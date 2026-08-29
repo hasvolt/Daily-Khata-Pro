@@ -1,0 +1,36 @@
+{
+  "name": "Daily Khata: Pro",
+  "short_name": "Daily Khata",
+  "description": "Daily Khata: Pro — Professional daily income & expense tracker with automated 6-fund money allocation, financial goals, and ledger statements.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#070E18",
+  "theme_color": "#0E1A29",
+  "orientation": "portrait-primary",
+  "categories": ["finance", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/daily-Khata-Pro.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/daily-Khata-Pro.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/daily-Khata-Pro.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/daily-Khata-Pro.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

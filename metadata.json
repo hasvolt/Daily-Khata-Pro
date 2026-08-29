@@ -1,0 +1,6 @@
+{
+  "name": "Daily Khata: Pro",
+  "description": "Daily Khata: Pro — Universal professional daily income & expense ledger with automated 6-fund money allocation, financial goals, work deliverables, and daily life timeline tracker.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

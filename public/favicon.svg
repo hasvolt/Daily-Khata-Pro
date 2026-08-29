@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE566"/>
+      <stop offset="45%" stop-color="#FFC700"/>
+      <stop offset="100%" stop-color="#D99B00"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="coralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F87171"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#162433"/>
+      <stop offset="100%" stop-color="#0B1017"/>
+    </linearGradient>
+    <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#000000" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="#FFC700" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Rounded Financial Badge -->
+  <rect x="24" y="24" width="464" height="464" rx="128" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="16" filter="url(#badgeShadow)"/>
+
+  <!-- Ledger Book Spine / Backplate -->
+  <rect x="100" y="104" width="312" height="304" rx="28" fill="#101A24" stroke="#2A3D52" stroke-width="10"/>
+
+  <!-- Ledger Ruled Lines (Khata Pages) -->
+  <line x1="140" y1="168" x2="372" y2="168" stroke="#25384B" stroke-width="8" stroke-linecap="round"/>
+  <line x1="140" y1="220" x2="372" y2="220" stroke="#25384B" stroke-width="8" stroke-linecap="round"/>
+  <line x1="140" y1="272" x2="372" y2="272" stroke="#25384B" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Green Income Up-Arrow (Left Inflow) -->
+  <g transform="translate(138, 296)">
+    <circle cx="28" cy="28" r="28" fill="#10B981" fill-opacity="0.2"/>
+    <path d="M16 36 L36 16 M22 16 L36 16 L36 30" stroke="url(#emeraldGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Red Expense Down-Arrow (Right Outflow) -->
+  <g transform="translate(318, 296)">
+    <circle cx="28" cy="28" r="28" fill="#EF4444" fill-opacity="0.2"/>
+    <path d="M16 20 L36 40 M36 26 L36 40 L22 40" stroke="url(#coralGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Central Golden Rupee Symbol (Khata Balance & Wealth Core) -->
+  <!-- Indian Rupee Sign ₹ -->
+  <g id="RupeeCore">
+    <!-- Rupee Upper Bar 1 -->
+    <path d="M204 186 L308 186" stroke="url(#goldGrad)" stroke-width="18" stroke-linecap="round"/>
+    <!-- Rupee Upper Bar 2 -->
+    <path d="M204 222 L290 222" stroke="url(#goldGrad)" stroke-width="18" stroke-linecap="round"/>
+    <!-- Rupee Loop & Leg -->
+    <path d="M236 186 C280 186 280 258 236 258 L218 258 L286 348" stroke="url(#goldGrad)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

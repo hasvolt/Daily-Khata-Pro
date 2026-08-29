@@ -1,0 +1,7 @@
+# Robots.txt for Daily Khata: Pro
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://daily-khata-pro.vercel.app/sitemap.xml
+Sitemap: https://dailykhatapro.com/sitemap.xml
