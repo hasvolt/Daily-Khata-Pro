@@ -16,7 +16,9 @@ import {
   PiggyBank,
   TrendingUp,
   Receipt,
-  LucideIcon
+  LucideIcon,
+  Calendar,
+  CalendarDays
 } from 'lucide-react';
 
 const FUND_ICONS: Record<FundType, LucideIcon> = {
@@ -57,6 +59,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi';
+  const todayStats = calculatePeriodStats(entries, { type: 'today' });
   const monthStats = calculatePeriodStats(entries, { type: 'month' });
   const fundTotals = calculateFundTotals(entries);
 
@@ -119,28 +122,94 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
         </div>
 
-        {/* This Month's Income & Expense Bar */}
-        <div className="grid grid-cols-2 gap-3 pt-5 mt-5 border-t border-[var(--theme-border,#213E61)]">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
-            <div className="w-9 h-9 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
-              <ArrowUpRight className="w-5 h-5" />
-            </div>
-            <div className="min-w-0">
-              <div className="text-[11.5px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthIncome}</div>
-              <div className="text-[16px] sm:text-[18px] font-bold text-[#10B981] font-mono truncate">
-                +{formatCurrency(monthStats.income, privacyMask)}
+        {/* Daily & Monthly Income & Expense Dual Breakdown */}
+        <div className="pt-5 mt-5 border-t border-[var(--theme-border,#213E61)] space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {/* 1. Daily (Today's) Income & Expense */}
+            <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5 shadow-xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-[11.5px] font-extrabold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>{t.home.dailySummaryHeading}</span>
+                </div>
+                <div className="text-[11px] font-mono font-bold flex items-center gap-1">
+                  <span className="text-[#94A3B8]">{t.home.todayNet}:</span>
+                  <span className={todayStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}>
+                    {todayStats.net >= 0 ? '+' : ''}{formatCurrency(todayStats.net, privacyMask)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                {/* Today Income */}
+                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
+                  <div className="w-8 h-8 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.todayIncome}</div>
+                    <div className="text-[14px] sm:text-[15px] font-bold text-[#10B981] font-mono truncate">
+                      +{formatCurrency(todayStats.income, privacyMask)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Today Expense */}
+                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
+                  <div className="w-8 h-8 rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
+                    <ArrowDownRight className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.todayExpense}</div>
+                    <div className="text-[14px] sm:text-[15px] font-bold text-[#EF4444] font-mono truncate">
+                      -{formatCurrency(todayStats.expense, privacyMask)}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
-            <div className="w-9 h-9 rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
-              <ArrowDownRight className="w-5 h-5" />
-            </div>
-            <div className="min-w-0">
-              <div className="text-[11.5px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthExpense}</div>
-              <div className="text-[16px] sm:text-[18px] font-bold text-[#EF4444] font-mono truncate">
-                -{formatCurrency(monthStats.expense, privacyMask)}
+            {/* 2. Monthly (This Month's) Income & Expense */}
+            <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5 shadow-xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-[11.5px] font-extrabold uppercase tracking-wider text-[#94A3B8]">
+                  <CalendarDays className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                  <span>{t.home.monthlySummaryHeading}</span>
+                </div>
+                <div className="text-[11px] font-mono font-bold flex items-center gap-1">
+                  <span className="text-[#94A3B8]">{t.home.thisMonthNet}:</span>
+                  <span className={monthStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}>
+                    {monthStats.net >= 0 ? '+' : ''}{formatCurrency(monthStats.net, privacyMask)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                {/* Month Income */}
+                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
+                  <div className="w-8 h-8 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthIncome}</div>
+                    <div className="text-[14px] sm:text-[15px] font-bold text-[#10B981] font-mono truncate">
+                      +{formatCurrency(monthStats.income, privacyMask)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Month Expense */}
+                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
+                  <div className="w-8 h-8 rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
+                    <ArrowDownRight className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthExpense}</div>
+                    <div className="text-[14px] sm:text-[15px] font-bold text-[#EF4444] font-mono truncate">
+                      -{formatCurrency(monthStats.expense, privacyMask)}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

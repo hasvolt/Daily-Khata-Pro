@@ -29,6 +29,12 @@ export interface Translations {
     newTransaction: string;
     thisMonthIncome: string;
     thisMonthExpense: string;
+    thisMonthNet: string;
+    todayIncome: string;
+    todayExpense: string;
+    todayNet: string;
+    dailySummaryHeading: string;
+    monthlySummaryHeading: string;
     netSavings: string;
     todayCashFlow: string;
     sixFundsHeading: string;
@@ -207,6 +213,12 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       newTransaction: 'New Entry',
       thisMonthIncome: 'Month Income',
       thisMonthExpense: 'Month Expense',
+      thisMonthNet: 'Month Net',
+      todayIncome: 'Today Income',
+      todayExpense: 'Today Expense',
+      todayNet: 'Today Net',
+      dailySummaryHeading: 'Today (Daily)',
+      monthlySummaryHeading: 'This Month (Monthly)',
       netSavings: 'Net Surplus',
       todayCashFlow: "Today's Activity",
       sixFundsHeading: '6-Fund Money Pots',
@@ -408,6 +420,12 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       newTransaction: 'नया लेन-देन',
       thisMonthIncome: 'इस महीने की कमाई',
       thisMonthExpense: 'इस महीने का खर्च',
+      thisMonthNet: 'मासिक शुद्ध बचत',
+      todayIncome: 'आज की कमाई',
+      todayExpense: 'आज का खर्च',
+      todayNet: 'आज की शुद्ध बचत',
+      dailySummaryHeading: 'आज का हिसाब (Daily)',
+      monthlySummaryHeading: 'इस माह का हिसाब (Monthly)',
       netSavings: 'शुद्ध बचत (Surplus)',
       todayCashFlow: 'आज का लेन-देन',
       sixFundsHeading: '6-फंड बैलेंस पॉट्स',
@@ -609,6 +627,12 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       newTransaction: 'New Entry',
       thisMonthIncome: 'Is Month Ki Income',
       thisMonthExpense: 'Is Month Ka Kharcha',
+      thisMonthNet: 'Month Ka Net Surplus',
+      todayIncome: 'Aaj Ki Income',
+      todayExpense: 'Aaj Ka Kharcha',
+      todayNet: 'Aaj Ki Net Bachath',
+      dailySummaryHeading: 'Aaj Ka Hisaab (Daily)',
+      monthlySummaryHeading: 'Is Month Ka Hisaab (Monthly)',
       netSavings: 'Net Surplus (Bachath)',
       todayCashFlow: 'Aaj Ka Len-Den',
       sixFundsHeading: '6-Fund Money Pots',
