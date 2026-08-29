@@ -101,7 +101,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
       <div className="space-y-4 text-[13px] text-[#CBD5E1]">
         {/* Section 1: Information We Do NOT Collect */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-          <h2 className="text-[15px] font-bold text-white flex items-center gap-2">
+          <h2 className="text-[15px] font-bold text-[#F8FAFC] flex items-center gap-2">
             <span className="text-[var(--theme-primary,#38BDF8)] font-mono">1.</span>
             <span>Data That We Do NOT Collect</span>
           </h2>
@@ -117,7 +117,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
 
         {/* Section 2: Local Storage Architecture */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-          <h2 className="text-[15px] font-bold text-white flex items-center gap-2">
+          <h2 className="text-[15px] font-bold text-[#F8FAFC] flex items-center gap-2">
             <span className="text-[var(--theme-primary,#38BDF8)] font-mono">2.</span>
             <span>How Your Data Is Stored Locally</span>
           </h2>
@@ -131,7 +131,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
 
         {/* Section 3: Third-Party Advertising & Google AdSense */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-          <h2 className="text-[15px] font-bold text-white flex items-center gap-2">
+          <h2 className="text-[15px] font-bold text-[#F8FAFC] flex items-center gap-2">
             <span className="text-[var(--theme-primary,#38BDF8)] font-mono">3.</span>
             <span>Third-Party Advertising &amp; Google AdSense</span>
           </h2>
@@ -148,7 +148,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
 
         {/* Section 4: Data Export & Erasure Rights */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-          <h2 className="text-[15px] font-bold text-white flex items-center gap-2">
+          <h2 className="text-[15px] font-bold text-[#F8FAFC] flex items-center gap-2">
             <span className="text-[var(--theme-primary,#38BDF8)] font-mono">4.</span>
             <span>Your Rights (Export, Transfer &amp; Erasure)</span>
           </h2>
@@ -163,7 +163,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
 
         {/* Section 5: Contact Information */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-          <h2 className="text-[15px] font-bold text-white flex items-center gap-2">
+          <h2 className="text-[15px] font-bold text-[#F8FAFC] flex items-center gap-2">
             <span className="text-[var(--theme-primary,#38BDF8)] font-mono">5.</span>
             <span>Contact Regarding Privacy</span>
           </h2>
@@ -172,7 +172,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
           </p>
           <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2">
             <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <span className="font-mono text-white font-bold">{email}</span>
+            <span className="font-mono text-[#F8FAFC] font-bold">{email}</span>
           </div>
         </div>
       </div>

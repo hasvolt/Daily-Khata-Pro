@@ -110,7 +110,7 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
 
         {/* 4. Contact regarding Disclaimers */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-          <div className="flex items-center gap-2 text-white font-bold text-[15px]">
+          <div className="flex items-center gap-2 text-[#F8FAFC] font-bold text-[15px]">
             <Mail className="w-4.5 h-4.5 text-[var(--theme-primary,#38BDF8)]" />
             <h2>4. Questions &amp; Clarifications</h2>
           </div>
@@ -119,7 +119,7 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
           </p>
           <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2">
             <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <span className="font-mono text-white font-bold">{email}</span>
+            <span className="font-mono text-[#F8FAFC] font-bold">{email}</span>
           </div>
         </div>
       </div>

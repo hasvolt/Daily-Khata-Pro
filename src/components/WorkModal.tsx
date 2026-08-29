@@ -11,6 +11,7 @@ import {
   Clock,
   IndianRupee,
   CheckCircle2,
+  Check,
   Plus,
   Tag,
   AlignLeft,
@@ -389,11 +390,12 @@ export const WorkModal: React.FC<WorkModalProps> = ({
                     key={index}
                     className="px-2 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] text-[#CBD5E1] text-[11.5px] font-medium border border-[var(--theme-border,#213E61)] flex items-center gap-1.5"
                   >
-                    <span>✓ {d}</span>
+                    <Check className="w-3 h-3 text-[#10B981] shrink-0" />
+                    <span>{d}</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveDeliverable(index)}
-                      className="text-[#94A3B8] hover:text-[#EF4444] cursor-pointer"
+                      className="text-[#94A3B8] hover:text-[#EF4444] cursor-pointer ml-0.5"
                     >
                       <X className="w-3 h-3" />
                     </button>

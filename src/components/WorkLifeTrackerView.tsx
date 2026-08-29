@@ -23,7 +23,8 @@ import {
   Sun,
   Sunset,
   Moon,
-  ChevronDown
+  ChevronDown,
+  Check
 } from 'lucide-react';
 
 interface WorkLifeTrackerViewProps {
@@ -393,9 +394,10 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                       {item.deliverables.map((d, i) => (
                         <span
                           key={i}
-                          className="px-2 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] text-[11px] font-medium border border-[var(--theme-border,#213E61)]"
+                          className="px-2 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] text-[11px] font-medium border border-[var(--theme-border,#213E61)] flex items-center gap-1"
                         >
-                          ✓ {d}
+                          <Check className="w-3 h-3 text-[#10B981] shrink-0" />
+                          <span>{d}</span>
                         </span>
                       ))}
                     </div>

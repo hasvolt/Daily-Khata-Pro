@@ -88,7 +88,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 mt-6 border-t border-[var(--theme-border,#213E61)]/70">
           <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
             <div className="text-[11px] text-[#94A3B8] font-medium">Platform</div>
-            <div className="text-[14px] font-bold text-white mt-0.5 flex items-center gap-1">
+            <div className="text-[14px] font-bold text-[#F8FAFC] mt-0.5 flex items-center gap-1">
               <Globe className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
               <span>rozfiber.com</span>
             </div>
@@ -203,7 +203,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </div>
             <div className="min-w-0">
               <div className="text-[11px] text-[#94A3B8] font-medium">Official Support &amp; Contact</div>
-              <div className="text-[13px] font-bold text-white font-mono truncate group-hover:text-[var(--theme-primary,#38BDF8)]">{email}</div>
+              <div className="text-[13px] font-bold text-[#F8FAFC] font-mono truncate group-hover:text-[var(--theme-primary,#38BDF8)]">{email}</div>
             </div>
           </a>
 
@@ -218,7 +218,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </div>
             <div className="min-w-0">
               <div className="text-[11px] text-[#94A3B8] font-medium">Open Source GitHub Repository</div>
-              <div className="text-[13px] font-bold text-white truncate group-hover:text-[#10B981]">hasvolt/Daily-Khata-Pro</div>
+              <div className="text-[13px] font-bold text-[#F8FAFC] truncate group-hover:text-[#10B981]">hasvolt/Daily-Khata-Pro</div>
             </div>
           </a>
 
@@ -233,7 +233,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </div>
             <div className="min-w-0">
               <div className="text-[11px] text-[#94A3B8] font-medium">Official Instagram Profile</div>
-              <div className="text-[13px] font-bold text-white truncate group-hover:text-[#E1306C]">@dailykhatapro</div>
+              <div className="text-[13px] font-bold text-[#F8FAFC] truncate group-hover:text-[#E1306C]">@dailykhatapro</div>
             </div>
           </a>
 
@@ -248,7 +248,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </div>
             <div className="min-w-0">
               <div className="text-[11px] text-[#94A3B8] font-medium">Official X (Twitter) Profile</div>
-              <div className="text-[13px] font-bold text-white truncate group-hover:text-[#1DA1F2]">@Dailykhatapro</div>
+              <div className="text-[13px] font-bold text-[#F8FAFC] truncate group-hover:text-[#1DA1F2]">@Dailykhatapro</div>
             </div>
           </a>
         </div>

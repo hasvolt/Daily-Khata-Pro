@@ -4,6 +4,7 @@ import {
   Code2,
   ShieldCheck,
   CheckCircle2,
+  XCircle,
   Copy,
   Download,
   Terminal,
@@ -324,11 +325,11 @@ export interface KhataData {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-150 no-print">
-      <div className="bg-[#0B1017] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
         {/* Header */}
         <div className="px-5 py-3.5 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#060B11] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-[var(--theme-primary,#38BDF8)]">
+            <div className="w-9 h-9 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-[var(--theme-primary,#38BDF8)]">
               <Code2 className="w-5 h-5" />
             </div>
             <div>
@@ -347,7 +348,7 @@ export interface KhataData {
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/5 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -406,12 +407,12 @@ export interface KhataData {
 
         {/* Tab 0: Official GitHub Repository */}
         {activeTab === 'github' && (
-          <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-5 bg-[#070E18]">
+          <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-5 bg-[var(--theme-bg,#070E18)]">
             {/* Main GitHub Hero Banner */}
-            <div className="p-5 rounded-2xl bg-gradient-to-r from-[#0E1A29] via-[#132438] to-[#0A1624] border border-[var(--theme-primary,#38BDF8)]/40 shadow-xl space-y-4">
+            <div className="p-5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-primary,#38BDF8)]/40 shadow-xl space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-start gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#060B11] border border-[#213E61] flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 shadow-md">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 shadow-md">
                     <FolderGit2 className="w-6 h-6 text-[#10B981]" />
                   </div>
                   <div>
@@ -419,7 +420,7 @@ export interface KhataData {
                       <h3 className="font-serif-display text-[18px] font-bold text-[#F8FAFC]">
                         hasvolt / Daily-Khata-Pro
                       </h3>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/40">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/40">
                         Public
                       </span>
                     </div>
@@ -434,7 +435,7 @@ export interface KhataData {
                     href={GITHUB_REPO_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#040D17] font-extrabold text-[12.5px] flex items-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-[var(--theme-btn-bg,#38BDF8)] hover:bg-[var(--theme-btn-hover,#0EA5E9)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] flex items-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span>Open GitHub Repo</span>
@@ -443,7 +444,7 @@ export interface KhataData {
                     href={`${GITHUB_REPO_URL}/stargazers`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3.5 py-2 rounded-xl bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-bold text-[12px] flex items-center gap-1.5 transition-all shadow-xs"
+                    className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-bold text-[12px] flex items-center gap-1.5 transition-all shadow-xs"
                   >
                     <Star className="w-3.5 h-3.5 text-[#FFC700]" />
                     <span>Star Repo</span>
@@ -452,7 +453,7 @@ export interface KhataData {
               </div>
 
               {/* Quick Git Clone Card */}
-              <div className="p-3.5 rounded-xl bg-[#060B11] border border-[#213E61] space-y-2">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2">
                 <div className="flex items-center justify-between text-[11px] text-[#94A3B8]">
                   <span className="font-bold flex items-center gap-1.5 text-[#CBD5E1]">
                     <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
@@ -460,13 +461,13 @@ export interface KhataData {
                   </span>
                   <span className="text-[10.5px] text-[#64748B]">Click copy to clone anywhere</span>
                 </div>
-                <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#0B1017] border border-[#1E293B] font-mono text-[12px]">
-                  <span className="text-[#38BDF8] truncate select-all">
+                <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] font-mono text-[12px]">
+                  <span className="text-[var(--theme-primary,#38BDF8)] truncate select-all">
                     git clone {GITHUB_CLONE_URL}
                   </span>
                   <button
                     onClick={handleCopyClone}
-                    className="px-2.5 py-1 rounded bg-[#132438] hover:bg-[#1E3A5F] border border-[#213E61] text-[#F8FAFC] text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer shrink-0"
+                    className="px-2.5 py-1 rounded bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer shrink-0"
                   >
                     {copiedClone ? (
                       <>
@@ -485,50 +486,57 @@ export interface KhataData {
             </div>
 
             {/* Run Locally Quickstart Guide */}
-            <div className="p-4 rounded-2xl bg-[#0E1A29] border border-[var(--theme-border,#213E61)] space-y-3">
+            <div className="p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="font-bold text-[14px] text-[#F8FAFC] flex items-center gap-2">
+                <h4 className="font-bold text-[14px] text-[#0F172A] dark:text-[#F8FAFC] flex items-center gap-2">
                   <Play className="w-4 h-4 text-[#10B981]" />
                   <span>How to Run Locally from GitHub</span>
                 </h4>
                 <button
                   onClick={handleCopySetup}
-                  className="text-[11.5px] text-[#38BDF8] hover:underline font-bold flex items-center gap-1 cursor-pointer"
+                  className="text-[11.5px] text-[var(--theme-primary,#38BDF8)] hover:underline font-bold flex items-center gap-1 cursor-pointer"
                 >
-                  {copiedSetup ? '✓ Commands Copied' : 'Copy All 4 Commands'}
+                  {copiedSetup ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-[#10B981]" />
+                      <span>Commands Copied</span>
+                    </>
+                  ) : (
+                    'Copy All 4 Commands'
+                  )}
                 </button>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#060B11] border border-[#213E61] font-mono text-[11.5px] text-[#CBD5E1] space-y-1.5">
-                <p className="text-[#64748B]"># 1. Clone repository from GitHub</p>
-                <p className="text-[#38BDF8]">git clone {GITHUB_CLONE_URL}</p>
-                <p className="text-[#64748B] pt-1"># 2. Enter project folder</p>
-                <p className="text-[#F8FAFC]">cd Daily-Khata-Pro</p>
-                <p className="text-[#64748B] pt-1"># 3. Install packages</p>
-                <p className="text-[#F8FAFC]">npm install</p>
-                <p className="text-[#64748B] pt-1"># 4. Launch local dev server</p>
-                <p className="text-[#10B981]">npm run dev</p>
+              <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] font-mono text-[11.5px] text-[#0F172A] dark:text-[#CBD5E1] space-y-1.5 shadow-inner">
+                <p className="text-[#64748B] dark:text-[#94A3B8]"># 1. Clone repository from GitHub</p>
+                <p className="text-[var(--theme-primary,#38BDF8)] font-bold">git clone {GITHUB_CLONE_URL}</p>
+                <p className="text-[#64748B] dark:text-[#94A3B8] pt-1"># 2. Enter project folder</p>
+                <p className="text-[#0F172A] dark:text-[#F8FAFC] font-semibold">cd Daily-Khata-Pro</p>
+                <p className="text-[#64748B] dark:text-[#94A3B8] pt-1"># 3. Install packages</p>
+                <p className="text-[#0F172A] dark:text-[#F8FAFC] font-semibold">npm install</p>
+                <p className="text-[#64748B] dark:text-[#94A3B8] pt-1"># 4. Launch local dev server</p>
+                <p className="text-[#059669] dark:text-[#10B981] font-bold">npm run dev</p>
               </div>
             </div>
 
             {/* Repository Spec Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] space-y-1">
-                <div className="text-[10px] uppercase font-bold text-[#94A3B8]">Open License</div>
-                <div className="font-bold text-[13px] text-[#F8FAFC]">MIT / Free Open-Source</div>
-                <p className="text-[11px] text-[#64748B]">Full freedom to audit, fork, customize, and self-host</p>
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1">
+                <div className="text-[10px] uppercase font-bold text-[#64748B] dark:text-[#94A3B8]">Open License</div>
+                <div className="font-bold text-[13px] text-[#0F172A] dark:text-[#F8FAFC]">MIT / Free Open-Source</div>
+                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">Full freedom to audit, fork, customize, and self-host</p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] space-y-1">
-                <div className="text-[10px] uppercase font-bold text-[#94A3B8]">Modern Stack</div>
-                <div className="font-bold text-[13px] text-[#F8FAFC]">React 18 + TypeScript + Vite</div>
-                <p className="text-[11px] text-[#64748B]">Tailwind CSS, Lucide Icons &amp; PWA Service Worker</p>
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1">
+                <div className="text-[10px] uppercase font-bold text-[#64748B] dark:text-[#94A3B8]">Modern Stack</div>
+                <div className="font-bold text-[13px] text-[#0F172A] dark:text-[#F8FAFC]">React 18 + TypeScript + Vite</div>
+                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">Tailwind CSS, Lucide Icons &amp; PWA Service Worker</p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] space-y-1">
-                <div className="text-[10px] uppercase font-bold text-[#94A3B8]">Privacy Standard</div>
-                <div className="font-bold text-[13px] text-[#10B981]">Zero Telemetry / 100% Local</div>
-                <p className="text-[11px] text-[#64748B]">All calculations and records stay in browser storage</p>
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1">
+                <div className="text-[10px] uppercase font-bold text-[#64748B] dark:text-[#94A3B8]">Privacy Standard</div>
+                <div className="font-bold text-[13px] text-[#059669] dark:text-[#10B981]">Zero Telemetry / 100% Local</div>
+                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">All calculations and records stay in browser storage</p>
               </div>
             </div>
           </div>
@@ -536,10 +544,10 @@ export interface KhataData {
 
         {/* Tab 1: Live Code Inspector */}
         {activeTab === 'inspector' && (
-          <div className="flex-1 flex flex-col md:flex-row overflow-hidden min-h-[380px]">
+          <div className="flex-1 flex flex-col md:flex-row overflow-hidden min-h-[420px]">
             {/* Sidebar File List */}
-            <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[var(--theme-border,#213E61)] bg-[#070E18] p-3 flex flex-col gap-2 shrink-0">
-              <div className="text-[10.5px] uppercase tracking-wider font-extrabold text-[#94A3B8] px-2 pt-1">
+            <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)] p-3 flex flex-col gap-2 shrink-0">
+              <div className="text-[10.5px] uppercase tracking-wider font-extrabold text-[#64748B] dark:text-[#94A3B8] px-2 pt-1">
                 Core Source Modules
               </div>
 
@@ -553,8 +561,8 @@ export interface KhataData {
                       onClick={() => setSelectedFileIndex(idx)}
                       className={`w-full flex items-start gap-2.5 p-2.5 rounded-xl text-left transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)] text-[#F8FAFC] shadow-sm'
-                          : 'border border-transparent text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/5'
+                          ? 'bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] shadow-sm'
+                          : 'border border-transparent text-[#64748B] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F8FAFC] hover:bg-[var(--theme-surface,#0E1A29)]'
                       }`}
                     >
                       <Icon
@@ -563,10 +571,10 @@ export interface KhataData {
                         }`}
                       />
                       <div className="min-w-0 flex-1">
-                        <div className="font-mono text-[12px] font-bold truncate">
+                        <div className="font-mono text-[12px] font-bold truncate text-[#0F172A] dark:text-[#F8FAFC]">
                           {file.name}
                         </div>
-                        <div className="text-[10px] text-[#64748B] truncate">
+                        <div className="text-[10px] text-[#64748B] dark:text-[#94A3B8] truncate">
                           {file.category}
                         </div>
                       </div>
@@ -576,43 +584,43 @@ export interface KhataData {
               </div>
 
               {/* Local Storage Live Stats */}
-              <div className="p-3 bg-[#0B1017] border border-[var(--theme-border,#213E61)] rounded-xl text-[11px] space-y-1.5 mt-auto hidden md:block">
-                <div className="text-[#94A3B8] font-bold text-[10px] uppercase">Device Storage Info</div>
-                <div className="flex justify-between text-[#CBD5E1]">
+              <div className="p-3 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl text-[11px] space-y-1.5 mt-auto hidden md:block">
+                <div className="text-[#64748B] dark:text-[#94A3B8] font-bold text-[10px] uppercase">Device Storage Info</div>
+                <div className="flex justify-between text-[#334155] dark:text-[#CBD5E1]">
                   <span>Storage Key:</span>
-                  <span className="font-mono text-[#38BDF8]">hasvolt_khata_v1</span>
+                  <span className="font-mono text-[var(--theme-primary,#38BDF8)] font-bold">hasvolt_khata_v1</span>
                 </div>
-                <div className="flex justify-between text-[#CBD5E1]">
+                <div className="flex justify-between text-[#334155] dark:text-[#CBD5E1]">
                   <span>Local Entries:</span>
-                  <span className="font-mono font-bold text-[#10B981]">{entriesCount} records</span>
+                  <span className="font-mono font-bold text-[#059669] dark:text-[#10B981]">{entriesCount} records</span>
                 </div>
-                <div className="flex justify-between text-[#CBD5E1]">
+                <div className="flex justify-between text-[#334155] dark:text-[#CBD5E1]">
                   <span>Active Goals:</span>
-                  <span className="font-mono text-[#FFC700]">{goalsCount}</span>
+                  <span className="font-mono text-[#D97706] dark:text-[#FFC700] font-bold">{goalsCount}</span>
                 </div>
               </div>
             </div>
 
             {/* Code Viewer Panel */}
-            <div className="flex-1 flex flex-col bg-[#05090F] overflow-hidden">
+            <div className="flex-1 flex flex-col bg-[var(--theme-surface,#0E1A29)] overflow-hidden">
               {/* File Info Bar */}
-              <div className="px-4 py-2.5 border-b border-[#1E293B] bg-[#0A0F17] flex items-center justify-between gap-3 shrink-0">
+              <div className="px-4 py-2.5 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-between gap-3 shrink-0">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[13px] font-bold text-[#38BDF8]">
+                    <span className="font-mono text-[13px] font-bold text-[var(--theme-primary,#38BDF8)]">
                       {currentFile.name}
                     </span>
-                    <span className="text-[9.5px] uppercase font-mono px-1.5 py-0.5 rounded bg-[#1E293B] text-[#94A3B8]">
+                    <span className="text-[9.5px] uppercase font-mono px-2 py-0.5 rounded bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#0F172A] dark:text-[#CBD5E1] font-bold">
                       {currentFile.language}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#64748B] truncate">{currentFile.description}</p>
+                  <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] truncate">{currentFile.description}</p>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={handleCopyCode}
-                    className="px-2.5 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[#213E61] text-[#F8FAFC] text-[11.5px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                    className="px-2.5 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[#0F172A] dark:text-[#F8FAFC] text-[11.5px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
                     title="Copy code to clipboard"
                   >
                     {copied ? (
@@ -622,17 +630,17 @@ export interface KhataData {
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3.5 h-3.5 text-[#94A3B8]" />
-                        <span>Copy</span>
+                        <Copy className="w-3.5 h-3.5 text-[#64748B] dark:text-[#94A3B8]" />
+                        <span>Copy Code</span>
                       </>
                     )}
                   </button>
                 </div>
               </div>
 
-              {/* Code Pre Block */}
-              <div className="flex-1 p-4 overflow-auto font-mono text-[11.5px] leading-relaxed text-[#CBD5E1] selection:bg-[#38BDF8]/30 selection:text-white">
-                <pre className="whitespace-pre">{currentFile.content}</pre>
+              {/* Code Pre Block with high contrast on Day and Night themes */}
+              <div className="flex-1 p-4 overflow-auto font-mono text-[12px] leading-relaxed bg-[var(--theme-bg,#070E18)] border-t border-[var(--theme-border,#213E61)]/30 selection:bg-[var(--theme-primary,#38BDF8)]/20 code-inspector-container">
+                <pre className="whitespace-pre font-mono code-inspector-pre">{currentFile.content}</pre>
               </div>
             </div>
           </div>
@@ -640,9 +648,9 @@ export interface KhataData {
 
         {/* Tab 2: Security & Privacy Audit */}
         {activeTab === 'audit' && (
-          <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-5 bg-[#070E18]">
+          <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-5 bg-[var(--theme-bg,#070E18)]">
             {/* Guarantee Banner */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-[#0E1A29] to-[#132438] border border-[var(--theme-border,#213E61)] flex items-start gap-3.5">
+            <div className="p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-start gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-[#10B981]/20 border border-[#10B981]/40 flex items-center justify-center text-[#10B981] shrink-0 mt-0.5">
                 <ShieldCheck className="w-6 h-6" />
               </div>
@@ -658,7 +666,7 @@ export interface KhataData {
 
             {/* Audit Checklist Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1.5">
                 <div className="flex items-center gap-2 text-[#10B981] font-bold text-[13px]">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Zero Network Telemetry</span>
@@ -668,17 +676,17 @@ export interface KhataData {
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1.5">
                 <div className="flex items-center gap-2 text-[#10B981] font-bold text-[13px]">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Isolated LocalStorage</span>
                 </div>
                 <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
-                  All ledger records live securely in your browser's sandboxed storage (<code className="text-[#38BDF8]">hasvolt_khata_v1</code>). Other websites cannot access it.
+                  All ledger records live securely in your browser&apos;s sandboxed storage (<code className="text-[var(--theme-primary,#38BDF8)]">hasvolt_khata_v1</code>). Other websites cannot access it.
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1.5">
                 <div className="flex items-center gap-2 text-[#10B981] font-bold text-[13px]">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Works 100% Offline</span>
@@ -688,7 +696,7 @@ export interface KhataData {
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1.5">
                 <div className="flex items-center gap-2 text-[#10B981] font-bold text-[13px]">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>No Ads, No Popups, No Lock-in</span>
@@ -700,25 +708,27 @@ export interface KhataData {
             </div>
 
             {/* Architecture Comparison */}
-            <div className="p-4 rounded-xl bg-[#0B1017] border border-[#213E61] space-y-3">
+            <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
               <div className="text-[12px] font-bold text-[#F8FAFC] uppercase tracking-wider">
                 Architecture Comparison
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[12px]">
                 <div className="p-3 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/20 space-y-1 text-[#EF4444]">
                   <div className="font-bold flex items-center gap-1.5">
-                    <span>❌ Traditional Cloud Accounting Apps</span>
+                    <XCircle className="w-4 h-4 text-[#EF4444] shrink-0" />
+                    <span>Traditional Cloud Accounting Apps</span>
                   </div>
-                  <p className="text-[11px] text-[#CBD5E1] leading-relaxed">
+                  <p className="text-[11px] text-[#64748B] dark:text-[#CBD5E1] leading-relaxed">
                     Stores income &amp; bank data on remote servers; vulnerable to cloud leaks, ad profiling, and monthly subscription lock-ins.
                   </p>
                 </div>
 
                 <div className="p-3 rounded-lg bg-[#10B981]/10 border border-[#10B981]/20 space-y-1 text-[#10B981]">
                   <div className="font-bold flex items-center gap-1.5">
-                    <span>✅ Daily Khata: Pro Architecture</span>
+                    <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                    <span>Daily Khata: Pro Architecture</span>
                   </div>
-                  <p className="text-[11px] text-[#CBD5E1] leading-relaxed">
+                  <p className="text-[11px] text-[#64748B] dark:text-[#CBD5E1] leading-relaxed">
                     100% on your device. Client-side state + LocalStorage. Mathematical calculations execute on your CPU. Zero data scraping.
                   </p>
                 </div>
@@ -729,7 +739,7 @@ export interface KhataData {
 
         {/* Tab 3: How to Verify */}
         {activeTab === 'verify' && (
-          <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-4 bg-[#070E18] text-[#F8FAFC] text-[13px]">
+          <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-4 bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] text-[13px]">
             <div className="space-y-1">
               <h3 className="font-serif-display text-[16px] font-bold text-[#F8FAFC]">
                 Verify Safety Yourself in 3 Steps
@@ -740,38 +750,38 @@ export interface KhataData {
             </div>
 
             <div className="space-y-3">
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] flex items-center justify-center font-bold text-[12px] shrink-0">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center font-bold text-[12px] shrink-0">
                   1
                 </div>
                 <div className="space-y-1">
                   <div className="font-bold text-[#F8FAFC]">Open Developer Tools</div>
                   <p className="text-[12px] text-[#94A3B8]">
-                    Press <kbd className="px-1.5 py-0.5 rounded bg-[#070E18] border border-[#213E61] text-[#38BDF8] font-mono text-[11px]">F12</kbd> or <kbd className="px-1.5 py-0.5 rounded bg-[#070E18] border border-[#213E61] text-[#38BDF8] font-mono text-[11px]">Ctrl + Shift + I</kbd> (Mac: <kbd className="px-1.5 py-0.5 rounded bg-[#070E18] border border-[#213E61] text-[#38BDF8] font-mono text-[11px]">Cmd + Option + I</kbd>).
+                    Press <kbd className="px-1.5 py-0.5 rounded bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono text-[11px]">F12</kbd> or <kbd className="px-1.5 py-0.5 rounded bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono text-[11px]">Ctrl + Shift + I</kbd> (Mac: <kbd className="px-1.5 py-0.5 rounded bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono text-[11px]">Cmd + Option + I</kbd>).
                   </p>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] flex items-center justify-center font-bold text-[12px] shrink-0">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center font-bold text-[12px] shrink-0">
                   2
                 </div>
                 <div className="space-y-1">
-                  <div className="font-bold text-[#F8FAFC]">Inspect the "Network" Tab</div>
+                  <div className="font-bold text-[#F8FAFC]">Inspect the &quot;Network&quot; Tab</div>
                   <p className="text-[12px] text-[#94A3B8]">
                     Switch to the <strong>Network</strong> tab. Add an income entry or delete an expense in the app. You will see <strong>0 requests</strong> being sent to any server.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0E1A29] border border-[#213E61] flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] flex items-center justify-center font-bold text-[12px] shrink-0">
+              <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center font-bold text-[12px] shrink-0">
                   3
                 </div>
                 <div className="space-y-1">
-                  <div className="font-bold text-[#F8FAFC]">Inspect the "Application" Tab (Storage)</div>
+                  <div className="font-bold text-[#F8FAFC]">Inspect the &quot;Application&quot; Tab (Storage)</div>
                   <p className="text-[12px] text-[#94A3B8]">
-                    Navigate to <strong>Application → Local Storage</strong> and click your domain. Look for the key <code className="text-[#38BDF8] font-mono">hasvolt_khata_v1</code>. You will see all your data cleanly stored in plain JSON format on your computer or phone.
+                    Navigate to <strong>Application → Local Storage</strong> and click your domain. Look for the key <code className="text-[var(--theme-primary,#38BDF8)] font-mono">hasvolt_khata_v1</code>. You will see all your data cleanly stored in plain JSON format on your computer or phone.
                   </p>
                 </div>
               </div>
@@ -791,7 +801,7 @@ export interface KhataData {
               href={GITHUB_REPO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-2 rounded-xl bg-[#0E1A29] hover:bg-[#192D47] border border-[var(--theme-primary,#38BDF8)]/40 text-[var(--theme-primary,#38BDF8)] font-bold text-[12px] flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
+              className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-primary,#38BDF8)]/40 text-[var(--theme-primary,#38BDF8)] font-bold text-[12px] flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
             >
               <FolderGit2 className="w-3.5 h-3.5" />
               <span>GitHub Repo</span>
@@ -800,7 +810,7 @@ export interface KhataData {
 
             <button
               onClick={handleDownloadAllSource}
-              className="px-3.5 py-2 rounded-xl bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] font-bold text-[12px] flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
+              className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] font-bold text-[12px] flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
             >
               <Download className="w-4 h-4" />
               <span className="hidden sm:inline">Download Source</span>
@@ -808,7 +818,7 @@ export interface KhataData {
 
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-[var(--theme-btn-bg,#38BDF8)] hover:bg-[var(--theme-btn-hover,#7DD3FC)] text-[var(--theme-btn-text,#040D17)] font-bold text-[12.5px] cursor-pointer transition-all shadow-md active:scale-95"
+              className="px-4 py-2 rounded-xl bg-[var(--theme-btn-bg,#38BDF8)] hover:bg-[var(--theme-btn-hover,#0EA5E9)] text-[var(--theme-btn-text,#040D17)] font-bold text-[12.5px] cursor-pointer transition-all shadow-md active:scale-95"
             >
               Close
             </button>

@@ -4,7 +4,7 @@ export type TransactionType = 'income' | 'expense';
 
 export type PaymentMode = 'cash' | 'upi' | 'bank' | 'card' | 'cheque' | 'wallet' | 'other';
 
-export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cyan';
+export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cyan' | 'light' | 'white';
 
 export type AppLanguage = 'en' | 'hi' | 'hinglish';
 

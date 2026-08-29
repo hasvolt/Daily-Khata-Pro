@@ -48,7 +48,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-150 no-print">
-      <div className="bg-[#0B1017] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-lg max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-lg max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between bg-[var(--theme-surface,#0E1A29)]">
           <div className="flex items-center gap-2.5">
@@ -66,7 +66,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-[#94A3B8] hover:text-[#F8FAFC] transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 flex items-center justify-center text-[#94A3B8] hover:text-[#F8FAFC] transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -74,13 +74,13 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
         </div>
 
         {/* Content Body */}
-        <div className="p-4 sm:p-5 space-y-4 overflow-y-auto bg-[#070E18]">
+        <div className="p-4 sm:p-5 space-y-4 overflow-y-auto bg-[var(--theme-bg,#070E18)]">
           {/* Developer Profile Card */}
           <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] relative overflow-hidden">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
               {/* Photo - Full uncropped view */}
               <div className="relative shrink-0 flex flex-col items-center">
-                <div className="w-28 h-auto max-h-36 sm:w-32 sm:max-h-40 rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)] shadow-lg bg-[#070E18] p-1">
+                <div className="w-28 h-auto max-h-36 sm:w-32 sm:max-h-40 rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)] shadow-lg bg-[var(--theme-bg,#070E18)] p-1">
                   <img
                     src="/md-zafeer-hasan-yazdaan.jpg"
                     alt="MD Zafeer Hasan (YAZDAAN)"
@@ -109,15 +109,15 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                   </span>
                 </div>
 
-                <div className="text-[12.5px] font-medium text-[#38BDF8]">
+                <div className="text-[12.5px] font-medium text-[var(--theme-primary,#38BDF8)]">
                   Independent Developer, Creator &amp; Founder
                 </div>
 
                 <div className="text-[11px] text-[#94A3B8] flex items-center justify-center sm:justify-start gap-1.5 pt-0.5">
-                  <Mail className="w-3 h-3 text-[#38BDF8] shrink-0" />
+                  <Mail className="w-3 h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                   <a
                     href={`mailto:${email}`}
-                    className="hover:underline text-[#CBD5E1] hover:text-[#38BDF8] truncate font-mono"
+                    className="hover:underline text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] truncate font-mono"
                   >
                     {email}
                   </a>
@@ -144,7 +144,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           </div>
 
           {/* Mission & Philosophy Bio */}
-          <div className="p-4 rounded-xl bg-[#0E1A29] border border-[var(--theme-border,#213E61)] space-y-2.5 text-[12.5px] text-[#CBD5E1] leading-relaxed">
+          <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-2.5 text-[12.5px] text-[#CBD5E1] leading-relaxed">
             <p>
               I&apos;m an independent developer focused on creating simple, practical, and privacy-conscious digital tools that are useful in everyday life.
             </p>
@@ -157,7 +157,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           </div>
 
           {/* Project Details Box */}
-          <div className="p-3.5 rounded-xl bg-[#060B11] border border-[#213E61] space-y-2 text-[12px]">
+          <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2 text-[12px]">
             <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="font-semibold text-[#CBD5E1]">Project:</span>
               <span className="text-[#F8FAFC] font-bold">Daily Income &amp; Expense Tracker (Daily Khata Pro)</span>
@@ -170,7 +170,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
             </div>
             <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="font-semibold text-[#CBD5E1]">Support &amp; Feedback:</span>
-              <a href={`mailto:${email}`} className="text-[#38BDF8] hover:underline font-mono">
+              <a href={`mailto:${email}`} className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono">
                 {email}
               </a>
             </div>
@@ -180,7 +180,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
             <a
               href={`mailto:${email}`}
-              className="py-2.5 px-4 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#040D17] font-extrabold text-[12.5px] flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+              className="py-2.5 px-4 rounded-xl bg-[var(--theme-btn-bg,#38BDF8)] hover:bg-[var(--theme-btn-hover,#0EA5E9)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
             >
               <Mail className="w-4 h-4" />
               <span>Contact Developer</span>
@@ -188,7 +188,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
 
             <button
               onClick={handleCopyEmail}
-              className="py-2.5 px-4 rounded-xl bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-bold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="py-2.5 px-4 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-bold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               {copied ? (
                 <>
@@ -208,7 +208,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
             href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full py-2.5 px-4 rounded-xl bg-[#111A24] hover:bg-[#162230] border border-[#253648] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] font-bold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] font-bold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <FolderGit2 className="w-4 h-4 text-[#10B981]" />
             <span>View GitHub Repository (hasvolt/Daily-Khata-Pro)</span>
@@ -223,7 +223,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[12px] font-bold transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[12px] font-bold transition-all cursor-pointer"
           >
             {isHindi ? 'बंद करें' : 'Close'}
           </button>

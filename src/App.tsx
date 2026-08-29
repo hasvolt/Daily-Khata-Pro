@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Entry, FundType, Goal, WorkLog, DailyLifeLog, KhataData, AppTheme, AppLanguage } from './types';
 import {
   DEFAULT_PERCENTAGES,
@@ -44,6 +45,9 @@ import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles } from 'lucide-rea
 const STORAGE_KEY = 'daily-khata-pro-v3';
 
 export default function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   const [entries, setEntries] = useState<Entry[]>([]);
   const [goals, setGoals] = useState<Goal[]>([]);
   const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
@@ -60,7 +64,15 @@ export default function App() {
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
   
-  const [currentTab, setCurrentTab] = useState<NavTab>('home');
+  // Re-add currentTab and normalize it based on pathname
+  const rawPath = location.pathname.substring(1);
+  const currentTab = rawPath === '' ? 'home' : rawPath;
+
+  const setCurrentTab = (tab: string) => {
+    if (tab === 'home') navigate('/');
+    else navigate(`/${tab}`);
+  };
+
   const [addInitialType, setAddInitialType] = useState<'income' | 'expense'>('income');
   const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
   const [historyFilter, setHistoryFilter] = useState<string>('all');
@@ -100,7 +112,7 @@ export default function App() {
     return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
   }, []);
 
-  // Deep Link URL Sync: Read query params on mount & popstate
+  // Deep Link URL Sync: Read query params on mount for backwards compatibility
   useEffect(() => {
     const handleUrlSync = () => {
       try {
@@ -110,19 +122,14 @@ export default function App() {
         const fundParam = searchParams.get('fund');
         const actionParam = searchParams.get('action');
 
-        if (tabParam) {
+        if (tabParam && location.pathname === '/') {
           const normalized = tabParam.toLowerCase();
-          if (normalized === 'home') setCurrentTab('home');
-          else if (normalized === 'add') setCurrentTab('add');
-          else if (normalized === 'tracker') setCurrentTab('tracker');
-          else if (normalized === 'goals') setCurrentTab('goals');
-          else if (normalized === 'history') setCurrentTab('history');
-          else if (normalized === 'report' || normalized === 'reports') setCurrentTab('report');
-          else if (normalized === 'developer' || normalized === 'dev' || normalized === 'creator' || normalized === 'founder') setCurrentTab('developer');
-          else if (normalized === 'about' || normalized === 'about-us') setCurrentTab('about');
-          else if (normalized === 'privacy' || normalized === 'privacy-policy') setCurrentTab('privacy');
-          else if (normalized === 'disclaimer') setCurrentTab('disclaimer');
-          else if (normalized === 'terms' || normalized === 'terms-of-service') setCurrentTab('terms');
+          if (normalized === 'reports') setCurrentTab('report');
+          else if (normalized === 'dev' || normalized === 'creator' || normalized === 'founder') setCurrentTab('developer');
+          else if (normalized === 'about-us') setCurrentTab('about');
+          else if (normalized === 'privacy-policy') setCurrentTab('privacy');
+          else if (normalized === 'terms-of-service') setCurrentTab('terms');
+          else setCurrentTab(normalized);
         }
 
         if (fundParam && ['personal', 'family', 'buffer', 'emergency', 'saving', 'investment'].includes(fundParam.toLowerCase())) {
@@ -140,32 +147,7 @@ export default function App() {
     };
 
     handleUrlSync();
-    window.addEventListener('popstate', handleUrlSync);
-    return () => window.removeEventListener('popstate', handleUrlSync);
   }, []);
-
-  // Update browser URL query string when active tab or fund filter changes
-  useEffect(() => {
-    try {
-      if (typeof window === 'undefined') return;
-      const url = new URL(window.location.href);
-      if (currentTab === 'home') {
-        url.searchParams.delete('tab');
-        url.searchParams.delete('fund');
-        url.searchParams.delete('action');
-      } else {
-        url.searchParams.set('tab', currentTab);
-        if (currentTab === 'history' && historyFilter !== 'all') {
-          url.searchParams.set('fund', historyFilter);
-        } else {
-          url.searchParams.delete('fund');
-        }
-      }
-      window.history.replaceState(null, '', url.toString());
-    } catch (err) {
-      // safe fallback in sandboxes
-    }
-  }, [currentTab, historyFilter]);
 
   // Sync theme to document element
   useEffect(() => {
@@ -803,168 +785,197 @@ export default function App() {
 
       {/* Main Container */}
       <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 py-3.5 sm:py-6">
-        {currentTab === 'home' && (
-          <HomeView
-            entries={entries}
-            goals={goals}
-            workLogs={workLogs}
-            dailyLifeLogs={dailyLifeLogs}
-            percentages={percentages}
-            onAddClick={handleAddClick}
-            onFilterFund={handleFilterFund}
-            onViewHistory={() => {
-              setHistoryFilter('all');
-              setCurrentTab('history');
-            }}
-            onNavigateGoals={() => setCurrentTab('goals')}
-            onNavigateTracker={() => setCurrentTab('tracker')}
-            onOpenWorkModal={() => {
-              setEditingWork(null);
-              setIsWorkModalOpen(true);
-            }}
-            onOpenDailyLifeModal={() => {
-              setEditingDailyLife(null);
-              setIsDailyLifeModalOpen(true);
-            }}
-            onOpenManual={() => setIsManualOpen(true)}
-            language={language}
-            privacyMask={privacyMask}
-          />
-        )}
+        <Routes>
+          <Route path="/" element={
+            <HomeView
+              entries={entries}
+              goals={goals}
+              workLogs={workLogs}
+              dailyLifeLogs={dailyLifeLogs}
+              percentages={percentages}
+              onAddClick={handleAddClick}
+              onFilterFund={handleFilterFund}
+              onViewHistory={() => {
+                setHistoryFilter('all');
+                setCurrentTab('history');
+              }}
+              onNavigateGoals={() => setCurrentTab('goals')}
+              onNavigateTracker={() => setCurrentTab('tracker')}
+              onOpenWorkModal={() => {
+                setEditingWork(null);
+                setIsWorkModalOpen(true);
+              }}
+              onOpenDailyLifeModal={() => {
+                setEditingDailyLife(null);
+                setIsDailyLifeModalOpen(true);
+              }}
+              onOpenManual={() => setIsManualOpen(true)}
+              language={language}
+              privacyMask={privacyMask}
+            />
+          } />
 
-        {currentTab === 'add' && (
-          <AddView
-            initialType={addInitialType}
-            editingEntry={editingEntry}
-            categories={categories}
-            incomeSources={incomeSources}
-            percentages={percentages}
-            fundTotals={fundTotals}
-            onSaveEntry={handleSaveEntry}
-            onCancelEdit={() => {
-              setEditingEntry(null);
-              setCurrentTab('home');
-            }}
-            onAddCategory={handleAddCategory}
-            onAddIncomeSource={handleAddIncomeSource}
-            language={language}
-            privacyMask={privacyMask}
-          />
-        )}
+          <Route path="/add" element={
+            <AddView
+              initialType={addInitialType}
+              editingEntry={editingEntry}
+              categories={categories}
+              incomeSources={incomeSources}
+              percentages={percentages}
+              fundTotals={fundTotals}
+              onSaveEntry={handleSaveEntry}
+              onCancelEdit={() => {
+                setEditingEntry(null);
+                setCurrentTab('home');
+              }}
+              onAddCategory={handleAddCategory}
+              onAddIncomeSource={handleAddIncomeSource}
+              language={language}
+              privacyMask={privacyMask}
+            />
+          } />
 
-        {currentTab === 'tracker' && (
-          <WorkLifeTrackerView
-            workLogs={workLogs}
-            dailyLifeLogs={dailyLifeLogs}
-            onOpenWorkModal={(work) => {
-              setEditingWork(work || null);
-              setIsWorkModalOpen(true);
-            }}
-            onOpenDailyLifeModal={(log) => {
-              setEditingDailyLife(log || null);
-              setIsDailyLifeModalOpen(true);
-            }}
-            onDeleteWorkLog={handleDeleteWorkLog}
-            onDeleteDailyLifeLog={handleDeleteDailyLifeLog}
-            onRecordWorkIncomeToKhata={handleRecordWorkIncomeToKhata}
-            language={language}
-          />
-        )}
+          <Route path="/tracker" element={
+            <WorkLifeTrackerView
+              workLogs={workLogs}
+              dailyLifeLogs={dailyLifeLogs}
+              onOpenWorkModal={(work) => {
+                setEditingWork(work || null);
+                setIsWorkModalOpen(true);
+              }}
+              onOpenDailyLifeModal={(log) => {
+                setEditingDailyLife(log || null);
+                setIsDailyLifeModalOpen(true);
+              }}
+              onDeleteWorkLog={handleDeleteWorkLog}
+              onDeleteDailyLifeLog={handleDeleteDailyLifeLog}
+              onRecordWorkIncomeToKhata={handleRecordWorkIncomeToKhata}
+              language={language}
+            />
+          } />
 
-        {currentTab === 'goals' && (
-          <GoalsView
-            goals={goals}
-            onOpenCreateGoal={() => {
-              setEditingGoal(null);
-              setIsGoalModalOpen(true);
-            }}
-            onEditGoal={(goal) => {
-              setEditingGoal(goal);
-              setIsGoalModalOpen(true);
-            }}
-            onDeleteGoal={handleDeleteGoal}
-            onOpenDeposit={(goal) => {
-              setDepositGoal(goal);
-            }}
-            onToggleComplete={handleToggleCompleteGoal}
-            language={language}
-            privacyMask={privacyMask}
-          />
-        )}
+          <Route path="/goals" element={
+            <GoalsView
+              goals={goals}
+              onOpenCreateGoal={() => {
+                setEditingGoal(null);
+                setIsGoalModalOpen(true);
+              }}
+              onEditGoal={(goal) => {
+                setEditingGoal(goal);
+                setIsGoalModalOpen(true);
+              }}
+              onDeleteGoal={handleDeleteGoal}
+              onOpenDeposit={(goal) => {
+                setDepositGoal(goal);
+              }}
+              onToggleComplete={handleToggleCompleteGoal}
+              language={language}
+              privacyMask={privacyMask}
+            />
+          } />
 
-        {currentTab === 'history' && (
-          <HistoryView
-            entries={entries}
-            activeFilter={historyFilter}
-            onFilterChange={setHistoryFilter}
-            onEditEntry={handleEditEntry}
-            onDeleteEntry={handleDeleteEntry}
-            onTriggerPrint={handleTriggerPrint}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            onNavigateAdd={() => {
-              setEditingEntry(null);
-              setAddInitialType('income');
-              setCurrentTab('add');
-            }}
-            language={language}
-            privacyMask={privacyMask}
-          />
-        )}
+          <Route path="/history" element={
+            <HistoryView
+              entries={entries}
+              activeFilter={historyFilter}
+              onFilterChange={setHistoryFilter}
+              onEditEntry={handleEditEntry}
+              onDeleteEntry={handleDeleteEntry}
+              onTriggerPrint={handleTriggerPrint}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              onNavigateAdd={() => {
+                setEditingEntry(null);
+                setAddInitialType('income');
+                setCurrentTab('add');
+              }}
+              language={language}
+              privacyMask={privacyMask}
+            />
+          } />
 
-        {currentTab === 'report' && (
-          <ReportView
-            entries={entries}
-            categories={categories}
-            percentages={percentages}
-            onUpdatePercentages={handleUpdatePercentages}
-            onAddCategory={handleAddCategory}
-            onRemoveCategory={(cat) => handleUpdateCategories(categories.filter((c) => c !== cat))}
-            onTriggerPrint={handleTriggerPrint}
-            language={language}
-            privacyMask={privacyMask}
-          />
-        )}
+          <Route path="/report" element={
+            <ReportView
+              entries={entries}
+              categories={categories}
+              percentages={percentages}
+              onUpdatePercentages={handleUpdatePercentages}
+              onAddCategory={handleAddCategory}
+              onRemoveCategory={(cat) => handleUpdateCategories(categories.filter((c) => c !== cat))}
+              onTriggerPrint={handleTriggerPrint}
+              language={language}
+              privacyMask={privacyMask}
+            />
+          } />
 
-        {currentTab === 'developer' && (
-          <DeveloperPage
-            onBack={() => setCurrentTab('home')}
-            language={language}
-            onOpenShare={() => setIsShareOpen(true)}
-          />
-        )}
+          <Route path="/developer" element={
+            <DeveloperPage
+              onBack={() => setCurrentTab('home')}
+              language={language}
+              onOpenShare={() => setIsShareOpen(true)}
+            />
+          } />
 
-        {currentTab === 'about' && (
-          <AboutPage
-            onBack={() => setCurrentTab('home')}
-            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
-            language={language}
-          />
-        )}
+          <Route path="/about" element={
+            <AboutPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
 
-        {currentTab === 'privacy' && (
-          <PrivacyPage
-            onBack={() => setCurrentTab('home')}
-            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
-            language={language}
-          />
-        )}
+          <Route path="/privacy" element={
+            <PrivacyPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
 
-        {currentTab === 'disclaimer' && (
-          <DisclaimerPage
-            onBack={() => setCurrentTab('home')}
-            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
-            language={language}
-          />
-        )}
+          <Route path="/disclaimer" element={
+            <DisclaimerPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
 
-        {currentTab === 'terms' && (
-          <TermsPage
-            onBack={() => setCurrentTab('home')}
-            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
-            language={language}
-          />
-        )}
+          <Route path="/terms" element={
+            <TermsPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
+          
+          <Route path="*" element={<HomeView
+              entries={entries}
+              goals={goals}
+              workLogs={workLogs}
+              dailyLifeLogs={dailyLifeLogs}
+              percentages={percentages}
+              onAddClick={handleAddClick}
+              onFilterFund={handleFilterFund}
+              onViewHistory={() => {
+                setHistoryFilter('all');
+                setCurrentTab('history');
+              }}
+              onNavigateGoals={() => setCurrentTab('goals')}
+              onNavigateTracker={() => setCurrentTab('tracker')}
+              onOpenWorkModal={() => {
+                setEditingWork(null);
+                setIsWorkModalOpen(true);
+              }}
+              onOpenDailyLifeModal={() => {
+                setEditingDailyLife(null);
+                setIsDailyLifeModalOpen(true);
+              }}
+              onOpenManual={() => setIsManualOpen(true)}
+              language={language}
+              privacyMask={privacyMask}
+            />} />
+        </Routes>
 
         {/* Sponsor / Ad Banner (Compact) */}
         <section className="pt-3 pb-1">

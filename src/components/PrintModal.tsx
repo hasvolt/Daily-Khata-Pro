@@ -232,11 +232,11 @@ export const PrintModal: React.FC<PrintModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-150 no-print">
-      <div className="bg-[#111A24] border border-[#253648] rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-[#253648] flex items-center justify-between bg-[#162230]">
+        <div className="px-5 py-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between bg-[var(--theme-surface,#0E1A29)]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#0B1017] border border-[#253648] flex items-center justify-center text-[#FFC700]">
+            <div className="w-8 h-8 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-[#FFC700]">
               <FileText className="w-4.5 h-4.5" />
             </div>
             <div>
@@ -250,15 +250,15 @@ export const PrintModal: React.FC<PrintModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/5 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* View Toggle Bar */}
-        <div className="px-5 py-2.5 bg-[#0e1620] border-b border-[#253648] flex items-center justify-between">
-          <div className="flex gap-1.5 bg-[#162230] p-1 rounded-xl border border-[#253648]">
+        <div className="px-5 py-2.5 bg-[var(--theme-bg,#070E18)] border-b border-[var(--theme-border,#213E61)] flex items-center justify-between">
+          <div className="flex gap-1.5 bg-[var(--theme-surface,#0E1A29)] p-1 rounded-xl border border-[var(--theme-border,#213E61)]">
             <button
               onClick={() => setViewMode('preview')}
               className={`px-3 py-1 rounded-lg text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
@@ -289,7 +289,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
         </div>
 
         {/* Modal Body Preview */}
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 bg-[#0B1017] text-[#F8FAFC] text-[13px] leading-relaxed flex-1 max-h-[calc(92vh-180px)]">
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] text-[13px] leading-relaxed flex-1 max-h-[calc(92vh-180px)]">
           {/* Statement Banner Header */}
           <div className="border-b-2 border-[#FFC700] pb-3 flex justify-between items-start gap-4">
             <div>
@@ -309,19 +309,19 @@ export const PrintModal: React.FC<PrintModalProps> = ({
 
           {/* 3 Metric Cards */}
           <div className="grid grid-cols-3 gap-2.5">
-            <div className="bg-[#111A24] border border-[#253648] rounded-xl p-3 text-center">
+            <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-3 text-center">
               <div className="text-[10.5px] uppercase tracking-wider text-[#94A3B8] font-bold">Total Income</div>
               <div className="font-serif-display text-[16px] sm:text-[18px] font-bold text-[#10B981] mt-0.5">
                 +{formatCurrency(totalInc)}
               </div>
             </div>
-            <div className="bg-[#111A24] border border-[#253648] rounded-xl p-3 text-center">
+            <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-3 text-center">
               <div className="text-[10.5px] uppercase tracking-wider text-[#94A3B8] font-bold">Total Expense</div>
               <div className="font-serif-display text-[16px] sm:text-[18px] font-bold text-[#EF4444] mt-0.5">
                 -{formatCurrency(totalExp)}
               </div>
             </div>
-            <div className="bg-[#111A24] border border-[#253648] rounded-xl p-3 text-center">
+            <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-3 text-center">
               <div className="text-[10.5px] uppercase tracking-wider text-[#94A3B8] font-bold">Net Saved</div>
               <div className="font-serif-display text-[16px] sm:text-[18px] font-bold text-[#FFC700] mt-0.5">
                 {formatCurrency(netSaved)}
@@ -333,18 +333,18 @@ export const PrintModal: React.FC<PrintModalProps> = ({
             <>
               {/* Fund Balances */}
               <div className="space-y-2">
-                <div className="text-[11px] uppercase tracking-wider font-bold text-[#94A3B8] border-b border-[#253648] pb-1">
+                <div className="text-[11px] uppercase tracking-wider font-bold text-[#94A3B8] border-b border-[var(--theme-border,#213E61)] pb-1">
                   Active 6-Fund Balances (All-Time)
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {FUND_ORDER.map((f) => (
-                    <div key={f} className="p-2.5 rounded-xl bg-[#111A24] border border-[#253648] flex justify-between items-center text-[12px]">
+                    <div key={f} className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex justify-between items-center text-[12px]">
                       <span className="text-[#94A3B8]">{FUND_LABELS[f]}</span>
                       <span className="font-mono font-bold text-[#F8FAFC]">{formatCurrency(fundTotals[f])}</span>
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-between items-center bg-[#162230] border border-[#FFC700]/40 rounded-xl px-3.5 py-2 text-[13px] font-bold">
+                <div className="flex justify-between items-center bg-[var(--theme-surface,#0E1A29)] border border-[#FFC700]/40 rounded-xl px-3.5 py-2 text-[13px] font-bold">
                   <span>Grand Total Combined Wealth</span>
                   <span className="font-serif-display text-[16px] text-[#FFC700] font-bold">
                     {formatCurrency(grandTotal)}
@@ -354,7 +354,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
 
               {/* Quick Transaction List preview */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] uppercase tracking-wider font-bold text-[#94A3B8] border-b border-[#253648] pb-1">
+                <div className="flex items-center justify-between text-[11px] uppercase tracking-wider font-bold text-[#94A3B8] border-b border-[var(--theme-border,#213E61)] pb-1">
                   <span>Recent Monthly Entries ({monthEntries.length})</span>
                   <button
                     onClick={() => setViewMode('itemized')}
@@ -366,7 +366,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
                 {monthEntries.slice(0, 5).map((e) => (
                   <div
                     key={e.id}
-                    className="p-2.5 rounded-xl bg-[#111A24] border border-[#253648] flex items-center justify-between text-[12px]"
+                    className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center justify-between text-[12px]"
                   >
                     <div className="flex items-center gap-2">
                       <span
@@ -393,7 +393,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
           ) : (
             /* Itemized Full Transactions Table */
             <div className="space-y-2">
-              <div className="text-[11px] uppercase tracking-wider font-bold text-[#94A3B8] border-b border-[#253648] pb-1">
+              <div className="text-[11px] uppercase tracking-wider font-bold text-[#94A3B8] border-b border-[var(--theme-border,#213E61)] pb-1">
                 All Monthly Transactions Log ({monthEntries.length} Entries)
               </div>
               {monthEntries.length === 0 ? (
@@ -405,7 +405,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
                   {monthEntries.map((e) => (
                     <div
                       key={e.id}
-                      className="p-2.5 rounded-xl bg-[#111A24] border border-[#253648] flex items-center justify-between text-[12px]"
+                      className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center justify-between text-[12px]"
                     >
                       <div className="space-y-0.5">
                         <div className="flex items-center gap-2">
@@ -441,10 +441,10 @@ export const PrintModal: React.FC<PrintModalProps> = ({
         </div>
 
         {/* Modal Footer Controls */}
-        <div className="px-5 py-3.5 border-t border-[#253648] bg-[#162230] flex flex-wrap items-center justify-between gap-2.5">
+        <div className="px-5 py-3.5 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex flex-wrap items-center justify-between gap-2.5">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl border border-[#253648] bg-transparent text-[#94A3B8] hover:text-[#F8FAFC] font-semibold text-[13px] cursor-pointer"
+            className="px-4 py-2 rounded-xl border border-[var(--theme-border,#213E61)] bg-transparent text-[#94A3B8] hover:text-[#F8FAFC] font-semibold text-[13px] cursor-pointer"
           >
             Close
           </button>
@@ -452,7 +452,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handleDownloadCSV}
-              className="px-3.5 py-2 rounded-xl bg-[#111A24] border border-[#253648] text-[#F8FAFC] hover:text-[#10B981] font-bold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:text-[#10B981] font-bold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <FileSpreadsheet className="w-4 h-4 text-[#10B981]" />
               <span className="hidden sm:inline">Export</span> CSV
@@ -460,7 +460,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
 
             <button
               onClick={handleDownloadHTML}
-              className="px-3.5 py-2 rounded-xl bg-[#111A24] border border-[#253648] text-[#F8FAFC] hover:text-[#FFC700] font-bold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:text-[#FFC700] font-bold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <Download className="w-4 h-4" />
               <span>Download HTML</span>

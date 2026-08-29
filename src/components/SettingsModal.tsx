@@ -282,13 +282,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     triggerHapticSound('click');
   };
 
-  const themeList: { id: AppTheme; label: string; dot: string }[] = [
+  const themeList: { id: AppTheme; label: string; dot: string; isLight?: boolean }[] = [
     { id: 'blue', label: 'Electric Blue', dot: '#38BDF8' },
     { id: 'yellow', label: 'Volt Gold', dot: '#FFC700' },
     { id: 'orange', label: 'Sunset Orange', dot: '#F97316' },
     { id: 'emerald', label: 'Emerald Green', dot: '#10B981' },
     { id: 'purple', label: 'Royal Violet', dot: '#A855F7' },
-    { id: 'cyan', label: 'Ocean Teal', dot: '#06B6D4' }
+    { id: 'cyan', label: 'Ocean Teal', dot: '#06B6D4' },
+    { id: 'light', label: isHindi ? 'दिन / वाइट मोड (Daylight)' : 'Daylight White', dot: '#0284C7', isLight: true },
+    { id: 'white', label: isHindi ? 'आउटडोर प्योर वाइट' : 'Outdoor Pure White', dot: '#2563EB', isLight: true }
   ];
 
   return (
@@ -891,14 +893,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 servers or cloud databases without your explicit export.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11.5px]">
-                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8]">
-                  ✓ Zero Server Tracking
+                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                  <span>Zero Server Tracking</span>
                 </div>
-                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8]">
-                  ✓ Instant Client-Side Math
+                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                  <span>Instant Client Math</span>
                 </div>
-                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8]">
-                  ✓ Local JSON Data Portability
+                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                  <span>Local JSON Portability</span>
                 </div>
               </div>
 

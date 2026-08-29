@@ -154,7 +154,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                   className="w-full sm:w-auto px-5 py-3 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#040D17] font-extrabold text-[13.5px] flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer shrink-0"
                 >
                   <HardDriveDownload className="w-4.5 h-4.5" />
-                  <span>{isHindi ? '⚡ अभी इंस्टॉल करें' : '⚡ Install App Now'}</span>
+                  <span>{isHindi ? 'अभी इंस्टॉल करें' : 'Install App Now'}</span>
                 </button>
               )}
             </div>
@@ -223,9 +223,9 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                     </span>
                     <span>
                       {isHindi ? (
-                        <>ऊपर दिए गए <strong className="text-[#F8FAFC]">"⚡ अभी इंस्टॉल करें"</strong> बटन पर क्लिक करें या ब्राउज़र के ऊपर दाहिने कोने में <strong>(⋮ 3 डॉट्स)</strong> मेन्यू दबाएं।</>
+                        <>ऊपर दिए गए <strong className="text-[#F8FAFC]">"अभी इंस्टॉल करें"</strong> बटन पर क्लिक करें या ब्राउज़र मेन्यू दबाएं।</>
                       ) : (
-                        <>Click the <strong className="text-[#F8FAFC]">"⚡ Install App Now"</strong> button above, or tap the <strong>(⋮ 3 dots)</strong> menu in your browser.</>
+                        <>Click the <strong className="text-[#F8FAFC]">"Install App Now"</strong> button above, or open the browser menu.</>
                       )}
                     </span>
                   </div>
@@ -323,9 +323,9 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                     </span>
                     <span>
                       {isHindi ? (
-                        <>ब्राउज़र के एड्रेस बार (Address bar) के दाएं तरफ <strong className="text-[#F8FAFC]">Install Icon ( ⬇️ या 💻 )</strong> देखें या ऊपर दिए गए बटन को दबाएं।</>
+                        <>ब्राउज़र के एड्रेस बार (Address bar) के दाएं तरफ <strong className="text-[#F8FAFC]">Install Icon</strong> देखें या ऊपर दिए गए बटन को दबाएं।</>
                       ) : (
-                        <>Look for the <strong className="text-[#F8FAFC]">Install icon ( ⬇️ or 💻 )</strong> in your address bar or click the button above.</>
+                        <>Look for the <strong className="text-[#F8FAFC]">Install Icon</strong> in your address bar or click the button above.</>
                       )}
                     </span>
                   </div>

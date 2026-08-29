@@ -18,7 +18,9 @@ import {
   User,
   MoreVertical,
   ExternalLink,
-  ChevronDown
+  ChevronDown,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -71,6 +73,8 @@ export const Header: React.FC<HeaderProps> = ({
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi';
 
+  const isLightMode = theme === 'light' || theme === 'white';
+
   const themeOptions: {
     id: AppTheme;
     label: string;
@@ -78,12 +82,14 @@ export const Header: React.FC<HeaderProps> = ({
     bgClass: string;
     textClass: string;
   }[] = [
-    { id: 'blue', label: 'Electric Blue', dotColor: '#38BDF8', bgClass: 'bg-[#38BDF8]', textClass: 'text-[#38BDF8]' },
-    { id: 'yellow', label: 'Volt Gold', dotColor: '#FFC700', bgClass: 'bg-[#FFC700]', textClass: 'text-[#FFC700]' },
-    { id: 'orange', label: 'Sunset Orange', dotColor: '#F97316', bgClass: 'bg-[#F97316]', textClass: 'text-[#FB923C]' },
-    { id: 'emerald', label: 'Emerald Green', dotColor: '#10B981', bgClass: 'bg-[#10B981]', textClass: 'text-[#10B981]' },
-    { id: 'purple', label: 'Royal Violet', dotColor: '#A855F7', bgClass: 'bg-[#A855F7]', textClass: 'text-[#A855F7]' },
-    { id: 'cyan', label: 'Ocean Teal', dotColor: '#06B6D4', bgClass: 'bg-[#06B6D4]', textClass: 'text-[#06B6D4]' }
+    { id: 'blue', label: 'Electric Blue (Dark)', dotColor: '#38BDF8', bgClass: 'bg-[#38BDF8]', textClass: 'text-[#38BDF8]' },
+    { id: 'yellow', label: 'Volt Gold (Dark)', dotColor: '#FFC700', bgClass: 'bg-[#FFC700]', textClass: 'text-[#FFC700]' },
+    { id: 'orange', label: 'Sunset Orange (Dark)', dotColor: '#F97316', bgClass: 'bg-[#F97316]', textClass: 'text-[#FB923C]' },
+    { id: 'emerald', label: 'Emerald Green (Dark)', dotColor: '#10B981', bgClass: 'bg-[#10B981]', textClass: 'text-[#10B981]' },
+    { id: 'purple', label: 'Royal Violet (Dark)', dotColor: '#A855F7', bgClass: 'bg-[#A855F7]', textClass: 'text-[#A855F7]' },
+    { id: 'cyan', label: 'Ocean Teal (Dark)', dotColor: '#06B6D4', bgClass: 'bg-[#06B6D4]', textClass: 'text-[#06B6D4]' },
+    { id: 'light', label: isHindi ? 'दिन/लाइट मोड (Daylight)' : 'Daylight White (Day Mode)', dotColor: '#0284C7', bgClass: 'bg-[#0284C7]', textClass: 'text-[#0284C7]' },
+    { id: 'white', label: isHindi ? 'आउटडोर प्योर व्हाइट' : 'Outdoor Pure White', dotColor: '#2563EB', bgClass: 'bg-[#2563EB]', textClass: 'text-[#2563EB]' }
   ];
 
   const languageOptions: { id: AppLanguage; label: string; short: string; native: string }[] = [
@@ -215,140 +221,8 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Quick Language Switcher */}
-          {onLanguageChange && (
-            <div className="relative shrink-0">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsLangMenuOpen(!isLangMenuOpen);
-                  setIsThemeMenuOpen(false);
-                  setIsMoreMenuOpen(false);
-                }}
-                className="flex items-center gap-1 px-2 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold"
-                title="Change Language (English / हिन्दी / Hinglish)"
-                id="header-language-btn"
-              >
-                <Languages className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                <span>{currentLangConfig.short}</span>
-              </button>
+          {/* Header Action Buttons (Moved to More Menu) */}
 
-              {isLangMenuOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setIsLangMenuOpen(false)}
-                  />
-                  <div className="absolute right-0 mt-2 w-44 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl shadow-2xl z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">
-                      {isHindi ? 'भाषा चुनें' : 'Select Language'}
-                    </div>
-                    {languageOptions.map((opt) => (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        onClick={() => {
-                          onLanguageChange(opt.id);
-                          setIsLangMenuOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-[12px] font-bold transition-all cursor-pointer text-left ${
-                          language === opt.id
-                            ? 'bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)]'
-                            : 'hover:bg-white/5 text-[#CBD5E1]'
-                        }`}
-                      >
-                        <div className="flex flex-col">
-                          <span>{opt.native}</span>
-                          <span className="text-[10px] text-[#64748B]">{opt.label}</span>
-                        </div>
-                        {language === opt.id && (
-                          <Check className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Quick Theme Switcher */}
-          {onThemeChange && (
-            <div className="relative shrink-0">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsThemeMenuOpen(!isThemeMenuOpen);
-                  setIsLangMenuOpen(false);
-                  setIsMoreMenuOpen(false);
-                }}
-                className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold"
-                title="Toggle Theme"
-                id="header-theme-switcher-btn"
-              >
-                <span
-                  className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
-                  style={{ backgroundColor: currentThemeConfig.dotColor }}
-                />
-                <Palette className="w-3.5 h-3.5 text-[#94A3B8]" />
-              </button>
-
-              {/* Theme Dropdown Popover */}
-              {isThemeMenuOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setIsThemeMenuOpen(false)}
-                  />
-                  <div className="absolute right-0 mt-2 w-48 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl shadow-2xl z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">
-                      {isHindi ? 'रंग थीम चुनें' : 'Choose Color Theme'}
-                    </div>
-                    {themeOptions.map((opt) => (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        onClick={() => {
-                          onThemeChange(opt.id);
-                          setIsThemeMenuOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-[12px] font-bold transition-all cursor-pointer text-left ${
-                          theme === opt.id
-                            ? 'bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)]'
-                            : 'hover:bg-white/5 text-[#CBD5E1]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="w-3.5 h-3.5 rounded-full shadow-xs"
-                            style={{ backgroundColor: opt.dotColor }}
-                          />
-                          <span className={theme === opt.id ? opt.textClass : ''}>
-                            {opt.label}
-                          </span>
-                        </div>
-                        {theme === opt.id && <Check className="w-3.5 h-3.5 text-white" />}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Quick Install App Button (Visible on desktop & mobile when available) */}
-          {onOpenInstall && (
-            <button
-              onClick={onOpenInstall}
-              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-[#10B981]/50 bg-[#10B981]/15 text-[#10B981] hover:bg-[#10B981] hover:text-[#04140D] transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-extrabold shrink-0"
-              title="Install App (100% Offline PWA for Mobile & PC)"
-              aria-label="Install App"
-              id="header-install-btn"
-            >
-              <Download className="w-3.5 h-3.5 shrink-0" />
-              <span>{isHindi ? 'ऐप इंस्टॉल' : 'Install'}</span>
-            </button>
-          )}
 
           {/* More Actions & Links Menu (Consolidates Calculator, Manual, Developer, Source Code, Share, GitHub) */}
           <div className="relative shrink-0">
@@ -381,6 +255,50 @@ export const Header: React.FC<HeaderProps> = ({
                 />
                 <div className="absolute right-0 mt-2 w-56 sm:w-60 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl shadow-2xl z-50 p-2 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                   <div className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#94A3B8] border-b border-[var(--theme-border,#213E61)]/60 pb-1.5 mb-1">
+                    {isHindi ? 'रंग एवं भाषा' : 'Appearance & Language'}
+                  </div>
+
+                  {/* Themes Grid */}
+                  {onThemeChange && (
+                    <div className="px-2.5 py-2 border-b border-[var(--theme-border,#213E61)]/60 mb-1">
+                      <div className="text-[10px] font-bold text-[#64748B] mb-2">{isHindi ? 'रंग थीम चुनें:' : 'Color Theme:'}</div>
+                      <div className="grid grid-cols-4 gap-2">
+                        {themeOptions.map((opt) => (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => onThemeChange(opt.id)}
+                            className={`flex justify-center items-center py-1.5 rounded-lg transition-all cursor-pointer border ${
+                              theme === opt.id ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))]' : 'border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-card,#132438)]'
+                            }`}
+                            title={opt.label}
+                          >
+                            <span className="w-3.5 h-3.5 rounded-full shadow-xs" style={{ backgroundColor: opt.dotColor }} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Language Selector */}
+                  {onLanguageChange && (
+                    <div className="px-2.5 py-2 border-b border-[var(--theme-border,#213E61)]/60 mb-1 flex gap-2">
+                      {languageOptions.map((opt) => (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => onLanguageChange(opt.id)}
+                          className={`flex-1 text-center py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer border ${
+                            language === opt.id ? 'border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))]' : 'border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]'
+                          }`}
+                        >
+                          {opt.short}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#94A3B8] border-b border-[var(--theme-border,#213E61)]/60 pb-1.5 mb-1 mt-2">
                     {isHindi ? 'त्वरित लिंक एवं टूल्स' : 'Quick Links & Tools'}
                   </div>
 
@@ -465,14 +383,14 @@ export const Header: React.FC<HeaderProps> = ({
                     </button>
                   )}
 
-                  {/* Mobile Install Option if hidden on small screens */}
+                  {/* Install Option */}
                   {onOpenInstall && (
                     <button
                       onClick={() => {
                         onOpenInstall();
                         closeAllMenus();
                       }}
-                      className="sm:hidden w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[12px] font-bold text-[#10B981] hover:bg-[var(--theme-card,#132438)] transition-all cursor-pointer text-left"
+                      className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[12px] font-bold text-[#10B981] hover:bg-[var(--theme-card,#132438)] hover:text-[#34D399] transition-all cursor-pointer text-left"
                     >
                       <Download className="w-4 h-4 shrink-0" />
                       <span>{isHindi ? 'ऐप इंस्टॉल करें (PWA)' : 'Install App (PWA)'}</span>

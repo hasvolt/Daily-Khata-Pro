@@ -45,8 +45,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://rozfiber.com';
   
   const getPageUrl = (tab: NavTab) => {
-    if (tab === 'home') return `${baseUrl}/?tab=home`;
-    return `${baseUrl}/?tab=${tab}`;
+    if (tab === 'home') return `${baseUrl}/`;
+    return `${baseUrl}/${tab}`;
   };
 
   const currentShareUrl = getPageUrl(selectedShareTab);
