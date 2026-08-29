@@ -25,6 +25,7 @@ import { DepositGoalModal } from './components/DepositGoalModal';
 import { UserManualModal } from './components/UserManualModal';
 import { FundSplitCalculatorModal } from './components/FundSplitCalculatorModal';
 import { HasVoltPromoBanner } from './components/HasVoltPromoBanner';
+import { GoogleAdBanner } from './components/GoogleAdBanner';
 import { PrintArea } from './components/PrintArea';
 import { PrintModal } from './components/PrintModal';
 import { SourceCodeModal } from './components/SourceCodeModal';
@@ -925,23 +926,29 @@ export default function App() {
           />
         )}
 
-        {/* Sponsor / Ad Banner */}
-        <section className="pt-6 pb-2">
+        {/* Sponsor / Ad Banner (Compact) */}
+        <section className="pt-3 pb-1">
           <HasVoltPromoBanner />
         </section>
 
-        {/* Professional Footer */}
-        <footer className="pt-4 pb-3 text-center text-[11.5px] text-[#64748B] space-y-2.5 select-none">
-          {/* Creator & Developer Badge */}
-          <div className="flex items-center justify-center">
+        {/* Google AdSense Responsive Ad Unit */}
+        <section className="py-1">
+          <GoogleAdBanner slotId="1364027408" client="ca-pub-4744063610455678" />
+        </section>
+
+        {/* Streamlined Minimal Footer */}
+        <footer className="pt-3 pb-2 text-center text-[11px] text-[#64748B] space-y-2 select-none">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            {/* Creator Minimal Pill */}
             <button
               onClick={() => setCurrentTab('developer')}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-xs active:scale-95 text-[11.5px]"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-2xs active:scale-95 text-[11px]"
+              title="View Developer Profile (MD Zafeer Hasan - YAZDAAN)"
             >
-              <div className="w-5 h-5 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] bg-[#070E18] shrink-0">
+              <div className="w-4 h-4 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] bg-[#070E18] shrink-0">
                 <img
                   src="/md-zafeer-hasan-yazdaan.jpg"
-                  alt="MD Zafeer Hasan (YAZDAAN)"
+                  alt="MD Zafeer Hasan"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
@@ -949,85 +956,72 @@ export default function App() {
                   }}
                 />
               </div>
-              <span className="text-[#94A3B8]">Creator:</span>
-              <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan <span className="text-[var(--theme-primary,#38BDF8)] font-mono text-[10.5px]">(YAZDAAN)</span></span>
-              <span className="text-[10px] bg-[#10B981]/20 text-[#10B981] px-1.5 py-0.2 rounded font-bold">Verified</span>
+              <span className="text-[#94A3B8]">By</span>
+              <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan</span>
+              <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1 py-0.1 rounded font-bold">Creator</span>
             </button>
+
+            {/* Compact Icon Links */}
+            <div className="flex items-center gap-1.5">
+              <a
+                href="https://github.com/hasvolt/Daily-Khata-Pro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
+                title="GitHub Repository (hasvolt/Daily-Khata-Pro)"
+              >
+                <FolderGit2 className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href="mailto:yazdaantalk@gmail.com"
+                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
+                title="Email: yazdaantalk@gmail.com"
+              >
+                <Mail className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href="https://www.instagram.com/dailykhatapro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#94A3B8] hover:text-[#E1306C] transition-colors"
+                title="Instagram: @dailykhatapro"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href="https://x.com/Dailykhatapro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#94A3B8] hover:text-[#1DA1F2] transition-colors"
+                title="X / Twitter: @Dailykhatapro"
+              >
+                <Twitter className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[12px]">
-            <a
-              href="https://github.com/hasvolt/Daily-Khata-Pro"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] transition-colors"
-              title="GitHub Source Code Repository"
-            >
-              <FolderGit2 className="w-3.5 h-3.5 text-[#10B981]" />
-              <span className="font-medium">GitHub / Daily-Khata-Pro</span>
-            </a>
-
-            <a
-              href="mailto:yazdaantalk@gmail.com"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#CBD5E1] hover:text-[#38BDF8] transition-colors"
-              title="Official Developer Email"
-            >
-              <Mail className="w-3.5 h-3.5 text-[#38BDF8]" />
-              <span className="font-medium">yazdaantalk@gmail.com</span>
-            </a>
-
-            <a
-              href="https://www.instagram.com/dailykhatapro"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#CBD5E1] hover:text-[#E1306C] transition-colors"
-              title="Official Instagram @dailykhatapro"
-            >
-              <Instagram className="w-3.5 h-3.5 text-[#E1306C]" />
-              <span className="font-medium">@dailykhatapro</span>
-            </a>
-
-            <a
-              href="https://x.com/Dailykhatapro"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#CBD5E1] hover:text-[#1DA1F2] transition-colors"
-              title="Official X / Twitter @Dailykhatapro"
-            >
-              <Twitter className="w-3.5 h-3.5 text-[#1DA1F2]" />
-              <span className="font-medium">@Dailykhatapro</span>
-            </a>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-2 font-medium text-[11px]">
-            <span className="font-bold text-[#CBD5E1]">Daily Khata: Pro™</span>
+          <div className="flex flex-wrap items-center justify-center gap-1.5 font-medium text-[10.5px] text-[#64748B]">
+            <span className="font-semibold text-[#94A3B8]">Daily Khata: Pro™</span>
             <span>•</span>
-            <span>100% Client-Side Universal Ledger</span>
-            <span>•</span>
-            <button
-              onClick={() => setIsDeveloperOpen(true)}
-              className="text-[var(--theme-primary,#38BDF8)] hover:underline font-bold transition-colors cursor-pointer"
-            >
-              Developer Info
-            </button>
+            <span>100% Offline &amp; Private</span>
             <span>•</span>
             <button
               onClick={() => setIsSourceCodeOpen(true)}
-              className="text-[#10B981] hover:underline font-bold transition-colors cursor-pointer"
+              className="text-[#10B981] hover:underline font-medium transition-colors cursor-pointer"
             >
-              Verify Safety &amp; Code
+              Open Source (MIT)
             </button>
             <span>•</span>
             <button
               onClick={() => setIsSettingsOpen(true)}
               className="text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] underline transition-colors cursor-pointer"
             >
-              Trust &amp; Privacy
+              Settings
             </button>
           </div>
-          <p className="text-[10px] text-[#475569]">
-            Universal Income &amp; Expense Accounting · Work Deliverables &amp; Daily Life Journal · Open Source MIT
-          </p>
         </footer>
       </main>
 
