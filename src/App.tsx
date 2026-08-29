@@ -34,6 +34,10 @@ import { InstallModal } from './components/InstallModal';
 import { ShareModal } from './components/ShareModal';
 import { DeveloperModal } from './components/DeveloperModal';
 import { DeveloperPage } from './components/DeveloperPage';
+import { AboutPage } from './components/AboutPage';
+import { PrivacyPage } from './components/PrivacyPage';
+import { DisclaimerPage } from './components/DisclaimerPage';
+import { TermsPage } from './components/TermsPage';
 import { TRANSLATIONS } from './utils/translations';
 import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles } from 'lucide-react';
 
@@ -115,6 +119,10 @@ export default function App() {
           else if (normalized === 'history') setCurrentTab('history');
           else if (normalized === 'report' || normalized === 'reports') setCurrentTab('report');
           else if (normalized === 'developer' || normalized === 'dev' || normalized === 'creator' || normalized === 'founder') setCurrentTab('developer');
+          else if (normalized === 'about' || normalized === 'about-us') setCurrentTab('about');
+          else if (normalized === 'privacy' || normalized === 'privacy-policy') setCurrentTab('privacy');
+          else if (normalized === 'disclaimer') setCurrentTab('disclaimer');
+          else if (normalized === 'terms' || normalized === 'terms-of-service') setCurrentTab('terms');
         }
 
         if (fundParam && ['personal', 'family', 'buffer', 'emergency', 'saving', 'investment'].includes(fundParam.toLowerCase())) {
@@ -926,6 +934,38 @@ export default function App() {
           />
         )}
 
+        {currentTab === 'about' && (
+          <AboutPage
+            onBack={() => setCurrentTab('home')}
+            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+            language={language}
+          />
+        )}
+
+        {currentTab === 'privacy' && (
+          <PrivacyPage
+            onBack={() => setCurrentTab('home')}
+            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+            language={language}
+          />
+        )}
+
+        {currentTab === 'disclaimer' && (
+          <DisclaimerPage
+            onBack={() => setCurrentTab('home')}
+            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+            language={language}
+          />
+        )}
+
+        {currentTab === 'terms' && (
+          <TermsPage
+            onBack={() => setCurrentTab('home')}
+            onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+            language={language}
+          />
+        )}
+
         {/* Sponsor / Ad Banner (Compact) */}
         <section className="pt-3 pb-1">
           <HasVoltPromoBanner />
@@ -937,7 +977,7 @@ export default function App() {
         </section>
 
         {/* Streamlined Minimal Footer */}
-        <footer className="pt-3 pb-2 text-center text-[11px] text-[#64748B] space-y-2 select-none">
+        <footer className="pt-3 pb-3 text-center text-[11px] text-[#64748B] space-y-2 select-none">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {/* Creator Minimal Pill */}
             <button
@@ -961,7 +1001,7 @@ export default function App() {
               <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1 py-0.1 rounded font-bold">Creator</span>
             </button>
 
-            {/* Compact Icon Links */}
+            {/* Compact Verified Social & Email Links */}
             <div className="flex items-center gap-1.5">
               <a
                 href="https://github.com/hasvolt/Daily-Khata-Pro"
@@ -974,9 +1014,9 @@ export default function App() {
               </a>
 
               <a
-                href="mailto:yazdaantalk@gmail.com"
+                href="mailto:daily-Khata-Pro@gmail.com"
                 className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
-                title="Email: yazdaantalk@gmail.com"
+                title="Official Email: daily-Khata-Pro@gmail.com"
               >
                 <Mail className="w-3.5 h-3.5" />
               </a>
@@ -1003,10 +1043,35 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-1.5 font-medium text-[10.5px] text-[#64748B]">
-            <span className="font-semibold text-[#94A3B8]">Daily Khata: Pro™</span>
+          {/* Legal & Informational Separate Page Links */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-1 font-medium text-[11px] text-[#94A3B8]">
+            <button
+              onClick={() => setCurrentTab('about')}
+              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'about' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
+            >
+              About Us
+            </button>
             <span>•</span>
-            <span>100% Offline &amp; Private</span>
+            <button
+              onClick={() => setCurrentTab('privacy')}
+              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'privacy' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
+            >
+              Privacy Policy
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => setCurrentTab('disclaimer')}
+              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'disclaimer' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
+            >
+              Disclaimer
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => setCurrentTab('terms')}
+              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'terms' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
+            >
+              Terms
+            </button>
             <span>•</span>
             <button
               onClick={() => setIsSourceCodeOpen(true)}
@@ -1014,6 +1079,14 @@ export default function App() {
             >
               Open Source (MIT)
             </button>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-1.5 font-medium text-[10.5px] text-[#64748B]">
+            <span className="font-semibold text-[#94A3B8]">Daily Khata: Pro™</span>
+            <span>•</span>
+            <span>Official Domain: <strong>rozfiber.com</strong></span>
+            <span>•</span>
+            <span>100% Offline &amp; Private</span>
             <span>•</span>
             <button
               onClick={() => setIsSettingsOpen(true)}

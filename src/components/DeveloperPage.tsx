@@ -13,7 +13,9 @@ import {
   Sparkles,
   Layers,
   Terminal,
-  Share2
+  Share2,
+  Instagram,
+  Twitter
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { AppLanguage } from '../types';
@@ -31,7 +33,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const isHindi = language === 'hi';
-  const email = 'yazdaantalk@gmail.com';
+  const email = 'daily-Khata-Pro@gmail.com';
   const githubUrl = 'https://github.com/hasvolt/Daily-Khata-Pro';
 
   const handleCopyEmail = () => {
@@ -212,24 +214,46 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 <span className="font-bold text-[#38BDF8]">100% Offline-First Client Storage</span>
               </div>
               <div className="flex items-center justify-between py-1.5">
-                <span className="text-[#94A3B8]">Support &amp; Feedback:</span>
-                <a href={`mailto:${email}`} className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono">
+                <span className="text-[#94A3B8]">Official Email:</span>
+                <a href={`mailto:${email}`} className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono font-bold text-[12px]">
                   {email}
                 </a>
               </div>
             </div>
           </div>
 
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full py-3 px-4 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] font-bold text-[13px] flex items-center justify-center gap-2 transition-all cursor-pointer mt-2"
-          >
-            <FolderGit2 className="w-4 h-4 text-[#10B981]" />
-            <span>GitHub: hasvolt/Daily-Khata-Pro</span>
-            <ExternalLink className="w-3.5 h-3.5 text-[#64748B]" />
-          </a>
+          {/* Social Links Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2.5 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+              <span>GitHub</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/dailykhatapro"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2.5 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#CBD5E1] hover:text-[#E1306C] font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Instagram className="w-4 h-4 text-[#E1306C]" />
+              <span>Instagram</span>
+            </a>
+
+            <a
+              href="https://x.com/Dailykhatapro"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2.5 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#CBD5E1] hover:text-[#1DA1F2] font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Twitter className="w-4 h-4 text-[#1DA1F2]" />
+              <span>X (Twitter)</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

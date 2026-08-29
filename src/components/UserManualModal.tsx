@@ -533,8 +533,8 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
 
                       <div className="text-[11.5px] text-[#94A3B8] flex items-center justify-center sm:justify-start gap-1.5 pt-0.5">
                         <Mail className="w-3.5 h-3.5 text-[#38BDF8] shrink-0" />
-                        <a href="mailto:yazdaantalk@gmail.com" className="hover:underline text-[#CBD5E1] hover:text-[#38BDF8] font-mono">
-                          yazdaantalk@gmail.com
+                        <a href="mailto:daily-Khata-Pro@gmail.com" className="hover:underline text-[#CBD5E1] hover:text-[#38BDF8] font-mono">
+                          daily-Khata-Pro@gmail.com
                         </a>
                       </div>
                     </div>
@@ -581,19 +581,19 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                     </div>
                     <div className="flex items-center justify-between text-[#94A3B8]">
                       <span className="font-semibold text-[#CBD5E1]">Support &amp; Feedback:</span>
-                      <a href="mailto:yazdaantalk@gmail.com" className="text-[#38BDF8] hover:underline font-mono">
-                        yazdaantalk@gmail.com
+                      <a href="mailto:daily-Khata-Pro@gmail.com" className="text-[#38BDF8] hover:underline font-mono">
+                        daily-Khata-Pro@gmail.com
                       </a>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                     <a
-                      href="mailto:yazdaantalk@gmail.com"
+                      href="mailto:daily-Khata-Pro@gmail.com"
                       className="p-2.5 rounded-lg bg-[#38BDF8] hover:brightness-110 text-[#0B1017] font-bold text-[12px] flex items-center justify-center gap-2 transition-all"
                     >
                       <Mail className="w-4 h-4" />
-                      <span>Email: yazdaantalk@gmail.com</span>
+                      <span>Email: daily-Khata-Pro@gmail.com</span>
                     </a>
                     <a
                       href="https://github.com/hasvolt/Daily-Khata-Pro"

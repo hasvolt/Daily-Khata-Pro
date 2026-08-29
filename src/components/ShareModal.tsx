@@ -5,9 +5,7 @@ import {
   Check,
   X,
   ExternalLink,
-  MessageCircle,
   Twitter,
-  Send,
   Mail,
   QrCode,
   Globe,
@@ -44,7 +42,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   if (!isOpen) return null;
 
   const isHindi = language === 'hi';
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://daily-khata-pro.vercel.app';
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://rozfiber.com';
   
   const getPageUrl = (tab: NavTab) => {
     if (tab === 'home') return `${baseUrl}/?tab=home`;
@@ -166,7 +164,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               {typeof navigator !== 'undefined' && (
                 <button
                   onClick={handleNativeShare}
-                  className="px-3 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95"
                 >
                   <Share2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                   <span>{isHindi ? 'सिस्टम शेयर' : 'Share Menu'}</span>
@@ -174,40 +172,20 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               )}
 
               <a
-                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-[#10B981]/20 hover:bg-[#10B981]/30 border border-[#10B981]/40 text-[#10B981] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <MessageCircle className="w-3.5 h-3.5" />
-                <span>WhatsApp</span>
-              </a>
-
-              <a
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(currentShareUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-[#1DA1F2]/20 hover:bg-[#1DA1F2]/30 border border-[#1DA1F2]/40 text-[#1DA1F2] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-[#1DA1F2]/20 hover:bg-[#1DA1F2]/30 border border-[#1DA1F2]/40 text-[#1DA1F2] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
               >
                 <Twitter className="w-3.5 h-3.5" />
-                <span>X / Twitter</span>
-              </a>
-
-              <a
-                href={`https://t.me/share/url?url=${encodeURIComponent(currentShareUrl)}&text=${encodeURIComponent(shareTitle)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-[#0088cc]/20 hover:bg-[#0088cc]/30 border border-[#0088cc]/40 text-[#38BDF8] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>Telegram</span>
+                <span>X (Twitter)</span>
               </a>
 
               <a
                 href={`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareText)}`}
-                className="px-3 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#CBD5E1] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#CBD5E1] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
               >
-                <Mail className="w-3.5 h-3.5 text-[#CBD5E1]" />
+                <Mail className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                 <span>Email</span>
               </a>
             </div>

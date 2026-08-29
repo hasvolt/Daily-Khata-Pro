@@ -34,7 +34,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
   if (!isOpen) return null;
 
   const isHindi = language === 'hi';
-  const email = 'yazdaantalk@gmail.com';
+  const email = 'daily-Khata-Pro@gmail.com';
   const githubUrl = 'https://github.com/hasvolt/Daily-Khata-Pro';
 
   const handleCopyEmail = () => {
