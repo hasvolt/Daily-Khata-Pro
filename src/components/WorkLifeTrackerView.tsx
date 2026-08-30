@@ -24,7 +24,9 @@ import {
   Sunset,
   Moon,
   ChevronDown,
-  Check
+  Check,
+  Printer,
+  FileText
 } from 'lucide-react';
 
 interface WorkLifeTrackerViewProps {
@@ -55,6 +57,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
 
   // Work Stats
   const totalWorkHours = workLogs.reduce((s, w) => s + (w.hoursSpent || 0), 0);
@@ -161,6 +164,51 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
             <Sparkles className="w-4 h-4 stroke-[2.5]" />
             <span>{isHindi ? '+ आज की डायरी' : "+ Today's Story"}</span>
           </button>
+          
+          {/* Tracker Export / Print Button */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:bg-[var(--theme-card-hover,#19304A)] transition-all cursor-pointer shadow-sm active:scale-95 shrink-0"
+              title="Backup / Print Options"
+            >
+              <Printer className="w-4 h-4" />
+            </button>
+            
+            {isExportMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsExportMenuOpen(false)} />
+                <div className="absolute right-0 mt-2 w-48 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl shadow-2xl z-50 p-1.5 animate-in fade-in zoom-in-95">
+                  <div className="px-2.5 py-1.5 text-[10px] font-extrabold uppercase text-[#94A3B8] border-b border-[var(--theme-border,#213E61)]/60 mb-1">
+                    {isHindi ? 'डेटा बैकअप' : 'Data Backup'}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      import('../utils/trackerExport').then(m => m.printTrackerData(workLogs, dailyLifeLogs));
+                      setIsExportMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-[12px] font-bold text-[#F8FAFC] hover:bg-white/5 transition-colors cursor-pointer text-left"
+                  >
+                    <Printer className="w-3.5 h-3.5 text-[#38BDF8]" />
+                    <span>{isHindi ? 'प्रिंट / PDF सेव करें' : 'Print / Save PDF'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      import('../utils/trackerExport').then(m => m.downloadTrackerCSV(workLogs, dailyLifeLogs));
+                      setIsExportMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-[12px] font-bold text-[#F8FAFC] hover:bg-white/5 transition-colors cursor-pointer text-left"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-[#10B981]" />
+                    <span>{isHindi ? 'CSV डाउनलोड करें' : 'Download CSV'}</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
