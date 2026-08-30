@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Entry, FundType, Goal, WorkLog, DailyLifeLog, KhataData, AppTheme, AppLanguage } from './types';
+import { Entry, FundType, Goal, WorkLog, DailyLifeLog, KhataData, AppTheme, AppLanguage, SecurityLockConfig } from './types';
 import {
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
   DEFAULT_INCOME_SOURCES,
   DEFAULT_WORK_CATEGORIES,
   DEFAULT_LIFE_TAGS,
-  INITIAL_SAMPLE_ENTRIES
+  INITIAL_SAMPLE_ENTRIES,
+  DEFAULT_SECURITY_LOCK
 } from './data/defaults';
 import { calculateFundTotals } from './utils/khataCalculations';
 import { Header } from './components/Header';
@@ -23,8 +24,10 @@ import { DailyLifeModal } from './components/DailyLifeModal';
 import { SettingsModal } from './components/SettingsModal';
 import { GoalModal } from './components/GoalModal';
 import { DepositGoalModal } from './components/DepositGoalModal';
+import { LockScreen } from './components/LockScreen';
+import { SecurityLockModal } from './components/SecurityLockModal';
 import { UserManualModal } from './components/UserManualModal';
-import { FundSplitCalculatorModal } from './components/FundSplitCalculatorModal';
+import { MultiCalculatorModal } from './components/MultiCalculatorModal';
 import { HasVoltPromoBanner } from './components/HasVoltPromoBanner';
 import { GoogleAdBanner } from './components/GoogleAdBanner';
 import { PrintArea } from './components/PrintArea';
@@ -39,6 +42,9 @@ import { AboutPage } from './components/AboutPage';
 import { PrivacyPage } from './components/PrivacyPage';
 import { DisclaimerPage } from './components/DisclaimerPage';
 import { TermsPage } from './components/TermsPage';
+import { GuidePage } from './components/GuidePage';
+import { SafetyPage } from './components/SafetyPage';
+import { CalculatorPage } from './components/CalculatorPage';
 import { TRANSLATIONS } from './utils/translations';
 import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles } from 'lucide-react';
 
@@ -63,6 +69,8 @@ export default function App() {
   const [theme, setTheme] = useState<AppTheme>('blue');
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
+  const [securityLock, setSecurityLock] = useState<SecurityLockConfig>(DEFAULT_SECURITY_LOCK);
+  const [isAppLocked, setIsAppLocked] = useState<boolean>(false);
   
   // Re-add currentTab and normalize it based on pathname
   const rawPath = location.pathname.substring(1);
@@ -74,10 +82,12 @@ export default function App() {
   };
 
   const [addInitialType, setAddInitialType] = useState<'income' | 'expense'>('income');
+  const [addInitialAmount, setAddInitialAmount] = useState<number | undefined>(undefined);
   const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
   const [historyFilter, setHistoryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isSecurityModalOpen, setIsSecurityModalOpen] = useState<boolean>(false);
   const [isManualOpen, setIsManualOpen] = useState<boolean>(false);
   const [isSourceCodeOpen, setIsSourceCodeOpen] = useState<boolean>(false);
   const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
@@ -196,6 +206,12 @@ export default function App() {
         if (typeof parsed.settings?.privacyMask === 'boolean') {
           setPrivacyMask(parsed.settings.privacyMask);
         }
+        if (parsed.settings?.securityLock) {
+          setSecurityLock(parsed.settings.securityLock);
+          if (parsed.settings.securityLock.isEnabled && parsed.settings.securityLock.pin) {
+            setIsAppLocked(true);
+          }
+        }
       } else {
         // Clean ledger start
         setEntries([]);
@@ -208,12 +224,30 @@ export default function App() {
         setLifeTags(DEFAULT_LIFE_TAGS);
         setTheme('blue');
         setLanguage('en');
-        saveToLocalStorage([], [], DEFAULT_CATEGORIES, DEFAULT_INCOME_SOURCES, DEFAULT_WORK_CATEGORIES, DEFAULT_LIFE_TAGS, DEFAULT_PERCENTAGES, 'blue', 'en', false, [], []);
+        setSecurityLock(DEFAULT_SECURITY_LOCK);
+        setIsAppLocked(false);
+        saveToLocalStorage([], [], DEFAULT_CATEGORIES, DEFAULT_INCOME_SOURCES, DEFAULT_WORK_CATEGORIES, DEFAULT_LIFE_TAGS, DEFAULT_PERCENTAGES, 'blue', 'en', false, [], [], DEFAULT_SECURITY_LOCK);
       }
     } catch (e) {
       console.error('Failed to load local data', e);
     }
   }, []);
+
+  // Auto-lock when user leaves tab / switches app (if autoLockOnLeave is enabled)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        if (securityLock.isEnabled && securityLock.pin && securityLock.autoLockOnLeave) {
+          setIsAppLocked(true);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [securityLock]);
 
   const saveToLocalStorage = (
     newEntries: Entry[] = entries,
@@ -227,7 +261,8 @@ export default function App() {
     newLang: AppLanguage = language,
     newMask: boolean = privacyMask,
     newWorkLogs: WorkLog[] = workLogs,
-    newDailyLifeLogs: DailyLifeLog[] = dailyLifeLogs
+    newDailyLifeLogs: DailyLifeLog[] = dailyLifeLogs,
+    newSecurityLock: SecurityLockConfig = securityLock
   ) => {
     try {
       const data: KhataData = {
@@ -243,13 +278,64 @@ export default function App() {
           percentages: newPct,
           theme: newTheme,
           language: newLang,
-          privacyMask: newMask
+          privacyMask: newMask,
+          securityLock: newSecurityLock
         }
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (err) {
       console.error('Failed to save to localStorage', err);
     }
+  };
+
+  const handleUnlockSuccess = () => {
+    setIsAppLocked(false);
+    const updated: SecurityLockConfig = {
+      ...securityLock,
+      lastUnlockedAt: Date.now()
+    };
+    setSecurityLock(updated);
+    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs, updated);
+    showToast(language === 'hi' ? 'वॉल्ट अनलॉक हुआ (Vault Unlocked)' : 'Vault unlocked successfully');
+  };
+
+  const handleInstantLock = () => {
+    if (securityLock.isEnabled && securityLock.pin) {
+      setIsAppLocked(true);
+      showToast(language === 'hi' ? 'ऐप तुरंत लॉक किया गया' : 'App locked');
+    } else {
+      setIsSecurityModalOpen(true);
+    }
+  };
+
+  const handleSaveSecurityConfig = (config: SecurityLockConfig) => {
+    setSecurityLock(config);
+    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs, config);
+    if (!config.isEnabled) {
+      setIsAppLocked(false);
+    }
+    showToast(
+      config.isEnabled
+        ? language === 'hi' ? 'सुरक्षा पिन सुरक्षित रूप से सहेजा गया' : 'PIN security enabled & saved'
+        : language === 'hi' ? 'सुरक्षा लॉक हटा दिया गया' : 'PIN security disabled'
+    );
+  };
+
+  const handleEmergencyReset = () => {
+    setEntries([]);
+    setGoals([]);
+    setWorkLogs([]);
+    setDailyLifeLogs([]);
+    setCategories(DEFAULT_CATEGORIES);
+    setIncomeSources(DEFAULT_INCOME_SOURCES);
+    setWorkCategories(DEFAULT_WORK_CATEGORIES);
+    setLifeTags(DEFAULT_LIFE_TAGS);
+    setPercentages(DEFAULT_PERCENTAGES);
+    setSecurityLock(DEFAULT_SECURITY_LOCK);
+    setIsAppLocked(false);
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('hasvolt-khata-v2');
+    showToast(language === 'hi' ? 'सभी डेटा रीसेट और सुरक्षा पिन हटा दिया गया' : 'Emergency wipe complete. All locks reset.');
   };
 
   const showToast = (msg: string) => {
@@ -323,6 +409,7 @@ export default function App() {
   const handleAddClick = (type: 'income' | 'expense') => {
     setEditingEntry(null);
     setAddInitialType(type);
+    setAddInitialAmount(undefined);
     setCurrentTab('add');
   };
 
@@ -766,12 +853,15 @@ export default function App() {
           currentTab={currentTab}
           onSelectTab={setCurrentTab}
           onOpenSettings={() => setIsSettingsOpen(true)}
-          onOpenManual={() => setIsManualOpen(true)}
-          onOpenSimulator={() => setIsCalculatorOpen(true)}
-          onOpenSourceCode={() => setIsSourceCodeOpen(true)}
+          onOpenManual={() => setCurrentTab('guide')}
+          onOpenSimulator={() => setCurrentTab('calculator')}
+          onOpenSourceCode={() => setCurrentTab('safety')}
           onOpenInstall={() => setIsInstallModalOpen(true)}
           onOpenShare={() => setIsShareOpen(true)}
           onOpenDeveloper={() => setIsDeveloperOpen(true)}
+          onOpenSecurity={() => setIsSecurityModalOpen(true)}
+          isLockEnabled={Boolean(securityLock.isEnabled && securityLock.pin)}
+          onLockNow={handleInstantLock}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           theme={theme}
@@ -809,7 +899,7 @@ export default function App() {
                 setEditingDailyLife(null);
                 setIsDailyLifeModalOpen(true);
               }}
-              onOpenManual={() => setIsManualOpen(true)}
+              onOpenManual={() => setCurrentTab('guide')}
               language={language}
               privacyMask={privacyMask}
             />
@@ -818,6 +908,7 @@ export default function App() {
           <Route path="/add" element={
             <AddView
               initialType={addInitialType}
+              initialAmount={addInitialAmount}
               editingEntry={editingEntry}
               categories={categories}
               incomeSources={incomeSources}
@@ -826,6 +917,7 @@ export default function App() {
               onSaveEntry={handleSaveEntry}
               onCancelEdit={() => {
                 setEditingEntry(null);
+                setAddInitialAmount(undefined);
                 setCurrentTab('home');
               }}
               onAddCategory={handleAddCategory}
@@ -948,6 +1040,55 @@ export default function App() {
               language={language}
             />
           } />
+
+          <Route path="/guide" element={
+            <GuidePage
+              onBack={() => setCurrentTab('home')}
+              onOpenSourceCode={() => setCurrentTab('safety')}
+              onOpenSecurityLock={() => setIsSecurityModalOpen(true)}
+              language={language}
+            />
+          } />
+
+          <Route path="/safety" element={
+            <SafetyPage
+              onBack={() => setCurrentTab('home')}
+              language={language}
+              entriesCount={entries.length}
+              goalsCount={goals.length}
+            />
+          } />
+
+          <Route path="/calculator" element={
+            <CalculatorPage
+              onBack={() => setCurrentTab('home')}
+              percentages={percentages}
+              privacyMask={privacyMask}
+              language={language}
+              onApplyToIncome={(amount) => {
+                setEditingEntry(null);
+                setAddInitialType('income');
+                setAddInitialAmount(amount);
+                setCurrentTab('add');
+              }}
+              onApplyToExpense={(amount) => {
+                setEditingEntry(null);
+                setAddInitialType('expense');
+                setAddInitialAmount(amount);
+                setCurrentTab('add');
+              }}
+              onApplyToGoal={(title, targetAmount) => {
+                handleSaveGoal({
+                  title,
+                  targetAmount,
+                  currentAmount: 0,
+                  category: 'Future Investment',
+                  note: 'Created via Inflation & Goal Horizon Calculator'
+                });
+                setCurrentTab('goals');
+              }}
+            />
+          } />
           
           <Route path="*" element={<HomeView
               entries={entries}
@@ -971,7 +1112,7 @@ export default function App() {
                 setEditingDailyLife(null);
                 setIsDailyLifeModalOpen(true);
               }}
-              onOpenManual={() => setIsManualOpen(true)}
+              onOpenManual={() => setCurrentTab('guide')}
               language={language}
               privacyMask={privacyMask}
             />} />
@@ -1085,10 +1226,24 @@ export default function App() {
             </button>
             <span>•</span>
             <button
-              onClick={() => setIsSourceCodeOpen(true)}
-              className="text-[#10B981] hover:underline font-medium transition-colors cursor-pointer"
+              onClick={() => setCurrentTab('safety')}
+              className={`text-[#10B981] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'safety' ? 'font-bold' : ''}`}
             >
-              Open Source (MIT)
+              Source Safety
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => setCurrentTab('guide')}
+              className={`text-[var(--theme-primary,#38BDF8)] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'guide' ? 'font-bold' : ''}`}
+            >
+              Guide
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => setCurrentTab('calculator')}
+              className={`text-[#F59E0B] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'calculator' ? 'font-bold' : ''}`}
+            >
+              Calculators
             </button>
           </div>
 
@@ -1161,6 +1316,9 @@ export default function App() {
         onOpenInstall={() => setIsInstallModalOpen(true)}
         onOpenShare={() => setIsShareOpen(true)}
         onOpenDeveloper={() => setIsDeveloperOpen(true)}
+        onOpenSecurityModal={() => setIsSecurityModalOpen(true)}
+        securityLock={securityLock}
+        onInstantLock={handleInstantLock}
         theme={theme}
         onThemeChange={handleThemeChange}
         language={language}
@@ -1197,15 +1355,23 @@ export default function App() {
         language={language}
       />
 
-      {/* 6-Fund Split Simulator Modal */}
-      <FundSplitCalculatorModal
+      {/* Multi-Purpose Pro Financial Calculator Modal */}
+      <MultiCalculatorModal
         isOpen={isCalculatorOpen}
         onClose={() => setIsCalculatorOpen(false)}
         percentages={percentages}
         language={language}
-        onApplyToIncome={() => {
+        privacyMask={privacyMask}
+        onApplyToIncome={(amount) => {
           setEditingEntry(null);
           setAddInitialType('income');
+          setAddInitialAmount(amount);
+          setCurrentTab('add');
+        }}
+        onApplyToExpense={(amount) => {
+          setEditingEntry(null);
+          setAddInitialType('expense');
+          setAddInitialAmount(amount);
           setCurrentTab('add');
         }}
       />
@@ -1215,6 +1381,8 @@ export default function App() {
         isOpen={isManualOpen}
         onClose={() => setIsManualOpen(false)}
         onOpenSourceCode={() => setIsSourceCodeOpen(true)}
+        onOpenSecurityLock={() => setIsSecurityModalOpen(true)}
+        language={language}
       />
 
       {/* Source Code & Security Audit Modal */}
@@ -1289,6 +1457,27 @@ export default function App() {
         onClose={() => setIsDeveloperOpen(false)}
         language={language}
       />
+
+      {/* App Passcode / PIN Security Configuration Modal */}
+      <SecurityLockModal
+        isOpen={isSecurityModalOpen}
+        onClose={() => setIsSecurityModalOpen(false)}
+        securityConfig={securityLock}
+        onSaveSecurityConfig={handleSaveSecurityConfig}
+        onInstantLock={handleInstantLock}
+        language={language}
+      />
+
+      {/* Global App Passcode Vault Lock Screen */}
+      {isAppLocked && securityLock.isEnabled && securityLock.pin && (
+        <LockScreen
+          securityConfig={securityLock}
+          onUnlockSuccess={handleUnlockSuccess}
+          onUpdateSecurityConfig={handleSaveSecurityConfig}
+          onResetAllData={handleEmergencyReset}
+          language={language}
+        />
+      )}
     </div>
   );
 }

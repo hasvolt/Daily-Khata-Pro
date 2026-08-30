@@ -20,7 +20,9 @@ import {
   ExternalLink,
   ChevronDown,
   Sun,
-  Moon
+  Moon,
+  Lock,
+  KeyRound
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -37,6 +39,9 @@ interface HeaderProps {
   onOpenInstall?: () => void;
   onOpenShare?: () => void;
   onOpenDeveloper?: () => void;
+  onOpenSecurity?: () => void;
+  isLockEnabled?: boolean;
+  onLockNow?: () => void;
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
   theme?: AppTheme;
@@ -57,6 +62,9 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenInstall,
   onOpenShare,
   onOpenDeveloper,
+  onOpenSecurity,
+  isLockEnabled = false,
+  onLockNow,
   searchQuery = '',
   onSearchChange,
   theme = 'blue',
@@ -221,8 +229,67 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Header Action Buttons (Moved to More Menu) */}
+          {/* Quick Lock Button (Visible when PIN protection is active) */}
+          {isLockEnabled && onLockNow && (
+            <button
+              type="button"
+              onClick={onLockNow}
+              className="p-1.5 sm:px-2 sm:py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[#EF4444]/15 hover:border-[#EF4444]/50 text-[#CBD5E1] hover:text-[#EF4444] transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1 shrink-0"
+              title={isHindi ? 'अभी ऐप लॉक करें' : 'Lock App Vault Now'}
+              id="header-lock-now-btn"
+            >
+              <Lock className="w-3.5 h-3.5 text-[#10B981]" />
+              <span className="hidden xl:inline">
+                {isHindi ? 'लॉक' : 'Lock'}
+              </span>
+            </button>
+          )}
 
+          {/* Quick Day/Night Toggle */}
+          {onThemeChange && (
+            <button
+              type="button"
+              onClick={() => {
+                if (isLightMode) {
+                  onThemeChange('blue');
+                } else {
+                  onThemeChange('light');
+                }
+              }}
+              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1 shrink-0 ${
+                isLightMode
+                  ? 'bg-[#0284C7]/15 border-[#0284C7]/40 text-[#0284C7] hover:bg-[#0284C7]/25'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+              }`}
+              title={isLightMode ? (isHindi ? 'नाइट मोड' : 'Switch to Night Mode') : (isHindi ? 'डे मोड' : 'Switch to Day Mode')}
+              id="header-theme-toggle-btn"
+            >
+              {isLightMode ? (
+                <Moon className="w-3.5 h-3.5" />
+              ) : (
+                <Sun className="w-3.5 h-3.5" />
+              )}
+              <span className="hidden sm:inline">
+                {isLightMode ? (isHindi ? 'नाइट' : 'Night') : (isHindi ? 'डे' : 'Day')}
+              </span>
+            </button>
+          )}
+
+          {/* Header Quick Calculator Button */}
+          {onOpenSimulator && (
+            <button
+              type="button"
+              onClick={onOpenSimulator}
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1.5 shrink-0"
+              title={isHindi ? 'मल्टीपर्पस कैलकुलेटर (Standard, 6-Fund, SIP, EMI, GST)' : 'Multi-Purpose Calculator (Standard, 6-Fund, SIP, EMI, GST)'}
+              id="header-calculator-btn"
+            >
+              <Calculator className="w-3.5 h-3.5 text-[#F59E0B]" />
+              <span className="hidden sm:inline font-semibold">
+                {isHindi ? 'कैलकुलेटर' : 'Calculator'}
+              </span>
+            </button>
+          )}
 
           {/* More Actions & Links Menu (Consolidates Calculator, Manual, Developer, Source Code, Share, GitHub) */}
           <div className="relative shrink-0">
@@ -341,6 +408,27 @@ export const Header: React.FC<HeaderProps> = ({
                     <span>{t.header.manual} (Guide)</span>
                   </button>
 
+                  {/* Security & App Passcode Lock */}
+                  {onOpenSecurity && (
+                    <button
+                      onClick={() => {
+                        onOpenSecurity();
+                        closeAllMenus();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[12px] font-bold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] transition-all cursor-pointer text-left"
+                    >
+                      <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
+                      <div className="flex items-center justify-between flex-1">
+                        <span>{isHindi ? 'सुरक्षा पिन एवं ऐप लॉक' : 'App Passcode Lock'}</span>
+                        {isLockEnabled && (
+                          <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40">
+                            ON
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  )}
+
                   {/* Simulator / Calculator Option */}
                   {onOpenSimulator && (
                     <button
@@ -351,7 +439,7 @@ export const Header: React.FC<HeaderProps> = ({
                       className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[12px] font-bold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer text-left"
                     >
                       <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
-                      <span>{isHindi ? '6-फंड कैलकुलेटर' : '6-Fund Calculator'}</span>
+                      <span>{isHindi ? 'वित्तीय कैलकुलेटर सूट' : 'Financial Calculators (Pro)'}</span>
                     </button>
                   )}
 

@@ -123,35 +123,80 @@ export const calculatePeriodStats = (
   };
 };
 
+let sharedAudioCtx: AudioContext | null = null;
+
+function getSharedAudioContext(): AudioContext | null {
+  try {
+    if (!sharedAudioCtx) {
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (AudioContextClass) {
+        sharedAudioCtx = new AudioContextClass();
+      }
+    }
+    if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+      sharedAudioCtx.resume().catch(() => {});
+    }
+    return sharedAudioCtx;
+  } catch {
+    return null;
+  }
+}
+
 export const triggerHapticSound = (type: 'save' | 'delete' | 'click' | 'error' = 'click') => {
   try {
-    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    // Gentle vibration for mobile devices if supported
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      if (type === 'click') {
+        navigator.vibrate(8);
+      } else if (type === 'save') {
+        navigator.vibrate([15, 30, 20]);
+      } else if (type === 'error' || type === 'delete') {
+        navigator.vibrate(30);
+      }
+    }
 
-    if (type === 'save') {
+    // Audio feedback via lightweight shared AudioContext
+    const ctx = getSharedAudioContext();
+    if (!ctx) return;
+
+    if (type === 'click') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.04);
+    } else if (type === 'save') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
       osc.type = 'sine';
       osc.frequency.setValueAtTime(520, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
       osc.start();
       osc.stop(ctx.currentTime + 0.18);
     } else if (type === 'delete' || type === 'error') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(320, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
       osc.start();
       osc.stop(ctx.currentTime + 0.12);
     }
   } catch {
-    // ignore audio block
+    // ignore audio/haptic failures
   }
 };
 

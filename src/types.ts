@@ -85,6 +85,19 @@ export interface Goal {
   completedAt?: number;
 }
 
+export interface SecurityLockConfig {
+  isEnabled: boolean;
+  pin: string; // 4 to 6 digit PIN or password string
+  securityQuestion?: string;
+  securityQuestionId?: string;
+  securityAnswer: string; // Lowercase normalized for recovery
+  recoveryHint?: string;
+  autoLockOnLeave?: boolean; // Auto-lock when user switches tabs or window loses focus
+  autoLockTimeoutMinutes?: number; // 0 = immediate, or 1, 5, 15 min
+  createdAt?: number;
+  lastUnlockedAt?: number;
+}
+
 export interface KhataSettings {
   percentages: Record<FundType, number>;
   categories: string[];
@@ -98,6 +111,7 @@ export interface KhataSettings {
   userName?: string;
   userRole?: string;
   privacyMask?: boolean;
+  securityLock?: SecurityLockConfig;
 }
 
 export interface KhataData {
@@ -116,5 +130,6 @@ export interface KhataData {
     privacyMask?: boolean;
     currency?: string;
     currencySymbol?: string;
+    securityLock?: SecurityLockConfig;
   };
 }

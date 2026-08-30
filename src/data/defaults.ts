@@ -1,4 +1,4 @@
-import { FundConfig, FundType, Entry } from '../types';
+import { FundConfig, FundType, Entry, SecurityLockConfig } from '../types';
 
 export const FUND_ORDER: FundType[] = [
   'personal',
@@ -163,6 +163,25 @@ export const GOAL_PRESETS = [
   { id: 'gp_gold', title: 'Asset & Gold Reserve', iconKey: 'gold', defaultTarget: 100000, category: 'Wealth Asset', defaultFund: 'investment' as FundType },
   { id: 'gp_education', title: 'Executive Certifications & Degrees', iconKey: 'education', defaultTarget: 40000, category: 'Professional Growth', defaultFund: 'saving' as FundType }
 ];
+
+export const SECURITY_QUESTIONS = [
+  { id: 'pet', label: "What was the name of your first pet?", hindiLabel: "आपके पहले पालतू जानवर (Pet) का क्या नाम था?" },
+  { id: 'city', label: "What is your birthplace / hometown?", hindiLabel: "आपका जन्म स्थान या गृहनगर (City) कौन सा है?" },
+  { id: 'school', label: "What was the name of your first school?", hindiLabel: "आपके पहले स्कूल का क्या नाम था?" },
+  { id: 'food', label: "What is your favorite comfort food?", hindiLabel: "आपका पसंदीदा भोजन या मिठाई क्या है?" },
+  { id: 'hero', label: "Who was your childhood favorite hero/mentor?", hindiLabel: "आपके बचपन का पसंदीदा हीरो या मेंटर कौन था?" },
+  { id: 'custom', label: "Custom Secret Phrase / Pin Reminder", hindiLabel: "कस्टम गुप्त शब्द या पिन याद दिलाने वाला संकेत" }
+];
+
+export const DEFAULT_SECURITY_LOCK: SecurityLockConfig = {
+  isEnabled: false,
+  pin: '',
+  securityQuestion: "What was the name of your first pet?",
+  securityAnswer: '',
+  recoveryHint: '',
+  autoLockOnLeave: true,
+  autoLockTimeoutMinutes: 0
+};
 
 export const INITIAL_SAMPLE_ENTRIES: Entry[] = [
   {

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { KhataData, AppTheme, AppLanguage, FundType } from '../types';
+import { KhataData, AppTheme, AppLanguage, FundType, SecurityLockConfig } from '../types';
 import {
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
@@ -67,6 +67,9 @@ interface SettingsModalProps {
   onOpenInstall?: () => void;
   onOpenShare?: () => void;
   onOpenDeveloper?: () => void;
+  onOpenSecurityModal?: () => void;
+  securityLock?: SecurityLockConfig;
+  onInstantLock?: () => void;
   theme?: AppTheme;
   onThemeChange?: (theme: AppTheme) => void;
   language?: AppLanguage;
@@ -93,6 +96,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onOpenSourceCode,
   onOpenInstall,
   onOpenShare,
+  onOpenDeveloper,
+  onOpenSecurityModal,
+  securityLock,
+  onInstantLock,
   theme = 'blue',
   onThemeChange,
   language = 'en',
@@ -880,51 +887,127 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* TAB 5: PRIVACY & SECURITY */}
           {activeTab === 'privacy' && (
-            <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3.5">
-              <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
-                <Lock className="w-5 h-5" />
-                <h4 className="font-bold text-[15px] text-[#F8FAFC]">
-                  {isHindi ? '100% ऑफलाइन व सुरक्षित आर्किटेक्चर' : '100% Offline & Client-Side Architecture'}
-                </h4>
-              </div>
-              <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
-                Daily Khata: Pro operates strictly on your local device memory (IndexedDB / localStorage). Your
-                financial records, invoices, work deliverables, and daily journals are never transmitted to external
-                servers or cloud databases without your explicit export.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11.5px]">
-                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
-                  <span>Zero Server Tracking</span>
+            <div className="space-y-4">
+              {/* App Lock / Passcode Card */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3.5">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
+                    <Lock className="w-5 h-5" />
+                    <div>
+                      <h4 className="font-bold text-[15px] text-[#F8FAFC]">
+                        {isHindi ? 'ऐप पासकोड व पिन लॉक' : 'App Passcode & PIN Lock'}
+                      </h4>
+                      <p className="text-[11px] text-[#94A3B8]">
+                        {isHindi
+                          ? 'वित्तीय प्रविष्टियों और डायरी को सुरक्षित रखने हेतु 4-अंकीय पिन व रिकवरी सवाल'
+                          : 'Protect financial records and journal entries with a 4-digit PIN & recovery question'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <span
+                    className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full border uppercase tracking-wider ${
+                      securityLock?.isEnabled
+                        ? 'bg-[#10B981]/20 text-[#10B981] border-[#10B981]/40'
+                        : 'bg-[#64748B]/20 text-[#94A3B8] border-[#64748B]/40'
+                    }`}
+                  >
+                    {securityLock?.isEnabled
+                      ? isHindi
+                        ? 'सुरक्षा सक्रिय (Active)'
+                        : 'Locked / Protected'
+                      : isHindi
+                      ? 'अक्रिय (Disabled)'
+                      : 'Disabled'}
+                  </span>
                 </div>
-                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
-                  <span>Instant Client Math</span>
-                </div>
-                <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
-                  <span>Local JSON Portability</span>
+
+                <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                  {onOpenSecurityModal && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenSecurityModal();
+                        onClose();
+                      }}
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-95"
+                    >
+                      <Lock className="w-4 h-4" />
+                      <span>
+                        {securityLock?.isEnabled
+                          ? isHindi
+                            ? 'पिन व रिकवरी सेटिंग्स बदलें'
+                            : 'Modify Passcode & Recovery'
+                          : isHindi
+                          ? 'सुरक्षा पिन सेट करें (Set PIN)'
+                          : 'Set Up App Passcode'}
+                      </span>
+                    </button>
+                  )}
+
+                  {securityLock?.isEnabled && onInstantLock && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        onInstantLock();
+                      }}
+                      className="py-2.5 px-4 rounded-xl bg-[#EF4444]/15 border border-[#EF4444]/30 hover:bg-[#EF4444]/25 text-[#EF4444] text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+                    >
+                      <Lock className="w-4 h-4" />
+                      <span>{isHindi ? 'अभी लॉक करें' : 'Lock Now'}</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* GitHub Repo Card */}
-              <div className="p-3 rounded-xl bg-[#060B11] border border-[#213E61] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                <div className="flex items-center gap-2.5">
-                  <FolderGit2 className="w-5 h-5 text-[#10B981] shrink-0" />
-                  <div>
-                    <div className="text-[12.5px] font-bold text-[#F8FAFC]">GitHub Open Source Repository</div>
-                    <div className="text-[11px] text-[#94A3B8]">github.com/hasvolt/Daily-Khata-Pro</div>
+              {/* Offline Architecture Info */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3.5">
+                <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
+                  <ShieldCheck className="w-5 h-5 text-[#10B981]" />
+                  <h4 className="font-bold text-[15px] text-[#F8FAFC]">
+                    {isHindi ? '100% ऑफलाइन व सुरक्षित आर्किटेक्चर' : '100% Offline & Client-Side Architecture'}
+                  </h4>
+                </div>
+                <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
+                  Daily Khata: Pro operates strictly on your local device memory (IndexedDB / localStorage). Your
+                  financial records, invoices, work deliverables, and daily journals are never transmitted to external
+                  servers or cloud databases without your explicit export.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11.5px]">
+                  <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                    <span>Zero Server Tracking</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                    <span>Instant Client Math</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                    <span>Local JSON Portability</span>
                   </div>
                 </div>
-                <a
-                  href="https://github.com/hasvolt/Daily-Khata-Pro"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-primary,#38BDF8)]/40 text-[var(--theme-primary,#38BDF8)] text-[11.5px] font-bold flex items-center justify-center gap-1.5 transition-all self-start sm:self-auto"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Inspect Code</span>
-                </a>
+
+                {/* GitHub Repo Card */}
+                <div className="p-3 rounded-xl bg-[#060B11] border border-[#213E61] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <FolderGit2 className="w-5 h-5 text-[#10B981] shrink-0" />
+                    <div>
+                      <div className="text-[12.5px] font-bold text-[#F8FAFC]">GitHub Open Source Repository</div>
+                      <div className="text-[11px] text-[#94A3B8]">github.com/hasvolt/Daily-Khata-Pro</div>
+                    </div>
+                  </div>
+                  <a
+                    href="https://github.com/hasvolt/Daily-Khata-Pro"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-primary,#38BDF8)]/40 text-[var(--theme-primary,#38BDF8)] text-[11.5px] font-bold flex items-center justify-center gap-1.5 transition-all self-start sm:self-auto"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Inspect Code</span>
+                  </a>
+                </div>
               </div>
             </div>
           )}

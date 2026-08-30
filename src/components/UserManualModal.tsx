@@ -31,45 +31,61 @@ import {
   FolderGit2,
   Copy,
   Check,
-  User
+  User,
+  Lock,
+  KeyRound,
+  EyeOff,
+  AlertTriangle,
+  Briefcase,
+  Calendar
 } from 'lucide-react';
 import { HasVoltLogo } from './HasVoltLogo';
 import { FUND_LABELS, FUND_ORDER, DEFAULT_PERCENTAGES, FUND_CONFIGS } from '../data/defaults';
+import { AppLanguage } from '../types';
 
 interface UserManualModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenSourceCode?: () => void;
+  onOpenSecurityLock?: () => void;
+  language?: AppLanguage;
 }
 
 interface SectionItem {
   id: string;
   title: string;
+  hindiTitle?: string;
   icon: LucideIcon;
 }
 
 export const UserManualModal: React.FC<UserManualModalProps> = ({
   isOpen,
   onClose,
-  onOpenSourceCode
+  onOpenSourceCode,
+  onOpenSecurityLock,
+  language = 'en'
 }) => {
   const [activeSection, setActiveSection] = useState<string>('intro');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   if (!isOpen) return null;
 
+  const isHindi = language === 'hi';
+
   const sections: SectionItem[] = [
-    { id: 'intro', title: '1. Introduction & Overview', icon: Zap },
-    { id: 'six_funds', title: '2. 6-Fund Formula Allocation', icon: Layers },
-    { id: 'add_income', title: '3. Recording Income', icon: Coins },
-    { id: 'add_expense', title: '4. Logging Expenses', icon: Receipt },
-    { id: 'goals', title: '5. Financial Goal Targets', icon: Target },
-    { id: 'reports', title: '6. Reports & PDF Statements', icon: FileText },
-    { id: 'settings', title: '7. Custom Settings & Rules', icon: Settings },
-    { id: 'backup', title: '8. Backup & Privacy Security', icon: ShieldCheck },
-    { id: 'source_code', title: '9. Source Code & Trust Verification', icon: Code2 },
-    { id: 'faq', title: '10. Frequently Asked Questions', icon: HelpCircle },
-    { id: 'developer', title: '11. Developer & Creator Info', icon: User }
+    { id: 'intro', title: '1. Introduction & Overview', hindiTitle: '1. परिचय एवं अवलोकन', icon: Zap },
+    { id: 'app_lock', title: '2. App Passcode Lock & Vault', hindiTitle: '2. ऐप पासकोड लॉक एवं सुरक्षा वॉल्ट', icon: Lock },
+    { id: 'six_funds', title: '3. 6-Fund Formula Allocation', hindiTitle: '3. 6-फंड फॉर्मूला एलोकेशन', icon: Layers },
+    { id: 'add_income', title: '4. Recording Income', hindiTitle: '4. आमदनी (Income) जोड़ना', icon: Coins },
+    { id: 'add_expense', title: '5. Logging Expenses', hindiTitle: '5. खर्च (Expense) दर्ज करना', icon: Receipt },
+    { id: 'work_life', title: '6. Work Logs & Daily Timeline', hindiTitle: '6. वर्क प्रोजेक्ट्स एवं डेली लाइफ टाइमलाइन', icon: Briefcase },
+    { id: 'goals', title: '7. Financial Goal Targets', hindiTitle: '7. वित्तीय लक्ष्य (Goals)', icon: Target },
+    { id: 'reports', title: '8. Reports & PDF Statements', hindiTitle: '8. रिपोर्ट एवं PDF स्टेटमेंट', icon: FileText },
+    { id: 'settings', title: '9. Custom Settings & Rules', hindiTitle: '9. कस्टम सेटिंग्स व रूल्स', icon: Settings },
+    { id: 'backup', title: '10. Backup & Privacy Security', hindiTitle: '10. बैकअप एवं डेटा सुरक्षा', icon: ShieldCheck },
+    { id: 'source_code', title: '11. Source Code & Verification', hindiTitle: '11. ओपन सोर्स व सुरक्षा सत्यापन', icon: Code2 },
+    { id: 'faq', title: '12. Frequently Asked Questions', hindiTitle: '12. अक्सर पूछे जाने वाले प्रश्न (FAQ)', icon: HelpCircle },
+    { id: 'developer', title: '13. Developer & Creator Info', hindiTitle: '13. डेवलपर एवं क्रिएटर प्रोफाइल', icon: User }
   ];
 
   const filteredSections = searchQuery.trim()
@@ -153,7 +169,7 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                   }`}
                 >
                   <SecIcon className="w-4 h-4 shrink-0" />
-                  <span className="truncate">{sec.title}</span>
+                  <span className="truncate">{isHindi && sec.hindiTitle ? sec.hindiTitle : sec.title}</span>
                 </button>
               );
             })}
@@ -166,48 +182,159 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                 <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
                   <h3 className="font-serif-display text-[20px] font-bold text-[#F8FAFC] flex items-center gap-2">
                     <Zap className="w-5 h-5 text-[var(--theme-primary,#38BDF8)]" />
-                    <span>Welcome to Daily Khata: Pro</span>
+                    <span>{isHindi ? 'Daily Khata: Pro में आपका स्वागत है' : 'Welcome to Daily Khata: Pro'}</span>
                   </h3>
                   <p className="text-[12.5px] text-[#94A3B8] mt-1">
-                    Your personal and enterprise financial discipline companion.
+                    {isHindi ? 'आपका व्यक्तिगत एवं व्यावसायिक वित्तीय अनुशासन साथी।' : 'Your personal and enterprise financial discipline companion.'}
                   </p>
                 </div>
 
                 <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-4 space-y-2.5">
                   <h4 className="text-[14px] font-bold text-[var(--theme-primary,#38BDF8)]">
-                    Core Design Philosophy
+                    {isHindi ? 'मुख्य डिज़ाइन दर्शन (Core Philosophy)' : 'Core Design Philosophy'}
                   </h4>
                   <p className="text-[#CBD5E1]">
-                    Daily Khata: Pro helps freelancers, business professionals, and households implement mathematical budgeting. Every earned rupee is immediately partitioned across 6 distinct purpose-driven pots before discretionary spending occurs.
+                    {isHindi
+                      ? 'Daily Khata: Pro फ्रीलांसर्स, बिजनेस ओनर्स एवं परिवारों को 6-फंड फॉर्मूला के साथ अनुशासित बजटिंग प्रदान करता है। साथ ही ऐप पासकोड वॉल्ट आपकी फाइनेंशियल प्राइवेसी को 100% ऑफलाइन व सुरक्षित रखता है।'
+                      : 'Daily Khata: Pro helps freelancers, business professionals, and households implement mathematical budgeting. Every earned rupee is immediately partitioned across 6 distinct purpose-driven pots before discretionary spending occurs.'}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
                   <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1">
                     <div className="text-[12px] font-bold text-[#10B981] flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5" /> 100% Private
+                      <Lock className="w-3.5 h-3.5" /> {isHindi ? '100% प्राइवेट वॉल्ट' : 'PIN Vault Lock'}
                     </div>
                     <p className="text-[11.5px] text-[#94A3B8]">
-                      All financial data stays strictly on your local browser storage.
+                      {isHindi ? 'पासकोड सुरक्षा और ऑटो-लॉक के साथ पूर्ण प्राइवेसी।' : 'Custom 4–6 digit PIN lock with auto-lock protection.'}
                     </p>
                   </div>
                   <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1">
                     <div className="text-[12px] font-bold text-[var(--theme-primary,#38BDF8)] flex items-center gap-1">
-                      <Zap className="w-3.5 h-3.5" /> Auto 6-Fund Split
+                      <Zap className="w-3.5 h-3.5" /> {isHindi ? 'ऑटो 6-फंड विभाजन' : 'Auto 6-Fund Split'}
                     </div>
                     <p className="text-[11.5px] text-[#94A3B8]">
-                      Zero manual calculations needed when entering new earnings.
+                      {isHindi ? 'नई कमाई जोड़ते ही सभी फंड्स में तुरंत विभाजन।' : 'Zero manual calculations needed when entering new earnings.'}
                     </p>
                   </div>
                   <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1">
                     <div className="text-[12px] font-bold text-[#38BDF8] flex items-center gap-1">
-                      <FileText className="w-3.5 h-3.5" /> Clean Audit Reports
+                      <FileText className="w-3.5 h-3.5" /> {isHindi ? 'ऑडिट रिपोर्ट्स व PDF' : 'Clean Audit Reports'}
                     </div>
                     <p className="text-[11.5px] text-[#94A3B8]">
-                      Download statements in print-ready PDF or raw CSV formats anytime.
+                      {isHindi ? 'प्रिंट-रेडी PDF व CSV फॉर्मेट में कभी भी डाउनलोड करें।' : 'Download statements in print-ready PDF or raw CSV formats anytime.'}
                     </p>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Dedicated App Passcode Lock Section */}
+            {activeSection === 'app_lock' && (
+              <div className="space-y-4 animate-in fade-in">
+                <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
+                  <h3 className="font-serif-display text-[20px] font-bold text-[#F8FAFC] flex items-center gap-2">
+                    <Lock className="w-5 h-5 text-[#10B981]" />
+                    <span>{isHindi ? 'ऐप पासकोड लॉक एवं सुरक्षा वॉल्ट गाइड' : 'App Passcode Lock & Security Vault Guide'}</span>
+                  </h3>
+                  <p className="text-[12.5px] text-[#94A3B8] mt-1">
+                    {isHindi
+                      ? 'अपनी वित्तीय जानकारी, इनकम, खर्च और वर्क लॉग्स को अनधिकृत पहुंच से सुरक्षित रखें।'
+                      : 'Protect your financial records, income stats, and personal diary from unauthorized access.'}
+                  </p>
+                </div>
+
+                <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 rounded-lg bg-[#10B981]/20 text-[#10B981]">
+                      <KeyRound className="w-4 h-4" />
+                    </span>
+                    <h4 className="text-[14px] font-bold text-[#F8FAFC]">
+                      {isHindi ? 'ऐप लॉक कैसे काम करता है? (How It Works)' : 'How App Passcode Vault Works'}
+                    </h4>
+                  </div>
+                  <p className="text-[#CBD5E1] text-[12.5px] leading-relaxed">
+                    {isHindi
+                      ? 'Daily Khata: Pro में 4 से 6 अंकों का कस्टमाइज़ेबल पिन सेट किया जा सकता है। यह लॉक पूरी तरह से आपके डिवाइस के लोकल स्टोरेज में काम करता है और किसी भी सर्वर पर कोई डेटा नहीं भेजता।'
+                      : 'Daily Khata: Pro includes a built-in 4-to-6 digit numeric passcode vault that runs 100% locally in your browser. When active, no one can view balances, transactions, or client work logs without entering the PIN.'}
+                  </p>
+                </div>
+
+                {/* Step-by-Step Setup Guide */}
+                <div className="space-y-2.5">
+                  <div className="font-bold text-[13.5px] text-[#F8FAFC] flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                    <span>{isHindi ? '1. पासकोड लॉक कैसे चालू करें (Setup Steps):' : '1. How to Enable Passcode Lock:'}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1">
+                      <div className="text-[11.5px] font-bold text-[var(--theme-primary,#38BDF8)]">चरण 1 / Step 1</div>
+                      <p className="text-[11.5px] text-[#CBD5E1]">
+                        {isHindi ? 'ऊपरी मेनू में "More" (अतिरिक्त) → "सुरक्षा पिन एवं ऐप लॉक" या Settings में जाएं।' : 'Click "More" in Header → Select "App Passcode Lock" or open Settings.'}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1">
+                      <div className="text-[11.5px] font-bold text-[#10B981]">चरण 2 / Step 2</div>
+                      <p className="text-[11.5px] text-[#CBD5E1]">
+                        {isHindi ? 'स्विच को ON करें और अपना 4 से 6 अंकों का गुप्त पिन व सुरक्षा प्रश्न दर्ज करें।' : 'Toggle ON, choose a 4–6 digit PIN, select a security recovery question.'}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1">
+                      <div className="text-[11.5px] font-bold text-[#F59E0B]">चरण 3 / Step 3</div>
+                      <p className="text-[11.5px] text-[#CBD5E1]">
+                        {isHindi ? '"सुरक्षा पिन सहेजें" पर क्लिक करें। आपका वॉल्ट तुरंत सक्रिय हो जाएगा।' : 'Click "Save & Enable Passcode". Vault activates immediately.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Key Features of Lock */}
+                <div className="p-4 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                  <div className="text-[13px] font-bold text-[#F8FAFC] flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-[#10B981]" />
+                    <span>{isHindi ? 'प्रमुख सुरक्षा सुविधाएं (Key Features)' : 'Key Security Features'}</span>
+                  </div>
+                  <ul className="list-disc pl-5 space-y-1.5 text-[12px] text-[#CBD5E1]">
+                    <li>
+                      <strong className="text-[#F8FAFC]">{isHindi ? 'ऑटो-लॉक (Auto-Lock on Leave):' : 'Auto-Lock on Tab Switch:'}</strong>{' '}
+                      {isHindi
+                        ? 'जैसे ही आप दूसरा ब्राउज़र टैब खोलते हैं या ऐप बैकग्राउंड में जाता है, वॉल्ट अपने आप लॉक हो जाता है।'
+                        : 'Automatically re-engages the lock screen whenever you switch tabs or minimize the window.'}
+                    </li>
+                    <li>
+                      <strong className="text-[#F8FAFC]">{isHindi ? 'त्वरित लॉक बटन (Instant Lock):' : 'Instant 1-Tap Lock:'}</strong>{' '}
+                      {isHindi
+                        ? 'हेडर में "लॉक" बटन पर क्लिक करके किसी भी समय तुरंत ऐप को सुरक्षित लॉक कर सकते हैं।'
+                        : 'Click the "Lock" button in the top navigation bar anytime to immediately secure your screen.'}
+                    </li>
+                    <li>
+                      <strong className="text-[#F8FAFC]">{isHindi ? 'पिन भूलने पर रिकवरी (Forgot PIN Recovery):' : 'Security Question Reset:'}</strong>{' '}
+                      {isHindi
+                        ? 'यदि आप पिन भूल जाते हैं, तो "पिन भूल गए?" पर क्लिक करके अपने सुरक्षा प्रश्न का सही उत्तर देकर नया पिन बना सकते हैं (बिना डेटा खोए)।'
+                        : 'Forgot your passcode? Answer your configured security question to safely reset your PIN without data loss.'}
+                    </li>
+                    <li>
+                      <strong className="text-[#F8FAFC]">{isHindi ? 'प्राइवेसी आई मास्क (Amount Masking):' : 'Amount Privacy Masking:'}</strong>{' '}
+                      {isHindi
+                        ? 'पब्लिक में इस्तेमाल करते समय हेडर के Eye बटन (आंख आइकन) से रुपए की रकम को छिपा सकते हैं।'
+                        : 'Quickly hide sensitive financial figures in public spaces using the eye toggle in the header.'}
+                    </li>
+                  </ul>
+                </div>
+
+                {onOpenSecurityLock && (
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenSecurityLock();
+                    }}
+                    className="w-full py-3 px-4 rounded-xl bg-[#10B981]/15 border border-[#10B981]/40 text-[#F8FAFC] hover:border-[#10B981] font-bold text-[13px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                  >
+                    <Lock className="w-4 h-4 text-[#10B981]" />
+                    <span>{isHindi ? 'सुरक्षा पिन सेटिंग्स अभी खोलें' : 'Open Security Lock Settings Now'}</span>
+                  </button>
+                )}
               </div>
             )}
 
@@ -299,6 +426,48 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                   <li><strong className="text-[#F8FAFC]">Emergency Fund:</strong> Urgent medical fees, unexpected hardware/vehicle repairs.</li>
                   <li><strong className="text-[#F8FAFC]">Buffer Fund:</strong> Shortfalls or petty business expenses.</li>
                 </ul>
+              </div>
+            )}
+
+            {activeSection === 'work_life' && (
+              <div className="space-y-4 animate-in fade-in">
+                <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
+                  <h3 className="font-serif-display text-[20px] font-bold text-[#F8FAFC] flex items-center gap-2">
+                    <Briefcase className="w-5 h-5 text-[var(--theme-primary,#38BDF8)]" />
+                    <span>{isHindi ? 'वर्क प्रोजेक्ट्स एवं डेली लाइफ टाइमलाइन' : 'Work Deliverables & Daily Life Timeline'}</span>
+                  </h3>
+                  <p className="text-[12.5px] text-[#94A3B8] mt-1">
+                    {isHindi
+                      ? 'अपने प्रोजेक्ट्स, क्लाइंट डिलीवरेबल्स और रोज़ाना की गतिविधियों को ट्रैक करें।'
+                      : 'Manage client deliverables, milestone earnings, and your daily life reflection logs.'}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2">
+                    <div className="flex items-center gap-2 text-[#F8FAFC] font-bold text-[13px]">
+                      <Briefcase className="w-4 h-4 text-[#10B981]" />
+                      <span>{isHindi ? 'वर्क एवं प्रोजेक्ट ट्रैकर' : 'Work & Project Deliverables'}</span>
+                    </div>
+                    <p className="text-[12px] text-[#CBD5E1] leading-relaxed">
+                      {isHindi
+                        ? 'क्लाइंट का नाम, प्रोजेक्ट शीर्षक, पेमेंट स्थिति (Paid, Pending, Partial), देय राशि, और डेडलाइन एक जगह दर्ज करें।'
+                        : 'Track client names, project scope, payment status (Paid, Pending, Partial), deadlines, and deliverables.'}
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2">
+                    <div className="flex items-center gap-2 text-[#F8FAFC] font-bold text-[13px]">
+                      <Calendar className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                      <span>{isHindi ? 'डेली लाइफ टाइमलाइन व डायरी' : 'Daily Life Diary & Habit Logs'}</span>
+                    </div>
+                    <p className="text-[12px] text-[#CBD5E1] leading-relaxed">
+                      {isHindi
+                        ? 'दिनचर्या के महत्वपूर्ण पल, मूड रेटिंग, स्वास्थ्य चेकपॉइंट्स, और व्यक्तिगत नोट्स को समयबद्ध टाइमलाइन में सहेजें।'
+                        : 'Record mood ratings, daily routines, wellness notes, and personal reflections in a chronological timeline.'}
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
