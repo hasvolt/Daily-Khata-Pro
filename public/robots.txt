@@ -3,5 +3,5 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://daily-khata-pro.vercel.app/sitemap.xml
-Sitemap: https://dailykhatapro.com/sitemap.xml
+Sitemap: https://rozfiber.com/sitemap.xml
+
