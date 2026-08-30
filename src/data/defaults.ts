@@ -183,6 +183,32 @@ export const DEFAULT_SECURITY_LOCK: SecurityLockConfig = {
   autoLockTimeoutMinutes: 0
 };
 
+export const DEFAULT_NOTE_CATEGORIES = [
+  { id: 'personal', label: 'Personal & Thoughts', hindiLabel: 'व्यक्तिगत विचार' },
+  { id: 'secret', label: 'Secret & Private', hindiLabel: 'गोपनीय व गुप्त' },
+  { id: 'ideas', label: 'Ideas & Innovation', hindiLabel: 'आइडियाज व योजना' },
+  { id: 'todo', label: 'Checklist / Tasks', hindiLabel: 'टू-डू लिस्ट व कार्य' },
+  { id: 'important', label: 'Important & Keys', hindiLabel: 'महत्वपूर्ण जानकारी' },
+  { id: 'finance', label: 'Finance Reminders', hindiLabel: 'वित्तीय रिमाइंडर्स' },
+  { id: 'work', label: 'Work & Business', hindiLabel: 'कार्य व व्यापार' },
+  { id: 'general', label: 'General Memo', hindiLabel: 'सामान्य मेमो' }
+];
+
+export const INITIAL_SAMPLE_PERSONAL_NOTES = [
+  {
+    id: 'note_welcome',
+    title: '✨ Welcome to Your Private Vault (पर्सनल नोट्स)',
+    content: 'This is your completely separate personal scratchpad & private vault!\n\n• 100% Offline & Stored only in your local browser storage.\n• Keep ideas, secret credentials, personal reminders, daily checklists, and reflections.\n• Pin important notes to the top or toggle secret mask to hide sensitive text in public.',
+    category: 'personal',
+    color: 'emerald' as const,
+    isPinned: true,
+    isLocked: false,
+    tags: ['Welcome', 'Private', 'Guide'],
+    createdAt: Date.now() - 86400000,
+    updatedAt: Date.now() - 86400000
+  }
+];
+
 export const INITIAL_SAMPLE_ENTRIES: Entry[] = [
   {
     id: 'demo_1',

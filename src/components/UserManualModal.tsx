@@ -75,17 +75,18 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
   const sections: SectionItem[] = [
     { id: 'intro', title: '1. Introduction & Overview', hindiTitle: '1. परिचय एवं अवलोकन', icon: Zap },
     { id: 'app_lock', title: '2. App Passcode Lock & Vault', hindiTitle: '2. ऐप पासकोड लॉक एवं सुरक्षा वॉल्ट', icon: Lock },
-    { id: 'six_funds', title: '3. 6-Fund Formula Allocation', hindiTitle: '3. 6-फंड फॉर्मूला एलोकेशन', icon: Layers },
-    { id: 'add_income', title: '4. Recording Income', hindiTitle: '4. आमदनी (Income) जोड़ना', icon: Coins },
-    { id: 'add_expense', title: '5. Logging Expenses', hindiTitle: '5. खर्च (Expense) दर्ज करना', icon: Receipt },
-    { id: 'work_life', title: '6. Work Logs & Daily Timeline', hindiTitle: '6. वर्क प्रोजेक्ट्स एवं डेली लाइफ टाइमलाइन', icon: Briefcase },
-    { id: 'goals', title: '7. Financial Goal Targets', hindiTitle: '7. वित्तीय लक्ष्य (Goals)', icon: Target },
-    { id: 'reports', title: '8. Reports & PDF Statements', hindiTitle: '8. रिपोर्ट एवं PDF स्टेटमेंट', icon: FileText },
-    { id: 'settings', title: '9. Custom Settings & Rules', hindiTitle: '9. कस्टम सेटिंग्स व रूल्स', icon: Settings },
-    { id: 'backup', title: '10. Backup & Privacy Security', hindiTitle: '10. बैकअप एवं डेटा सुरक्षा', icon: ShieldCheck },
-    { id: 'source_code', title: '11. Source Code & Verification', hindiTitle: '11. ओपन सोर्स व सुरक्षा सत्यापन', icon: Code2 },
-    { id: 'faq', title: '12. Frequently Asked Questions', hindiTitle: '12. अक्सर पूछे जाने वाले प्रश्न (FAQ)', icon: HelpCircle },
-    { id: 'developer', title: '13. Developer & Creator Info', hindiTitle: '13. डेवलपर एवं क्रिएटर प्रोफाइल', icon: User }
+    { id: 'personal_notes', title: '3. Personal Notes & Private Vault', hindiTitle: '3. पर्सनल नोट्स एवं प्राइवेट वॉल्ट', icon: FileText },
+    { id: 'six_funds', title: '4. 6-Fund Formula Allocation', hindiTitle: '4. 6-फंड फॉर्मूला एलोकेशन', icon: Layers },
+    { id: 'add_income', title: '5. Recording Income', hindiTitle: '5. आमदनी (Income) जोड़ना', icon: Coins },
+    { id: 'add_expense', title: '6. Logging Expenses', hindiTitle: '6. खर्च (Expense) दर्ज करना', icon: Receipt },
+    { id: 'work_life', title: '7. Work Logs & Daily Timeline', hindiTitle: '7. वर्क प्रोजेक्ट्स एवं डेली लाइफ टाइमलाइन', icon: Briefcase },
+    { id: 'goals', title: '8. Financial Goal Targets', hindiTitle: '8. वित्तीय लक्ष्य (Goals)', icon: Target },
+    { id: 'reports', title: '9. Reports & PDF Statements', hindiTitle: '9. रिपोर्ट एवं PDF स्टेटमेंट', icon: FileText },
+    { id: 'settings', title: '10. Custom Settings & Rules', hindiTitle: '10. कस्टम सेटिंग्स व रूल्स', icon: Settings },
+    { id: 'backup', title: '11. Backup & Privacy Security', hindiTitle: '11. बैकअप एवं डेटा सुरक्षा', icon: ShieldCheck },
+    { id: 'source_code', title: '12. Source Code & Verification', hindiTitle: '12. ओपन सोर्स व सुरक्षा सत्यापन', icon: Code2 },
+    { id: 'faq', title: '13. Frequently Asked Questions', hindiTitle: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)', icon: HelpCircle },
+    { id: 'developer', title: '14. Developer & Creator Info', hindiTitle: '14. डेवलपर एवं क्रिएटर प्रोफाइल', icon: User }
   ];
 
   const filteredSections = searchQuery.trim()
@@ -335,6 +336,48 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                     <span>{isHindi ? 'सुरक्षा पिन सेटिंग्स अभी खोलें' : 'Open Security Lock Settings Now'}</span>
                   </button>
                 )}
+              </div>
+            )}
+
+            {activeSection === 'personal_notes' && (
+              <div className="space-y-4 animate-in fade-in">
+                <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
+                  <h3 className="font-serif-display text-[20px] font-bold text-[#F8FAFC] flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-[#10B981]" />
+                    <span>{isHindi ? 'पर्सनल नोट्स एवं प्राइवेट वॉल्ट' : 'Personal Notes & Private Vault'}</span>
+                  </h3>
+                  <p className="text-[12.5px] text-[#94A3B8] mt-1">
+                    {isHindi
+                      ? 'वित्तीय लेजर से पूरी तरह अलग एक स्वतंत्र, गोपनीय स्पेस जहाँ आप अपने निजी विचार व संवेदनशील जानकारी सुरक्षित रख सकते हैं।'
+                      : 'An isolated, confidential workspace separate from the financial ledger for your private thoughts, credentials, and ideas.'}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5">
+                    <div className="font-bold text-[13px] text-[#F8FAFC] flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-[#10B981]" />
+                      <span>{isHindi ? '100% अलग व निजी' : 'Completely Separate'}</span>
+                    </div>
+                    <p className="text-[12px] text-[#CBD5E1]">
+                      {isHindi
+                        ? 'यह सेक्शन आपके वित्तीय खातों से पूरी तरह अलग है और सिर्फ आपके डिवाइस में सुरक्षित रहता है।'
+                        : 'Completely isolated from your financial balances and entries, stored securely on your device.'}
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5">
+                    <div className="font-bold text-[13px] text-[#F8FAFC] flex items-center gap-1.5">
+                      <Lock className="w-4 h-4 text-[#F59E0B]" />
+                      <span>{isHindi ? 'नोट लॉक सुरक्षा' : 'Note Lock Shield'}</span>
+                    </div>
+                    <p className="text-[12px] text-[#CBD5E1]">
+                      {isHindi
+                        ? 'किसी भी नोट को अलग से लॉक करें ताकि कोई अन्य व्यक्ति स्क्रीन पर उसका विवरण न पढ़ सके।'
+                        : 'Protect individual notes with an extra privacy lock to hide text previews until revealed.'}
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Entry, FundType, Goal, WorkLog, DailyLifeLog, KhataData, AppTheme, AppLanguage, SecurityLockConfig } from './types';
+import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, SecurityLockConfig } from './types';
 import {
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
@@ -8,6 +8,7 @@ import {
   DEFAULT_WORK_CATEGORIES,
   DEFAULT_LIFE_TAGS,
   INITIAL_SAMPLE_ENTRIES,
+  INITIAL_SAMPLE_PERSONAL_NOTES,
   DEFAULT_SECURITY_LOCK
 } from './data/defaults';
 import { calculateFundTotals } from './utils/khataCalculations';
@@ -19,8 +20,10 @@ import { GoalsView } from './components/GoalsView';
 import { HistoryView } from './components/HistoryView';
 import { ReportView } from './components/ReportView';
 import { WorkLifeTrackerView } from './components/WorkLifeTrackerView';
+import { PersonalNotesView } from './components/PersonalNotesView';
 import { WorkModal } from './components/WorkModal';
 import { DailyLifeModal } from './components/DailyLifeModal';
+import { PersonalNoteModal } from './components/PersonalNoteModal';
 import { SettingsModal } from './components/SettingsModal';
 import { GoalModal } from './components/GoalModal';
 import { DepositGoalModal } from './components/DepositGoalModal';
@@ -58,6 +61,7 @@ export default function App() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
   const [dailyLifeLogs, setDailyLifeLogs] = useState<DailyLifeLog[]>([]);
+  const [personalNotes, setPersonalNotes] = useState<PersonalNote[]>([]);
   
   // Custom Dynamic Lists
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
@@ -109,6 +113,10 @@ export default function App() {
   const [editingWork, setEditingWork] = useState<WorkLog | null>(null);
   const [isDailyLifeModalOpen, setIsDailyLifeModalOpen] = useState<boolean>(false);
   const [editingDailyLife, setEditingDailyLife] = useState<DailyLifeLog | null>(null);
+
+  // Personal Notes Modal State
+  const [isPersonalNoteModalOpen, setIsPersonalNoteModalOpen] = useState<boolean>(false);
+  const [editingPersonalNote, setEditingPersonalNote] = useState<PersonalNote | null>(null);
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
 
@@ -181,6 +189,9 @@ export default function App() {
         }
         if (parsed.dailyLifeLogs && Array.isArray(parsed.dailyLifeLogs)) {
           setDailyLifeLogs(parsed.dailyLifeLogs);
+        }
+        if (parsed.personalNotes && Array.isArray(parsed.personalNotes)) {
+          setPersonalNotes(parsed.personalNotes);
         }
         if (parsed.categories && Array.isArray(parsed.categories)) {
           setCategories(parsed.categories);
@@ -262,7 +273,8 @@ export default function App() {
     newMask: boolean = privacyMask,
     newWorkLogs: WorkLog[] = workLogs,
     newDailyLifeLogs: DailyLifeLog[] = dailyLifeLogs,
-    newSecurityLock: SecurityLockConfig = securityLock
+    newSecurityLock: SecurityLockConfig = securityLock,
+    newPersonalNotes: PersonalNote[] = personalNotes
   ) => {
     try {
       const data: KhataData = {
@@ -274,6 +286,7 @@ export default function App() {
         goals: newGoals,
         workLogs: newWorkLogs,
         dailyLifeLogs: newDailyLifeLogs,
+        personalNotes: newPersonalNotes,
         settings: {
           percentages: newPct,
           theme: newTheme,
@@ -692,12 +705,154 @@ export default function App() {
     showToast(language === 'hi' ? `₹${work.earningsOrCost} खाता में दर्ज` : `₹${work.earningsOrCost} recorded to ledger`);
   };
 
+  // Personal Notes Handlers
+  const handleSavePersonalNote = (
+    noteData: Omit<PersonalNote, 'id' | 'createdAt' | 'updatedAt'>,
+    id?: string
+  ) => {
+    let updatedNotes: PersonalNote[];
+    if (id) {
+      updatedNotes = personalNotes.map((n) =>
+        n.id === id ? { ...n, ...noteData, updatedAt: Date.now() } : n
+      );
+      showToast(language === 'hi' ? 'पर्सनल नोट अपडेट हो गया' : 'Personal note updated');
+    } else {
+      const newNote: PersonalNote = {
+        id: 'note_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        ...noteData
+      };
+      updatedNotes = [newNote, ...personalNotes];
+      showToast(language === 'hi' ? 'नया पर्सनल नोट सुरक्षित सहेजा गया' : 'Personal note saved securely');
+    }
+    setPersonalNotes(updatedNotes);
+    saveToLocalStorage(
+      entries,
+      goals,
+      categories,
+      incomeSources,
+      workCategories,
+      lifeTags,
+      percentages,
+      theme,
+      language,
+      privacyMask,
+      workLogs,
+      dailyLifeLogs,
+      securityLock,
+      updatedNotes
+    );
+    setIsPersonalNoteModalOpen(false);
+    setEditingPersonalNote(null);
+  };
+
+  const handleDeletePersonalNote = (id: string) => {
+    const updated = personalNotes.filter((n) => n.id !== id);
+    setPersonalNotes(updated);
+    saveToLocalStorage(
+      entries,
+      goals,
+      categories,
+      incomeSources,
+      workCategories,
+      lifeTags,
+      percentages,
+      theme,
+      language,
+      privacyMask,
+      workLogs,
+      dailyLifeLogs,
+      securityLock,
+      updated
+    );
+    showToast(language === 'hi' ? 'पर्सनल नोट हटाया गया' : 'Personal note deleted');
+  };
+
+  const handleTogglePinPersonalNote = (id: string) => {
+    const updated = personalNotes.map((n) =>
+      n.id === id ? { ...n, isPinned: !n.isPinned, updatedAt: Date.now() } : n
+    );
+    setPersonalNotes(updated);
+    saveToLocalStorage(
+      entries,
+      goals,
+      categories,
+      incomeSources,
+      workCategories,
+      lifeTags,
+      percentages,
+      theme,
+      language,
+      privacyMask,
+      workLogs,
+      dailyLifeLogs,
+      securityLock,
+      updated
+    );
+  };
+
+  const handleToggleLockPersonalNote = (id: string) => {
+    const updated = personalNotes.map((n) =>
+      n.id === id ? { ...n, isLocked: !n.isLocked, updatedAt: Date.now() } : n
+    );
+    setPersonalNotes(updated);
+    saveToLocalStorage(
+      entries,
+      goals,
+      categories,
+      incomeSources,
+      workCategories,
+      lifeTags,
+      percentages,
+      theme,
+      language,
+      privacyMask,
+      workLogs,
+      dailyLifeLogs,
+      securityLock,
+      updated
+    );
+    showToast(language === 'hi' ? 'नोट की सुरक्षा बदली गई' : 'Note lock status updated');
+  };
+
+  const handleQuickAddPersonalNote = (title: string, content: string) => {
+    const newNote: PersonalNote = {
+      id: 'note_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      title,
+      content,
+      category: 'Personal',
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    const updatedNotes = [newNote, ...personalNotes];
+    setPersonalNotes(updatedNotes);
+    saveToLocalStorage(
+      entries,
+      goals,
+      categories,
+      incomeSources,
+      workCategories,
+      lifeTags,
+      percentages,
+      theme,
+      language,
+      privacyMask,
+      workLogs,
+      dailyLifeLogs,
+      securityLock,
+      updatedNotes
+    );
+    showToast(language === 'hi' ? 'त्वरित पर्सनल नोट सहेजा गया' : 'Quick personal note saved');
+  };
+
   // Restore backup
   const handleRestoreData = (restored: KhataData) => {
     setEntries(restored.entries || []);
     setGoals(restored.goals || []);
     setWorkLogs(restored.workLogs || []);
     setDailyLifeLogs(restored.dailyLifeLogs || []);
+    setPersonalNotes(restored.personalNotes || []);
     setCategories(restored.categories || DEFAULT_CATEGORIES);
     setIncomeSources(restored.incomeSources || DEFAULT_INCOME_SOURCES);
     setWorkCategories(restored.workCategories || DEFAULT_WORK_CATEGORIES);
@@ -721,7 +876,9 @@ export default function App() {
       restored.settings?.language || language,
       typeof restored.settings?.privacyMask === 'boolean' ? restored.settings.privacyMask : privacyMask,
       restored.workLogs || [],
-      restored.dailyLifeLogs || []
+      restored.dailyLifeLogs || [],
+      restored.settings?.securityLock || securityLock,
+      restored.personalNotes || []
     );
     showToast('Backup restored successfully');
   };
@@ -732,7 +889,8 @@ export default function App() {
     setGoals([]);
     setWorkLogs([]);
     setDailyLifeLogs([]);
-    saveToLocalStorage([], [], categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, [], []);
+    setPersonalNotes([]);
+    saveToLocalStorage([], [], categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, [], [], securityLock, []);
     showToast('All local data reset');
   };
 
@@ -804,6 +962,7 @@ export default function App() {
     ]);
     setWorkLogs(sampleWork);
     setDailyLifeLogs(sampleLife);
+    setPersonalNotes(INITIAL_SAMPLE_PERSONAL_NOTES);
 
     saveToLocalStorage(
       INITIAL_SAMPLE_ENTRIES,
@@ -829,7 +988,9 @@ export default function App() {
       language,
       privacyMask,
       sampleWork,
-      sampleLife
+      sampleLife,
+      securityLock,
+      INITIAL_SAMPLE_PERSONAL_NOTES
     );
     showToast('Sample data loaded');
   };
@@ -854,6 +1015,7 @@ export default function App() {
           onSelectTab={setCurrentTab}
           onOpenSettings={() => setIsSettingsOpen(true)}
           onOpenManual={() => setCurrentTab('guide')}
+          onOpenNotes={() => setCurrentTab('notes')}
           onOpenSimulator={() => setCurrentTab('calculator')}
           onOpenSourceCode={() => setCurrentTab('safety')}
           onOpenInstall={() => setIsInstallModalOpen(true)}
@@ -882,6 +1044,7 @@ export default function App() {
               goals={goals}
               workLogs={workLogs}
               dailyLifeLogs={dailyLifeLogs}
+              personalNotes={personalNotes}
               percentages={percentages}
               onAddClick={handleAddClick}
               onFilterFund={handleFilterFund}
@@ -891,6 +1054,11 @@ export default function App() {
               }}
               onNavigateGoals={() => setCurrentTab('goals')}
               onNavigateTracker={() => setCurrentTab('tracker')}
+              onNavigateNotes={() => setCurrentTab('notes')}
+              onOpenNoteModal={() => {
+                setEditingPersonalNote(null);
+                setIsPersonalNoteModalOpen(true);
+              }}
               onOpenWorkModal={() => {
                 setEditingWork(null);
                 setIsWorkModalOpen(true);
@@ -902,6 +1070,26 @@ export default function App() {
               onOpenManual={() => setCurrentTab('guide')}
               language={language}
               privacyMask={privacyMask}
+            />
+          } />
+
+          <Route path="/notes" element={
+            <PersonalNotesView
+              notes={personalNotes}
+              onOpenCreateModal={() => {
+                setEditingPersonalNote(null);
+                setIsPersonalNoteModalOpen(true);
+              }}
+              onEditNote={(note) => {
+                setEditingPersonalNote(note);
+                setIsPersonalNoteModalOpen(true);
+              }}
+              onDeleteNote={handleDeletePersonalNote}
+              onTogglePin={handleTogglePinPersonalNote}
+              onToggleLock={handleToggleLockPersonalNote}
+              onQuickAdd={handleQuickAddPersonalNote}
+              language={language}
+              onOpenSecurityModal={() => setIsSecurityModalOpen(true)}
             />
           } />
 
@@ -1095,6 +1283,7 @@ export default function App() {
               goals={goals}
               workLogs={workLogs}
               dailyLifeLogs={dailyLifeLogs}
+              personalNotes={personalNotes}
               percentages={percentages}
               onAddClick={handleAddClick}
               onFilterFund={handleFilterFund}
@@ -1104,6 +1293,11 @@ export default function App() {
               }}
               onNavigateGoals={() => setCurrentTab('goals')}
               onNavigateTracker={() => setCurrentTab('tracker')}
+              onNavigateNotes={() => setCurrentTab('notes')}
+              onOpenNoteModal={() => {
+                setEditingPersonalNote(null);
+                setIsPersonalNoteModalOpen(true);
+              }}
               onOpenWorkModal={() => {
                 setEditingWork(null);
                 setIsWorkModalOpen(true);
@@ -1297,11 +1491,12 @@ export default function App() {
           goals,
           workLogs,
           dailyLifeLogs,
+          personalNotes,
           categories,
           incomeSources,
           workCategories,
           lifeTags,
-          settings: { percentages, theme, language, privacyMask }
+          settings: { percentages, theme, language, privacyMask, securityLock }
         }}
         onRestoreData={handleRestoreData}
         onResetData={handleResetData}
@@ -1352,6 +1547,18 @@ export default function App() {
         initialLog={editingDailyLife}
         lifeTags={lifeTags}
         onAddLifeTag={handleAddLifeTag}
+        language={language}
+      />
+
+      {/* Personal Private Note Create / Edit Modal */}
+      <PersonalNoteModal
+        isOpen={isPersonalNoteModalOpen}
+        onClose={() => {
+          setIsPersonalNoteModalOpen(false);
+          setEditingPersonalNote(null);
+        }}
+        onSave={handleSavePersonalNote}
+        initialNote={editingPersonalNote}
         language={language}
       />
 

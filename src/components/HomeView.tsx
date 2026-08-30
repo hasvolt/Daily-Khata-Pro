@@ -1,5 +1,5 @@
 import React from 'react';
-import { Entry, FundType, Goal, WorkLog, DailyLifeLog, AppLanguage } from '../types';
+import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats } from '../utils/khataCalculations';
 import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
@@ -18,7 +18,10 @@ import {
   Receipt,
   LucideIcon,
   Calendar,
-  CalendarDays
+  CalendarDays,
+  FileText,
+  Pin,
+  Lock
 } from 'lucide-react';
 
 const FUND_ICONS: Record<FundType, LucideIcon> = {
@@ -35,12 +38,15 @@ interface HomeViewProps {
   goals?: Goal[];
   workLogs?: WorkLog[];
   dailyLifeLogs?: DailyLifeLog[];
+  personalNotes?: PersonalNote[];
   percentages: Record<FundType, number>;
   onAddClick: (type: 'income' | 'expense') => void;
   onFilterFund: (fund: FundType) => void;
   onViewHistory: () => void;
   onNavigateGoals?: () => void;
   onNavigateTracker?: () => void;
+  onNavigateNotes?: () => void;
+  onOpenNoteModal?: () => void;
   onOpenWorkModal?: () => void;
   onOpenDailyLifeModal?: () => void;
   onOpenManual?: () => void;
@@ -50,10 +56,18 @@ interface HomeViewProps {
 
 export const HomeView: React.FC<HomeViewProps> = ({
   entries,
+  goals,
+  workLogs,
+  dailyLifeLogs,
+  personalNotes = [],
   percentages,
   onAddClick,
   onFilterFund,
   onViewHistory,
+  onNavigateGoals,
+  onNavigateTracker,
+  onNavigateNotes,
+  onOpenNoteModal,
   language = 'en',
   privacyMask = false
 }) => {
@@ -270,6 +284,57 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </button>
             );
           })}
+        </div>
+      </div>
+
+      {/* Quick Personal Notes & Vault Card */}
+      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 transition-all">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 border border-[var(--theme-primary-border,rgba(56,189,248,0.3))]">
+            <FileText className="w-5 h-5" />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <h4 className="text-[14.5px] font-bold text-[#F8FAFC] truncate">
+                {isHindi ? 'पर्सनल नोट्स एवं सीक्रेट डायरी' : 'Personal Notes & Private Vault'}
+              </h4>
+              <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
+                100% PRIVATE
+              </span>
+            </div>
+            <p className="text-[12px] text-[#94A3B8] truncate mt-0.5">
+              {personalNotes.length > 0
+                ? isHindi
+                  ? `${personalNotes.length} पर्सनल नोट सुरक्षित हैं • गुप्त पासवर्ड्स व विचार`
+                  : `${personalNotes.length} notes saved securely • Ideas, passwords & reminders`
+                : isHindi
+                ? 'खाते से अलग अपने विचार, गुप्त क्रेडेंशियल्स व टू-डू लिस्ट रखें'
+                : 'Write thoughts, credentials, checklists completely separate from ledgers'}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          {onOpenNoteModal && (
+            <button
+              type="button"
+              onClick={onOpenNoteModal}
+              className="py-1.5 px-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[#F8FAFC] font-bold text-[12px] flex items-center gap-1 cursor-pointer transition-all"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>{isHindi ? 'नया नोट' : 'New Note'}</span>
+            </button>
+          )}
+          {onNavigateNotes && (
+            <button
+              type="button"
+              onClick={onNavigateNotes}
+              className="py-1.5 px-3.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all"
+            >
+              <span>{isHindi ? 'वॉल्ट खोलें' : 'Open Vault'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
       </div>
 

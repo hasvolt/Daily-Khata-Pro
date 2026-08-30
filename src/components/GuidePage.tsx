@@ -76,17 +76,18 @@ export const GuidePage: React.FC<GuidePageProps> = ({
   const sections: SectionItem[] = [
     { id: 'intro', title: '1. Introduction & Overview', hindiTitle: '1. परिचय एवं अवलोकन', icon: Zap },
     { id: 'app_lock', title: '2. App Passcode Lock & Vault', hindiTitle: '2. ऐप पासकोड लॉक एवं सुरक्षा वॉल्ट', icon: Lock },
-    { id: 'six_funds', title: '3. 6-Fund Formula Allocation', hindiTitle: '3. 6-फंड फॉर्मूला एलोकेशन', icon: Layers },
-    { id: 'add_income', title: '4. Recording Income', hindiTitle: '4. आमदनी (Income) जोड़ना', icon: Coins },
-    { id: 'add_expense', title: '5. Logging Expenses', hindiTitle: '5. खर्च (Expense) दर्ज करना', icon: Receipt },
-    { id: 'work_life', title: '6. Work Deliverables & Timeline', hindiTitle: '6. वर्क प्रोजेक्ट्स एवं डेली लाइफ टाइमलाइन', icon: Calendar },
-    { id: 'goals', title: '7. Financial Goal Targets', hindiTitle: '7. वित्तीय लक्ष्य (Goals)', icon: Target },
-    { id: 'reports', title: '8. Reports & PDF Statements', hindiTitle: '8. रिपोर्ट एवं PDF स्टेटमेंट', icon: FileText },
-    { id: 'settings', title: '9. Custom Settings & Rules', hindiTitle: '9. कस्टम सेटिंग्स व रूल्स', icon: Settings },
-    { id: 'backup', title: '10. Backup & Privacy Security', hindiTitle: '10. बैकअप एवं डेटा सुरक्षा', icon: ShieldCheck },
-    { id: 'source_code', title: '11. Source Code & Verification', hindiTitle: '11. ओपन सोर्स व सुरक्षा सत्यापन', icon: Code2 },
-    { id: 'faq', title: '12. Frequently Asked Questions', hindiTitle: '12. अक्सर पूछे जाने वाले प्रश्न (FAQ)', icon: HelpCircle },
-    { id: 'developer', title: '13. Developer & Creator Info', hindiTitle: '13. डेवलपर एवं क्रिएटर प्रोफाइल', icon: User }
+    { id: 'personal_notes', title: '3. Personal Notes & Private Vault', hindiTitle: '3. पर्सनल नोट्स एवं प्राइवेट वॉल्ट', icon: FileText },
+    { id: 'six_funds', title: '4. 6-Fund Formula Allocation', hindiTitle: '4. 6-फंड फॉर्मूला एलोकेशन', icon: Layers },
+    { id: 'add_income', title: '5. Recording Income', hindiTitle: '5. आमदनी (Income) जोड़ना', icon: Coins },
+    { id: 'add_expense', title: '6. Logging Expenses', hindiTitle: '6. खर्च (Expense) दर्ज करना', icon: Receipt },
+    { id: 'work_life', title: '7. Work Deliverables & Timeline', hindiTitle: '7. वर्क प्रोजेक्ट्स एवं डेली लाइफ टाइमलाइन', icon: Calendar },
+    { id: 'goals', title: '8. Financial Goal Targets', hindiTitle: '8. वित्तीय लक्ष्य (Goals)', icon: Target },
+    { id: 'reports', title: '9. Reports & PDF Statements', hindiTitle: '9. रिपोर्ट एवं PDF स्टेटमेंट', icon: FileText },
+    { id: 'settings', title: '10. Custom Settings & Rules', hindiTitle: '10. कस्टम सेटिंग्स व रूल्स', icon: Settings },
+    { id: 'backup', title: '11. Backup & Privacy Security', hindiTitle: '11. बैकअप एवं डेटा सुरक्षा', icon: ShieldCheck },
+    { id: 'source_code', title: '12. Source Code & Verification', hindiTitle: '12. ओपन सोर्स व सुरक्षा सत्यापन', icon: Code2 },
+    { id: 'faq', title: '13. Frequently Asked Questions', hindiTitle: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)', icon: HelpCircle },
+    { id: 'developer', title: '14. Developer & Creator Info', hindiTitle: '14. डेवलपर एवं क्रिएटर प्रोफाइल', icon: User }
   ];
 
   const filteredSections = searchQuery.trim()
@@ -368,7 +369,83 @@ export const GuidePage: React.FC<GuidePageProps> = ({
             </div>
           )}
 
-          {/* SECTION 2: 6-Fund Formula Allocation */}
+          {/* SECTION 3: Personal Notes & Private Vault */}
+          {activeSection === 'personal_notes' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="border-b border-[var(--theme-border,#213E61)] pb-5">
+                <h3 className="font-serif-display text-[24px] sm:text-[26px] font-bold text-[#F8FAFC] flex items-center gap-3">
+                  <FileText className="w-7 h-7 text-[#10B981]" />
+                  <span>{isHindi ? 'पर्सनल नोट्स एवं प्राइवेट वॉल्ट (Personal Notes & Vault)' : 'Personal Notes & Private Vault'}</span>
+                </h3>
+                <p className="text-[14.5px] text-[#94A3B8] mt-2 leading-relaxed">
+                  {isHindi
+                    ? 'वित्तीय लेजर से पूरी तरह अलग एक स्वतंत्र, गोपनीय स्पेस जहाँ आप अपने निजी विचार, गुप्त पासवर्ड, डायरी या महत्वपूर्ण कोड सुरक्षित रख सकते हैं।'
+                    : 'A completely isolated and confidential workspace separate from the financial ledger to store secret thoughts, private ideas, codes, and documents safely.'}
+                </p>
+              </div>
+
+              {/* Core Features of Personal Notes */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                  <div className="flex items-center gap-2 text-[#F8FAFC] font-bold text-[15px]">
+                    <div className="p-2 rounded-xl bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <span>{isHindi ? '100% अलग और गोपनीय स्पेस' : '100% Isolated & Private'}</span>
+                  </div>
+                  <p className="text-[13px] text-[#CBD5E1] leading-relaxed">
+                    {isHindi
+                      ? 'यह सेक्शन आपके खातों, लेन-देन और बैलेंस से पूरी तरह अलग है। आपका पर्सनल डेटा केवल आपके डिवाइस के सुरक्षित स्टोरेज में रहता है।'
+                      : 'This section is entirely distinct from account entries and ledger balances. All notes stay strictly inside your local browser storage.'}
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                  <div className="flex items-center gap-2 text-[#F8FAFC] font-bold text-[15px]">
+                    <div className="p-2 rounded-xl bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30">
+                      <Lock className="w-4 h-4" />
+                    </div>
+                    <span>{isHindi ? 'व्यक्तिगत नोट लॉक शील्ड' : 'Individual Note Lock Shield'}</span>
+                  </div>
+                  <p className="text-[13px] text-[#CBD5E1] leading-relaxed">
+                    {isHindi
+                      ? 'किसी भी संवेदनशील नोट पर ताला (Lock) लगाएँ। लॉक किया गया नोट केवल आपकी पुष्टि पर ही स्क्रीन पर दिखाई देगा।'
+                      : 'Lock specific confidential notes. Locked notes mask their preview until explicitly unlocked by you.'}
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                  <div className="flex items-center gap-2 text-[#F8FAFC] font-bold text-[15px]">
+                    <div className="p-2 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
+                      <Layers className="w-4 h-4" />
+                    </div>
+                    <span>{isHindi ? 'कैटेगरी व कलर कोडिंग' : 'Categories & Color Coding'}</span>
+                  </div>
+                  <p className="text-[13px] text-[#CBD5E1] leading-relaxed">
+                    {isHindi
+                      ? 'नोट्स को Personal, Secret & Vault, Ideas & Goals, Credentials, या Documents जैसी श्रेणियों और रंगों में व्यवस्थित करें।'
+                      : 'Organize notes by custom categories (Personal, Vault, Ideas, Credentials, Work) and vivid color accents.'}
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                  <div className="flex items-center gap-2 text-[#F8FAFC] font-bold text-[15px]">
+                    <div className="p-2 rounded-xl bg-[#8B5CF6]/15 text-[#8B5CF6] border border-[#8B5CF6]/30">
+                      <Download className="w-4 h-4" />
+                    </div>
+                    <span>{isHindi ? '1-क्लिक कॉपी व बैकअप' : '1-Click Copy & Backup'}</span>
+                  </div>
+                  <p className="text-[13px] text-[#CBD5E1] leading-relaxed">
+                    {isHindi
+                      ? 'नोट के पूरे टेक्स्ट को तुरंत क्लिपबोर्ड पर कॉपी करें और सेटिंग्स बैकअप फ़ाइल में अपने सभी नोट्स भी सुरक्षित रखें।'
+                      : 'Instantly copy formatted note text to clipboard with 1 click, and export all notes along with JSON backup.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 4: 6-Fund Formula Allocation */}
           {activeSection === 'six_funds' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <div className="border-b border-[var(--theme-border,#213E61)] pb-5">

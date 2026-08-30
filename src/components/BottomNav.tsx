@@ -3,7 +3,7 @@ import { Home, PlusCircle, Briefcase, Target, History, BarChart3 } from 'lucide-
 import { AppLanguage } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 
-export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'developer' | 'about' | 'privacy' | 'disclaimer' | 'terms';
+export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'developer' | 'about' | 'privacy' | 'disclaimer' | 'terms';
 
 interface BottomNavProps {
   currentTab: NavTab;

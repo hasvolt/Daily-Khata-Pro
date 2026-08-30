@@ -22,7 +22,8 @@ import {
   Sun,
   Moon,
   Lock,
-  KeyRound
+  KeyRound,
+  FileText
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -34,6 +35,7 @@ interface HeaderProps {
   onSelectTab?: (tab: NavTab) => void;
   onOpenSettings: () => void;
   onOpenManual: () => void;
+  onOpenNotes?: () => void;
   onOpenSimulator?: () => void;
   onOpenSourceCode?: () => void;
   onOpenInstall?: () => void;
@@ -57,6 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab,
   onOpenSettings,
   onOpenManual,
+  onOpenNotes,
   onOpenSimulator,
   onOpenSourceCode,
   onOpenInstall,
@@ -395,6 +398,24 @@ export const Header: React.FC<HeaderProps> = ({
                       </div>
                     </button>
                   )}
+
+                  {/* Personal Notes Vault Option */}
+                  <button
+                    onClick={() => {
+                      if (onOpenNotes) onOpenNotes();
+                      else if (onSelectTab) onSelectTab('notes');
+                      closeAllMenus();
+                    }}
+                    className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[12px] font-bold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer text-left"
+                  >
+                    <FileText className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                    <div className="flex items-center justify-between flex-1">
+                      <span>{isHindi ? 'पर्सनल नोट्स एवं डायरी' : 'Personal Notes & Vault'}</span>
+                      <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))]">
+                        VAULT
+                      </span>
+                    </div>
+                  </button>
 
                   {/* User Manual Guide Option */}
                   <button

@@ -98,6 +98,23 @@ export interface SecurityLockConfig {
   lastUnlockedAt?: number;
 }
 
+export type PersonalNoteCategory = 'personal' | 'secret' | 'ideas' | 'todo' | 'important' | 'finance' | 'work' | 'general';
+
+export type PersonalNoteColor = 'default' | 'blue' | 'emerald' | 'amber' | 'purple' | 'rose' | 'slate';
+
+export interface PersonalNote {
+  id: string;
+  title: string;
+  content: string;
+  category: PersonalNoteCategory | string;
+  color?: PersonalNoteColor;
+  isPinned?: boolean;
+  isLocked?: boolean; // Can be masked with private lock view
+  tags?: string[];
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface KhataSettings {
   percentages: Record<FundType, number>;
   categories: string[];
@@ -123,6 +140,7 @@ export interface KhataData {
   goals?: Goal[];
   workLogs?: WorkLog[];
   dailyLifeLogs?: DailyLifeLog[];
+  personalNotes?: PersonalNote[];
   settings: {
     percentages: Record<FundType, number>;
     theme?: AppTheme;
@@ -133,3 +151,4 @@ export interface KhataData {
     securityLock?: SecurityLockConfig;
   };
 }
+
