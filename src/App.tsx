@@ -1398,8 +1398,8 @@ export default function App() {
       </main>
 
       {/* Unified Global Footer with Integrated Sponsor Promo Banner & Advertisement */}
-      <footer className="no-print mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/90 backdrop-blur-xs select-none">
-        <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-8 pb-24 sm:pb-28 space-y-4">
+      <footer className="no-print mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-xs select-none">
+        <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-20 sm:pb-22 space-y-3">
           {/* Sponsor / HasVolt Promo Banner (Anchored inside Footer) */}
           <section aria-label="Sponsored Partner" className="w-full">
             <HasVoltPromoBanner />
@@ -1411,7 +1411,7 @@ export default function App() {
           </section>
 
           {/* Streamlined Minimal Footer Details */}
-          <div className="pt-2 text-center text-[11px] text-[#64748B] space-y-2">
+          <div className="pt-1 text-center text-[11px] text-[#64748B] space-y-2">
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
               {/* Creator Minimal Pill */}
               <button
@@ -1436,43 +1436,43 @@ export default function App() {
               </button>
 
               {/* Compact Verified Social & Email Links */}
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <a
                   href="https://github.com/hasvolt/Daily-Khata-Pro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
+                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
                   title="GitHub Repository (hasvolt/Daily-Khata-Pro)"
                 >
-                  <FolderGit2 className="w-3.5 h-3.5" />
+                  <FolderGit2 className="w-4 h-4" />
                 </a>
 
                 <a
                   href="mailto:daily-Khata-Pro@gmail.com"
-                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
+                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
                   title="Official Email: daily-Khata-Pro@gmail.com"
                 >
-                  <Mail className="w-3.5 h-3.5" />
+                  <Mail className="w-4 h-4" />
                 </a>
 
                 <a
                   href="https://www.instagram.com/dailykhatapro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#94A3B8] hover:text-[#E1306C] transition-colors"
+                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#94A3B8] hover:text-[#E1306C] transition-colors"
                   title="Instagram: @dailykhatapro"
                 >
-                  <Instagram className="w-3.5 h-3.5" />
+                  <Instagram className="w-4 h-4" />
                 </a>
 
                 <a
                   href="https://x.com/Dailykhatapro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#94A3B8] hover:text-[#1DA1F2] transition-colors"
+                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#94A3B8] hover:text-[#1DA1F2] transition-colors"
                   title="X / Twitter: @Dailykhatapro"
                 >
-                  <Twitter className="w-3.5 h-3.5" />
+                  <Twitter className="w-4 h-4" />
                 </a>
               </div>
             </div>

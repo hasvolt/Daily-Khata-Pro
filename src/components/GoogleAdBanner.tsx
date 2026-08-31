@@ -23,34 +23,31 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
   className = '',
   label = 'ADVERTISEMENT',
 }) => {
-  const adRef = useRef<HTMLModElement | null>(null);
   const isPushed = useRef(false);
 
   useEffect(() => {
-    // Only push if not already pushed for this mount
     if (!isPushed.current && typeof window !== 'undefined') {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         isPushed.current = true;
       } catch (err) {
-        // Handle ad-blockers or iframe preview constraints quietly
         console.debug('AdSense initialization notice:', err);
       }
     }
   }, []);
 
   return (
-    <div className={`w-full max-w-4xl mx-auto my-3 overflow-hidden text-center select-none ${className}`}>
+    <div className={`w-full max-w-4xl mx-auto my-2 text-center select-none overflow-hidden ${className}`}>
       {label && (
-        <div className="text-[9.5px] font-extrabold uppercase tracking-widest text-[#64748B] mb-1 text-center">
+        <div className="text-[9px] font-bold uppercase tracking-widest text-[#64748B] mb-1.5 text-center opacity-80">
           {label}
         </div>
       )}
-      <div className="rounded-xl border border-[#1E2C3D]/60 bg-[#060B12]/60 p-2 min-h-[90px] flex items-center justify-center overflow-hidden">
+      {/* Fixed Dedicated Ad Container (Reserved standard 90px banner space to prevent layout jumps) */}
+      <div className="w-full min-h-[90px] sm:min-h-[100px] rounded-xl border border-[var(--theme-border,#213E61)]/35 bg-[var(--theme-card,#132438)]/25 flex items-center justify-center overflow-hidden transition-colors">
         <ins
-          ref={adRef}
           className="adsbygoogle"
-          style={{ display: 'block', width: '100%', minHeight: '60px' }}
+          style={{ display: 'block', width: '100%', minHeight: '90px' }}
           data-ad-client={client}
           data-ad-slot={slotId}
           data-ad-format={format}
@@ -60,4 +57,6 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
     </div>
   );
 };
+
 export default GoogleAdBanner;
+

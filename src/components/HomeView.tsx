@@ -20,8 +20,11 @@ import {
   Calendar,
   CalendarDays,
   FileText,
-  Pin,
-  Lock
+  Target,
+  Clock,
+  Sparkles,
+  Lock,
+  CheckCircle2
 } from 'lucide-react';
 
 const FUND_ICONS: Record<FundType, LucideIcon> = {
@@ -56,9 +59,9 @@ interface HomeViewProps {
 
 export const HomeView: React.FC<HomeViewProps> = ({
   entries,
-  goals,
-  workLogs,
-  dailyLifeLogs,
+  goals = [],
+  workLogs = [],
+  dailyLifeLogs = [],
   personalNotes = [],
   percentages,
   onAddClick,
@@ -68,6 +71,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onNavigateTracker,
   onNavigateNotes,
   onOpenNoteModal,
+  onOpenWorkModal,
+  onOpenDailyLifeModal,
   language = 'en',
   privacyMask = false
 }) => {
@@ -88,6 +93,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const totalWealth = Object.values(fundTotals).reduce((sum, v) => sum + v, 0);
   const isZeroState = entries.length === 0;
 
+  // Active or top savings goal
+  const primaryGoal = goals.length > 0 ? goals[0] : null;
+  const goalProgress = primaryGoal ? Math.min(100, Math.round((primaryGoal.currentAmount / (primaryGoal.targetAmount || 1)) * 100)) : 0;
+
   // Recent 4 entries
   const recentEntries = entries
     .slice()
@@ -99,10 +108,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
     .slice(0, 4);
 
   return (
-    <div className="w-full space-y-6 animate-in fade-in duration-200 text-left max-w-5xl mx-auto">
+    <div className="w-full space-y-5 sm:space-y-6 animate-in fade-in duration-200 text-left max-w-5xl mx-auto">
       {/* 1. Main Balance Hero Card (Simple, Clean, Spacious) */}
-      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-6 sm:p-7 shadow-xl relative overflow-hidden transition-colors duration-300">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-7 shadow-xl relative overflow-hidden transition-colors duration-300">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           {/* Left: Total Balance & Date */}
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -111,38 +120,40 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </span>
               <span className="text-[11px] text-[#64748B] font-medium">• {dateFormatted}</span>
             </div>
-            <div className="font-serif-display text-[36px] sm:text-[44px] font-bold text-[#F8FAFC] tracking-tight leading-none pt-1">
+            <div className="font-serif-display text-[32px] xs:text-[36px] sm:text-[44px] font-bold text-[#F8FAFC] tracking-tight leading-none pt-0.5">
               {formatCurrency(totalWealth, privacyMask)}
             </div>
           </div>
 
           {/* Right: Primary Income & Expense Actions */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="grid grid-cols-2 gap-2.5 sm:flex sm:items-center sm:gap-3 w-full sm:w-auto shrink-0">
             <button
+              type="button"
               onClick={() => onAddClick('income')}
-              className="flex-1 sm:flex-initial min-h-[44px] py-2.5 px-5 sm:px-6 rounded-xl bg-[#10B981] hover:bg-[#059669] text-[#04140D] font-extrabold text-[14px] flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer"
+              className="w-full sm:w-auto min-h-[42px] sm:min-h-[44px] py-2 px-3 sm:px-5 rounded-xl bg-[#10B981] hover:bg-[#059669] text-[#04140D] font-extrabold text-[13px] sm:text-[14px] flex items-center justify-center gap-1.5 sm:gap-2 shadow-md active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
-              <Plus className="w-4 h-4 stroke-[3]" />
+              <Plus className="w-4 h-4 stroke-[3] shrink-0" />
               <span>{t.home.addIncome}</span>
             </button>
 
             <button
+              type="button"
               onClick={() => onAddClick('expense')}
-              className="flex-1 sm:flex-initial min-h-[44px] py-2.5 px-5 sm:px-6 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[#EF4444]/15 border border-[#EF4444]/60 text-[#EF4444] font-extrabold text-[14px] flex items-center justify-center gap-2 shadow-xs active:scale-95 transition-all cursor-pointer"
+              className="w-full sm:w-auto min-h-[42px] sm:min-h-[44px] py-2 px-3 sm:px-5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[#EF4444]/15 border border-[#EF4444]/60 text-[#EF4444] font-extrabold text-[13px] sm:text-[14px] flex items-center justify-center gap-1.5 sm:gap-2 shadow-xs active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
-              <Plus className="w-4 h-4 stroke-[3]" />
+              <Plus className="w-4 h-4 stroke-[3] shrink-0" />
               <span>{t.home.addExpense}</span>
             </button>
           </div>
         </div>
 
         {/* Daily & Monthly Income & Expense Dual Breakdown */}
-        <div className="pt-5 mt-5 border-t border-[var(--theme-border,#213E61)] space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <div className="pt-4 mt-4 border-t border-[var(--theme-border,#213E61)] space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* 1. Daily (Today's) Income & Expense */}
-            <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5 shadow-xs">
+            <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 shadow-xs">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-[11.5px] font-extrabold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
+                <div className="flex items-center gap-1.5 text-[11px] sm:text-[11.5px] font-extrabold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{t.home.dailySummaryHeading}</span>
                 </div>
@@ -154,28 +165,28 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 {/* Today Income */}
-                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
-                  <div className="w-8 h-8 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
-                    <ArrowUpRight className="w-4 h-4" />
+                <div className="flex items-center gap-2 p-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
+                    <ArrowUpRight className="w-3.5 h-3.5" />
                   </div>
-                  <div className="min-w-0">
-                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.todayIncome}</div>
-                    <div className="text-[14px] sm:text-[15px] font-bold text-[#10B981] font-mono truncate">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] text-[#94A3B8] font-medium truncate">{t.home.todayIncome}</div>
+                    <div className="text-[12.5px] sm:text-[14px] font-bold text-[#10B981] font-mono truncate">
                       +{formatCurrency(todayStats.income, privacyMask)}
                     </div>
                   </div>
                 </div>
 
                 {/* Today Expense */}
-                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
-                  <div className="w-8 h-8 rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
-                    <ArrowDownRight className="w-4 h-4" />
+                <div className="flex items-center gap-2 p-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
+                    <ArrowDownRight className="w-3.5 h-3.5" />
                   </div>
-                  <div className="min-w-0">
-                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.todayExpense}</div>
-                    <div className="text-[14px] sm:text-[15px] font-bold text-[#EF4444] font-mono truncate">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] text-[#94A3B8] font-medium truncate">{t.home.todayExpense}</div>
+                    <div className="text-[12.5px] sm:text-[14px] font-bold text-[#EF4444] font-mono truncate">
                       -{formatCurrency(todayStats.expense, privacyMask)}
                     </div>
                   </div>
@@ -184,9 +195,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
 
             {/* 2. Monthly (This Month's) Income & Expense */}
-            <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5 shadow-xs">
+            <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 shadow-xs">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-[11.5px] font-extrabold uppercase tracking-wider text-[#94A3B8]">
+                <div className="flex items-center gap-1.5 text-[11px] sm:text-[11.5px] font-extrabold uppercase tracking-wider text-[#94A3B8]">
                   <CalendarDays className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                   <span>{t.home.monthlySummaryHeading}</span>
                 </div>
@@ -198,28 +209,28 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 {/* Month Income */}
-                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
-                  <div className="w-8 h-8 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
-                    <ArrowUpRight className="w-4 h-4" />
+                <div className="flex items-center gap-2 p-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
+                    <ArrowUpRight className="w-3.5 h-3.5" />
                   </div>
-                  <div className="min-w-0">
-                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthIncome}</div>
-                    <div className="text-[14px] sm:text-[15px] font-bold text-[#10B981] font-mono truncate">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthIncome}</div>
+                    <div className="text-[12.5px] sm:text-[14px] font-bold text-[#10B981] font-mono truncate">
                       +{formatCurrency(monthStats.income, privacyMask)}
                     </div>
                   </div>
                 </div>
 
                 {/* Month Expense */}
-                <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70">
-                  <div className="w-8 h-8 rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
-                    <ArrowDownRight className="w-4 h-4" />
+                <div className="flex items-center gap-2 p-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
+                    <ArrowDownRight className="w-3.5 h-3.5" />
                   </div>
-                  <div className="min-w-0">
-                    <div className="text-[10.5px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthExpense}</div>
-                    <div className="text-[14px] sm:text-[15px] font-bold text-[#EF4444] font-mono truncate">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthExpense}</div>
+                    <div className="text-[12.5px] sm:text-[14px] font-bold text-[#EF4444] font-mono truncate">
                       -{formatCurrency(monthStats.expense, privacyMask)}
                     </div>
                   </div>
@@ -287,58 +298,125 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
-      {/* Quick Personal Notes & Vault Card */}
-      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 transition-all">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-10 h-10 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 border border-[var(--theme-primary-border,rgba(56,189,248,0.3))]">
-            <FileText className="w-5 h-5" />
-          </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <h4 className="text-[14.5px] font-bold text-[#F8FAFC] truncate">
-                {isHindi ? 'पर्सनल नोट्स एवं सीक्रेट डायरी' : 'Personal Notes & Private Vault'}
-              </h4>
-              <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
-                100% PRIVATE
-              </span>
+      {/* 3. Dual Productivity Hub: Savings Goals & Private Notes Vault */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        {/* Left: Savings Goals Quick Card */}
+        <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col justify-between gap-3.5 transition-all">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/15 text-[#F59E0B] flex items-center justify-center shrink-0 border border-[#F59E0B]/30">
+                <Target className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-[14.5px] font-bold text-[#F8FAFC] truncate">
+                    {isHindi ? 'बचत लक्ष्य (Goals)' : 'Savings Goals'}
+                  </h4>
+                  <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#F59E0B]/20 text-[#FCD34D] border border-[#F59E0B]/30">
+                    {goals.length} ACTIVE
+                  </span>
+                </div>
+                <p className="text-[12px] text-[#94A3B8] truncate mt-0.5">
+                  {primaryGoal
+                    ? `${primaryGoal.title}: ${formatCurrency(primaryGoal.currentAmount, privacyMask)} of ${formatCurrency(primaryGoal.targetAmount, privacyMask)}`
+                    : isHindi
+                    ? 'कार, घर, शादी या इमरजेंसी के लिए नया लक्ष्य बनाएं'
+                    : 'Track milestones for emergency fund, gadgets, or travel'}
+                </p>
+              </div>
             </div>
-            <p className="text-[12px] text-[#94A3B8] truncate mt-0.5">
-              {personalNotes.length > 0
-                ? isHindi
-                  ? `${personalNotes.length} पर्सनल नोट सुरक्षित हैं • गुप्त पासवर्ड्स व विचार`
-                  : `${personalNotes.length} notes saved securely • Ideas, passwords & reminders`
-                : isHindi
-                ? 'खाते से अलग अपने विचार, गुप्त क्रेडेंशियल्स व टू-डू लिस्ट रखें'
-                : 'Write thoughts, credentials, checklists completely separate from ledgers'}
-            </p>
+          </div>
+
+          {primaryGoal && (
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-[11px] font-bold text-[#94A3B8]">
+                <span>{goalProgress}% Achieved</span>
+                <span className="text-[#10B981]">{formatCurrency(primaryGoal.targetAmount - primaryGoal.currentAmount, privacyMask)} remaining</span>
+              </div>
+              <div className="w-full h-2 rounded-full bg-[var(--theme-surface,#0E1A29)] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#F59E0B] to-[#10B981] transition-all duration-500"
+                  style={{ width: `${goalProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center justify-between pt-1 border-t border-[var(--theme-border,#213E61)]/50">
+            <span className="text-[11.5px] text-[#64748B] font-medium">
+              {goals.length > 0 ? `${goals.length} goals tracking` : 'Set a target'}
+            </span>
+            {onNavigateGoals && (
+              <button
+                type="button"
+                onClick={onNavigateGoals}
+                className="py-1 px-3 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[#F59E0B] text-[#CBD5E1] hover:text-[#FCD34D] font-bold text-[12px] flex items-center gap-1.5 cursor-pointer transition-all"
+              >
+                <span>{isHindi ? 'लक्ष्य देखें' : 'View Goals'}</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          {onOpenNoteModal && (
-            <button
-              type="button"
-              onClick={onOpenNoteModal}
-              className="py-1.5 px-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[#F8FAFC] font-bold text-[12px] flex items-center gap-1 cursor-pointer transition-all"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>{isHindi ? 'नया नोट' : 'New Note'}</span>
-            </button>
-          )}
-          {onNavigateNotes && (
-            <button
-              type="button"
-              onClick={onNavigateNotes}
-              className="py-1.5 px-3.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all"
-            >
-              <span>{isHindi ? 'वॉल्ट खोलें' : 'Open Vault'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          )}
+        {/* Right: Personal Notes & Private Vault */}
+        <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col justify-between gap-3.5 transition-all">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 border border-[var(--theme-primary-border,rgba(56,189,248,0.3))]">
+                <FileText className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-[14.5px] font-bold text-[#F8FAFC] truncate">
+                    {isHindi ? 'पर्सनल नोट्स एवं वॉल्ट' : 'Personal Notes & Vault'}
+                  </h4>
+                  <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
+                    100% PRIVATE
+                  </span>
+                </div>
+                <p className="text-[12px] text-[#94A3B8] truncate mt-0.5">
+                  {personalNotes.length > 0
+                    ? isHindi
+                      ? `${personalNotes.length} पर्सनल नोट सुरक्षित हैं • गुप्त विचार व लिस्ट`
+                      : `${personalNotes.length} notes saved securely • Ideas, passwords & reminders`
+                    : isHindi
+                    ? 'खाते से अलग अपने विचार, गुप्त क्रेडेंशियल्स व टू-डू लिस्ट रखें'
+                    : 'Write thoughts, credentials, checklists completely separate from ledgers'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-1 border-t border-[var(--theme-border,#213E61)]/50">
+            <div className="flex items-center gap-1.5">
+              {onOpenNoteModal && (
+                <button
+                  type="button"
+                  onClick={onOpenNoteModal}
+                  className="py-1 px-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[#F8FAFC] font-bold text-[11.5px] flex items-center gap-1 cursor-pointer transition-all"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>{isHindi ? 'नया नोट' : 'New Note'}</span>
+                </button>
+              )}
+            </div>
+
+            {onNavigateNotes && (
+              <button
+                type="button"
+                onClick={onNavigateNotes}
+                className="py-1 px-3 rounded-lg bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[12px] flex items-center gap-1 cursor-pointer shadow-xs active:scale-95 transition-all"
+              >
+                <span>{isHindi ? 'वॉल्ट खोलें' : 'Open Vault'}</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* 3. Recent Transactions (Simple, Uncluttered List) */}
+      {/* 4. Recent Transactions (Simple, Uncluttered List) */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <h3 className="text-[13.5px] sm:text-[14.5px] font-bold uppercase tracking-wider text-[#94A3B8] flex items-center gap-2">
@@ -355,22 +433,34 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         {isZeroState ? (
-          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-6 text-center space-y-3 shadow-sm">
-            <div className="w-10 h-10 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center mx-auto">
-              <Receipt className="w-5 h-5" />
+          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-6 text-center space-y-4 shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center mx-auto border border-[var(--theme-primary,#38BDF8)]/30">
+              <Receipt className="w-6 h-6" />
             </div>
-            <div>
-              <h4 className="text-[15px] font-bold text-[#F8FAFC]">{t.home.noEntriesYet}</h4>
-              <p className="text-[12.5px] text-[#94A3B8] max-w-xs mx-auto mt-0.5">
-                {t.home.noEntriesSub}
+            <div className="space-y-1">
+              <h4 className="text-[15.5px] font-bold text-[#F8FAFC]">{t.home.noEntriesYet}</h4>
+              <p className="text-[13px] text-[#94A3B8] max-w-md mx-auto">
+                {isHindi
+                  ? 'अपनी दैनिक कमाई या खर्च दर्ज करें — 6-फंड ऑटो-स्प्लिट सिस्टम आपके पैसे को तुरंत व्यवस्थित कर देगा।'
+                  : 'Start logging your daily income or expense to activate automatic 6-fund split and wealth growth.'}
               </p>
             </div>
-            <div className="pt-1">
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
               <button
+                type="button"
                 onClick={() => onAddClick('income')}
-                className="px-4 py-2 rounded-xl font-bold text-[13px] bg-[var(--theme-btn-bg,#38BDF8)] text-[var(--theme-btn-text,#040D17)] cursor-pointer shadow-sm active:scale-95 transition-all"
+                className="px-5 py-2.5 rounded-xl font-extrabold text-[13.5px] bg-[#10B981] hover:bg-[#059669] text-[#04140D] flex items-center gap-2 cursor-pointer shadow-md active:scale-95 transition-all"
               >
-                {t.home.startByAdding}
+                <Plus className="w-4 h-4 stroke-[3]" />
+                <span>{isHindi ? 'आय जोड़ें (+ Income)' : '+ Record Income'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('expense')}
+                className="px-5 py-2.5 rounded-xl font-extrabold text-[13.5px] bg-[var(--theme-surface,#0E1A29)] border border-[#EF4444]/60 text-[#EF4444] hover:bg-[#EF4444]/15 flex items-center gap-2 cursor-pointer shadow-xs active:scale-95 transition-all"
+              >
+                <Plus className="w-4 h-4 stroke-[3]" />
+                <span>{isHindi ? 'खर्च जोड़ें (- Expense)' : '- Record Expense'}</span>
               </button>
             </div>
           </div>
@@ -428,6 +518,52 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
         )}
       </div>
+
+      {/* 5. Work & Daily Life Quick Tracker Preview */}
+      <div className="bg-[var(--theme-card,#132438)]/60 border border-[var(--theme-border,#213E61)]/70 rounded-2xl p-4 sm:p-4.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0 border border-[#10B981]/30">
+            <Clock className="w-4.5 h-4.5" />
+          </div>
+          <div>
+            <div className="text-[13.5px] font-bold text-[#F8FAFC] flex items-center gap-2">
+              <span>{isHindi ? 'काम और दैनिक दिनचर्या ट्रैकर' : 'Work Hours & Daily Life Tracker'}</span>
+              <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-[#10B981]/20 text-[#10B981]">
+                {workLogs.length + dailyLifeLogs.length} LOGS
+              </span>
+            </div>
+            <div className="text-[11.5px] text-[#94A3B8]">
+              {isHindi
+                ? 'दैनिक ड्यूटी के घंटे, ओवरटाइम, कमाई और व्यक्तिगत दिनचर्या को आसानी से ट्रैक करें'
+                : 'Track daily shift duty hours, freelance earnings, sleep & personal wellness routines'}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          {onOpenWorkModal && (
+            <button
+              type="button"
+              onClick={onOpenWorkModal}
+              className="py-1.5 px-3 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] font-bold text-[11.5px] flex items-center gap-1 cursor-pointer transition-all"
+            >
+              <Plus className="w-3 h-3" />
+              <span>{isHindi ? '+ काम का घंटा' : '+ Work Log'}</span>
+            </button>
+          )}
+          {onNavigateTracker && (
+            <button
+              type="button"
+              onClick={onNavigateTracker}
+              className="py-1.5 px-3 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[#F8FAFC] font-bold text-[11.5px] flex items-center gap-1 cursor-pointer transition-all"
+            >
+              <span>{isHindi ? 'ट्रैकर खोलें' : 'Open Tracker'}</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
+export default HomeView;

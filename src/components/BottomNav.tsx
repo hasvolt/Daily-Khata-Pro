@@ -26,7 +26,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
   return (
     <nav
       id="bottom-nav-bar"
-      className="fixed bottom-0 left-0 right-0 bg-[var(--theme-surface,#0E1A29)]/98 backdrop-blur-2xl border-t border-[var(--theme-border,#213E61)] flex justify-around items-center py-2 sm:py-2.5 px-1 sm:px-2 z-40 max-w-full md:max-w-3xl lg:max-w-4xl mx-auto md:rounded-t-2xl shadow-2xl no-print transition-colors duration-300"
+      className="fixed bottom-0 left-0 right-0 bg-[var(--theme-surface,#0E1A29)]/98 backdrop-blur-2xl border-t border-[var(--theme-border,#213E61)] flex justify-around items-center py-1.5 sm:py-2.5 px-1 sm:px-3 z-40 max-w-full md:max-w-3xl lg:max-w-4xl mx-auto md:rounded-t-2xl shadow-2xl no-print transition-colors duration-300"
     >
       {tabs.map((tab) => {
         const Icon = tab.icon;
@@ -36,9 +36,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
             key={tab.id}
             id={`nav-btn-${tab.id}`}
             onClick={() => onSelectTab(tab.id)}
-            className={`flex flex-col items-center gap-0.5 sm:gap-1 text-[11px] sm:text-[12.5px] px-1.5 sm:px-3 py-1 font-sans font-bold tracking-tight transition-all cursor-pointer rounded-xl shrink-0 min-w-0 ${
+            className={`flex flex-col items-center gap-0.5 sm:gap-1 text-[11px] sm:text-[12.5px] px-1 sm:px-2.5 py-1 font-sans font-semibold tracking-tight transition-all cursor-pointer rounded-xl shrink-0 min-w-[52px] sm:min-w-[64px] min-h-[46px] justify-center ${
               isActive
-                ? 'scale-105'
+                ? 'scale-105 font-bold'
                 : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]/50 active:scale-95'
             }`}
             style={{
@@ -46,15 +46,15 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
             }}
           >
             <div
-              className="p-1 sm:p-1.5 rounded-xl transition-colors"
+              className="p-1.5 sm:p-2 rounded-xl transition-colors flex items-center justify-center"
               style={{
                 backgroundColor: isActive ? 'var(--theme-primary-dim, rgba(56, 189, 248, 0.2))' : 'transparent',
                 color: isActive ? 'var(--theme-primary, #38BDF8)' : undefined
               }}
             >
-              <Icon className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
+              <Icon className="w-5.5 h-5.5 sm:w-6 sm:h-6 stroke-[2.3]" />
             </div>
-            <span className="truncate leading-none text-[10.5px] sm:text-[12px]">{tab.label}</span>
+            <span className="truncate leading-none text-[11px] sm:text-[12px]">{tab.label}</span>
           </button>
         );
       })}
