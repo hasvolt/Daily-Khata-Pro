@@ -56,7 +56,7 @@ const STORAGE_KEY = 'daily-khata-pro-v3';
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [entries, setEntries] = useState<Entry[]>([]);
   const [goals, setGoals] = useState<Goal[]>([]);
   const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
