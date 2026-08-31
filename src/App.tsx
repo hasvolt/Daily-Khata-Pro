@@ -1072,7 +1072,7 @@ export default function App() {
     <div
       data-theme={theme}
       data-view-mode={viewMode}
-      className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] flex flex-col font-sans pb-24 md:pb-28 transition-colors duration-300"
+      className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] flex flex-col font-sans transition-colors duration-300"
     >
       {/* Top Header */}
       <div className="no-print">
@@ -1107,9 +1107,9 @@ export default function App() {
         />
       </div>
 
-      {/* Main Container */}
-      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6 pb-24 sm:pb-28 flex flex-col justify-between">
-        <div className="flex-1 w-full">
+      {/* Main Content Area */}
+      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6">
+        <div className="w-full">
           <Routes>
           <Route path="/" element={
             <HomeView
@@ -1395,21 +1395,22 @@ export default function App() {
             />} />
           </Routes>
         </div>
+      </main>
 
-        {/* Dedicated Bottom Advertising & Footer Section (Positioned Cleanly at Bottom near Footer) */}
-        <div className="mt-auto pt-8 sm:pt-12 space-y-3.5 w-full">
-          {/* Sponsor / HasVolt Promo Banner (Near Footer) */}
-          <section className="w-full">
-            <HasVoltPromoBanner />
-          </section>
+      {/* Dedicated Bottom Advertising & Footer Section (Cleanly anchored at the bottom right above bottom nav) */}
+      <div className="no-print mt-auto pt-8 sm:pt-10 pb-20 sm:pb-24 space-y-3.5 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8">
+        {/* Sponsor / HasVolt Promo Banner (Near Footer) */}
+        <section className="w-full">
+          <HasVoltPromoBanner />
+        </section>
 
-          {/* Google AdSense Responsive Ad Unit */}
-          <section className="w-full">
-            <GoogleAdBanner slotId="1364027408" client="ca-pub-4744063610455678" />
-          </section>
+        {/* Google AdSense Responsive Ad Unit */}
+        <section className="w-full">
+          <GoogleAdBanner slotId="1364027408" client="ca-pub-4744063610455678" />
+        </section>
 
-          {/* Streamlined Minimal Footer */}
-          <footer className="pt-2 pb-2 text-center text-[11px] text-[#64748B] space-y-2 select-none">
+        {/* Streamlined Minimal Footer */}
+        <footer className="pt-2 pb-2 text-center text-[11px] text-[#64748B] space-y-2 select-none">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {/* Creator Minimal Pill */}
             <button
@@ -1542,8 +1543,7 @@ export default function App() {
             </button>
           </div>
         </footer>
-        </div>
-      </main>
+      </div>
 
       {/* Fixed Bottom Navigation */}
       <div className="no-print">
