@@ -487,58 +487,22 @@
   background: #CBD5E1;
 }
 
-/* View Mode Layout Engine (Auto, Mobile & Desktop Modes) */
-
-/* 1. AUTO MODE (Default): Standard Natural Fluid Responsive Layout */
-[data-view-mode="auto"] {
+/* Professional Desktop Workstation Layout */
+#app-root,
+main {
   width: 100%;
-}
-
-[data-view-mode="auto"] main {
-  width: 100%;
-  max-width: 72rem; /* 1152px */
+  max-width: 80rem; /* 1280px */
   margin: 0 auto;
 }
 
-/* 2. MOBILE VIEW PREFERENCE: Fluid on mobile/tablet viewports, neatly framed centered column on large screens */
-[data-view-mode="mobile"] {
-  width: 100%;
-}
-
-[data-view-mode="mobile"] main {
-  width: 100%;
-  margin: 0 auto;
-}
-
-@media (min-width: 1024px) {
-  [data-view-mode="mobile"] main {
-    max-width: 520px;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  [data-view-mode="mobile"] #bottom-nav-bar {
-    max-width: 520px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
-
-/* 3. DESKTOP VIEW PREFERENCE: Expansive Workstation Width */
-[data-view-mode="desktop"] {
-  width: 100%;
-}
-
-[data-view-mode="desktop"] main {
-  width: 100%;
-  max-width: 84rem; /* 1344px */
-  margin: 0 auto;
-}
-
-[data-view-mode="desktop"] #bottom-nav-bar {
-  max-width: 56rem; /* 896px */
-  left: 50%;
-  transform: translateX(-50%);
+#bottom-nav-bar {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  transform: none !important;
 }
 
 @media print {

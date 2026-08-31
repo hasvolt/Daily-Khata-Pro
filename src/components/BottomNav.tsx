@@ -1,64 +1,105 @@
 import React from 'react';
-import { Home, PlusCircle, Briefcase, Target, History, BarChart3 } from 'lucide-react';
+import { Home, Plus, Briefcase, Target, History, BarChart3, LucideIcon } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 
-export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'developer' | 'about' | 'privacy' | 'disclaimer' | 'terms' | 'support';
+export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'developer' | 'about' | 'privacy' | 'disclaimer' | 'terms' | 'support' | 'safety' | 'guide' | 'calculator';
 
 interface BottomNavProps {
-  currentTab: NavTab;
+  currentTab: string;
   onSelectTab: (tab: NavTab) => void;
   language?: AppLanguage;
 }
 
+interface TabItem {
+  id: NavTab;
+  label: string;
+  icon: LucideIcon;
+  isAction?: boolean;
+}
+
 export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, language = 'en' }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const isHindi = language === 'hi';
 
-  const tabs = [
-    { id: 'home' as NavTab, label: t.nav.home, icon: Home },
-    { id: 'add' as NavTab, label: t.nav.add, icon: PlusCircle },
-    { id: 'tracker' as NavTab, label: t.nav.tracker, icon: Briefcase },
-    { id: 'goals' as NavTab, label: t.nav.goals, icon: Target },
-    { id: 'history' as NavTab, label: t.nav.history, icon: History },
-    { id: 'report' as NavTab, label: t.nav.reports, icon: BarChart3 }
+  const tabs: TabItem[] = [
+    { id: 'home', label: t.nav.home, icon: Home },
+    { id: 'history', label: t.nav.history, icon: History },
+    { id: 'add', label: isHindi ? 'नया' : 'Add', icon: Plus, isAction: true },
+    { id: 'goals', label: t.nav.goals, icon: Target },
+    { id: 'tracker', label: t.nav.tracker, icon: Briefcase },
+    { id: 'report', label: t.nav.reports, icon: BarChart3 }
   ];
 
   return (
     <nav
       id="bottom-nav-bar"
-      className="fixed bottom-0 left-0 right-0 bg-[var(--theme-surface,#0E1A29)]/98 backdrop-blur-2xl border-t border-[var(--theme-border,#213E61)] flex justify-around items-center py-1.5 sm:py-2.5 px-1 sm:px-3 z-40 max-w-full md:max-w-3xl lg:max-w-4xl mx-auto md:rounded-t-2xl shadow-2xl no-print transition-colors duration-300"
+      aria-label="Bottom Navigation"
+      className="fixed bottom-0 left-0 right-0 w-full bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-2xl border-t border-[var(--theme-border,#213E61)] shadow-[0_-8px_30px_rgba(0,0,0,0.35)] z-50 px-2 sm:px-6 lg:px-10 pt-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] transition-colors duration-200"
     >
-      {tabs.map((tab) => {
-        const Icon = tab.icon;
-        const isActive = currentTab === tab.id;
-        return (
-          <button
-            key={tab.id}
-            id={`nav-btn-${tab.id}`}
-            onClick={() => onSelectTab(tab.id)}
-            className={`flex flex-col items-center gap-0.5 sm:gap-1 text-[11px] sm:text-[12.5px] px-1 sm:px-2.5 py-1 font-sans font-semibold tracking-tight transition-all cursor-pointer rounded-xl shrink-0 min-w-[52px] sm:min-w-[64px] min-h-[46px] justify-center ${
-              isActive
-                ? 'scale-105 font-bold'
-                : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]/50 active:scale-95'
-            }`}
-            style={{
-              color: isActive ? 'var(--theme-primary, #38BDF8)' : undefined
-            }}
-          >
-            <div
-              className="p-1.5 sm:p-2 rounded-xl transition-colors flex items-center justify-center"
-              style={{
-                backgroundColor: isActive ? 'var(--theme-primary-dim, rgba(56, 189, 248, 0.2))' : 'transparent',
-                color: isActive ? 'var(--theme-primary, #38BDF8)' : undefined
-              }}
+      <div className="grid grid-cols-6 items-center w-full max-w-6xl mx-auto gap-1 sm:gap-3">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = currentTab === tab.id;
+
+          // Special Center Action Button (+ Add)
+          if (tab.isAction) {
+            return (
+              <button
+                key={tab.id}
+                id="nav-btn-add"
+                type="button"
+                onClick={() => onSelectTab(tab.id)}
+                className="group relative flex flex-col items-center justify-center -mt-4 sm:-mt-5 cursor-pointer focus:outline-none transition-transform active:scale-90 w-full"
+                title={tab.label}
+              >
+                <div
+                  className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
+                    isActive
+                      ? 'bg-[#10B981] text-[#04140D] ring-4 ring-[#10B981]/30 shadow-[#10B981]/50 scale-105'
+                      : 'bg-gradient-to-tr from-[#10B981] to-[#34D399] text-[#04140D] hover:scale-105 shadow-[#10B981]/30'
+                  }`}
+                >
+                  <Plus className="w-6 h-6 sm:w-7 sm:h-7 stroke-[3] transition-transform group-hover:rotate-90 duration-200" />
+                </div>
+                <span className="text-[11px] sm:text-[12.5px] font-extrabold text-[#10B981] mt-1 tracking-tight truncate max-w-full">
+                  {tab.label}
+                </span>
+              </button>
+            );
+          }
+
+          // Standard Nav Tab
+          return (
+            <button
+              key={tab.id}
+              id={`nav-btn-${tab.id}`}
+              type="button"
+              onClick={() => onSelectTab(tab.id)}
+              className={`flex flex-col items-center justify-center py-1 sm:py-2 px-1 sm:px-3 rounded-2xl transition-all cursor-pointer select-none w-full ${
+                isActive
+                  ? 'text-[var(--theme-primary,#38BDF8)] font-extrabold bg-[var(--theme-card,#132438)]/60'
+                  : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]/40 active:scale-95'
+              }`}
             >
-              <Icon className="w-5.5 h-5.5 sm:w-6 sm:h-6 stroke-[2.3]" />
-            </div>
-            <span className="truncate leading-none text-[11px] sm:text-[12px]">{tab.label}</span>
-          </button>
-        );
-      })}
+              <div
+                className={`p-1.5 sm:p-2 rounded-xl transition-all ${
+                  isActive
+                    ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] scale-110'
+                    : 'text-[#94A3B8]'
+                }`}
+              >
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]" />
+              </div>
+              <span className="text-[11px] sm:text-[13px] font-bold leading-tight truncate mt-0.5 max-w-full text-center">
+                {tab.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </nav>
   );
 };
 
+export default BottomNav;

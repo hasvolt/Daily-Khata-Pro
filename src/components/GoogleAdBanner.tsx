@@ -37,17 +37,17 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
   }, []);
 
   return (
-    <div className={`w-full max-w-4xl mx-auto my-2 text-center select-none overflow-hidden ${className}`}>
+    <div className={`w-full max-w-4xl mx-auto my-3 text-center select-none overflow-hidden ${className}`}>
       {label && (
-        <div className="text-[9px] font-bold uppercase tracking-widest text-[#64748B] mb-1.5 text-center opacity-80">
+        <div className="text-[10px] font-bold uppercase tracking-widest text-[#64748B] mb-1.5 text-center opacity-85">
           {label}
         </div>
       )}
-      {/* Fixed Dedicated Ad Container (Reserved standard 90px banner space to prevent layout jumps) */}
-      <div className="w-full min-h-[90px] sm:min-h-[100px] rounded-xl border border-[var(--theme-border,#213E61)]/35 bg-[var(--theme-card,#132438)]/25 flex items-center justify-center overflow-hidden transition-colors">
+      {/* Fixed Dedicated AdSense Container with reserved banner height */}
+      <div className="w-full min-h-[90px] sm:min-h-[100px] rounded-2xl border border-[var(--theme-border,#213E61)]/60 bg-[var(--theme-card,#132438)]/40 flex items-center justify-center overflow-hidden transition-colors shadow-xs">
         <ins
           className="adsbygoogle"
-          style={{ display: 'block', width: '100%', minHeight: '90px' }}
+          style={{ display: 'block', width: '100%', minHeight: '90px', textAlign: 'center' }}
           data-ad-client={client}
           data-ad-slot={slotId}
           data-ad-format={format}

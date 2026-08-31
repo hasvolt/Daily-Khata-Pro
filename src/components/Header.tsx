@@ -183,6 +183,38 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
+        {/* Desktop Navigation Links for SaaS Desktop Experience */}
+        {onSelectTab && (
+          <nav className="hidden lg:flex items-center gap-1 mx-1.5">
+            {[
+              { id: 'home' as NavTab, label: isHindi ? 'खाता' : 'Khata', icon: Home },
+              { id: 'history' as NavTab, label: isHindi ? 'लेज़र' : 'Ledger', icon: History },
+              { id: 'goals' as NavTab, label: isHindi ? 'लक्ष्य' : 'Goals', icon: Target },
+              { id: 'tracker' as NavTab, label: isHindi ? 'ड्यूटी/लाइफ' : 'Work & Life', icon: Briefcase },
+              { id: 'notes' as NavTab, label: isHindi ? 'वॉल्ट' : 'Notes', icon: FileText },
+              { id: 'report' as NavTab, label: isHindi ? 'रिपोर्ट्स' : 'Analytics', icon: BarChart3 },
+            ].map((tab) => {
+              const TabIcon = tab.icon;
+              const isActive = currentTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => onSelectTab(tab.id)}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[12px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] shadow-xs'
+                      : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]'
+                  }`}
+                >
+                  <TabIcon className="w-3.5 h-3.5" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+        )}
+
         {/* Desktop Mode Search Bar */}
         {onSearchChange && (
           <div className="hidden lg:flex items-center flex-1 max-w-xs mx-3">

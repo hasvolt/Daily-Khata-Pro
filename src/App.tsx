@@ -1108,7 +1108,7 @@ export default function App() {
       </div>
 
       {/* Main Content Area */}
-      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6 pb-6">
+      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6 pb-6 sm:pb-8">
         <div className="w-full">
           <Routes>
           <Route path="/" element={
@@ -1399,7 +1399,7 @@ export default function App() {
 
       {/* Unified Global Footer with Integrated Sponsor Promo Banner & Advertisement */}
       <footer className="no-print mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-xs select-none">
-        <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-20 sm:pb-22 space-y-3">
+        <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-24 sm:pb-28 space-y-3">
           {/* Sponsor / HasVolt Promo Banner (Anchored inside Footer) */}
           <section aria-label="Sponsored Partner" className="w-full">
             <HasVoltPromoBanner />
