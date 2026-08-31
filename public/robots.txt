@@ -1,5 +1,49 @@
-# Robots.txt for Daily Khata: Pro
+# Robots.txt for Daily Khata Pro (https://rozfiber.com)
+# Full open crawling permissions for Googlebot, Search Engines & AI Assistants
+
 User-agent: *
+Allow: /
+
+# Google Search & Google Bot Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Microsoft Bing
+User-agent: Bingbot
+Allow: /
+
+# AI Crawlers & Assistants (ChatGPT, Claude, Perplexity, etc.)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: YandexBot
 Allow: /
 
 # Sitemaps

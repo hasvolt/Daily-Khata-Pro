@@ -40,6 +40,7 @@ import { InstallPWA } from './components/InstallPWA';
 import { InstallModal } from './components/InstallModal';
 import { ShareModal } from './components/ShareModal';
 import { DeveloperModal } from './components/DeveloperModal';
+import { SupportFeedbackModal, SupportTab } from './components/SupportFeedbackModal';
 import { DeveloperPage } from './components/DeveloperPage';
 import { AboutPage } from './components/AboutPage';
 import { PrivacyPage } from './components/PrivacyPage';
@@ -47,6 +48,7 @@ import { DisclaimerPage } from './components/DisclaimerPage';
 import { TermsPage } from './components/TermsPage';
 import { GuidePage } from './components/GuidePage';
 import { SafetyPage } from './components/SafetyPage';
+import { SupportPage } from './components/SupportPage';
 import { CalculatorPage } from './components/CalculatorPage';
 import { TRANSLATIONS } from './utils/translations';
 import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles } from 'lucide-react';
@@ -97,6 +99,8 @@ export default function App() {
   const [isSourceCodeOpen, setIsSourceCodeOpen] = useState<boolean>(false);
   const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
   const [isDeveloperOpen, setIsDeveloperOpen] = useState<boolean>(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState<boolean>(false);
+  const [supportModalTab, setSupportModalTab] = useState<SupportTab>('help');
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
   const [isPrintModalOpen, setIsPrintModalOpen] = useState<boolean>(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
@@ -1077,6 +1081,10 @@ export default function App() {
           onSelectTab={setCurrentTab}
           onOpenSettings={() => setIsSettingsOpen(true)}
           onOpenManual={() => setCurrentTab('guide')}
+          onOpenSupport={(tab) => {
+            setCurrentTab('support');
+            navigate(`/support?tab=${tab || 'help'}`);
+          }}
           onOpenNotes={() => setCurrentTab('notes')}
           onOpenSimulator={() => setCurrentTab('calculator')}
           onOpenSourceCode={() => setCurrentTab('safety')}
@@ -1100,8 +1108,9 @@ export default function App() {
       </div>
 
       {/* Main Container */}
-      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 py-3.5 sm:py-6">
-        <Routes>
+      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6 pb-24 sm:pb-28 flex flex-col justify-between">
+        <div className="flex-1 w-full">
+          <Routes>
           <Route path="/" element={
             <HomeView
               entries={entries}
@@ -1311,6 +1320,16 @@ export default function App() {
             />
           } />
 
+          <Route path="/support" element={
+            <SupportPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+              onOpenManual={() => setCurrentTab('guide')}
+              onOpenSourceCode={() => setCurrentTab('safety')}
+            />
+          } />
+
           <Route path="/calculator" element={
             <CalculatorPage
               onBack={() => setCurrentTab('home')}
@@ -1374,20 +1393,23 @@ export default function App() {
               language={language}
               privacyMask={privacyMask}
             />} />
-        </Routes>
+          </Routes>
+        </div>
 
-        {/* Sponsor / Ad Banner (Compact) */}
-        <section className="pt-3 pb-1">
-          <HasVoltPromoBanner />
-        </section>
+        {/* Dedicated Bottom Advertising & Footer Section (Positioned Cleanly at Bottom near Footer) */}
+        <div className="mt-auto pt-8 sm:pt-12 space-y-3.5 w-full">
+          {/* Sponsor / HasVolt Promo Banner (Near Footer) */}
+          <section className="w-full">
+            <HasVoltPromoBanner />
+          </section>
 
-        {/* Google AdSense Responsive Ad Unit */}
-        <section className="py-1">
-          <GoogleAdBanner slotId="1364027408" client="ca-pub-4744063610455678" />
-        </section>
+          {/* Google AdSense Responsive Ad Unit */}
+          <section className="w-full">
+            <GoogleAdBanner slotId="1364027408" client="ca-pub-4744063610455678" />
+          </section>
 
-        {/* Streamlined Minimal Footer */}
-        <footer className="pt-3 pb-3 text-center text-[11px] text-[#64748B] space-y-2 select-none">
+          {/* Streamlined Minimal Footer */}
+          <footer className="pt-2 pb-2 text-center text-[11px] text-[#64748B] space-y-2 select-none">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {/* Creator Minimal Pill */}
             <button
@@ -1520,6 +1542,7 @@ export default function App() {
             </button>
           </div>
         </footer>
+        </div>
       </main>
 
       {/* Fixed Bottom Navigation */}
@@ -1575,6 +1598,10 @@ export default function App() {
         onOpenInstall={() => setIsInstallModalOpen(true)}
         onOpenShare={() => setIsShareOpen(true)}
         onOpenDeveloper={() => setIsDeveloperOpen(true)}
+        onOpenSupport={(tab) => {
+          setSupportModalTab(tab || 'help');
+          setIsSupportModalOpen(true);
+        }}
         onOpenSecurityModal={() => setIsSecurityModalOpen(true)}
         securityLock={securityLock}
         onInstantLock={handleInstantLock}
@@ -1729,6 +1756,21 @@ export default function App() {
         isOpen={isDeveloperOpen}
         onClose={() => setIsDeveloperOpen(false)}
         language={language}
+      />
+
+      {/* Bug Report, Suggestion & Help Centre Modal */}
+      <SupportFeedbackModal
+        isOpen={isSupportModalOpen}
+        onClose={() => setIsSupportModalOpen(false)}
+        initialTab={supportModalTab}
+        language={language}
+        onOpenManual={() => setCurrentTab('guide')}
+        onOpenSourceCode={() => setCurrentTab('safety')}
+        onOpenFullPage={(tab) => {
+          setIsSupportModalOpen(false);
+          setCurrentTab('support');
+          navigate(`/support?tab=${tab || 'help'}`);
+        }}
       />
 
       {/* App Passcode / PIN Security Configuration Modal */}

@@ -197,7 +197,7 @@ export const DEFAULT_NOTE_CATEGORIES = [
 export const INITIAL_SAMPLE_PERSONAL_NOTES = [
   {
     id: 'note_welcome',
-    title: '✨ Welcome to Your Private Vault (पर्सनल नोट्स)',
+    title: 'Welcome to Your Private Vault (पर्सनल नोट्स)',
     content: 'This is your completely separate personal scratchpad & private vault!\n\n• 100% Offline & Stored only in your local browser storage.\n• Keep ideas, secret credentials, personal reminders, daily checklists, and reflections.\n• Pin important notes to the top or toggle secret mask to hide sensitive text in public.',
     category: 'personal',
     color: 'emerald' as const,

@@ -21,7 +21,8 @@ import {
   ChevronRight,
   Target,
   Zap,
-  Tag
+  Tag,
+  History
 } from 'lucide-react';
 import { FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
@@ -116,6 +117,8 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
   const [calcHistory, setCalcHistory] = useState<CalcHistoryItem[]>([]);
   const [copiedResult, setCopiedResult] = useState<boolean>(false);
   const [memoryVal, setMemoryVal] = useState<number>(0);
+  const [calcScale, setCalcScale] = useState<'normal' | 'large' | 'jumbo'>('large');
+  const [showHistory, setShowHistory] = useState<boolean>(false);
 
   // --- 2. 6-Fund Split State ---
   const [fundAmountInput, setFundAmountInput] = useState<string>('50000');
@@ -379,7 +382,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-200 no-print text-left">
-      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150">
+      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl w-full max-w-2xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150">
         {/* Header Bar */}
         <div className="px-4 sm:px-5 py-3.5 border-b border-[var(--theme-border,#213E61)] flex justify-between items-center bg-[var(--theme-surface,#0E1A29)] shrink-0">
           <div className="flex items-center gap-3">
@@ -439,116 +442,244 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
         <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar bg-[var(--theme-surface,#0E1A29)]/50">
           
           {/* ========================================================= */}
-          {/* TAB 1: Standard Keypad Calculator */}
+          {/* TAB 1: Standard Keypad Calculator (ENLARGED & HIGH CONTRAST) */}
           {/* ========================================================= */}
           {activeTab === 'standard' && (
             <div className="space-y-4 animate-in fade-in duration-150">
-              <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-inner space-y-1 text-right">
-                <div className="text-[13px] font-mono text-[#94A3B8] h-5 overflow-x-auto whitespace-nowrap">
-                  {stdExpr || '0'}
-                </div>
-                <div className="text-[28px] sm:text-[32px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] tracking-tight truncate">
-                  {privacyMask ? '₹ ****' : `₹ ${Number(stdResult || 0).toLocaleString('en-IN')}`}
+              {/* Size Switcher & History Bar */}
+              <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-2.5">
+                <button
+                  type="button"
+                  onClick={() => setShowHistory(!showHistory)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12px] font-mono text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs"
+                >
+                  <History className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                  <span>{calcHistory.length > 0 ? `Tape (${calcHistory.length})` : 'History'}</span>
+                </button>
+
+                <div className="flex items-center gap-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] p-1 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCalcScale('normal');
+                      triggerHapticSound('click');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                      calcScale === 'normal'
+                        ? 'bg-[var(--theme-card,#132438)] text-[#F8FAFC] border border-[var(--theme-border,#213E61)] shadow-xs'
+                        : 'text-[#64748B] hover:text-[#CBD5E1]'
+                    }`}
+                  >
+                    Normal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCalcScale('large');
+                      triggerHapticSound('click');
+                    }}
+                    className={`px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer ${
+                      calcScale === 'large'
+                        ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] shadow-xs'
+                        : 'text-[#94A3B8] hover:text-[#CBD5E1]'
+                    }`}
+                  >
+                    Large
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCalcScale('jumbo');
+                      triggerHapticSound('click');
+                    }}
+                    className={`px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer ${
+                      calcScale === 'jumbo'
+                        ? 'bg-[#10B981] text-[#040D17] shadow-xs'
+                        : 'text-[#94A3B8] hover:text-[#CBD5E1]'
+                    }`}
+                  >
+                    Extra Large (XL)
+                  </button>
                 </div>
               </div>
 
-              {/* Memory Buttons */}
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono font-bold">
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => {
-                      setMemoryVal(0);
-                      triggerHapticSound('click');
-                    }}
-                    className="px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-bg,#070E18)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] cursor-pointer"
-                  >
-                    MC
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleKeypadPress(memoryVal.toString());
-                      triggerHapticSound('click');
-                    }}
-                    className="px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-bg,#070E18)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] cursor-pointer"
-                  >
-                    MR ({memoryVal})
-                  </button>
-                  <button
-                    onClick={() => {
-                      const cur = parseFloat(stdResult) || 0;
-                      setMemoryVal((prev) => prev + cur);
-                      triggerHapticSound('click');
-                    }}
-                    className="px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-bg,#070E18)] text-[#10B981] border border-[var(--theme-border,#213E61)] cursor-pointer"
-                  >
-                    M+
-                  </button>
-                  <button
-                    onClick={() => {
-                      const cur = parseFloat(stdResult) || 0;
-                      setMemoryVal((prev) => prev - cur);
-                      triggerHapticSound('click');
-                    }}
-                    className="px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-bg,#070E18)] text-[#EF4444] border border-[var(--theme-border,#213E61)] cursor-pointer"
-                  >
-                    M-
-                  </button>
+              {/* Large OLED/LCD Screen */}
+              <div className={`p-4 sm:p-5 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-inner space-y-1 text-right relative overflow-hidden transition-all ${
+                calcScale === 'jumbo' ? 'min-h-[130px]' : 'min-h-[110px]'
+              }`}>
+                <div className="flex items-center justify-between text-[#94A3B8]">
+                  {memoryVal !== 0 ? (
+                    <span className="text-[11px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+                      M = {memoryVal}
+                    </span>
+                  ) : (
+                    <span className="text-[11px] font-mono text-[#64748B]">CALCULATOR</span>
+                  )}
+                  <div className="text-[14px] sm:text-[16px] font-mono text-[#94A3B8] overflow-x-auto whitespace-nowrap custom-scrollbar pl-2">
+                    {stdExpr || '0'}
+                  </div>
                 </div>
 
+                <div className={`font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] tracking-tight truncate select-all py-1 ${
+                  calcScale === 'jumbo'
+                    ? 'text-[40px] sm:text-[50px] md:text-[60px]'
+                    : calcScale === 'large'
+                    ? 'text-[34px] sm:text-[44px] md:text-[50px]'
+                    : 'text-[28px] sm:text-[34px]'
+                }`}>
+                  {privacyMask ? '₹ ****' : (stdResult || '0')}
+                </div>
+
+                {parseFloat(stdResult) > 0 && (
+                  <div className="text-[12px] font-mono font-bold text-[#10B981] flex items-center justify-end gap-1">
+                    <span>≈ ₹ {parseFloat(stdResult).toLocaleString('en-IN')}</span>
+                    {formatIndianWords(parseFloat(stdResult)) && (
+                      <span className="bg-[#10B981]/15 px-2 py-0.5 rounded text-[#10B981] border border-[#10B981]/30">
+                        ({formatIndianWords(parseFloat(stdResult))})
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* History Drawer */}
+              {showHistory && (
+                <div className="p-3 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 animate-in fade-in max-h-40 overflow-y-auto custom-scrollbar text-[12px] font-mono">
+                  <div className="flex justify-between items-center text-[11px] font-bold text-[#64748B] border-b border-[var(--theme-border,#213E61)] pb-1">
+                    <span>RECENT CALCULATIONS</span>
+                    <button
+                      onClick={() => setCalcHistory([])}
+                      className="text-[#EF4444] hover:brightness-125 transition-colors cursor-pointer"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  {calcHistory.length === 0 ? (
+                    <div className="text-[#64748B] text-center py-2 text-[11px]">No history yet</div>
+                  ) : (
+                    calcHistory.map((item, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => {
+                          setStdExpr(item.res);
+                          setStdResult(item.res);
+                          triggerHapticSound('click');
+                        }}
+                        className="flex justify-between items-center p-1.5 rounded-lg hover:bg-[var(--theme-card,#132438)] transition-colors cursor-pointer text-[#CBD5E1]"
+                      >
+                        <span className="text-[#94A3B8] truncate max-w-[160px]">{item.expr}</span>
+                        <span className="font-bold text-[var(--theme-primary,#38BDF8)]">= {item.res}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {/* Memory Buttons */}
+              <div className="grid grid-cols-4 gap-2 text-center font-mono font-bold">
                 <button
-                  type="button"
-                  onClick={() => handleCopyResult(stdResult)}
-                  className="flex items-center gap-1 text-[11px] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer"
+                  onClick={() => {
+                    setMemoryVal(0);
+                    triggerHapticSound('click');
+                  }}
+                  className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] cursor-pointer transition-all active:scale-95 ${
+                    calcScale === 'jumbo' ? 'py-3 text-[13px]' : 'py-2.5 text-[12px]'
+                  }`}
                 >
-                  {copiedResult ? <Check className="w-3.5 h-3.5 text-[#10B981]" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedResult ? 'Copied' : 'Copy'}</span>
+                  MC
+                </button>
+                <button
+                  onClick={() => {
+                    handleKeypadPress(memoryVal.toString());
+                    triggerHapticSound('click');
+                  }}
+                  className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#CBD5E1] border border-[var(--theme-border,#213E61)] cursor-pointer transition-all active:scale-95 ${
+                    calcScale === 'jumbo' ? 'py-3 text-[13px]' : 'py-2.5 text-[12px]'
+                  }`}
+                >
+                  MR {memoryVal !== 0 && `(${memoryVal})`}
+                </button>
+                <button
+                  onClick={() => {
+                    const cur = parseFloat(stdResult) || 0;
+                    setMemoryVal((prev) => prev + cur);
+                    triggerHapticSound('click');
+                  }}
+                  className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#10B981] border border-[var(--theme-border,#213E61)] cursor-pointer transition-all active:scale-95 ${
+                    calcScale === 'jumbo' ? 'py-3 text-[13px]' : 'py-2.5 text-[12px]'
+                  }`}
+                >
+                  M+
+                </button>
+                <button
+                  onClick={() => {
+                    const cur = parseFloat(stdResult) || 0;
+                    setMemoryVal((prev) => prev - cur);
+                    triggerHapticSound('click');
+                  }}
+                  className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#EF4444] border border-[var(--theme-border,#213E61)] cursor-pointer transition-all active:scale-95 ${
+                    calcScale === 'jumbo' ? 'py-3 text-[13px]' : 'py-2.5 text-[12px]'
+                  }`}
+                >
+                  M-
                 </button>
               </div>
 
-              {/* Keypad Grid */}
-              <div className="grid grid-cols-4 gap-2">
+              {/* Keypad Grid (Huge Touch Targets & Clear Numbers) */}
+              <div className={`grid grid-cols-4 ${
+                calcScale === 'jumbo' ? 'gap-3 sm:gap-3.5' : calcScale === 'large' ? 'gap-2.5 sm:gap-3' : 'gap-2 sm:gap-2.5'
+              }`}>
                 {[
-                  { label: 'C', val: 'C', cls: 'bg-[#EF4444]/15 text-[#EF4444] border-[#EF4444]/30 hover:bg-[#EF4444]/25' },
+                  { label: 'C', val: 'C', cls: 'bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/40 hover:bg-[#EF4444]/30' },
                   { label: '⌫', val: '⌫', cls: 'bg-[var(--theme-card,#132438)] text-[#F59E0B] border-[var(--theme-border,#213E61)]' },
                   { label: '%', val: '%', cls: 'bg-[var(--theme-card,#132438)] text-[#38BDF8] border-[var(--theme-border,#213E61)]' },
-                  { label: '÷', val: '÷', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.4))] font-bold text-[18px]' },
+                  { label: '÷', val: '÷', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.22))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.5))] font-black' },
 
                   { label: '7', val: '7' },
                   { label: '8', val: '8' },
                   { label: '9', val: '9' },
-                  { label: '×', val: '×', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.4))] font-bold text-[18px]' },
+                  { label: '×', val: '×', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.22))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.5))] font-black' },
 
                   { label: '4', val: '4' },
                   { label: '5', val: '5' },
                   { label: '6', val: '6' },
-                  { label: '−', val: '−', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.4))] font-bold text-[18px]' },
+                  { label: '−', val: '−', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.22))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.5))] font-black' },
 
                   { label: '1', val: '1' },
                   { label: '2', val: '2' },
                   { label: '3', val: '3' },
-                  { label: '+', val: '+', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.4))] font-bold text-[18px]' },
+                  { label: '+', val: '+', cls: 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.22))] text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary-border,rgba(56,189,248,0.5))] font-black' },
 
                   { label: '0', val: '0' },
                   { label: '00', val: '00' },
                   { label: '.', val: '.' },
-                  { label: '=', val: '=', cls: 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-black text-[20px] shadow-md border-transparent hover:brightness-110' }
-                ].map((btn, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleKeypadPress(btn.val)}
-                    className={`h-12 rounded-xl text-[17px] font-mono font-bold flex items-center justify-center transition-all cursor-pointer active:scale-95 select-none shadow-xs border ${
-                      btn.cls ||
-                      'bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-card,#132438)]'
-                    }`}
-                  >
-                    {btn.label}
-                  </button>
-                ))}
+                  { label: '=', val: '=', cls: 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-black shadow-lg border-transparent hover:brightness-115 active:scale-95' }
+                ].map((btn, idx) => {
+                  const heightClass =
+                    calcScale === 'jumbo'
+                      ? 'h-16 sm:h-20 text-[26px] sm:text-[32px] rounded-2xl'
+                      : calcScale === 'large'
+                      ? 'h-14 sm:h-17 text-[22px] sm:text-[26px] rounded-2xl'
+                      : 'h-12 sm:h-14 text-[18px] sm:text-[20px] rounded-xl';
+
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleKeypadPress(btn.val)}
+                      className={`${heightClass} font-mono font-bold flex items-center justify-center transition-all cursor-pointer active:scale-90 select-none shadow-md border ${
+                        btn.cls ||
+                        'bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-card,#132438)]'
+                      }`}
+                    >
+                      {btn.label}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
                 <button
                   type="button"
                   onClick={() => {
@@ -558,7 +689,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                       onClose();
                     }
                   }}
-                  className="py-2.5 px-3 rounded-xl bg-[#10B981]/15 border border-[#10B981]/30 hover:border-[#10B981] text-[#10B981] font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                  className="py-3.5 px-3 rounded-2xl bg-[#10B981]/15 border-2 border-[#10B981]/40 hover:border-[#10B981] hover:bg-[#10B981]/25 text-[#10B981] font-extrabold text-[13px] sm:text-[14px] flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-md"
                 >
                   <PlusCircle className="w-4 h-4" />
                   <span>{isHindi ? 'आय में जोड़ें (+)' : 'Send to Income (+)'}</span>
@@ -573,10 +704,21 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                       onClose();
                     }
                   }}
-                  className="py-2.5 px-3 rounded-xl bg-[#EF4444]/15 border border-[#EF4444]/30 hover:border-[#EF4444] text-[#EF4444] font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                  className="py-3.5 px-3 rounded-2xl bg-[#EF4444]/15 border-2 border-[#EF4444]/40 hover:border-[#EF4444] hover:bg-[#EF4444]/25 text-[#EF4444] font-extrabold text-[13px] sm:text-[14px] flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-md"
                 >
                   <MinusCircle className="w-4 h-4" />
                   <span>{isHindi ? 'खर्च में जोड़ें (-)' : 'Send to Expense (-)'}</span>
+                </button>
+              </div>
+
+              <div className="flex justify-center pt-1">
+                <button
+                  type="button"
+                  onClick={() => handleCopyResult(stdResult)}
+                  className="flex items-center gap-1.5 text-[12px] font-mono text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer"
+                >
+                  {copiedResult ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiedResult ? 'Copied Result' : 'Copy Result'}</span>
                 </button>
               </div>
             </div>

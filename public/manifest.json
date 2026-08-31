@@ -1,14 +1,14 @@
 {
-  "name": "Daily Khata: Pro",
-  "short_name": "Daily Khata",
-  "description": "Daily Khata: Pro — Professional daily income & expense tracker with automated 6-fund money allocation, financial goals, and ledger statements.",
+  "name": "Daily Khata Pro",
+  "short_name": "Daily Khata Pro",
+  "description": "Daily Khata Pro — Universal professional daily income & expense tracker with automated 6-fund money allocation, financial goals, work deliverables, and ledger statements.",
   "start_url": "/",
   "id": "/",
   "display": "standalone",
   "background_color": "#070E18",
   "theme_color": "#0E1A29",
   "orientation": "portrait-primary",
-  "categories": ["finance", "productivity", "utilities"],
+  "categories": ["finance", "productivity", "utilities", "business"],
   "icons": [
     {
       "src": "/daily-Khata-Pro.png",
@@ -21,16 +21,36 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Transaction",
+      "short_name": "Add Entry",
+      "description": "Log new income or expense",
+      "url": "/add",
+      "icons": [{ "src": "/daily-Khata-Pro.png", "sizes": "192x192" }]
     },
     {
-      "src": "/daily-Khata-Pro.jpg",
-      "sizes": "192x192",
-      "type": "image/jpeg"
+      "name": "Passbook & Ledger",
+      "short_name": "Ledger",
+      "description": "View transaction history & statements",
+      "url": "/history",
+      "icons": [{ "src": "/daily-Khata-Pro.png", "sizes": "192x192" }]
     },
     {
-      "src": "/daily-Khata-Pro.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg"
+      "name": "Financial Goals",
+      "short_name": "Goals",
+      "description": "Track savings targets & milestones",
+      "url": "/goals",
+      "icons": [{ "src": "/daily-Khata-Pro.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Help & Support",
+      "short_name": "Support",
+      "description": "Report bugs & get help",
+      "url": "/support",
+      "icons": [{ "src": "/daily-Khata-Pro.png", "sizes": "192x192" }]
     }
   ]
 }

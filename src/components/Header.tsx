@@ -32,7 +32,11 @@ import {
   Target,
   Briefcase,
   BarChart3,
-  History
+  History,
+  LifeBuoy,
+  Bug,
+  Lightbulb,
+  HelpCircle
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -44,6 +48,7 @@ interface HeaderProps {
   onSelectTab?: (tab: NavTab) => void;
   onOpenSettings: () => void;
   onOpenManual: () => void;
+  onOpenSupport?: (tab?: 'help' | 'bug' | 'suggestion') => void;
   onOpenNotes?: () => void;
   onOpenSimulator?: () => void;
   onOpenSourceCode?: () => void;
@@ -70,6 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab,
   onOpenSettings,
   onOpenManual,
+  onOpenSupport,
   onOpenNotes,
   onOpenSimulator,
   onOpenSourceCode,
@@ -426,6 +432,60 @@ export const Header: React.FC<HeaderProps> = ({
                     <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <span>{t.header.manual}</span>
                   </button>
+
+                  {/* Help Centre */}
+                  {onOpenSupport && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenSupport('help');
+                        closeAllMenus();
+                      }}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer text-left"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <LifeBuoy className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                        <span>{isHindi ? 'सहायता केंद्र' : 'Help Centre & FAQ'}</span>
+                      </div>
+                      <span className="text-[9.5px] text-[#94A3B8]">Guide</span>
+                    </button>
+                  )}
+
+                  {/* Bug Report */}
+                  {onOpenSupport && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenSupport('bug');
+                        closeAllMenus();
+                      }}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#EF4444] transition-colors cursor-pointer text-left"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Bug className="w-4 h-4 text-[#EF4444] shrink-0" />
+                        <span>{isHindi ? 'बग रिपोर्ट करें' : 'Report a Bug'}</span>
+                      </div>
+                      <span className="text-[9.5px] font-medium text-[#EF4444] bg-[#EF4444]/10 px-1.5 py-0.5 rounded">Fix</span>
+                    </button>
+                  )}
+
+                  {/* Suggestion / Feature Request */}
+                  {onOpenSupport && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenSupport('suggestion');
+                        closeAllMenus();
+                      }}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#F59E0B] transition-colors cursor-pointer text-left"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0" />
+                        <span>{isHindi ? 'सुझाव दें' : 'Give Suggestion'}</span>
+                      </div>
+                      <span className="text-[9.5px] font-medium text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded">Idea</span>
+                    </button>
+                  )}
 
                   {/* Simple Clean Divider */}
                   <div className="my-1.5 border-t border-[var(--theme-border,#213E61)]/70" />

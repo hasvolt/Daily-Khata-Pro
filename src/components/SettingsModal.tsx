@@ -46,7 +46,10 @@ import {
   Mail,
   Smartphone,
   Monitor,
-  LayoutGrid
+  LayoutGrid,
+  HelpCircle,
+  Bug,
+  Lightbulb
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { ConfirmModal } from './ConfirmModal';
@@ -71,6 +74,7 @@ interface SettingsModalProps {
   onOpenShare?: () => void;
   onOpenDeveloper?: () => void;
   onOpenSecurityModal?: () => void;
+  onOpenSupport?: (tab?: 'help' | 'bug' | 'suggestion') => void;
   securityLock?: SecurityLockConfig;
   onInstantLock?: () => void;
   theme?: AppTheme;
@@ -103,6 +107,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onOpenShare,
   onOpenDeveloper,
   onOpenSecurityModal,
+  onOpenSupport,
   securityLock,
   onInstantLock,
   theme = 'blue',
@@ -1173,11 +1178,52 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
                   <div className="flex items-center justify-between text-[#94A3B8]">
                     <span className="font-semibold text-[#CBD5E1]">Support &amp; Feedback:</span>
-                    <a href="mailto:daily-Khata-Pro@gmail.com" className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono">
+                    <a href="mailto:daily-Khata-Pro@gmail.com" className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono text-[11.5px]">
                       daily-Khata-Pro@gmail.com
                     </a>
                   </div>
                 </div>
+
+                {/* Quick Bug / Suggestion / Help buttons */}
+                {onOpenSupport && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        onOpenSupport('help');
+                      }}
+                      className="p-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[#F8FAFC] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                      <span>{isHindi ? 'सहायता केंद्र' : 'Help Centre'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        onOpenSupport('bug');
+                      }}
+                      className="p-2 rounded-xl bg-[#EF4444]/10 border border-[#EF4444]/30 hover:bg-[#EF4444]/20 text-[#FCA5A5] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Bug className="w-3.5 h-3.5 text-[#EF4444]" />
+                      <span>{isHindi ? 'बग रिपोर्ट करें' : 'Report Bug'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        onOpenSupport('suggestion');
+                      }}
+                      className="p-2 rounded-xl bg-[#F59E0B]/10 border border-[#F59E0B]/30 hover:bg-[#F59E0B]/20 text-[#FCD34D] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Lightbulb className="w-3.5 h-3.5 text-[#F59E0B]" />
+                      <span>{isHindi ? 'सुझाव दें' : 'Suggestion'}</span>
+                    </button>
+                  </div>
+                )}
 
                 {/* Action Contact Buttons */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
