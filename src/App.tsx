@@ -1108,7 +1108,7 @@ export default function App() {
       </div>
 
       {/* Main Content Area */}
-      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6">
+      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6 pb-6">
         <div className="w-full">
           <Routes>
           <Route path="/" element={
@@ -1397,153 +1397,155 @@ export default function App() {
         </div>
       </main>
 
-      {/* Dedicated Bottom Advertising & Footer Section (Cleanly anchored at the bottom right above bottom nav) */}
-      <div className="no-print mt-auto pt-8 sm:pt-10 pb-20 sm:pb-24 space-y-3.5 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8">
-        {/* Sponsor / HasVolt Promo Banner (Near Footer) */}
-        <section className="w-full">
-          <HasVoltPromoBanner />
-        </section>
+      {/* Unified Global Footer with Integrated Sponsor Promo Banner & Advertisement */}
+      <footer className="no-print mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/90 backdrop-blur-xs select-none">
+        <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-8 pb-24 sm:pb-28 space-y-4">
+          {/* Sponsor / HasVolt Promo Banner (Anchored inside Footer) */}
+          <section aria-label="Sponsored Partner" className="w-full">
+            <HasVoltPromoBanner />
+          </section>
 
-        {/* Google AdSense Responsive Ad Unit */}
-        <section className="w-full">
-          <GoogleAdBanner slotId="1364027408" client="ca-pub-4744063610455678" />
-        </section>
+          {/* Google AdSense Responsive Ad Unit */}
+          <section aria-label="Advertisement Space" className="w-full">
+            <GoogleAdBanner slotId="1364027408" client="ca-pub-4744063610455678" />
+          </section>
 
-        {/* Streamlined Minimal Footer */}
-        <footer className="pt-2 pb-2 text-center text-[11px] text-[#64748B] space-y-2 select-none">
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {/* Creator Minimal Pill */}
-            <button
-              onClick={() => setCurrentTab('developer')}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-2xs active:scale-95 text-[11px]"
-              title="View Developer Profile (MD Zafeer Hasan - YAZDAAN)"
-            >
-              <div className="w-4 h-4 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] bg-[#070E18] shrink-0">
-                <img
-                  src="/md-zafeer-hasan-yazdaan.jpg"
-                  alt="MD Zafeer Hasan"
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
-                  }}
-                />
+          {/* Streamlined Minimal Footer Details */}
+          <div className="pt-2 text-center text-[11px] text-[#64748B] space-y-2">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {/* Creator Minimal Pill */}
+              <button
+                onClick={() => setCurrentTab('developer')}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-2xs active:scale-95 text-[11px]"
+                title="View Developer Profile (MD Zafeer Hasan - YAZDAAN)"
+              >
+                <div className="w-4 h-4 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] bg-[#070E18] shrink-0">
+                  <img
+                    src="/md-zafeer-hasan-yazdaan.jpg"
+                    alt="MD Zafeer Hasan"
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+                <span className="text-[#94A3B8]">By</span>
+                <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan</span>
+                <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1 py-0.1 rounded font-bold">Creator</span>
+              </button>
+
+              {/* Compact Verified Social & Email Links */}
+              <div className="flex items-center gap-1.5">
+                <a
+                  href="https://github.com/hasvolt/Daily-Khata-Pro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
+                  title="GitHub Repository (hasvolt/Daily-Khata-Pro)"
+                >
+                  <FolderGit2 className="w-3.5 h-3.5" />
+                </a>
+
+                <a
+                  href="mailto:daily-Khata-Pro@gmail.com"
+                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
+                  title="Official Email: daily-Khata-Pro@gmail.com"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                </a>
+
+                <a
+                  href="https://www.instagram.com/dailykhatapro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#94A3B8] hover:text-[#E1306C] transition-colors"
+                  title="Instagram: @dailykhatapro"
+                >
+                  <Instagram className="w-3.5 h-3.5" />
+                </a>
+
+                <a
+                  href="https://x.com/Dailykhatapro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#94A3B8] hover:text-[#1DA1F2] transition-colors"
+                  title="X / Twitter: @Dailykhatapro"
+                >
+                  <Twitter className="w-3.5 h-3.5" />
+                </a>
               </div>
-              <span className="text-[#94A3B8]">By</span>
-              <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan</span>
-              <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1 py-0.1 rounded font-bold">Creator</span>
-            </button>
+            </div>
 
-            {/* Compact Verified Social & Email Links */}
-            <div className="flex items-center gap-1.5">
-              <a
-                href="https://github.com/hasvolt/Daily-Khata-Pro"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
-                title="GitHub Repository (hasvolt/Daily-Khata-Pro)"
+            {/* Legal & Informational Separate Page Links */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-1 font-medium text-[11px] text-[#94A3B8]">
+              <button
+                onClick={() => setCurrentTab('about')}
+                className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'about' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
               >
-                <FolderGit2 className="w-3.5 h-3.5" />
-              </a>
+                About Us
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setCurrentTab('privacy')}
+                className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'privacy' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
+              >
+                Privacy Policy
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setCurrentTab('disclaimer')}
+                className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'disclaimer' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
+              >
+                Disclaimer
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setCurrentTab('terms')}
+                className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'terms' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
+              >
+                Terms
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setCurrentTab('safety')}
+                className={`text-[#10B981] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'safety' ? 'font-bold' : ''}`}
+              >
+                Source Safety
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setCurrentTab('guide')}
+                className={`text-[var(--theme-primary,#38BDF8)] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'guide' ? 'font-bold' : ''}`}
+              >
+                Guide
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setCurrentTab('calculator')}
+                className={`text-[#F59E0B] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'calculator' ? 'font-bold' : ''}`}
+              >
+                Calculators
+              </button>
+            </div>
 
-              <a
-                href="mailto:daily-Khata-Pro@gmail.com"
-                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
-                title="Official Email: daily-Khata-Pro@gmail.com"
+            <div className="flex flex-wrap items-center justify-center gap-1.5 font-medium text-[10.5px] text-[#64748B]">
+              <span className="font-semibold text-[#94A3B8]">Daily Khata: Pro™</span>
+              <span>•</span>
+              <span>Official Domain: <strong>rozfiber.com</strong></span>
+              <span>•</span>
+              <span>100% Offline &amp; Private</span>
+              <span>•</span>
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                className="text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] underline transition-colors cursor-pointer"
               >
-                <Mail className="w-3.5 h-3.5" />
-              </a>
-
-              <a
-                href="https://www.instagram.com/dailykhatapro"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#94A3B8] hover:text-[#E1306C] transition-colors"
-                title="Instagram: @dailykhatapro"
-              >
-                <Instagram className="w-3.5 h-3.5" />
-              </a>
-
-              <a
-                href="https://x.com/Dailykhatapro"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#94A3B8] hover:text-[#1DA1F2] transition-colors"
-                title="X / Twitter: @Dailykhatapro"
-              >
-                <Twitter className="w-3.5 h-3.5" />
-              </a>
+                Settings
+              </button>
             </div>
           </div>
-
-          {/* Legal & Informational Separate Page Links */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-1 font-medium text-[11px] text-[#94A3B8]">
-            <button
-              onClick={() => setCurrentTab('about')}
-              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'about' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
-            >
-              About Us
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setCurrentTab('privacy')}
-              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'privacy' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
-            >
-              Privacy Policy
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setCurrentTab('disclaimer')}
-              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'disclaimer' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
-            >
-              Disclaimer
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setCurrentTab('terms')}
-              className={`hover:text-white underline transition-colors cursor-pointer ${currentTab === 'terms' ? 'text-[var(--theme-primary,#38BDF8)] font-bold' : ''}`}
-            >
-              Terms
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setCurrentTab('safety')}
-              className={`text-[#10B981] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'safety' ? 'font-bold' : ''}`}
-            >
-              Source Safety
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setCurrentTab('guide')}
-              className={`text-[var(--theme-primary,#38BDF8)] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'guide' ? 'font-bold' : ''}`}
-            >
-              Guide
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => setCurrentTab('calculator')}
-              className={`text-[#F59E0B] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'calculator' ? 'font-bold' : ''}`}
-            >
-              Calculators
-            </button>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-1.5 font-medium text-[10.5px] text-[#64748B]">
-            <span className="font-semibold text-[#94A3B8]">Daily Khata: Pro™</span>
-            <span>•</span>
-            <span>Official Domain: <strong>rozfiber.com</strong></span>
-            <span>•</span>
-            <span>100% Offline &amp; Private</span>
-            <span>•</span>
-            <button
-              onClick={() => setIsSettingsOpen(true)}
-              className="text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] underline transition-colors cursor-pointer"
-            >
-              Settings
-            </button>
-          </div>
-        </footer>
-      </div>
+        </div>
+      </footer>
 
       {/* Fixed Bottom Navigation */}
       <div className="no-print">
