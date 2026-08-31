@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { KhataData, AppTheme, AppLanguage, FundType, SecurityLockConfig } from '../types';
+import { KhataData, AppTheme, AppLanguage, AppViewMode, FundType, SecurityLockConfig } from '../types';
 import {
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
@@ -43,7 +43,10 @@ import {
   Copy,
   Share2,
   User,
-  Mail
+  Mail,
+  Smartphone,
+  Monitor,
+  LayoutGrid
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { ConfirmModal } from './ConfirmModal';
@@ -76,6 +79,8 @@ interface SettingsModalProps {
   onLanguageChange?: (lang: AppLanguage) => void;
   privacyMask?: boolean;
   onTogglePrivacyMask?: () => void;
+  viewMode?: AppViewMode;
+  onViewModeChange?: (mode: AppViewMode) => void;
 }
 
 type TabType = 'preferences' | 'custom' | 'rules' | 'backup' | 'privacy' | 'developer' | 'legal';
@@ -105,7 +110,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   language = 'en',
   onLanguageChange,
   privacyMask = false,
-  onTogglePrivacyMask
+  onTogglePrivacyMask,
+  viewMode = 'auto',
+  onViewModeChange
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('preferences');
@@ -443,6 +450,71 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       {theme === th.id && <Check className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Screen View Mode (Mobile / Desktop / Auto) */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                    <label className="font-bold text-[13.5px] text-[#F8FAFC]">
+                      {isHindi ? 'स्क्रीन व्यू मोड (Display Mode)' : 'Screen View Mode (Layout)'}
+                    </label>
+                  </div>
+                  <span className="text-[11px] font-semibold text-[#94A3B8]">
+                    {viewMode === 'mobile'
+                      ? isHindi ? 'मोबाइल व्यू' : 'Mobile Phone View'
+                      : viewMode === 'desktop'
+                      ? isHindi ? 'फुल डेस्कटॉप व्यू' : 'Wide Desktop View'
+                      : isHindi ? 'ऑटो रिस्पॉन्सिव' : 'Auto Responsive'}
+                  </span>
+                </div>
+                <p className="text-[11.5px] text-[#94A3B8]">
+                  {isHindi
+                    ? 'कंप्यूटर या मोबाइल पर अपनी सुविधानुसार ऐप का लेआउट चुनें — कॉम्पैक्ट मोबाइल स्क्रीन या विस्तृत डेस्कटॉप डैशबोर्ड।'
+                    : 'Force a compact mobile phone layout or an expansive wide-screen desktop workspace regardless of device.'}
+                </p>
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  {[
+                    {
+                      id: 'auto' as AppViewMode,
+                      label: isHindi ? 'ऑटो' : 'Auto Detect',
+                      sub: isHindi ? 'स्क्रीन अनुसार' : 'Adaptive',
+                      icon: LayoutGrid
+                    },
+                    {
+                      id: 'mobile' as AppViewMode,
+                      label: isHindi ? 'मोबाइल मोड' : 'Mobile View',
+                      sub: isHindi ? 'कॉम्पैक्ट लेआउट' : 'Compact 480px',
+                      icon: Smartphone
+                    },
+                    {
+                      id: 'desktop' as AppViewMode,
+                      label: isHindi ? 'डेस्कटॉप मोड' : 'Desktop View',
+                      sub: isHindi ? 'विस्तृत ग्रिड' : 'Wide Dashboard',
+                      icon: Monitor
+                    }
+                  ].map((m) => {
+                    const ModeIcon = m.icon;
+                    const isSel = viewMode === m.id;
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => onViewModeChange && onViewModeChange(m.id)}
+                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                          isSel
+                            ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] font-extrabold shadow-sm'
+                            : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                        }`}
+                      >
+                        <ModeIcon className="w-4 h-4 mb-0.5" />
+                        <div className="text-[12.5px] font-bold">{m.label}</div>
+                        <div className="text-[10px] opacity-80">{m.sub}</div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 

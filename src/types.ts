@@ -8,6 +8,8 @@ export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cy
 
 export type AppLanguage = 'en' | 'hi' | 'hinglish';
 
+export type AppViewMode = 'auto' | 'mobile' | 'desktop';
+
 export type WorkStatus = 'completed' | 'in_progress' | 'pending' | 'on_hold';
 
 export interface WorkLog {
@@ -128,6 +130,7 @@ export interface KhataSettings {
   userName?: string;
   userRole?: string;
   privacyMask?: boolean;
+  viewMode?: AppViewMode;
   securityLock?: SecurityLockConfig;
 }
 
@@ -146,6 +149,7 @@ export interface KhataData {
     theme?: AppTheme;
     language?: AppLanguage;
     privacyMask?: boolean;
+    viewMode?: AppViewMode;
     currency?: string;
     currencySymbol?: string;
     securityLock?: SecurityLockConfig;

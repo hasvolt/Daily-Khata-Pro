@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, SecurityLockConfig } from './types';
+import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig } from './types';
 import {
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
@@ -73,6 +73,7 @@ export default function App() {
   const [theme, setTheme] = useState<AppTheme>('blue');
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<AppViewMode>('auto');
   const [securityLock, setSecurityLock] = useState<SecurityLockConfig>(DEFAULT_SECURITY_LOCK);
   const [isAppLocked, setIsAppLocked] = useState<boolean>(false);
   
@@ -217,6 +218,9 @@ export default function App() {
         if (typeof parsed.settings?.privacyMask === 'boolean') {
           setPrivacyMask(parsed.settings.privacyMask);
         }
+        if (parsed.settings?.viewMode) {
+          setViewMode(parsed.settings.viewMode);
+        }
         if (parsed.settings?.securityLock) {
           setSecurityLock(parsed.settings.securityLock);
           if (parsed.settings.securityLock.isEnabled && parsed.settings.securityLock.pin) {
@@ -235,9 +239,10 @@ export default function App() {
         setLifeTags(DEFAULT_LIFE_TAGS);
         setTheme('blue');
         setLanguage('en');
+        setViewMode('auto');
         setSecurityLock(DEFAULT_SECURITY_LOCK);
         setIsAppLocked(false);
-        saveToLocalStorage([], [], DEFAULT_CATEGORIES, DEFAULT_INCOME_SOURCES, DEFAULT_WORK_CATEGORIES, DEFAULT_LIFE_TAGS, DEFAULT_PERCENTAGES, 'blue', 'en', false, [], [], DEFAULT_SECURITY_LOCK);
+        saveToLocalStorage([], [], DEFAULT_CATEGORIES, DEFAULT_INCOME_SOURCES, DEFAULT_WORK_CATEGORIES, DEFAULT_LIFE_TAGS, DEFAULT_PERCENTAGES, 'blue', 'en', false, [], [], DEFAULT_SECURITY_LOCK, [], 'auto');
       }
     } catch (e) {
       console.error('Failed to load local data', e);
@@ -261,40 +266,84 @@ export default function App() {
   }, [securityLock]);
 
   const saveToLocalStorage = (
-    newEntries: Entry[] = entries,
-    newGoals: Goal[] = goals,
-    newCategories: string[] = categories,
-    newIncomeSources: string[] = incomeSources,
-    newWorkCategories: string[] = workCategories,
-    newLifeTags: string[] = lifeTags,
-    newPct: Record<FundType, number> = percentages,
-    newTheme: AppTheme = theme,
-    newLang: AppLanguage = language,
-    newMask: boolean = privacyMask,
-    newWorkLogs: WorkLog[] = workLogs,
-    newDailyLifeLogs: DailyLifeLog[] = dailyLifeLogs,
-    newSecurityLock: SecurityLockConfig = securityLock,
-    newPersonalNotes: PersonalNote[] = personalNotes
+    arg1?: {
+      entries?: Entry[];
+      goals?: Goal[];
+      categories?: string[];
+      incomeSources?: string[];
+      workCategories?: string[];
+      lifeTags?: string[];
+      percentages?: Record<FundType, number>;
+      theme?: AppTheme;
+      language?: AppLanguage;
+      privacyMask?: boolean;
+      viewMode?: AppViewMode;
+      workLogs?: WorkLog[];
+      dailyLifeLogs?: DailyLifeLog[];
+      securityLock?: SecurityLockConfig;
+      personalNotes?: PersonalNote[];
+    } | Entry[],
+    newGoals?: Goal[],
+    newCategories?: string[],
+    newIncomeSources?: string[],
+    newWorkCategories?: string[],
+    newLifeTags?: string[],
+    newPct?: Record<FundType, number>,
+    newTheme?: AppTheme,
+    newLang?: AppLanguage,
+    newMask?: boolean,
+    newWorkLogs?: WorkLog[],
+    newDailyLifeLogs?: DailyLifeLog[],
+    newSecurityLock?: SecurityLockConfig,
+    newPersonalNotes?: PersonalNote[],
+    newViewMode?: AppViewMode
   ) => {
     try {
-      const data: KhataData = {
-        entries: newEntries,
-        categories: newCategories,
-        incomeSources: newIncomeSources,
-        workCategories: newWorkCategories,
-        lifeTags: newLifeTags,
-        goals: newGoals,
-        workLogs: newWorkLogs,
-        dailyLifeLogs: newDailyLifeLogs,
-        personalNotes: newPersonalNotes,
-        settings: {
-          percentages: newPct,
-          theme: newTheme,
-          language: newLang,
-          privacyMask: newMask,
-          securityLock: newSecurityLock
-        }
-      };
+      let data: KhataData;
+
+      if (arg1 && !Array.isArray(arg1) && typeof arg1 === 'object') {
+        const updates = arg1;
+        data = {
+          entries: updates.entries ?? entries,
+          categories: updates.categories ?? categories,
+          incomeSources: updates.incomeSources ?? incomeSources,
+          workCategories: updates.workCategories ?? workCategories,
+          lifeTags: updates.lifeTags ?? lifeTags,
+          goals: updates.goals ?? goals,
+          workLogs: updates.workLogs ?? workLogs,
+          dailyLifeLogs: updates.dailyLifeLogs ?? dailyLifeLogs,
+          personalNotes: updates.personalNotes ?? personalNotes,
+          settings: {
+            percentages: updates.percentages ?? percentages,
+            theme: updates.theme ?? theme,
+            language: updates.language ?? language,
+            privacyMask: updates.privacyMask ?? privacyMask,
+            viewMode: updates.viewMode ?? viewMode,
+            securityLock: updates.securityLock ?? securityLock
+          }
+        };
+      } else {
+        data = {
+          entries: (Array.isArray(arg1) ? arg1 : undefined) ?? entries,
+          categories: newCategories ?? categories,
+          incomeSources: newIncomeSources ?? incomeSources,
+          workCategories: newWorkCategories ?? workCategories,
+          lifeTags: newLifeTags ?? lifeTags,
+          goals: newGoals ?? goals,
+          workLogs: newWorkLogs ?? workLogs,
+          dailyLifeLogs: newDailyLifeLogs ?? dailyLifeLogs,
+          personalNotes: newPersonalNotes ?? personalNotes,
+          settings: {
+            percentages: newPct ?? percentages,
+            theme: newTheme ?? theme,
+            language: newLang ?? language,
+            privacyMask: newMask ?? privacyMask,
+            viewMode: newViewMode ?? viewMode,
+            securityLock: newSecurityLock ?? securityLock
+          }
+        };
+      }
+
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (err) {
       console.error('Failed to save to localStorage', err);
@@ -308,7 +357,7 @@ export default function App() {
       lastUnlockedAt: Date.now()
     };
     setSecurityLock(updated);
-    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs, updated);
+    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs, updated, personalNotes, viewMode);
     showToast(language === 'hi' ? 'वॉल्ट अनलॉक हुआ (Vault Unlocked)' : 'Vault unlocked successfully');
   };
 
@@ -323,7 +372,7 @@ export default function App() {
 
   const handleSaveSecurityConfig = (config: SecurityLockConfig) => {
     setSecurityLock(config);
-    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs, config);
+    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs, config, personalNotes, viewMode);
     if (!config.isEnabled) {
       setIsAppLocked(false);
     }
@@ -373,8 +422,20 @@ export default function App() {
   const handleTogglePrivacyMask = () => {
     const nextMask = !privacyMask;
     setPrivacyMask(nextMask);
-    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, nextMask, workLogs, dailyLifeLogs);
+    saveToLocalStorage({ privacyMask: nextMask });
     showToast(nextMask ? 'Privacy Mask Enabled' : 'Privacy Mask Disabled');
+  };
+
+  const handleViewModeChange = (newMode: AppViewMode) => {
+    setViewMode(newMode);
+    saveToLocalStorage({ viewMode: newMode });
+    showToast(
+      newMode === 'mobile'
+        ? language === 'hi' ? 'मोबाइल मोड सक्रिय' : 'Mobile view mode activated'
+        : newMode === 'desktop'
+        ? language === 'hi' ? 'डेस्कटॉप मोड सक्रिय' : 'Desktop view mode activated'
+        : language === 'hi' ? 'ऑटो स्क्रीन व्यू' : 'Auto responsive view restored'
+    );
   };
 
   // Add / Edit Entry
@@ -1006,6 +1067,7 @@ export default function App() {
   return (
     <div
       data-theme={theme}
+      data-view-mode={viewMode}
       className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] flex flex-col font-sans pb-24 md:pb-28 transition-colors duration-300"
     >
       {/* Top Header */}
@@ -1032,6 +1094,8 @@ export default function App() {
           onLanguageChange={handleLanguageChange}
           privacyMask={privacyMask}
           onTogglePrivacyMask={handleTogglePrivacyMask}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
         />
       </div>
 
@@ -1520,6 +1584,8 @@ export default function App() {
         onLanguageChange={handleLanguageChange}
         privacyMask={privacyMask}
         onTogglePrivacyMask={handleTogglePrivacyMask}
+        viewMode={viewMode}
+        onViewModeChange={handleViewModeChange}
       />
 
       {/* Work Log Create / Edit Modal */}

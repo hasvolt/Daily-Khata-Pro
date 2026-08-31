@@ -14,19 +14,18 @@ import {
   Sparkles,
   ArrowLeft,
   Target,
-  Printer,
   History,
   Trash2,
   Sliders,
   Tag,
   HelpCircle,
-  ChevronDown,
-  ChevronUp
+  Zap,
+  Info,
+  DollarSign
 } from 'lucide-react';
 import { FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
-import { TRANSLATIONS } from '../utils/translations';
 
 export type CalculatorViewType = 'standard' | 'funds' | 'sip' | 'emi' | 'gst' | 'discount' | 'inflation';
 
@@ -46,7 +45,25 @@ interface CalcHistoryItem {
   time: string;
 }
 
-// Fast & safe math expression evaluator
+// Helper to convert large numbers to Indian Lakhs / Crores string for instant readability
+function formatIndianWords(num: number): string {
+  if (!num || isNaN(num) || num <= 0) return '';
+  if (num >= 10000000) {
+    const cr = (num / 10000000).toFixed(2).replace(/\.00$/, '');
+    return `${cr} Crore`;
+  }
+  if (num >= 100000) {
+    const lk = (num / 100000).toFixed(2).replace(/\.00$/, '');
+    return `${lk} Lakh`;
+  }
+  if (num >= 1000) {
+    const th = (num / 1000).toFixed(1).replace(/\.0$/, '');
+    return `${th}k`;
+  }
+  return '';
+}
+
+// Fast & safe math expression evaluator for arithmetic calculator
 function evaluateMath(raw: string): { result: number | null; error: string | null } {
   if (!raw || !raw.trim()) return { result: null, error: null };
   try {
@@ -104,36 +121,40 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const [fundCustomPct, setFundCustomPct] = useState<Record<FundType, number>>(percentages);
   const [showFundSliders, setShowFundSliders] = useState<boolean>(false);
 
-  // --- 3. SIP State ---
+  // --- 3. SIP & Wealth Compounder State ---
   const [sipMode, setSipMode] = useState<'sip' | 'lumpsum'>('sip');
-  const [sipMonthlyAmt, setSipMonthlyAmt] = useState<number>(5000);
-  const [sipRate, setSipRate] = useState<number>(12);
-  const [sipTenureYears, setSipTenureYears] = useState<number>(10);
-  const [sipStepUpPct, setSipStepUpPct] = useState<number>(0);
+  const [sipAmountInput, setSipAmountInput] = useState<string>('5000');
+  const [sipRateInput, setSipRateInput] = useState<string>('12');
+  const [sipTenureInput, setSipTenureInput] = useState<string>('10');
+  const [sipStepUpInput, setSipStepUpInput] = useState<string>('0');
 
   // --- 4. Loan EMI State ---
-  const [loanPrincipal, setLoanPrincipal] = useState<number>(500000);
-  const [loanRate, setLoanRate] = useState<number>(9.5);
-  const [loanTenureYears, setLoanTenureYears] = useState<number>(5);
+  const [loanPrincipalInput, setLoanPrincipalInput] = useState<string>('500000');
+  const [loanRateInput, setLoanRateInput] = useState<string>('9.5');
+  const [loanTenureInput, setLoanTenureInput] = useState<string>('5');
+  const [loanTenureUnit, setLoanTenureUnit] = useState<'years' | 'months'>('years');
 
   // --- 5. GST State ---
-  const [gstAmount, setGstAmount] = useState<number>(10000);
-  const [gstSlab, setGstSlab] = useState<number>(18);
+  const [gstAmountInput, setGstAmountInput] = useState<string>('10000');
+  const [gstSlabMode, setGstSlabMode] = useState<number | 'custom'>(18);
+  const [gstCustomRateInput, setGstCustomRateInput] = useState<string>('18');
   const [gstType, setGstType] = useState<'exclusive' | 'inclusive'>('exclusive');
+  const [gstTaxType, setGstTaxType] = useState<'intra' | 'inter'>('intra'); // intra = CGST+SGST, inter = IGST
 
   // --- 6. Discount & Margin State ---
   const [discMode, setDiscMode] = useState<'discount' | 'margin'>('discount');
-  const [discOriginalPrice, setDiscOriginalPrice] = useState<number>(2500);
-  const [discPercent, setDiscPercent] = useState<number>(20);
-  const [costPrice, setCostPrice] = useState<number>(1000);
-  const [sellingPrice, setSellingPrice] = useState<number>(1400);
+  const [discOriginalPriceInput, setDiscOriginalPriceInput] = useState<string>('2500');
+  const [discPercentInput, setDiscPercentInput] = useState<string>('20');
+  const [discFlatAmountInput, setDiscFlatAmountInput] = useState<string>('0');
+  const [costPriceInput, setCostPriceInput] = useState<string>('1000');
+  const [sellingPriceInput, setSellingPriceInput] = useState<string>('1400');
 
-  // --- 7. Inflation & Horizon State ---
-  const [goalTargetToday, setGoalTargetToday] = useState<number>(1000000);
-  const [inflationRate, setInflationRate] = useState<number>(6.5);
-  const [goalYears, setGoalYears] = useState<number>(7);
-  const [goalExpectedReturn] = useState<number>(12);
+  // --- 7. Inflation & Goal Horizon State ---
   const [goalNameInput, setGoalNameInput] = useState<string>('Dream Goal');
+  const [goalTargetTodayInput, setGoalTargetTodayInput] = useState<string>('1000000');
+  const [inflationRateInput, setInflationRateInput] = useState<string>('6.5');
+  const [goalYearsInput, setGoalYearsInput] = useState<string>('7');
+  const [goalExpectedReturnInput, setGoalExpectedReturnInput] = useState<string>('12');
 
   // Copy helper
   const handleCopy = (text: string, keyId: string) => {
@@ -188,7 +209,6 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
     // Append operator/digit
     setStdExpr((prev) => {
-      // Prevent consecutive operators
       const operators = ['+', '-', '×', '÷', '*', '/'];
       const lastChar = prev.slice(-1);
       let next = prev;
@@ -212,7 +232,6 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     if (activeTab !== 'standard') return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if typing inside an input element
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
@@ -256,108 +275,154 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const totalFundPct = (Object.values(fundCustomPct) as number[]).reduce((sum, v) => sum + (Number(v) || 0), 0);
   const isFundBalanced = Math.abs(totalFundPct - 100) < 0.01;
 
-  const fundSplits: Record<FundType, number> = FUND_ORDER.reduce((acc, fund) => {
-    const pct = fundCustomPct[fund] || 0;
-    acc[fund] = (fundInflowNum * pct) / 100;
-    return acc;
-  }, {} as Record<FundType, number>);
+  const fundSplits: Record<FundType, number> = useMemo(() => {
+    return FUND_ORDER.reduce((acc, fund) => {
+      const pct = fundCustomPct[fund] || 0;
+      acc[fund] = (fundInflowNum * pct) / 100;
+      return acc;
+    }, {} as Record<FundType, number>);
+  }, [fundInflowNum, fundCustomPct]);
 
   // --- Calculations for SIP / Wealth ---
+  const sipAmtNum = Math.max(0, parseFloat(sipAmountInput) || 0);
+  const sipRateNum = Math.max(0, parseFloat(sipRateInput) || 0);
+  const sipTenureNum = Math.max(1, parseFloat(sipTenureInput) || 1);
+  const sipStepUpNum = Math.max(0, parseFloat(sipStepUpInput) || 0);
+
   const sipCalculation = useMemo(() => {
-    const months = sipTenureYears * 12;
-    const monthlyRate = sipRate / 100 / 12;
+    const months = Math.round(sipTenureNum * 12);
+    const monthlyRate = sipRateNum / 100 / 12;
     let totalInvested = 0;
     let totalValue = 0;
 
     if (sipMode === 'sip') {
-      if (sipStepUpPct === 0) {
-        totalInvested = sipMonthlyAmt * months;
+      if (sipStepUpNum === 0) {
+        totalInvested = sipAmtNum * months;
         if (monthlyRate > 0) {
           totalValue =
-            sipMonthlyAmt *
+            sipAmtNum *
             ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) *
             (1 + monthlyRate);
         } else {
           totalValue = totalInvested;
         }
       } else {
-        let curMonthly = sipMonthlyAmt;
+        let curMonthly = sipAmtNum;
         let cumulativeVal = 0;
         let cumulativeInv = 0;
-        for (let y = 1; y <= sipTenureYears; y++) {
-          for (let m = 1; m <= 12; m++) {
+        const yearsCount = Math.ceil(sipTenureNum);
+        for (let y = 1; y <= yearsCount; y++) {
+          const monthsInThisYear = y === yearsCount && sipTenureNum % 1 !== 0 ? Math.round((sipTenureNum % 1) * 12) : 12;
+          for (let m = 1; m <= monthsInThisYear; m++) {
             cumulativeInv += curMonthly;
             cumulativeVal = (cumulativeVal + curMonthly) * (1 + monthlyRate);
           }
-          curMonthly = curMonthly * (1 + sipStepUpPct / 100);
+          curMonthly = curMonthly * (1 + sipStepUpNum / 100);
         }
         totalInvested = cumulativeInv;
         totalValue = cumulativeVal;
       }
     } else {
-      totalInvested = sipMonthlyAmt;
-      totalValue = sipMonthlyAmt * Math.pow(1 + sipRate / 100, sipTenureYears);
+      totalInvested = sipAmtNum;
+      totalValue = sipAmtNum * Math.pow(1 + sipRateNum / 100, sipTenureNum);
     }
 
     const totalGain = Math.max(0, totalValue - totalInvested);
-    return { totalInvested, totalValue, totalGain };
-  }, [sipMode, sipMonthlyAmt, sipRate, sipTenureYears, sipStepUpPct]);
+    const multiplier = totalInvested > 0 ? (totalValue / totalInvested).toFixed(2) : '1.0';
+    return { totalInvested, totalValue, totalGain, multiplier };
+  }, [sipMode, sipAmtNum, sipRateNum, sipTenureNum, sipStepUpNum]);
 
   // --- Calculations for EMI ---
+  const loanPrincipalNum = Math.max(0, parseFloat(loanPrincipalInput) || 0);
+  const loanRateNum = Math.max(0, parseFloat(loanRateInput) || 0);
+  const rawTenure = parseFloat(loanTenureInput) || 0;
+  const loanMonths = loanTenureUnit === 'years' ? Math.round(rawTenure * 12) : Math.round(rawTenure);
+
   const emiCalculation = useMemo(() => {
-    const loanMonths = loanTenureYears * 12;
-    const loanMonthlyRate = loanRate / 100 / 12;
+    const loanMonthlyRate = loanRateNum / 100 / 12;
     let monthlyEmi = 0;
     let totalPayment = 0;
     let totalInterest = 0;
 
-    if (loanPrincipal > 0 && loanMonths > 0) {
+    if (loanPrincipalNum > 0 && loanMonths > 0) {
       if (loanMonthlyRate > 0) {
         monthlyEmi =
-          (loanPrincipal * loanMonthlyRate * Math.pow(1 + loanMonthlyRate, loanMonths)) /
+          (loanPrincipalNum * loanMonthlyRate * Math.pow(1 + loanMonthlyRate, loanMonths)) /
           (Math.pow(1 + loanMonthlyRate, loanMonths) - 1);
       } else {
-        monthlyEmi = loanPrincipal / loanMonths;
+        monthlyEmi = loanPrincipalNum / loanMonths;
       }
       totalPayment = monthlyEmi * loanMonths;
-      totalInterest = Math.max(0, totalPayment - loanPrincipal);
+      totalInterest = Math.max(0, totalPayment - loanPrincipalNum);
     }
 
-    return { monthlyEmi, totalPayment, totalInterest, loanMonths };
-  }, [loanPrincipal, loanRate, loanTenureYears]);
+    const interestPct = totalPayment > 0 ? ((totalInterest / totalPayment) * 100).toFixed(1) : '0';
+    const principalPct = totalPayment > 0 ? ((loanPrincipalNum / totalPayment) * 100).toFixed(1) : '100';
+
+    return { monthlyEmi, totalPayment, totalInterest, loanMonths, interestPct, principalPct };
+  }, [loanPrincipalNum, loanRateNum, loanMonths]);
 
   // --- Calculations for GST ---
+  const gstAmountNum = Math.max(0, parseFloat(gstAmountInput) || 0);
+  const effectiveGstSlab = gstSlabMode === 'custom'
+    ? Math.max(0, parseFloat(gstCustomRateInput) || 0)
+    : gstSlabMode;
+
   let gstBase = 0;
   let gstTotalTax = 0;
   let gstCgst = 0;
   let gstSgst = 0;
+  let gstIgst = 0;
   let gstFinalGross = 0;
 
   if (gstType === 'exclusive') {
-    gstBase = gstAmount;
-    gstTotalTax = (gstAmount * gstSlab) / 100;
-    gstCgst = gstTotalTax / 2;
-    gstSgst = gstTotalTax / 2;
+    gstBase = gstAmountNum;
+    gstTotalTax = (gstAmountNum * effectiveGstSlab) / 100;
+    if (gstTaxType === 'intra') {
+      gstCgst = gstTotalTax / 2;
+      gstSgst = gstTotalTax / 2;
+    } else {
+      gstIgst = gstTotalTax;
+    }
     gstFinalGross = gstBase + gstTotalTax;
   } else {
-    gstFinalGross = gstAmount;
-    gstBase = (gstAmount * 100) / (100 + gstSlab);
+    gstFinalGross = gstAmountNum;
+    gstBase = (gstAmountNum * 100) / (100 + effectiveGstSlab);
     gstTotalTax = gstFinalGross - gstBase;
-    gstCgst = gstTotalTax / 2;
-    gstSgst = gstTotalTax / 2;
+    if (gstTaxType === 'intra') {
+      gstCgst = gstTotalTax / 2;
+      gstSgst = gstTotalTax / 2;
+    } else {
+      gstIgst = gstTotalTax;
+    }
   }
 
   // --- Calculations for Discount & Margin ---
-  const discSaved = (discOriginalPrice * discPercent) / 100;
-  const discFinal = Math.max(0, discOriginalPrice - discSaved);
-  const grossProfit = sellingPrice - costPrice;
-  const profitMarginPct = sellingPrice > 0 ? (grossProfit / sellingPrice) * 100 : 0;
-  const markupPct = costPrice > 0 ? (grossProfit / costPrice) * 100 : 0;
+  const discOrigNum = Math.max(0, parseFloat(discOriginalPriceInput) || 0);
+  const discPctNum = Math.max(0, parseFloat(discPercentInput) || 0);
+  const discFlatNum = Math.max(0, parseFloat(discFlatAmountInput) || 0);
 
-  // --- Calculations for Inflation & Horizon ---
-  const futureInflatedCost = goalTargetToday * Math.pow(1 + inflationRate / 100, goalYears);
-  const goalMonths = goalYears * 12;
-  const goalMonthlyRate = goalExpectedReturn / 100 / 12;
+  const discSaved = discFlatNum > 0 ? Math.min(discOrigNum, discFlatNum) : (discOrigNum * discPctNum) / 100;
+  const discFinal = Math.max(0, discOrigNum - discSaved);
+  const effectiveDiscPct = discOrigNum > 0 ? (discSaved / discOrigNum) * 100 : 0;
+
+  const costPriceNum = Math.max(0, parseFloat(costPriceInput) || 0);
+  const sellingPriceNum = Math.max(0, parseFloat(sellingPriceInput) || 0);
+  const grossProfit = sellingPriceNum - costPriceNum;
+  const profitMarginPct = sellingPriceNum > 0 ? (grossProfit / sellingPriceNum) * 100 : 0;
+  const markupPct = costPriceNum > 0 ? (grossProfit / costPriceNum) * 100 : 0;
+
+  // --- Calculations for Inflation & Goal Horizon ---
+  const goalTargetTodayNum = Math.max(0, parseFloat(goalTargetTodayInput) || 0);
+  const inflationRateNum = Math.max(0, parseFloat(inflationRateInput) || 0);
+  const goalYearsNum = Math.max(1, parseFloat(goalYearsInput) || 1);
+  const goalReturnNum = Math.max(0, parseFloat(goalExpectedReturnInput) || 0);
+
+  const futureInflatedCost = goalTargetTodayNum * Math.pow(1 + inflationRateNum / 100, goalYearsNum);
+  const extraInflationBurden = Math.max(0, futureInflatedCost - goalTargetTodayNum);
+  const goalMonths = Math.round(goalYearsNum * 12);
+  const goalMonthlyRate = goalReturnNum / 100 / 12;
+
   let requiredMonthlySIP = 0;
   if (goalMonthlyRate > 0 && goalMonths > 0) {
     requiredMonthlySIP =
@@ -366,6 +431,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   } else {
     requiredMonthlySIP = futureInflatedCost / goalMonths;
   }
+
+  // Required One-time Lumpsum today to achieve future cost
+  const requiredLumpsumToday = goalReturnNum > 0
+    ? futureInflatedCost / Math.pow(1 + goalReturnNum / 100, goalYearsNum)
+    : futureInflatedCost;
 
   // Clean, focused tool tabs
   const navTabs: { id: CalculatorViewType; label: string; hindi: string; icon: any }[] = [
@@ -397,11 +467,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <h1 className="text-[17px] sm:text-[19px] font-bold text-[#F8FAFC] flex items-center gap-2">
               <span>{isHindi ? 'वित्तीय कैलकुलेटर' : 'Financial Calculator'}</span>
               <span className="text-[10px] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] px-2 py-0.5 rounded-md border border-[var(--theme-primary,#38BDF8)]/30">
-                PRO
+                PRO • CUSTOM
               </span>
             </h1>
             <p className="text-[11px] text-[#94A3B8]">
-              {isHindi ? 'तेज़, सटीक एवं खाता-सिंक्ड गणना' : 'Fast, accurate, keyboard-ready calculations'}
+              {isHindi ? 'अनलिमिटेड कस्टम इनपुट, शून्य पाबंदी एवं रीयल-टाइम गणना' : 'Custom inputs with zero limits, flexible rates & instant projections'}
             </p>
           </div>
         </div>
@@ -445,14 +515,12 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       </div>
 
       {/* ========================================================================= */}
-      {/* 1. STANDARD ARITHMETIC CALCULATOR (TACTILE, RESPONSIVE, ZERO-LAG) */}
+      {/* 1. STANDARD ARITHMETIC CALCULATOR */}
       {/* ========================================================================= */}
       {activeTab === 'standard' && (
         <div className="max-w-md mx-auto bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4">
-          
           {/* LCD / OLED Display Screen */}
           <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-inner space-y-1 text-right relative overflow-hidden">
-            {/* Top row: Active Expression & History button */}
             <div className="flex items-center justify-between text-[13px] font-mono text-[#94A3B8]">
               <button
                 type="button"
@@ -469,12 +537,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
             </div>
 
-            {/* Main Result Display */}
             <div className="text-[36px] sm:text-[42px] font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] tracking-tight truncate select-all py-1">
               {privacyMask ? '₹ ****' : (stdLiveResult || '0')}
             </div>
 
-            {/* Quick Memory indicator */}
             {memoryVal !== 0 && (
               <div className="absolute bottom-2 left-3 text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded border border-[#10B981]/30">
                 M = {memoryVal}
@@ -558,7 +624,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             </button>
           </div>
 
-          {/* Keypad Grid (Tactile, Clean, Fast) */}
+          {/* Keypad Grid */}
           <div className="grid grid-cols-4 gap-2.5">
             {[
               { label: 'C', val: 'C', cls: 'bg-[#EF4444]/15 text-[#EF4444] border-[#EF4444]/30 hover:bg-[#EF4444]/25' },
@@ -631,7 +697,6 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             </button>
           </div>
 
-          {/* Copy Button */}
           <div className="flex justify-center">
             <button
               type="button"
@@ -653,10 +718,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
               <h2 className="text-[16px] font-bold text-[#F8FAFC]">
-                {isHindi ? '6-फंड आय विभाजन' : '6-Fund Income Split Allocation'}
+                {isHindi ? '6-फंड आय विभाजन (कस्टम राशि)' : '6-Fund Income Split Allocation'}
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
-                Divide income across 6 buckets instantly before spending.
+                {isHindi ? 'किसी भी राशि को 6 आवश्यक फंड्स में सीधे बांटें (असीमित इनपुट)' : 'Divide any custom income across 6 funds with zero amount restrictions.'}
               </p>
             </div>
 
@@ -666,12 +731,23 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] text-[11px] font-bold flex items-center gap-1.5 cursor-pointer"
             >
               <Sliders className="w-3.5 h-3.5" />
-              <span>{showFundSliders ? 'Hide Sliders' : 'Edit %'}</span>
+              <span>{showFundSliders ? 'Hide Sliders' : 'Custom % Weights'}</span>
             </button>
           </div>
 
           {/* Amount Inflow Input */}
           <div className="space-y-2">
+            <div className="flex justify-between items-center text-[11.5px]">
+              <label className="font-bold text-[#CBD5E1]">
+                {isHindi ? 'कुल आय / इनफ्लो राशि (₹):' : 'Total Inflow Amount (₹):'}
+              </label>
+              {fundInflowNum > 0 && (
+                <span className="font-mono text-[11px] text-[var(--theme-primary,#38BDF8)] font-bold">
+                  {formatIndianWords(fundInflowNum)}
+                </span>
+              )}
+            </div>
+
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[18px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
                 ₹
@@ -679,7 +755,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <input
                 type="number"
                 min="0"
-                step="500"
+                step="any"
                 value={fundAmountInput}
                 onChange={(e) => setFundAmountInput(e.target.value)}
                 className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[22px] font-mono font-bold rounded-xl pl-10 pr-4 py-2.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none shadow-inner"
@@ -689,7 +765,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
             {/* Quick Presets */}
             <div className="flex flex-wrap gap-1.5">
-              {[25000, 50000, 75000, 100000, 200000].map((amt) => (
+              {[10000, 25000, 50000, 100000, 250000, 500000, 1000000, 5000000].map((amt) => (
                 <button
                   key={amt}
                   type="button"
@@ -699,33 +775,55 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   }}
                   className="px-2.5 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[11.5px] font-mono text-[#CBD5E1] transition-colors cursor-pointer"
                 >
-                  ₹{(amt / 1000).toLocaleString('en-IN')}k
+                  ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Sliders (if open) */}
+          {/* Sliders / Custom Weights */}
           {showFundSliders && (
             <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5">
               <div className="flex justify-between items-center text-[11.5px]">
                 <span className="font-bold text-[#CBD5E1]">Adjust Fund % Weights:</span>
-                <span className={`font-mono font-bold ${isFundBalanced ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
-                  Total: {totalFundPct}% {isFundBalanced ? '✓' : '(Must equal 100%)'}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`font-mono font-bold ${isFundBalanced ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+                    Total: {totalFundPct}% {isFundBalanced ? '✓' : '(Must equal 100%)'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setFundCustomPct(DEFAULT_PERCENTAGES)}
+                    className="text-[10px] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] underline cursor-pointer"
+                  >
+                    Reset (55/10/10/10/10/5)
+                  </button>
+                </div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {FUND_ORDER.map((f) => (
-                  <div key={f} className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-1">
-                    <div className="flex justify-between text-[10.5px]">
+                  <div key={f} className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-1.5">
+                    <div className="flex justify-between items-center text-[11px]">
                       <span className="font-bold text-[#CBD5E1] truncate">{FUND_LABELS[f]}</span>
-                      <span className="font-mono font-bold text-[var(--theme-primary,#38BDF8)]">{fundCustomPct[f]}%</span>
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={fundCustomPct[f]}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value) || 0;
+                            setFundCustomPct((prev) => ({ ...prev, [f]: val }));
+                          }}
+                          className="w-12 text-right bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono font-bold text-[11px] rounded px-1 py-0.5 outline-none"
+                        />
+                        <span className="text-[10px] text-[#94A3B8] font-mono">%</span>
+                      </div>
                     </div>
                     <input
                       type="range"
                       min="0"
                       max="100"
-                      step="5"
+                      step="1"
                       value={fundCustomPct[f]}
                       onChange={(e) => {
                         const val = parseInt(e.target.value) || 0;
@@ -773,7 +871,6 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             })}
           </div>
 
-          {/* Apply to income */}
           {onApplyToIncome && (
             <button
               type="button"
@@ -790,17 +887,20 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 3. SIP & COMPOUND WEALTH */}
+      {/* 3. SIP & COMPOUND WEALTH (UNLIMITED CUSTOM INPUTS) */}
       {/* ========================================================================= */}
       {activeTab === 'sip' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)] pb-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
-              <h2 className="text-[16px] font-bold text-[#F8FAFC]">
-                {isHindi ? 'SIP एवं चक्रवृद्धि वेल्थ' : 'SIP & Wealth Compounder'}
+              <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+                <span>{isHindi ? 'SIP एवं वेल्थ कम्पाउंडर' : 'SIP & Wealth Compounder'}</span>
+                <span className="text-[10px] bg-[#10B981]/15 text-[#10B981] font-mono px-1.5 py-0.5 rounded border border-[#10B981]/30">
+                  UNLIMITED
+                </span>
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
-                Calculate future value of systematic or lumpsum investments.
+                {isHindi ? 'बिना किसी पाबंदी के कोई भी राशि, रिटर्न % और समयावधि सीधे टाइप करें' : 'Type custom amounts of any size, return rate %, and tenure years.'}
               </p>
             </div>
 
@@ -808,10 +908,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setSipMode('sip')}
-                className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
                   sipMode === 'sip'
-                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
-                    : 'text-[#94A3B8]'
+                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
+                    : 'text-[#94A3B8] hover:text-[#F8FAFC]'
                 }`}
               >
                 Monthly SIP
@@ -819,10 +919,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setSipMode('lumpsum')}
-                className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
                   sipMode === 'lumpsum'
-                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
-                    : 'text-[#94A3B8]'
+                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
+                    : 'text-[#94A3B8] hover:text-[#F8FAFC]'
                 }`}
               >
                 Lumpsum
@@ -831,57 +931,165 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[11.5px]">
-                <span className="text-[#CBD5E1] font-bold">{sipMode === 'sip' ? 'Monthly Amount' : 'Lumpsum'}</span>
-                <span className="font-mono font-bold text-[var(--theme-primary,#38BDF8)]">₹{sipMonthlyAmt.toLocaleString('en-IN')}</span>
+            {/* Amount Input */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
+                <span className="text-[#CBD5E1] font-bold">
+                  {sipMode === 'sip' ? 'Monthly Investment (₹)' : 'One-Time Lumpsum (₹)'}
+                </span>
+                {sipAmtNum > 0 && (
+                  <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">
+                    {formatIndianWords(sipAmtNum)}
+                  </span>
+                )}
               </div>
-              <input
-                type="range"
-                min="500"
-                max="100000"
-                step="500"
-                value={sipMonthlyAmt}
-                onChange={(e) => setSipMonthlyAmt(parseInt(e.target.value) || 0)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[var(--theme-primary,#38BDF8)]"
-              />
+
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
+                  ₹
+                </span>
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={sipAmountInput}
+                  onChange={(e) => setSipAmountInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-lg pl-7 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
+                  placeholder="5000"
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[1000, 5000, 10000, 25000, 50000, 100000, 500000, 1000000].map((amt) => (
+                  <button
+                    key={amt}
+                    type="button"
+                    onClick={() => setSipAmountInput(amt.toString())}
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                  >
+                    ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[11.5px]">
-                <span className="text-[#CBD5E1] font-bold">Return Rate (p.a.)</span>
-                <span className="font-mono font-bold text-[#10B981]">{sipRate}%</span>
+            {/* Expected Return Rate */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
+                <span className="text-[#CBD5E1] font-bold">Expected Return (% p.a.)</span>
+                <span className="font-mono text-[10.5px] text-[#10B981] font-bold">Annual CAGR</span>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="30"
-                step="0.5"
-                value={sipRate}
-                onChange={(e) => setSipRate(parseFloat(e.target.value) || 0)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[#10B981]"
-              />
+
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0.1"
+                  max="100"
+                  step="0.1"
+                  value={sipRateInput}
+                  onChange={(e) => setSipRateInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#10B981] text-[16px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#10B981] focus:outline-none"
+                  placeholder="12"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] font-mono font-bold text-[#10B981]">
+                  %
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[8, 12, 15, 18, 24].map((rate) => (
+                  <button
+                    key={rate}
+                    type="button"
+                    onClick={() => setSipRateInput(rate.toString())}
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                  >
+                    {rate}%
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[11.5px]">
-                <span className="text-[#CBD5E1] font-bold">Time Period</span>
-                <span className="font-mono font-bold text-[#F59E0B]">{sipTenureYears} Years</span>
+            {/* Time Period */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
+                <span className="text-[#CBD5E1] font-bold">Time Period (Years)</span>
+                <span className="font-mono text-[10.5px] text-[#F59E0B] font-bold">
+                  {Math.round(sipTenureNum * 12)} Months
+                </span>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="35"
-                step="1"
-                value={sipTenureYears}
-                onChange={(e) => setSipTenureYears(parseInt(e.target.value) || 1)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[#F59E0B]"
-              />
+
+              <div className="relative">
+                <input
+                  type="number"
+                  min="1"
+                  max="60"
+                  step="1"
+                  value={sipTenureInput}
+                  onChange={(e) => setSipTenureInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F59E0B] text-[16px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#F59E0B] focus:outline-none"
+                  placeholder="10"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] font-mono font-bold text-[#F59E0B]">
+                  Yrs
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[1, 3, 5, 10, 15, 20, 25, 30].map((yr) => (
+                  <button
+                    key={yr}
+                    type="button"
+                    onClick={() => setSipTenureInput(yr.toString())}
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#F59E0B] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                  >
+                    {yr}Y
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Outcome Summary */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
+          {/* Optional Step-up SIP */}
+          {sipMode === 'sip' && (
+            <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-[#EAB308]" />
+                <span className="text-[12px] font-bold text-[#CBD5E1]">
+                  Annual Step-Up Increment (%):
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                {[0, 5, 10, 15, 20].map((step) => (
+                  <button
+                    key={step}
+                    type="button"
+                    onClick={() => setSipStepUpInput(step.toString())}
+                    className={`px-2 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                      parseFloat(sipStepUpInput) === step
+                        ? 'bg-[#EAB308] text-[#070E18]'
+                        : 'bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] border border-[var(--theme-border,#213E61)]'
+                    }`}
+                  >
+                    {step}%
+                  </button>
+                ))}
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value={sipStepUpInput}
+                  onChange={(e) => setSipStepUpInput(e.target.value)}
+                  placeholder="Custom %"
+                  className="w-16 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-mono text-[11px] rounded px-2 py-1 outline-none text-right"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Outcome Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#94A3B8] font-bold">Invested Amount</div>
               <div className="text-[16px] font-mono font-bold text-[#F8FAFC] mt-0.5">
@@ -896,6 +1104,13 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
             </div>
 
+            <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
+              <div className="text-[10.5px] text-[#8B5CF6] font-bold">Wealth Multiplier</div>
+              <div className="text-[16px] font-mono font-bold text-[#8B5CF6] mt-0.5">
+                {sipCalculation.multiplier}x
+              </div>
+            </div>
+
             <div className="p-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30">
               <div className="text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Total Future Value</div>
               <div className="text-[18px] font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] mt-0.5">
@@ -907,70 +1122,157 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 4. LOAN EMI CALCULATOR */}
+      {/* 4. LOAN EMI CALCULATOR (UNLIMITED PRINCIPAL & CUSTOM TENURE) */}
       {/* ========================================================================= */}
       {activeTab === 'emi' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
-            <h2 className="text-[16px] font-bold text-[#F8FAFC]">
-              {isHindi ? 'लोन EMI एवं ब्याज गणना' : 'Loan EMI & Interest Calculator'}
+            <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+              <span>{isHindi ? 'लोन EMI एवं ब्याज गणना' : 'Loan EMI & Interest Calculator'}</span>
+              <span className="text-[10px] bg-[#8B5CF6]/15 text-[#8B5CF6] font-mono px-1.5 py-0.5 rounded border border-[#8B5CF6]/30">
+                FLEXIBLE
+              </span>
             </h2>
             <p className="text-[11px] text-[#94A3B8]">
-              Monthly repayment and interest burden for Home, Car, or Personal loans.
+              {isHindi ? 'होम, कार या पर्सनल लोन के लिए कोई भी मूलधन, ब्याज दर और अवधि दर्ज करें' : 'Custom Principal amounts, fractional interest rates, and loan durations.'}
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[11.5px]">
+            {/* Principal */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
                 <span className="text-[#CBD5E1] font-bold">Principal Loan (₹)</span>
-                <span className="font-mono font-bold text-[var(--theme-primary,#38BDF8)]">₹{loanPrincipal.toLocaleString('en-IN')}</span>
+                {loanPrincipalNum > 0 && (
+                  <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">
+                    {formatIndianWords(loanPrincipalNum)}
+                  </span>
+                )}
               </div>
-              <input
-                type="range"
-                min="10000"
-                max="10000000"
-                step="10000"
-                value={loanPrincipal}
-                onChange={(e) => setLoanPrincipal(parseInt(e.target.value) || 0)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[var(--theme-primary,#38BDF8)]"
-              />
+
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
+                  ₹
+                </span>
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={loanPrincipalInput}
+                  onChange={(e) => setLoanPrincipalInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-lg pl-7 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
+                  placeholder="500000"
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[100000, 500000, 1000000, 2500000, 5000000, 10000000].map((amt) => (
+                  <button
+                    key={amt}
+                    type="button"
+                    onClick={() => setLoanPrincipalInput(amt.toString())}
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                  >
+                    ₹{amt >= 10000000 ? `${amt / 10000000}Cr` : `${amt / 100000}L`}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[11.5px]">
+            {/* Interest Rate */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
                 <span className="text-[#CBD5E1] font-bold">Interest Rate (% p.a.)</span>
-                <span className="font-mono font-bold text-[#8B5CF6]">{loanRate}%</span>
+                <span className="font-mono text-[10.5px] text-[#8B5CF6] font-bold">Per Annum</span>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="25"
-                step="0.1"
-                value={loanRate}
-                onChange={(e) => setLoanRate(parseFloat(e.target.value) || 0)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[#8B5CF6]"
-              />
+
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0.1"
+                  max="100"
+                  step="0.05"
+                  value={loanRateInput}
+                  onChange={(e) => setLoanRateInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#8B5CF6] text-[16px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#8B5CF6] focus:outline-none"
+                  placeholder="9.5"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] font-mono font-bold text-[#8B5CF6]">
+                  %
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[6.5, 8.5, 9.5, 11.5, 14.0].map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setLoanRateInput(r.toString())}
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#8B5CF6] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                  >
+                    {r}%
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[11.5px]">
-                <span className="text-[#CBD5E1] font-bold">Tenure (Years)</span>
-                <span className="font-mono font-bold text-[#F59E0B]">{loanTenureYears} Years</span>
+            {/* Tenure */}
+            <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
+                <span className="text-[#CBD5E1] font-bold">Tenure Duration</span>
+                <div className="flex rounded bg-[var(--theme-card,#132438)] p-0.5 text-[10px] font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setLoanTenureUnit('years')}
+                    className={`px-1.5 py-0.5 rounded ${loanTenureUnit === 'years' ? 'bg-[#F59E0B] text-[#070E18]' : 'text-[#94A3B8]'}`}
+                  >
+                    Yrs
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLoanTenureUnit('months')}
+                    className={`px-1.5 py-0.5 rounded ${loanTenureUnit === 'months' ? 'bg-[#F59E0B] text-[#070E18]' : 'text-[#94A3B8]'}`}
+                  >
+                    Mos
+                  </button>
+                </div>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="30"
-                step="1"
-                value={loanTenureYears}
-                onChange={(e) => setLoanTenureYears(parseInt(e.target.value) || 1)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[#F59E0B]"
-              />
+
+              <div className="relative">
+                <input
+                  type="number"
+                  min="1"
+                  max="600"
+                  step="1"
+                  value={loanTenureInput}
+                  onChange={(e) => setLoanTenureInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F59E0B] text-[16px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#F59E0B] focus:outline-none"
+                  placeholder="5"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] font-mono font-bold text-[#F59E0B]">
+                  {loanTenureUnit === 'years' ? 'Years' : 'Months'}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[1, 3, 5, 7, 10, 15, 20, 25, 30].map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => {
+                      setLoanTenureUnit('years');
+                      setLoanTenureInput(t.toString());
+                    }}
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#F59E0B] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                  >
+                    {t}Y
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
             <div className="p-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30">
               <div className="text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Monthly EMI</div>
               <div className="text-[18px] font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] mt-0.5">
@@ -979,15 +1281,22 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             </div>
 
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
-              <div className="text-[10.5px] text-[#EF4444] font-bold">Total Interest</div>
+              <div className="text-[10.5px] text-[#EF4444] font-bold">Total Interest ({emiCalculation.interestPct}%)</div>
               <div className="text-[16px] font-mono font-bold text-[#EF4444] mt-0.5">
                 ₹{Math.round(emiCalculation.totalInterest).toLocaleString('en-IN')}
               </div>
             </div>
 
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
-              <div className="text-[10.5px] text-[#94A3B8] font-bold">Total Payment</div>
+              <div className="text-[10.5px] text-[#94A3B8] font-bold">Principal Loan ({emiCalculation.principalPct}%)</div>
               <div className="text-[16px] font-mono font-bold text-[#F8FAFC] mt-0.5">
+                ₹{Math.round(loanPrincipalNum).toLocaleString('en-IN')}
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
+              <div className="text-[10.5px] text-[#10B981] font-bold">Total Repayment</div>
+              <div className="text-[16px] font-mono font-bold text-[#10B981] mt-0.5">
                 ₹{Math.round(emiCalculation.totalPayment).toLocaleString('en-IN')}
               </div>
             </div>
@@ -996,65 +1305,128 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 5. GST TAX SPLITTER */}
+      {/* 5. GST TAX SPLITTER (CUSTOM % & INTRA/INTER-STATE SUPPORT) */}
       {/* ========================================================================= */}
       {activeTab === 'gst' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)] pb-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
-              <h2 className="text-[16px] font-bold text-[#F8FAFC]">
-                {isHindi ? 'GST टैक्स गणना' : 'GST & Tax Calculator'}
+              <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+                <span>{isHindi ? 'GST टैक्स कैलकुलेटर' : 'GST & Tax Invoice Splitter'}</span>
+                <span className="text-[10px] bg-[#EC4899]/15 text-[#EC4899] font-mono px-1.5 py-0.5 rounded border border-[#EC4899]/30">
+                  CUSTOM SLAB
+                </span>
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
-                Calculate GST slabs with CGST + SGST tax invoice breakdowns.
+                {isHindi ? 'कोई भी कस्टम GST % दर्ज करें (0.25%, 5%, 12%, 18%, 28%, 40% आदि) और CGST/SGST/IGST ब्रेकडाउन देखें' : 'Enter custom GST percentages, CGST/SGST split, or IGST with instant invoice calculations.'}
               </p>
             </div>
 
-            <div className="flex rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] p-0.5">
-              <button
-                type="button"
-                onClick={() => setGstType('exclusive')}
-                className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
-                  gstType === 'exclusive' ? 'bg-[#EC4899] text-white' : 'text-[#94A3B8]'
-                }`}
-              >
-                + Add GST
-              </button>
-              <button
-                type="button"
-                onClick={() => setGstType('inclusive')}
-                className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
-                  gstType === 'inclusive' ? 'bg-[#EC4899] text-white' : 'text-[#94A3B8]'
-                }`}
-              >
-                - Extract GST
-              </button>
+            <div className="flex items-center gap-2">
+              <div className="flex rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setGstType('exclusive')}
+                  className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    gstType === 'exclusive' ? 'bg-[#EC4899] text-white' : 'text-[#94A3B8]'
+                  }`}
+                >
+                  + Add GST (Net)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGstType('inclusive')}
+                  className={`px-3 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    gstType === 'inclusive' ? 'bg-[#EC4899] text-white' : 'text-[#94A3B8]'
+                  }`}
+                >
+                  - Extract GST (MRP)
+                </button>
+              </div>
+
+              <div className="flex rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setGstTaxType('intra')}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    gstTaxType === 'intra' ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]' : 'text-[#94A3B8]'
+                  }`}
+                >
+                  Intra (CGST+SGST)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGstTaxType('inter')}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    gstTaxType === 'inter' ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]' : 'text-[#94A3B8]'
+                  }`}
+                >
+                  Inter (IGST)
+                </button>
+              </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Amount */}
             <div className="space-y-1.5">
-              <label className="text-[11.5px] font-bold text-[#CBD5E1]">
-                {gstType === 'exclusive' ? 'Base Net Amount (₹):' : 'Gross MRP Amount (₹):'}
-              </label>
-              <input
-                type="number"
-                value={gstAmount}
-                onChange={(e) => setGstAmount(parseFloat(e.target.value) || 0)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[18px] font-mono font-bold rounded-xl px-4 py-2 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
-              />
+              <div className="flex justify-between items-center text-[11.5px]">
+                <label className="font-bold text-[#CBD5E1]">
+                  {gstType === 'exclusive' ? 'Base Net Amount (₹):' : 'Gross MRP Amount (₹):'}
+                </label>
+                {gstAmountNum > 0 && (
+                  <span className="font-mono text-[10.5px] text-[#EC4899] font-bold">
+                    {formatIndianWords(gstAmountNum)}
+                  </span>
+                )}
+              </div>
+
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] font-mono font-bold text-[#EC4899]">
+                  ₹
+                </span>
+                <input
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={gstAmountInput}
+                  onChange={(e) => setGstAmountInput(e.target.value)}
+                  className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[18px] font-mono font-bold rounded-xl pl-8 pr-4 py-2 focus:border-[#EC4899] focus:outline-none"
+                  placeholder="10000"
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[1000, 5000, 10000, 25000, 50000, 100000, 500000].map((amt) => (
+                  <button
+                    key={amt}
+                    type="button"
+                    onClick={() => setGstAmountInput(amt.toString())}
+                    className="px-2 py-0.5 rounded text-[10.5px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#EC4899] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                  >
+                    ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                  </button>
+                ))}
+              </div>
             </div>
 
+            {/* GST Slab Rates + Custom */}
             <div className="space-y-1.5">
-              <label className="text-[11.5px] font-bold text-[#CBD5E1]">GST Rate Slab:</label>
-              <div className="grid grid-cols-5 gap-1.5">
-                {[3, 5, 12, 18, 28].map((slab) => (
+              <div className="flex justify-between items-center text-[11.5px]">
+                <label className="font-bold text-[#CBD5E1]">GST Rate Slab:</label>
+                <span className="font-mono text-[11px] font-bold text-[#EC4899]">
+                  Applied: {effectiveGstSlab}%
+                </span>
+              </div>
+
+              <div className="grid grid-cols-6 gap-1">
+                {[0, 3, 5, 12, 18, 28].map((slab) => (
                   <button
                     key={slab}
                     type="button"
-                    onClick={() => setGstSlab(slab)}
+                    onClick={() => setGstSlabMode(slab)}
                     className={`py-2 rounded-xl text-[12px] font-mono font-bold border transition-colors cursor-pointer ${
-                      gstSlab === slab
+                      gstSlabMode === slab
                         ? 'bg-[#EC4899] text-white border-transparent'
                         : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[#CBD5E1]'
                     }`}
@@ -1063,20 +1435,74 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   </button>
                 ))}
               </div>
+
+              {/* Custom GST % Input Box */}
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setGstSlabMode('custom')}
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-colors cursor-pointer ${
+                    gstSlabMode === 'custom'
+                      ? 'bg-[#EC4899] text-white border-transparent'
+                      : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[#94A3B8]'
+                  }`}
+                >
+                  Custom %:
+                </button>
+                <div className="relative flex-1">
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    value={gstCustomRateInput}
+                    onFocus={() => setGstSlabMode('custom')}
+                    onChange={(e) => {
+                      setGstCustomRateInput(e.target.value);
+                      setGstSlabMode('custom');
+                    }}
+                    placeholder="e.g. 0.25, 6, 40"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-mono text-[13px] font-bold rounded-lg px-3 py-1.5 focus:border-[#EC4899] outline-none"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] font-mono text-[#94A3B8]">
+                    %
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 font-mono text-[13px]">
+          <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5 font-mono text-[13px]">
             <div className="flex justify-between text-[#94A3B8]">
               <span>Net Base Price:</span>
               <span className="font-bold text-[#F8FAFC]">₹{gstBase.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-[#EC4899]">
-              <span>Total GST ({gstSlab}%):</span>
-              <span className="font-bold">+₹{gstTotalTax.toFixed(2)} (CGST: ₹{gstCgst.toFixed(2)} | SGST: ₹{gstSgst.toFixed(2)})</span>
+
+            {gstTaxType === 'intra' ? (
+              <>
+                <div className="flex justify-between text-[#EC4899]/80 text-[12px]">
+                  <span>CGST ({effectiveGstSlab / 2}%):</span>
+                  <span className="font-bold">+₹{gstCgst.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-[#EC4899]/80 text-[12px]">
+                  <span>SGST ({effectiveGstSlab / 2}%):</span>
+                  <span className="font-bold">+₹{gstSgst.toFixed(2)}</span>
+                </div>
+              </>
+            ) : (
+              <div className="flex justify-between text-[#EC4899] text-[12px]">
+                <span>IGST ({effectiveGstSlab}%):</span>
+                <span className="font-bold">+₹{gstIgst.toFixed(2)}</span>
+              </div>
+            )}
+
+            <div className="flex justify-between text-[#EC4899] border-t border-[var(--theme-border,#213E61)] pt-1.5">
+              <span className="font-bold">Total GST Tax ({effectiveGstSlab}%):</span>
+              <span className="font-bold">+₹{gstTotalTax.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[15px]">
-              <span className="font-bold">Total Final Price:</span>
+
+            <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
+              <span className="font-bold">Total Final Gross Price:</span>
               <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">₹{gstFinalGross.toFixed(2)}</span>
             </div>
           </div>
@@ -1084,7 +1510,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 6. DISCOUNT & MARGIN CALCULATOR */}
+      {/* 6. DISCOUNT & MARGIN CALCULATOR (UNLIMITED CUSTOM VALUES) */}
       {/* ========================================================================= */}
       {activeTab === 'discount' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
@@ -1094,7 +1520,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 {isHindi ? 'छूट एवं मार्जिन' : 'Discount & Profit Margin'}
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
-                Calculate sales discount or retail markup profit margins.
+                {isHindi ? 'बिक्री छूट या प्रॉफिट मार्जिन और मार्कअप प्रतिशत की कस्टम गणना' : 'Custom sale discounts or retail markup profit margin calculations.'}
               </p>
             </div>
 
@@ -1122,39 +1548,61 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
           {discMode === 'discount' ? (
             <div className="space-y-3">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <label className="text-[11.5px] font-bold text-[#CBD5E1]">Original MRP (₹):</label>
                   <input
                     type="number"
-                    value={discOriginalPrice}
-                    onChange={(e) => setDiscOriginalPrice(parseFloat(e.target.value) || 0)}
+                    min="0"
+                    step="any"
+                    value={discOriginalPriceInput}
+                    onChange={(e) => setDiscOriginalPriceInput(e.target.value)}
                     className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
+
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11.5px]">
-                    <span className="font-bold text-[#CBD5E1]">Discount:</span>
-                    <span className="font-mono font-bold text-[#10B981]">{discPercent}% OFF</span>
+                    <span className="font-bold text-[#CBD5E1]">Discount %:</span>
+                    <span className="font-mono font-bold text-[#10B981]">{discPctNum}%</span>
                   </div>
                   <input
-                    type="range"
-                    min="1"
-                    max="90"
-                    step="1"
-                    value={discPercent}
-                    onChange={(e) => setDiscPercent(parseFloat(e.target.value) || 0)}
-                    className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[#10B981]"
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    value={discPercentInput}
+                    onChange={(e) => {
+                      setDiscPercentInput(e.target.value);
+                      setDiscFlatAmountInput('0');
+                    }}
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#10B981] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Or Flat Discount (₹):</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    value={discFlatAmountInput}
+                    onChange={(e) => {
+                      setDiscFlatAmountInput(e.target.value);
+                      setDiscPercentInput('0');
+                    }}
+                    placeholder="0"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 font-mono text-[13px]">
                 <div className="flex justify-between text-[#10B981]">
-                  <span>Discount Saved:</span>
+                  <span>Discount Saved ({effectiveDiscPct.toFixed(1)}%):</span>
                   <span className="font-bold">-₹{discSaved.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[15px]">
+                <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
                   <span className="font-bold">Final Payable Price:</span>
                   <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">₹{discFinal.toFixed(2)}</span>
                 </div>
@@ -1167,8 +1615,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   <label className="text-[11.5px] font-bold text-[#CBD5E1]">Cost Price (CP ₹):</label>
                   <input
                     type="number"
-                    value={costPrice}
-                    onChange={(e) => setCostPrice(parseFloat(e.target.value) || 0)}
+                    min="0"
+                    step="any"
+                    value={costPriceInput}
+                    onChange={(e) => setCostPriceInput(e.target.value)}
                     className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
@@ -1176,8 +1626,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   <label className="text-[11.5px] font-bold text-[#CBD5E1]">Selling Price (SP ₹):</label>
                   <input
                     type="number"
-                    value={sellingPrice}
-                    onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)}
+                    min="0"
+                    step="any"
+                    value={sellingPriceInput}
+                    onChange={(e) => setSellingPriceInput(e.target.value)}
                     className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
@@ -1203,69 +1655,169 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 7. INFLATION & FUTURE GOAL HORIZON */}
+      {/* 7. INFLATION & FUTURE GOAL HORIZON (UNLIMITED CUSTOM AMOUNTS) */}
       {/* ========================================================================= */}
       {activeTab === 'inflation' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
-            <h2 className="text-[16px] font-bold text-[#F8FAFC]">
-              {isHindi ? 'मुद्रास्फीति एवं भविष्य लक्ष्य' : 'Inflation & Goal Horizon Planner'}
+            <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+              <span>{isHindi ? 'मुद्रास्फीति एवं भविष्य लक्ष्य' : 'Inflation & Goal Horizon Planner'}</span>
+              <span className="text-[10px] bg-[#EAB308]/15 text-[#EAB308] font-mono px-1.5 py-0.5 rounded border border-[#EAB308]/30">
+                CUSTOM GOALS
+              </span>
             </h2>
             <p className="text-[11px] text-[#94A3B8]">
-              Calculate future inflated cost and required monthly SIP savings.
+              {isHindi ? 'भविष्य की महंगाई दर और किसी भी लक्ष्य की सटीक लागत व आवश्यक SIP की गणना' : 'Calculate true future inflated cost of goals and exact monthly SIP needed to achieve it.'}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="space-y-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* Goal Name */}
+            <div className="space-y-1 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
               <label className="text-[11.5px] font-bold text-[#CBD5E1]">Goal Name:</label>
               <input
                 type="text"
                 value={goalNameInput}
                 onChange={(e) => setGoalNameInput(e.target.value)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[13px] font-bold rounded-xl px-3 py-2"
-                placeholder="e.g. Higher Education / Car"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[13px] font-bold rounded-lg px-3 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] outline-none"
+                placeholder="e.g. Higher Education / Car / Flat"
               />
             </div>
 
-            <div className="space-y-1">
-              <div className="flex justify-between text-[11.5px]">
-                <span className="font-bold text-[#CBD5E1]">Today's Cost:</span>
-                <span className="font-mono font-bold text-[var(--theme-primary,#38BDF8)]">₹{goalTargetToday.toLocaleString('en-IN')}</span>
+            {/* Today's Cost */}
+            <div className="space-y-1 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
+                <label className="font-bold text-[#CBD5E1]">Today's Cost (₹):</label>
+                {goalTargetTodayNum > 0 && (
+                  <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">
+                    {formatIndianWords(goalTargetTodayNum)}
+                  </span>
+                )}
               </div>
-              <input
-                type="range"
-                min="50000"
-                max="10000000"
-                step="50000"
-                value={goalTargetToday}
-                onChange={(e) => setGoalTargetToday(parseInt(e.target.value) || 0)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[var(--theme-primary,#38BDF8)]"
-              />
+              <div className="relative">
+                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
+                  ₹
+                </span>
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={goalTargetTodayInput}
+                  onChange={(e) => setGoalTargetTodayInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[15px] font-mono font-bold rounded-lg pl-6 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] outline-none"
+                  placeholder="1000000"
+                />
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <div className="flex justify-between text-[11.5px]">
-                <span className="font-bold text-[#CBD5E1]">Inflation ({inflationRate}%):</span>
-                <span className="font-mono font-bold text-[#F59E0B]">{goalYears} Years</span>
+            {/* Inflation Rate */}
+            <div className="space-y-1 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
+                <label className="font-bold text-[#CBD5E1]">Inflation Rate (% p.a.):</label>
+                <span className="font-mono text-[10.5px] text-[#F59E0B] font-bold">Annual</span>
               </div>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0"
+                  max="50"
+                  step="0.1"
+                  value={inflationRateInput}
+                  onChange={(e) => setInflationRateInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F59E0B] text-[15px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#F59E0B] outline-none"
+                  placeholder="6.5"
+                />
+                <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[13px] font-mono font-bold text-[#F59E0B]">
+                  %
+                </span>
+              </div>
+            </div>
+
+            {/* Time Horizon (Years) */}
+            <div className="space-y-1 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
+              <div className="flex justify-between items-center text-[11.5px]">
+                <label className="font-bold text-[#CBD5E1]">Target Horizon:</label>
+                <span className="font-mono text-[10.5px] text-[#10B981] font-bold">
+                  {Math.round(goalYearsNum * 12)} Mos
+                </span>
+              </div>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="1"
+                  max="60"
+                  step="1"
+                  value={goalYearsInput}
+                  onChange={(e) => setGoalYearsInput(e.target.value)}
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#10B981] text-[15px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#10B981] outline-none"
+                  placeholder="7"
+                />
+                <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[12px] font-mono font-bold text-[#10B981]">
+                  Yrs
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick preset chips for Goal Cost */}
+          <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-[#94A3B8]">
+            <span className="font-bold text-[#CBD5E1]">Quick Presets:</span>
+            {[200000, 500000, 1000000, 2500000, 5000000, 10000000, 50000000].map((amt) => (
+              <button
+                key={amt}
+                type="button"
+                onClick={() => setGoalTargetTodayInput(amt.toString())}
+                className="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
+              >
+                ₹{amt >= 10000000 ? `${amt / 10000000}Cr` : `${amt / 100000}L`}
+              </button>
+            ))}
+          </div>
+
+          {/* Return Rate Custom Input */}
+          <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#10B981]" />
+              <span className="text-[12px] font-bold text-[#CBD5E1]">
+                Expected Investment Return Rate (% p.a.):
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {[8, 10, 12, 14, 16].map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setGoalExpectedReturnInput(r.toString())}
+                  className={`px-2 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                    parseFloat(goalExpectedReturnInput) === r
+                      ? 'bg-[#10B981] text-[#070E18]'
+                      : 'bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] border border-[var(--theme-border,#213E61)]'
+                  }`}
+                >
+                  {r}%
+                </button>
+              ))}
               <input
-                type="range"
+                type="number"
                 min="1"
-                max="25"
-                step="1"
-                value={goalYears}
-                onChange={(e) => setGoalYears(parseInt(e.target.value) || 1)}
-                className="w-full h-1.5 bg-[var(--theme-bg,#070E18)] rounded appearance-none cursor-pointer accent-[#F59E0B]"
+                max="100"
+                step="0.5"
+                value={goalExpectedReturnInput}
+                onChange={(e) => setGoalExpectedReturnInput(e.target.value)}
+                placeholder="12"
+                className="w-16 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#10B981] font-mono text-[11px] font-bold rounded px-2 py-1 outline-none text-right"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[#EF4444]/30">
-              <div className="text-[10.5px] text-[#EF4444] font-bold">Future Cost in {goalYears} Yrs</div>
+              <div className="text-[10.5px] text-[#EF4444] font-bold">Future Cost in {goalYearsNum} Yrs</div>
               <div className="text-[17px] font-mono font-bold text-[#F8FAFC] mt-0.5">
                 ₹{Math.round(futureInflatedCost).toLocaleString('en-IN')}
+              </div>
+              <div className="text-[10px] text-[#94A3B8] mt-0.5">
+                (+₹{Math.round(extraInflationBurden).toLocaleString('en-IN')} inflation)
               </div>
             </div>
 
@@ -1273,6 +1825,19 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <div className="text-[10.5px] text-[#10B981] font-bold">Required Monthly SIP</div>
               <div className="text-[17px] font-mono font-bold text-[#10B981] mt-0.5">
                 ₹{Math.round(requiredMonthlySIP).toLocaleString('en-IN')}<span className="text-[11px] font-normal text-[#94A3B8]"> /mo</span>
+              </div>
+              <div className="text-[10px] text-[#94A3B8] mt-0.5">
+                @ {goalReturnNum}% p.a.
+              </div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/30">
+              <div className="text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Or One-time Lumpsum Today</div>
+              <div className="text-[17px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] mt-0.5">
+                ₹{Math.round(requiredLumpsumToday).toLocaleString('en-IN')}
+              </div>
+              <div className="text-[10px] text-[#94A3B8] mt-0.5">
+                Invested for {goalYearsNum} yrs
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ export const FundSplitCalculatorModal: React.FC<FundSplitCalculatorModalProps> =
   if (!isOpen) return null;
 
   const numAmount = parseFloat(customAmount) || 0;
-  const quickAmounts = [10000, 25000, 50000, 100000, 250000];
+  const quickAmounts = [10000, 25000, 50000, 100000, 250000, 500000, 1000000, 5000000];
 
   const handleSelectQuick = (amt: number) => {
     setCustomAmount(amt.toString());
@@ -104,7 +104,7 @@ export const FundSplitCalculatorModal: React.FC<FundSplitCalculatorModalProps> =
                       : 'bg-[var(--theme-surface,#0E1A29)] text-[#CBD5E1] border-[var(--theme-border,#213E61)] hover:border-white/20'
                   }`}
                 >
-                  ₹{(amt / 1000).toLocaleString()}k
+                  ₹{amt >= 10000000 ? `${amt / 10000000}Cr` : amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                 </button>
               ))}
             </div>

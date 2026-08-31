@@ -23,11 +23,14 @@ import {
   Moon,
   Lock,
   KeyRound,
-  FileText
+  FileText,
+  Smartphone,
+  Monitor,
+  LayoutGrid
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
-import { AppTheme, AppLanguage } from '../types';
+import { AppTheme, AppLanguage, AppViewMode } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 
 interface HeaderProps {
@@ -52,6 +55,8 @@ interface HeaderProps {
   onLanguageChange?: (lang: AppLanguage) => void;
   privacyMask?: boolean;
   onTogglePrivacyMask?: () => void;
+  viewMode?: AppViewMode;
+  onViewModeChange?: (mode: AppViewMode) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -75,7 +80,9 @@ export const Header: React.FC<HeaderProps> = ({
   language = 'en',
   onLanguageChange,
   privacyMask = false,
-  onTogglePrivacyMask
+  onTogglePrivacyMask,
+  viewMode = 'auto',
+  onViewModeChange
 }) => {
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -248,6 +255,47 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* Mobile / Desktop View Mode Switcher */}
+          {onViewModeChange && (
+            <button
+              type="button"
+              onClick={() => {
+                const nextMode: AppViewMode = viewMode === 'auto' ? 'mobile' : viewMode === 'mobile' ? 'desktop' : 'auto';
+                onViewModeChange(nextMode);
+              }}
+              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1 shrink-0 ${
+                viewMode === 'mobile'
+                  ? 'bg-[#38BDF8]/20 border-[#38BDF8]/50 text-[#38BDF8]'
+                  : viewMode === 'desktop'
+                  ? 'bg-[#10B981]/20 border-[#10B981]/50 text-[#10B981]'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+              }`}
+              title={
+                viewMode === 'mobile'
+                  ? isHindi ? 'मोबाइल मोड सक्रिय (Click for Desktop / Auto)' : 'Mobile Mode Active (Click for Desktop / Auto)'
+                  : viewMode === 'desktop'
+                  ? isHindi ? 'डेस्कटॉप मोड सक्रिय (Click for Auto / Mobile)' : 'Desktop Mode Active (Click for Auto / Mobile)'
+                  : isHindi ? 'ऑटो स्क्रीन व्यू (Click to Switch Mobile/Desktop Mode)' : 'Auto Responsive View (Click to Switch Mobile/Desktop Mode)'
+              }
+              id="header-viewmode-toggle-btn"
+            >
+              {viewMode === 'mobile' ? (
+                <Smartphone className="w-3.5 h-3.5" />
+              ) : viewMode === 'desktop' ? (
+                <Monitor className="w-3.5 h-3.5" />
+              ) : (
+                <LayoutGrid className="w-3.5 h-3.5" />
+              )}
+              <span className="text-[10px] sm:text-[11px] font-bold">
+                {viewMode === 'mobile'
+                  ? isHindi ? 'मोबाइल' : 'Mobile'
+                  : viewMode === 'desktop'
+                  ? isHindi ? 'डेस्कटॉप' : 'Desktop'
+                  : isHindi ? 'ऑटो' : 'Auto'}
+              </span>
+            </button>
+          )}
+
           {/* Quick Day/Night Toggle */}
           {onThemeChange && (
             <button
@@ -365,6 +413,42 @@ export const Header: React.FC<HeaderProps> = ({
                           {opt.short}
                         </button>
                       ))}
+                    </div>
+                  )}
+
+                  {/* View Mode Selector (Auto / Mobile / Desktop) */}
+                  {onViewModeChange && (
+                    <div className="px-2.5 py-2 border-b border-[var(--theme-border,#213E61)]/60 mb-1">
+                      <div className="text-[10px] font-bold text-[#64748B] mb-2">
+                        {isHindi ? 'स्क्रीन व्यू मोड (Display Mode):' : 'Screen View Mode:'}
+                      </div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[
+                          { id: 'auto' as AppViewMode, label: isHindi ? 'ऑटो' : 'Auto', icon: LayoutGrid },
+                          { id: 'mobile' as AppViewMode, label: isHindi ? 'मोबाइल' : 'Mobile', icon: Smartphone },
+                          { id: 'desktop' as AppViewMode, label: isHindi ? 'डेस्कटॉप' : 'Desktop', icon: Monitor }
+                        ].map((m) => {
+                          const ModeIcon = m.icon;
+                          const isSel = viewMode === m.id;
+                          return (
+                            <button
+                              key={m.id}
+                              type="button"
+                              onClick={() => {
+                                onViewModeChange(m.id);
+                              }}
+                              className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-lg text-[10.5px] font-bold transition-all cursor-pointer border gap-1 ${
+                                isSel
+                                  ? 'border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))]'
+                                  : 'border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]'
+                              }`}
+                            >
+                              <ModeIcon className="w-3.5 h-3.5" />
+                              <span>{m.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
 

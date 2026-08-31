@@ -213,6 +213,18 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 <span className="text-[#94A3B8]">Data Privacy:</span>
                 <span className="font-bold text-[#38BDF8]">100% Offline-First Client Storage</span>
               </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
+                <span className="text-[#94A3B8]">Official Domain:</span>
+                <a
+                  href="https://rozfiber.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-[var(--theme-primary,#38BDF8)] hover:underline font-mono text-[12px] flex items-center gap-1"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>rozfiber.com</span>
+                </a>
+              </div>
               <div className="flex items-center justify-between py-1.5">
                 <span className="text-[#94A3B8]">Official Email:</span>
                 <a href={`mailto:${email}`} className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono font-bold text-[12px]">

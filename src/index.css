@@ -481,6 +481,112 @@
   background: #CBD5E1;
 }
 
+/* View Mode Layout Engine (Auto, Mobile & Desktop Modes) */
+
+/* 1. AUTO MODE: Standard Fluid Responsive Layout */
+[data-view-mode="auto"] {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+[data-view-mode="auto"] main {
+  width: 100%;
+  max-width: 72rem; /* 1152px */
+  margin: 0 auto;
+}
+
+/* 2. MOBILE MODE: Dedicated Smartphone Layout */
+/* On small screens: Edge-to-Edge full width */
+[data-view-mode="mobile"] {
+  width: 100%;
+  max-width: 100%;
+}
+
+[data-view-mode="mobile"] main {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 0.85rem;
+  padding-right: 0.85rem;
+}
+
+[data-view-mode="mobile"] #bottom-nav-bar {
+  width: 100%;
+  max-width: 100%;
+  left: 0;
+  right: 0;
+  transform: none;
+}
+
+/* On desktop screens (>=1024px): Center as a simulated mobile phone frame */
+@media (min-width: 1024px) {
+  [data-view-mode="mobile"] {
+    max-width: 480px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border-left: 1px solid var(--theme-border, #213E61);
+    border-right: 1px solid var(--theme-border, #213E61);
+    box-shadow: 0 0 60px -10px rgba(0, 0, 0, 0.85);
+  }
+
+  [data-view-mode="mobile"] main {
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  [data-view-mode="mobile"] #bottom-nav-bar {
+    max-width: 480px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    border-radius: 1rem 1rem 0 0 !important;
+  }
+}
+
+/* 3. DESKTOP MODE: Full-scale Desktop Workstation on ALL devices */
+[data-view-mode="desktop"] {
+  width: 100% !important;
+  min-width: 1024px !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-view-mode="desktop"] header > div {
+  max-width: 1280px !important;
+  min-width: 1024px !important;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
+
+[data-view-mode="desktop"] main {
+  max-width: 1280px !important;
+  min-width: 1024px !important;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
+
+[data-view-mode="desktop"] #bottom-nav-bar {
+  max-width: 1024px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  border-radius: 1rem 1rem 0 0 !important;
+}
+
+/* Force desktop multi-column visibility in desktop mode */
+[data-view-mode="desktop"] .hidden.md\\:flex,
+[data-view-mode="desktop"] .hidden.lg\\:flex {
+  display: flex !important;
+}
+
+[data-view-mode="desktop"] .hidden.sm\\:inline,
+[data-view-mode="desktop"] .hidden.md\\:inline-block {
+  display: inline-block !important;
+}
+
+[data-view-mode="desktop"] .grid-cols-2.sm\\:grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
 @media print {
   @page {
     size: A4 portrait;
