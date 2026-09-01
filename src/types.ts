@@ -23,7 +23,7 @@ export type AppLanguage =
   | 'zh'; // 中文 (Simplified Chinese)
 
 export type AppViewMode = 'auto' | 'mobile' | 'desktop';
-export type AppLayout = 'dashboard' | 'compact' | 'minimal';
+export type AppLayout = 'dashboard' | 'bento' | 'passbook' | 'cardstack' | 'compact' | 'minimal';
 
 export type WorkStatus = 'completed' | 'in_progress' | 'pending' | 'on_hold';
 

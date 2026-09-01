@@ -1092,7 +1092,7 @@ export default function App() {
     <div
       data-theme={theme}
       data-view-mode={viewMode}
-      className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] flex flex-col font-sans transition-colors duration-300"
+      className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex flex-col font-sans transition-colors duration-300"
     >
       {/* Top Header */}
       <div className="no-print">
@@ -1136,6 +1136,7 @@ export default function App() {
           <Route path="/" element={
             <HomeView
               appLayout={appLayout}
+              onLayoutChange={handleAppLayoutChange}
               entries={entries}
               goals={goals}
               workLogs={workLogs}

@@ -19,7 +19,6 @@ import {
   CalendarDays,
   Wallet,
   PieChart,
-  History,
   ShieldCheck,
   ChevronRight,
   Sparkles
@@ -43,7 +42,6 @@ interface HomeViewProps {
   onNavigateGoals?: () => void;
   language?: AppLanguage;
   privacyMask?: boolean;
-  appLayout?: 'dashboard' | 'compact' | 'minimal';
   [key: string]: any;
 }
 
@@ -53,10 +51,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onAddClick,
   onFilterFund,
   onViewHistory,
-  onNavigateGoals,
   language = 'en',
-  privacyMask = false,
-  appLayout = 'dashboard'
+  privacyMask = false
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const pageT = getPageTranslation(language);
@@ -90,41 +86,45 @@ export const HomeView: React.FC<HomeViewProps> = ({
     year: 'numeric'
   });
 
+  const monthFormatted = today.toLocaleString(localeMap[language] || 'default', {
+    month: 'short',
+    year: 'numeric'
+  });
+
   const totalWealth = Object.values(fundTotals).reduce((sum, v) => sum + v, 0);
 
   return (
-    <div className="w-full space-y-3 sm:space-y-6 animate-in fade-in duration-200 text-left max-w-6xl mx-auto pb-4">
-      {/* 1. TOTAL NET BALANCE (Clean, High-Contrast Executive Banner) */}
+    <div className="w-full max-w-6xl mx-auto pb-4 space-y-3 sm:space-y-6 animate-in fade-in duration-200">
+      {/* 1. TOTAL NET BALANCE BANNER */}
       <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl sm:rounded-3xl p-3 sm:p-6 md:p-7 shadow-xl relative overflow-hidden transition-all">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-6">
-          {/* Left: Total Net Balance & Date */}
           <div className="space-y-0.5 sm:space-y-1 min-w-0">
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-              <span className="text-[10px] sm:text-[13px] font-extrabold uppercase tracking-widest text-[#94A3B8] flex items-center gap-1 sm:gap-1.5">
+              <span className="text-[10px] sm:text-[13px] font-extrabold uppercase tracking-widest text-[var(--theme-primary,#38BDF8)] flex items-center gap-1 sm:gap-1.5">
                 <Wallet className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" />
                 <span>{t.home.netBalance}</span>
               </span>
-              <span className="text-[9px] sm:text-[11px] font-semibold text-[#64748B] bg-[var(--theme-bg,#070E18)] px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full border border-[var(--theme-border,#213E61)]">
+              <span className="text-[9px] sm:text-[11px] font-semibold text-[var(--theme-text-muted,#94A3B8)] bg-[var(--theme-surface,#070E18)] px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full border border-[var(--theme-border,#213E61)]">
                 {dateFormatted}
               </span>
             </div>
 
-            <div className="font-serif-display text-[24px] xs:text-[28px] sm:text-[40px] md:text-[48px] font-bold text-[#F8FAFC] tracking-tight leading-tight truncate">
+            <div className="font-serif-display text-[24px] xs:text-[28px] sm:text-[40px] md:text-[48px] font-bold text-[var(--theme-text,#F8FAFC)] tracking-tight leading-tight truncate">
               {formatCurrency(totalWealth, privacyMask)}
             </div>
 
-            <p className="text-[10px] sm:text-[13px] text-[#94A3B8] leading-normal break-words">
+            <p className="text-[10px] sm:text-[13px] text-[var(--theme-text-muted,#94A3B8)] leading-normal break-words">
               {pageT.common.netBalanceDesc}
             </p>
           </div>
 
-          {/* Right: Direct Primary Actions (+ Add Income / + Add Expense) */}
+          {/* Quick Actions */}
           <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3.5 shrink-0">
             <button
               type="button"
               id="home-btn-add-income"
               onClick={() => onAddClick('income')}
-              className="min-h-[36px] sm:min-h-[46px] py-1.5 sm:py-2.5 px-2.5 sm:px-5 rounded-lg sm:rounded-2xl bg-[#10B981] hover:bg-[#059669] text-[#04140D] font-extrabold text-[11.5px] sm:text-[14.5px] flex items-center justify-center gap-1 sm:gap-2 shadow-md active:scale-95 transition-all cursor-pointer whitespace-nowrap hover:shadow-[#10B981]/25"
+              className="min-h-[36px] sm:min-h-[46px] py-1.5 sm:py-2.5 px-2.5 sm:px-5 rounded-lg sm:rounded-2xl bg-[#10B981] hover:bg-[#059669] text-[#04140D] font-extrabold text-[11.5px] sm:text-[14.5px] flex items-center justify-center gap-1 sm:gap-2 shadow-md active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
               <Plus className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[3] shrink-0" />
               <span>{t.home.addIncome}</span>
@@ -143,11 +143,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
-      {appLayout !== 'minimal' && (
-        <>
-      {/* 2 & 3. DAILY & MONTHLY INCOME & EXPENSE (Clean 2-Card Desktop Grid) */}
+      {/* 2 & 3. DAILY & MONTHLY INCOME & EXPENSE */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-5">
-        {/* 2. DAILY (TODAY'S) INCOME & EXPENSE */}
+        {/* Daily Stats */}
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl sm:rounded-3xl p-2.5 sm:p-5 shadow-md space-y-2 sm:space-y-4">
           <div className="flex items-center justify-between pb-1.5 sm:pb-2 border-b border-[var(--theme-border,#213E61)]/70">
             <div className="flex items-center gap-1.5 sm:gap-2 text-[10.5px] sm:text-[13px] font-extrabold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
@@ -156,32 +154,30 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </div>
               <span className="truncate">{t.home.dailySummaryHeading}</span>
             </div>
-            <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#94A3B8] bg-[var(--theme-bg,#070E18)] px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[var(--theme-border,#213E61)]">
+            <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[var(--theme-text-muted,#94A3B8)] bg-[var(--theme-surface,#070E18)] px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[var(--theme-border,#213E61)]">
               {pageT.common.today}
             </span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-            {/* Today Income */}
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
                   <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
-                <span className="text-[9.5px] sm:text-[12px] text-[#94A3B8] font-medium truncate">{t.home.todayIncome}</span>
+                <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.todayIncome}</span>
               </div>
               <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#10B981] tracking-tight truncate">
                 +{formatCurrency(todayStats.income, privacyMask)}
               </div>
             </div>
 
-            {/* Today Expense */}
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
                   <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
-                <span className="text-[9.5px] sm:text-[12px] text-[#94A3B8] font-medium truncate">{t.home.todayExpense}</span>
+                <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.todayExpense}</span>
               </div>
               <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#EF4444] tracking-tight truncate">
                 -{formatCurrency(todayStats.expense, privacyMask)}
@@ -189,50 +185,47 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </div>
 
-          {/* Today Net Diff */}
           <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/60 text-[10px] sm:text-[12.5px]">
-            <span className="text-[#94A3B8] font-medium truncate">{pageT.common.todaysNet}</span>
+            <span className="text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{pageT.common.todaysNet}</span>
             <span className={`font-mono font-bold text-[11.5px] sm:text-[14px] truncate ${todayStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
               {todayStats.net >= 0 ? '+' : ''}{formatCurrency(todayStats.net, privacyMask)}
             </span>
           </div>
         </div>
 
-        {/* 3. MONTHLY (THIS MONTH'S) INCOME & EXPENSE */}
+        {/* Monthly Stats */}
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl sm:rounded-3xl p-2.5 sm:p-5 shadow-md space-y-2 sm:space-y-4">
           <div className="flex items-center justify-between pb-1.5 sm:pb-2 border-b border-[var(--theme-border,#213E61)]/70">
-            <div className="flex items-center gap-1.5 sm:gap-2 text-[10.5px] sm:text-[13px] font-extrabold uppercase tracking-wider text-[#94A3B8]">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[10.5px] sm:text-[13px] font-extrabold uppercase tracking-wider text-[var(--theme-text-muted,#94A3B8)]">
               <div className="p-1 sm:p-1.5 rounded-md sm:rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)]">
                 <CalendarDays className="w-3 h-3 sm:w-4 sm:h-4" />
               </div>
               <span className="truncate">{t.home.monthlySummaryHeading}</span>
             </div>
             <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[#10B981]/30">
-              {today.toLocaleString(localeMap[language] || 'default', { month: 'short', year: 'numeric' })}
+              {monthFormatted}
             </span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-            {/* Month Income */}
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
                   <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
-                <span className="text-[9.5px] sm:text-[12px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthIncome}</span>
+                <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.thisMonthIncome}</span>
               </div>
               <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#10B981] tracking-tight truncate">
                 +{formatCurrency(monthStats.income, privacyMask)}
               </div>
             </div>
 
-            {/* Month Expense */}
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
                   <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
-                <span className="text-[9.5px] sm:text-[12px] text-[#94A3B8] font-medium truncate">{t.home.thisMonthExpense}</span>
+                <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.thisMonthExpense}</span>
               </div>
               <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#EF4444] tracking-tight truncate">
                 -{formatCurrency(monthStats.expense, privacyMask)}
@@ -240,9 +233,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </div>
 
-          {/* Month Net Diff */}
           <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/60 text-[10px] sm:text-[12.5px]">
-            <span className="text-[#94A3B8] font-medium truncate">{t.home.thisMonthNet}:</span>
+            <span className="text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.thisMonthNet}:</span>
             <span className={`font-mono font-bold text-[11.5px] sm:text-[14px] truncate ${monthStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
               {monthStats.net >= 0 ? '+' : ''}{formatCurrency(monthStats.net, privacyMask)}
             </span>
@@ -250,24 +242,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
-        </>
-      )}
-
-      {appLayout === 'dashboard' && (
-      <>
-      {/* 4. 6-FUND MONEY ALLOCATION POTS */}
+      {/* 4. 6-FUND ALLOCATION GRID */}
       <div className="space-y-2 sm:space-y-4 pt-1 sm:pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
           <div>
-            <h3 className="text-[12px] sm:text-[17px] font-bold uppercase tracking-wider text-[#F8FAFC] flex items-center gap-1.5 sm:gap-2">
+            <h3 className="text-[12px] sm:text-[17px] font-bold uppercase tracking-wider text-[var(--theme-text,#F8FAFC)] flex items-center gap-1.5 sm:gap-2">
               <PieChart className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-[var(--theme-primary,#38BDF8)]" />
               <span>{t.home.sixFundsHeading}</span>
             </h3>
-            <p className="text-[9.5px] sm:text-[12px] text-[#94A3B8] break-words">
+            <p className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] break-words">
               {t.home.sixFundsSub}
             </p>
           </div>
-          <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#94A3B8] bg-[var(--theme-card,#132438)] px-2 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-xl border border-[var(--theme-border,#213E61)] shrink-0 self-start sm:self-auto">
+          <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[var(--theme-text-muted,#94A3B8)] bg-[var(--theme-card,#132438)] px-2 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-xl border border-[var(--theme-border,#213E61)] shrink-0 self-start sm:self-auto">
             {t.home.allocationRule}
           </span>
         </div>
@@ -297,21 +284,21 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   >
                     <FundIcon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                   </div>
-                  <span className="text-[9px] sm:text-[11.5px] text-[#F8FAFC] font-mono font-bold bg-[var(--theme-bg,#070E18)] px-1.5 py-0.5 rounded border border-[var(--theme-border,#213E61)]">
+                  <span className="text-[9px] sm:text-[11.5px] text-[var(--theme-text,#F8FAFC)] font-mono font-bold bg-[var(--theme-surface,#070E18)] px-1.5 py-0.5 rounded border border-[var(--theme-border,#213E61)]">
                     {pct}%
                   </span>
                 </div>
 
                 <div className="mt-1.5 min-w-0">
-                  <div className="text-[11px] sm:text-[14px] font-bold text-[#F8FAFC] truncate group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
+                  <div className="text-[11px] sm:text-[14px] font-bold text-[var(--theme-text,#F8FAFC)] truncate group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
                     {fundTranslatedName}
                   </div>
-                  <div className="text-[8.5px] sm:text-[10.5px] text-[#64748B] truncate mt-0.5">
+                  <div className="text-[8.5px] sm:text-[10.5px] text-[var(--theme-text-dim,#64748B)] truncate mt-0.5">
                     {subtitle}
                   </div>
                   <div
                     className={`font-serif-display text-[13px] sm:text-[18px] font-bold tracking-tight truncate mt-0.5 ${
-                      isNeg ? 'text-[#EF4444]' : 'text-[#F8FAFC]'
+                      isNeg ? 'text-[#EF4444]' : 'text-[var(--theme-text,#F8FAFC)]'
                     }`}
                   >
                     {formatCurrency(val, privacyMask)}
@@ -321,101 +308,53 @@ export const HomeView: React.FC<HomeViewProps> = ({
             );
           })}
         </div>
+      </div>
 
-
-      </div></>)}
-      {/* Compact Layout List */}
-      {(appLayout === 'compact' || appLayout === 'minimal') && (
-        <div className="bg-[var(--theme-card,#132438)] rounded-xl sm:rounded-3xl border border-[var(--theme-border,#213E61)] shadow-sm overflow-hidden mb-2 sm:mb-4 mt-2">
-          <div className="p-3 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]">
-            <div className="text-[12px] font-bold text-[var(--theme-primary,#38BDF8)] uppercase tracking-wider flex items-center gap-1.5">
-              <PieChart className="w-4 h-4" /> <span>Funds Overview</span>
-            </div>
+      {/* 5. 6-FUND ALLOCATION BAR & SHORTCUTS */}
+      <div className="bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)]/70 rounded-lg sm:rounded-2xl p-2 sm:p-4 space-y-2 sm:space-y-3 mt-1">
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-[9.5px] sm:text-[11.5px] text-[var(--theme-text-muted,#94A3B8)]">
+            <span className="flex items-center gap-1 sm:gap-1.5 font-semibold text-[var(--theme-text,#F8FAFC)]">
+              <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F59E0B]" />
+              <span className="truncate">{pageT.common.disciplinedSplit}</span>
+            </span>
+            <span className="font-mono text-[9.5px] sm:text-[11px] text-[#10B981] font-bold shrink-0">100% Allocated</span>
           </div>
-          <div className="divide-y divide-[var(--theme-border,#213E61)]">
-          {FUND_ORDER.map((f) => {
-            const config = FUND_CONFIGS[f];
-            const label = language === 'hi' ? config.hindiLabel : config.label;
-            const val = fundTotals[f] || 0;
-            const isNeg = val < 0;
-            return (
-              <button
-                key={f}
-                type="button"
-                onClick={() => onFilterFund(f)}
-                className="w-full flex items-center justify-between p-3 sm:p-4 hover:bg-[var(--theme-bg,#070E18)] transition-colors text-left cursor-pointer"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: config.color + '20', color: config.color }}>
-                    <PieChart className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[13.5px] font-bold text-[#F8FAFC] truncate">{label}</div>
-                  </div>
-                </div>
-                <div className={`font-mono font-bold text-[14px] ${isNeg ? 'text-[#EF4444]' : 'text-[#F8FAFC]'}`}>
-                  {formatCurrency(val, privacyMask)}
-                </div>
-              </button>
-            );
-          })}
+          
+          <div className="w-full h-1.5 sm:h-2.5 bg-[var(--theme-surface,#070E18)] rounded-full overflow-hidden flex border border-[var(--theme-border,#213E61)]/50">
+            {FUND_ORDER.map((f) => {
+              const config = FUND_CONFIGS[f];
+              const pct = percentages[f] ?? config.defaultPct;
+              return (
+                <div
+                  key={f}
+                  style={{ width: `${pct}%`, backgroundColor: config.color }}
+                  className="h-full transition-all duration-300 relative group"
+                  title={`${FUND_LABELS[f]}: ${pct}%`}
+                />
+              );
+            })}
           </div>
         </div>
-      )}
-      
 
-      {appLayout !== 'minimal' && (
-      <>
-      {/* 5. 6-FUND ALLOCATION BAR & INSTANT SHORTCUTS STRIP */}
-        <div className="bg-[var(--theme-card,#132438)]/70 border border-[var(--theme-border,#213E61)]/70 rounded-lg sm:rounded-2xl p-2 sm:p-4 space-y-2 sm:space-y-3 mt-1">
-          {/* Multi-color Segments Allocation Bar */}
-          <div className="space-y-1">
-            <div className="flex items-center justify-between text-[9.5px] sm:text-[11.5px] text-[#94A3B8]">
-              <span className="flex items-center gap-1 sm:gap-1.5 font-semibold text-[#F8FAFC]">
-                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F59E0B]" />
-                <span className="truncate">{pageT.common.disciplinedSplit}</span>
-              </span>
-              <span className="font-mono text-[9.5px] sm:text-[11px] text-[#10B981] font-bold shrink-0">100% Allocated</span>
-            </div>
-            
-            {/* Visual Bar */}
-            <div className="w-full h-1.5 sm:h-2.5 bg-[#070E18] rounded-full overflow-hidden flex border border-[var(--theme-border,#213E61)]/50">
-              {FUND_ORDER.map((f) => {
-                const config = FUND_CONFIGS[f];
-                const pct = percentages[f] ?? config.defaultPct;
-                return (
-                  <div
-                    key={f}
-                    style={{ width: `${pct}%`, backgroundColor: config.color }}
-                    className="h-full transition-all duration-300 relative group"
-                    title={`${FUND_LABELS[f]}: ${pct}%`}
-                  />
-                );
-              })}
-            </div>
+        <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-[var(--theme-border,#213E61)]/40 text-[9.5px] sm:text-[11.5px]">
+          <div className="flex items-center gap-1 text-[#10B981] font-medium text-[9.5px] sm:text-[11px]">
+            <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#10B981] shrink-0" />
+            <span className="truncate">{pageT.common.safeOffline}</span>
           </div>
 
-          {/* Quick Action Navigation & Privacy Badge */}
-          <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-[var(--theme-border,#213E61)]/40 text-[9.5px] sm:text-[11.5px]">
-            <div className="flex items-center gap-1 text-[#10B981] font-medium text-[9.5px] sm:text-[11px]">
-              <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#10B981] shrink-0" />
-              <span className="truncate">{pageT.common.safeOffline}</span>
-            </div>
-
-            {onViewHistory && (
-              <button
-                type="button"
-                onClick={onViewHistory}
-                className="inline-flex items-center gap-1 text-[var(--theme-primary,#38BDF8)] hover:text-white font-semibold cursor-pointer transition-colors"
-              >
-                <span className="truncate">{pageT.common.viewLedger}</span>
-                <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              </button>
-            )}
-          </div>
+          {onViewHistory && (
+            <button
+              type="button"
+              onClick={onViewHistory}
+              className="inline-flex items-center gap-1 text-[var(--theme-primary,#38BDF8)] hover:underline font-semibold cursor-pointer transition-colors"
+            >
+              <span className="truncate">{pageT.common.viewLedger}</span>
+              <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            </button>
+          )}
         </div>
-      </>
-      )}
+      </div>
     </div>
   );
 };
