@@ -154,5 +154,19 @@
   <body class="bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] font-sans antialiased min-h-screen selection:bg-[var(--theme-primary,#38BDF8)] selection:text-[#040D17]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Service Worker Registration for PWA & Offline Support -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then((registration) => {
+              console.log('Daily Khata Pro Service Worker registered:', registration.scope);
+            })
+            .catch((error) => {
+              console.warn('Service Worker registration error:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

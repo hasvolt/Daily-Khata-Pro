@@ -6,14 +6,45 @@
   "scope": "/",
   "id": "com.rozfiber.dailykhatapro",
   "display": "standalone",
-  "display_override": ["standalone", "window-controls-overlay", "minimal-ui", "browser"],
+  "display_override": ["tabbed", "standalone", "window-controls-overlay", "minimal-ui", "browser"],
+  "tab_strip": {
+    "home_tab": {
+      "scope": "/"
+    },
+    "new_tab_button": {
+      "url": "/add"
+    }
+  },
+  "note_taking": {
+    "new_note_url": "/add"
+  },
   "background_color": "#070E18",
   "theme_color": "#070E18",
   "orientation": "portrait-primary",
   "dir": "ltr",
   "lang": "en-IN",
   "prefer_related_applications": false,
-  "related_applications": [],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.rozfiber.dailykhatapro",
+      "id": "com.rozfiber.dailykhatapro"
+    },
+    {
+      "platform": "windows",
+      "url": "https://www.rozfiber.com",
+      "id": "com.rozfiber.dailykhatapro"
+    },
+    {
+      "platform": "webapp",
+      "url": "https://www.rozfiber.com/manifest.json",
+      "id": "com.rozfiber.dailykhatapro"
+    }
+  ],
+  "scope_extensions": [
+    { "origin": "https://www.rozfiber.com" },
+    { "origin": "https://rozfiber.com" }
+  ],
   "categories": ["finance", "productivity", "utilities", "business"],
   "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
   "edge_side_panel": {
