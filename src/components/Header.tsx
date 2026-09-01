@@ -43,7 +43,7 @@ import {
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
-import { AppTheme, AppLanguage, AppViewMode } from '../types';
+import { AppTheme, AppLanguage, AppViewMode, AppLayout } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
 
@@ -72,6 +72,8 @@ interface HeaderProps {
   onTogglePrivacyMask?: () => void;
   viewMode?: AppViewMode;
   onViewModeChange?: (mode: AppViewMode) => void;
+  appLayout?: AppLayout;
+  onLayoutChange?: (layout: AppLayout) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -98,10 +100,13 @@ export const Header: React.FC<HeaderProps> = ({
   privacyMask = false,
   onTogglePrivacyMask,
   viewMode = 'auto',
-  onViewModeChange
+  onViewModeChange,
+  appLayout = 'dashboard',
+  onLayoutChange
 }) => {
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [isLayoutMenuOpen, setIsLayoutMenuOpen] = useState(false);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
@@ -172,6 +177,7 @@ export const Header: React.FC<HeaderProps> = ({
   const closeAllMenus = () => {
     setIsThemeMenuOpen(false);
     setIsLangMenuOpen(false);
+    setIsLayoutMenuOpen(false);
     setIsMoreMenuOpen(false);
   };
 
@@ -648,6 +654,58 @@ export const Header: React.FC<HeaderProps> = ({
                                 )}
                               </div>
                             )}
+
+                            {/* Homepage UI Design / Layout Selection */}
+                            {onLayoutChange && (
+                              <div className="rounded-xl border border-[var(--theme-border,#213E61)]/40 overflow-hidden bg-[var(--theme-card,#132438)]/60">
+                                <button
+                                  type="button"
+                                  onClick={() => setIsLayoutMenuOpen(!isLayoutMenuOpen)}
+                                  className="w-full flex items-center justify-between px-3 py-2 text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-surface,#0E1A29)] hover:text-[#10B981] transition-colors cursor-pointer text-left"
+                                >
+                                  <div className="flex items-center gap-2.5">
+                                    <LayoutGrid className="w-4 h-4 text-[#10B981] shrink-0" />
+                                    <span>{isHindi ? 'होमपेज लेआउट (UI Design)' : 'Homepage Layout (UI)'}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[10px] text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded-full font-bold capitalize">
+                                      {appLayout === 'dashboard' ? (isHindi ? 'डैशबोर्ड' : 'Dashboard') : appLayout === 'compact' ? (isHindi ? 'कॉम्पैक्ट' : 'Compact') : (isHindi ? 'मिनिमल' : 'Minimal')}
+                                    </span>
+                                    <ChevronDown className={`w-4 h-4 text-[var(--theme-text-muted,#94A3B8)] transition-transform ${isLayoutMenuOpen ? 'rotate-180' : ''}`} />
+                                  </div>
+                                </button>
+                                
+                                {isLayoutMenuOpen && (
+                                  <div className="p-2 border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/50 space-y-1.5">
+                                    {[
+                                      { id: 'dashboard' as AppLayout, label: isHindi ? 'डिफ़ॉल्ट डैशबोर्ड' : 'Default Dashboard', sub: isHindi ? 'फुल कार्ड्स और ग्राफ़' : 'Full Cards & Visuals' },
+                                      { id: 'compact' as AppLayout, label: isHindi ? 'कॉम्पैक्ट लिस्ट' : 'Compact List', sub: isHindi ? 'पंक्ति-वार संक्षिप्त व्यू' : 'Row-by-Row Overview' },
+                                      { id: 'minimal' as AppLayout, label: isHindi ? 'मिनिमल व्यू' : 'Minimal View', sub: isHindi ? 'सरल व तेज़ बैलेंस' : 'Clean & Ultra Simple' }
+                                    ].map((lo) => (
+                                      <button
+                                        key={lo.id}
+                                        type="button"
+                                        onClick={() => {
+                                          onLayoutChange(lo.id);
+                                          setIsLayoutMenuOpen(false);
+                                        }}
+                                        className={`w-full flex items-center justify-between p-2 rounded-lg text-left transition-all cursor-pointer border ${
+                                          appLayout === lo.id
+                                            ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold border-[var(--theme-primary,#38BDF8)] shadow-xs'
+                                            : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)]/40'
+                                        }`}
+                                      >
+                                        <div>
+                                          <div className="text-[11.5px] font-bold">{lo.label}</div>
+                                          <div className="text-[9.5px] opacity-80">{lo.sub}</div>
+                                        </div>
+                                        {appLayout === lo.id && <Check className="w-3.5 h-3.5 shrink-0" />}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
 
                           {/* Category: Support & Safety */}
@@ -1006,6 +1064,58 @@ export const Header: React.FC<HeaderProps> = ({
                                 </button>
                               ))}
                             </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Homepage UI Design / Layout Selection */}
+                    {onLayoutChange && (
+                      <div className="rounded-xl border border-[var(--theme-border,#213E61)]/40 overflow-hidden bg-[var(--theme-card,#132438)]/60">
+                        <button
+                          type="button"
+                          onClick={() => setIsLayoutMenuOpen(!isLayoutMenuOpen)}
+                          className="w-full flex items-center justify-between px-3 py-2 text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-surface,#0E1A29)] hover:text-[#10B981] transition-colors cursor-pointer text-left"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <LayoutGrid className="w-4 h-4 text-[#10B981] shrink-0" />
+                            <span>{isHindi ? 'होमपेज लेआउट (UI Design)' : 'Homepage Layout (UI)'}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded-full font-bold capitalize">
+                              {appLayout === 'dashboard' ? (isHindi ? 'डैशबोर्ड' : 'Dashboard') : appLayout === 'compact' ? (isHindi ? 'कॉम्पैक्ट' : 'Compact') : (isHindi ? 'मिनिमल' : 'Minimal')}
+                            </span>
+                            <ChevronDown className={`w-4 h-4 text-[var(--theme-text-muted,#94A3B8)] transition-transform ${isLayoutMenuOpen ? 'rotate-180' : ''}`} />
+                          </div>
+                        </button>
+                        
+                        {isLayoutMenuOpen && (
+                          <div className="p-2 border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/50 space-y-1.5">
+                            {[
+                              { id: 'dashboard' as AppLayout, label: isHindi ? 'डिफ़ॉल्ट डैशबोर्ड' : 'Default Dashboard', sub: isHindi ? 'फुल कार्ड्स और ग्राफ़' : 'Full Cards & Visuals' },
+                              { id: 'compact' as AppLayout, label: isHindi ? 'कॉम्पैक्ट लिस्ट' : 'Compact List', sub: isHindi ? 'पंक्ति-वार संक्षिप्त व्यू' : 'Row-by-Row Overview' },
+                              { id: 'minimal' as AppLayout, label: isHindi ? 'मिनिमल व्यू' : 'Minimal View', sub: isHindi ? 'सरल व तेज़ बैलेंस' : 'Clean & Ultra Simple' }
+                            ].map((lo) => (
+                              <button
+                                key={lo.id}
+                                type="button"
+                                onClick={() => {
+                                  onLayoutChange(lo.id);
+                                  setIsLayoutMenuOpen(false);
+                                }}
+                                className={`w-full flex items-center justify-between p-2 rounded-lg text-left transition-all cursor-pointer border ${
+                                  appLayout === lo.id
+                                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold border-[var(--theme-primary,#38BDF8)] shadow-xs'
+                                    : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)]/40'
+                                }`}
+                              >
+                                <div>
+                                  <div className="text-[11.5px] font-bold">{lo.label}</div>
+                                  <div className="text-[9.5px] opacity-80">{lo.sub}</div>
+                                </div>
+                                {appLayout === lo.id && <Check className="w-3.5 h-3.5 shrink-0" />}
+                              </button>
+                            ))}
                           </div>
                         )}
                       </div>

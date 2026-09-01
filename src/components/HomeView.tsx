@@ -43,6 +43,7 @@ interface HomeViewProps {
   onNavigateGoals?: () => void;
   language?: AppLanguage;
   privacyMask?: boolean;
+  appLayout?: 'dashboard' | 'compact' | 'minimal';
   [key: string]: any;
 }
 
@@ -54,7 +55,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onViewHistory,
   onNavigateGoals,
   language = 'en',
-  privacyMask = false
+  privacyMask = false,
+  appLayout = 'dashboard'
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const pageT = getPageTranslation(language);
@@ -141,6 +143,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
+      {appLayout !== 'minimal' && (
+        <>
       {/* 2 & 3. DAILY & MONTHLY INCOME & EXPENSE (Clean 2-Card Desktop Grid) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-5">
         {/* 2. DAILY (TODAY'S) INCOME & EXPENSE */}
@@ -246,6 +250,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
+        </>
+      )}
+
+      {appLayout === 'dashboard' && (
+      <>
       {/* 4. 6-FUND MONEY ALLOCATION POTS */}
       <div className="space-y-2 sm:space-y-4 pt-1 sm:pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
@@ -313,7 +322,51 @@ export const HomeView: React.FC<HomeViewProps> = ({
           })}
         </div>
 
-        {/* 5. 6-FUND ALLOCATION BAR & INSTANT SHORTCUTS STRIP */}
+
+      </div></>)}
+      {/* Compact Layout List */}
+      {(appLayout === 'compact' || appLayout === 'minimal') && (
+        <div className="bg-[var(--theme-card,#132438)] rounded-xl sm:rounded-3xl border border-[var(--theme-border,#213E61)] shadow-sm overflow-hidden mb-2 sm:mb-4 mt-2">
+          <div className="p-3 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]">
+            <div className="text-[12px] font-bold text-[var(--theme-primary,#38BDF8)] uppercase tracking-wider flex items-center gap-1.5">
+              <PieChart className="w-4 h-4" /> <span>Funds Overview</span>
+            </div>
+          </div>
+          <div className="divide-y divide-[var(--theme-border,#213E61)]">
+          {FUND_ORDER.map((f) => {
+            const config = FUND_CONFIGS[f];
+            const label = language === 'hi' ? config.hindiLabel : config.label;
+            const val = fundTotals[f] || 0;
+            const isNeg = val < 0;
+            return (
+              <button
+                key={f}
+                type="button"
+                onClick={() => onFilterFund(f)}
+                className="w-full flex items-center justify-between p-3 sm:p-4 hover:bg-[var(--theme-bg,#070E18)] transition-colors text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: config.color + '20', color: config.color }}>
+                    <PieChart className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[13.5px] font-bold text-[#F8FAFC] truncate">{label}</div>
+                  </div>
+                </div>
+                <div className={`font-mono font-bold text-[14px] ${isNeg ? 'text-[#EF4444]' : 'text-[#F8FAFC]'}`}>
+                  {formatCurrency(val, privacyMask)}
+                </div>
+              </button>
+            );
+          })}
+          </div>
+        </div>
+      )}
+      
+
+      {appLayout !== 'minimal' && (
+      <>
+      {/* 5. 6-FUND ALLOCATION BAR & INSTANT SHORTCUTS STRIP */}
         <div className="bg-[var(--theme-card,#132438)]/70 border border-[var(--theme-border,#213E61)]/70 rounded-lg sm:rounded-2xl p-2 sm:p-4 space-y-2 sm:space-y-3 mt-1">
           {/* Multi-color Segments Allocation Bar */}
           <div className="space-y-1">
@@ -361,7 +414,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
             )}
           </div>
         </div>
-      </div>
+      </>
+      )}
     </div>
   );
 };

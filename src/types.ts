@@ -23,6 +23,7 @@ export type AppLanguage =
   | 'zh'; // 中文 (Simplified Chinese)
 
 export type AppViewMode = 'auto' | 'mobile' | 'desktop';
+export type AppLayout = 'dashboard' | 'compact' | 'minimal';
 
 export type WorkStatus = 'completed' | 'in_progress' | 'pending' | 'on_hold';
 
@@ -145,6 +146,7 @@ export interface KhataSettings {
   userRole?: string;
   privacyMask?: boolean;
   viewMode?: AppViewMode;
+  appLayout?: AppLayout;
   securityLock?: SecurityLockConfig;
 }
 
@@ -164,6 +166,7 @@ export interface KhataData {
     language?: AppLanguage;
     privacyMask?: boolean;
     viewMode?: AppViewMode;
+    appLayout?: AppLayout;
     currency?: string;
     currencySymbol?: string;
     securityLock?: SecurityLockConfig;

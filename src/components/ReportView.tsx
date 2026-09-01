@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Entry, FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats, downloadCSVReport, triggerHapticSound } from '../utils/khataCalculations';
 import { getCategoryIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
-import { ChevronLeft, ChevronRight, Printer, Download, Save, Plus, Trash2, PieChart, Sparkles, Check, AlertCircle, TrendingUp, BarChart3, Wallet, Sliders, Tags } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Printer, Download, Save, Plus, Minus, Trash2, PieChart, Sparkles, Check, AlertCircle, TrendingUp, BarChart3, Wallet, Sliders, Tags, RotateCcw } from 'lucide-react';
 
 interface ReportViewProps {
   entries: Entry[];
@@ -30,11 +30,16 @@ export const ReportView: React.FC<ReportViewProps> = ({
   privacyMask = false
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const isHindi = language === 'hi';
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [localPct, setLocalPct] = useState<Record<FundType, number>>({ ...percentages });
   const [newCatInput, setNewCatInput] = useState<string>('');
   const [pctSuccessMsg, setPctSuccessMsg] = useState<string>('');
   const [pctErrorMsg, setPctErrorMsg] = useState<string>('');
+
+  useEffect(() => {
+    setLocalPct({ ...percentages });
+  }, [percentages]);
 
   const fundTotals = calculateFundTotals(entries);
   const grandTotal = Object.values(fundTotals).reduce((sum, v) => sum + v, 0);
@@ -62,13 +67,17 @@ export const ReportView: React.FC<ReportViewProps> = ({
 
   const handleSavePercentages = () => {
     if (!isPctValid) {
-      setPctErrorMsg(language === 'hi' ? 'कुल प्रतिशत ठीक 100% होना चाहिए।' : 'Total percentage sum must equal exactly 100%.');
-      setTimeout(() => setPctErrorMsg(''), 3000);
+      setPctErrorMsg(
+        isHindi
+          ? `कुल प्रतिशत ठीक 100% होना चाहिए (वर्तमान: ${pctSum}%)`
+          : `Total percentage sum must equal exactly 100% (currently ${pctSum}%).`
+      );
+      setTimeout(() => setPctErrorMsg(''), 3500);
       return;
     }
     setPctErrorMsg('');
     onUpdatePercentages(localPct);
-    setPctSuccessMsg(language === 'hi' ? 'फंड आवंटन प्रतिशत सफलतापूर्वक सेव हो गया!' : 'Fund allocation percentages saved successfully!');
+    setPctSuccessMsg(isHindi ? 'फंड आवंटन नियम सफलतापूर्वक सेव हो गया!' : 'Fund split rule saved successfully!');
     triggerHapticSound('save');
     setTimeout(() => setPctSuccessMsg(''), 2500);
   };
@@ -76,9 +85,21 @@ export const ReportView: React.FC<ReportViewProps> = ({
   const handleResetToDefaultPercentages = () => {
     setLocalPct({ ...DEFAULT_PERCENTAGES });
     onUpdatePercentages(DEFAULT_PERCENTAGES);
-    setPctSuccessMsg(language === 'hi' ? 'डिफ़ॉल्ट 50-20-10-10-5-5 नियम रीसेट हो गया।' : 'Reset to standard 50-20-10-10-5-5 rule.');
+    setPctSuccessMsg(isHindi ? 'डिफ़ॉल्ट 50-20-10-10-5-5 नियम रीसेट हो गया।' : 'Reset to default fund percentages.');
     triggerHapticSound('save');
     setTimeout(() => setPctSuccessMsg(''), 2500);
+  };
+
+  const handleApplyPreset = (preset: Record<FundType, number>) => {
+    setLocalPct({ ...preset });
+    triggerHapticSound('click');
+  };
+
+  const handleAdjustFundPct = (fund: FundType, delta: number) => {
+    const current = localPct[fund] ?? FUND_CONFIGS[fund].defaultPct;
+    const next = Math.max(0, Math.min(100, current + delta));
+    setLocalPct({ ...localPct, [fund]: next });
+    triggerHapticSound('click');
   };
 
   const handleAddNewCategory = (e: React.FormEvent) => {
@@ -94,27 +115,27 @@ export const ReportView: React.FC<ReportViewProps> = ({
   const catEntries = Object.entries(monthStats.categoryExpenses).sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="w-full space-y-4 animate-in fade-in duration-200 text-left">
+    <div className="w-full max-w-full overflow-hidden space-y-4 animate-in fade-in duration-200 text-left">
       {/* Month Navigator Header with Quick Actions */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-2.5 sm:px-4 sm:py-2.5 shadow-sm gap-2 no-print">
-        <div className="flex items-center justify-between sm:justify-start gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-2.5 sm:px-4 sm:py-2.5 shadow-sm gap-2 no-print min-w-0">
+        <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 min-w-0">
           <button
             onClick={handlePrevMonth}
-            className="p-1.5 rounded-lg hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer shrink-0"
             style={{ color: 'var(--theme-primary, #38BDF8)' }}
             title="Previous Month"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
 
-          <div className="font-serif-display font-bold text-[15px] sm:text-[16px] text-[#F8FAFC] flex items-center gap-2">
-            <BarChart3 className="w-4 h-4" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-            <span>{monthTitle}</span>
+          <div className="font-serif-display font-bold text-[14px] sm:text-[16px] text-[#F8FAFC] flex items-center gap-1.5 sm:gap-2 truncate">
+            <BarChart3 className="w-4 h-4 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+            <span className="truncate">{monthTitle}</span>
           </div>
 
           <button
             onClick={handleNextMonth}
-            className="p-1.5 rounded-lg hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer shrink-0"
             style={{ color: 'var(--theme-primary, #38BDF8)' }}
             title="Next Month"
           >
@@ -123,10 +144,10 @@ export const ReportView: React.FC<ReportViewProps> = ({
         </div>
 
         {/* Export & Print Buttons */}
-        <div className="flex items-center gap-1.5 self-end sm:self-auto">
+        <div className="flex items-center gap-1.5 justify-end shrink-0">
           <button
             onClick={() => downloadCSVReport(entries, selectedDate)}
-            className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[11px] sm:text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[11px] sm:text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
           >
             <Download className="w-3.5 h-3.5" />
             <span>{t.reports?.exportCsv || 'Export CSV'}</span>
@@ -134,7 +155,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
 
           <button
             onClick={() => onTriggerPrint(selectedDate)}
-            className="px-3 sm:px-3.5 py-1.5 rounded-xl text-[11px] sm:text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
+            className="px-3 sm:px-3.5 py-1.5 rounded-xl text-[11px] sm:text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 whitespace-nowrap"
             style={{
               backgroundColor: 'var(--theme-btn-bg, #38BDF8)',
               color: 'var(--theme-btn-text, #040D17)'
@@ -147,40 +168,40 @@ export const ReportView: React.FC<ReportViewProps> = ({
       </div>
 
       {/* Responsive 2-Column Grid on Desktop */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start w-full min-w-0">
         {/* Left Column (Monthly Overview + Category Breakdown) */}
-        <div className="lg:col-span-6 space-y-4">
+        <div className="lg:col-span-6 space-y-4 w-full min-w-0">
           {/* Monthly Performance Stats Card */}
-          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-md space-y-3.5">
-            <div className="flex justify-between items-center">
-              <span className="text-[11px] uppercase tracking-wider text-[#94A3B8] font-bold flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-                <span>Monthly Cashflow ({monthTitle})</span>
+          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3.5 sm:p-5 shadow-md space-y-3.5 min-w-0">
+            <div className="flex justify-between items-center gap-2">
+              <span className="text-[11px] uppercase tracking-wider text-[#94A3B8] font-bold flex items-center gap-1.5 truncate">
+                <TrendingUp className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+                <span className="truncate">Cashflow ({monthTitle})</span>
               </span>
-              <span className="text-[11px] text-[#94A3B8]">
-                {t.reports?.savingsRate || 'Savings Rate'}: <strong style={{ color: 'var(--theme-primary, #38BDF8)' }}>{monthStats.savingsRate}%</strong>
+              <span className="text-[11px] text-[#94A3B8] shrink-0 font-medium">
+                {t.reports?.savingsRate || 'Savings'}: <strong style={{ color: 'var(--theme-primary, #38BDF8)' }}>{monthStats.savingsRate}%</strong>
               </span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
-              <div className="bg-[var(--theme-bg,#070E18)] p-2.5 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] text-center">
-                <span className="text-[10px] text-[#94A3B8] uppercase tracking-wider block font-semibold">{t.home?.thisMonthIncome || 'Income'}</span>
-                <span className="font-serif-display text-[14.5px] sm:text-[16.5px] font-bold text-[#10B981] num block mt-0.5 truncate">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5">
+              <div className="bg-[var(--theme-bg,#070E18)] p-2 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] text-center min-w-0">
+                <span className="text-[9.5px] sm:text-[10px] text-[#94A3B8] uppercase tracking-wider block font-semibold truncate">{t.home?.thisMonthIncome || 'Income'}</span>
+                <span className="font-serif-display text-[13px] sm:text-[16px] font-bold text-[#10B981] num block mt-0.5 truncate">
                   +{formatCurrency(monthStats.income, privacyMask)}
                 </span>
               </div>
 
-              <div className="bg-[var(--theme-bg,#070E18)] p-2.5 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] text-center">
-                <span className="text-[10px] text-[#94A3B8] uppercase tracking-wider block font-semibold">{t.home?.thisMonthExpense || 'Expense'}</span>
-                <span className="font-serif-display text-[14.5px] sm:text-[16.5px] font-bold text-[#EF4444] num block mt-0.5 truncate">
+              <div className="bg-[var(--theme-bg,#070E18)] p-2 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] text-center min-w-0">
+                <span className="text-[9.5px] sm:text-[10px] text-[#94A3B8] uppercase tracking-wider block font-semibold truncate">{t.home?.thisMonthExpense || 'Expense'}</span>
+                <span className="font-serif-display text-[13px] sm:text-[16px] font-bold text-[#EF4444] num block mt-0.5 truncate">
                   -{formatCurrency(monthStats.expense, privacyMask)}
                 </span>
               </div>
 
-              <div className="bg-[var(--theme-bg,#070E18)] p-2.5 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] text-center">
-                <span className="text-[10px] text-[#94A3B8] uppercase tracking-wider block font-semibold">{t.home?.netSavings || 'Net Surplus'}</span>
+              <div className="bg-[var(--theme-bg,#070E18)] p-2 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] text-center min-w-0">
+                <span className="text-[9.5px] sm:text-[10px] text-[#94A3B8] uppercase tracking-wider block font-semibold truncate">{t.home?.netSavings || 'Surplus'}</span>
                 <span
-                  className={`font-serif-display text-[14.5px] sm:text-[16.5px] font-bold num block mt-0.5 truncate ${
+                  className={`font-serif-display text-[13px] sm:text-[16px] font-bold num block mt-0.5 truncate ${
                     monthStats.net < 0 ? 'text-[#EF4444]' : 'text-[#10B981]'
                   }`}
                 >
@@ -205,13 +226,13 @@ export const ReportView: React.FC<ReportViewProps> = ({
           </div>
 
           {/* Category Spending Breakdown */}
-          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-md space-y-3.5">
-            <h3 className="font-serif-display text-[14.5px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <PieChart className="w-4 h-4" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-                <span>{t.reports?.topExpenseCategories || 'Category Spending'}</span>
+          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3.5 sm:p-5 shadow-md space-y-3.5 min-w-0">
+            <h3 className="font-serif-display text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center justify-between gap-2">
+              <span className="flex items-center gap-2 truncate">
+                <PieChart className="w-4 h-4 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+                <span className="truncate">{t.reports?.topExpenseCategories || 'Category Spending'}</span>
               </span>
-              <span className="text-[11px] font-sans text-[#94A3B8]">{catEntries.length} categories</span>
+              <span className="text-[11px] font-sans text-[#94A3B8] shrink-0">{catEntries.length} categories</span>
             </h3>
 
             {catEntries.length === 0 ? (
@@ -225,8 +246,8 @@ export const ReportView: React.FC<ReportViewProps> = ({
                   const pctOfTotal = monthStats.expense > 0 ? Math.round((amt / monthStats.expense) * 100) : 0;
                   return (
                     <div key={cat} className="space-y-1">
-                      <div className="flex justify-between items-center text-[12.5px]">
-                        <div className="flex items-center gap-2 min-w-0">
+                      <div className="flex justify-between items-center text-[12px] sm:text-[12.5px] gap-2">
+                        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
                           <div
                             className="w-6 h-6 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-center shrink-0"
                             style={{ color: 'var(--theme-primary, #38BDF8)' }}
@@ -236,7 +257,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
                           <span className="text-[#F8FAFC] font-medium truncate">{cat}</span>
                           <span className="text-[10px] text-[#94A3B8] font-mono shrink-0">({pctOfTotal}%)</span>
                         </div>
-                        <span className="font-serif-display font-bold text-[#EF4444] num shrink-0 ml-2">
+                        <span className="font-serif-display font-bold text-[#EF4444] num shrink-0 ml-1">
                           -{formatCurrency(amt, privacyMask)}
                         </span>
                       </div>
@@ -255,23 +276,23 @@ export const ReportView: React.FC<ReportViewProps> = ({
         </div>
 
         {/* Right Column (All-Time Portfolio + Fund % Splitter + Category Manager) */}
-        <div className="lg:col-span-6 space-y-4">
+        <div className="lg:col-span-6 space-y-4 w-full min-w-0">
           {/* Fund Totals Card (All-Time Portfolio) */}
-          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-md space-y-3">
-            <h3 className="font-serif-display text-[14.5px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <Wallet className="w-4 h-4" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-                <span>6-Fund Total Portfolio</span>
+          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3.5 sm:p-5 shadow-md space-y-3 min-w-0">
+            <h3 className="font-serif-display text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center justify-between gap-2">
+              <span className="flex items-center gap-2 truncate">
+                <Wallet className="w-4 h-4 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+                <span className="truncate">6-Fund Total Portfolio</span>
               </span>
               <span
-                className="text-[11px] font-sans font-bold font-mono"
+                className="text-[11.5px] sm:text-[12px] font-sans font-bold font-mono shrink-0"
                 style={{ color: 'var(--theme-primary, #38BDF8)' }}
               >
                 {formatCurrency(grandTotal, privacyMask)}
               </span>
             </h3>
 
-            <div className="space-y-2 pt-1">
+            <div className="space-y-1.5 pt-1">
               {FUND_ORDER.map((f) => {
                 const val = fundTotals[f] ?? 0;
                 const config = FUND_CONFIGS[f];
@@ -279,14 +300,14 @@ export const ReportView: React.FC<ReportViewProps> = ({
                 return (
                   <div
                     key={f}
-                    className="flex justify-between items-center text-[12.5px] sm:text-[13px] py-1 border-b border-[var(--theme-border,#213E61)] last:border-none"
+                    className="flex justify-between items-center text-[12px] sm:text-[13px] py-1 border-b border-[var(--theme-border,#213E61)] last:border-none gap-2 min-w-0"
                   >
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
                       <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: config.color }} />
                       <span className="text-[#94A3B8] font-medium truncate">{fundLabel}</span>
                     </div>
                     <span
-                      className={`font-serif-display font-bold num shrink-0 ml-2 ${
+                      className={`font-serif-display font-bold num shrink-0 ml-1 ${
                         val < 0 ? 'text-[#EF4444]' : 'text-[#F8FAFC]'
                       }`}
                     >
@@ -298,77 +319,158 @@ export const ReportView: React.FC<ReportViewProps> = ({
             </div>
           </div>
 
-          {/* Allocation Percentages Settings */}
-          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-md space-y-3.5">
-            <div className="flex justify-between items-center">
-              <div className="space-y-0.5">
-                <h3 className="font-serif-display text-[14.5px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center gap-2">
-                  <Sliders className="w-4 h-4" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-                  <span>{t.home?.allocationRule || 'Fund Allocation Rules'}</span>
+          {/* Allocation Percentages Settings (Split Rule) - Mobile Friendly & Responsive */}
+          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3.5 sm:p-5 shadow-md space-y-3.5 w-full min-w-0 overflow-hidden">
+            {/* Header: Title + Sum Badge */}
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <h3 className="font-serif-display text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center gap-2">
+                  <Sliders className="w-4 h-4 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+                  <span className="truncate">{t.home?.allocationRule || 'Fund Allocation Rules'}</span>
                 </h3>
-                <p className="text-[11px] text-[#94A3B8]">
-                  Custom split applied automatically whenever income is recorded.
+                <p className="text-[11px] text-[#94A3B8] line-clamp-1 sm:line-clamp-none mt-0.5">
+                  {isHindi
+                    ? 'आय दर्ज करने पर 6 फंड्स में ऑटो-विभाजन का प्रतिशत नियम'
+                    : 'Custom split applied automatically whenever income is recorded.'}
                 </p>
               </div>
-              <span
-                className={`text-[11px] font-bold px-2 py-0.5 rounded-md font-mono shrink-0 ${
+
+              <div
+                className={`text-[11.5px] font-bold px-2.5 py-1 rounded-lg font-mono shrink-0 flex items-center gap-1.5 ${
                   isPctValid
                     ? 'bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30'
                     : 'bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/30'
                 }`}
               >
-                Sum: {pctSum}%
-              </span>
+                <span>{isHindi ? 'कुल योग' : 'Sum'}:</span>
+                <span className="font-extrabold">{pctSum}%</span>
+                {isPctValid ? <Check className="w-3.5 h-3.5 text-[#10B981]" /> : null}
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            {/* Visual Multi-Fund Allocation Bar */}
+            <div className="space-y-1">
+              <div className="w-full h-2.5 bg-[var(--theme-bg,#070E18)] rounded-full overflow-hidden flex border border-[var(--theme-border,#213E61)]">
+                {FUND_ORDER.map((f) => {
+                  const pct = localPct[f] ?? FUND_CONFIGS[f].defaultPct;
+                  const config = FUND_CONFIGS[f];
+                  if (pct <= 0) return null;
+                  return (
+                    <div
+                      key={f}
+                      className="h-full transition-all duration-300 relative group"
+                      style={{
+                        width: `${pct}%`,
+                        backgroundColor: config.color
+                      }}
+                      title={`${FUND_LABELS[f]}: ${pct}%`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="flex justify-between items-center text-[9.5px] sm:text-[10px] text-[#64748B] font-mono">
+                <span>0%</span>
+                <span className={isPctValid ? 'text-[#10B981] font-bold' : 'text-[#EF4444] font-bold'}>
+                  {pctSum}% / 100%
+                </span>
+              </div>
+            </div>
+
+            {/* Fund Percentage Inputs Grid: 1 col on mobile, 2 col on tablet/desktop */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 w-full min-w-0">
               {FUND_ORDER.map((f) => {
                 const config = FUND_CONFIGS[f];
                 const fundLabel = t.funds?.[f]?.name ? t.funds[f].name.split(' (')[0] : FUND_LABELS[f];
+                const currentPct = localPct[f] ?? config.defaultPct;
+
                 return (
-                  <div key={f} className="bg-[var(--theme-bg,#070E18)] p-2.5 rounded-xl border border-[var(--theme-border,#213E61)] flex items-center justify-between">
-                    <span className="text-[12px] text-[#94A3B8] font-medium truncate pr-1">
-                      {fundLabel}
-                    </span>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={localPct[f] ?? config.defaultPct}
-                        onChange={(e) => {
-                          const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                          setLocalPct({ ...localPct, [f]: val });
-                        }}
-                        className="w-12 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] font-mono text-center font-bold text-[13px] rounded-lg py-1 focus:outline-none"
-                        style={{ color: 'var(--theme-primary, #38BDF8)' }}
+                  <div
+                    key={f}
+                    className="bg-[var(--theme-bg,#070E18)] p-2.5 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-2 min-w-0 shadow-2xs hover:border-[var(--theme-primary,#38BDF8)]/40 transition-colors"
+                  >
+                    {/* Fund Label + Color Dot */}
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <div
+                        className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
+                        style={{ backgroundColor: config.color }}
                       />
-                      <span className="text-[11px] text-[#64748B]">%</span>
+                      <span className="text-[12.5px] sm:text-[13px] text-[#F8FAFC] font-medium truncate">
+                        {fundLabel}
+                      </span>
+                    </div>
+
+                    {/* Stepper + Input Box */}
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleAdjustFundPct(f, -5)}
+                        className="w-6 h-6 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)] flex items-center justify-center cursor-pointer transition-colors active:scale-95 text-xs font-bold"
+                        title="-5%"
+                      >
+                        <Minus className="w-3 h-3" />
+                      </button>
+
+                      <div className="relative flex items-center">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={currentPct}
+                          onChange={(e) => {
+                            const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                            setLocalPct({ ...localPct, [f]: val });
+                          }}
+                          className="w-11 sm:w-12 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] font-mono text-center font-bold text-[13px] rounded-lg py-1 text-[#F8FAFC] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+                        />
+                        <span className="text-[10.5px] text-[#64748B] ml-1 font-mono">%</span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleAdjustFundPct(f, 5)}
+                        className="w-6 h-6 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)] flex items-center justify-center cursor-pointer transition-colors active:scale-95 text-xs font-bold"
+                        title="+5%"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {pctErrorMsg && (
-              <div className="text-[12px] text-[#EF4444] bg-[#EF4444]/10 p-2.5 rounded-xl border border-[#EF4444]/30 flex items-center gap-2">
+            {/* Error / Warning Alert */}
+            {pctErrorMsg ? (
+              <div className="text-[12px] text-[#EF4444] bg-[#EF4444]/10 p-2.5 rounded-xl border border-[#EF4444]/30 flex items-center gap-2 animate-in fade-in">
                 <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{pctErrorMsg}</span>
+                <span className="leading-snug">{pctErrorMsg}</span>
               </div>
-            )}
+            ) : !isPctValid ? (
+              <div className="text-[11.5px] text-amber-400 bg-amber-500/10 p-2 sm:p-2.5 rounded-xl border border-amber-500/25 flex items-center gap-2">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                <span>
+                  {isHindi
+                    ? `योग 100% होना चाहिए (${pctSum > 100 ? `+${pctSum - 100}% घटाएं` : `${100 - pctSum}% और जोड़ें`})`
+                    : `Sum must be 100% (${pctSum > 100 ? `reduce by ${pctSum - 100}%` : `add ${100 - pctSum}%`})`}
+                </span>
+              </div>
+            ) : null}
 
+            {/* Success Alert */}
             {pctSuccessMsg && (
-              <div className="text-[12px] text-[#10B981] bg-[#10B981]/10 p-2.5 rounded-xl border border-[#10B981]/30 flex items-center gap-2">
+              <div className="text-[12px] text-[#10B981] bg-[#10B981]/10 p-2.5 rounded-xl border border-[#10B981]/30 flex items-center gap-2 animate-in fade-in">
                 <Check className="w-4 h-4 shrink-0" />
                 <span>{pctSuccessMsg}</span>
               </div>
             )}
 
-            <div className="flex items-center gap-2 pt-1">
+            {/* Quick Action Buttons (Save & Reset) */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1 w-full">
               <button
+                type="button"
                 onClick={handleSavePercentages}
                 disabled={!isPctValid}
-                className="flex-1 py-2.5 px-3 rounded-xl disabled:opacity-50 font-bold text-[12.5px] sm:text-[13px] flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+                className="flex-1 py-2.5 px-3 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed font-bold text-[12.5px] sm:text-[13px] flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer active:scale-95"
                 style={{
                   backgroundColor: 'var(--theme-btn-bg, #38BDF8)',
                   color: 'var(--theme-btn-text, #040D17)'
@@ -379,32 +481,34 @@ export const ReportView: React.FC<ReportViewProps> = ({
               </button>
 
               <button
+                type="button"
                 onClick={handleResetToDefaultPercentages}
-                className="py-2.5 px-3 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#F8FAFC] text-[11.5px] font-semibold cursor-pointer shrink-0"
+                className="py-2.5 px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#94A3B8] hover:text-[#F8FAFC] text-[11.5px] sm:text-[12px] font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors shrink-0"
               >
-                {t.settings?.resetRuleBtn || 'Reset to Default'}
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>{t.settings?.resetRuleBtn || 'Reset Default (50-20-10-10-5-5)'}</span>
               </button>
             </div>
           </div>
 
           {/* Custom Category Manager */}
-          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-md space-y-3">
-            <h3 className="font-serif-display text-[14.5px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <Tags className="w-4 h-4" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-                <span>Expense Categories Manager</span>
+          <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3.5 sm:p-5 shadow-md space-y-3 min-w-0">
+            <h3 className="font-serif-display text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center justify-between gap-2">
+              <span className="flex items-center gap-2 truncate">
+                <Tags className="w-4 h-4 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+                <span className="truncate">Expense Categories Manager</span>
               </span>
-              <span className="text-[11px] text-[#94A3B8]">{categories.length} Active</span>
+              <span className="text-[11px] text-[#94A3B8] shrink-0">{categories.length} Active</span>
             </h3>
 
             {/* Add Category Input */}
-            <form onSubmit={handleAddNewCategory} className="flex gap-2">
+            <form onSubmit={handleAddNewCategory} className="flex gap-2 min-w-0">
               <input
                 type="text"
-                placeholder="New Category Name..."
+                placeholder={isHindi ? 'नई श्रेणी का नाम...' : 'New Category Name...'}
                 value={newCatInput}
                 onChange={(e) => setNewCatInput(e.target.value)}
-                className="flex-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[12.5px] rounded-xl px-3 py-2 focus:outline-none"
+                className="flex-1 min-w-0 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[12.5px] rounded-xl px-3 py-2 focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
               />
               <button
                 type="submit"
@@ -412,26 +516,26 @@ export const ReportView: React.FC<ReportViewProps> = ({
                 style={{ color: 'var(--theme-primary, #38BDF8)' }}
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Add</span>
+                <span>{isHindi ? 'जोड़ें' : 'Add'}</span>
               </button>
             </form>
 
             {/* Category Chips with Delete */}
-            <div className="flex flex-wrap gap-1.5 pt-1 max-h-36 overflow-y-auto">
+            <div className="flex flex-wrap gap-1.5 pt-1 max-h-36 overflow-y-auto min-w-0">
               {categories.map((cat) => {
                 const CatIcon = getCategoryIcon(cat);
                 return (
                   <span
                     key={cat}
-                    className="inline-flex items-center gap-1.5 bg-[var(--theme-bg,#070E18)] text-[#94A3B8] hover:text-[#F8FAFC] border border-[var(--theme-border,#213E61)] px-2.5 py-1 rounded-lg text-[11px] transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-[var(--theme-bg,#070E18)] text-[#94A3B8] hover:text-[#F8FAFC] border border-[var(--theme-border,#213E61)] px-2.5 py-1 rounded-lg text-[11px] transition-colors max-w-full"
                   >
-                    <CatIcon className="w-3 h-3" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-                    <span>{cat}</span>
+                    <CatIcon className="w-3 h-3 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+                    <span className="truncate">{cat}</span>
                     {categories.length > 1 && (
                       <button
                         type="button"
                         onClick={() => onRemoveCategory(cat)}
-                        className="text-[#64748B] hover:text-[#EF4444] ml-0.5 cursor-pointer"
+                        className="text-[#64748B] hover:text-[#EF4444] ml-0.5 cursor-pointer shrink-0"
                         title={`Remove ${cat}`}
                       >
                         ×

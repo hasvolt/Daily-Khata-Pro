@@ -1,7 +1,7 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig } from './types';
+import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout } from './types';
 import {
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
@@ -78,6 +78,7 @@ export default function App() {
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<AppViewMode>('auto');
+  const [appLayout, setAppLayout] = useState<AppLayout>('dashboard');
   const [securityLock, setSecurityLock] = useState<SecurityLockConfig>(DEFAULT_SECURITY_LOCK);
   const [isAppLocked, setIsAppLocked] = useState<boolean>(false);
   
@@ -228,6 +229,9 @@ export default function App() {
         if (parsed.settings?.viewMode) {
           setViewMode(parsed.settings.viewMode);
         }
+        if (parsed.settings?.appLayout) {
+          setAppLayout(parsed.settings.appLayout);
+        }
         if (parsed.settings?.securityLock) {
           setSecurityLock(parsed.settings.securityLock);
           if (parsed.settings.securityLock.isEnabled && parsed.settings.securityLock.pin) {
@@ -247,6 +251,7 @@ export default function App() {
         setTheme('blue');
         setLanguage('en');
         setViewMode('auto');
+        setAppLayout('dashboard');
         setSecurityLock(DEFAULT_SECURITY_LOCK);
         setIsAppLocked(false);
         saveToLocalStorage([], [], DEFAULT_CATEGORIES, DEFAULT_INCOME_SOURCES, DEFAULT_WORK_CATEGORIES, DEFAULT_LIFE_TAGS, DEFAULT_PERCENTAGES, 'blue', 'en', false, [], [], DEFAULT_SECURITY_LOCK, [], 'auto');
@@ -285,6 +290,7 @@ export default function App() {
       language?: AppLanguage;
       privacyMask?: boolean;
       viewMode?: AppViewMode;
+      appLayout?: AppLayout;
       workLogs?: WorkLog[];
       dailyLifeLogs?: DailyLifeLog[];
       securityLock?: SecurityLockConfig;
@@ -303,7 +309,8 @@ export default function App() {
     newDailyLifeLogs?: DailyLifeLog[],
     newSecurityLock?: SecurityLockConfig,
     newPersonalNotes?: PersonalNote[],
-    newViewMode?: AppViewMode
+    newViewMode?: AppViewMode,
+    newAppLayout?: AppLayout
   ) => {
     try {
       let data: KhataData;
@@ -326,6 +333,7 @@ export default function App() {
             language: updates.language ?? language,
             privacyMask: updates.privacyMask ?? privacyMask,
             viewMode: updates.viewMode ?? viewMode,
+            appLayout: updates.appLayout ?? appLayout,
             securityLock: updates.securityLock ?? securityLock
           }
         };
@@ -346,6 +354,7 @@ export default function App() {
             language: newLang ?? language,
             privacyMask: newMask ?? privacyMask,
             viewMode: newViewMode ?? viewMode,
+            appLayout: newAppLayout ?? appLayout,
             securityLock: newSecurityLock ?? securityLock
           }
         };
@@ -432,6 +441,13 @@ export default function App() {
     setPrivacyMask(nextMask);
     saveToLocalStorage({ privacyMask: nextMask });
     showToast(nextMask ? 'Privacy Mask Enabled' : 'Privacy Mask Disabled');
+  };
+
+  
+  const handleAppLayoutChange = (newLayout: AppLayout) => {
+    setAppLayout(newLayout);
+    saveToLocalStorage({ appLayout: newLayout });
+    showToast('App layout updated');
   };
 
   const handleViewModeChange = (newMode: AppViewMode) => {
@@ -1107,7 +1123,9 @@ export default function App() {
           privacyMask={privacyMask}
           onTogglePrivacyMask={handleTogglePrivacyMask}
           viewMode={viewMode}
+          appLayout={appLayout}
           onViewModeChange={handleViewModeChange}
+        onLayoutChange={handleAppLayoutChange}
         />
       </div>
 
@@ -1117,6 +1135,7 @@ export default function App() {
           <Routes>
           <Route path="/" element={
             <HomeView
+              appLayout={appLayout}
               entries={entries}
               goals={goals}
               workLogs={workLogs}
@@ -1366,6 +1385,7 @@ export default function App() {
           } />
           
           <Route path="*" element={<HomeView
+              appLayout={appLayout}
               entries={entries}
               goals={goals}
               workLogs={workLogs}
@@ -1602,7 +1622,7 @@ export default function App() {
           incomeSources,
           workCategories,
           lifeTags,
-          settings: { percentages, theme, language, privacyMask, securityLock }
+          settings: { percentages, theme, language, privacyMask, viewMode, appLayout, securityLock }
         }}
         onRestoreData={handleRestoreData}
         onResetData={handleResetData}
@@ -1632,6 +1652,8 @@ export default function App() {
         onTogglePrivacyMask={handleTogglePrivacyMask}
         viewMode={viewMode}
         onViewModeChange={handleViewModeChange}
+        appLayout={appLayout}
+        onLayoutChange={handleAppLayoutChange}
       />
 
       {/* Work Log Create / Edit Modal */}
