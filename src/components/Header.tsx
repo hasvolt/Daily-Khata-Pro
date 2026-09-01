@@ -382,7 +382,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsThemeMenuOpen(false);
                 setIsLangMenuOpen(false);
               }}
-              className={`min-h-[32px] sm:min-h-[36px] p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10.5px] sm:text-[11px] font-bold flex items-center gap-1 sm:gap-1.5 shrink-0 ${
+              className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 ${
                 isMoreMenuOpen
                   ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] ring-2 ring-[var(--theme-primary,#38BDF8)]/40'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/60'
@@ -391,10 +391,7 @@ export const Header: React.FC<HeaderProps> = ({
               aria-label={tr.menu.mainMenu}
               id="header-main-menu-btn"
             >
-              <Menu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" />
-              <span className="font-bold">
-                {tr.menu.mainMenu}
-              </span>
+              <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--theme-primary,#38BDF8)]" />
             </button>
 
             {/* UNIFIED MAIN MENU FOR MOBILE DRAWER & DESKTOP DROPDOWN */}
