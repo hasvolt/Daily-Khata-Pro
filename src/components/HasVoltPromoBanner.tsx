@@ -34,6 +34,19 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
   const phoneRaw = '+918383098574';
   const whatsappUrl = `https://wa.me/918383098574?text=${encodeURIComponent('Hi HasVolt, I need electrical service assistance.')}`;
 
+const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta') {
+        setShowBanner(true);
+      }
+    } catch (e) {
+      setShowBanner(true); // Fallback to show if timezone check fails
+    }
+  }, []);
+
   // Keyboard escape listener & body scroll lock
   useEffect(() => {
     if (!isPosterModalOpen) return;
@@ -62,6 +75,8 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
     }
   };
 
+  if (!showBanner) return null;
+
   return (
     <>
       {/* Professional & Accessible Sponsored Ad Banner (Clickable Card) */}
@@ -78,12 +93,12 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
         aria-label="HasVolt Professional Electrical Services - Click to open full details and poster"
         className={`w-full max-w-4xl mx-auto rounded-xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] shadow-sm overflow-hidden text-left hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all cursor-pointer group select-none ${className}`}
       >
-        <div className="p-2.5 sm:p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="p-1.5 sm:p-3.5 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
           {/* Left Section: Thumbnail + Info */}
-          <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto flex-1">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 w-full sm:w-auto flex-1">
             {/* Clickable Mini Poster Thumbnail */}
             <div
-              className="relative w-16 h-12 sm:w-20 sm:h-14 shrink-0 rounded-lg overflow-hidden border border-[var(--theme-border,#213E61)] bg-[#05080E] group-hover:border-[var(--theme-primary,#38BDF8)]/70 transition-colors flex items-center justify-center"
+              className="relative w-11 h-8 sm:w-20 sm:h-14 shrink-0 rounded-lg overflow-hidden border border-[var(--theme-border,#213E61)] bg-[#05080E] group-hover:border-[var(--theme-primary,#38BDF8)]/70 transition-colors flex items-center justify-center"
               title="Click to view full HasVolt poster"
             >
               {!imgError ? (
@@ -107,27 +122,27 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
 
             {/* Clear Typography & Service Highlights */}
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-extrabold uppercase px-2 py-0.5 rounded-md text-[9.5px] tracking-wider bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] shadow-2xs inline-flex items-center gap-1">
-                  <Sparkles className="w-2.5 h-2.5 shrink-0" /> SPONSORED
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <span className="font-extrabold uppercase px-1.5 sm:px-2 py-0.5 rounded-md text-[8.5px] sm:text-[9.5px] tracking-wider bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] shadow-2xs inline-flex items-center gap-1">
+                  <Sparkles className="w-2 h-2 sm:w-2.5 sm:h-2.5 shrink-0" /> SPONSORED
                 </span>
-                <span className="text-[var(--theme-text,#F8FAFC)] font-bold text-[13.5px] tracking-tight">HasVolt</span>
+                <span className="text-[var(--theme-text,#F8FAFC)] font-bold text-[11.5px] sm:text-[13.5px] tracking-tight">HasVolt</span>
                 <span className="text-[#64748B] text-[11px] hidden xs:inline">•</span>
-                <span className="text-[var(--theme-text-muted,#94A3B8)] text-[12px] font-medium truncate">Professional Electrical Services</span>
+                <span className="text-[var(--theme-text-muted,#94A3B8)] text-[10px] sm:text-[12px] font-medium truncate">Professional Electrical Services</span>
               </div>
 
-              <p className="text-[11.5px] text-[var(--theme-text-muted,#94A3B8)] truncate mt-0.5 font-normal">
+              <p className="text-[9.5px] sm:text-[11.5px] text-[var(--theme-text-muted,#94A3B8)] truncate mt-0.5 font-normal">
                 House Wiring, Repairing, Breakdown &amp; Installation • Certified Electricians
               </p>
 
-              <div className="flex items-center gap-2 text-[11px] text-[#64748B] mt-1 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[11px] text-[#64748B] mt-0.5 sm:mt-1 flex-wrap">
                 <span className="flex items-center gap-1 text-[var(--theme-text-muted,#94A3B8)]">
-                  <Clock className="w-3 h-3 text-[#64748B] shrink-0" />
+                  <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#64748B] shrink-0" />
                   <span>8 AM – 9 PM</span>
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1 text-[var(--theme-text-muted,#94A3B8)] truncate">
-                  <MapPin className="w-3 h-3 text-[#64748B] shrink-0" />
+                  <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#64748B] shrink-0" />
                   <span>Delhi NCR &amp; Across India</span>
                 </span>
               </div>
@@ -136,17 +151,17 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
 
           {/* Right Section: Crisp Action Buttons with stopPropagation */}
           <div
-            className="flex items-center gap-1.5 shrink-0 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-[var(--theme-border,#213E61)]/40"
+            className="flex items-center gap-1.5 shrink-0 w-full sm:w-auto justify-end pt-1.5 sm:pt-0 border-t sm:border-t-0 border-[var(--theme-border,#213E61)]/40"
             onClick={(e) => e.stopPropagation()}
           >
             {/* View Full Poster Button */}
             <button
               type="button"
               onClick={() => setIsPosterModalOpen(true)}
-              className="px-2.5 py-1.2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text,#F8FAFC)] font-semibold text-[11px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs active:scale-95"
+              className="px-2 sm:px-2.5 py-1 sm:py-1.2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text,#F8FAFC)] font-semibold text-[9.5px] sm:text-[11px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs active:scale-95"
               title="Open full poster and service card"
             >
-              <Maximize2 className="w-3 h-3 text-[var(--theme-primary,#38BDF8)]" />
+              <Maximize2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#38BDF8)]" />
               <span>Poster</span>
             </button>
 
@@ -154,19 +169,19 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2.5 py-1.2 rounded-lg bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/40 text-[#10B981] font-semibold text-[11px] flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
+              className="px-2 sm:px-2.5 py-1 sm:py-1.2 rounded-lg bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/40 text-[#10B981] font-semibold text-[9.5px] sm:text-[11px] flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
               title="Chat on WhatsApp (+91 8383098574)"
             >
-              <MessageSquare className="w-3 h-3" />
+              <MessageSquare className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
               <span>WhatsApp</span>
             </a>
 
             <a
               href={`tel:${phoneRaw}`}
-              className="px-2.5 py-1.2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-semibold text-[11px] flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
+              className="px-2 sm:px-2.5 py-1 sm:py-1.2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-semibold text-[9.5px] sm:text-[11px] flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
               title={`Call ${phoneFormatted}`}
             >
-              <Phone className="w-3 h-3 text-[var(--theme-text-muted,#94A3B8)]" />
+              <Phone className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-text-muted,#94A3B8)]" />
               <span>Call</span>
             </a>
 
@@ -174,10 +189,10 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
               href={websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors flex items-center justify-center cursor-pointer shadow-2xs"
+              className="p-1 sm:p-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors flex items-center justify-center cursor-pointer shadow-2xs"
               title="Visit HasVolt Official Website (www.hasvolt.com)"
             >
-              <Globe className="w-3.5 h-3.5" />
+              <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             </a>
 
             <a
@@ -324,14 +339,14 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                     rel="noopener noreferrer"
                     className="px-2.5 py-1.5 rounded-lg bg-[var(--theme-surface,#141E2B)] hover:bg-[var(--theme-card-hover,#1C2B3E)] border border-[var(--theme-border,#2B3D54)] text-amber-400 font-medium text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <Star className="w-3.5 h-3.5" />
+                    <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     <span className="hidden xs:inline">Feedback</span>
                   </a>
                   <a
                     href={`tel:${phoneRaw}`}
                     className="px-3.5 py-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)] hover:bg-[var(--theme-primary-hover,#0EA5E9)] text-[var(--theme-btn-text,#040D17)] font-bold text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
                   >
-                    <Phone className="w-3.5 h-3.5" />
+                    <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     <span>Call Now</span>
                   </a>
                 </div>

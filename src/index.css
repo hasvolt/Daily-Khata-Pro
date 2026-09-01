@@ -654,3 +654,29 @@ main {
     margin: 0 !important;
   }
 }
+
+/* Google AdSense Responsive Sizes */
+.custom-responsive-ad {
+  width: 100%;
+}
+/* Mobile Devices */
+@media (max-width: 639px) {
+  .custom-responsive-ad {
+    height: 60px;
+    min-height: 60px;
+  }
+}
+/* Tablets */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .custom-responsive-ad {
+    height: 90px;
+    min-height: 90px;
+  }
+}
+/* Desktop Devices */
+@media (min-width: 1024px) {
+  .custom-responsive-ad {
+    height: 90px;
+    min-height: 90px;
+  }
+}

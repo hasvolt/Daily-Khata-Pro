@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface GoogleAdBannerProps {
   slotId?: string;
@@ -18,13 +18,27 @@ declare global {
 export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
   slotId = '1364027408',
   client = 'ca-pub-4744063610455678',
-  format = 'auto',
+  format = 'horizontal',
   responsive = true,
   className = '',
   label = 'ADVERTISEMENT',
 }) => {
+  const [isOnline, setIsOnline] = useState<boolean>(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const adRef = useRef<HTMLModElement | null>(null);
   const isPushedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -47,6 +61,8 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
     return () => clearTimeout(timer);
   }, []);
 
+  if (!isOnline) return null;
+
   return (
     <div
       id="google-adsense-banner-container"
@@ -62,8 +78,8 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
       <div className="w-full min-h-[90px] rounded-xl border border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-card,#132438)]/30 flex items-center justify-center overflow-hidden">
         <ins
           ref={adRef}
-          className="adsbygoogle"
-          style={{ display: 'block', width: '100%', minHeight: '90px', textAlign: 'center' }}
+          className="adsbygoogle custom-responsive-ad"
+          style={{ display: "block", textAlign: "center" }}
           data-ad-client={client}
           data-ad-slot={slotId}
           data-ad-format={format}

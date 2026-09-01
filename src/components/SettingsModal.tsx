@@ -315,8 +315,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#030712]/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
+    <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4 bg-[#030712]/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-[var(--theme-card,#132438)] border-0 sm:border border-[var(--theme-border,#213E61)] rounded-none sm:rounded-2xl w-full h-full sm:h-auto sm:max-h-[92vh] max-w-2xl flex flex-col shadow-2xl overflow-hidden text-left">
         {/* Modal Header */}
         <div className="px-5 py-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between bg-[var(--theme-surface,#0E1A29)]">
           <div className="flex items-center gap-3">
@@ -405,7 +405,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     {isHindi ? 'ऐप की भाषा' : 'Application Language'}
                   </label>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2">
                   {[
                     { id: 'en', label: 'English', sub: 'Global' },
                     { id: 'hi', label: 'हिन्दी', sub: 'Hindi' },
@@ -426,7 +426,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       key={l.id}
                       type="button"
                       onClick={() => onLanguageChange && onLanguageChange(l.id as AppLanguage)}
-                      className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      className={`p-2 sm:p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                         language === l.id
                           ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] font-extrabold shadow-sm'
                           : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)]/50'

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   X,
+  ChevronLeft,
   BookOpen,
   HelpCircle,
   Sparkles,
@@ -64,6 +65,7 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
 }) => {
   const [activeSectionId, setActiveSectionId] = useState<string>('intro');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(true);
 
   if (!isOpen) return null;
 
@@ -104,8 +106,8 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
   const CurrentIcon = currentSection?.icon || BookOpen;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-5xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden text-left">
+    <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-[var(--theme-surface,#0E1A29)] sm:border border-[var(--theme-border,#213E61)] rounded-none sm:rounded-2xl w-full h-full sm:h-auto sm:max-h-[90vh] max-w-5xl shadow-2xl flex flex-col overflow-hidden text-left">
         {/* Header */}
         <div className="px-5 py-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between bg-[var(--theme-bg,#070E18)] shrink-0">
           <div className="flex items-center gap-3">
@@ -137,7 +139,7 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
         {/* Body - Responsive Split View */}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
           {/* Sidebar / Section List */}
-          <div className="w-full md:w-80 border-r border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)] flex flex-col shrink-0">
+          <div className={`w-full md:w-80 h-full md:h-auto md:flex-none border-b md:border-b-0 md:border-r border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)] flex-col shrink-0 ${isMobileMenuOpen ? 'flex' : 'hidden md:flex'}`}>
             {/* Search Box */}
             <div className="p-3 border-b border-[var(--theme-border,#213E61)]">
               <div className="relative">
@@ -163,7 +165,10 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                 return (
                   <button
                     key={s.id}
-                    onClick={() => setActiveSectionId(s.id)}
+                    onClick={() => {
+                      setActiveSectionId(s.id);
+                      setIsMobileMenuOpen(false);
+                    }}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all cursor-pointer ${
                       isActive
                         ? 'bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/50 text-[var(--theme-primary,#38BDF8)] font-bold shadow-sm'
@@ -182,14 +187,20 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-6 bg-[var(--theme-surface,#0E1A29)] custom-scrollbar">
+          <div className={`flex-1 overflow-y-auto p-4 sm:p-7 space-y-5 sm:space-y-6 bg-[var(--theme-surface,#0E1A29)] custom-scrollbar ${!isMobileMenuOpen ? 'block' : 'hidden md:block'}`}>
             {currentSection && (
               <div className="space-y-6 animate-in fade-in duration-200">
                 {/* Chapter Heading */}
                 <div className="border-b border-[var(--theme-border,#213E61)] pb-4 flex items-start justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] mb-1">
-                      <CurrentIcon className="w-5 h-5" />
+                      <button 
+                        onClick={() => setIsMobileMenuOpen(true)}
+                        className="md:hidden mr-2 p-1 rounded-md bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:bg-[var(--theme-card-hover,#19304A)]"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <CurrentIcon className="w-5 h-5 hidden md:block" />
                       <span className="text-[12px] font-bold uppercase tracking-wider">Chapter Guide</span>
                     </div>
                     <h3 className="font-serif-display text-[22px] font-bold text-[#F8FAFC]">
