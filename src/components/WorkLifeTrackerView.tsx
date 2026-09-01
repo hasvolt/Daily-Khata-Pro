@@ -3,6 +3,13 @@ import { WorkLog, DailyLifeLog, AppLanguage } from '../types';
 import { formatCurrency } from '../utils/khataCalculations';
 import { getWorkCategoryIcon, getMoodVisual } from '../utils/iconMap';
 import {
+  localizeWorkStatus,
+  localizeMood,
+  localizeCategory,
+  getTrackerText
+} from '../utils/localization';
+import { TRANSLATIONS } from '../utils/translations';
+import {
   Briefcase,
   BookOpen,
   Plus,
@@ -52,7 +59,6 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
   language = 'en',
   privacyMask = false
 }) => {
-  const isHindi = language === 'hi';
   const [activeTab, setActiveTab] = useState<'work' | 'life'>('work');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -94,33 +100,34 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
     .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
 
   const getStatusBadge = (status: WorkLog['status']) => {
+    const localizedStatus = localizeWorkStatus(status, language);
     switch (status) {
       case 'completed':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
             <CheckCircle2 className="w-3 h-3" />
-            <span>{isHindi ? 'पूर्ण' : 'Completed'}</span>
+            <span>{localizedStatus}</span>
           </span>
         );
       case 'in_progress':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
             <Clock className="w-3 h-3 animate-pulse" />
-            <span>{isHindi ? 'प्रगति पर' : 'In Progress'}</span>
+            <span>{localizedStatus}</span>
           </span>
         );
       case 'pending':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30">
             <AlertCircle className="w-3 h-3" />
-            <span>{isHindi ? 'लंबित' : 'Pending'}</span>
+            <span>{localizedStatus}</span>
           </span>
         );
       case 'on_hold':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[#94A3B8]/15 text-[#94A3B8] border border-[#94A3B8]/30">
             <PauseCircle className="w-3 h-3" />
-            <span>{isHindi ? 'रोका गया' : 'On Hold'}</span>
+            <span>{localizedStatus}</span>
           </span>
         );
     }
@@ -136,12 +143,10 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
         <div>
           <h2 className="text-[20px] sm:text-[22px] font-bold text-[#F8FAFC] flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-[var(--theme-primary,#38BDF8)]" />
-            <span>{isHindi ? 'काम व दैनिक जीवन ट्रैकर' : 'Work Deliverables & Daily Life Tracker'}</span>
+            <span>{getTrackerText('headerTitle', language)}</span>
           </h2>
           <p className="text-[12.5px] text-[#94A3B8] mt-0.5">
-            {isHindi
-              ? 'काम का इतिहास, ग्राहक डिलीवरेबल्स और दैनिक जीवन डायरी को सुरक्षित रूप से ट्रैक करें।'
-              : 'Universal logbook for client projects, deliverables, daily routines and journal highlights.'}
+            {getTrackerText('headerSubtitle', language)}
           </p>
         </div>
 
@@ -153,7 +158,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
             className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] hover:brightness-110 font-bold text-[13px] flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-all active:scale-98"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>{isHindi ? '+ काम जोड़ें' : '+ Log Work'}</span>
+            <span>{getTrackerText('logWorkBtn', language)}</span>
           </button>
 
           <button
@@ -162,7 +167,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
             className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl bg-[var(--theme-secondary,#FFC700)] text-[#040D17] hover:brightness-110 font-bold text-[13px] flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-all active:scale-98"
           >
             <Sparkles className="w-4 h-4 stroke-[2.5]" />
-            <span>{isHindi ? '+ आज की डायरी' : "+ Today's Story"}</span>
+            <span>{getTrackerText('todayStoryBtn', language)}</span>
           </button>
           
           {/* Tracker Export / Print Button */}
@@ -181,7 +186,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                 <div className="fixed inset-0 z-40" onClick={() => setIsExportMenuOpen(false)} />
                 <div className="absolute right-0 mt-2 w-48 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl shadow-2xl z-50 p-1.5 animate-in fade-in zoom-in-95">
                   <div className="px-2.5 py-1.5 text-[10px] font-extrabold uppercase text-[#94A3B8] border-b border-[var(--theme-border,#213E61)]/60 mb-1">
-                    {isHindi ? 'डेटा बैकअप' : 'Data Backup'}
+                    Backup / Export
                   </div>
                   <button
                     type="button"
@@ -192,7 +197,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                     className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-[12px] font-bold text-[#F8FAFC] hover:bg-white/5 transition-colors cursor-pointer text-left"
                   >
                     <Printer className="w-3.5 h-3.5 text-[#38BDF8]" />
-                    <span>{isHindi ? 'प्रिंट / PDF सेव करें' : 'Print / Save PDF'}</span>
+                    <span>Print / Save PDF</span>
                   </button>
                   <button
                     type="button"
@@ -203,7 +208,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                     className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-[12px] font-bold text-[#F8FAFC] hover:bg-white/5 transition-colors cursor-pointer text-left"
                   >
                     <FileText className="w-3.5 h-3.5 text-[#10B981]" />
-                    <span>{isHindi ? 'CSV डाउनलोड करें' : 'Download CSV'}</span>
+                    <span>Download CSV</span>
                   </button>
                 </div>
               </>
@@ -216,49 +221,49 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-sm">
           <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider block">
-            {isHindi ? 'कुल कार्य' : 'Total Work Items'}
+            {getTrackerText('totalWorkItems', language)}
           </span>
           <div className="font-serif-display text-[22px] font-bold text-[#F8FAFC] mt-0.5 font-mono">
             {workLogs.length}
           </div>
           <span className="text-[11px] text-[#10B981] font-semibold">
-            {completedWorks} {isHindi ? 'पूर्ण' : 'completed'} · {inProgressWorks} {isHindi ? 'प्रगति पर' : 'active'}
+            {completedWorks} {localizeWorkStatus('completed', language)} · {inProgressWorks} {localizeWorkStatus('in_progress', language)}
           </span>
         </div>
 
         <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-sm">
           <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider block">
-            {isHindi ? 'कुल समय' : 'Logged Hours'}
+            {getTrackerText('loggedHours', language)}
           </span>
           <div className="font-serif-display text-[22px] font-bold text-[var(--theme-primary,#38BDF8)] mt-0.5 font-mono">
             {totalWorkHours} <span className="text-[13px] font-sans">hrs</span>
           </div>
           <span className="text-[11px] text-[#94A3B8]">
-            {isHindi ? 'उत्पादक घंटे' : 'Productive work time'}
+            Productive Hours
           </span>
         </div>
 
         <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-sm">
           <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider block">
-            {isHindi ? 'कार्य आय / शुल्क' : 'Work Revenue / Billables'}
+            {getTrackerText('workRevenue', language)}
           </span>
           <div className="font-serif-display text-[20px] font-bold text-[#10B981] mt-0.5 font-mono truncate">
             {formatCurrency(totalWorkEarnings, privacyMask)}
           </div>
           <span className="text-[11px] text-[#94A3B8]">
-            {isHindi ? 'बिल योग्य मूल्य' : 'Total deliverables value'}
+            Total Value
           </span>
         </div>
 
         <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-sm">
           <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider block">
-            {isHindi ? 'दैनिक डायरी प्रविष्टियाँ' : 'Life Journal Days'}
+            {getTrackerText('lifeJournalDays', language)}
           </span>
           <div className="font-serif-display text-[22px] font-bold text-[var(--theme-secondary,#FFC700)] mt-0.5 font-mono">
             {dailyLifeLogs.length} <span className="text-[13px] font-sans">days</span>
           </div>
           <span className="text-[11px] text-[#94A3B8]">
-            {isHindi ? 'प्रतिबिंब और आदतें' : 'Routines & memories'}
+            Entries Logged
           </span>
         </div>
       </div>
@@ -275,7 +280,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
           }`}
         >
           <Briefcase className="w-4 h-4" />
-          <span>{isHindi ? 'कार्य डिलीवरेबल्स' : 'Work Deliverables'} ({workLogs.length})</span>
+          <span>{getTrackerText('workTab', language)} ({workLogs.length})</span>
         </button>
 
         <button
@@ -288,7 +293,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
           }`}
         >
           <BookOpen className="w-4 h-4" />
-          <span>{isHindi ? 'दैनिक जीवन डायरी' : 'Daily Life Stories'} ({dailyLifeLogs.length})</span>
+          <span>{getTrackerText('lifeTab', language)} ({dailyLifeLogs.length})</span>
         </button>
       </div>
 
@@ -300,11 +305,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
             type="text"
             placeholder={
               activeTab === 'work'
-                ? isHindi
-                  ? 'काम, ग्राहक, प्रोजेक्ट या श्रेणी खोजें...'
-                  : 'Search work, client, project or category...'
-                : isHindi
-                ? 'दैनिक नोट्स, हाइलाइट्स या टैग्स खोजें...'
+                ? 'Search work, client, project or category...'
                 : 'Search journal highlights, reflections or tags...'
             }
             value={searchQuery}
@@ -321,11 +322,11 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
               aria-label="Filter work by status"
               className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#CBD5E1] text-[12.5px] font-bold rounded-xl px-3 py-2.5 focus:outline-none"
             >
-              <option value="all">{isHindi ? 'सभी स्थिति' : 'All Status'}</option>
-              <option value="completed">{isHindi ? 'पूर्ण' : 'Completed'}</option>
-              <option value="in_progress">{isHindi ? 'प्रगति पर' : 'In Progress'}</option>
-              <option value="pending">{isHindi ? 'लंबित' : 'Pending'}</option>
-              <option value="on_hold">{isHindi ? 'रोका गया' : 'On Hold'}</option>
+              <option value="all">All Status</option>
+              <option value="completed">{localizeWorkStatus('completed', language)}</option>
+              <option value="in_progress">{localizeWorkStatus('in_progress', language)}</option>
+              <option value="pending">{localizeWorkStatus('pending', language)}</option>
+              <option value="on_hold">{localizeWorkStatus('on_hold', language)}</option>
             </select>
 
             {uniqueWorkCategories.length > 0 && (
@@ -335,7 +336,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                 aria-label="Filter work by category"
                 className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#CBD5E1] text-[12.5px] font-bold rounded-xl px-3 py-2.5 focus:outline-none max-w-[150px] truncate"
               >
-                <option value="all">{isHindi ? 'सभी श्रेणियां' : 'All Categories'}</option>
+                <option value="all">All Categories</option>
                 {uniqueWorkCategories.map((c) => (
                   <option key={c} value={c}>
                     {c}
@@ -356,19 +357,17 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                 <Briefcase className="w-6 h-6" />
               </div>
               <h3 className="font-bold text-[16px] text-[#F8FAFC]">
-                {isHindi ? 'कोई कार्य प्रविष्टि नहीं मिली' : 'No Work Logs Found'}
+                No Work Logs Found
               </h3>
               <p className="text-[13px] text-[#94A3B8] max-w-sm mx-auto">
-                {isHindi
-                  ? 'अपनी व्यावसायिक परियोजनाओं, ग्राहक कार्यों और डिलीवरेबल्स को व्यवस्थित रूप से रिकॉर्ड करें।'
-                  : 'Start tracking professional tasks, deliverables, billable hours and client work.'}
+                Start tracking professional tasks, deliverables, billable hours and client work.
               </p>
               <button
                 type="button"
                 onClick={() => onOpenWorkModal()}
                 className="py-2.5 px-4 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] font-bold text-[13px] cursor-pointer hover:brightness-110"
               >
-                {isHindi ? '+ पहला काम जोड़ें' : '+ Record First Work Item'}
+                {getTrackerText('logWorkBtn', language)}
               </button>
             </div>
           ) : (
@@ -451,17 +450,17 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                     </div>
                   )}
 
-                  {/* Actions Footer */}
+                  {/* Action Bar */}
                   <div className="flex items-center justify-between pt-2 border-t border-[var(--theme-border,#213E61)]/60 text-[12px]">
                     <div className="flex items-center gap-2">
-                      {item.earningsOrCost && item.earningsOrCost > 0 && onRecordWorkAsIncome && (
+                      {onRecordWorkAsIncome && item.earningsOrCost && item.earningsOrCost > 0 && (
                         <button
                           type="button"
                           onClick={() => onRecordWorkAsIncome(item)}
-                          className="text-[11.5px] font-bold px-2.5 py-1 rounded-lg bg-[#10B981]/15 text-[#10B981] hover:bg-[#10B981]/25 border border-[#10B981]/30 flex items-center gap-1 cursor-pointer transition-colors"
+                          className="py-1 px-2.5 rounded-lg bg-[#10B981]/15 hover:bg-[#10B981]/25 text-[#10B981] font-bold flex items-center gap-1 cursor-pointer transition-colors border border-[#10B981]/30"
                         >
                           <DollarSign className="w-3 h-3" />
-                          <span>{isHindi ? 'खाता में आय दर्ज करें' : 'Post to Khata as Income'}</span>
+                          <span>Record as Income</span>
                         </button>
                       )}
                     </div>
@@ -491,7 +490,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
           )}
         </div>
       ) : (
-        /* Daily Life Stories View */
+        /* Daily Life Timeline Tab */
         <div className="space-y-3">
           {filteredLifeLogs.length === 0 ? (
             <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-8 sm:p-12 text-center space-y-3">
@@ -499,19 +498,17 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                 <BookOpen className="w-6 h-6" />
               </div>
               <h3 className="font-bold text-[16px] text-[#F8FAFC]">
-                {isHindi ? 'कोई दैनिक डायरी प्रविष्टि नहीं है' : 'No Daily Stories Logged Yet'}
+                No Daily Stories Logged Yet
               </h3>
               <p className="text-[13px] text-[#94A3B8] max-w-sm mx-auto">
-                {isHindi
-                  ? 'आज का दिन कैसा रहा? सुबह, दोपहर और शाम की मुख्य घटनाओं और सीखों को नोट करें।'
-                  : "Capture what happened today, key highlights, routines, learnings and gratitude."}
+                Capture what happened today, key highlights, routines, learnings and gratitude.
               </p>
               <button
                 type="button"
                 onClick={() => onOpenDailyLifeModal()}
                 className="py-2.5 px-4 rounded-xl bg-[var(--theme-secondary,#FFC700)] text-[#040D17] font-bold text-[13px] cursor-pointer hover:brightness-110"
               >
-                {isHindi ? '+ आज का दिन दर्ज करें' : "+ Record Today's Story"}
+                {getTrackerText('todayStoryBtn', language)}
               </button>
             </div>
           ) : (
@@ -539,7 +536,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <h4 className="font-bold text-[15px] sm:text-[16px] text-[#F8FAFC]">
-                            {item.title || (isHindi ? 'दैनिक जीवन डायरी' : 'Daily Journal Entry')}
+                            {item.title || 'Daily Journal Entry'}
                           </h4>
                           <span
                             className="px-2 py-0.5 rounded text-[11px] font-bold"
@@ -548,7 +545,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                               color: moodConfig.color
                             }}
                           >
-                            {isHindi ? moodConfig.labelHi : moodConfig.labelEn}
+                            {localizeMood(item.mood, language)}
                           </span>
                         </div>
 
@@ -604,7 +601,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                         <div className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
                           <span className="text-[10.5px] font-bold uppercase text-[var(--theme-secondary,#FFC700)] flex items-center gap-1 mb-1">
                             <Sun className="w-3 h-3" />
-                            <span>{isHindi ? 'सुबह' : 'Morning'}</span>
+                            <span>Morning</span>
                           </span>
                           <p className="text-[#CBD5E1] text-[11.5px]">{item.morningRoutine}</p>
                         </div>
@@ -613,7 +610,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                         <div className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
                           <span className="text-[10.5px] font-bold uppercase text-[var(--theme-primary,#38BDF8)] flex items-center gap-1 mb-1">
                             <Sunset className="w-3 h-3" />
-                            <span>{isHindi ? 'दोपहर' : 'Afternoon'}</span>
+                            <span>Afternoon</span>
                           </span>
                           <p className="text-[#CBD5E1] text-[11.5px]">{item.afternoonRoutine}</p>
                         </div>
@@ -622,7 +619,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                         <div className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
                           <span className="text-[10.5px] font-bold uppercase text-[#A855F7] flex items-center gap-1 mb-1">
                             <Moon className="w-3 h-3" />
-                            <span>{isHindi ? 'शाम / रात' : 'Evening'}</span>
+                            <span>Evening</span>
                           </span>
                           <p className="text-[#CBD5E1] text-[11.5px]">{item.eveningRoutine}</p>
                         </div>
@@ -636,7 +633,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                       {item.keyLearnings && (
                         <div className="flex-1 p-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)]/10 border border-[var(--theme-primary,#38BDF8)]/30">
                           <span className="text-[11px] font-bold text-[var(--theme-primary,#38BDF8)] block mb-0.5">
-                            {isHindi ? 'आज की मुख्य सीख:' : 'Key Learning:'}
+                            Key Learning:
                           </span>
                           <p className="text-[#CBD5E1] text-[12px]">{item.keyLearnings}</p>
                         </div>
@@ -644,7 +641,7 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
                       {item.gratitude && (
                         <div className="flex-1 p-2.5 rounded-xl bg-[var(--theme-secondary,#FFC700)]/10 border border-[var(--theme-secondary,#FFC700)]/30">
                           <span className="text-[11px] font-bold text-[var(--theme-secondary,#FFC700)] block mb-0.5">
-                            {isHindi ? 'शुक्रगुजार / Gratitude:' : 'Gratitude:'}
+                            Gratitude:
                           </span>
                           <p className="text-[#CBD5E1] text-[12px]">{item.gratitude}</p>
                         </div>

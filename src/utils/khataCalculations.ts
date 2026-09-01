@@ -1,14 +1,10 @@
 import { Entry, FundType } from '../types';
 import { FUND_ORDER } from '../data/defaults';
 import confetti from 'canvas-confetti';
+import { formatCurrencyByLang } from './currencyConfig';
 
 export const formatCurrency = (n: number, mask: boolean = false): string => {
-  if (mask) {
-    return '₹ •••••';
-  }
-  const isNegative = n < 0;
-  const abs = Math.abs(Math.round(n));
-  return (isNegative ? '-₹' : '₹') + abs.toLocaleString('en-IN');
+  return formatCurrencyByLang(n, undefined, mask);
 };
 
 export const formatPercent = (n: number): string => {

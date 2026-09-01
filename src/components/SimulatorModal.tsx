@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import React, { useState } from 'react';
 import { X, Calculator, ArrowRight, RotateCcw, Check, Sparkles } from 'lucide-react';
 import { FundType, AppLanguage } from '../types';
@@ -111,9 +112,7 @@ export const SimulatorModal: React.FC<SimulatorModalProps> = ({
             </label>
 
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-[#94A3B8]">
-                ₹
-              </span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-[#94A3B8]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
               <input
                 id="simulator-amount-input"
                 type="number"
@@ -143,7 +142,7 @@ export const SimulatorModal: React.FC<SimulatorModalProps> = ({
                         : 'bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[#CBD5E1] hover:border-[var(--theme-primary,#38BDF8)]'
                     }`}
                   >
-                    ₹{amt.toLocaleString('en-IN')}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{amt.toLocaleString('en-IN')}
                   </button>
                 ))}
               </div>

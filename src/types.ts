@@ -6,7 +6,21 @@ export type PaymentMode = 'cash' | 'upi' | 'bank' | 'card' | 'cheque' | 'wallet'
 
 export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cyan' | 'light' | 'white';
 
-export type AppLanguage = 'en' | 'hi' | 'hinglish';
+export type AppLanguage = 
+  | 'en' // English (Global)
+  | 'hi' // हिन्दी (Hindi)
+  | 'hinglish' // Hinglish (India)
+  | 'es' // Español (Spanish)
+  | 'ar' // العربية (Arabic)
+  | 'fr' // Français (French)
+  | 'de' // Deutsch (German)
+  | 'ru' // Русский (Russian)
+  | 'pt' // Português (Portuguese)
+  | 'bn' // বাংলা (Bengali)
+  | 'ur' // اردو (Urdu)
+  | 'id' // Bahasa Indonesia
+  | 'ja' // 日本語 (Japanese)
+  | 'zh'; // 中文 (Simplified Chinese)
 
 export type AppViewMode = 'auto' | 'mobile' | 'desktop';
 

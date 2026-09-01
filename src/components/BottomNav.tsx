@@ -26,7 +26,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
   const tabs: TabItem[] = [
     { id: 'home', label: t.nav.home, icon: Home },
     { id: 'history', label: t.nav.history, icon: History },
-    { id: 'add', label: isHindi ? 'नया' : 'Add', icon: Plus, isAction: true },
+    { id: 'add', label: t.nav.add || (isHindi ? 'नया' : 'Add'), icon: Plus, isAction: true },
     { id: 'goals', label: t.nav.goals, icon: Target },
     { id: 'tracker', label: t.nav.tracker, icon: Briefcase },
     { id: 'report', label: t.nav.reports, icon: BarChart3 }

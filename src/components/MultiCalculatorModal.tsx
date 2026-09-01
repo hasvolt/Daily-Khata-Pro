@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "../utils/currencyConfig";
 import React, { useState, useMemo } from 'react';
 import {
   X,
@@ -28,6 +29,7 @@ import { FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import { TRANSLATIONS } from '../utils/translations';
+import { getAppTranslation } from '../utils/appTranslations';
 
 type CalculatorTab = 'standard' | 'funds' | 'sip' | 'emi' | 'gst' | 'discount' | 'inflation';
 
@@ -110,6 +112,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
   const [activeTab, setActiveTab] = useState<CalculatorTab>('standard');
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi';
+  const tr = getAppTranslation(language as AppLanguage);
 
   // --- 1. Standard Calculator State ---
   const [stdExpr, setStdExpr] = useState<string>('');
@@ -371,13 +374,13 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
   }
 
   const tabs: { id: CalculatorTab; label: string; icon: any; color: string }[] = [
-    { id: 'standard', label: isHindi ? 'साधारण गणित' : 'Standard', icon: Calculator, color: '#38BDF8' },
-    { id: 'funds', label: isHindi ? '6-फंड फॉर्मूला' : '6-Fund Split', icon: Layers, color: '#10B981' },
-    { id: 'sip', label: isHindi ? 'SIP / वेल्थ' : 'SIP & Wealth', icon: TrendingUp, color: '#F59E0B' },
-    { id: 'emi', label: isHindi ? 'लोन EMI' : 'Loan EMI', icon: Landmark, color: '#8B5CF6' },
-    { id: 'gst', label: isHindi ? 'GST टैक्स' : 'GST Tax', icon: Percent, color: '#EC4899' },
-    { id: 'discount', label: isHindi ? 'छूट / मार्जिन' : 'Discount', icon: Tag, color: '#06B6D4' },
-    { id: 'inflation', label: isHindi ? 'लक्ष्य महंगाई' : 'Goal Planner', icon: Target, color: '#EAB308' }
+    { id: 'standard', label: tr.calc.tabStandard, icon: Calculator, color: '#38BDF8' },
+    { id: 'funds', label: tr.calc.tabFunds, icon: Layers, color: '#10B981' },
+    { id: 'sip', label: tr.calc.tabSip, icon: TrendingUp, color: '#F59E0B' },
+    { id: 'emi', label: tr.calc.tabEmi, icon: Landmark, color: '#8B5CF6' },
+    { id: 'gst', label: tr.calc.tabGst, icon: Percent, color: '#EC4899' },
+    { id: 'discount', label: tr.calc.tabDiscount, icon: Tag, color: '#06B6D4' },
+    { id: 'inflation', label: tr.calc.tabInflation, icon: Target, color: '#EAB308' }
   ];
 
   return (
@@ -392,14 +395,14 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-serif-display text-[17px] sm:text-[18px] font-bold text-[#F8FAFC]">
-                  {isHindi ? 'मल्टीपर्पस कैलकुलेटर' : 'Multi-Purpose Calculator'}
+                  {tr.calc.title}
                 </h2>
                 <span className="text-[10px] font-bold bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] px-2 py-0.5 rounded-md border border-[var(--theme-primary,#38BDF8)]/30 uppercase tracking-wider">
                   Unlimited
                 </span>
               </div>
               <p className="text-[11.5px] text-[#94A3B8]">
-                {isHindi ? 'कस्टम इनपुट, कोई पाबंदी नहीं, रीयल-टाइम गणना' : 'Custom inputs with zero restrictions & instant results'}
+                {tr.calc.subtitle}
               </p>
             </div>
           </div>
@@ -527,12 +530,12 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                     ? 'text-[34px] sm:text-[44px] md:text-[50px]'
                     : 'text-[28px] sm:text-[34px]'
                 }`}>
-                  {privacyMask ? '₹ ****' : (stdResult || '0')}
+                  {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : (stdResult || '0')}
                 </div>
 
                 {parseFloat(stdResult) > 0 && (
                   <div className="text-[12px] font-mono font-bold text-[#10B981] flex items-center justify-end gap-1">
-                    <span>≈ ₹ {parseFloat(stdResult).toLocaleString('en-IN')}</span>
+                    <span>≈ {getCurrencyConfig(getCurrentLanguage()).symbol} {parseFloat(stdResult).toLocaleString('en-IN')}</span>
                     {formatIndianWords(parseFloat(stdResult)) && (
                       <span className="bg-[#10B981]/15 px-2 py-0.5 rounded text-[#10B981] border border-[#10B981]/30">
                         ({formatIndianWords(parseFloat(stdResult))})
@@ -732,7 +735,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-[11.5px]">
                   <label className="font-bold text-[#CBD5E1]">
-                    {isHindi ? 'कुल आय / इनफ्लो राशि (₹):' : 'Total Inflow Amount (₹):'}
+                    {isHindi ? `कुल आय / इनफ्लो राशि (${getCurrencyConfig(getCurrentLanguage()).symbol}):` : `Total Inflow Amount (${getCurrencyConfig(getCurrentLanguage()).symbol}):`}
                   </label>
                   {fundInflowNum > 0 && (
                     <span className="font-mono text-[11px] text-[var(--theme-primary,#38BDF8)] font-bold">
@@ -742,9 +745,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                 </div>
 
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
-                    ₹
-                  </span>
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
                   <input
                     type="number"
                     min="0"
@@ -764,7 +765,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                       onClick={() => setFundAmountInput(amt.toString())}
                       className="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--theme-card,#132438)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
                     >
-                      ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                      {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                     </button>
                   ))}
                 </div>
@@ -793,7 +794,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
 
                       <div className="text-right shrink-0">
                         <div className="text-[13px] font-mono font-bold text-[#F8FAFC]">
-                          {privacyMask ? '₹ ****' : formatCurrency(allocatedAmt)}
+                          {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : formatCurrency(allocatedAmt)}
                         </div>
                       </div>
                     </div>
@@ -813,7 +814,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                   className="w-full py-2.5 px-4 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
                 >
                   <PlusCircle className="w-4 h-4" />
-                  <span>Apply ₹{fundInflowNum.toLocaleString('en-IN')} to Income</span>
+                  <span>Apply {getCurrencyConfig(getCurrentLanguage()).symbol}{fundInflowNum.toLocaleString('en-IN')} to Income</span>
                 </button>
               )}
             </div>
@@ -847,7 +848,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11px]">
-                    <span className="font-bold text-[#CBD5E1]">Amount (₹):</span>
+                    <span className="font-bold text-[#CBD5E1]">Amount ({getCurrencyConfig(getCurrentLanguage()).symbol}):</span>
                     {sipAmtNum > 0 && <span className="text-[var(--theme-primary,#38BDF8)] font-mono">{formatIndianWords(sipAmtNum)}</span>}
                   </div>
                   <input
@@ -892,19 +893,19 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                 <div>
                   <div className="text-[10px] text-[#94A3B8]">Total Invested</div>
                   <div className="text-[13px] font-bold text-[#F8FAFC] mt-0.5">
-                    ₹{Math.round(sipCalculation.sipInvested).toLocaleString('en-IN')}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(sipCalculation.sipInvested).toLocaleString('en-IN')}
                   </div>
                 </div>
                 <div>
                   <div className="text-[10px] text-[#10B981]">Wealth Gains</div>
                   <div className="text-[13px] font-bold text-[#10B981] mt-0.5">
-                    +₹{Math.round(sipCalculation.sipGain).toLocaleString('en-IN')}
+                    +{getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(sipCalculation.sipGain).toLocaleString('en-IN')}
                   </div>
                 </div>
                 <div>
                   <div className="text-[10px] text-[var(--theme-primary,#38BDF8)]">Maturity Value</div>
                   <div className="text-[14px] font-extrabold text-[var(--theme-primary,#38BDF8)] mt-0.5">
-                    ₹{Math.round(sipCalculation.sipTotalValue).toLocaleString('en-IN')}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(sipCalculation.sipTotalValue).toLocaleString('en-IN')}
                   </div>
                 </div>
               </div>
@@ -919,7 +920,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11px]">
-                    <span className="font-bold text-[#CBD5E1]">Principal (₹):</span>
+                    <span className="font-bold text-[#CBD5E1]">Principal ({getCurrencyConfig(getCurrentLanguage()).symbol}):</span>
                     {loanPrincipalNum > 0 && <span className="text-[var(--theme-primary,#38BDF8)] font-mono">{formatIndianWords(loanPrincipalNum)}</span>}
                   </div>
                   <input
@@ -963,19 +964,19 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                 <div>
                   <div className="text-[10px] text-[var(--theme-primary,#38BDF8)]">Monthly EMI</div>
                   <div className="text-[14px] font-extrabold text-[var(--theme-primary,#38BDF8)] mt-0.5">
-                    ₹{Math.round(emiCalculation.monthlyEmi).toLocaleString('en-IN')}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(emiCalculation.monthlyEmi).toLocaleString('en-IN')}
                   </div>
                 </div>
                 <div>
                   <div className="text-[10px] text-[#EF4444]">Total Interest</div>
                   <div className="text-[13px] font-bold text-[#EF4444] mt-0.5">
-                    ₹{Math.round(emiCalculation.totalLoanInterest).toLocaleString('en-IN')}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(emiCalculation.totalLoanInterest).toLocaleString('en-IN')}
                   </div>
                 </div>
                 <div>
                   <div className="text-[10px] text-[#10B981]">Total Payment</div>
                   <div className="text-[13px] font-bold text-[#10B981] mt-0.5">
-                    ₹{Math.round(emiCalculation.totalLoanPayment).toLocaleString('en-IN')}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(emiCalculation.totalLoanPayment).toLocaleString('en-IN')}
                   </div>
                 </div>
               </div>
@@ -1026,7 +1027,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11px]">
-                    <span className="font-bold text-[#CBD5E1]">Amount (₹):</span>
+                    <span className="font-bold text-[#CBD5E1]">Amount ({getCurrencyConfig(getCurrentLanguage()).symbol}):</span>
                     {gstAmountNum > 0 && <span className="font-mono text-[#EC4899]">{formatIndianWords(gstAmountNum)}</span>}
                   </div>
                   <input
@@ -1046,7 +1047,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                         onClick={() => setGstAmountInput(amt.toString())}
                         className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-card,#132438)] text-[#94A3B8] hover:text-[#EC4899] border border-[var(--theme-border,#213E61)] cursor-pointer"
                       >
-                        ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                        {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                       </button>
                     ))}
                   </div>
@@ -1099,15 +1100,15 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5 font-mono text-[12px]">
                 <div className="flex justify-between text-[#94A3B8]">
                   <span>Base Price:</span>
-                  <span className="font-bold text-[#F8FAFC]">₹{gstBase.toFixed(2)}</span>
+                  <span className="font-bold text-[#F8FAFC]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstBase.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[#EC4899]">
                   <span>GST Tax ({effectiveGstSlab}%):</span>
-                  <span className="font-bold">+₹{gstTotalTax.toFixed(2)}</span>
+                  <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstTotalTax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-1 text-[14px]">
                   <span className="font-bold">Total Final Price:</span>
-                  <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">₹{gstFinalGross.toFixed(2)}</span>
+                  <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstFinalGross.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -1120,7 +1121,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
             <div className="space-y-3.5 animate-in fade-in duration-150">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-[#CBD5E1]">Original MRP (₹):</span>
+                  <span className="text-[11px] font-bold text-[#CBD5E1]">Original MRP ({getCurrencyConfig(getCurrentLanguage()).symbol}):</span>
                   <input
                     type="number"
                     min="0"
@@ -1148,11 +1149,11 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5 font-mono text-[12px]">
                 <div className="flex justify-between text-[#10B981]">
                   <span>Discount Saved ({discPctNum}%):</span>
-                  <span className="font-bold">-₹{discSaved.toFixed(2)}</span>
+                  <span className="font-bold">-{getCurrencyConfig(getCurrentLanguage()).symbol}{discSaved.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-1 text-[14px]">
                   <span className="font-bold">Payable Price:</span>
-                  <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">₹{discFinal.toFixed(2)}</span>
+                  <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{discFinal.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -1165,7 +1166,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
             <div className="space-y-3.5 animate-in fade-in duration-150">
               <div className="grid grid-cols-2 gap-2.5">
                 <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-[#CBD5E1]">Today's Cost (₹):</span>
+                  <span className="text-[11px] font-bold text-[#CBD5E1]">Today's Cost ({getCurrencyConfig(getCurrentLanguage()).symbol}):</span>
                   <input
                     type="number"
                     min="1"
@@ -1219,11 +1220,11 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5 font-mono text-[12px]">
                 <div className="flex justify-between text-[#EF4444]">
                   <span>Future Cost in {goalYearsNum} Yrs:</span>
-                  <span className="font-bold">₹{Math.round(futureInflatedCost).toLocaleString('en-IN')}</span>
+                  <span className="font-bold">{getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(futureInflatedCost).toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between text-[#10B981] border-t border-[var(--theme-border,#213E61)] pt-1 text-[13px]">
                   <span>Required Monthly SIP:</span>
-                  <span className="font-extrabold text-[#10B981]">₹{Math.round(requiredMonthlySIP).toLocaleString('en-IN')} /mo</span>
+                  <span className="font-extrabold text-[#10B981]">{getCurrencyConfig(getCurrentLanguage()).symbol}{Math.round(requiredMonthlySIP).toLocaleString('en-IN')} /mo</span>
                 </div>
               </div>
 

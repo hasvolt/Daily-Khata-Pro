@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig } from './types';
@@ -12,6 +13,7 @@ import {
   DEFAULT_SECURITY_LOCK
 } from './data/defaults';
 import { calculateFundTotals } from './utils/khataCalculations';
+import { setCurrentLanguage } from './utils/currencyConfig';
 import { Header } from './components/Header';
 import { BottomNav, NavTab } from './components/BottomNav';
 import { HomeView } from './components/HomeView';
@@ -218,6 +220,7 @@ export default function App() {
         }
         if (parsed.settings?.language) {
           setLanguage(parsed.settings.language);
+          setCurrentLanguage(parsed.settings.language);
         }
         if (typeof parsed.settings?.privacyMask === 'boolean') {
           setPrivacyMask(parsed.settings.privacyMask);
@@ -419,6 +422,7 @@ export default function App() {
 
   const handleLanguageChange = (newLang: AppLanguage) => {
     setLanguage(newLang);
+    setCurrentLanguage(newLang);
     saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, newLang, privacyMask, workLogs, dailyLifeLogs);
     showToast(newLang === 'hi' ? 'भाषा हिन्दी सेट हो गई' : newLang === 'hinglish' ? 'Language Hinglish set' : 'Language set to English');
   };
@@ -669,7 +673,7 @@ export default function App() {
     if (isNowComplete) {
       showToast(`Target achieved: ${targetGoalTitle}`);
     } else {
-      showToast(`₹${amount} deposited to goal`);
+      showToast(`${getCurrencyConfig(getCurrentLanguage()).symbol}${amount} deposited to goal`);
     }
   };
 
@@ -767,7 +771,7 @@ export default function App() {
     const updatedEntries = [newEntry, ...entries];
     setEntries(updatedEntries);
     saveToLocalStorage(updatedEntries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
-    showToast(language === 'hi' ? `₹${work.earningsOrCost} खाता में दर्ज` : `₹${work.earningsOrCost} recorded to ledger`);
+    showToast(language === 'hi' ? `${getCurrencyConfig(getCurrentLanguage()).symbol}${work.earningsOrCost} खाता में दर्ज` : `${getCurrencyConfig(getCurrentLanguage()).symbol}${work.earningsOrCost} recorded to ledger`);
   };
 
   // Personal Notes Handlers

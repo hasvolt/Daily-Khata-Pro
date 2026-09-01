@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { PersonalNote, PersonalNoteCategory, AppLanguage } from '../types';
 import { DEFAULT_NOTE_CATEGORIES } from '../data/defaults';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import { getNotesText, localizeCategory } from '../utils/localization';
 import {
   FileText,
   Plus,
@@ -54,7 +55,6 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
   language = 'en',
   privacyMask = false
 }) => {
-  const isHindi = language === 'hi';
   const handleOpenCreate = onOpenCreateModal || onAddNote || (() => {});
   const handleQuickAdd = onQuickAdd || onQuickAddNote;
 
@@ -143,7 +143,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
     if (!quickTitle.trim() && !quickContent.trim()) return;
 
     if (handleQuickAdd) {
-      handleQuickAdd(quickTitle.trim() || (isHindi ? 'त्वरित नोट' : 'Quick Memo'), quickContent.trim());
+      handleQuickAdd(quickTitle.trim() || 'Quick Memo', quickContent.trim());
       setQuickTitle('');
       setQuickContent('');
       setIsQuickBoxExpanded(false);
@@ -186,16 +186,14 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
                 <FileText className="w-4 h-4" />
               </span>
               <span className="text-[12px] font-extrabold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                {isHindi ? '100% प्राइवेट व सेपरेट वॉल्ट' : 'Private Personal Vault'}
+                {getNotesText('vaultTitle', language)}
               </span>
             </div>
             <h2 className="font-serif-display text-[24px] sm:text-[30px] font-bold text-[#F8FAFC] tracking-tight leading-tight">
-              {isHindi ? 'पर्सनल नोट्स एवं सीक्रेट डायरी' : 'Personal Notes & Private Memos'}
+              {getNotesText('headerTitle', language)}
             </h2>
             <p className="text-[13px] sm:text-[14px] text-[#94A3B8] leading-relaxed">
-              {isHindi
-                ? 'खाता और खर्चों से बिल्कुल अलग अपना पर्सनल स्पेस। यहाँ अपने गुप्त विचार, जरूरी क्रेडेंशियल्स, पासवर्ड हिंट्स, टू-डू लिस्ट और मेमो 100% सुरक्षित और ऑफलाइन रखें।'
-                : 'A dedicated private space isolated from ledgers and finances. Keep your personal reflections, passwords hints, ideas, and checklists 100% offline in your browser.'}
+              {getNotesText('vaultSubtitle', language)}
             </p>
           </div>
 
@@ -204,7 +202,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
             className="self-start sm:self-center min-h-[46px] py-2.5 px-5 sm:px-6 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[14px] flex items-center gap-2 shadow-lg active:scale-95 transition-all cursor-pointer shrink-0"
           >
             <Plus className="w-4.5 h-4.5 stroke-[3]" />
-            <span>{isHindi ? 'नया नोट लिखें' : 'Create Note'}</span>
+            <span>{getNotesText('createNoteBtn', language)}</span>
           </button>
         </div>
 
@@ -212,7 +210,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
         <div className="grid grid-cols-3 gap-2.5 sm:gap-4 mt-5 pt-4 border-t border-[var(--theme-border,#213E61)]/70">
           <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)]/60 text-center sm:text-left">
             <div className="text-[10.5px] sm:text-[11.5px] font-bold uppercase tracking-wider text-[#94A3B8]">
-              {isHindi ? 'कुल नोट्स' : 'Total Notes'}
+              {getNotesText('totalNotes', language)}
             </div>
             <div className="text-[18px] sm:text-[22px] font-bold text-[#F8FAFC] mt-0.5">
               {notes.length}
@@ -222,7 +220,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
           <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)]/60 text-center sm:text-left">
             <div className="text-[10.5px] sm:text-[11.5px] font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)] flex items-center justify-center sm:justify-start gap-1">
               <Pin className="w-3 h-3 fill-current" />
-              <span>{isHindi ? 'पिन किए गए' : 'Pinned'}</span>
+              <span>{getNotesText('pinnedNotes', language)}</span>
             </div>
             <div className="text-[18px] sm:text-[22px] font-bold text-[var(--theme-primary,#38BDF8)] mt-0.5">
               {pinnedCount}
@@ -232,7 +230,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
           <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)]/60 text-center sm:text-left">
             <div className="text-[10.5px] sm:text-[11.5px] font-bold uppercase tracking-wider text-[#10B981] flex items-center justify-center sm:justify-start gap-1">
               <Lock className="w-3 h-3" />
-              <span>{isHindi ? 'मास्क्ड / सीक्रेट' : 'Secret / Masked'}</span>
+              <span>{getNotesText('secretNotes', language)}</span>
             </div>
             <div className="text-[18px] sm:text-[22px] font-bold text-[#10B981] mt-0.5">
               {lockedCount}
@@ -250,7 +248,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
           >
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-              <span>{isHindi ? 'त्वरित पर्सनल नोट लिखें (क्लिक करें)...' : 'Write a quick personal note / scratchpad here...'}</span>
+              <span>{getNotesText('quickMemoPrompt', language)}</span>
             </div>
             <Plus className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
           </div>
@@ -260,7 +258,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
               type="text"
               value={quickTitle}
               onChange={(e) => setQuickTitle(e.target.value)}
-              placeholder={isHindi ? 'नोट का शीर्षक (Title)...' : 'Note title / subject...'}
+              placeholder="Title..."
               className="w-full px-3.5 py-2 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[13.5px] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
               autoFocus
             />
@@ -268,7 +266,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
               value={quickContent}
               onChange={(e) => setQuickContent(e.target.value)}
               rows={3}
-              placeholder={isHindi ? 'यहाँ अपनी बात लिखें...' : 'Write note content...'}
+              placeholder="Write note content..."
               className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[13px] leading-relaxed focus:outline-none focus:border-[var(--theme-primary,#38BDF8)] resize-none"
             />
             <div className="flex items-center justify-end gap-2">
@@ -281,13 +279,13 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
                 }}
                 className="py-1.5 px-3 rounded-lg text-[12px] font-bold text-[#94A3B8] hover:text-[#F8FAFC] cursor-pointer"
               >
-                {isHindi ? 'बंद करें' : 'Cancel'}
+                {getNotesText('cancelBtn', language)}
               </button>
               <button
                 type="submit"
                 className="py-1.5 px-4 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[12.5px] shadow-sm cursor-pointer active:scale-95"
               >
-                {isHindi ? 'सहेजें' : 'Save Note'}
+                {getNotesText('saveNoteBtn', language)}
               </button>
             </div>
           </form>
@@ -303,7 +301,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={isHindi ? 'नोट्स में खोजें (शीर्षक, शब्द या #टैग)...' : 'Search in notes (title, body or #tags)...'}
+            placeholder={getNotesText('searchPlaceholder', language)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[13.5px] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)] transition-colors shadow-sm"
           />
           {searchQuery && (
@@ -329,7 +327,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
                 : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
             }`}
           >
-            {isHindi ? 'सभी नोट्स' : 'All Notes'} ({notes.length})
+            {getNotesText('allNotes', language)} ({notes.length})
           </button>
 
           <button
@@ -344,7 +342,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
             }`}
           >
             <Pin className="w-3.5 h-3.5 fill-current" />
-            <span>{isHindi ? 'पिन किए गए' : 'Pinned'}</span> ({pinnedCount})
+            <span>{getNotesText('pinnedNotes', language)}</span> ({pinnedCount})
           </button>
 
           <button
@@ -359,7 +357,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
             }`}
           >
             <Lock className="w-3.5 h-3.5" />
-            <span>{isHindi ? 'गोपनीय / सीक्रेट' : 'Secret Vault'}</span> ({lockedCount})
+            <span>{getNotesText('secretVault', language)}</span> ({lockedCount})
           </button>
 
           {DEFAULT_NOTE_CATEGORIES.map((cat) => {
@@ -378,7 +376,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
                     : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
                 }`}
               >
-                {isHindi ? cat.hindiLabel : cat.label} ({count})
+                {localizeCategory(cat.label, language)} ({count})
               </button>
             );
           })}
@@ -418,16 +416,10 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
           </div>
           <div className="space-y-1.5 max-w-md mx-auto">
             <h3 className="text-[18px] font-bold text-[#F8FAFC]">
-              {searchQuery || activeCategory !== 'all' || activeTag
-                ? isHindi ? 'कोई नोट नहीं मिला' : 'No matching notes found'
-                : isHindi ? 'कोई पर्सनल नोट मौजूद नहीं है' : 'Your Personal Notes Vault is Empty'}
+              {getNotesText('emptyVault', language)}
             </h3>
             <p className="text-[13px] text-[#94A3B8] leading-relaxed">
-              {searchQuery || activeCategory !== 'all' || activeTag
-                ? isHindi ? 'फ़िल्टर साफ़ करें या नया नोट जोड़ें।' : 'Try clearing filters or search terms.'
-                : isHindi
-                  ? 'अपने व्यक्तिगत विचार, गुप्त पासवर्ड्स, जरूरी टू-डू लिस्ट या महत्वपूर्ण मेमो यहाँ सुरक्षित रखें।'
-                  : 'Start jotting down private thoughts, project ideas, to-do checklists, or secret credentials.'}
+              {getNotesText('emptyVaultDesc', language)}
             </p>
           </div>
           <button
@@ -435,7 +427,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
             className="py-2.5 px-5 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[13.5px] shadow-md inline-flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
-            <span>{isHindi ? 'पहला नोट लिखें' : 'Create First Note'}</span>
+            <span>{getNotesText('createFirstNote', language)}</span>
           </button>
         </div>
       ) : (
@@ -443,7 +435,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
           {filteredNotes.map((note) => {
             const isMasked = note.isLocked && !revealedNoteIds[note.id] && !privacyMask;
             const categoryObj = DEFAULT_NOTE_CATEGORIES.find((c) => c.id === note.category);
-            const dateStr = new Date(note.updatedAt || note.createdAt).toLocaleDateString(isHindi ? 'hi-IN' : 'en-IN', {
+            const dateStr = new Date(note.updatedAt || note.createdAt).toLocaleDateString(undefined, {
               day: 'numeric',
               month: 'short',
               year: 'numeric'
@@ -461,7 +453,7 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5">
                       <span className="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#070E18]/60 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]">
-                        {isHindi && categoryObj?.hindiLabel ? categoryObj.hindiLabel : categoryObj?.label || note.category}
+                        {categoryObj ? localizeCategory(categoryObj.label, language) : note.category}
                       </span>
                       {note.isLocked && (
                         <span className="p-1 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30" title="Secret Vault Masked">
@@ -513,10 +505,10 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
                       >
                         <div className="flex items-center gap-1.5 text-[#10B981] text-[12px] font-bold">
                           <Eye className="w-4 h-4" />
-                          <span>{isHindi ? 'सीक्रेट नोट: देखने के लिए क्लिक करें' : 'Secret Note: Click to View'}</span>
+                          <span>{getNotesText('secretNoteClick', language)}</span>
                         </div>
                         <span className="text-[11px] text-[#94A3B8]">
-                          {isHindi ? 'गोपनीयता के लिए मास्क्ड' : 'Hidden for privacy'}
+                          {getNotesText('hiddenForPrivacy', language)}
                         </span>
                       </div>
                     ) : (

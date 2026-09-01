@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage } from "./currencyConfig";
 import { WorkLog, DailyLifeLog } from '../types';
 
 export const downloadTrackerCSV = (workLogs: WorkLog[], dailyLifeLogs: DailyLifeLog[]) => {
@@ -103,7 +104,7 @@ export const printTrackerData = (workLogs: WorkLog[], dailyLifeLogs: DailyLifeLo
               <td><strong>${log.title}</strong><br/>${log.clientOrCompany ? `<span class="meta">${log.clientOrCompany}</span>` : ''}</td>
               <td>${log.category}</td>
               <td>${log.status}</td>
-              <td>${log.earningsOrCost ? `₹${log.earningsOrCost}` : '-'}<br/>${log.hoursSpent ? `${log.hoursSpent} hrs` : ''}</td>
+              <td>${log.earningsOrCost ? `${getCurrencyConfig(getCurrentLanguage()).symbol}${log.earningsOrCost}` : '-'}<br/>${log.hoursSpent ? `${log.hoursSpent} hrs` : ''}</td>
               <td>
                 ${log.notes ? `<p style="margin:0 0 5px 0;">${log.notes}</p>` : ''}
                 ${log.deliverables && log.deliverables.length > 0 ? `<ul style="margin:0; padding-left:15px;">${log.deliverables.map(d => `<li>${d}</li>`).join('')}</ul>` : ''}

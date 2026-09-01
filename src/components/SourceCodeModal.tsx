@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import React, { useState } from 'react';
 import {
   X,
@@ -27,6 +28,7 @@ import {
 import { HasVoltLogo } from './HasVoltLogo';
 import { AppLanguage } from '../types';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import { getAppTranslation } from '../utils/appTranslations';
 
 interface SourceCodeModalProps {
   isOpen: boolean;
@@ -61,6 +63,8 @@ export const SourceCodeModal: React.FC<SourceCodeModalProps> = ({
   const [copiedClone, setCopiedClone] = useState(false);
   const [copiedSetup, setCopiedSetup] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const tr = getAppTranslation(language as AppLanguage);
 
   if (!isOpen) return null;
 
@@ -335,14 +339,14 @@ export interface KhataData {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-serif-display text-[17px] font-bold text-[#F8FAFC]">
-                  Source Code &amp; GitHub Repository
+                  {tr.safety.title}
                 </h2>
                 <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
-                  100% Open &amp; Safe
+                  {tr.safety.openSourceBadge}
                 </span>
               </div>
               <p className="text-[11px] text-[#94A3B8]">
-                Open Transparency Hub · GitHub Repo, 100% client-side algorithms &amp; offline privacy
+                {tr.safety.subtitle}
               </p>
             </div>
           </div>
@@ -365,7 +369,7 @@ export interface KhataData {
             }`}
           >
             <FolderGit2 className="w-3.5 h-3.5 text-[#10B981]" />
-            <span>GitHub Repository</span>
+            <span>{tr.safety.tabGithub}</span>
           </button>
 
           <button
@@ -377,7 +381,7 @@ export interface KhataData {
             }`}
           >
             <Terminal className="w-3.5 h-3.5" />
-            <span>Code Inspector</span>
+            <span>{tr.safety.tabInspector}</span>
           </button>
 
           <button
@@ -389,7 +393,7 @@ export interface KhataData {
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Security &amp; Privacy Audit</span>
+            <span>{tr.safety.tabAudit}</span>
           </button>
 
           <button
@@ -401,7 +405,7 @@ export interface KhataData {
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
-            <span>How to Verify (DIY)</span>
+            <span>{tr.safety.tabVerify}</span>
           </button>
         </div>
 
@@ -438,7 +442,7 @@ export interface KhataData {
                     className="px-4 py-2 rounded-xl bg-[var(--theme-btn-bg,#38BDF8)] hover:bg-[var(--theme-btn-hover,#0EA5E9)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] flex items-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
                   >
                     <ExternalLink className="w-4 h-4" />
-                    <span>Open GitHub Repo</span>
+                    <span>{tr.safety.viewOnGithub}</span>
                   </a>
                   <a
                     href={`${GITHUB_REPO_URL}/stargazers`}
@@ -457,9 +461,9 @@ export interface KhataData {
                 <div className="flex items-center justify-between text-[11px] text-[#94A3B8]">
                   <span className="font-bold flex items-center gap-1.5 text-[#CBD5E1]">
                     <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                    <span>Git Clone HTTPS URL</span>
+                    <span>{tr.safety.cloneRepo}</span>
                   </span>
-                  <span className="text-[10.5px] text-[#64748B]">Click copy to clone anywhere</span>
+                  <span className="text-[10.5px] text-[#64748B]">{tr.safety.cloneHint}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] font-mono text-[12px]">
                   <span className="text-[var(--theme-primary,#38BDF8)] truncate select-all">
@@ -472,12 +476,12 @@ export interface KhataData {
                     {copiedClone ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-[#10B981]" />
-                        <span className="text-[#10B981]">Copied!</span>
+                        <span className="text-[#10B981]">{tr.safety.copied}</span>
                       </>
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5 text-[#94A3B8]" />
-                        <span>Copy</span>
+                        <span>{tr.safety.copyCode}</span>
                       </>
                     )}
                   </button>
@@ -523,20 +527,20 @@ export interface KhataData {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1">
                 <div className="text-[10px] uppercase font-bold text-[#64748B] dark:text-[#94A3B8]">Open License</div>
-                <div className="font-bold text-[13px] text-[#0F172A] dark:text-[#F8FAFC]">MIT / Free Open-Source</div>
-                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">Full freedom to audit, fork, customize, and self-host</p>
+                <div className="font-bold text-[13px] text-[#0F172A] dark:text-[#F8FAFC]">{tr.safety.mitLicenseTitle}</div>
+                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">{tr.safety.mitLicenseDesc}</p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1">
                 <div className="text-[10px] uppercase font-bold text-[#64748B] dark:text-[#94A3B8]">Modern Stack</div>
-                <div className="font-bold text-[13px] text-[#0F172A] dark:text-[#F8FAFC]">React 18 + TypeScript + Vite</div>
-                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">Tailwind CSS, Lucide Icons &amp; PWA Service Worker</p>
+                <div className="font-bold text-[13px] text-[#0F172A] dark:text-[#F8FAFC]">{tr.safety.modernStackTitle}</div>
+                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">{tr.safety.modernStackDesc}</p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1">
                 <div className="text-[10px] uppercase font-bold text-[#64748B] dark:text-[#94A3B8]">Privacy Standard</div>
-                <div className="font-bold text-[13px] text-[#059669] dark:text-[#10B981]">Zero Telemetry / 100% Local</div>
-                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">All calculations and records stay in browser storage</p>
+                <div className="font-bold text-[13px] text-[#059669] dark:text-[#10B981]">{tr.safety.auditReadyTitle}</div>
+                <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">{tr.safety.auditReadyDesc}</p>
               </div>
             </div>
           </div>
@@ -742,10 +746,10 @@ export interface KhataData {
           <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-4 bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] text-[13px]">
             <div className="space-y-1">
               <h3 className="font-serif-display text-[16px] font-bold text-[#F8FAFC]">
-                Verify Safety Yourself in 3 Steps
+                {tr.safety.verifyTitle}
               </h3>
               <p className="text-[12px] text-[#94A3B8]">
-                You do not need to take our word for it. Any user or engineer can verify that no network traffic occurs using standard browser Developer Tools:
+                {tr.safety.verifySubtitle}
               </p>
             </div>
 
@@ -755,9 +759,9 @@ export interface KhataData {
                   1
                 </div>
                 <div className="space-y-1">
-                  <div className="font-bold text-[#F8FAFC]">Open Developer Tools</div>
+                  <div className="font-bold text-[#F8FAFC]">{tr.safety.step1Title}</div>
                   <p className="text-[12px] text-[#94A3B8]">
-                    Press <kbd className="px-1.5 py-0.5 rounded bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono text-[11px]">F12</kbd> or <kbd className="px-1.5 py-0.5 rounded bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono text-[11px]">Ctrl + Shift + I</kbd> (Mac: <kbd className="px-1.5 py-0.5 rounded bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono text-[11px]">Cmd + Option + I</kbd>).
+                    {tr.safety.step1Desc}
                   </p>
                 </div>
               </div>
@@ -767,9 +771,9 @@ export interface KhataData {
                   2
                 </div>
                 <div className="space-y-1">
-                  <div className="font-bold text-[#F8FAFC]">Inspect the &quot;Network&quot; Tab</div>
+                  <div className="font-bold text-[#F8FAFC]">{tr.safety.step2Title}</div>
                   <p className="text-[12px] text-[#94A3B8]">
-                    Switch to the <strong>Network</strong> tab. Add an income entry or delete an expense in the app. You will see <strong>0 requests</strong> being sent to any server.
+                    {tr.safety.step2Desc}
                   </p>
                 </div>
               </div>
@@ -779,9 +783,9 @@ export interface KhataData {
                   3
                 </div>
                 <div className="space-y-1">
-                  <div className="font-bold text-[#F8FAFC]">Inspect the &quot;Application&quot; Tab (Storage)</div>
+                  <div className="font-bold text-[#F8FAFC]">{tr.safety.step3Title}</div>
                   <p className="text-[12px] text-[#94A3B8]">
-                    Navigate to <strong>Application → Local Storage</strong> and click your domain. Look for the key <code className="text-[var(--theme-primary,#38BDF8)] font-mono">hasvolt_khata_v1</code>. You will see all your data cleanly stored in plain JSON format on your computer or phone.
+                    {tr.safety.step3Desc}
                   </p>
                 </div>
               </div>
@@ -820,7 +824,7 @@ export interface KhataData {
               onClick={onClose}
               className="px-4 py-2 rounded-xl bg-[var(--theme-btn-bg,#38BDF8)] hover:bg-[var(--theme-btn-hover,#0EA5E9)] text-[var(--theme-btn-text,#040D17)] font-bold text-[12.5px] cursor-pointer transition-all shadow-md active:scale-95"
             >
-              Close
+              {language === 'hi' ? 'बंद करें' : 'Close'}
             </button>
           </div>
         </div>

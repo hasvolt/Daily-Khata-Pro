@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import React, { useState, useEffect } from 'react';
 import { Goal, FundType } from '../types';
 import { FUND_ORDER, FUND_LABELS, GOAL_PRESETS } from '../data/defaults';
@@ -220,10 +221,10 @@ export const GoalModal: React.FC<GoalModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">
-                Target Amount (₹) <span style={{ color: 'var(--theme-primary, #38BDF8)' }}>*</span>
+                Target Amount ({getCurrencyConfig(getCurrentLanguage()).symbol}) <span style={{ color: 'var(--theme-primary, #38BDF8)' }}>*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-bold text-[#94A3B8]">₹</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-bold text-[#94A3B8]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
                 <input
                   type="number"
                   required
@@ -239,10 +240,10 @@ export const GoalModal: React.FC<GoalModalProps> = ({
 
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">
-                Current Saved Amount (₹)
+                Current Saved Amount ({getCurrencyConfig(getCurrentLanguage()).symbol})
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-bold text-[#94A3B8]">₹</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-bold text-[#94A3B8]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
                 <input
                   type="number"
                   step="any"

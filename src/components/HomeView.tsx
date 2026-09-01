@@ -3,6 +3,7 @@ import { Entry, FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats } from '../utils/khataCalculations';
 import { TRANSLATIONS } from '../utils/translations';
+import { getPageTranslation } from '../utils/pageTranslations';
 import {
   Plus,
   ArrowUpRight,
@@ -33,15 +34,6 @@ const FUND_ICONS: Record<FundType, LucideIcon> = {
   investment: TrendingUp
 };
 
-const FUND_SUBTITLES: Record<FundType, { en: string; hi: string }> = {
-  personal: { en: 'Personal needs & lifestyle', hi: 'व्यक्तिगत जरूरतें व खर्च' },
-  family: { en: 'Household, rent & grocery', hi: 'घर, किराया, राशन व परिवार' },
-  buffer: { en: 'Daily unexpected expenses', hi: 'दैनिक अप्रत्याशित खर्चे' },
-  emergency: { en: 'Crisis & medical safety', hi: 'आपातकालीन व चिकित्सा फंड' },
-  saving: { en: 'Short-term savings & gadgets', hi: 'बचत, गैजेट्स व खरीदारी' },
-  investment: { en: 'Long-term compounding & wealth', hi: 'दीर्घकालिक निवेश व समृद्धि' }
-};
-
 interface HomeViewProps {
   entries: Entry[];
   percentages: Record<FundType, number>;
@@ -65,14 +57,31 @@ export const HomeView: React.FC<HomeViewProps> = ({
   privacyMask = false
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
-  const isHindi = language === 'hi';
+  const pageT = getPageTranslation(language);
 
   const todayStats = calculatePeriodStats(entries, { type: 'today' });
   const monthStats = calculatePeriodStats(entries, { type: 'month' });
   const fundTotals = calculateFundTotals(entries);
 
+  const localeMap: Record<string, string> = {
+    hi: 'hi-IN',
+    hinglish: 'en-IN',
+    es: 'es-ES',
+    ar: 'ar-SA',
+    fr: 'fr-FR',
+    de: 'de-DE',
+    ru: 'ru-RU',
+    pt: 'pt-BR',
+    bn: 'bn-BD',
+    ur: 'ur-PK',
+    id: 'id-ID',
+    ja: 'ja-JP',
+    zh: 'zh-CN',
+    en: 'en-IN'
+  };
+
   const today = new Date();
-  const dateFormatted = today.toLocaleDateString(isHindi ? 'hi-IN' : 'en-IN', {
+  const dateFormatted = today.toLocaleDateString(localeMap[language] || 'en-IN', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -103,9 +112,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
 
             <p className="text-[10px] sm:text-[13px] text-[#94A3B8] leading-normal break-words">
-              {isHindi 
-                ? '6-फंड ऑटो-स्प्लिट नियम के अनुसार आपका कुल सुरक्षित संचित बैलेंस'
-                : 'Consolidated real-time net balance managed across all 6 financial pots'}
+              {pageT.common.netBalanceDesc}
             </p>
           </div>
 
@@ -146,7 +153,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <span className="truncate">{t.home.dailySummaryHeading}</span>
             </div>
             <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#94A3B8] bg-[var(--theme-bg,#070E18)] px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[var(--theme-border,#213E61)]">
-              {isHindi ? 'आज' : 'Today'}
+              {pageT.common.today}
             </span>
           </div>
 
@@ -180,7 +187,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           {/* Today Net Diff */}
           <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/60 text-[10px] sm:text-[12.5px]">
-            <span className="text-[#94A3B8] font-medium truncate">{isHindi ? 'आज का नेट:' : "Today's Net:"}</span>
+            <span className="text-[#94A3B8] font-medium truncate">{pageT.common.todaysNet}</span>
             <span className={`font-mono font-bold text-[11.5px] sm:text-[14px] truncate ${todayStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
               {todayStats.net >= 0 ? '+' : ''}{formatCurrency(todayStats.net, privacyMask)}
             </span>
@@ -197,7 +204,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <span className="truncate">{t.home.monthlySummaryHeading}</span>
             </div>
             <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[#10B981]/30">
-              {today.toLocaleString(isHindi ? 'hi-IN' : 'default', { month: 'short', year: 'numeric' })}
+              {today.toLocaleString(localeMap[language] || 'default', { month: 'short', year: 'numeric' })}
             </span>
           </div>
 
@@ -248,9 +255,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <span>{t.home.sixFundsHeading}</span>
             </h3>
             <p className="text-[9.5px] sm:text-[12px] text-[#94A3B8] break-words">
-              {isHindi
-                ? 'हर आय का 6 महत्वपूर्ण श्रेणियों में अनुशासित ऑटो-विभाजन (क्लिक करके लेज़र फ़िल्टर करें)'
-                : 'Disciplined wealth allocation across 6 pots (Click any fund pot to inspect ledger)'}
+              {t.home.sixFundsSub}
             </p>
           </div>
           <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#94A3B8] bg-[var(--theme-card,#132438)] px-2 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-xl border border-[var(--theme-border,#213E61)] shrink-0 self-start sm:self-auto">
@@ -266,7 +271,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             const val = fundTotals[f] ?? 0;
             const isNeg = val < 0;
             const fundTranslatedName = t.funds?.[f]?.name ? t.funds[f].name.split(' (')[0] : FUND_LABELS[f];
-            const subtitle = isHindi ? FUND_SUBTITLES[f].hi : FUND_SUBTITLES[f].en;
+            const subtitle = pageT.homeSubtitles?.[f] || t.funds?.[f]?.desc || FUND_LABELS[f];
 
             return (
               <button
@@ -315,7 +320,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <div className="flex items-center justify-between text-[9.5px] sm:text-[11.5px] text-[#94A3B8]">
               <span className="flex items-center gap-1 sm:gap-1.5 font-semibold text-[#F8FAFC]">
                 <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F59E0B]" />
-                <span className="truncate">{isHindi ? '100% अनुशासित विभाजन नियम' : '100% Disciplined Split Ratio'}</span>
+                <span className="truncate">{pageT.common.disciplinedSplit}</span>
               </span>
               <span className="font-mono text-[9.5px] sm:text-[11px] text-[#10B981] font-bold shrink-0">100% Allocated</span>
             </div>
@@ -341,7 +346,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-[var(--theme-border,#213E61)]/40 text-[9.5px] sm:text-[11.5px]">
             <div className="flex items-center gap-1 text-[#10B981] font-medium text-[9.5px] sm:text-[11px]">
               <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#10B981] shrink-0" />
-              <span className="truncate">{isHindi ? '100% सुरक्षित और ऑफ़लाइन' : '100% Safe, Private & Offline'}</span>
+              <span className="truncate">{pageT.common.safeOffline}</span>
             </div>
 
             {onViewHistory && (
@@ -350,7 +355,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 onClick={onViewHistory}
                 className="inline-flex items-center gap-1 text-[var(--theme-primary,#38BDF8)] hover:text-white font-semibold cursor-pointer transition-colors"
               >
-                <span className="truncate">{isHindi ? 'पूरा लेज़र देखें' : 'View Full Ledger'}</span>
+                <span className="truncate">{pageT.common.viewLedger}</span>
                 <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             )}

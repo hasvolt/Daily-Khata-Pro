@@ -55,6 +55,7 @@ import { triggerHapticSound } from '../utils/khataCalculations';
 import { ConfirmModal } from './ConfirmModal';
 import { HasVoltLogo } from './HasVoltLogo';
 import { TRANSLATIONS } from '../utils/translations';
+import { getAppTranslation } from '../utils/appTranslations';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -137,6 +138,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi';
+  const tr = getAppTranslation((language as AppLanguage) || 'en');
 
   if (!isOpen) return null;
 
@@ -321,12 +323,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <HasVoltLogo size={32} />
             <div>
               <h3 className="font-bold text-[16px] sm:text-[17px] text-[#F8FAFC]">
-                {isHindi ? 'सेटिंग्स व कस्टमाइज़ेशन' : 'Settings & Customization'}
+                {tr.settings.title}
               </h3>
               <p className="text-[11.5px] text-[#94A3B8]">
-                {isHindi
-                  ? 'थीम, भाषा, कस्टम श्रेणियां, 6-फंड नियम व डेटा बैकअप'
-                  : 'Universal customizer for categories, sources, rules, theme & local backup'}
+                {tr.settings.subtitle}
               </p>
             </div>
           </div>
@@ -361,13 +361,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {/* Navigation Tabs */}
         <div className="flex border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)]/70 px-4 overflow-x-auto no-scrollbar">
           {[
-            { id: 'preferences', label: isHindi ? 'पसंद' : 'Preferences', icon: Palette },
-            { id: 'custom', label: isHindi ? 'कस्टम श्रेणियां' : 'Custom Options', icon: Tag },
-            { id: 'rules', label: isHindi ? '6-फंड नियम' : '6-Fund Rules', icon: Percent },
-            { id: 'backup', label: isHindi ? 'बैकअप व डेटा' : 'Data & Backup', icon: Download },
-            { id: 'privacy', label: isHindi ? 'प्राइवेसी' : 'Privacy & Security', icon: ShieldCheck },
-            { id: 'developer', label: isHindi ? 'डेवलपर' : 'Developer', icon: User },
-            { id: 'legal', label: isHindi ? 'स्वामित्व' : 'Entity & Legal', icon: Scale }
+            { id: 'preferences', label: tr.settings.tabPreferences, icon: Palette },
+            { id: 'custom', label: tr.settings.tabCustomOptions, icon: Tag },
+            { id: 'rules', label: tr.settings.tabRules, icon: Percent },
+            { id: 'backup', label: tr.settings.tabBackup, icon: Download },
+            { id: 'privacy', label: tr.settings.tabPrivacy, icon: ShieldCheck },
+            { id: 'developer', label: tr.settings.tabDeveloper, icon: User },
+            { id: 'legal', label: tr.settings.tabLegal, icon: Scale }
           ].map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeTab === tab.id;
@@ -405,11 +405,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     {isHindi ? 'ऐप की भाषा' : 'Application Language'}
                   </label>
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                   {[
-                    { id: 'en', label: 'English', sub: 'Default' },
-                    { id: 'hi', label: 'हिन्दी', sub: 'हिंदी' },
-                    { id: 'hinglish', label: 'Hinglish', sub: 'Romanized' }
+                    { id: 'en', label: 'English', sub: 'Global' },
+                    { id: 'hi', label: 'हिन्दी', sub: 'Hindi' },
+                    { id: 'hinglish', label: 'Hinglish', sub: 'India' },
+                    { id: 'es', label: 'Español', sub: 'Spanish' },
+                    { id: 'ar', label: 'العربية', sub: 'Arabic' },
+                    { id: 'fr', label: 'Français', sub: 'French' },
+                    { id: 'de', label: 'Deutsch', sub: 'German' },
+                    { id: 'ru', label: 'Русский', sub: 'Russian' },
+                    { id: 'pt', label: 'Português', sub: 'Portuguese' },
+                    { id: 'bn', label: 'বাংলা', sub: 'Bengali' },
+                    { id: 'ur', label: 'اردو', sub: 'Urdu' },
+                    { id: 'id', label: 'Bahasa Indonesia', sub: 'Indonesian' },
+                    { id: 'ja', label: '日本語', sub: 'Japanese' },
+                    { id: 'zh', label: '中文 (简体)', sub: 'Chinese' }
                   ].map((l) => (
                     <button
                       key={l.id}
@@ -418,11 +429,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                         language === l.id
                           ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] font-extrabold shadow-sm'
-                          : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                          : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)]/50'
                       }`}
                     >
-                      <div className="text-[13px] font-bold">{l.label}</div>
-                      <div className="text-[10px] opacity-75">{l.sub}</div>
+                      <div className="text-[12.5px] font-bold truncate">{l.label}</div>
+                      <div className="text-[10px] opacity-75 truncate">{l.sub}</div>
                     </button>
                   ))}
                 </div>

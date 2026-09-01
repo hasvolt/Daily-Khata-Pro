@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import React, { useState } from 'react';
 import { Calculator, X, ArrowRight } from 'lucide-react';
 import { FundType, AppLanguage } from '../types';
@@ -76,9 +77,7 @@ export const FundSplitCalculatorModal: React.FC<FundSplitCalculatorModalProps> =
               {t.calculator.enterAmount}
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] font-bold text-[var(--theme-primary,#38BDF8)]">
-                ₹
-              </span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] font-bold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
               <input
                 type="number"
                 min="0"
@@ -104,7 +103,7 @@ export const FundSplitCalculatorModal: React.FC<FundSplitCalculatorModalProps> =
                       : 'bg-[var(--theme-surface,#0E1A29)] text-[#CBD5E1] border-[var(--theme-border,#213E61)] hover:border-white/20'
                   }`}
                 >
-                  ₹{amt >= 10000000 ? `${amt / 10000000}Cr` : amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                  {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 10000000 ? `${amt / 10000000}Cr` : amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                 </button>
               ))}
             </div>

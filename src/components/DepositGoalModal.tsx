@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import React, { useState } from 'react';
 import { Goal, FundType } from '../types';
 import { FUND_LABELS, FUND_ORDER } from '../data/defaults';
@@ -92,10 +93,10 @@ export const DepositGoalModal: React.FC<DepositGoalModalProps> = ({
           {/* Amount */}
           <div className="space-y-1.5">
             <label className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">
-              Deposit Amount (₹)
+              Deposit Amount ({getCurrencyConfig(getCurrentLanguage()).symbol})
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] font-bold text-[#94A3B8]">₹</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] font-bold text-[#94A3B8]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
               <input
                 type="number"
                 step="any"

@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "../utils/currencyConfig";
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   Calculator,
@@ -612,13 +613,13 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 ? 'text-[38px] sm:text-[48px] md:text-[58px]'
                 : 'text-[32px] sm:text-[40px] md:text-[46px]'
             }`}>
-              {privacyMask ? '₹ ****' : (stdLiveResult || '0')}
+              {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : (stdLiveResult || '0')}
             </div>
 
             {/* Indian Lakhs/Crores Word Indicator */}
             {parseFloat(stdLiveResult) > 0 && (
               <div className="text-[12px] sm:text-[13px] font-mono font-bold text-[#10B981] flex items-center justify-end gap-1 pt-0.5">
-                <span>≈ ₹ {parseFloat(stdLiveResult).toLocaleString('en-IN')}</span>
+                <span>≈ {getCurrencyConfig(getCurrentLanguage()).symbol} {parseFloat(stdLiveResult).toLocaleString('en-IN')}</span>
                 {formatIndianWords(parseFloat(stdLiveResult)) && (
                   <span className="bg-[#10B981]/15 px-2 py-0.5 rounded text-[#10B981] border border-[#10B981]/30">
                     ({formatIndianWords(parseFloat(stdLiveResult))})
@@ -843,7 +844,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="space-y-2">
             <div className="flex justify-between items-center text-[11.5px]">
               <label className="font-bold text-[#CBD5E1]">
-                {isHindi ? 'कुल आय / इनफ्लो राशि (₹):' : 'Total Inflow Amount (₹):'}
+                {isHindi ? `कुल आय / इनफ्लो राशि (${getCurrencyConfig(getCurrentLanguage()).symbol}):` : `Total Inflow Amount (${getCurrencyConfig(getCurrentLanguage()).symbol}):`}
               </label>
               {fundInflowNum > 0 && (
                 <span className="font-mono text-[11px] text-[var(--theme-primary,#38BDF8)] font-bold">
@@ -853,9 +854,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             </div>
 
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[18px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
-                ₹
-              </span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[18px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
               <input
                 type="number"
                 min="0"
@@ -879,7 +878,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   }}
                   className="px-2.5 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[11.5px] font-mono text-[#CBD5E1] transition-colors cursor-pointer"
                 >
-                  ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                  {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                 </button>
               ))}
             </div>
@@ -967,7 +966,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
                   <div className="text-right shrink-0">
                     <div className="text-[15px] font-mono font-bold text-[#F8FAFC]">
-                      {privacyMask ? '₹ ****' : formatCurrency(allocatedAmt)}
+                      {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : formatCurrency(allocatedAmt)}
                     </div>
                   </div>
                 </div>
@@ -984,7 +983,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               className="w-full py-3 px-4 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[var(--theme-btn-text,#040D17)] font-extrabold text-[13px] flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>Record ₹{fundInflowNum.toLocaleString('en-IN')} Inflow in Khata</span>
+              <span>Record {getCurrencyConfig(getCurrentLanguage()).symbol}{fundInflowNum.toLocaleString('en-IN')} Inflow in Khata</span>
             </button>
           )}
         </div>
@@ -1039,7 +1038,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
               <div className="flex justify-between items-center text-[11.5px]">
                 <span className="text-[#CBD5E1] font-bold">
-                  {sipMode === 'sip' ? 'Monthly Investment (₹)' : 'One-Time Lumpsum (₹)'}
+                  {sipMode === 'sip' ? `Monthly Investment (${getCurrencyConfig(getCurrentLanguage()).symbol})` : `One-Time Lumpsum (${getCurrencyConfig(getCurrentLanguage()).symbol})`}
                 </span>
                 {sipAmtNum > 0 && (
                   <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">
@@ -1049,9 +1048,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
 
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
-                  ₹
-                </span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
                 <input
                   type="number"
                   min="1"
@@ -1071,7 +1068,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     onClick={() => setSipAmountInput(amt.toString())}
                     className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
                   >
-                    ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                   </button>
                 ))}
               </div>
@@ -1197,14 +1194,14 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#94A3B8] font-bold">Invested Amount</div>
               <div className="text-[16px] font-mono font-bold text-[#F8FAFC] mt-0.5">
-                ₹{Math.round(sipCalculation.totalInvested).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(sipCalculation.totalInvested))}
               </div>
             </div>
 
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#10B981] font-bold">Est. Wealth Gains</div>
               <div className="text-[16px] font-mono font-bold text-[#10B981] mt-0.5">
-                +₹{Math.round(sipCalculation.totalGain).toLocaleString('en-IN')}
+                +{formatCurrency(Math.round(sipCalculation.totalGain))}
               </div>
             </div>
 
@@ -1218,7 +1215,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="p-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30">
               <div className="text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Total Future Value</div>
               <div className="text-[18px] font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] mt-0.5">
-                ₹{Math.round(sipCalculation.totalValue).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(sipCalculation.totalValue))}
               </div>
             </div>
           </div>
@@ -1246,7 +1243,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             {/* Principal */}
             <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
               <div className="flex justify-between items-center text-[11.5px]">
-                <span className="text-[#CBD5E1] font-bold">Principal Loan (₹)</span>
+                <span className="text-[#CBD5E1] font-bold">Principal Loan ({getCurrencyConfig(getCurrentLanguage()).symbol})</span>
                 {loanPrincipalNum > 0 && (
                   <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">
                     {formatIndianWords(loanPrincipalNum)}
@@ -1255,9 +1252,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
 
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
-                  ₹
-                </span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[15px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
                 <input
                   type="number"
                   min="1"
@@ -1277,7 +1272,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     onClick={() => setLoanPrincipalInput(amt.toString())}
                     className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
                   >
-                    ₹{amt >= 10000000 ? `${amt / 10000000}Cr` : `${amt / 100000}L`}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 10000000 ? `${amt / 10000000}Cr` : `${amt / 100000}L`}
                   </button>
                 ))}
               </div>
@@ -1380,28 +1375,28 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="p-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30">
               <div className="text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Monthly EMI</div>
               <div className="text-[18px] font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] mt-0.5">
-                ₹{Math.round(emiCalculation.monthlyEmi).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(emiCalculation.monthlyEmi))}
               </div>
             </div>
 
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#EF4444] font-bold">Total Interest ({emiCalculation.interestPct}%)</div>
               <div className="text-[16px] font-mono font-bold text-[#EF4444] mt-0.5">
-                ₹{Math.round(emiCalculation.totalInterest).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(emiCalculation.totalInterest))}
               </div>
             </div>
 
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#94A3B8] font-bold">Principal Loan ({emiCalculation.principalPct}%)</div>
               <div className="text-[16px] font-mono font-bold text-[#F8FAFC] mt-0.5">
-                ₹{Math.round(loanPrincipalNum).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(loanPrincipalNum))}
               </div>
             </div>
 
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#10B981] font-bold">Total Repayment</div>
               <div className="text-[16px] font-mono font-bold text-[#10B981] mt-0.5">
-                ₹{Math.round(emiCalculation.totalPayment).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(emiCalculation.totalPayment))}
               </div>
             </div>
           </div>
@@ -1476,7 +1471,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-[11.5px]">
                 <label className="font-bold text-[#CBD5E1]">
-                  {gstType === 'exclusive' ? 'Base Net Amount (₹):' : 'Gross MRP Amount (₹):'}
+                  {gstType === 'exclusive' ? `Base Net Amount (${getCurrencyConfig(getCurrentLanguage()).symbol}):` : `Gross MRP Amount (${getCurrencyConfig(getCurrentLanguage()).symbol}):`}
                 </label>
                 {gstAmountNum > 0 && (
                   <span className="font-mono text-[10.5px] text-[#EC4899] font-bold">
@@ -1486,9 +1481,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
 
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] font-mono font-bold text-[#EC4899]">
-                  ₹
-                </span>
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] font-mono font-bold text-[#EC4899]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
                 <input
                   type="number"
                   min="0"
@@ -1508,7 +1501,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     onClick={() => setGstAmountInput(amt.toString())}
                     className="px-2 py-0.5 rounded text-[10.5px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#EC4899] border border-[var(--theme-border,#213E61)] cursor-pointer"
                   >
-                    ₹{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
+                    {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 100000 ? `${amt / 100000}L` : `${amt / 1000}k`}
                   </button>
                 ))}
               </div>
@@ -1579,35 +1572,35 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5 font-mono text-[13px]">
             <div className="flex justify-between text-[#94A3B8]">
               <span>Net Base Price:</span>
-              <span className="font-bold text-[#F8FAFC]">₹{gstBase.toFixed(2)}</span>
+              <span className="font-bold text-[#F8FAFC]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstBase.toFixed(2)}</span>
             </div>
 
             {gstTaxType === 'intra' ? (
               <>
                 <div className="flex justify-between text-[#EC4899]/80 text-[12px]">
                   <span>CGST ({effectiveGstSlab / 2}%):</span>
-                  <span className="font-bold">+₹{gstCgst.toFixed(2)}</span>
+                  <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstCgst.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[#EC4899]/80 text-[12px]">
                   <span>SGST ({effectiveGstSlab / 2}%):</span>
-                  <span className="font-bold">+₹{gstSgst.toFixed(2)}</span>
+                  <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstSgst.toFixed(2)}</span>
                 </div>
               </>
             ) : (
               <div className="flex justify-between text-[#EC4899] text-[12px]">
                 <span>IGST ({effectiveGstSlab}%):</span>
-                <span className="font-bold">+₹{gstIgst.toFixed(2)}</span>
+                <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstIgst.toFixed(2)}</span>
               </div>
             )}
 
             <div className="flex justify-between text-[#EC4899] border-t border-[var(--theme-border,#213E61)] pt-1.5">
               <span className="font-bold">Total GST Tax ({effectiveGstSlab}%):</span>
-              <span className="font-bold">+₹{gstTotalTax.toFixed(2)}</span>
+              <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstTotalTax.toFixed(2)}</span>
             </div>
 
             <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
               <span className="font-bold">Total Final Gross Price:</span>
-              <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">₹{gstFinalGross.toFixed(2)}</span>
+              <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstFinalGross.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -1654,7 +1647,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
-                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Original MRP (₹):</label>
+                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Original MRP ({getCurrencyConfig(getCurrentLanguage()).symbol}):</label>
                   <input
                     type="number"
                     min="0"
@@ -1685,7 +1678,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Or Flat Discount (₹):</label>
+                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Or Flat Discount ({getCurrencyConfig(getCurrentLanguage()).symbol}):</label>
                   <input
                     type="number"
                     min="0"
@@ -1704,11 +1697,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 font-mono text-[13px]">
                 <div className="flex justify-between text-[#10B981]">
                   <span>Discount Saved ({effectiveDiscPct.toFixed(1)}%):</span>
-                  <span className="font-bold">-₹{discSaved.toFixed(2)}</span>
+                  <span className="font-bold">-{getCurrencyConfig(getCurrentLanguage()).symbol}{discSaved.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
                   <span className="font-bold">Final Payable Price:</span>
-                  <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">₹{discFinal.toFixed(2)}</span>
+                  <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{discFinal.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -1716,7 +1709,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Cost Price (CP ₹):</label>
+                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Cost Price (CP {getCurrencyConfig(getCurrentLanguage()).symbol}):</label>
                   <input
                     type="number"
                     min="0"
@@ -1727,7 +1720,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Selling Price (SP ₹):</label>
+                  <label className="text-[11.5px] font-bold text-[#CBD5E1]">Selling Price (SP {getCurrencyConfig(getCurrentLanguage()).symbol}):</label>
                   <input
                     type="number"
                     min="0"
@@ -1742,7 +1735,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 font-mono text-[13px]">
                 <div className="flex justify-between text-[#94A3B8]">
                   <span>Gross Profit:</span>
-                  <span className={`font-bold ${grossProfit >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>₹{grossProfit.toFixed(2)}</span>
+                  <span className={`font-bold ${grossProfit >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{getCurrencyConfig(getCurrentLanguage()).symbol}{grossProfit.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[#94A3B8]">
                   <span>Profit Margin (on SP):</span>
@@ -1791,7 +1784,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             {/* Today's Cost */}
             <div className="space-y-1 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
               <div className="flex justify-between items-center text-[11.5px]">
-                <label className="font-bold text-[#CBD5E1]">Today's Cost (₹):</label>
+                <label className="font-bold text-[#CBD5E1]">Today's Cost ({getCurrencyConfig(getCurrentLanguage()).symbol}):</label>
                 {goalTargetTodayNum > 0 && (
                   <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">
                     {formatIndianWords(goalTargetTodayNum)}
@@ -1799,9 +1792,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 )}
               </div>
               <div className="relative">
-                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
-                  ₹
-                </span>
+                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
                 <input
                   type="number"
                   min="1"
@@ -1873,7 +1864,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 onClick={() => setGoalTargetTodayInput(amt.toString())}
                 className="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
               >
-                ₹{amt >= 10000000 ? `${amt / 10000000}Cr` : `${amt / 100000}L`}
+                {getCurrencyConfig(getCurrentLanguage()).symbol}{amt >= 10000000 ? `${amt / 10000000}Cr` : `${amt / 100000}L`}
               </button>
             ))}
           </div>
@@ -1918,17 +1909,17 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[#EF4444]/30">
               <div className="text-[10.5px] text-[#EF4444] font-bold">Future Cost in {goalYearsNum} Yrs</div>
               <div className="text-[17px] font-mono font-bold text-[#F8FAFC] mt-0.5">
-                ₹{Math.round(futureInflatedCost).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(futureInflatedCost))}
               </div>
               <div className="text-[10px] text-[#94A3B8] mt-0.5">
-                (+₹{Math.round(extraInflationBurden).toLocaleString('en-IN')} inflation)
+                (+{formatCurrency(Math.round(extraInflationBurden))} inflation)
               </div>
             </div>
 
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[#10B981]/30">
               <div className="text-[10.5px] text-[#10B981] font-bold">Required Monthly SIP</div>
               <div className="text-[17px] font-mono font-bold text-[#10B981] mt-0.5">
-                ₹{Math.round(requiredMonthlySIP).toLocaleString('en-IN')}<span className="text-[11px] font-normal text-[#94A3B8]"> /mo</span>
+                {formatCurrency(Math.round(requiredMonthlySIP))}<span className="text-[11px] font-normal text-[#94A3B8]"> /mo</span>
               </div>
               <div className="text-[10px] text-[#94A3B8] mt-0.5">
                 @ {goalReturnNum}% p.a.
@@ -1938,7 +1929,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/30">
               <div className="text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Or One-time Lumpsum Today</div>
               <div className="text-[17px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] mt-0.5">
-                ₹{Math.round(requiredLumpsumToday).toLocaleString('en-IN')}
+                {formatCurrency(Math.round(requiredLumpsumToday))}
               </div>
               <div className="text-[10px] text-[#94A3B8] mt-0.5">
                 Invested for {goalYearsNum} yrs
@@ -1955,7 +1946,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               className="w-full py-2.5 px-4 rounded-xl bg-[#EAB308] hover:brightness-110 text-[#040D17] font-bold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
             >
               <Target className="w-4 h-4" />
-              <span>Create Goal for ₹{Math.round(futureInflatedCost).toLocaleString('en-IN')} in Khata</span>
+              <span>Create Goal for {formatCurrency(Math.round(futureInflatedCost))} in Khata</span>
             </button>
           )}
         </div>

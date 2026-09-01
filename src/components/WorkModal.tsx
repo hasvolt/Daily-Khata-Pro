@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import React, { useState, useEffect } from 'react';
 import { WorkLog, WorkStatus, AppLanguage } from '../types';
 import { DEFAULT_WORK_CATEGORIES } from '../data/defaults';
@@ -330,7 +331,7 @@ export const WorkModal: React.FC<WorkModalProps> = ({
             <div className="space-y-1.5">
               <label className="font-bold uppercase tracking-wider text-[11.5px] text-[#94A3B8] flex items-center gap-1">
                 <IndianRupee className="w-3.5 h-3.5 text-[#10B981]" />
-                <span>{isHindi ? 'बिल योग्य आय / राशि (₹)' : 'Earnings / Value (₹)'}</span>
+                <span>{isHindi ? 'बिल योग्य आय / राशि ({getCurrencyConfig(getCurrentLanguage()).symbol})' : 'Earnings / Value ({getCurrencyConfig(getCurrentLanguage()).symbol})'}</span>
               </label>
               <input
                 type="number"

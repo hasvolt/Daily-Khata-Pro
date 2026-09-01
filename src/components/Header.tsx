@@ -45,6 +45,7 @@ import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
 import { AppTheme, AppLanguage, AppViewMode } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
+import { getAppTranslation } from '../utils/appTranslations';
 
 interface HeaderProps {
   currentTab?: NavTab;
@@ -104,6 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const tr = getAppTranslation((language as AppLanguage) || 'en');
   const isHindi = language === 'hi';
 
   const isLightMode = theme === 'light' || theme === 'white';
@@ -153,7 +155,18 @@ export const Header: React.FC<HeaderProps> = ({
   const languageOptions: { id: AppLanguage; label: string; short: string; native: string }[] = [
     { id: 'en', label: 'English', short: 'EN', native: 'English' },
     { id: 'hi', label: 'हिन्दी', short: 'HI', native: 'हिंदी' },
-    { id: 'hinglish', label: 'Hinglish', short: 'HIN', native: 'Hinglish' }
+    { id: 'hinglish', label: 'Hinglish', short: 'HIN', native: 'Hinglish' },
+    { id: 'es', label: 'Español', short: 'ES', native: 'Español' },
+    { id: 'ar', label: 'العربية', short: 'AR', native: 'العربية' },
+    { id: 'fr', label: 'Français', short: 'FR', native: 'Français' },
+    { id: 'de', label: 'Deutsch', short: 'DE', native: 'Deutsch' },
+    { id: 'ru', label: 'Русский', short: 'RU', native: 'Русский' },
+    { id: 'pt', label: 'Português', short: 'PT', native: 'Português' },
+    { id: 'bn', label: 'বাংলা', short: 'BN', native: 'বাংলা' },
+    { id: 'ur', label: 'اردو', short: 'UR', native: 'اردو' },
+    { id: 'id', label: 'Indonesian', short: 'ID', native: 'Bahasa Indonesia' },
+    { id: 'ja', label: '日本語', short: 'JA', native: '日本語' },
+    { id: 'zh', label: '中文', short: 'ZH', native: '中文 (简体)' }
   ];
 
   const closeAllMenus = () => {
@@ -205,10 +218,10 @@ export const Header: React.FC<HeaderProps> = ({
                 className="font-bold truncate transition-colors"
                 style={{ color: 'var(--theme-primary, #38BDF8)' }}
               >
-                {isHindi ? 'दैनिक आय-व्यय ट्रैकर' : 'Daily Income & Expense'}
+                {tr.menu.dailyIncomeExpense}
               </span>
               <span className="text-[#475569] mx-0.5 hidden sm:inline">•</span>
-              <span className="text-[#94A3B8] hidden sm:inline truncate">6-Fund Ledger</span>
+              <span className="text-[#94A3B8] hidden sm:inline truncate">{tr.menu.sixFundLedger}</span>
             </div>
           </div>
         </div>
@@ -217,12 +230,12 @@ export const Header: React.FC<HeaderProps> = ({
         {onSelectTab && (
           <nav className="hidden lg:flex items-center gap-1 mx-1.5">
             {[
-              { id: 'home' as NavTab, label: isHindi ? 'खाता' : 'Khata', icon: Home },
-              { id: 'history' as NavTab, label: isHindi ? 'लेज़र' : 'Ledger', icon: History },
-              { id: 'goals' as NavTab, label: isHindi ? 'लक्ष्य' : 'Goals', icon: Target },
-              { id: 'tracker' as NavTab, label: isHindi ? 'ड्यूटी/लाइफ' : 'Work & Life', icon: Briefcase },
-              { id: 'notes' as NavTab, label: isHindi ? 'वॉल्ट' : 'Notes', icon: FileText },
-              { id: 'report' as NavTab, label: isHindi ? 'रिपोर्ट्स' : 'Analytics', icon: BarChart3 },
+              { id: 'home' as NavTab, label: tr.menu.khata, icon: Home },
+              { id: 'history' as NavTab, label: tr.menu.ledger, icon: History },
+              { id: 'goals' as NavTab, label: tr.menu.goals, icon: Target },
+              { id: 'tracker' as NavTab, label: tr.menu.workAndLife, icon: Briefcase },
+              { id: 'notes' as NavTab, label: tr.menu.notes, icon: FileText },
+              { id: 'report' as NavTab, label: tr.menu.analytics, icon: BarChart3 },
             ].map((tab) => {
               const TabIcon = tab.icon;
               const isActive = currentTab === tab.id;
@@ -253,7 +266,7 @@ export const Header: React.FC<HeaderProps> = ({
               <input
                 id="header-desktop-search"
                 type="text"
-                placeholder={t.header.searchPlaceholder}
+                placeholder={tr.menu.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => {
                   onSearchChange(e.target.value);
@@ -308,23 +321,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <Eye className="w-3.5 h-3.5" />
               )}
               <span className="hidden xl:inline">
-                {privacyMask ? (isHindi ? 'छिपा हुआ' : 'Hidden') : (isHindi ? 'छुपाएं' : 'Mask')}
-              </span>
-            </button>
-          )}
-
-          {/* Quick Lock Button (Visible when PIN protection is active) */}
-          {isLockEnabled && onLockNow && (
-            <button
-              type="button"
-              onClick={onLockNow}
-              className="p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[#EF4444]/15 hover:border-[#EF4444]/50 text-[var(--theme-text-muted,#94A3B8)] hover:text-[#EF4444] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0"
-              title={isHindi ? 'अभी ऐप लॉक करें' : 'Lock App Vault Now'}
-              id="header-lock-now-btn"
-            >
-              <Lock className="w-3.5 h-3.5 text-[#10B981]" />
-              <span className="hidden xl:inline">
-                {isHindi ? 'लॉक' : 'Lock'}
+                {privacyMask ? tr.menu.hidden : tr.menu.mask}
               </span>
             </button>
           )}
@@ -345,7 +342,7 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'bg-[#0284C7]/15 border-[#0284C7]/40 text-[#0284C7] hover:bg-[#0284C7]/25'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
               }`}
-              title={isLightMode ? (isHindi ? 'नाइट मोड' : 'Switch to Night Mode') : (isHindi ? 'डे मोड' : 'Switch to Day Mode')}
+              title={isLightMode ? 'Switch to Night Mode' : 'Switch to Day Mode'}
               id="header-theme-toggle-btn"
             >
               {isLightMode ? (
@@ -354,7 +351,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <Sun className="w-3.5 h-3.5" />
               )}
               <span className="hidden sm:inline">
-                {isLightMode ? (isHindi ? 'नाइट' : 'Night') : (isHindi ? 'डे' : 'Day')}
+                {isLightMode ? tr.menu.night : tr.menu.day}
               </span>
             </button>
           )}
@@ -365,12 +362,12 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onOpenSimulator}
               className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1.5 shrink-0"
-              title={isHindi ? 'मल्टीपर्पस कैलकुलेटर' : 'Multi-Purpose Calculator'}
+              title={tr.calc.title}
               id="header-calculator-btn"
             >
               <Calculator className="w-3.5 h-3.5 text-[#F59E0B]" />
               <span className="hidden sm:inline font-semibold">
-                {isHindi ? 'कैलकुलेटर' : 'Calculator'}
+                {tr.menu.calculator}
               </span>
             </button>
           )}
@@ -390,13 +387,13 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] ring-2 ring-[var(--theme-primary,#38BDF8)]/40'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/60'
               }`}
-              title={isHindi ? 'मेनू एवं सेटिंग्स' : 'Menu & Settings'}
-              aria-label="Main Menu"
+              title={tr.menu.menuAndTools}
+              aria-label={tr.menu.mainMenu}
               id="header-main-menu-btn"
             >
               <Menu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" />
               <span className="font-bold">
-                {isHindi ? 'मेनू' : 'Menu'}
+                {tr.menu.mainMenu}
               </span>
             </button>
 
@@ -434,7 +431,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 Daily <span style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span> Pro
                               </div>
                               <div className="text-[9.5px] text-[var(--theme-text-muted,#94A3B8)] font-medium">
-                                {isHindi ? 'मुख्य मेनू व सेटिंग्स' : 'Main Menu & Tools'}
+                                {tr.menu.menuAndTools}
                               </div>
                             </div>
                           </div>
@@ -456,7 +453,7 @@ export const Header: React.FC<HeaderProps> = ({
                           {/* Category: Primary Features */}
                           <div className="space-y-1">
                             <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
-                              {isHindi ? 'सुविधाएं व उपकरण' : 'Features & Tools'}
+                              {tr.menu.featuresAndTools}
                             </div>
 
                             {/* Settings */}
@@ -471,7 +468,7 @@ export const Header: React.FC<HeaderProps> = ({
                               >
                                 <div className="flex items-center gap-2.5">
                                   <Settings className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                                  <span>{isHindi ? 'ऐप सेटिंग्स' : 'App Settings'}</span>
+                                  <span>{tr.menu.appSettings}</span>
                                 </div>
                               </button>
                             )}
@@ -488,7 +485,7 @@ export const Header: React.FC<HeaderProps> = ({
                               >
                                 <div className="flex items-center gap-2.5">
                                   <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
-                                  <span>{isHindi ? 'कैलकुलेटर' : 'Calculator'}</span>
+                                  <span>{tr.menu.calculator}</span>
                                 </div>
                               </button>
                             )}
@@ -505,7 +502,7 @@ export const Header: React.FC<HeaderProps> = ({
                             >
                               <div className="flex items-center gap-2.5">
                                 <FileText className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                                <span>{isHindi ? 'पर्सनल नोट्स' : 'Personal Notes'}</span>
+                                <span>{tr.menu.personalNotes}</span>
                               </div>
                             </button>
 
@@ -521,13 +518,28 @@ export const Header: React.FC<HeaderProps> = ({
                               >
                                 <div className="flex items-center gap-2.5">
                                   <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
-                                  <span>{isHindi ? 'सुरक्षा पिन लॉक' : 'Security PIN Lock'}</span>
+                                  <span>{tr.menu.securityPinLock}</span>
                                 </div>
                                 {isLockEnabled && (
                                   <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full">
-                                    Active
+                                    {tr.menu.active}
                                   </span>
                                 )}
+                              </button>
+                            )}
+
+                            {/* Lock App Now Button */}
+                            {isLockEnabled && onLockNow && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onLockNow();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#EF4444] bg-[var(--theme-card,#132438)]/60 hover:bg-[#EF4444]/15 border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <Lock className="w-4 h-4 text-[#EF4444] shrink-0" />
+                                <span>{tr.menu.lock || 'Lock App'}</span>
                               </button>
                             )}
 
@@ -541,60 +553,102 @@ export const Header: React.FC<HeaderProps> = ({
                               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                             >
                               <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                              <span>{isHindi ? 'उपयोग निर्देशिका' : 'User Manual Guide'}</span>
+                              <span>{tr.menu.userManualGuide}</span>
                             </button>
                           </div>
 
                           {/* Category: Theme & Language */}
-                          <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
-                            {/* Theme Colors */}
+                          <div className="space-y-1 mt-2">
+                            <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
+                              {tr.menu.themeColor} & {tr.menu.language}
+                            </div>
+
+                            {/* Theme Selection Accordion */}
                             {onThemeChange && (
-                              <div>
-                                <div className="text-[9.5px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1.5 uppercase tracking-wider">
-                                  {isHindi ? 'रंग थीम (Theme)' : 'Theme Color'}
-                                </div>
-                                <div className="grid grid-cols-4 gap-1.5">
-                                  {themeOptions.map((opt) => (
-                                    <button
-                                      key={opt.id}
-                                      type="button"
-                                      onClick={() => onThemeChange(opt.id)}
-                                      className={`py-1.5 px-1 rounded-lg border text-[10px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-                                        theme === opt.id
-                                          ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-text,#F8FAFC)]'
-                                          : 'border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
-                                      }`}
-                                    >
-                                      <span className="w-3.5 h-3.5 rounded-full shadow-xs shrink-0" style={{ backgroundColor: opt.dotColor }} />
-                                      <span className="truncate max-w-full">{opt.id}</span>
-                                    </button>
-                                  ))}
-                                </div>
+                              <div className="rounded-xl border border-[var(--theme-border,#213E61)]/40 overflow-hidden bg-[var(--theme-card,#132438)]/60">
+                                <button
+                                  type="button"
+                                  onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                                  className="w-full flex items-center justify-between px-3 py-2 text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-surface,#0E1A29)] hover:text-[#FFC700] transition-colors cursor-pointer text-left"
+                                >
+                                  <div className="flex items-center gap-2.5">
+                                    <Palette className="w-4 h-4 text-[#FFC700] shrink-0" />
+                                    <span>{tr.menu.themeColor}</span>
+                                  </div>
+                                  <ChevronDown className={`w-4 h-4 text-[var(--theme-text-muted,#94A3B8)] transition-transform ${isThemeMenuOpen ? 'rotate-180' : ''}`} />
+                                </button>
+                                
+                                {isThemeMenuOpen && (
+                                  <div className="p-2.5 border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/50">
+                                    <div className="grid grid-cols-4 gap-1.5">
+                                      {themeOptions.map((opt) => (
+                                        <button
+                                          key={opt.id}
+                                          type="button"
+                                          onClick={() => {
+                                            onThemeChange(opt.id);
+                                            setIsThemeMenuOpen(false);
+                                          }}
+                                          className={`py-1.5 px-1 rounded-lg border text-[10px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
+                                            theme === opt.id
+                                              ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-text,#F8FAFC)]'
+                                              : 'border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                                          }`}
+                                        >
+                                          <span className="w-3.5 h-3.5 rounded-full shadow-xs shrink-0" style={{ backgroundColor: opt.dotColor }} />
+                                          <span className="truncate max-w-full">{opt.id}</span>
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             )}
 
-                            {/* Language Switcher */}
+                            {/* Language Selection Accordion */}
                             {onLanguageChange && (
-                              <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/50 flex items-center justify-between">
-                                <span className="text-[10px] font-bold text-[var(--theme-text-muted,#94A3B8)] uppercase tracking-wider">
-                                  {isHindi ? 'भाषा' : 'Language'}
-                                </span>
-                                <div className="flex gap-1">
-                                  {languageOptions.map((opt) => (
-                                    <button
-                                      key={opt.id}
-                                      type="button"
-                                      onClick={() => onLanguageChange(opt.id)}
-                                      className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors cursor-pointer ${
-                                        language === opt.id
-                                          ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
-                                          : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-surface,#0E1A29)]'
-                                      }`}
-                                    >
-                                      {opt.label}
-                                    </button>
-                                  ))}
-                                </div>
+                              <div className="rounded-xl border border-[var(--theme-border,#213E61)]/40 overflow-hidden bg-[var(--theme-card,#132438)]/60">
+                                <button
+                                  type="button"
+                                  onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                                  className="w-full flex items-center justify-between px-3 py-2 text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-surface,#0E1A29)] hover:text-[#38BDF8] transition-colors cursor-pointer text-left"
+                                >
+                                  <div className="flex items-center gap-2.5">
+                                    <Languages className="w-4 h-4 text-[#38BDF8] shrink-0" />
+                                    <span>{tr.menu.language}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[10px] text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded-full font-bold">
+                                      {languageOptions.find((l) => l.id === language)?.native || language}
+                                    </span>
+                                    <ChevronDown className={`w-4 h-4 text-[var(--theme-text-muted,#94A3B8)] transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
+                                  </div>
+                                </button>
+                                
+                                {isLangMenuOpen && (
+                                  <div className="p-2 border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/50">
+                                    <div className="grid grid-cols-3 gap-1.5 max-h-48 overflow-y-auto pr-1">
+                                      {languageOptions.map((opt) => (
+                                        <button
+                                          key={opt.id}
+                                          type="button"
+                                          onClick={() => {
+                                            onLanguageChange(opt.id);
+                                            setIsLangMenuOpen(false);
+                                          }}
+                                          title={opt.label}
+                                          className={`px-2 py-1.5 rounded-lg text-[11px] font-bold transition-colors cursor-pointer text-center truncate ${
+                                            language === opt.id
+                                              ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold shadow-xs'
+                                              : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/40'
+                                          }`}
+                                        >
+                                          {opt.native}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
@@ -602,7 +656,7 @@ export const Header: React.FC<HeaderProps> = ({
                           {/* Category: Support & Safety */}
                           <div className="space-y-1">
                             <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
-                              {isHindi ? 'सहायता व सुरक्षा' : 'Support & Safety'}
+                              {tr.menu.supportAndSafety}
                             </div>
 
                             {/* Help Centre */}
@@ -617,7 +671,7 @@ export const Header: React.FC<HeaderProps> = ({
                               >
                                 <div className="flex items-center gap-2.5">
                                   <LifeBuoy className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                                  <span>{isHindi ? 'सहायता केंद्र एवं FAQ' : 'Help Centre & FAQ'}</span>
+                                  <span>{tr.menu.helpCenterFaq}</span>
                                 </div>
                               </button>
                             )}
@@ -634,7 +688,7 @@ export const Header: React.FC<HeaderProps> = ({
                               >
                                 <div className="flex items-center gap-2.5">
                                   <Bug className="w-4 h-4 text-[#EF4444] shrink-0" />
-                                  <span>{isHindi ? 'समस्या रिपोर्ट करें' : 'Report an Issue'}</span>
+                                  <span>{tr.menu.reportIssue}</span>
                                 </div>
                               </button>
                             )}
@@ -651,7 +705,7 @@ export const Header: React.FC<HeaderProps> = ({
                               >
                                 <div className="flex items-center gap-2.5">
                                   <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0" />
-                                  <span>{isHindi ? 'सुझाव एवं फीडबैक' : 'Feedback & Suggestions'}</span>
+                                  <span>{tr.menu.feedbackSuggestions}</span>
                                 </div>
                               </button>
                             )}
@@ -667,7 +721,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                               >
                                 <Code2 className="w-4 h-4 text-[#10B981] shrink-0" />
-                                <span>{isHindi ? 'सुरक्षा एवं सोर्स कोड' : 'Safety & Source Code'}</span>
+                                <span>{tr.menu.safetySourceCode}</span>
                               </button>
                             )}
 
@@ -682,7 +736,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                               >
                                 <Share2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                                <span>{isHindi ? 'ऐप शेयर करें' : 'Share App'}</span>
+                                <span>{tr.menu.shareApp}</span>
                               </button>
                             )}
 
@@ -697,7 +751,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#10B981] bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/30 transition-colors cursor-pointer text-left"
                               >
                                 <Download className="w-4 h-4 shrink-0" />
-                                <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
+                                <span>{tr.menu.installApp}</span>
                               </button>
                             )}
                           </div>
@@ -725,7 +779,7 @@ export const Header: React.FC<HeaderProps> = ({
                                   }}
                                 />
                               </div>
-                              <span>{isHindi ? 'डेवलपर प्रोफाइल' : 'Developer Profile'}</span>
+                              <span>{tr.menu.developerProfile}</span>
                             </button>
                           )}
 
@@ -737,7 +791,7 @@ export const Header: React.FC<HeaderProps> = ({
                             title="GitHub Profile"
                           >
                             <FolderGit2 className="w-3.5 h-3.5" />
-                            <span>{isHindi ? 'गिटहब प्रोफाइल' : 'GitHub Profile'}</span>
+                            <span>{tr.menu.githubProfile}</span>
                           </a>
                         </div>
                       </div>
@@ -761,7 +815,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Category: Primary Features */}
                   <div className="space-y-1">
                     <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
-                      {isHindi ? 'सुविधाएं व उपकरण' : 'Features & Tools'}
+                      {tr.menu.featuresAndTools}
                     </div>
 
                     {/* Settings */}
@@ -776,7 +830,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         <div className="flex items-center gap-2.5">
                           <Settings className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                          <span>{isHindi ? 'ऐप सेटिंग्स' : 'App Settings'}</span>
+                          <span>{tr.menu.appSettings}</span>
                         </div>
                       </button>
                     )}
@@ -793,7 +847,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         <div className="flex items-center gap-2.5">
                           <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
-                          <span>{isHindi ? 'कैलकुलेटर' : 'Calculator'}</span>
+                          <span>{tr.menu.calculator}</span>
                         </div>
                       </button>
                     )}
@@ -810,7 +864,7 @@ export const Header: React.FC<HeaderProps> = ({
                     >
                       <div className="flex items-center gap-2.5">
                         <FileText className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                        <span>{isHindi ? 'पर्सनल नोट्स' : 'Personal Notes'}</span>
+                        <span>{tr.menu.personalNotes}</span>
                       </div>
                     </button>
 
@@ -826,13 +880,28 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         <div className="flex items-center gap-2.5">
                           <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
-                          <span>{isHindi ? 'सुरक्षा पिन लॉक' : 'Security PIN Lock'}</span>
+                          <span>{tr.menu.securityPinLock}</span>
                         </div>
                         {isLockEnabled && (
                           <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full">
-                            Active
+                            {tr.menu.active}
                           </span>
                         )}
+                      </button>
+                    )}
+
+                    {/* Lock App Now Button */}
+                    {isLockEnabled && onLockNow && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onLockNow();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#EF4444] bg-[var(--theme-card,#132438)]/60 hover:bg-[#EF4444]/15 border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <Lock className="w-4 h-4 text-[#EF4444] shrink-0" />
+                        <span>{tr.menu.lock || 'Lock App'}</span>
                       </button>
                     )}
 
@@ -846,60 +915,102 @@ export const Header: React.FC<HeaderProps> = ({
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                     >
                       <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                      <span>{isHindi ? 'उपयोग निर्देशिका' : 'User Manual Guide'}</span>
+                      <span>{tr.menu.userManualGuide}</span>
                     </button>
                   </div>
 
                   {/* Category: Theme & Language */}
-                  <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
-                    {/* Theme Colors */}
+                  <div className="space-y-1 mt-2">
+                    <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
+                      {tr.menu.themeColor} & {tr.menu.language}
+                    </div>
+
+                    {/* Theme Selection Accordion */}
                     {onThemeChange && (
-                      <div>
-                        <div className="text-[9.5px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1.5 uppercase tracking-wider">
-                          {isHindi ? 'रंग थीम (Theme)' : 'Theme Color'}
-                        </div>
-                        <div className="grid grid-cols-4 gap-1.5">
-                          {themeOptions.map((opt) => (
-                            <button
-                              key={opt.id}
-                              type="button"
-                              onClick={() => onThemeChange(opt.id)}
-                              className={`py-1.5 px-1 rounded-lg border text-[10px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-                                theme === opt.id
-                                  ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-text,#F8FAFC)]'
-                                  : 'border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
-                              }`}
-                            >
-                              <span className="w-3.5 h-3.5 rounded-full shadow-xs shrink-0" style={{ backgroundColor: opt.dotColor }} />
-                              <span className="truncate max-w-full">{opt.id}</span>
-                            </button>
-                          ))}
-                        </div>
+                      <div className="rounded-xl border border-[var(--theme-border,#213E61)]/40 overflow-hidden bg-[var(--theme-card,#132438)]/60">
+                        <button
+                          type="button"
+                          onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                          className="w-full flex items-center justify-between px-3 py-2 text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-surface,#0E1A29)] hover:text-[#FFC700] transition-colors cursor-pointer text-left"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <Palette className="w-4 h-4 text-[#FFC700] shrink-0" />
+                            <span>{tr.menu.themeColor}</span>
+                          </div>
+                          <ChevronDown className={`w-4 h-4 text-[var(--theme-text-muted,#94A3B8)] transition-transform ${isThemeMenuOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        
+                        {isThemeMenuOpen && (
+                          <div className="p-2.5 border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/50">
+                            <div className="grid grid-cols-4 gap-1.5">
+                              {themeOptions.map((opt) => (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={() => {
+                                    onThemeChange(opt.id);
+                                    setIsThemeMenuOpen(false);
+                                  }}
+                                  className={`py-1.5 px-1 rounded-lg border text-[10px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
+                                    theme === opt.id
+                                      ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-text,#F8FAFC)]'
+                                      : 'border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                                  }`}
+                                >
+                                  <span className="w-3.5 h-3.5 rounded-full shadow-xs shrink-0" style={{ backgroundColor: opt.dotColor }} />
+                                  <span className="truncate max-w-full">{opt.id}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
 
-                    {/* Language Switcher */}
+                    {/* Language Selection Accordion */}
                     {onLanguageChange && (
-                      <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/50 flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-[var(--theme-text-muted,#94A3B8)] uppercase tracking-wider">
-                          {isHindi ? 'भाषा' : 'Language'}
-                        </span>
-                        <div className="flex gap-1">
-                          {languageOptions.map((opt) => (
-                            <button
-                              key={opt.id}
-                              type="button"
-                              onClick={() => onLanguageChange(opt.id)}
-                              className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors cursor-pointer ${
-                                language === opt.id
-                                  ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
-                                  : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-surface,#0E1A29)]'
-                              }`}
-                            >
-                              {opt.label}
-                            </button>
-                          ))}
-                        </div>
+                      <div className="rounded-xl border border-[var(--theme-border,#213E61)]/40 overflow-hidden bg-[var(--theme-card,#132438)]/60">
+                        <button
+                          type="button"
+                          onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                          className="w-full flex items-center justify-between px-3 py-2 text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-surface,#0E1A29)] hover:text-[#38BDF8] transition-colors cursor-pointer text-left"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <Languages className="w-4 h-4 text-[#38BDF8] shrink-0" />
+                            <span>{tr.menu.language}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded-full font-bold">
+                              {languageOptions.find((l) => l.id === language)?.native || language}
+                            </span>
+                            <ChevronDown className={`w-4 h-4 text-[var(--theme-text-muted,#94A3B8)] transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
+                          </div>
+                        </button>
+                        
+                        {isLangMenuOpen && (
+                          <div className="p-2 border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/50">
+                            <div className="grid grid-cols-3 gap-1.5 max-h-48 overflow-y-auto pr-1">
+                              {languageOptions.map((opt) => (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={() => {
+                                    onLanguageChange(opt.id);
+                                    setIsLangMenuOpen(false);
+                                  }}
+                                  title={opt.label}
+                                  className={`px-2 py-1.5 rounded-lg text-[11px] font-bold transition-colors cursor-pointer text-center truncate ${
+                                    language === opt.id
+                                      ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold shadow-xs'
+                                      : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/40'
+                                  }`}
+                                >
+                                  {opt.native}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -907,7 +1018,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Category: Support & Safety */}
                   <div className="space-y-1">
                     <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
-                      {isHindi ? 'सहायता व सुरक्षा' : 'Support & Safety'}
+                      {tr.menu.supportAndSafety}
                     </div>
 
                     {/* Help Centre */}
@@ -922,7 +1033,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         <div className="flex items-center gap-2.5">
                           <LifeBuoy className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                          <span>{isHindi ? 'सहायता केंद्र एवं FAQ' : 'Help Centre & FAQ'}</span>
+                          <span>{tr.menu.helpCenterFaq}</span>
                         </div>
                       </button>
                     )}
@@ -939,7 +1050,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         <div className="flex items-center gap-2.5">
                           <Bug className="w-4 h-4 text-[#EF4444] shrink-0" />
-                          <span>{isHindi ? 'समस्या रिपोर्ट करें' : 'Report an Issue'}</span>
+                          <span>{tr.menu.reportIssue}</span>
                         </div>
                       </button>
                     )}
@@ -956,7 +1067,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         <div className="flex items-center gap-2.5">
                           <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0" />
-                          <span>{isHindi ? 'सुझाव एवं फीडबैक' : 'Feedback & Suggestions'}</span>
+                          <span>{tr.menu.feedbackSuggestions}</span>
                         </div>
                       </button>
                     )}
@@ -972,7 +1083,7 @@ export const Header: React.FC<HeaderProps> = ({
                         className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                       >
                         <Code2 className="w-4 h-4 text-[#10B981] shrink-0" />
-                        <span>{isHindi ? 'सुरक्षा एवं सोर्स कोड' : 'Safety & Source Code'}</span>
+                        <span>{tr.menu.safetySourceCode}</span>
                       </button>
                     )}
 
@@ -987,7 +1098,7 @@ export const Header: React.FC<HeaderProps> = ({
                         className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                       >
                         <Share2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                        <span>{isHindi ? 'ऐप शेयर करें' : 'Share App'}</span>
+                        <span>{tr.menu.shareApp}</span>
                       </button>
                     )}
 
@@ -1002,7 +1113,7 @@ export const Header: React.FC<HeaderProps> = ({
                         className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#10B981] bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/30 transition-colors cursor-pointer text-left"
                       >
                         <Download className="w-4 h-4 shrink-0" />
-                        <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
+                        <span>{tr.menu.installApp}</span>
                       </button>
                     )}
                   </div>
@@ -1029,7 +1140,7 @@ export const Header: React.FC<HeaderProps> = ({
                             }}
                           />
                         </div>
-                        <span className="truncate">{isHindi ? 'डेवलपर प्रोफाइल' : 'Developer Profile'}</span>
+                        <span className="truncate">{tr.menu.developerProfile}</span>
                       </button>
                     )}
 
@@ -1041,7 +1152,7 @@ export const Header: React.FC<HeaderProps> = ({
                       title="GitHub Profile"
                     >
                       <FolderGit2 className="w-3.5 h-3.5" />
-                      <span>{isHindi ? 'गिटहब प्रोफाइल' : 'GitHub Profile'}</span>
+                      <span>{tr.menu.githubProfile}</span>
                     </a>
                   </div>
                 </div>

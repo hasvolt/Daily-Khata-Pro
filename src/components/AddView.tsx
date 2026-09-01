@@ -1,3 +1,4 @@
+import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "../utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
 import { Entry, FundType, PaymentMode, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_INCOME_SOURCES, DEFAULT_CATEGORIES } from '../data/defaults';
@@ -195,9 +196,7 @@ export const AddView: React.FC<AddViewProps> = ({
             <span
               className="absolute left-4 top-1/2 -translate-y-1/2 font-serif-display text-[30px] font-bold"
               style={{ color: 'var(--theme-primary, #38BDF8)' }}
-            >
-              ₹
-            </span>
+            >{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
             <input
               id="entry-amount-input"
               type="number"
@@ -230,7 +229,7 @@ export const AddView: React.FC<AddViewProps> = ({
                 }}
                 className="px-3 py-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] border border-[var(--theme-border,#213E61)] text-[12.5px] font-mono font-bold shrink-0 transition-colors cursor-pointer"
               >
-                +₹{q >= 1000 ? `${q / 1000}k` : q}
+                +{getCurrencyConfig(getCurrentLanguage()).symbol}{q >= 1000 ? `${q / 1000}k` : q}
               </button>
             ))}
           </div>
