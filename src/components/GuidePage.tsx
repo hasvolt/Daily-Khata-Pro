@@ -87,7 +87,7 @@ export const GuidePage: React.FC<GuidePageProps> = ({
     { id: 'backup', title: '11. Backup & Privacy Security', hindiTitle: '11. बैकअप एवं डेटा सुरक्षा', icon: ShieldCheck },
     { id: 'source_code', title: '12. Source Code & Verification', hindiTitle: '12. ओपन सोर्स व सुरक्षा सत्यापन', icon: Code2 },
     { id: 'faq', title: '13. Frequently Asked Questions', hindiTitle: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)', icon: HelpCircle },
-    { id: 'developer', title: '14. Developer & Creator Info', hindiTitle: '14. डेवलपर एवं क्रिएटर प्रोफाइल', icon: User }
+    { id: 'developer', title: '14. Developer & Founder Info', hindiTitle: '14. डेवलपर एवं फाउंडर प्रोफाइल', icon: User }
   ];
 
   const filteredSections = searchQuery.trim()
@@ -991,10 +991,10 @@ export const GuidePage: React.FC<GuidePageProps> = ({
               <div className="border-b border-[var(--theme-border,#213E61)] pb-5">
                 <h3 className="font-serif-display text-[24px] sm:text-[26px] font-bold text-[#F8FAFC] flex items-center gap-3">
                   <User className="w-7 h-7 text-[var(--theme-primary,#38BDF8)]" />
-                  <span>Developer &amp; Creator Information</span>
+                  <span>Developer &amp; Founder Information</span>
                 </h3>
                 <p className="text-[14.5px] text-[#94A3B8] mt-2 leading-relaxed">
-                  Meet the creator behind Daily Khata: Pro and HasVolt digital products.
+                  Meet the developer behind Daily Khata: Pro and HasVolt digital products.
                 </p>
               </div>
 
@@ -1011,7 +1011,7 @@ export const GuidePage: React.FC<GuidePageProps> = ({
                     </div>
                     <div className="mt-2 px-2.5 py-0.5 rounded bg-[#10B981] text-[#04140D] text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
                       <Check className="w-2.5 h-2.5 stroke-[3]" />
-                      <span>Creator &amp; Founder</span>
+                      <span>Developer &amp; Founder</span>
                     </div>
                   </div>
 
@@ -1026,7 +1026,7 @@ export const GuidePage: React.FC<GuidePageProps> = ({
                     </div>
 
                     <div className="text-[13px] font-medium text-[var(--theme-primary,#38BDF8)]">
-                      Independent Software Developer &amp; Creator
+                      Independent Software Developer &amp; Founder
                     </div>
 
                     <div className="text-[12px] text-[#94A3B8] flex items-center justify-center sm:justify-start gap-1.5 pt-1">

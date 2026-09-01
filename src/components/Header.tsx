@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   BookOpen,
   Settings,
@@ -17,6 +18,7 @@ import {
   Share2,
   User,
   MoreVertical,
+  Menu,
   ExternalLink,
   ChevronDown,
   Sun,
@@ -36,7 +38,8 @@ import {
   LifeBuoy,
   Bug,
   Lightbulb,
-  HelpCircle
+  HelpCircle,
+  Sparkles
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -105,6 +108,31 @@ export const Header: React.FC<HeaderProps> = ({
 
   const isLightMode = theme === 'light' || theme === 'white';
 
+  // Prevent background page scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMoreMenuOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalTouchAction = document.body.style.touchAction;
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+      return () => {
+        document.body.style.overflow = originalOverflow || '';
+        document.body.style.touchAction = originalTouchAction || '';
+      };
+    }
+  }, [isMoreMenuOpen]);
+
+  // Global event listener to trigger Main Menu from anywhere (e.g., Footer)
+  useEffect(() => {
+    const handleOpenMainMenu = () => {
+      setIsMoreMenuOpen(true);
+    };
+    window.addEventListener('open-main-menu', handleOpenMainMenu);
+    return () => {
+      window.removeEventListener('open-main-menu', handleOpenMainMenu);
+    };
+  }, []);
+
   const themeOptions: {
     id: AppTheme;
     label: string;
@@ -128,9 +156,6 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'hinglish', label: 'Hinglish', short: 'HIN', native: 'Hinglish' }
   ];
 
-  const currentThemeConfig = themeOptions.find((t) => t.id === theme) || themeOptions[0];
-  const currentLangConfig = languageOptions.find((l) => l.id === language) || languageOptions[0];
-
   const closeAllMenus = () => {
     setIsThemeMenuOpen(false);
     setIsLangMenuOpen(false);
@@ -139,24 +164,29 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-md sticky top-0 z-30 shadow-md transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-2.5 sm:px-4 md:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-2">
-        {/* Brand Icon & Name */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink-0">
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-2">
+        {/* Brand Icon & Name (Refined, 20% compact on mobile) */}
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 shrink-0">
           <div
             onClick={() => onSelectTab && onSelectTab('home')}
             className="cursor-pointer active:scale-95 transition-transform shrink-0"
           >
-            <HasVoltLogo size={36} />
+            <div className="sm:hidden">
+              <HasVoltLogo size={28} />
+            </div>
+            <div className="hidden sm:block">
+              <HasVoltLogo size={36} />
+            </div>
           </div>
 
           <div className="flex flex-col text-left min-w-0">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5">
               <span
                 onClick={() => onSelectTab && onSelectTab('home')}
-                className="font-serif-display font-bold text-[17px] sm:text-[20px] tracking-tight cursor-pointer transition-colors truncate"
+                className="font-serif-display font-bold text-[15px] sm:text-[20px] tracking-tight cursor-pointer transition-colors truncate"
               >
                 <span className="text-[#FFFFFF]">Daily</span>
-                <span className="ml-1" style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span>
+                <span className="ml-0.5 sm:ml-1" style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span>
                 <span className="text-[#F8FAFC]">: Pro</span>
               </span>
               <span
@@ -170,7 +200,7 @@ export const Header: React.FC<HeaderProps> = ({
                 OFFICIAL
               </span>
             </div>
-            <div className="text-[10.5px] sm:text-[11.5px] text-[#94A3B8] hidden xs:flex items-center gap-1 font-medium truncate">
+            <div className="text-[9px] sm:text-[11.5px] text-[#94A3B8] hidden xs:flex items-center gap-1 font-medium truncate">
               <span
                 className="font-bold truncate transition-colors"
                 style={{ color: 'var(--theme-primary, #38BDF8)' }}
@@ -204,7 +234,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[12px] font-bold transition-all cursor-pointer whitespace-nowrap ${
                     isActive
                       ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] shadow-xs'
-                      : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]'
+                      : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)]'
                   }`}
                 >
                   <TabIcon className="w-3.5 h-3.5" />
@@ -219,7 +249,7 @@ export const Header: React.FC<HeaderProps> = ({
         {onSearchChange && (
           <div className="hidden lg:flex items-center flex-1 max-w-xs mx-3">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#94A3B8] pointer-events-none" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] pointer-events-none" />
               <input
                 id="header-desktop-search"
                 type="text"
@@ -238,7 +268,7 @@ export const Header: React.FC<HeaderProps> = ({
                     }
                   }
                 }}
-                className="w-full bg-[var(--theme-bg,#070E18)] hover:bg-[var(--theme-card,#132438)] focus:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[12px] rounded-xl pl-8 pr-7 py-1.5 transition-all outline-none shadow-xs"
+                className="w-full bg-[var(--theme-bg,#070E18)] hover:bg-[var(--theme-card,#132438)] focus:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#64748B)] text-[12px] rounded-xl pl-8 pr-7 py-1.5 transition-all outline-none shadow-xs"
                 style={{
                   borderColor: searchQuery ? 'var(--theme-primary, #38BDF8)' : undefined
                 }}
@@ -247,7 +277,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => onSearchChange('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)] transition-colors cursor-pointer"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)] transition-colors cursor-pointer"
                   title="Clear search"
                 >
                   <X className="w-3 h-3" />
@@ -257,17 +287,17 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
 
-        {/* Right Action Buttons */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Right Action Buttons (Compact, Refined & Touch-Friendly) */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {/* Privacy Eye Toggle */}
           {onTogglePrivacyMask && (
             <button
               type="button"
               onClick={onTogglePrivacyMask}
-              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1 shrink-0 ${
+              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0 ${
                 privacyMask
                   ? 'bg-[#F59E0B]/20 border-[#F59E0B]/50 text-[#F59E0B]'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
               }`}
               title={privacyMask ? 'Amounts Hidden (Click to show)' : 'Mask Rupee Amounts'}
               id="header-privacy-mask-btn"
@@ -288,7 +318,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onLockNow}
-              className="p-1.5 sm:px-2 sm:py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[#EF4444]/15 hover:border-[#EF4444]/50 text-[#CBD5E1] hover:text-[#EF4444] transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1 shrink-0"
+              className="p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[#EF4444]/15 hover:border-[#EF4444]/50 text-[var(--theme-text-muted,#94A3B8)] hover:text-[#EF4444] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0"
               title={isHindi ? 'अभी ऐप लॉक करें' : 'Lock App Vault Now'}
               id="header-lock-now-btn"
             >
@@ -310,10 +340,10 @@ export const Header: React.FC<HeaderProps> = ({
                   onThemeChange('light');
                 }
               }}
-              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1 shrink-0 ${
+              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0 ${
                 isLightMode
                   ? 'bg-[#0284C7]/15 border-[#0284C7]/40 text-[#0284C7] hover:bg-[#0284C7]/25'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
               }`}
               title={isLightMode ? (isHindi ? 'नाइट मोड' : 'Switch to Night Mode') : (isHindi ? 'डे मोड' : 'Switch to Day Mode')}
               id="header-theme-toggle-btn"
@@ -334,7 +364,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenSimulator}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1.5 shrink-0"
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1.5 shrink-0"
               title={isHindi ? 'मल्टीपर्पस कैलकुलेटर' : 'Multi-Purpose Calculator'}
               id="header-calculator-btn"
             >
@@ -345,319 +375,673 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Main Three-Dot Menu */}
+          {/* Main Three-Dot / Hamburger Menu */}
           <div className="relative shrink-0">
             <button
               type="button"
-              onClick={() => {
-                setIsMoreMenuOpen(!isMoreMenuOpen);
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsMoreMenuOpen((prev) => !prev);
                 setIsThemeMenuOpen(false);
                 setIsLangMenuOpen(false);
               }}
-              className={`p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center gap-1.5 shrink-0 ${
+              className={`min-h-[32px] sm:min-h-[36px] p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10.5px] sm:text-[11px] font-bold flex items-center gap-1 sm:gap-1.5 shrink-0 ${
                 isMoreMenuOpen
-                  ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)]'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#CBD5E1] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)]/60'
+                  ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] ring-2 ring-[var(--theme-primary,#38BDF8)]/40'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/60'
               }`}
               title={isHindi ? 'मेनू एवं सेटिंग्स' : 'Menu & Settings'}
               aria-label="Main Menu"
               id="header-main-menu-btn"
             >
-              <MoreVertical className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-              <span className="text-[11px] font-bold">
+              <Menu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" />
+              <span className="font-bold">
                 {isHindi ? 'मेनू' : 'Menu'}
               </span>
             </button>
 
-            {/* Clean, Simple Dropdown Menu */}
+            {/* UNIFIED MAIN MENU FOR MOBILE DRAWER & DESKTOP DROPDOWN */}
             {isMoreMenuOpen && (
               <>
+                {/* --- MOBILE MODE: SLIDE-OVER DRAWER (via React Portal) --- */}
+                {typeof document !== 'undefined' &&
+                  createPortal(
+                    <div className="sm:hidden fixed inset-0 z-[9999] isolate">
+                      {/* Backdrop Blur Overlay with Click-outside & Scroll-Lock */}
+                      <div
+                        className="fixed inset-0 z-[9998] bg-black/75 backdrop-blur-xs animate-in fade-in duration-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsMoreMenuOpen(false);
+                        }}
+                        aria-hidden="true"
+                      />
+
+                      {/* Mobile Slide-Over Drawer */}
+                      <div
+                        className="fixed inset-y-0 right-0 w-[88vw] max-w-[340px] z-[9999] bg-[var(--theme-surface,#0E1A29)] border-l border-[var(--theme-border,#213E61)] shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-200 text-left"
+                        onClick={(e) => e.stopPropagation()}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={isHindi ? 'मुख्य मेनू' : 'Main Menu'}
+                      >
+                        {/* Drawer Header */}
+                        <div className="p-3.5 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] flex items-center justify-between shrink-0">
+                          <div className="flex items-center gap-2">
+                            <HasVoltLogo size={24} />
+                            <div>
+                              <div className="font-bold text-[14px] text-[var(--theme-text,#F8FAFC)]">
+                                Daily <span style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span> Pro
+                              </div>
+                              <div className="text-[9.5px] text-[var(--theme-text-muted,#94A3B8)] font-medium">
+                                {isHindi ? 'मुख्य मेनू व सेटिंग्स' : 'Main Menu & Tools'}
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsMoreMenuOpen(false);
+                            }}
+                            className="p-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] border border-[var(--theme-border,#213E61)] active:scale-90 transition-transform cursor-pointer"
+                            aria-label="Close Menu"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Drawer Scrollable Content */}
+                        <div className="flex-1 overflow-y-auto p-3 space-y-3 text-left overscroll-contain">
+                          {/* Category: Primary Features */}
+                          <div className="space-y-1">
+                            <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
+                              {isHindi ? 'सुविधाएं व उपकरण' : 'Features & Tools'}
+                            </div>
+
+                            {/* Settings */}
+                            {onOpenSettings && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenSettings();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Settings className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                  <span>{isHindi ? 'ऐप सेटिंग्स' : 'App Settings'}</span>
+                                </div>
+                              </button>
+                            )}
+
+                            {/* Calculator */}
+                            {onOpenSimulator && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenSimulator();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#F59E0B] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
+                                  <span>{isHindi ? 'कैलकुलेटर' : 'Calculator'}</span>
+                                </div>
+                              </button>
+                            )}
+
+                            {/* Personal Notes */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (onOpenNotes) onOpenNotes();
+                                else if (onSelectTab) onSelectTab('notes');
+                                closeAllMenus();
+                              }}
+                              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <FileText className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                <span>{isHindi ? 'पर्सनल नोट्स' : 'Personal Notes'}</span>
+                              </div>
+                            </button>
+
+                            {/* Security PIN Lock */}
+                            {onOpenSecurity && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenSecurity();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
+                                  <span>{isHindi ? 'सुरक्षा पिन लॉक' : 'Security PIN Lock'}</span>
+                                </div>
+                                {isLockEnabled && (
+                                  <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full">
+                                    Active
+                                  </span>
+                                )}
+                              </button>
+                            )}
+
+                            {/* User Manual Guide */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                onOpenManual();
+                                closeAllMenus();
+                              }}
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                            >
+                              <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                              <span>{isHindi ? 'उपयोग निर्देशिका' : 'User Manual Guide'}</span>
+                            </button>
+                          </div>
+
+                          {/* Category: Theme & Language */}
+                          <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                            {/* Theme Colors */}
+                            {onThemeChange && (
+                              <div>
+                                <div className="text-[9.5px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1.5 uppercase tracking-wider">
+                                  {isHindi ? 'रंग थीम (Theme)' : 'Theme Color'}
+                                </div>
+                                <div className="grid grid-cols-4 gap-1.5">
+                                  {themeOptions.map((opt) => (
+                                    <button
+                                      key={opt.id}
+                                      type="button"
+                                      onClick={() => onThemeChange(opt.id)}
+                                      className={`py-1.5 px-1 rounded-lg border text-[10px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
+                                        theme === opt.id
+                                          ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-text,#F8FAFC)]'
+                                          : 'border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                                      }`}
+                                    >
+                                      <span className="w-3.5 h-3.5 rounded-full shadow-xs shrink-0" style={{ backgroundColor: opt.dotColor }} />
+                                      <span className="truncate max-w-full">{opt.id}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Language Switcher */}
+                            {onLanguageChange && (
+                              <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/50 flex items-center justify-between">
+                                <span className="text-[10px] font-bold text-[var(--theme-text-muted,#94A3B8)] uppercase tracking-wider">
+                                  {isHindi ? 'भाषा' : 'Language'}
+                                </span>
+                                <div className="flex gap-1">
+                                  {languageOptions.map((opt) => (
+                                    <button
+                                      key={opt.id}
+                                      type="button"
+                                      onClick={() => onLanguageChange(opt.id)}
+                                      className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors cursor-pointer ${
+                                        language === opt.id
+                                          ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
+                                          : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-surface,#0E1A29)]'
+                                      }`}
+                                    >
+                                      {opt.label}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Category: Support & Safety */}
+                          <div className="space-y-1">
+                            <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
+                              {isHindi ? 'सहायता व सुरक्षा' : 'Support & Safety'}
+                            </div>
+
+                            {/* Help Centre */}
+                            {onOpenSupport && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenSupport('help');
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <LifeBuoy className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                  <span>{isHindi ? 'सहायता केंद्र एवं FAQ' : 'Help Centre & FAQ'}</span>
+                                </div>
+                              </button>
+                            )}
+
+                            {/* Bug Report */}
+                            {onOpenSupport && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenSupport('bug');
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#EF4444] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Bug className="w-4 h-4 text-[#EF4444] shrink-0" />
+                                  <span>{isHindi ? 'समस्या रिपोर्ट करें' : 'Report an Issue'}</span>
+                                </div>
+                              </button>
+                            )}
+
+                            {/* Suggestion / Idea */}
+                            {onOpenSupport && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenSupport('suggestion');
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#F59E0B] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0" />
+                                  <span>{isHindi ? 'सुझाव एवं फीडबैक' : 'Feedback & Suggestions'}</span>
+                                </div>
+                              </button>
+                            )}
+
+                            {/* Safety & Source Code */}
+                            {onOpenSourceCode && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenSourceCode();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <Code2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                                <span>{isHindi ? 'सुरक्षा एवं सोर्स कोड' : 'Safety & Source Code'}</span>
+                              </button>
+                            )}
+
+                            {/* Share App */}
+                            {onOpenShare && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenShare();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                              >
+                                <Share2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                <span>{isHindi ? 'ऐप शेयर करें' : 'Share App'}</span>
+                              </button>
+                            )}
+
+                            {/* Install App */}
+                            {onOpenInstall && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenInstall();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#10B981] bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/30 transition-colors cursor-pointer text-left"
+                              >
+                                <Download className="w-4 h-4 shrink-0" />
+                                <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Drawer Footer */}
+                        <div className="p-3 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] flex items-center justify-between shrink-0">
+                          {onOpenDeveloper && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                onOpenDeveloper();
+                                closeAllMenus();
+                              }}
+                              className="flex items-center gap-2 text-[11px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] cursor-pointer"
+                            >
+                              <div className="w-5 h-5 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
+                                <img
+                                  src="/md-zafeer-hasan-yazdaan.jpg"
+                                  alt="MD Zafeer Hasan"
+                                  className="w-full h-full object-cover"
+                                  referrerPolicy="no-referrer"
+                                  onError={(e) => {
+                                    (e.target as HTMLElement).style.display = 'none';
+                                  }}
+                                />
+                              </div>
+                              <span>MD Zafeer Hasan</span>
+                            </button>
+                          )}
+
+                          <a
+                            href="https://github.com/hasvolt/Daily-Khata-Pro"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]"
+                            title="GitHub"
+                          >
+                            <FolderGit2 className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>,
+                    document.body
+                  )}
+
+                {/* --- DESKTOP MODE: FLOATING BOUNDED DROPDOWN (matching mobile categories and contrast) --- */}
                 <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setIsMoreMenuOpen(false)}
+                  className="fixed inset-0 z-40 hidden sm:block"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMoreMenuOpen(false);
+                  }}
+                  aria-hidden="true"
                 />
-                <div className="absolute right-0 mt-2 w-64 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl shadow-2xl z-50 p-2 space-y-1 animate-in fade-in zoom-in-95 duration-150 max-h-[85vh] overflow-y-auto">
-                  
-                  {/* Settings */}
-                  {onOpenSettings && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenSettings();
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer text-left"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Settings className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                        <span>{isHindi ? 'ऐप सेटिंग्स' : 'App Settings'}</span>
-                      </div>
-                      <span className="text-[9.5px] text-[#94A3B8]">Rules &amp; %</span>
-                    </button>
-                  )}
-
-                  {/* Calculator Suite */}
-                  {onOpenSimulator && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenSimulator();
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#F59E0B] transition-colors cursor-pointer text-left"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
-                        <span>{isHindi ? 'कैलकुलेटर सूट' : 'Calculator Suite'}</span>
-                      </div>
-                      <span className="text-[9.5px] font-bold text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded">PRO</span>
-                    </button>
-                  )}
-
-                  {/* Personal Notes */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onOpenNotes) onOpenNotes();
-                      else if (onSelectTab) onSelectTab('notes');
-                      closeAllMenus();
-                    }}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer text-left"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <FileText className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                      <span>{isHindi ? 'पर्सनल नोट्स' : 'Personal Notes'}</span>
+                <div
+                  className="hidden sm:block absolute top-full right-0 mt-2 w-80 max-w-[340px] bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl shadow-2xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150 max-h-[82vh] overflow-y-auto text-left"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Category: Primary Features */}
+                  <div className="space-y-1">
+                    <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
+                      {isHindi ? 'सुविधाएं व उपकरण' : 'Features & Tools'}
                     </div>
-                  </button>
 
-                  {/* Security PIN Lock */}
-                  {onOpenSecurity && (
+                    {/* Settings */}
+                    {onOpenSettings && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenSettings();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Settings className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                          <span>{isHindi ? 'ऐप सेटिंग्स' : 'App Settings'}</span>
+                        </div>
+                      </button>
+                    )}
+
+                    {/* Calculator */}
+                    {onOpenSimulator && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenSimulator();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#F59E0B] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
+                          <span>{isHindi ? 'कैलकुलेटर' : 'Calculator'}</span>
+                        </div>
+                      </button>
+                    )}
+
+                    {/* Personal Notes */}
                     <button
                       type="button"
                       onClick={() => {
-                        onOpenSecurity();
+                        if (onOpenNotes) onOpenNotes();
+                        else if (onSelectTab) onSelectTab('notes');
                         closeAllMenus();
                       }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] transition-colors cursor-pointer text-left"
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
-                        <span>{isHindi ? 'सुरक्षा पिन लॉक' : 'Security PIN Lock'}</span>
+                        <FileText className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                        <span>{isHindi ? 'पर्सनल नोट्स' : 'Personal Notes'}</span>
                       </div>
-                      {isLockEnabled && (
-                        <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded">
-                          ON
+                    </button>
+
+                    {/* Security PIN Lock */}
+                    {onOpenSecurity && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenSecurity();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
+                          <span>{isHindi ? 'सुरक्षा पिन लॉक' : 'Security PIN Lock'}</span>
+                        </div>
+                        {isLockEnabled && (
+                          <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full">
+                            Active
+                          </span>
+                        )}
+                      </button>
+                    )}
+
+                    {/* User Manual Guide */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenManual();
+                        closeAllMenus();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                    >
+                      <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                      <span>{isHindi ? 'उपयोग निर्देशिका' : 'User Manual Guide'}</span>
+                    </button>
+                  </div>
+
+                  {/* Category: Theme & Language */}
+                  <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+                    {/* Theme Colors */}
+                    {onThemeChange && (
+                      <div>
+                        <div className="text-[9.5px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1.5 uppercase tracking-wider">
+                          {isHindi ? 'रंग थीम (Theme)' : 'Theme Color'}
+                        </div>
+                        <div className="grid grid-cols-4 gap-1.5">
+                          {themeOptions.map((opt) => (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => onThemeChange(opt.id)}
+                              className={`py-1.5 px-1 rounded-lg border text-[10px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
+                                theme === opt.id
+                                  ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] text-[var(--theme-text,#F8FAFC)]'
+                                  : 'border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                              }`}
+                            >
+                              <span className="w-3.5 h-3.5 rounded-full shadow-xs shrink-0" style={{ backgroundColor: opt.dotColor }} />
+                              <span className="truncate max-w-full">{opt.id}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Language Switcher */}
+                    {onLanguageChange && (
+                      <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/50 flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-[var(--theme-text-muted,#94A3B8)] uppercase tracking-wider">
+                          {isHindi ? 'भाषा' : 'Language'}
                         </span>
-                      )}
-                    </button>
-                  )}
-
-                  {/* User Manual Guide */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onOpenManual();
-                      closeAllMenus();
-                    }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer text-left"
-                  >
-                    <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                    <span>{t.header.manual}</span>
-                  </button>
-
-                  {/* Help Centre */}
-                  {onOpenSupport && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenSupport('help');
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer text-left"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <LifeBuoy className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                        <span>{isHindi ? 'सहायता केंद्र' : 'Help Centre & FAQ'}</span>
+                        <div className="flex gap-1">
+                          {languageOptions.map((opt) => (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => onLanguageChange(opt.id)}
+                              className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors cursor-pointer ${
+                                language === opt.id
+                                  ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
+                                  : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-surface,#0E1A29)]'
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                      <span className="text-[9.5px] text-[#94A3B8]">Guide</span>
-                    </button>
-                  )}
+                    )}
+                  </div>
 
-                  {/* Bug Report */}
-                  {onOpenSupport && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenSupport('bug');
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#EF4444] transition-colors cursor-pointer text-left"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Bug className="w-4 h-4 text-[#EF4444] shrink-0" />
-                        <span>{isHindi ? 'बग रिपोर्ट करें' : 'Report a Bug'}</span>
-                      </div>
-                      <span className="text-[9.5px] font-medium text-[#EF4444] bg-[#EF4444]/10 px-1.5 py-0.5 rounded">Fix</span>
-                    </button>
-                  )}
-
-                  {/* Suggestion / Feature Request */}
-                  {onOpenSupport && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenSupport('suggestion');
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#F59E0B] transition-colors cursor-pointer text-left"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0" />
-                        <span>{isHindi ? 'सुझाव दें' : 'Give Suggestion'}</span>
-                      </div>
-                      <span className="text-[9.5px] font-medium text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded">Idea</span>
-                    </button>
-                  )}
-
-                  {/* Simple Clean Divider */}
-                  <div className="my-1.5 border-t border-[var(--theme-border,#213E61)]/70" />
-
-                  {/* Themes Palette */}
-                  {onThemeChange && (
-                    <div className="px-3 py-1.5">
-                      <div className="text-[10px] font-bold text-[#64748B] mb-1.5 uppercase tracking-wider">
-                        {isHindi ? 'रंग थीम' : 'Theme Color'}
-                      </div>
-                      <div className="flex items-center justify-between gap-1">
-                        {themeOptions.map((opt) => (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            onClick={() => onThemeChange(opt.id)}
-                            className={`w-6 h-6 rounded-full flex items-center justify-center transition-transform cursor-pointer ${
-                              theme === opt.id ? 'ring-2 ring-[var(--theme-primary,#38BDF8)] scale-110' : 'hover:scale-105 opacity-80 hover:opacity-100'
-                            }`}
-                            title={opt.label}
-                          >
-                            <span className="w-4 h-4 rounded-full shadow-xs" style={{ backgroundColor: opt.dotColor }} />
-                          </button>
-                        ))}
-                      </div>
+                  {/* Category: Support & Safety */}
+                  <div className="space-y-1">
+                    <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
+                      {isHindi ? 'सहायता व सुरक्षा' : 'Support & Safety'}
                     </div>
-                  )}
 
-                  {/* Language Selector */}
-                  {onLanguageChange && (
-                    <div className="px-3 py-1.5 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">
-                        {isHindi ? 'भाषा' : 'Language'}
-                      </span>
-                      <div className="flex gap-1">
-                        {languageOptions.map((opt) => (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            onClick={() => onLanguageChange(opt.id)}
-                            className={`px-2 py-0.5 rounded text-[10.5px] font-bold transition-colors cursor-pointer ${
-                              language === opt.id
-                                ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
-                                : 'text-[#94A3B8] hover:text-[#F8FAFC] bg-[var(--theme-card,#132438)]'
-                            }`}
-                          >
-                            {opt.short}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                    {/* Help Centre */}
+                    {onOpenSupport && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenSupport('help');
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <LifeBuoy className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                          <span>{isHindi ? 'सहायता केंद्र एवं FAQ' : 'Help Centre & FAQ'}</span>
+                        </div>
+                      </button>
+                    )}
 
-                  {/* Simple Clean Divider */}
-                  <div className="my-1.5 border-t border-[var(--theme-border,#213E61)]/70" />
+                    {/* Bug Report */}
+                    {onOpenSupport && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenSupport('bug');
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#EF4444] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Bug className="w-4 h-4 text-[#EF4444] shrink-0" />
+                          <span>{isHindi ? 'समस्या रिपोर्ट करें' : 'Report an Issue'}</span>
+                        </div>
+                      </button>
+                    )}
 
-                  {/* Developer Profile */}
-                  {onOpenDeveloper && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenDeveloper();
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#F8FAFC] transition-colors cursor-pointer text-left"
+                    {/* Suggestion / Idea */}
+                    {onOpenSupport && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenSupport('suggestion');
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#F59E0B] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0" />
+                          <span>{isHindi ? 'सुझाव एवं फीडबैक' : 'Feedback & Suggestions'}</span>
+                        </div>
+                      </button>
+                    )}
+
+                    {/* Safety & Source Code */}
+                    {onOpenSourceCode && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenSourceCode();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <Code2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                        <span>{isHindi ? 'सुरक्षा एवं सोर्स कोड' : 'Safety & Source Code'}</span>
+                      </button>
+                    )}
+
+                    {/* Share App */}
+                    {onOpenShare && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenShare();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                      >
+                        <Share2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                        <span>{isHindi ? 'ऐप शेयर करें' : 'Share App'}</span>
+                      </button>
+                    )}
+
+                    {/* Install App */}
+                    {onOpenInstall && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenInstall();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#10B981] bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/30 transition-colors cursor-pointer text-left"
+                      >
+                        <Download className="w-4 h-4 shrink-0" />
+                        <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Divider & Developer Footer */}
+                  <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/70 flex items-center justify-between">
+                    {onOpenDeveloper && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenDeveloper();
+                          closeAllMenus();
+                        }}
+                        className="flex items-center gap-2 text-[11px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] cursor-pointer"
+                      >
+                        <div className="w-5 h-5 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
+                          <img
+                            src="/md-zafeer-hasan-yazdaan.jpg"
+                            alt="MD Zafeer Hasan"
+                            className="w-full h-full object-cover"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
+                        <span className="truncate">{isHindi ? 'डेवलपर प्रोफाइल' : 'Developer Profile'}</span>
+                      </button>
+                    )}
+
+                    <a
+                      href="https://github.com/hasvolt/Daily-Khata-Pro"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]"
+                      title="GitHub"
                     >
-                      <div className="w-5 h-5 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
-                        <img
-                          src="/md-zafeer-hasan-yazdaan.jpg"
-                          alt="MD Zafeer Hasan"
-                          className="w-full h-full object-cover"
-                          referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            (e.target as HTMLElement).style.display = 'none';
-                          }}
-                        />
-                      </div>
-                      <span className="truncate">MD Zafeer Hasan</span>
-                    </button>
-                  )}
-
-                  {/* Source Code / Safety */}
-                  {onOpenSourceCode && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenSourceCode();
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] transition-colors cursor-pointer text-left"
-                    >
-                      <Code2 className="w-4 h-4 text-[#10B981] shrink-0" />
-                      <span>{isHindi ? 'सुरक्षा एवं कोड' : 'Safety & Code'}</span>
-                    </button>
-                  )}
-
-                  {/* Share Link */}
-                  {onOpenShare && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenShare();
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold text-[#CBD5E1] hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer text-left"
-                    >
-                      <Share2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                      <span>{isHindi ? 'ऐप शेयर करें' : 'Share App'}</span>
-                    </button>
-                  )}
-
-                  {/* Install PWA */}
-                  {onOpenInstall && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onOpenInstall();
-                        closeAllMenus();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold text-[#10B981] hover:bg-[var(--theme-card,#132438)] hover:text-[#34D399] transition-colors cursor-pointer text-left"
-                    >
-                      <Download className="w-4 h-4 shrink-0" />
-                      <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
-                    </button>
-                  )}
-
-                  {/* GitHub Repo Link */}
-                  <a
-                    href="https://github.com/hasvolt/Daily-Khata-Pro"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsMoreMenuOpen(false)}
-                    className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-[11.5px] font-medium text-[#94A3B8] hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] transition-colors cursor-pointer text-left"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <FolderGit2 className="w-4 h-4 text-[#10B981] shrink-0" />
-                      <span>GitHub</span>
-                    </div>
-                    <ExternalLink className="w-3.5 h-3.5 text-[#64748B]" />
-                  </a>
+                      <FolderGit2 className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </div>
               </>
             )}

@@ -13,6 +13,9 @@
     --theme-card: #132438;
     --theme-card-hover: #19304A;
     --theme-border: #213E61;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #94A3B8;
+    --theme-text-dim: #64748B;
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #38BDF8;
     --theme-btn-hover: #0EA5E9;
@@ -30,6 +33,9 @@
     --theme-card: #132438;
     --theme-card-hover: #19304A;
     --theme-border: #213E61;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #94A3B8;
+    --theme-text-dim: #64748B;
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #38BDF8;
     --theme-btn-hover: #0EA5E9;
@@ -47,6 +53,9 @@
     --theme-card: #292413;
     --theme-card-hover: #373019;
     --theme-border: #4D431B;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
     --theme-badge-text: #FFC700;
     --theme-btn-bg: #FFC700;
     --theme-btn-hover: #FFD233;
@@ -64,6 +73,9 @@
     --theme-card: #2B180E;
     --theme-card-hover: #3B2113;
     --theme-border: #522D19;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
     --theme-badge-text: #FB923C;
     --theme-btn-bg: #F97316;
     --theme-btn-hover: #FB923C;
@@ -81,6 +93,9 @@
     --theme-card: #112A1B;
     --theme-card-hover: #183B26;
     --theme-border: #215235;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
     --theme-badge-text: #34D399;
     --theme-btn-bg: #10B981;
     --theme-btn-hover: #34D399;
@@ -98,6 +113,9 @@
     --theme-card: #251538;
     --theme-card-hover: #331D4D;
     --theme-border: #4A2A70;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
     --theme-badge-text: #C084FC;
     --theme-btn-bg: #A855F7;
     --theme-btn-hover: #C084FC;
@@ -115,6 +133,9 @@
     --theme-card: #0E2636;
     --theme-card-hover: #14354A;
     --theme-border: #1C4B69;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
     --theme-badge-text: #22D3EE;
     --theme-btn-bg: #06B6D4;
     --theme-btn-hover: #22D3EE;
@@ -132,6 +153,9 @@
     --theme-card: #FFFFFF;
     --theme-card-hover: #F8FAFC;
     --theme-border: #CBD5E1;
+    --theme-text: #0F172A;
+    --theme-text-muted: #475569;
+    --theme-text-dim: #64748B;
     --theme-badge-text: #0284C7;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
@@ -148,7 +172,10 @@
     --theme-surface: #F8FAFC;
     --theme-card: #FFFFFF;
     --theme-card-hover: #F1F5F9;
-    --theme-border: #D1D5DB;
+    --theme-border: #CBD5E1;
+    --theme-text: #0F172A;
+    --theme-text-muted: #475569;
+    --theme-text-dim: #64748B;
     --theme-badge-text: #1D4ED8;
     --theme-btn-bg: #2563EB;
     --theme-btn-hover: #1D4ED8;
@@ -163,6 +190,12 @@
     box-sizing: border-box;
   }
 
+  @media (max-width: 640px) {
+    html {
+      font-size: 95%; /* 5% reduction in mobile mode for optimal visual density */
+    }
+  }
+
   *, *:before, *:after {
     box-sizing: inherit;
   }
@@ -173,7 +206,7 @@
     background-image: 
       radial-gradient(ellipse at 50% 0%, var(--theme-glow, rgba(56, 189, 248, 0.15)) 0%, var(--theme-bg, #070E18) 75%),
       linear-gradient(to bottom, transparent 0%, rgba(7, 14, 24, 0.8) 100%);
-    color: #F8FAFC;
+    color: var(--theme-text, #F8FAFC);
     min-height: 100vh;
     min-height: 100dvh;
     overflow-x: hidden;
@@ -487,7 +520,82 @@
   background: #CBD5E1;
 }
 
-/* Professional Desktop Workstation Layout */
+/* Native Mobile App, APK & Play Store UX Standards */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Disallow accidental text highlight on app chrome (buttons, navbars, tabs, icons) */
+button,
+nav,
+header,
+.no-select,
+[role="button"],
+[role="tab"] {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection specifically for data fields, transaction amounts, note bodies */
+p, span, td, th, input, textarea, code, pre {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
+/* Smooth momentum scrolling for iOS WebViews & Android Chrome */
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Hardware-accelerated transitions for native-feeling 60fps animations */
+.gpu-accel {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Safe Area Inset Support for Notches, Dynamic Islands & Gesture Bars */
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+}
+
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+.safe-left {
+  padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+}
+
+.safe-right {
+  padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+}
+
+/* Professional Desktop Workstation & Native Mobile Layout */
+#app-root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
 #app-root,
 main {
   width: 100%;
@@ -503,6 +611,7 @@ main {
   max-width: 100% !important;
   margin: 0 !important;
   transform: none !important;
+  padding-bottom: max(0.65rem, env(safe-area-inset-bottom, 0px)) !important;
 }
 
 @media print {

@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="MobileOptimized" content="width" />
     
     <!-- Primary SEO Meta Tags -->
     <title>Daily Khata Pro — Universal Financial Ledger &amp; 6-Fund Accounting</title>
@@ -51,9 +54,27 @@
     <meta name="apple-mobile-web-app-title" content="Daily Khata Pro" />
 
     <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" type="image/png" href="/daily-Khata-Pro.png" />
-    <link rel="shortcut icon" href="/daily-Khata-Pro.png" />
-    <link rel="apple-touch-icon" href="/daily-Khata-Pro.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
+    <link rel="shortcut icon" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
+
+    <!-- Service Worker Registration for PWABuilder, Google Play TWA & Offline Capabilities -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function (reg) {
+              console.log('Daily Khata Pro SW registered:', reg.scope);
+            })
+            .catch(function (err) {
+              console.warn('Daily Khata Pro SW registration fallback:', err);
+            });
+        });
+      }
+    </script>
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,7 +114,7 @@
           "@id": "https://rozfiber.com/#developer",
           "name": "MD Zafeer Hasan",
           "alternateName": "YAZDAAN",
-          "jobTitle": "Independent Developer, Creator & Founder",
+          "jobTitle": "Independent Developer & Founder",
           "email": "daily-Khata-Pro@gmail.com",
           "image": "https://rozfiber.com/md-zafeer-hasan-yazdaan.jpg",
           "url": "https://github.com/hasvolt/Daily-Khata-Pro"
@@ -110,7 +131,7 @@
         "@id": "https://rozfiber.com/#developer",
         "name": "MD Zafeer Hasan",
         "alternateName": "YAZDAAN",
-        "jobTitle": "Independent Developer, Creator & Founder",
+        "jobTitle": "Independent Developer & Founder",
         "image": "https://rozfiber.com/md-zafeer-hasan-yazdaan.jpg",
         "email": "daily-Khata-Pro@gmail.com",
         "url": "https://rozfiber.com/developer",

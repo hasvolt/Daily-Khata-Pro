@@ -60,7 +60,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 {isHindi ? 'डेवलपर जानकारी' : 'Developer Information'}
               </h2>
               <p className="text-[11.5px] text-[#94A3B8]">
-                {isHindi ? 'क्रिएटर व फाउंडर प्रोफाइल' : 'Creator, Founder & Project Overview'}
+                {isHindi ? 'डेवलपर व फाउंडर प्रोफाइल' : 'Developer, Founder & Project Overview'}
               </p>
             </div>
           </div>
@@ -94,7 +94,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 </div>
                 <div className="mt-1.5 px-2 py-0.5 rounded-md bg-[#10B981] text-[#04140D] text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
                   <Check className="w-2.5 h-2.5 stroke-[3]" />
-                  <span>Creator &amp; Founder</span>
+                  <span>Developer &amp; Founder</span>
                 </div>
               </div>
 
@@ -110,7 +110,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 </div>
 
                 <div className="text-[12.5px] font-medium text-[var(--theme-primary,#38BDF8)]">
-                  Independent Developer, Creator &amp; Founder
+                  Independent Developer &amp; Founder
                 </div>
 
                 <div className="text-[11px] text-[#94A3B8] flex items-center justify-center sm:justify-start gap-1.5 pt-0.5">

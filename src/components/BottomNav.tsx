@@ -2,6 +2,7 @@ import React from 'react';
 import { Home, Plus, Briefcase, Target, History, BarChart3, LucideIcon } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
+import { triggerHaptic } from '../utils/haptics';
 
 export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'developer' | 'about' | 'privacy' | 'disclaimer' | 'terms' | 'support' | 'safety' | 'guide' | 'calculator';
 
@@ -31,13 +32,18 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
     { id: 'report', label: t.nav.reports, icon: BarChart3 }
   ];
 
+  const handleTabClick = (tab: TabItem) => {
+    triggerHaptic(tab.isAction ? 'medium' : 'light');
+    onSelectTab(tab.id);
+  };
+
   return (
     <nav
       id="bottom-nav-bar"
       aria-label="Bottom Navigation"
-      className="fixed bottom-0 left-0 right-0 w-full bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-2xl border-t border-[var(--theme-border,#213E61)] shadow-[0_-8px_30px_rgba(0,0,0,0.35)] z-50 px-2 sm:px-6 lg:px-10 pt-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] transition-colors duration-200"
+      className="fixed bottom-0 left-0 right-0 w-full bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-2xl border-t border-[var(--theme-border,#213E61)] shadow-[0_-8px_30px_rgba(0,0,0,0.35)] z-50 px-1 sm:px-6 lg:px-10 pt-1.5 sm:pt-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] transition-colors duration-200"
     >
-      <div className="grid grid-cols-6 items-center w-full max-w-6xl mx-auto gap-1 sm:gap-3">
+      <div className="grid grid-cols-6 items-center w-full max-w-6xl mx-auto gap-0.5 sm:gap-3">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.id;
@@ -49,20 +55,20 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
                 key={tab.id}
                 id="nav-btn-add"
                 type="button"
-                onClick={() => onSelectTab(tab.id)}
-                className="group relative flex flex-col items-center justify-center -mt-4 sm:-mt-5 cursor-pointer focus:outline-none transition-transform active:scale-90 w-full"
+                onClick={() => handleTabClick(tab)}
+                className="group relative flex flex-col items-center justify-center -mt-3.5 sm:-mt-5 cursor-pointer focus:outline-none transition-transform active:scale-90 w-full"
                 title={tab.label}
               >
                 <div
-                  className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
+                  className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
                     isActive
-                      ? 'bg-[#10B981] text-[#04140D] ring-4 ring-[#10B981]/30 shadow-[#10B981]/50 scale-105'
+                      ? 'bg-[#10B981] text-[#04140D] ring-3 sm:ring-4 ring-[#10B981]/30 shadow-[#10B981]/50 scale-105'
                       : 'bg-gradient-to-tr from-[#10B981] to-[#34D399] text-[#04140D] hover:scale-105 shadow-[#10B981]/30'
                   }`}
                 >
-                  <Plus className="w-6 h-6 sm:w-7 sm:h-7 stroke-[3] transition-transform group-hover:rotate-90 duration-200" />
+                  <Plus className="w-5 h-5 sm:w-7 sm:h-7 stroke-[3] transition-transform group-hover:rotate-90 duration-200" />
                 </div>
-                <span className="text-[11px] sm:text-[12.5px] font-extrabold text-[#10B981] mt-1 tracking-tight truncate max-w-full">
+                <span className="text-[10px] sm:text-[12.5px] font-extrabold text-[#10B981] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
                   {tab.label}
                 </span>
               </button>
@@ -75,23 +81,23 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
               key={tab.id}
               id={`nav-btn-${tab.id}`}
               type="button"
-              onClick={() => onSelectTab(tab.id)}
-              className={`flex flex-col items-center justify-center py-1 sm:py-2 px-1 sm:px-3 rounded-2xl transition-all cursor-pointer select-none w-full ${
+              onClick={() => handleTabClick(tab)}
+              className={`flex flex-col items-center justify-center py-0.5 sm:py-2 px-0.5 sm:px-3 rounded-xl sm:rounded-2xl transition-all cursor-pointer select-none w-full ${
                 isActive
                   ? 'text-[var(--theme-primary,#38BDF8)] font-extrabold bg-[var(--theme-card,#132438)]/60'
                   : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]/40 active:scale-95'
               }`}
             >
               <div
-                className={`p-1.5 sm:p-2 rounded-xl transition-all ${
+                className={`p-1 sm:p-2 rounded-lg sm:rounded-xl transition-all ${
                   isActive
-                    ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] scale-110'
+                    ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] scale-105 sm:scale-110'
                     : 'text-[#94A3B8]'
                 }`}
               >
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]" />
+                <Icon className="w-4 h-4 sm:w-6 sm:h-6 stroke-[2.2]" />
               </div>
-              <span className="text-[11px] sm:text-[13px] font-bold leading-tight truncate mt-0.5 max-w-full text-center">
+              <span className="text-[9.5px] sm:text-[13px] font-bold leading-tight truncate mt-0.5 max-w-full text-center">
                 {tab.label}
               </span>
             </button>

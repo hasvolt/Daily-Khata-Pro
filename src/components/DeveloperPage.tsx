@@ -85,13 +85,13 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)]/70 shadow-2xl bg-[#070E18] p-1.5 relative group">
               <img
                 src="/md-zafeer-hasan-yazdaan.jpg"
-                alt="MD Zafeer Hasan (YAZDAAN) - Independent Developer & Creator"
+                alt="MD Zafeer Hasan (YAZDAAN) - Independent Developer &amp; Founder"
                 className="w-full h-auto max-h-[380px] object-contain rounded-xl block mx-auto transition-transform duration-300 group-hover:scale-[1.02]"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-[#10B981] text-[#04140D] text-[11px] font-extrabold flex items-center gap-1 shadow-lg">
                 <Check className="w-3.5 h-3.5 stroke-[3]" />
-                <span>Verified Creator</span>
+                <span>Verified Developer</span>
               </div>
             </div>
             <p className="text-[11px] text-[#94A3B8] text-center mt-2.5 font-mono">
@@ -110,7 +110,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 MD Zafeer Hasan <span className="text-[var(--theme-primary,#38BDF8)]">(YAZDAAN)</span>
               </h1>
               <p className="text-[14px] sm:text-[15px] font-medium text-[var(--theme-primary,#38BDF8)] mt-1">
-                Independent Developer, Creator &amp; Founder
+                Independent Developer &amp; Founder
               </p>
             </div>
 

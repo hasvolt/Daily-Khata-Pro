@@ -51,7 +51,7 @@ import { SafetyPage } from './components/SafetyPage';
 import { SupportPage } from './components/SupportPage';
 import { CalculatorPage } from './components/CalculatorPage';
 import { TRANSLATIONS } from './utils/translations';
-import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles } from 'lucide-react';
+import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu } from 'lucide-react';
 
 const STORAGE_KEY = 'daily-khata-pro-v3';
 
@@ -1108,7 +1108,7 @@ export default function App() {
       </div>
 
       {/* Main Content Area */}
-      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-3.5 sm:pt-6 pb-6 sm:pb-8">
+      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-2.5 sm:px-6 lg:px-8 pt-2.5 sm:pt-6 pb-20 sm:pb-8">
         <div className="w-full">
           <Routes>
           <Route path="/" element={
@@ -1413,7 +1413,7 @@ export default function App() {
           {/* Streamlined Minimal Footer Details */}
           <div className="pt-1 text-center text-[11px] text-[#64748B] space-y-2">
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {/* Creator Minimal Pill */}
+              {/* Developer Minimal Pill */}
               <button
                 onClick={() => setCurrentTab('developer')}
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-2xs active:scale-95 text-[11px]"
@@ -1432,16 +1432,29 @@ export default function App() {
                 </div>
                 <span className="text-[#94A3B8]">By</span>
                 <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan</span>
-                <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1 py-0.1 rounded font-bold">Creator</span>
+                <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1.5 py-0.2 rounded font-bold">Developer</span>
               </button>
 
-              {/* Compact Verified Social & Email Links */}
-              <div className="flex items-center gap-2">
+              {/* Compact Verified Social & Email Links with Main Menu trigger */}
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {/* Main Menu Button in Footer */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent('open-main-menu'));
+                  }}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] font-bold text-[11px] transition-all cursor-pointer shadow-2xs active:scale-95"
+                  title="Open Main Menu & Tools"
+                >
+                  <Menu className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                  <span>Main Menu</span>
+                </button>
+
                 <a
                   href="https://github.com/hasvolt/Daily-Khata-Pro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
+                  className="p-1.5 sm:p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
                   title="GitHub Repository (hasvolt/Daily-Khata-Pro)"
                 >
                   <FolderGit2 className="w-4 h-4" />
@@ -1449,7 +1462,7 @@ export default function App() {
 
                 <a
                   href="mailto:daily-Khata-Pro@gmail.com"
-                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
+                  className="p-1.5 sm:p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
                   title="Official Email: daily-Khata-Pro@gmail.com"
                 >
                   <Mail className="w-4 h-4" />
@@ -1459,7 +1472,7 @@ export default function App() {
                   href="https://www.instagram.com/dailykhatapro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#94A3B8] hover:text-[#E1306C] transition-colors"
+                  className="p-1.5 sm:p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#E1306C] text-[#94A3B8] hover:text-[#E1306C] transition-colors"
                   title="Instagram: @dailykhatapro"
                 >
                   <Instagram className="w-4 h-4" />
@@ -1469,7 +1482,7 @@ export default function App() {
                   href="https://x.com/Dailykhatapro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#94A3B8] hover:text-[#1DA1F2] transition-colors"
+                  className="p-1.5 sm:p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#1DA1F2] text-[#94A3B8] hover:text-[#1DA1F2] transition-colors"
                   title="X / Twitter: @Dailykhatapro"
                 >
                   <Twitter className="w-4 h-4" />

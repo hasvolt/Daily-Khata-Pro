@@ -86,7 +86,7 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
     { id: 'backup', title: '11. Backup & Privacy Security', hindiTitle: '11. बैकअप एवं डेटा सुरक्षा', icon: ShieldCheck },
     { id: 'source_code', title: '12. Source Code & Verification', hindiTitle: '12. ओपन सोर्स व सुरक्षा सत्यापन', icon: Code2 },
     { id: 'faq', title: '13. Frequently Asked Questions', hindiTitle: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)', icon: HelpCircle },
-    { id: 'developer', title: '14. Developer & Creator Info', hindiTitle: '14. डेवलपर एवं क्रिएटर प्रोफाइल', icon: User }
+    { id: 'developer', title: '14. Developer & Founder Info', hindiTitle: '14. डेवलपर एवं फाउंडर प्रोफाइल', icon: User }
   ];
 
   const filteredSections = searchQuery.trim()
