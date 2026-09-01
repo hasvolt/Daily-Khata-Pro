@@ -29,20 +29,13 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
     }
     return true;
   });
-  const [isAdVisible, setIsAdVisible] = useState<boolean>(true);
-  const insRef = useRef<HTMLModElement | null>(null);
-  const isPushed = useRef(false);
+  const adRef = useRef<HTMLModElement | null>(null);
+  const pushedRef = useRef<boolean>(false);
 
   // Monitor real-time online / offline status
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      setIsAdVisible(true);
-    };
-    const handleOffline = () => {
-      setIsOnline(false);
-      setIsAdVisible(false);
-    };
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -53,66 +46,43 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
     };
   }, []);
 
-  // Initialize AdSense only when online
+  // Initialize AdSense tag on mount and when coming back online
   useEffect(() => {
-    if (!isOnline) {
-      setIsAdVisible(false);
-      return;
-    }
+    if (typeof window === 'undefined') return;
 
-    if (!isPushed.current && typeof window !== 'undefined' && isOnline) {
+    const timer = setTimeout(() => {
       try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        isPushed.current = true;
-      } catch (err) {
-        console.debug('AdSense initialization notice:', err);
-      }
-    }
-  }, [isOnline]);
-
-  // Watch for AdSense fill/unfill status via MutationObserver
-  useEffect(() => {
-    if (!insRef.current || !isOnline) return;
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'data-ad-status') {
-          const status = insRef.current?.getAttribute('data-ad-status');
-          if (status === 'unfilled') {
-            setIsAdVisible(false);
-          } else if (status === 'filled') {
-            setIsAdVisible(true);
-          }
+        if (!pushedRef.current && adRef.current) {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          pushedRef.current = true;
         }
-      });
-    });
+      } catch (err) {
+        console.debug('AdSense push notice:', err);
+      }
+    }, 150);
 
-    observer.observe(insRef.current, {
-      attributes: true,
-      attributeFilter: ['data-ad-status'],
-    });
-
-    return () => observer.disconnect();
+    return () => clearTimeout(timer);
   }, [isOnline]);
-
-  // If user is offline or ad is marked unfilled, hide completely with zero DOM impact
-  if (!isOnline || !isAdVisible) {
-    return null;
-  }
 
   return (
-    <div className={`w-full max-w-4xl mx-auto my-2 text-center select-none overflow-hidden transition-all duration-300 ${className}`}>
+    <div
+      id="google-adsense-banner-container"
+      className={`w-full max-w-4xl mx-auto my-3 text-center select-none overflow-hidden transition-all duration-300 ${
+        isOnline ? 'block' : 'hidden'
+      } ${className}`}
+    >
       {label && (
-        <div className="text-[9.5px] font-bold uppercase tracking-widest text-[#64748B] mb-1 text-center opacity-80">
+        <div className="text-[9.5px] font-bold uppercase tracking-widest text-[#64748B] mb-1.5 text-center opacity-80">
           {label}
         </div>
       )}
-      {/* Dynamic clean ad container - no fixed grey/white placeholder when empty */}
-      <div className="w-full flex items-center justify-center overflow-hidden">
+
+      {/* Official Google AdSense Tag Container - Always intact in DOM for verification & crawlers */}
+      <div className="w-full min-h-[90px] rounded-xl border border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-card,#132438)]/30 flex items-center justify-center overflow-hidden">
         <ins
-          ref={insRef}
+          ref={adRef}
           className="adsbygoogle"
-          style={{ display: 'block', width: '100%', textAlign: 'center', minHeight: '50px' }}
+          style={{ display: 'block', width: '100%', minHeight: '90px', textAlign: 'center' }}
           data-ad-client={client}
           data-ad-slot={slotId}
           data-ad-format={format}
@@ -124,5 +94,6 @@ export const GoogleAdBanner: React.FC<GoogleAdBannerProps> = ({
 };
 
 export default GoogleAdBanner;
+
 
 
