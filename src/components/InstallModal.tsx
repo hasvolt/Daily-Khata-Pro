@@ -796,7 +796,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                 </div>
                 <div>
                   <div className="font-bold text-[12.5px] text-[#F8FAFC]">
-                    {isHindi ? '6-फंड सिस्टम और कोई ऐड्स नहीं' : '6-Fund Rule & Zero Ads'}
+                    {isHindi ? '6-फंड सिस्टम और पूर्ण गोपनीयता' : '6-Fund Rule & 100% Privacy'}
                   </div>
                   <div className="text-[11px] text-[#94A3B8]">
                     {isHindi ? 'बिना किसी शुल्क या रुकावट के पूरा खाता बही' : 'Automated 55/10/10/10/10/5 money allocation'}

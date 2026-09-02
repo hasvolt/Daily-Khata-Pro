@@ -245,43 +245,43 @@ export const SupportPage: React.FC<SupportPageProps> = ({
         </div>
 
         {/* Tab Switcher Strip */}
-        <div className="flex rounded-2xl bg-[var(--theme-surface,#0E1A29)] p-1.5 border border-[var(--theme-border,#213E61)] gap-1.5">
+        <div className="flex rounded-2xl bg-[var(--theme-surface,#0E1A29)] p-1.5 border border-[var(--theme-border,#213E61)] gap-1 sm:gap-1.5">
           <button
             type="button"
             onClick={() => handleTabChange('help')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-[12.5px] transition-all cursor-pointer ${
+            className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-2.5 px-1 sm:px-3 rounded-xl font-bold text-[10.5px] sm:text-[12.5px] text-center leading-tight transition-all cursor-pointer ${
               activeTab === 'help'
                 ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] shadow-md'
                 : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]'
             }`}
           >
-            <HelpCircle className="w-4 h-4 shrink-0" />
+            <HelpCircle className="w-4 h-4 sm:w-4 sm:h-4 shrink-0" />
             <span>{isHindi ? 'सहायता केंद्र' : 'Help Centre & FAQ'}</span>
           </button>
 
           <button
             type="button"
             onClick={() => handleTabChange('bug')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-[12.5px] transition-all cursor-pointer ${
+            className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-2.5 px-1 sm:px-3 rounded-xl font-bold text-[10.5px] sm:text-[12.5px] text-center leading-tight transition-all cursor-pointer ${
               activeTab === 'bug'
                 ? 'bg-[#EF4444] text-white shadow-md'
                 : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]'
             }`}
           >
-            <Bug className="w-4 h-4 shrink-0" />
+            <Bug className="w-4 h-4 sm:w-4 sm:h-4 shrink-0" />
             <span>{isHindi ? 'बग रिपोर्ट करें' : 'Report a Bug'}</span>
           </button>
 
           <button
             type="button"
             onClick={() => handleTabChange('suggestion')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-bold text-[12.5px] transition-all cursor-pointer ${
+            className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-2.5 px-1 sm:px-3 rounded-xl font-bold text-[10.5px] sm:text-[12.5px] text-center leading-tight transition-all cursor-pointer ${
               activeTab === 'suggestion'
                 ? 'bg-[#F59E0B] text-[#040D17] shadow-md'
                 : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]'
             }`}
           >
-            <Lightbulb className="w-4 h-4 shrink-0" />
+            <Lightbulb className="w-4 h-4 sm:w-4 sm:h-4 shrink-0" />
             <span>{isHindi ? 'सुझाव दें' : 'Give Suggestion'}</span>
           </button>
         </div>

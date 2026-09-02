@@ -44,26 +44,28 @@ export const PrintModal: React.FC<PrintModalProps> = ({
   <style>
     @page { size: A4 portrait; margin: 12mm 14mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 24px; color: #0f172a; max-width: 820px; margin: 0 auto; line-height: 1.45; background: #fff; }
-    .brand-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #FFC700; padding-bottom: 12px; margin-bottom: 16px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 24px; color: #0f172a; max-width: 820px; margin: 0 auto; line-height: 1.45; background: #fff; position: relative; }
+    .watermark-bg { position: fixed; top: 48%; left: 50%; transform: translate(-50%, -50%) rotate(-28deg); font-size: 48px; font-weight: 900; color: rgba(15, 23, 42, 0.045); letter-spacing: 2px; pointer-events: none; z-index: 0; text-align: center; line-height: 1.35; user-select: none; }
+    .brand-header { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #FFC700; padding-bottom: 12px; margin-bottom: 16px; }
     .brand-title { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
     .brand-sub { font-size: 11.5px; color: #64748b; margin-top: 2px; }
-    .meta-box { font-size: 12px; color: #475569; display: flex; justify-content: space-between; background: #f8fafc; padding: 10px 14px; border-radius: 6px; margin-bottom: 18px; border: 1px solid #e2e8f0; }
-    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; background: #0f172a; color: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+    .brand-website { font-size: 11px; font-weight: 700; color: #0284c7; margin-top: 3px; }
+    .meta-box { position: relative; z-index: 1; font-size: 12px; color: #475569; display: flex; justify-content: space-between; background: #f8fafc; padding: 10px 14px; border-radius: 6px; margin-bottom: 18px; border: 1px solid #e2e8f0; }
+    .summary-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; background: #0f172a; color: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
     .summary-label { font-size: 10.5px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px; }
     .summary-val { font-size: 20px; font-weight: bold; margin-top: 4px; font-family: -apple-system, BlinkMacSystemFont, monospace; }
     .inc { color: #34d399; }
     .exp { color: #f87171; }
     .net { color: #fbbf24; }
-    .sec-title { font-size: 12.5px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; color: #1e293b; border-bottom: 1.5px solid #cbd5e1; padding-bottom: 5px; margin-top: 22px; margin-bottom: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 16px; }
+    .sec-title { position: relative; z-index: 1; font-size: 12.5px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; color: #1e293b; border-bottom: 1.5px solid #cbd5e1; padding-bottom: 5px; margin-top: 22px; margin-bottom: 10px; }
+    table { position: relative; z-index: 1; width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 16px; background: transparent; }
     th { text-align: left; padding: 7px 8px; border-bottom: 2px solid #cbd5e1; color: #475569; font-weight: 700; background: #f1f5f9; }
     td { padding: 7px 8px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
     .num { text-align: right; font-family: "Courier New", monospace; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
     .badge { display: inline-block; padding: 2px 6px; font-size: 10px; font-weight: 700; border-radius: 4px; text-transform: uppercase; }
     .badge-inc { background: #dcfce7; color: #166534; }
     .badge-exp { background: #fee2e2; color: #991b1b; }
-    .footer { margin-top: 30px; border-top: 1px solid #cbd5e1; padding-top: 10px; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; }
+    .footer { position: relative; z-index: 1; margin-top: 30px; border-top: 1.5px solid #cbd5e1; padding-top: 12px; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; }
     @media print {
       body { padding: 0; }
       .no-print { display: none !important; }
@@ -71,14 +73,22 @@ export const PrintModal: React.FC<PrintModalProps> = ({
   </style>
 </head>
 <body>
+  <!-- Official Company Watermark -->
+  <div class="watermark-bg">
+    Daily Khata Pro<br>
+    <span style="font-size: 26px; font-weight: 700; letter-spacing: 1px;">Website: www.rozfiber.com</span>
+  </div>
+
   <div class="brand-header">
     <div>
-      <div class="brand-title">Daily Khata: Pro — Financial Statement</div>
+      <div class="brand-title">Daily Khata Pro — Financial Statement</div>
       <div class="brand-sub">6-Fund Money Ledger &amp; Wealth Record</div>
+      <div class="brand-website">Website: www.rozfiber.com</div>
     </div>
     <div style="text-align: right; font-size: 11px; color: #475569;">
       <div>Official Record</div>
       <div>Confidential &amp; Verified</div>
+      <div style="font-size: 10px; color: #0284c7; font-weight: 600; margin-top: 2px;">Daily Khata Pro</div>
     </div>
   </div>
 
@@ -167,8 +177,11 @@ export const PrintModal: React.FC<PrintModalProps> = ({
   </table>
 
   <div class="footer">
-    <span>Daily Khata: Pro · Systematic Financial Record</span>
-    <span>Verified Digital Stamp: ___________________</span>
+    <div>
+      <strong>Daily Khata Pro</strong> · Confidential &amp; Verified Record<br>
+      <span style="color: #0284c7; font-weight: 700;">Website: www.rozfiber.com</span>
+    </div>
+    <span>Signature / Digital Stamp: ___________________</span>
   </div>
 </body>
 </html>`;

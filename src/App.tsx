@@ -1,7 +1,7 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout } from './types';
+import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder } from './types';
 import {
   DEFAULT_FUNDS,
   DEFAULT_PERCENTAGES,
@@ -13,7 +13,7 @@ import {
   INITIAL_SAMPLE_PERSONAL_NOTES,
   DEFAULT_SECURITY_LOCK
 } from './data/defaults';
-import { calculateFundTotals } from './utils/khataCalculations';
+import { calculateFundTotals, formatCurrency } from './utils/khataCalculations';
 import { setCurrentLanguage } from './utils/currencyConfig';
 import { Header } from './components/Header';
 import { BottomNav, NavTab } from './components/BottomNav';
@@ -34,6 +34,8 @@ import { LockScreen } from './components/LockScreen';
 import { SecurityLockModal } from './components/SecurityLockModal';
 import { UserManualModal } from './components/UserManualModal';
 import { MultiCalculatorModal } from './components/MultiCalculatorModal';
+import { TrashModal } from './components/TrashModal';
+import { MasterEditModal } from './components/MasterEditModal';
 import { HasVoltPromoBanner } from './components/HasVoltPromoBanner';
 import { GoogleAdBanner } from './components/GoogleAdBanner';
 import { PrintArea } from './components/PrintArea';
@@ -53,6 +55,8 @@ import { GuidePage } from './components/GuidePage';
 import { SafetyPage } from './components/SafetyPage';
 import { SupportPage } from './components/SupportPage';
 import { CalculatorPage } from './components/CalculatorPage';
+import { AttendancePage } from './components/AttendancePage';
+import { RemindersModal } from './components/RemindersModal';
 import { TRANSLATIONS } from './utils/translations';
 import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu } from 'lucide-react';
 
@@ -112,6 +116,12 @@ export default function App() {
   const [isSupportModalOpen, setIsSupportModalOpen] = useState<boolean>(false);
   const [supportModalTab, setSupportModalTab] = useState<SupportTab>('help');
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
+  const [isTrashOpen, setIsTrashOpen] = useState<boolean>(false);
+  const [isMasterEditOpen, setIsMasterEditOpen] = useState<boolean>(false);
+  const [trashItems, setTrashItems] = useState<TrashItem[]>([]);
+  const [attendanceLogs, setAttendanceLogs] = useState<AttendanceLog[]>([]);
+  const [reminders, setReminders] = useState<AppReminder[]>([]);
+  const [isRemindersOpen, setIsRemindersOpen] = useState<boolean>(false);
   const [isPrintModalOpen, setIsPrintModalOpen] = useState<boolean>(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
@@ -302,6 +312,45 @@ export default function App() {
           personalNotes: [],
           viewMode: 'auto'
         });
+      }
+
+      // Load Trash/Recycle items
+      try {
+        const storedTrash = localStorage.getItem('dailykhata_trash_v1');
+        if (storedTrash) {
+          const parsedTrash = JSON.parse(storedTrash);
+          if (Array.isArray(parsedTrash)) {
+            setTrashItems(parsedTrash);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load trash data', e);
+      }
+
+      // Load Attendance records
+      try {
+        const storedAttendance = localStorage.getItem('dailykhata_attendance_v1');
+        if (storedAttendance) {
+          const parsed = JSON.parse(storedAttendance);
+          if (Array.isArray(parsed)) {
+            setAttendanceLogs(parsed);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load attendance logs', e);
+      }
+
+      // Load Reminders
+      try {
+        const storedReminders = localStorage.getItem('dailykhata_reminders_v1');
+        if (storedReminders) {
+          const parsed = JSON.parse(storedReminders);
+          if (Array.isArray(parsed)) {
+            setReminders(parsed);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load reminders', e);
       }
     } catch (e) {
       console.error('Failed to load local data', e);
@@ -558,12 +607,123 @@ export default function App() {
     setCurrentTab('home');
   };
 
-  // Delete Entry
+  // Trash / Recycle Bin Helper to record deleted items
+  const pushToTrash = (item: TrashItem) => {
+    setTrashItems((prev) => {
+      const next = [item, ...prev];
+      try {
+        localStorage.setItem('dailykhata_trash_v1', JSON.stringify(next));
+      } catch (e) {
+        console.error('Failed to save trash', e);
+      }
+      return next;
+    });
+  };
+
+  const saveAttendanceLogs = (logs: AttendanceLog[]) => {
+    try {
+      localStorage.setItem('dailykhata_attendance_v1', JSON.stringify(logs));
+    } catch (e) {
+      console.error('Failed to save attendance logs', e);
+    }
+  };
+
+  const saveReminders = (rems: AppReminder[]) => {
+    try {
+      localStorage.setItem('dailykhata_reminders_v1', JSON.stringify(rems));
+    } catch (e) {
+      console.error('Failed to save reminders', e);
+    }
+  };
+
+  const handleRestoreTrashItem = (item: TrashItem) => {
+    if (item.type === 'entry' && item.data) {
+      const restored = [item.data as Entry, ...entries];
+      setEntries(restored);
+      saveToLocalStorage(restored, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
+    } else if (item.type === 'goal' && item.data) {
+      const restored = [item.data as Goal, ...goals];
+      setGoals(restored);
+      saveToLocalStorage(entries, restored, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
+    } else if (item.type === 'work_log' && item.data) {
+      const restored = [item.data as WorkLog, ...workLogs];
+      setWorkLogs(restored);
+      saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, restored, dailyLifeLogs);
+    } else if (item.type === 'daily_log' && item.data) {
+      const restored = [item.data as DailyLifeLog, ...dailyLifeLogs];
+      setDailyLifeLogs(restored);
+      saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, restored);
+    } else if (item.type === 'note' && item.data) {
+      const restored = [item.data as PersonalNote, ...personalNotes];
+      setPersonalNotes(restored);
+      saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs, securityLock, restored);
+    } else if (item.type === 'attendance_log' && item.data) {
+      const restored = [item.data as AttendanceLog, ...attendanceLogs];
+      setAttendanceLogs(restored);
+      saveAttendanceLogs(restored);
+    } else if (item.type === 'reminder' && item.data) {
+      const restored = [item.data as AppReminder, ...reminders];
+      setReminders(restored);
+      saveReminders(restored);
+    }
+
+    setTrashItems((prev) => {
+      const next = prev.filter((t) => t.id !== item.id);
+      try {
+        localStorage.setItem('dailykhata_trash_v1', JSON.stringify(next));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
+    showToast(language === 'hi' ? 'आइटम सफलतापूर्वक पुनर्स्थापित किया गया' : 'Item restored successfully');
+  };
+
+  const handlePermanentDeleteTrashItem = (id: string) => {
+    setTrashItems((prev) => {
+      const next = prev.filter((t) => t.id !== id);
+      try {
+        localStorage.setItem('dailykhata_trash_v1', JSON.stringify(next));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
+    showToast(language === 'hi' ? 'हमेशा के लिए हटाया गया' : 'Permanently removed from Trash');
+  };
+
+  const handleEmptyTrash = () => {
+    setTrashItems([]);
+    try {
+      localStorage.removeItem('dailykhata_trash_v1');
+    } catch (e) {
+      console.error(e);
+    }
+    showToast(language === 'hi' ? 'ट्रैश खाली कर दिया गया' : 'Trash emptied completely');
+  };
+
+  // Delete Entry with Trash/Recycle Bin support
   const handleDeleteEntry = (id: string) => {
+    const itemToDelete = entries.find((e) => e.id === id);
     const updated = entries.filter((e) => e.id !== id);
     setEntries(updated);
     saveToLocalStorage(updated, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
-    showToast('Entry deleted');
+
+    if (itemToDelete) {
+      pushToTrash({
+        id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        originalId: itemToDelete.id,
+        type: 'entry',
+        title: itemToDelete.type === 'income' ? (itemToDelete.source || 'Income') : (itemToDelete.category || 'Expense'),
+        subtitle: `${itemToDelete.date} · ${itemToDelete.note || (itemToDelete.type === 'income' ? 'Distributed across funds' : (itemToDelete.fund || 'Personal'))}`,
+        amount: itemToDelete.amount,
+        dateDeleted: new Date().toISOString(),
+        data: itemToDelete
+      });
+      showToast(language === 'hi' ? 'लेनदेन रीसायकल बिन (ट्रैश) में भेजा गया' : 'Entry moved to Trash (Recycle Bin)');
+    } else {
+      showToast('Entry deleted');
+    }
   };
 
   // Quick Trigger for Add (from Home buttons)
@@ -706,10 +866,25 @@ export default function App() {
   };
 
   const handleDeleteGoal = (goalId: string) => {
+    const goalToDelete = goals.find((g) => g.id === goalId);
     const updated = goals.filter((g) => g.id !== goalId);
     setGoals(updated);
     saveToLocalStorage(entries, updated, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
-    showToast('Goal removed');
+    if (goalToDelete) {
+      pushToTrash({
+        id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        originalId: goalToDelete.id,
+        type: 'goal',
+        title: goalToDelete.title,
+        subtitle: `Target: ${formatCurrency(goalToDelete.targetAmount)} · Saved: ${formatCurrency(goalToDelete.currentAmount)}`,
+        amount: goalToDelete.targetAmount,
+        dateDeleted: new Date().toISOString(),
+        data: goalToDelete
+      });
+      showToast(language === 'hi' ? 'लक्ष्य रीसायकल बिन (ट्रैश) में भेजा गया' : 'Goal moved to Trash');
+    } else {
+      showToast('Goal removed');
+    }
   };
 
   const handleToggleCompleteGoal = (goalId: string) => {
@@ -813,10 +988,25 @@ export default function App() {
   };
 
   const handleDeleteWorkLog = (id: string) => {
+    const workToDelete = workLogs.find((w) => w.id === id);
     const updated = workLogs.filter((w) => w.id !== id);
     setWorkLogs(updated);
     saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, updated, dailyLifeLogs);
-    showToast(language === 'hi' ? 'कार्य रिकॉर्ड हटाया गया' : 'Work record deleted');
+    if (workToDelete) {
+      pushToTrash({
+        id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        originalId: workToDelete.id,
+        type: 'work_log',
+        title: workToDelete.title,
+        subtitle: `${workToDelete.date} · ${workToDelete.clientOrCompany || workToDelete.category}`,
+        amount: workToDelete.earningsOrCost,
+        dateDeleted: new Date().toISOString(),
+        data: workToDelete
+      });
+      showToast(language === 'hi' ? 'कार्य रिकॉर्ड रीसायकल बिन में भेजा गया' : 'Work record moved to Trash');
+    } else {
+      showToast(language === 'hi' ? 'कार्य रिकॉर्ड हटाया गया' : 'Work record deleted');
+    }
   };
 
   const handleSaveDailyLifeLog = (
@@ -850,10 +1040,24 @@ export default function App() {
   };
 
   const handleDeleteDailyLifeLog = (id: string) => {
+    const lifeToDelete = dailyLifeLogs.find((l) => l.id === id);
     const updated = dailyLifeLogs.filter((l) => l.id !== id);
     setDailyLifeLogs(updated);
     saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, updated);
-    showToast(language === 'hi' ? 'डायरी प्रविष्टि हटाई गई' : 'Journal entry deleted');
+    if (lifeToDelete) {
+      pushToTrash({
+        id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        originalId: lifeToDelete.id,
+        type: 'daily_log',
+        title: lifeToDelete.title,
+        subtitle: `${lifeToDelete.date} · ${lifeToDelete.tag || 'Daily Life'}`,
+        dateDeleted: new Date().toISOString(),
+        data: lifeToDelete
+      });
+      showToast(language === 'hi' ? 'डायरी प्रविष्टि रीसायकल बिन में भेजी गई' : 'Journal entry moved to Trash');
+    } else {
+      showToast(language === 'hi' ? 'डायरी प्रविष्टि हटाई गई' : 'Journal entry deleted');
+    }
   };
 
   const handleRecordWorkIncomeToKhata = (work: WorkLog) => {
@@ -921,6 +1125,7 @@ export default function App() {
   };
 
   const handleDeletePersonalNote = (id: string) => {
+    const noteToDelete = personalNotes.find((n) => n.id === id);
     const updated = personalNotes.filter((n) => n.id !== id);
     setPersonalNotes(updated);
     saveToLocalStorage(
@@ -939,7 +1144,20 @@ export default function App() {
       securityLock,
       updated
     );
-    showToast(language === 'hi' ? 'पर्सनल नोट हटाया गया' : 'Personal note deleted');
+    if (noteToDelete) {
+      pushToTrash({
+        id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        originalId: noteToDelete.id,
+        type: 'note',
+        title: noteToDelete.title,
+        subtitle: noteToDelete.category || 'Personal Note',
+        dateDeleted: new Date().toISOString(),
+        data: noteToDelete
+      });
+      showToast(language === 'hi' ? 'पर्सनल नोट रीसायकल बिन (ट्रैश) में भेजा गया' : 'Personal note moved to Trash');
+    } else {
+      showToast(language === 'hi' ? 'पर्सनल नोट हटाया गया' : 'Personal note deleted');
+    }
   };
 
   const handleTogglePinPersonalNote = (id: string) => {
@@ -1018,6 +1236,130 @@ export default function App() {
     );
     showToast(language === 'hi' ? 'त्वरित पर्सनल नोट सहेजा गया' : 'Quick personal note saved');
   };
+
+  // Attendance & Work Register Handlers
+  const handleSaveAttendanceLog = (
+    logData: Omit<AttendanceLog, 'id' | 'createdAt'>,
+    editingId?: string
+  ) => {
+    let updated: AttendanceLog[];
+    if (editingId) {
+      updated = attendanceLogs.map((l) =>
+        l.id === editingId ? { ...l, ...logData, updatedAt: Date.now() } : l
+      );
+      showToast(language === 'hi' ? 'उपस्थिति रिकॉर्ड अपडेट हुआ' : 'Attendance record updated');
+    } else {
+      const newLog: AttendanceLog = {
+        id: 'att_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        createdAt: Date.now(),
+        ...logData
+      };
+      updated = [newLog, ...attendanceLogs];
+      showToast(language === 'hi' ? 'उपस्थिति सुरक्षित दर्ज हो गई' : 'Attendance recorded successfully');
+    }
+    setAttendanceLogs(updated);
+    saveAttendanceLogs(updated);
+  };
+
+  const handleDeleteAttendanceLog = (id: string) => {
+    const item = attendanceLogs.find((l) => l.id === id);
+    if (!item) return;
+
+    pushToTrash({
+      id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      originalId: item.id,
+      type: 'attendance_log',
+      title: `${item.date} (${item.status.toUpperCase()})`,
+      subtitle: item.employerName ? `Employer: ${item.employerName}` : `Hours: ${item.workingHours || 0}h`,
+      amount: item.salaryOrRate,
+      dateDeleted: new Date().toISOString(),
+      data: item
+    });
+
+    const updated = attendanceLogs.filter((l) => l.id !== id);
+    setAttendanceLogs(updated);
+    saveAttendanceLogs(updated);
+    showToast(language === 'hi' ? 'उपस्थिति रिकॉर्ड रीसायकल बिन में भेजा गया' : 'Attendance record moved to Trash');
+  };
+
+  const handleRecordAttendanceIncomeToKhata = (log: AttendanceLog) => {
+    if (!log.paymentReceived || log.paymentReceived <= 0) return;
+    const newEntry: Entry = {
+      id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      date: log.date || new Date().toISOString().slice(0, 10),
+      amount: log.paymentReceived,
+      type: 'income',
+      fund: 'personal',
+      category: 'Salary',
+      source: log.employerName || log.workType || 'Duty / Salary',
+      note: `Recorded from Attendance on ${log.date}. Work: ${log.jobDescription || log.workType || 'Duty'}`,
+      createdAt: Date.now()
+    };
+    const updated = [newEntry, ...entries];
+    setEntries(updated);
+    saveToLocalStorage(updated, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
+    showToast(language === 'hi' ? 'वेतन खाता में आय के रूप में दर्ज हुआ!' : 'Wage recorded as Income in Khata!');
+  };
+
+  // Smart Reminders Handlers
+  const handleSaveReminder = (
+    reminderData: Omit<AppReminder, 'id' | 'createdAt'>,
+    editingId?: string
+  ) => {
+    let updated: AppReminder[];
+    if (editingId) {
+      updated = reminders.map((r) =>
+        r.id === editingId ? { ...r, ...reminderData } : r
+      );
+      showToast(language === 'hi' ? 'रिमाइंडर अपडेट हुआ' : 'Reminder updated');
+    } else {
+      const newReminder: AppReminder = {
+        id: 'rem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        createdAt: Date.now(),
+        ...reminderData
+      };
+      updated = [newReminder, ...reminders];
+      showToast(language === 'hi' ? 'रिमाइंडर सेट किया गया' : 'Reminder scheduled successfully');
+    }
+    setReminders(updated);
+    saveReminders(updated);
+  };
+
+  const handleToggleCompleteReminder = (id: string) => {
+    const updated = reminders.map((r) =>
+      r.id === id ? { ...r, isCompleted: !r.isCompleted } : r
+    );
+    setReminders(updated);
+    saveReminders(updated);
+    showToast(language === 'hi' ? 'रिमाइंडर स्थिति बदली गई' : 'Reminder status updated');
+  };
+
+  const handleDeleteReminder = (id: string) => {
+    const item = reminders.find((r) => r.id === id);
+    if (!item) return;
+
+    pushToTrash({
+      id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      originalId: item.id,
+      type: 'reminder',
+      title: item.title,
+      subtitle: `Due: ${item.dueDate} ${item.dueTime || ''}`,
+      amount: item.amount,
+      dateDeleted: new Date().toISOString(),
+      data: item
+    });
+
+    const updated = reminders.filter((r) => r.id !== id);
+    setReminders(updated);
+    saveReminders(updated);
+    showToast(language === 'hi' ? 'रिमाइंडर रीसायकल बिन में भेजा गया' : 'Reminder moved to Trash');
+  };
+
+  // Daily Checks for Smart Reminders
+  const todayDateStr = new Date().toISOString().slice(0, 10);
+  const hasTransactionsToday = entries.some((e) => e.date === todayDateStr);
+  const hasAttendanceToday = attendanceLogs.some((l) => l.date === todayDateStr);
+  const pendingRemindersCount = reminders.filter((r) => !r.isCompleted).length + (!hasTransactionsToday ? 1 : 0) + (!hasAttendanceToday ? 1 : 0);
 
   // Restore backup
   const handleRestoreData = (restored: KhataData) => {
@@ -1227,6 +1569,11 @@ export default function App() {
           }}
           onOpenNotes={() => setCurrentTab('notes')}
           onOpenSimulator={() => setCurrentTab('calculator')}
+          onOpenMasterEdit={() => setIsMasterEditOpen(true)}
+          onOpenTrash={() => setIsTrashOpen(true)}
+          trashCount={trashItems.length}
+          onOpenReminders={() => setIsRemindersOpen(true)}
+          remindersCount={pendingRemindersCount}
           onOpenSourceCode={() => setCurrentTab('safety')}
           onOpenInstall={() => setIsInstallModalOpen(true)}
           onOpenShare={() => setIsShareOpen(true)}
@@ -1332,6 +1679,18 @@ export default function App() {
               }}
               onAddCategory={handleAddCategory}
               onAddIncomeSource={handleAddIncomeSource}
+              language={language}
+              privacyMask={privacyMask}
+            />
+          } />
+
+          <Route path="/attendance" element={
+            <AttendancePage
+              attendanceLogs={attendanceLogs}
+              onSaveAttendanceLog={handleSaveAttendanceLog}
+              onDeleteAttendanceLog={handleDeleteAttendanceLog}
+              onRecordAttendanceIncomeToKhata={handleRecordAttendanceIncomeToKhata}
+              onBack={() => setCurrentTab('home')}
               language={language}
               privacyMask={privacyMask}
             />
@@ -1853,6 +2212,85 @@ export default function App() {
           setAddInitialType('expense');
           setAddInitialAmount(amount);
           setCurrentTab('add');
+        }}
+      />
+
+      {/* Central Master Edit Hub Modal */}
+      <MasterEditModal
+        isOpen={isMasterEditOpen}
+        onClose={() => setIsMasterEditOpen(false)}
+        entries={entries}
+        percentages={percentages}
+        onSavePercentages={handleUpdatePercentages}
+        categories={categories}
+        onAddCategory={handleAddCategory}
+        onDeleteCategory={(cat) => {
+          const updated = categories.filter((c) => c !== cat);
+          setCategories(updated);
+          saveToLocalStorage(entries, goals, updated, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
+          showToast(language === 'hi' ? 'श्रेणी हटाई गई' : 'Category removed');
+        }}
+        incomeSources={incomeSources}
+        onAddSource={handleAddIncomeSource}
+        onDeleteSource={(src) => {
+          const updated = incomeSources.filter((s) => s !== src);
+          setIncomeSources(updated);
+          saveToLocalStorage(entries, goals, categories, updated, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
+          showToast(language === 'hi' ? 'आय स्रोत हटाया गया' : 'Income source removed');
+        }}
+        goals={goals}
+        onEditGoal={(goal) => {
+          setEditingGoal(goal);
+          setIsGoalModalOpen(true);
+        }}
+        onDeleteGoal={handleDeleteGoal}
+        notes={personalNotes}
+        onEditNote={(note) => {
+          setEditingPersonalNote(note);
+          setIsPersonalNoteModalOpen(true);
+        }}
+        onDeleteNote={handleDeletePersonalNote}
+        onEditEntry={handleEditEntry}
+        onDeleteEntry={handleDeleteEntry}
+        onOpenTrash={() => {
+          setIsMasterEditOpen(false);
+          setIsTrashOpen(true);
+        }}
+        language={language}
+        privacyMask={privacyMask}
+      />
+
+      {/* Recycle Bin / Trash Modal */}
+      <TrashModal
+        isOpen={isTrashOpen}
+        onClose={() => setIsTrashOpen(false)}
+        trashItems={trashItems}
+        onRestoreItem={handleRestoreTrashItem}
+        onPermanentlyDeleteItem={handlePermanentDeleteTrashItem}
+        onEmptyTrash={handleEmptyTrash}
+        language={language}
+        privacyMask={privacyMask}
+      />
+
+      {/* Smart Alerts & Warning Reminders Modal */}
+      <RemindersModal
+        isOpen={isRemindersOpen}
+        onClose={() => setIsRemindersOpen(false)}
+        reminders={reminders}
+        onSaveReminder={handleSaveReminder}
+        onToggleCompleteReminder={handleToggleCompleteReminder}
+        onDeleteReminder={handleDeleteReminder}
+        language={language}
+        hasTransactionsToday={hasTransactionsToday}
+        hasAttendanceToday={hasAttendanceToday}
+        pendingPaymentCount={attendanceLogs.filter((l) => l.paymentStatus === 'unpaid').length}
+        onNavigateAdd={() => {
+          setIsRemindersOpen(false);
+          setCurrentTab('add');
+        }}
+        onNavigateAttendance={() => {
+          setIsRemindersOpen(false);
+          setCurrentTab('attendance');
         }}
       />
 

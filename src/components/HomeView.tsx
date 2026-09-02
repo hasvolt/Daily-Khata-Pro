@@ -140,7 +140,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </span>
             </div>
 
-            <div className="font-serif-display text-[24px] xs:text-[28px] sm:text-[40px] md:text-[48px] font-bold text-[var(--theme-text,#F8FAFC)] tracking-tight leading-tight truncate">
+            <div className="font-serif-display text-[18px] xs:text-[20px] sm:text-[28px] md:text-[34px] font-bold text-[var(--theme-text,#F8FAFC)] tracking-tight leading-tight truncate max-w-full" title={formatCurrency(totalWealth, privacyMask)}>
               {formatCurrency(totalWealth, privacyMask)}
             </div>
 
@@ -150,14 +150,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3.5 shrink-0">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3 shrink-0">
             <button
               type="button"
               id="home-btn-add-income"
               onClick={() => onAddClick('income')}
-              className="min-h-[36px] sm:min-h-[46px] py-1.5 sm:py-2.5 px-2.5 sm:px-5 rounded-lg sm:rounded-2xl bg-[#10B981] hover:bg-[#059669] text-[#04140D] font-extrabold text-[11.5px] sm:text-[14.5px] flex items-center justify-center gap-1 sm:gap-2 shadow-md active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+              className="py-2 sm:py-2.5 px-3 sm:px-5 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[#10B981]/15 border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#10B981] font-bold text-[11.5px] sm:text-[13px] flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
-              <Plus className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[3] shrink-0" />
+              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5] shrink-0" />
               <span>{t.home.addIncome}</span>
             </button>
 
@@ -165,9 +165,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
               type="button"
               id="home-btn-add-expense"
               onClick={() => onAddClick('expense')}
-              className="min-h-[36px] sm:min-h-[46px] py-1.5 sm:py-2.5 px-2.5 sm:px-5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[#EF4444]/15 border-2 border-[#EF4444]/60 text-[#EF4444] font-extrabold text-[11.5px] sm:text-[14.5px] flex items-center justify-center gap-1 sm:gap-2 shadow-xs active:scale-95 transition-all cursor-pointer whitespace-nowrap hover:border-[#EF4444]"
+              className="py-2 sm:py-2.5 px-3 sm:px-5 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[#EF4444]/15 border border-[var(--theme-border,#213E61)] hover:border-[#EF4444] text-[#EF4444] font-bold text-[11.5px] sm:text-[13px] flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
-              <Plus className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[3] shrink-0" />
+              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5] shrink-0" />
               <span>{t.home.addExpense}</span>
             </button>
           </div>
@@ -190,83 +190,83 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
                   <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.todayIncome}</span>
               </div>
-              <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#10B981] tracking-tight truncate">
+              <div className="font-mono font-bold text-[10px] xs:text-[12px] sm:text-[16px] text-[#10B981] tracking-tight truncate w-full block" title={formatCurrency(todayStats.income, privacyMask)}>
                 +{formatCurrency(todayStats.income, privacyMask)}
               </div>
             </div>
 
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
                   <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.todayExpense}</span>
               </div>
-              <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#EF4444] tracking-tight truncate">
+              <div className="font-mono font-bold text-[10px] xs:text-[12px] sm:text-[16px] text-[#EF4444] tracking-tight truncate w-full block" title={formatCurrency(todayStats.expense, privacyMask)}>
                 -{formatCurrency(todayStats.expense, privacyMask)}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/60 text-[10px] sm:text-[12.5px]">
-            <span className="text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{pageT.common.todaysNet}</span>
-            <span className={`font-mono font-bold text-[11.5px] sm:text-[14px] truncate ${todayStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+          <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/60 text-[10px] sm:text-[12.5px] min-w-0 overflow-hidden">
+            <span className="text-[var(--theme-text-muted,#94A3B8)] font-medium truncate mr-1.5">{pageT.common.todaysNet}</span>
+            <span className={`font-mono font-bold text-[11px] sm:text-[13.5px] truncate max-w-[60%] text-right ${todayStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`} title={formatCurrency(todayStats.net, privacyMask)}>
               {todayStats.net >= 0 ? '+' : ''}{formatCurrency(todayStats.net, privacyMask)}
             </span>
           </div>
         </div>
 
         {/* Monthly Stats */}
-        <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl sm:rounded-3xl p-2.5 sm:p-5 shadow-md space-y-2 sm:space-y-4">
+        <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl sm:rounded-3xl p-2.5 sm:p-5 shadow-md space-y-2 sm:space-y-4 min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-1.5 sm:pb-2 border-b border-[var(--theme-border,#213E61)]/70">
-            <div className="flex items-center gap-1.5 sm:gap-2 text-[10.5px] sm:text-[13px] font-extrabold uppercase tracking-wider text-[var(--theme-text-muted,#94A3B8)]">
-              <div className="p-1 sm:p-1.5 rounded-md sm:rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)]">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[10.5px] sm:text-[13px] font-extrabold uppercase tracking-wider text-[var(--theme-text-muted,#94A3B8)] min-w-0">
+              <div className="p-1 sm:p-1.5 rounded-md sm:rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] shrink-0">
                 <CalendarDays className="w-3 h-3 sm:w-4 sm:h-4" />
               </div>
               <span className="truncate">{t.home.monthlySummaryHeading}</span>
             </div>
-            <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[#10B981]/30">
+            <span className="text-[9.5px] sm:text-[12px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[#10B981]/30 shrink-0">
               {monthFormatted}
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
                   <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.thisMonthIncome}</span>
               </div>
-              <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#10B981] tracking-tight truncate">
+              <div className="font-mono font-bold text-[10px] xs:text-[12px] sm:text-[16px] text-[#10B981] tracking-tight truncate w-full block" title={formatCurrency(monthStats.income, privacyMask)}>
                 +{formatCurrency(monthStats.income, privacyMask)}
               </div>
             </div>
 
-            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0">
+            <div className="p-2 sm:p-3.5 rounded-lg sm:rounded-2xl bg-[var(--theme-surface,#070E18)] border border-[var(--theme-border,#213E61)]/80 space-y-0.5 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#EF4444]/15 text-[#EF4444] flex items-center justify-center shrink-0">
                   <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[9.5px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.thisMonthExpense}</span>
               </div>
-              <div className="font-mono font-bold text-[13.5px] sm:text-[20px] text-[#EF4444] tracking-tight truncate">
+              <div className="font-mono font-bold text-[10px] xs:text-[12px] sm:text-[16px] text-[#EF4444] tracking-tight truncate w-full block" title={formatCurrency(monthStats.expense, privacyMask)}>
                 -{formatCurrency(monthStats.expense, privacyMask)}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/60 text-[10px] sm:text-[12.5px]">
-            <span className="text-[var(--theme-text-muted,#94A3B8)] font-medium truncate">{t.home.thisMonthNet}:</span>
-            <span className={`font-mono font-bold text-[11.5px] sm:text-[14px] truncate ${monthStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+          <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/60 text-[10px] sm:text-[12.5px] min-w-0 overflow-hidden">
+            <span className="text-[var(--theme-text-muted,#94A3B8)] font-medium truncate mr-1.5">{t.home.thisMonthNet}:</span>
+            <span className={`font-mono font-bold text-[11px] sm:text-[13.5px] truncate max-w-[60%] text-right ${monthStats.net >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`} title={formatCurrency(monthStats.net, privacyMask)}>
               {monthStats.net >= 0 ? '+' : ''}{formatCurrency(monthStats.net, privacyMask)}
             </span>
           </div>
@@ -327,7 +327,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 type="button"
                 key={config.id}
                 onClick={() => onFilterFund(config.id)}
-                className="group bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] rounded-lg sm:rounded-2xl p-2 sm:p-3.5 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] text-left flex flex-col justify-between min-h-[92px] sm:min-h-[135px] overflow-hidden"
+                className="group bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] rounded-lg sm:rounded-2xl p-2 sm:p-3.5 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] text-left flex flex-col justify-between min-h-[92px] sm:min-h-[135px] min-w-0 w-full overflow-hidden"
                 title={`Filter ledger by ${fundTranslatedName}`}
               >
                 <div className="flex items-center justify-between w-full">
@@ -337,22 +337,23 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   >
                     <FundIcon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                   </div>
-                  <span className="text-[9px] sm:text-[11.5px] text-[var(--theme-text,#F8FAFC)] font-mono font-bold bg-[var(--theme-surface,#070E18)] px-1.5 py-0.5 rounded border border-[var(--theme-border,#213E61)]">
+                  <span className="text-[9px] sm:text-[11.5px] text-[var(--theme-text,#F8FAFC)] font-mono font-bold bg-[var(--theme-surface,#070E18)] px-1.5 py-0.5 rounded border border-[var(--theme-border,#213E61)] shrink-0">
                     {pct}%
                   </span>
                 </div>
 
-                <div className="mt-1.5 min-w-0">
-                  <div className="text-[11px] sm:text-[13.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
+                <div className="mt-1.5 min-w-0 w-full overflow-hidden">
+                  <div className="text-[11px] sm:text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
                     {fundTranslatedName}
                   </div>
-                  <div className="text-[8.5px] sm:text-[10px] text-[var(--theme-text-dim,#64748B)] truncate mt-0.5">
+                  <div className="text-[8.5px] sm:text-[10px] text-[var(--theme-text-dim,#64748B)] truncate mt-0.5 hidden xs:block">
                     {subtitle}
                   </div>
                   <div
-                    className={`font-mono text-[13px] sm:text-[16px] font-bold tracking-tight whitespace-nowrap overflow-hidden text-ellipsis mt-0.5 ${
+                    className={`font-mono text-[11px] xs:text-[12px] sm:text-[14px] font-bold tracking-tight truncate max-w-full block mt-0.5 ${
                       isNeg ? 'text-[#EF4444]' : 'text-[var(--theme-text,#F8FAFC)]'
                     }`}
+                    title={formatCurrency(val, privacyMask)}
                   >
                     {formatCurrency(val, privacyMask)}
                   </div>
@@ -418,7 +419,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       type="button"
                       key={config.id}
                       onClick={() => onFilterFund(config.id)}
-                      className="group bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] rounded-lg sm:rounded-2xl p-2 sm:p-3.5 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] text-left flex flex-col justify-between min-h-[92px] sm:min-h-[135px] overflow-hidden"
+                      className="group bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] rounded-lg sm:rounded-2xl p-2 sm:p-3.5 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] text-left flex flex-col justify-between min-h-[92px] sm:min-h-[135px] min-w-0 w-full overflow-hidden"
                       title={`Filter ledger by ${fundTranslatedName}`}
                     >
                       <div className="flex items-center justify-between w-full">
@@ -428,22 +429,23 @@ export const HomeView: React.FC<HomeViewProps> = ({
                         >
                           <FundIcon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                         </div>
-                        <span className="text-[9px] sm:text-[11.5px] text-[var(--theme-text,#F8FAFC)] font-mono font-bold bg-[var(--theme-surface,#070E18)] px-1.5 py-0.5 rounded border border-[var(--theme-border,#213E61)]">
+                        <span className="text-[9px] sm:text-[11.5px] text-[var(--theme-text,#F8FAFC)] font-mono font-bold bg-[var(--theme-surface,#070E18)] px-1.5 py-0.5 rounded border border-[var(--theme-border,#213E61)] shrink-0">
                           {pct}%
                         </span>
                       </div>
 
-                      <div className="mt-1.5 min-w-0">
-                        <div className="text-[11px] sm:text-[13.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
+                      <div className="mt-1.5 min-w-0 w-full overflow-hidden">
+                        <div className="text-[11px] sm:text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
                           {fundTranslatedName}
                         </div>
-                        <div className="text-[8.5px] sm:text-[10px] text-[var(--theme-text-dim,#64748B)] truncate mt-0.5">
+                        <div className="text-[8.5px] sm:text-[10px] text-[var(--theme-text-dim,#64748B)] truncate mt-0.5 hidden xs:block">
                           {subtitle}
                         </div>
                         <div
-                          className={`font-mono text-[13px] sm:text-[16px] font-bold tracking-tight whitespace-nowrap overflow-hidden text-ellipsis mt-0.5 ${
+                          className={`font-mono text-[11px] xs:text-[12px] sm:text-[14px] font-bold tracking-tight truncate max-w-full block mt-0.5 ${
                             isNeg ? 'text-[#EF4444]' : 'text-[var(--theme-text,#F8FAFC)]'
                           }`}
+                          title={formatCurrency(val, privacyMask)}
                         >
                           {formatCurrency(val, privacyMask)}
                         </div>

@@ -18,7 +18,10 @@ import {
   Cpu,
   Building2,
   Zap,
-  MapPin
+  MapPin,
+  Award,
+  FileCheck2,
+  BadgeCheck
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { AppLanguage } from '../types';
@@ -53,24 +56,92 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
 
   const roles = isHindi
     ? [
-        { label: 'स्वतंत्र डेवलपर', icon: Code2, color: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30' },
-        { label: 'सॉफ़्टवेयर डेवलपर', icon: Terminal, color: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30' },
-        { label: 'ओपन-सोर्स क्रिएटर', icon: FolderGit2, color: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30' },
-        { label: 'सुरक्षा शोधकर्ता', icon: ShieldCheck, color: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30' },
-        { label: 'स्वतंत्र शोधकर्ता', icon: Search, color: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30' },
-        { label: 'टेक्नोलॉजी व डिजिटल सिस्टम्स', icon: Cpu, color: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30' },
-        { label: 'फ्रीलांसर एवं उद्यमी', icon: Briefcase, color: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30' },
-        { label: 'मानवता व लोक संसाधन सहायक', icon: Heart, color: 'text-[#14B8A6] bg-[#14B8A6]/10 border-[#14B8A6]/30' }
+        {
+          label: 'स्वतंत्र डेवलपर (Independent Developer)',
+          proof: 'ऑफ़लाइन-फर्स्ट आर्किटेक्चर, जीरो-सर्वर प्राइवेसी लेजर टूल्स',
+          icon: Code2,
+          color: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30'
+        },
+        {
+          label: 'ओपन-सोर्स क्रिएटर (Open Source Creator)',
+          proof: 'MIT लाइसेंस प्रमाण पत्र • GitHub: hasvolt/Daily-Khata-Pro',
+          icon: FolderGit2,
+          color: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+        },
+        {
+          label: 'स्वतंत्र व तकनीकी शोधकर्ता (Independent Tech Researcher)',
+          proof: 'क्लाइंट-साइड सुरक्षा, मॉड्यूलर एकाउंटिंग व वेब स्टैंडर्ड्स',
+          icon: Search,
+          color: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30'
+        },
+        {
+          label: 'सुरक्षा शोधकर्ता (Security Researcher)',
+          proof: 'ज़ीरो-नॉलेज लोकल स्टोरेज, SHA-256 हैशिंग, 0% ट्रैकिंग टेलीमेट्री',
+          icon: ShieldCheck,
+          color: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
+        },
+        {
+          label: 'सॉफ़्टवेयर डेवलपर (Software Developer)',
+          proof: 'TypeScript, React, PWA ऑफ़लाइन तकनीक, मॉडर्न वेब सिस्टम्स',
+          icon: Terminal,
+          color: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30'
+        },
+        {
+          label: 'फ्रीलांसर एवं उद्यमी (Freelancer & Entrepreneur)',
+          proof: 'संस्थापक: Hasan Smart Electrical Solutions ® (MSME Registered) व Hasvolt',
+          icon: Briefcase,
+          color: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
+        },
+        {
+          label: 'मानवता व लोक संसाधन सहायक (Humanity Public Resources Helper)',
+          proof: '100% निःशुल्क, पूर्णतः प्राइवेट व सुरक्षित डिजिटल पब्लिक टूल्स',
+          icon: Heart,
+          color: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
+        }
       ]
     : [
-        { label: 'Independent Developer', icon: Code2, color: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30' },
-        { label: 'Software Developer', icon: Terminal, color: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30' },
-        { label: 'Open Source Creator', icon: FolderGit2, color: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30' },
-        { label: 'Security Researcher', icon: ShieldCheck, color: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30' },
-        { label: 'Independent Researcher', icon: Search, color: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30' },
-        { label: 'Technology & Digital Systems', icon: Cpu, color: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30' },
-        { label: 'Freelancer & Entrepreneur', icon: Briefcase, color: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30' },
-        { label: 'Humanity & Public Resources Helper', icon: Heart, color: 'text-[#14B8A6] bg-[#14B8A6]/10 border-[#14B8A6]/30' }
+        {
+          label: 'Independent Developer',
+          proof: 'Offline-first, zero-server architecture & user-sovereign tools',
+          icon: Code2,
+          color: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30'
+        },
+        {
+          label: 'Open Source Creator',
+          proof: 'MIT License Certificate • GitHub: hasvolt/Daily-Khata-Pro',
+          icon: FolderGit2,
+          color: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+        },
+        {
+          label: 'Independent Tech Researcher',
+          proof: 'Client-side privacy preservation, modular accounting & web standards',
+          icon: Search,
+          color: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30'
+        },
+        {
+          label: 'Security & Privacy Researcher',
+          proof: 'Client-side zero-knowledge, SHA-256 crypto & zero telemetry audits',
+          icon: ShieldCheck,
+          color: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
+        },
+        {
+          label: 'Software Developer',
+          proof: 'TypeScript, React, Tailwind CSS, Service Workers & Offline PWA',
+          icon: Terminal,
+          color: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30'
+        },
+        {
+          label: 'Freelancer & Entrepreneur',
+          proof: 'Founder: Hasan Smart Electrical Solutions ® (MSME Enterprise) & Hasvolt',
+          icon: Briefcase,
+          color: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
+        },
+        {
+          label: 'Humanity Public Resources Helper',
+          proof: '100% free, zero data monetization public digital utilities',
+          icon: Heart,
+          color: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
+        }
       ];
 
   return (
@@ -165,9 +236,11 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8] flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                <span>{isHindi ? 'पेशेवर प्रोफ़ाइल एवं विशेषज्ञता' : 'Professional Profile & Domains'}</span>
+                <span>{isHindi ? 'पेशेवर भूमिकाएं एवं वास्तविक विवरण' : 'Professional Roles & Proven Focus Areas'}</span>
               </span>
-              <span className="text-[10px] text-[#64748B] font-mono">Verified Specializations</span>
+              <span className="text-[10px] text-[#10B981] font-mono font-bold bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+                Verified Records
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -176,13 +249,108 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 return (
                   <div
                     key={i}
-                    className={`flex items-center gap-2 p-2 rounded-xl border text-[11.5px] font-semibold transition-colors ${r.color}`}
+                    className={`p-2.5 rounded-xl border text-[11.5px] transition-colors space-y-1 ${r.color}`}
                   >
-                    <IconComponent className="w-3.5 h-3.5 shrink-0" />
-                    <span className="truncate">{r.label}</span>
+                    <div className="flex items-center gap-2 font-bold">
+                      <IconComponent className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{r.label}</span>
+                    </div>
+                    <div className="text-[10.5px] text-[#CBD5E1] pl-5.5 leading-snug">
+                      {r.proof}
+                    </div>
                   </div>
                 );
               })}
+            </div>
+          </div>
+
+          {/* Official Legal Registrations & Valid Certificates */}
+          <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+            <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)] pb-2.5">
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4 text-[#10B981]" />
+                <span className="text-[13px] font-bold text-[#F8FAFC]">
+                  {isHindi ? 'वैधानिक पंजीकरण एवं लाइसेंस प्रमाणपत्र' : 'Official Legal Registrations & Certificates'}
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+                Verified Legal
+              </span>
+            </div>
+
+            {/* Govt of India MSME Certificate */}
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-1.5">
+              <div className="flex items-center justify-between flex-wrap gap-1.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base leading-none">🇮🇳</span>
+                  <span className="text-[12px] font-bold text-[#F8FAFC]">
+                    Government of India – MSME Registered Enterprise
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/25">
+                  Govt. of India
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11.5px] pt-1">
+                <div>
+                  <span className="text-[#94A3B8]">Enterprise: </span>
+                  <span className="font-bold text-[#CBD5E1]">HASAN SMART ELECTRICAL SOLUTIONS ®</span>
+                </div>
+                <div>
+                  <span className="text-[#94A3B8]">Udyam Reg. No.: </span>
+                  <span className="font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 px-1.5 py-0.5 rounded">
+                    UDYAM-DL-10-0098630
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[#94A3B8]">Ministry: </span>
+                  <span className="text-[#CBD5E1]">Ministry of MSME, Govt. of India</span>
+                </div>
+                <div>
+                  <span className="text-[#94A3B8]">Operational Status: </span>
+                  <span className="text-[#F59E0B] font-semibold">Active Since 2012</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Open Source MIT License Certificate */}
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-1.5">
+              <div className="flex items-center justify-between flex-wrap gap-1.5">
+                <div className="flex items-center gap-1.5">
+                  <FileCheck2 className="w-3.5 h-3.5 text-[#38BDF8]" />
+                  <span className="text-[12px] font-bold text-[#F8FAFC]">
+                    Open Source MIT License Certificate
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 px-2 py-0.5 rounded border border-[#38BDF8]/25">
+                  SPDX: MIT
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11.5px] pt-1">
+                <div>
+                  <span className="text-[#94A3B8]">Software: </span>
+                  <span className="font-semibold text-[#CBD5E1]">Daily Khata: Pro (Multi-Bucket Financial Ledger)</span>
+                </div>
+                <div>
+                  <span className="text-[#94A3B8]">Copyright: </span>
+                  <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan (YAZDAAN)</span>
+                </div>
+                <div>
+                  <span className="text-[#94A3B8]">Terms: </span>
+                  <span className="text-[#10B981] font-semibold">100% Free &amp; Unrestricted Audit Rights</span>
+                </div>
+                <div>
+                  <span className="text-[#94A3B8]">Source Code: </span>
+                  <a
+                    href="https://github.com/hasvolt/Daily-Khata-Pro"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono"
+                  >
+                    hasvolt/Daily-Khata-Pro
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -323,6 +491,12 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               <span className="font-semibold text-[#CBD5E1]">{isHindi ? 'लाइसेंस:' : 'License:'}</span>
               <span className="text-[#10B981] font-mono font-bold bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
                 Open Source (MIT)
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-[#94A3B8]">
+              <span className="font-semibold text-[#CBD5E1]">{isHindi ? 'एमएसएमई पंजीकरण:' : 'MSME Reg:'}</span>
+              <span className="text-[#F59E0B] font-mono font-bold">
+                UDYAM-DL-10-0098630
               </span>
             </div>
             <div className="flex items-center justify-between text-[#94A3B8]">

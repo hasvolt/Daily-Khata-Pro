@@ -151,10 +151,23 @@ export function formatCurrencyByLang(
   const abs = Math.abs(Math.round(amount));
   let formattedNumber = '';
 
-  try {
-    formattedNumber = abs.toLocaleString(cfg.locale);
-  } catch {
-    formattedNumber = abs.toLocaleString('en-US');
+  if (abs >= 10000) {
+    const isIndian = cfg.code === 'INR' || cfg.code === 'BDT' || cfg.code === 'PKR';
+    const compactLocale = isIndian ? 'en-IN' : 'en-US';
+    try {
+      formattedNumber = new Intl.NumberFormat(compactLocale, {
+        notation: 'compact',
+        maximumFractionDigits: 1
+      }).format(abs);
+    } catch {
+      formattedNumber = abs.toLocaleString('en-US');
+    }
+  } else {
+    try {
+      formattedNumber = abs.toLocaleString(cfg.locale);
+    } catch {
+      formattedNumber = abs.toLocaleString('en-US');
+    }
   }
 
   const prefixSign = isNegative ? '-' : '';

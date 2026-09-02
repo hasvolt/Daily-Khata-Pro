@@ -22,11 +22,14 @@ import {
   HelpCircle,
   Zap,
   Info,
-  DollarSign
+  DollarSign,
+  Printer,
+  FileDown
 } from 'lucide-react';
 import { FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
+import { printCalculatorSlip, downloadCalculatorSlipHTML, CalcPrintParams } from '../utils/calculatorPrint';
 
 export type CalculatorViewType = 'standard' | 'funds' | 'sip' | 'emi' | 'gst' | 'discount' | 'inflation';
 
@@ -450,42 +453,209 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     { id: 'inflation', label: 'Goal & Inflation', hindi: 'महंगाई लक्ष्य', icon: Target }
   ];
 
+  const getCurrentCalcParams = (): CalcPrintParams => {
+    if (activeTab === 'standard') {
+      return {
+        title: isHindi ? 'साधारण अंकगणित गणना' : 'Standard Arithmetic Calculation',
+        type: 'Arithmetic Computation',
+        mainResult: stdLiveResult || '0',
+        resultLabel: isHindi ? 'गणना परिणाम' : 'Calculated Result',
+        secondaryInfo:
+          parseFloat(stdLiveResult) > 0
+            ? `≈ ₹ ${parseFloat(stdLiveResult).toLocaleString('en-IN')} ${
+                formatIndianWords(parseFloat(stdLiveResult)) ? `(${formatIndianWords(parseFloat(stdLiveResult))})` : ''
+              }`
+            : undefined,
+        items: [
+          { label: isHindi ? 'इनपुट सूत्र' : 'Input Expression', value: stdExpr || '0', isBold: true },
+          { label: isHindi ? 'अंतिम परिणाम' : 'Final Result', value: stdLiveResult || '0', isBold: true, isHighlight: true },
+          ...(memoryVal !== 0 ? [{ label: isHindi ? 'मेमोरी मान (M)' : 'Memory Value (M)', value: memoryVal.toString() }] : [])
+        ],
+        recentTape: calcHistory.map((h) => ({ expr: h.expr, res: h.res }))
+      };
+    }
+
+    if (activeTab === 'funds') {
+      return {
+        title: isHindi ? '6-फंड धन आवंटन स्लिप' : '6-Fund Money Allocation Slip',
+        type: 'Income Allocation Rule',
+        mainResult: formatCurrency(fundInflowNum),
+        resultLabel: isHindi ? 'कुल आय / इनफ्लो' : 'Total Inflow Amount',
+        secondaryInfo: formatIndianWords(fundInflowNum) ? `≈ ${formatIndianWords(fundInflowNum)}` : undefined,
+        items: [
+          { label: isHindi ? 'कुल आय इनफ्लो' : 'Total Inflow', value: formatCurrency(fundInflowNum), isBold: true },
+          ...FUND_ORDER.map((f) => ({
+            label: `${FUND_LABELS[f]} (${fundCustomPct[f]}%)`,
+            value: formatCurrency((fundInflowNum * (fundCustomPct[f] || 0)) / 100),
+            isHighlight: f === 'savings' || f === 'investment'
+          }))
+        ],
+        notes: isHindi ? '6-फंड नियम के अनुसार विभाजित' : 'Divided as per 6-Fund Wealth Management Rule'
+      };
+    }
+
+    if (activeTab === 'sip') {
+      return {
+        title: isHindi ? 'SIP वेल्थ संचय योजना' : 'SIP Wealth Accumulation Plan',
+        type: 'Compound Interest & Equity SIP',
+        mainResult: formatCurrency(sipCalculation.totalValue),
+        resultLabel: isHindi ? 'अनुमानित परिपक्वता मूल्य (Maturity)' : 'Expected Maturity Value',
+        secondaryInfo: formatIndianWords(sipCalculation.totalValue) ? `≈ ${formatIndianWords(sipCalculation.totalValue)}` : undefined,
+        items: [
+          { label: isHindi ? 'मासिक SIP राशि' : 'Monthly Investment', value: formatCurrency(sipAmtNum), isBold: true },
+          { label: isHindi ? 'अपेक्षित वार्षिक रिटर्न' : 'Expected Return Rate', value: `${sipRateNum}% p.a.` },
+          { label: isHindi ? 'निवेश अवधि' : 'Time Horizon (Tenure)', value: `${sipTenureNum} Years` },
+          { label: isHindi ? 'कुल जमा मूलधन' : 'Total Principal Invested', value: formatCurrency(sipCalculation.totalInvested), isBold: true },
+          { label: isHindi ? 'अनुमानित लाभ / रिटर्न' : 'Estimated Wealth Gain', value: `+${formatCurrency(sipCalculation.totalGain)}`, isHighlight: true, isBold: true },
+          { label: isHindi ? 'परिपक्वता मूल्य' : 'Total Maturity Value', value: formatCurrency(sipCalculation.totalValue), isHighlight: true, isBold: true }
+        ]
+      };
+    }
+
+    if (activeTab === 'emi') {
+      return {
+        title: isHindi ? 'ऋण / लोन EMI पुनर्भुगतान अनुसूची' : 'Loan EMI Repayment Schedule',
+        type: 'Equated Monthly Installment',
+        mainResult: formatCurrency(emiCalculation.monthlyEmi),
+        resultLabel: isHindi ? 'मासिक EMI देय' : 'Monthly EMI Payable',
+        secondaryInfo: formatIndianWords(emiCalculation.totalPayment) ? `कुल भुगतान: ≈ ${formatIndianWords(emiCalculation.totalPayment)}` : undefined,
+        items: [
+          { label: isHindi ? 'मूल ऋण राशि (Principal)' : 'Loan Principal Amount', value: formatCurrency(loanPrincipalNum), isBold: true },
+          { label: isHindi ? 'वार्षिक ब्याज दर' : 'Annual Interest Rate', value: `${loanRateNum}% p.a.` },
+          { label: isHindi ? 'ऋण अवधि (Tenure)' : 'Loan Duration', value: `${loanMonths} Months (${(loanMonths / 12).toFixed(1)} Years)` },
+          { label: isHindi ? 'मासिक EMI' : 'Monthly EMI', value: formatCurrency(emiCalculation.monthlyEmi), isBold: true, isHighlight: true },
+          { label: isHindi ? 'कुल देय ब्याज' : 'Total Interest Payable', value: formatCurrency(emiCalculation.totalInterest) },
+          { label: isHindi ? 'कुल चुकौती राशि' : 'Total Payment (Principal + Interest)', value: formatCurrency(emiCalculation.totalPayment), isBold: true }
+        ]
+      };
+    }
+
+    if (activeTab === 'gst') {
+      return {
+        title: isHindi ? 'GST टैक्स इनवॉइस सारांश' : 'GST Tax Calculation Summary',
+        type: 'Goods and Services Tax',
+        mainResult: formatCurrency(gstFinalGross),
+        resultLabel: isHindi ? 'कुल इनवॉइस राशि' : 'Final Invoice Total',
+        items: [
+          { label: isHindi ? 'मूल राशि (Base Value)' : 'Base Amount', value: formatCurrency(gstBase), isBold: true },
+          { label: isHindi ? 'GST टैक्स स्लैब' : 'GST Tax Slab', value: `${effectiveGstSlab}%` },
+          { label: isHindi ? 'प्रकार' : 'Tax Type', value: gstTaxType === 'intra' ? 'Intra-State (CGST + SGST)' : 'Inter-State (IGST)' },
+          ...(gstTaxType === 'intra'
+            ? [
+                { label: 'CGST (Central Tax)', value: formatCurrency(gstCgst) },
+                { label: 'SGST (State Tax)', value: formatCurrency(gstSgst) }
+              ]
+            : [{ label: 'IGST (Integrated Tax)', value: formatCurrency(gstIgst) }]),
+          { label: isHindi ? 'कुल टैक्स राशि' : 'Total GST Amount', value: formatCurrency(gstTotalTax), isHighlight: true },
+          { label: isHindi ? 'अंतिम देय राशि' : 'Gross Invoice Value', value: formatCurrency(gstFinalGross), isBold: true, isHighlight: true }
+        ]
+      };
+    }
+
+    if (activeTab === 'discount') {
+      return {
+        title: isHindi ? 'छूट एवं बचत गणना स्लिप' : 'Discount & Savings Calculation Slip',
+        type: 'Retail & Commercial Discount',
+        mainResult: formatCurrency(discFinal),
+        resultLabel: isHindi ? 'अंतिम देय मूल्य' : 'Final Discounted Price',
+        items: [
+          { label: isHindi ? 'मूल मूल्य / MRP' : 'Original Price / MRP', value: formatCurrency(discOrigNum), isBold: true },
+          { label: isHindi ? 'छूट प्रतिशत' : 'Discount Percentage', value: `${effectiveDiscPct.toFixed(1)}%` },
+          { label: isHindi ? 'कुल बचत राशि' : 'Total Money Saved', value: `-${formatCurrency(discSaved)}`, isHighlight: true, isBold: true },
+          { label: isHindi ? 'अंतिम देय मूल्य' : 'Final Payable Price', value: formatCurrency(discFinal), isBold: true, isHighlight: true }
+        ]
+      };
+    }
+
+    // Default: inflation
+    return {
+      title: isHindi ? 'महंगाई प्रभाव एवं भविष्य मूल्य स्लिप' : 'Inflation & Purchasing Power Slip',
+      type: 'Future Cost Projection',
+      mainResult: formatCurrency(futureInflatedCost),
+      resultLabel: isHindi ? 'भविष्य में आवश्यक अनुमानित लागत' : 'Future Inflated Cost',
+      items: [
+        { label: isHindi ? 'वर्तमान लागत' : 'Current Cost Today', value: formatCurrency(goalTargetTodayNum), isBold: true },
+        { label: isHindi ? 'वार्षिक अनुमानित महंगाई दर' : 'Annual Inflation Rate', value: `${inflationRateNum}% p.a.` },
+        { label: isHindi ? 'समय सीमा' : 'Time Horizon', value: `${goalYearsNum} Years` },
+        { label: isHindi ? 'महंगाई के कारण अतिरिक्त भार' : 'Extra Inflation Burden', value: `+${formatCurrency(extraInflationBurden)}`, isHighlight: true },
+        { label: isHindi ? 'भविष्य की कुल लागत' : 'Future Inflated Target', value: formatCurrency(futureInflatedCost), isBold: true, isHighlight: true },
+        { label: isHindi ? 'आवश्यक मासिक SIP (यदि निवेश करें)' : 'Required Monthly SIP Target', value: formatCurrency(requiredMonthlySIP) }
+      ]
+    };
+  };
+
+  const handlePrintCurrent = () => {
+    const params = getCurrentCalcParams();
+    printCalculatorSlip(params);
+    triggerHapticSound('click');
+  };
+
+  const handleDownloadCurrent = () => {
+    const params = getCurrentCalcParams();
+    downloadCalculatorSlipHTML(params);
+    triggerHapticSound('save');
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-4 animate-in fade-in duration-150 pb-16 text-left" id="calculator-page-container">
       {/* Top Header Bar: Clean, Minimal, Fast */}
-      <div className="flex items-center justify-between gap-3 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-md">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-md">
+        <div className="flex items-start sm:items-center gap-3 min-w-0">
           <button
             type="button"
             onClick={onBack}
-            className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+            className="mt-1 sm:mt-0 p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
             title="Back to Ledger"
             id="calc-back-to-home"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
 
-          <div>
-            <h1 className="text-[17px] sm:text-[19px] font-bold text-[#F8FAFC] flex items-center gap-2">
-              <span>{isHindi ? 'वित्तीय कैलकुलेटर' : 'Financial Calculator'}</span>
-              <span className="text-[10px] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] px-2 py-0.5 rounded-md border border-[var(--theme-primary,#38BDF8)]/30">
+          <div className="min-w-0">
+            <h1 className="text-[16px] sm:text-[19px] font-bold text-[#F8FAFC] flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="truncate">{isHindi ? 'वित्तीय कैलकुलेटर' : 'Financial Calculator'}</span>
+              <span className="text-[9px] sm:text-[10px] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] px-1.5 sm:px-2 py-0.5 rounded-md border border-[var(--theme-primary,#38BDF8)]/30 shrink-0">
                 PRO • CUSTOM
               </span>
             </h1>
-            <p className="text-[11px] text-[#94A3B8]">
+            <p className="text-[10.5px] sm:text-[11px] text-[#94A3B8] leading-tight mt-0.5 sm:mt-0 line-clamp-2 sm:line-clamp-none">
               {isHindi ? 'अनलिमिटेड कस्टम इनपुट, शून्य पाबंदी एवं रीयल-टाइम गणना' : 'Custom inputs with zero limits, flexible rates & instant projections'}
             </p>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={onBack}
-          className="px-3 py-1.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[var(--theme-btn-text,#040D17)] text-[12px] font-extrabold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
-        >
-          <span>{isHindi ? 'खाता' : 'Ledger'}</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        <div className="flex items-center justify-end gap-2 shrink-0 w-full sm:w-auto border-t sm:border-0 border-[var(--theme-border,#213E61)]/50 pt-2.5 sm:pt-0 mt-0.5 sm:mt-0">
+          <button
+            type="button"
+            onClick={handlePrintCurrent}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[12px] font-bold text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+            title="Print Calculation Slip"
+            id="calc-print-slip-btn"
+          >
+            <Printer className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+            <span className="hidden sm:inline">{isHindi ? 'प्रिंट स्लिप' : 'Print Slip'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDownloadCurrent}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[12px] font-bold text-[#CBD5E1] hover:text-[#10B981] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+            title="Download Calculation PDF"
+            id="calc-download-pdf-btn"
+          >
+            <FileDown className="w-3.5 h-3.5 text-[#10B981]" />
+            <span className="hidden sm:inline">PDF</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onBack}
+            className="px-3 py-1.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[var(--theme-btn-text,#040D17)] text-[12px] font-extrabold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs shrink-0 ml-auto sm:ml-0"
+          >
+            <span>{isHindi ? 'खाता' : 'Ledger'}</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Mode Selector - Clean Segments */}
@@ -521,19 +691,43 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       {/* ========================================================================= */}
       {activeTab === 'standard' && (
         <div className={`mx-auto bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl p-4 sm:p-6 shadow-2xl space-y-4 transition-all ${
-          calcScale === 'jumbo' ? 'max-w-3xl' : calcScale === 'large' ? 'max-w-2xl' : 'max-w-lg'
+          calcScale === 'jumbo' ? 'max-w-3xl' : calcScale === 'large' ? 'max-w-2xl' : 'max-w-md'
         }`}>
-          {/* Top Bar: Size Toggle & History */}
-          <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-3">
-            <button
-              type="button"
-              onClick={() => setShowHistory(!showHistory)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12px] font-mono text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs"
-              title="View Calculation Tape / History"
-            >
-              <History className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-              <span>{calcHistory.length > 0 ? `Tape (${calcHistory.length})` : (isHindi ? 'हिस्ट्री' : 'History')}</span>
-            </button>
+          {/* Top Bar: Size Toggle & History & Print/PDF */}
+          <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-3 flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setShowHistory(!showHistory)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12px] font-mono text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs"
+                title="View Calculation Tape / History"
+              >
+                <History className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                <span>{calcHistory.length > 0 ? `Tape (${calcHistory.length})` : (isHindi ? 'हिस्ट्री' : 'History')}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handlePrintCurrent}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12px] font-mono text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95"
+                title="Print Calculation Slip"
+                id="calc-std-print-btn"
+              >
+                <Printer className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                <span className="hidden xs:inline">{isHindi ? 'प्रिंट' : 'Print'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDownloadCurrent}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12px] font-mono text-[#CBD5E1] hover:text-[#10B981] hover:border-[#10B981] transition-all cursor-pointer shadow-xs active:scale-95"
+                title="Download Calculation PDF"
+                id="calc-std-pdf-btn"
+              >
+                <FileDown className="w-3.5 h-3.5 text-[#10B981]" />
+                <span className="hidden xs:inline">PDF</span>
+              </button>
+            </div>
 
             {/* Size / Zoom Switcher */}
             <div className="flex items-center gap-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] p-1 rounded-xl">
@@ -585,9 +779,9 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             </div>
           </div>
 
-          {/* LCD / OLED Large Display Screen */}
+          {/* LCD / OLED Display Screen */}
           <div className={`p-4 sm:p-5 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-inner space-y-1 text-right relative overflow-hidden transition-all ${
-            calcScale === 'jumbo' ? 'min-h-[140px]' : 'min-h-[120px]'
+            calcScale === 'jumbo' ? 'min-h-[150px]' : calcScale === 'large' ? 'min-h-[135px]' : 'min-h-[105px]'
           }`}>
             <div className="flex items-center justify-between text-[#94A3B8]">
               {memoryVal !== 0 ? (
@@ -599,7 +793,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               )}
 
               <div className={`font-mono text-[#94A3B8] overflow-x-auto whitespace-nowrap custom-scrollbar pl-3 font-semibold ${
-                calcScale === 'jumbo' ? 'text-[17px]' : 'text-[15px]'
+                calcScale === 'jumbo' ? 'text-[17px]' : calcScale === 'large' ? 'text-[16px]' : 'text-[14px]'
               }`}>
                 {stdExpr || '0'}
               </div>
@@ -608,10 +802,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             {/* Main Result Number */}
             <div className={`font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] tracking-tight truncate select-all transition-all py-1 ${
               calcScale === 'jumbo'
-                ? 'text-[44px] sm:text-[58px] md:text-[70px]'
+                ? 'text-[46px] sm:text-[60px] md:text-[72px]'
                 : calcScale === 'large'
-                ? 'text-[38px] sm:text-[48px] md:text-[58px]'
-                : 'text-[32px] sm:text-[40px] md:text-[46px]'
+                ? 'text-[42px] sm:text-[54px] md:text-[64px]'
+                : 'text-[28px] sm:text-[34px] md:text-[40px]'
             }`}>
               {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : (stdLiveResult || '0')}
             </div>
@@ -671,7 +865,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 triggerHapticSound('click');
               }}
               className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 ${
-                calcScale === 'jumbo' ? 'py-3 text-[14px]' : 'py-2.5 text-[12.5px]'
+                calcScale === 'jumbo' ? 'py-3.5 text-[15px]' : calcScale === 'large' ? 'py-3 text-[13.5px]' : 'py-2 text-[11px]'
               }`}
             >
               MC
@@ -682,7 +876,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 triggerHapticSound('click');
               }}
               className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#CBD5E1] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 ${
-                calcScale === 'jumbo' ? 'py-3 text-[14px]' : 'py-2.5 text-[12.5px]'
+                calcScale === 'jumbo' ? 'py-3.5 text-[15px]' : calcScale === 'large' ? 'py-3 text-[13.5px]' : 'py-2 text-[11px]'
               }`}
             >
               MR {memoryVal !== 0 && `(${memoryVal})`}
@@ -694,7 +888,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 triggerHapticSound('click');
               }}
               className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#10B981] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] transition-all cursor-pointer shadow-xs active:scale-95 ${
-                calcScale === 'jumbo' ? 'py-3 text-[14px]' : 'py-2.5 text-[12.5px]'
+                calcScale === 'jumbo' ? 'py-3.5 text-[15px]' : calcScale === 'large' ? 'py-3 text-[13.5px]' : 'py-2 text-[11px]'
               }`}
             >
               M+
@@ -706,16 +900,16 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 triggerHapticSound('click');
               }}
               className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#EF4444] border border-[var(--theme-border,#213E61)] hover:border-[#EF4444] transition-all cursor-pointer shadow-xs active:scale-95 ${
-                calcScale === 'jumbo' ? 'py-3 text-[14px]' : 'py-2.5 text-[12.5px]'
+                calcScale === 'jumbo' ? 'py-3.5 text-[15px]' : calcScale === 'large' ? 'py-3 text-[13.5px]' : 'py-2 text-[11px]'
               }`}
             >
               M-
             </button>
           </div>
 
-          {/* Large Keypad Grid (Huge Touch Targets & Clear Numbers) */}
+          {/* Keypad Grid (Touch-friendly & proportional) */}
           <div className={`grid grid-cols-4 ${
-            calcScale === 'jumbo' ? 'gap-3 sm:gap-4' : calcScale === 'large' ? 'gap-2.5 sm:gap-3.5' : 'gap-2 sm:gap-2.5'
+            calcScale === 'jumbo' ? 'gap-3 sm:gap-4' : calcScale === 'large' ? 'gap-2.5 sm:gap-3.5' : 'gap-1.5 sm:gap-2'
           }`}>
             {[
               { label: 'C', val: 'C', cls: 'bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/40 hover:bg-[#EF4444]/30' },
@@ -745,10 +939,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             ].map((btn, idx) => {
               const heightClass =
                 calcScale === 'jumbo'
-                  ? 'h-18 sm:h-22 md:h-24 text-[28px] sm:text-[34px] md:text-[38px] rounded-2xl sm:rounded-3xl'
+                  ? 'h-19 sm:h-23 md:h-25 text-[29px] sm:text-[35px] md:text-[39px] rounded-2xl sm:rounded-3xl'
                   : calcScale === 'large'
-                  ? 'h-15 sm:h-18 md:h-20 text-[24px] sm:text-[28px] md:text-[32px] rounded-2xl'
-                  : 'h-13 sm:h-15 text-[20px] sm:text-[24px] rounded-xl';
+                  ? 'h-17 sm:h-20 md:h-22 text-[26px] sm:text-[31px] md:text-[35px] rounded-2xl'
+                  : 'h-11 sm:h-13 text-[17px] sm:text-[20px] rounded-xl';
 
               return (
                 <button

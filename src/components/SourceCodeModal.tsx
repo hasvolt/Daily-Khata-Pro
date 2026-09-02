@@ -703,7 +703,7 @@ export interface KhataData {
               <div className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-1.5">
                 <div className="flex items-center gap-2 text-[#10B981] font-bold text-[13px]">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>No Ads, No Popups, No Lock-in</span>
+                  <span>Zero Telemetry, No Popups, No Lock-in</span>
                 </div>
                 <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
                   You can export your complete ledger as a standard JSON or CSV at any time, giving you 100% unconstrained ownership of your data.

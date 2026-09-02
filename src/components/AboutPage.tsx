@@ -57,8 +57,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({
       </div>
 
       {/* Hero Intro Card */}
-      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-primary,#38BDF8)] via-[#10B981] to-[#F59E0B]" />
+      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[var(--theme-primary,#38BDF8)] opacity-80" />
         
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#070E18] border border-[var(--theme-primary,#38BDF8)]/40 p-2 shrink-0 shadow-lg flex items-center justify-center">

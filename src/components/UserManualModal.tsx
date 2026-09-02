@@ -116,7 +116,7 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[var(--theme-surface,#0E1A29)] sm:border border-[var(--theme-border,#213E61)] rounded-none sm:rounded-2xl w-full h-full sm:h-auto sm:max-h-[92vh] max-w-5xl shadow-2xl flex flex-col overflow-hidden text-left">
+      <div className="bg-[var(--theme-surface,#0E1A29)] sm:border border-[var(--theme-border,#213E61)] rounded-none sm:rounded-2xl w-full h-full sm:h-auto sm:max-h-[92vh] max-w-5xl shadow-lg flex flex-col overflow-hidden text-left">
         {/* Modal Top Header */}
         <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between bg-[var(--theme-bg,#070E18)] shrink-0">
           <div className="flex items-center gap-3 min-w-0 flex-1 mr-2">

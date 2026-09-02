@@ -40,7 +40,15 @@ import {
   Lightbulb,
   HelpCircle,
   Sparkles,
-  RotateCcw
+  RotateCcw,
+  Award,
+  FileCheck2,
+  BadgeCheck,
+  SlidersHorizontal,
+  Trash2,
+  CalendarCheck,
+  Bell,
+  BellRing
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -57,6 +65,11 @@ interface HeaderProps {
   onOpenSupport?: (tab?: 'help' | 'bug' | 'suggestion') => void;
   onOpenNotes?: () => void;
   onOpenSimulator?: () => void;
+  onOpenMasterEdit?: () => void;
+  onOpenTrash?: () => void;
+  trashCount?: number;
+  onOpenReminders?: () => void;
+  remindersCount?: number;
   onOpenSourceCode?: () => void;
   onOpenInstall?: () => void;
   onOpenShare?: () => void;
@@ -86,6 +99,11 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSupport,
   onOpenNotes,
   onOpenSimulator,
+  onOpenMasterEdit,
+  onOpenTrash,
+  trashCount = 0,
+  onOpenReminders,
+  remindersCount = 0,
   onOpenSourceCode,
   onOpenInstall,
   onOpenShare,
@@ -260,6 +278,7 @@ export const Header: React.FC<HeaderProps> = ({
             {[
               { id: 'home' as NavTab, label: tr.menu.khata, icon: Home },
               { id: 'history' as NavTab, label: tr.menu.ledger, icon: History },
+              { id: 'attendance' as NavTab, label: isHindi ? 'उपस्थिति' : 'Attendance', icon: CalendarCheck },
               { id: 'goals' as NavTab, label: tr.menu.goals, icon: Target },
               { id: 'tracker' as NavTab, label: tr.menu.workAndLife, icon: Briefcase },
               { id: 'notes' as NavTab, label: tr.menu.notes, icon: FileText },
@@ -400,6 +419,27 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* Smart Alerts & Reminders Button */}
+          {onOpenReminders && (
+            <button
+              type="button"
+              onClick={onOpenReminders}
+              className="relative p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1.5 shrink-0"
+              title={isHindi ? 'चेतावनी एवं रिमाइंडर' : 'Alerts & Reminders'}
+              id="header-reminders-btn"
+            >
+              <Bell className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+              <span className="hidden sm:inline font-semibold">
+                {isHindi ? 'अलर्ट' : 'Alerts'}
+              </span>
+              {remindersCount > 0 && (
+                <span className="text-[9px] font-bold text-white bg-[#EF4444] px-1.5 py-0.2 rounded-full min-w-[16px] text-center">
+                  {remindersCount}
+                </span>
+              )}
+            </button>
+          )}
+
           {/* Main Three-Dot / Hamburger Menu */}
           <div className="relative shrink-0">
             <button
@@ -512,6 +552,94 @@ export const Header: React.FC<HeaderProps> = ({
                                   <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
                                   <span>{tr.menu.calculator}</span>
                                 </div>
+                              </button>
+                            )}
+
+                            {/* Master Edit Option */}
+                            {onOpenMasterEdit && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenMasterEdit();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                                id="header-drawer-master-edit-btn"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <SlidersHorizontal className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                  <span>{isHindi ? 'मास्टर एडिट व कस्टमाइज़' : 'Master Edit Hub'}</span>
+                                </div>
+                                <span className="text-[9px] font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded">
+                                  All-in-One
+                                </span>
+                              </button>
+                            )}
+
+                            {/* Trash / Recycle Bin */}
+                            {onOpenTrash && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenTrash();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#EF4444] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                                id="header-drawer-trash-btn"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Trash2 className="w-4 h-4 text-[#EF4444] shrink-0" />
+                                  <span>{isHindi ? 'रीसायकल बिन (ट्रैश)' : 'Recycle Bin / Trash'}</span>
+                                </div>
+                                {trashCount > 0 && (
+                                  <span className="text-[9px] font-bold text-white bg-[#EF4444] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                                    {trashCount}
+                                  </span>
+                                )}
+                              </button>
+                            )}
+
+                            {/* Attendance & Work Register */}
+                            {onSelectTab && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onSelectTab('attendance');
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                                id="header-drawer-attendance-btn"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <CalendarCheck className="w-4 h-4 text-[#10B981] shrink-0" />
+                                  <span>{isHindi ? 'उपस्थिति व कार्य रजिस्टर' : 'Attendance & Work'}</span>
+                                </div>
+                                <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded">
+                                  Duty
+                                </span>
+                              </button>
+                            )}
+
+                            {/* Alerts & Reminders */}
+                            {onOpenReminders && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenReminders();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                                id="header-drawer-alerts-btn"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <BellRing className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                  <span>{isHindi ? 'चेतावनी एवं रिमाइंडर' : 'Alerts & Reminders'}</span>
+                                </div>
+                                {remindersCount > 0 && (
+                                  <span className="text-[9px] font-bold text-white bg-[#EF4444] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                                    {remindersCount}
+                                  </span>
+                                )}
                               </button>
                             )}
 
@@ -804,42 +932,66 @@ export const Header: React.FC<HeaderProps> = ({
                           </div>
                         </div>
 
-                        {/* Drawer Footer */}
-                        <div className="p-3 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] flex items-center justify-between gap-2 shrink-0">
-                          {onOpenDeveloper && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                onOpenDeveloper();
-                                closeAllMenus();
-                              }}
-                              className="flex items-center gap-2 text-[11.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] cursor-pointer"
-                            >
-                              <div className="w-5 h-5 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
-                                <img
-                                  src="/md-zafeer-hasan-yazdaan.jpg"
-                                  alt="Developer Profile"
-                                  className="w-full h-full object-cover"
-                                  referrerPolicy="no-referrer"
-                                  onError={(e) => {
-                                    (e.target as HTMLElement).style.display = 'none';
-                                  }}
-                                />
-                              </div>
-                              <span>{tr.menu.developerProfile}</span>
-                            </button>
-                          )}
+                        {/* Drawer Footer with Verified Legal Credentials */}
+                        <div className="p-3 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] flex flex-col gap-2 shrink-0">
+                          <div className="flex items-center justify-between gap-2">
+                            {onOpenDeveloper && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenDeveloper();
+                                  closeAllMenus();
+                                }}
+                                className="flex items-center gap-2 text-[11.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] cursor-pointer text-left"
+                              >
+                                <div className="w-6 h-6 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
+                                  <img
+                                    src="/md-zafeer-hasan-yazdaan.jpg"
+                                    alt="Developer Profile"
+                                    className="w-full h-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                    onError={(e) => {
+                                      (e.target as HTMLElement).style.display = 'none';
+                                    }}
+                                  />
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="leading-tight font-bold">{tr.menu.developerProfile}</span>
+                                  <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan (YAZDAAN)</span>
+                                </div>
+                              </button>
+                            )}
 
-                          <a
-                            href="https://github.com/hasvolt/Daily-Khata-Pro"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] text-[11px] font-semibold transition-colors"
-                            title="GitHub Profile"
+                            <a
+                              href="https://github.com/hasvolt/Daily-Khata-Pro"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] text-[10.5px] font-semibold transition-colors shrink-0"
+                              title="GitHub Profile"
+                            >
+                              <FolderGit2 className="w-3.5 h-3.5" />
+                              <span>GitHub</span>
+                            </a>
+                          </div>
+
+                          {/* Legal Certificate & Registration Stamp */}
+                          <div
+                            onClick={() => {
+                              if (onOpenDeveloper) onOpenDeveloper();
+                              closeAllMenus();
+                            }}
+                            className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/80 flex items-center justify-between gap-1.5 cursor-pointer hover:border-[#10B981]/50 transition-colors"
                           >
-                            <FolderGit2 className="w-3.5 h-3.5" />
-                            <span>{tr.menu.githubProfile}</span>
-                          </a>
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <Award className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                              <span className="text-[10px] font-mono text-[#CBD5E1] truncate">
+                                MSME: <strong className="text-[#38BDF8]">UDYAM-DL-10-0098630</strong>
+                              </span>
+                            </div>
+                            <span className="text-[9px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded border border-[#10B981]/25 shrink-0">
+                              MIT License
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>,
@@ -896,6 +1048,50 @@ export const Header: React.FC<HeaderProps> = ({
                           <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
                           <span>{tr.menu.calculator}</span>
                         </div>
+                      </button>
+                    )}
+
+                    {/* Master Edit Option */}
+                    {onOpenMasterEdit && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenMasterEdit();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                        id="header-desktop-master-edit-btn"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <SlidersHorizontal className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                          <span>{isHindi ? 'मास्टर एडिट व कस्टमाइज़' : 'Master Edit Hub'}</span>
+                        </div>
+                        <span className="text-[9px] font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded">
+                          All-in-One
+                        </span>
+                      </button>
+                    )}
+
+                    {/* Trash / Recycle Bin */}
+                    {onOpenTrash && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenTrash();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#EF4444] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                        id="header-desktop-trash-btn"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Trash2 className="w-4 h-4 text-[#EF4444] shrink-0" />
+                          <span>{isHindi ? 'रीसायकल बिन (ट्रैश)' : 'Recycle Bin / Trash'}</span>
+                        </div>
+                        {trashCount > 0 && (
+                          <span className="text-[9px] font-bold text-white bg-[#EF4444] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                            {trashCount}
+                          </span>
+                        )}
                       </button>
                     )}
 
@@ -1187,42 +1383,66 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </div>
 
-                  {/* Divider & Developer Footer */}
-                  <div className="pt-2.5 border-t border-[var(--theme-border,#213E61)]/70 flex items-center justify-between gap-2">
-                    {onOpenDeveloper && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onOpenDeveloper();
-                          closeAllMenus();
-                        }}
-                        className="flex items-center gap-2 text-[11.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] cursor-pointer"
-                      >
-                        <div className="w-5 h-5 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
-                          <img
-                            src="/md-zafeer-hasan-yazdaan.jpg"
-                            alt="Developer Profile"
-                            className="w-full h-full object-cover"
-                            referrerPolicy="no-referrer"
-                            onError={(e) => {
-                              (e.target as HTMLElement).style.display = 'none';
-                            }}
-                          />
-                        </div>
-                        <span className="truncate">{tr.menu.developerProfile}</span>
-                      </button>
-                    )}
+                  {/* Divider & Developer Footer with Verified Legal Credentials */}
+                  <div className="pt-2.5 border-t border-[var(--theme-border,#213E61)]/70 flex flex-col gap-2">
+                    <div className="flex items-center justify-between gap-2">
+                      {onOpenDeveloper && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onOpenDeveloper();
+                            closeAllMenus();
+                          }}
+                          className="flex items-center gap-2 text-[11.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] cursor-pointer text-left"
+                        >
+                          <div className="w-6 h-6 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
+                            <img
+                              src="/md-zafeer-hasan-yazdaan.jpg"
+                              alt="Developer Profile"
+                              className="w-full h-full object-cover"
+                              referrerPolicy="no-referrer"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = 'none';
+                              }}
+                            />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="leading-tight font-bold">{tr.menu.developerProfile}</span>
+                            <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan (YAZDAAN)</span>
+                          </div>
+                        </button>
+                      )}
 
-                    <a
-                      href="https://github.com/hasvolt/Daily-Khata-Pro"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] text-[11px] font-semibold transition-colors"
-                      title="GitHub Profile"
+                      <a
+                        href="https://github.com/hasvolt/Daily-Khata-Pro"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] text-[10.5px] font-semibold transition-colors shrink-0"
+                        title="GitHub Profile"
+                      >
+                        <FolderGit2 className="w-3.5 h-3.5" />
+                        <span>GitHub</span>
+                      </a>
+                    </div>
+
+                    {/* Legal Certificate & Registration Stamp */}
+                    <div
+                      onClick={() => {
+                        if (onOpenDeveloper) onOpenDeveloper();
+                        closeAllMenus();
+                      }}
+                      className="p-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)]/80 flex items-center justify-between gap-1.5 cursor-pointer hover:border-[#10B981]/50 transition-colors"
                     >
-                      <FolderGit2 className="w-3.5 h-3.5" />
-                      <span>{tr.menu.githubProfile}</span>
-                    </a>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <Award className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                        <span className="text-[10px] font-mono text-[#CBD5E1] truncate">
+                          MSME: <strong className="text-[#38BDF8]">UDYAM-DL-10-0098630</strong>
+                        </span>
+                      </div>
+                      <span className="text-[9px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded border border-[#10B981]/25 shrink-0">
+                        MIT License
+                      </span>
+                    </div>
                   </div>
                 </div>
               </>

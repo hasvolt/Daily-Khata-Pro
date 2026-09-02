@@ -122,6 +122,70 @@ export type PersonalNoteCategory = 'personal' | 'secret' | 'ideas' | 'todo' | 'i
 
 export type PersonalNoteColor = 'default' | 'blue' | 'emerald' | 'amber' | 'purple' | 'rose' | 'slate';
 
+export type AttendanceStatus = 'present' | 'absent' | 'half_day' | 'leave' | 'overtime';
+export type PaymentStatusType = 'paid' | 'pending' | 'partial';
+
+export interface AttendanceLog {
+  id: string;
+  date: string; // YYYY-MM-DD
+  startTime?: string; // HH:mm
+  endTime?: string; // HH:mm
+  status: AttendanceStatus;
+  overtimeHours?: number;
+  workingHours?: number;
+  
+  // Payment tracking
+  salaryOrRate?: number;
+  paymentReceived?: number;
+  advanceReceived?: number;
+  pendingPayment?: number;
+  paymentDate?: string;
+  paymentStatus: PaymentStatusType;
+  paymentNotes?: string;
+  
+  // Work details
+  employerName?: string;
+  workAddress?: string;
+  workType?: string; // Nature of work
+  jobDescription?: string;
+  workStartDate?: string;
+  workEndDate?: string;
+  notes?: string;
+  
+  createdAt: number;
+  updatedAt?: number;
+}
+
+export type ReminderType = 'payment' | 'khata' | 'attendance' | 'custom' | 'activity';
+
+export interface AppReminder {
+  id: string;
+  type: ReminderType;
+  title: string;
+  description?: string;
+  amount?: number;
+  dueDate: string; // YYYY-MM-DD
+  dueTime?: string; // HH:mm
+  isCompleted: boolean;
+  repeat?: 'none' | 'daily' | 'weekly' | 'monthly';
+  notifyViaBrowser?: boolean;
+  lastNotifiedAt?: number;
+  createdAt: number;
+}
+
+export type TrashItemType = 'entry' | 'goal' | 'note' | 'work_log' | 'daily_log' | 'calc_history' | 'attendance_log' | 'reminder';
+
+export interface TrashItem {
+  id: string;
+  originalId: string;
+  type: TrashItemType;
+  title: string;
+  subtitle?: string;
+  amount?: number;
+  dateDeleted: string; // ISO string
+  data: any; // Original payload for complete lossless restoration
+}
+
 export interface PersonalNote {
   id: string;
   title: string;
@@ -167,6 +231,8 @@ export interface KhataData {
   workLogs?: WorkLog[];
   dailyLifeLogs?: DailyLifeLog[];
   personalNotes?: PersonalNote[];
+  attendanceLogs?: AttendanceLog[];
+  reminders?: AppReminder[];
   settings: {
     percentages: Record<FundType, number>;
     funds?: FundConfig[];

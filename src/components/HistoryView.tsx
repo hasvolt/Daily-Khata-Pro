@@ -153,21 +153,18 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#94A3B8]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
           <input
             type="text"
             placeholder={t.history.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[14px] sm:text-[15px] rounded-xl pl-10 pr-8 py-3 focus:outline-none shadow-xs"
-            style={{
-              borderColor: searchQuery ? 'var(--theme-primary, #38BDF8)' : undefined
-            }}
+            className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[13.5px] sm:text-[14.5px] rounded-xl pl-10 pr-8 py-2.5 focus:outline-none shadow-sm transition-colors focus:border-[var(--theme-primary,#38BDF8)]"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-[#94A3B8] hover:text-[#F8FAFC] p-1 cursor-pointer"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-[#94A3B8] hover:text-[#F8FAFC] p-1 cursor-pointer"
             >
               Clear
             </button>
@@ -179,9 +176,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           <button
             onClick={() => downloadCSVReport(entries, new Date())}
             title={t.history?.exportCsv || 'Export CSV'}
-            className="h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="h-[40px] sm:h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-4 h-4 shrink-0" />
             <span className="hidden sm:inline">{t.history?.exportCsv || 'Export CSV'}</span>
           </button>
 
@@ -189,9 +186,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             <button
               onClick={() => onTriggerPrint(new Date())}
               title={t.history?.printPdf || 'Print Statement'}
-              className="h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="h-[40px] sm:h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
-              <Printer className="w-4 h-4" />
+              <Printer className="w-4 h-4 shrink-0" />
               <span className="hidden sm:inline">{t.history?.printPdf || 'Print / PDF'}</span>
             </button>
           )}
@@ -199,14 +196,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           {/* Quick Add Button */}
           <button
             onClick={onNavigateAdd}
-            className="h-[44px] px-4 sm:px-5 rounded-xl font-extrabold text-[13.5px] sm:text-[14px] flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer shrink-0"
-            style={{
-              backgroundColor: 'var(--theme-btn-bg, #38BDF8)',
-              color: 'var(--theme-btn-text, #040D17)'
-            }}
+            className="h-[40px] sm:h-[44px] px-3.5 sm:px-5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-bold text-[12px] sm:text-[13.5px] flex items-center justify-center gap-1 sm:gap-1.5 transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer shrink-0 whitespace-nowrap"
           >
-            <Plus className="w-4 h-4 stroke-[3]" />
-            <span>{t.home?.newTransaction || 'Add +'}</span>
+            <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+            <span>{t.home?.newTransaction || 'New Entry'}</span>
           </button>
         </div>
       </div>
@@ -222,16 +215,11 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                 onFilterChange(opt.key);
                 triggerHapticSound('click');
               }}
-              className={`whitespace-nowrap px-3.5 py-2 rounded-xl text-[13px] sm:text-[13.5px] font-bold transition-all cursor-pointer border shrink-0 ${
+              className={`whitespace-nowrap px-3.5 py-2 rounded-xl text-[12.5px] sm:text-[13px] font-bold transition-all cursor-pointer border shrink-0 ${
                 isActive
-                  ? 'shadow-sm'
+                  ? 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] shadow-sm'
                   : 'bg-[var(--theme-card,#132438)] text-[#94A3B8] border-[var(--theme-border,#213E61)] hover:text-[#F8FAFC]'
               }`}
-              style={{
-                backgroundColor: isActive ? 'var(--theme-btn-bg, #38BDF8)' : undefined,
-                color: isActive ? 'var(--theme-btn-text, #040D17)' : undefined,
-                borderColor: isActive ? 'var(--theme-primary, #38BDF8)' : undefined
-              }}
             >
               {opt.label}
             </button>
@@ -241,20 +229,20 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
       {/* Filter Stats Bar */}
       {entries.length > 0 && (
-        <div className="flex justify-between items-center bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-4 py-2.5 text-[13px] sm:text-[14px]">
-          <span className="text-[#94A3B8] truncate mr-2">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 gap-1.5 sm:gap-2">
+          <span className="text-[11px] sm:text-[14px] text-[#94A3B8] truncate">
             Showing <strong className="text-[#F8FAFC] font-bold">{filtered.length}</strong> records
           </span>
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-            <span className="text-[#10B981] font-bold font-mono">+{formatCurrency(totalFilteredIn, privacyMask)}</span>
-            <span className="text-[#EF4444] font-bold font-mono">-{formatCurrency(totalFilteredOut, privacyMask)}</span>
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
+            <span className="text-[#10B981] font-bold font-mono text-[11px] sm:text-[14px] truncate" title={formatCurrency(totalFilteredIn, privacyMask)}>+{formatCurrency(totalFilteredIn, privacyMask)}</span>
+            <span className="text-[#EF4444] font-bold font-mono text-[11px] sm:text-[14px] truncate" title={formatCurrency(totalFilteredOut, privacyMask)}>-{formatCurrency(totalFilteredOut, privacyMask)}</span>
           </div>
         </div>
       )}
 
       {/* List of Entries Grouped by Day */}
       {sortedDates.length === 0 ? (
-        <div className="text-center text-[#94A3B8] py-14 px-5 text-[14.5px] border border-dashed border-[var(--theme-border,#213E61)] rounded-2xl bg-[var(--theme-card,#132438)]/40 space-y-4 shadow-md">
+        <div className="text-center text-[#94A3B8] py-14 px-5 text-[14.5px] border border-dashed border-[var(--theme-border,#213E61)] rounded-2xl bg-[var(--theme-card,#132438)]/40 space-y-4 shadow-sm">
           <div
             className="w-14 h-14 mx-auto rounded-full flex items-center justify-center border"
             style={{
@@ -272,13 +260,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           </p>
           <button
             onClick={onNavigateAdd}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-[14px] transition-colors cursor-pointer shadow-md"
-            style={{
-              backgroundColor: 'var(--theme-btn-bg, #38BDF8)',
-              color: 'var(--theme-btn-text, #040D17)'
-            }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[13.5px] transition-colors cursor-pointer shadow-sm bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] hover:brightness-110 active:scale-95"
           >
-            <Plus className="w-4.5 h-4.5" />
+            <Plus className="w-4 h-4" />
             <span>{t.home.newTransaction}</span>
           </button>
         </div>
@@ -293,7 +277,6 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               month: 'short',
               year: 'numeric'
             });
-
             const dayInc = dayEntries.filter((e) => e.type === 'income').reduce((s, e) => s + e.amount, 0);
             const dayExp = dayEntries.filter((e) => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
             const dayNet = dayInc - dayExp;
@@ -303,7 +286,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                 {/* Day Header */}
                 <div className="flex justify-between items-center px-1 text-[13px] sm:text-[14px] text-[#94A3B8]">
                   <span className="font-bold text-[#F8FAFC] flex items-center gap-2">
-                    <Calendar className="w-4 h-4" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
+                    <Calendar className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                     <span>{dayLabel}</span>
                   </span>
                   <span className="font-mono text-[#94A3B8]">
@@ -324,29 +307,27 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       <div
                         key={entry.id}
                         id={`entry-row-${entry.id}`}
-                        className="w-full flex items-center justify-between bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 rounded-2xl p-3.5 sm:p-4 shadow-sm transition-all group overflow-hidden"
+                        className="w-full flex items-center justify-between bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 rounded-2xl p-3 sm:p-4 shadow-sm transition-all group overflow-hidden min-w-0"
                       >
                         {/* Left Icon & Text Info */}
-                        <div className="flex items-center gap-3 sm:gap-3.5 flex-1 min-w-0 pr-2">
+                        <div className="flex items-center gap-2.5 sm:gap-3.5 flex-1 min-w-0 pr-1.5 sm:pr-2">
                           <div
-                            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${
+                            className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${
                               isIncome
                                 ? 'bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30'
                                 : 'bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/30'
                             }`}
                           >
-                            <ItemIcon className="w-5 h-5" />
+                            <ItemIcon className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
                           </div>
-
-                          <div className="flex flex-col gap-1 min-w-0 flex-1 text-left">
-                            <div className="flex items-center gap-2 min-w-0">
-                              <span className="text-[14.5px] sm:text-[15.5px] font-bold text-[#F8FAFC] truncate">
+                          <div className="flex flex-col gap-0.5 sm:gap-1 min-w-0 flex-1 text-left">
+                            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                              <span className="text-[13.5px] sm:text-[15px] font-bold text-[#F8FAFC] truncate">
                                 {isIncome ? (entry.source || entry.note || 'Income') : (entry.category || 'Expense')}
                               </span>
                               {renderPaymentIcon(entry.paymentMode)}
                             </div>
-
-                            <div className="text-[12px] sm:text-[12.5px] text-[#94A3B8] truncate">
+                            <div className="text-[11px] sm:text-[12.5px] text-[#94A3B8] truncate">
                               {isIncome ? (
                                 <span>
                                   {entry.note ? `${entry.note} · ` : ''}
@@ -367,35 +348,35 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                             </div>
                           </div>
                         </div>
-
                         {/* Right Amount and Controls */}
-                        <div className="shrink-0 flex items-center gap-2 sm:gap-3 text-right">
+                        <div className="shrink-0 flex items-center gap-1.5 sm:gap-3 text-right max-w-[55%] sm:max-w-none">
                           <div
-                            className={`font-mono text-[15.5px] sm:text-[17.5px] font-bold tracking-tight whitespace-nowrap ${
+                            className={`font-mono text-[12px] xs:text-[13.5px] sm:text-[15.5px] font-bold tracking-tight truncate max-w-[105px] xs:max-w-[135px] sm:max-w-none ${
                               isIncome ? 'text-[#10B981]' : 'text-[#EF4444]'
                             }`}
+                            title={formatCurrency(entry.amount, privacyMask)}
                           >
                             {isIncome ? `+${formatCurrency(entry.amount, privacyMask)}` : `-${formatCurrency(entry.amount, privacyMask)}`}
                           </div>
 
                           {/* Action Buttons with 40px touch targets */}
-                          <div className="flex items-center gap-1 pl-1.5 border-l border-[var(--theme-border,#213E61)]">
+                          <div className="flex items-center gap-0.5 sm:gap-1 pl-1 sm:pl-1.5 border-l border-[var(--theme-border,#213E61)] shrink-0">
                             <button
                               onClick={() => onEditEntry(entry)}
-                              className="text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] p-2 rounded-xl hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer"
+                              className="text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] p-1.5 sm:p-2 rounded-xl hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer"
                               title="Edit transaction"
                               aria-label="Edit"
                             >
-                              <Edit3 className="w-4 h-4" />
+                              <Edit3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </button>
 
                             <button
                               onClick={(e) => handleDeletePrompt(entry.id, e)}
-                              className="text-[#94A3B8] hover:text-[#EF4444] p-2 rounded-xl hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer"
-                              title="Delete transaction"
+                              className="text-[#94A3B8] hover:text-[#EF4444] p-1.5 sm:p-2 rounded-xl hover:bg-[var(--theme-surface,#0E1A29)] transition-colors cursor-pointer"
+                              title="Delete transaction (Move to Trash)"
                               aria-label="Delete"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </button>
                           </div>
                         </div>

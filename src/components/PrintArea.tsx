@@ -24,15 +24,40 @@ export const PrintArea: React.FC<PrintAreaProps> = ({ entries, targetMonth = new
   const grandTotal = Object.values(fundTotals).reduce((sum, v) => sum + v, 0);
 
   return (
-    <div id="printArea" className="print-only hidden p-6 bg-white text-black font-sans text-[12px] max-w-4xl mx-auto">
+    <div id="printArea" className="print-only hidden p-6 bg-white text-black font-sans text-[12px] max-w-4xl mx-auto relative">
+      {/* Subtle Company Watermark for print */}
+      <div
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%) rotate(-30deg)',
+          fontSize: '44px',
+          fontWeight: 900,
+          color: 'rgba(15, 23, 42, 0.04)',
+          letterSpacing: '2px',
+          pointerEvents: 'none',
+          zIndex: 0,
+          textAlign: 'center',
+          lineHeight: '1.3',
+          userSelect: 'none'
+        }}
+      >
+        Daily Khata Pro<br />
+        <span style={{ fontSize: '24px', fontWeight: 700 }}>Website: www.rozfiber.com</span>
+      </div>
+
       {/* Brand Header */}
-      <div className="border-b-2 border-[#FFC700] pb-3 mb-5 flex justify-between items-start">
+      <div className="border-b-2 border-[#FFC700] pb-3 mb-5 flex justify-between items-start relative z-10">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">
-            Daily Khata: Pro — Financial Statement
+            Daily Khata Pro — Financial Statement
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             6-Fund Income &amp; Expense Money Ledger
+          </p>
+          <p className="text-xs font-bold text-sky-600 mt-0.5">
+            Website: www.rozfiber.com
           </p>
         </div>
         <div className="text-right text-xs text-slate-600">
@@ -143,8 +168,11 @@ export const PrintArea: React.FC<PrintAreaProps> = ({ entries, targetMonth = new
       </div>
 
       {/* Footer Statement */}
-      <div className="border-t border-slate-300 pt-3 flex justify-between items-center text-[10.5px] text-slate-500">
-        <span>Daily Khata: Pro · Verified Ledger Statement</span>
+      <div className="border-t border-slate-300 pt-3 flex justify-between items-center text-[10.5px] text-slate-500 relative z-10">
+        <div>
+          <span>Daily Khata Pro · Verified Ledger Statement · </span>
+          <span className="font-bold text-sky-600">Website: www.rozfiber.com</span>
+        </div>
         <span>Signature / Stamp: ___________________</span>
       </div>
     </div>

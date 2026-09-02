@@ -24,7 +24,10 @@ import {
   Building2,
   Zap,
   MapPin,
-  Layers
+  Layers,
+  Award,
+  FileCheck2,
+  BadgeCheck
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { AppLanguage } from '../types';
@@ -60,102 +63,104 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
   const roles = isHindi
     ? [
         {
-          title: 'स्वतंत्र डेवलपर (Independent Developer)',
-          desc: 'स्वतंत्र रूप से आधुनिक वेब ऍप्लिकेशन्स और ऑफ़लाइन टूल्स का निर्माण।',
-          icon: Code2,
+          title: 'स्वतंत्र सॉफ़्टवेयर डेवलपर (Independent Developer)',
+          desc: 'टाइपस्क्रिप्ट, रिएक्ट और PWA ऑफ़लाइन-फ़र्स्ट आर्किटेक्चर के साथ सुरक्षित, पारदर्शी डिजिटल टूल्स का स्वतंत्र निर्माण।',
+          proof: '100% क्लाइंट-साइड निष्पादन, शून्य एक्सटर्नल सर्वर लेटेंसी, तेज़ और सटीक गणना',
+          icon: Terminal,
           tagColor: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30'
         },
         {
-          title: 'सॉफ़्टवेयर डेवलपर (Software Developer)',
-          desc: 'मजबूत, स्वच्छ और स्केलेबल कोडबेस के साथ हाई-स्पीड यूटिलिटी सिस्टम्स।',
-          icon: Terminal,
-          tagColor: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
-        },
-        {
           title: 'ओपन-सोर्स क्रिएटर (Open Source Creator)',
-          desc: 'पारदर्शी और मुफ़्त टूल्स का विकास ताकि समुदाय व डेवलपर्स सीधे लाभ ले सकें।',
+          desc: 'आधिकारिक ओपन सोर्स MIT लाइसेंस प्रमाण पत्र के तहत Daily Khata Pro का निर्माण व रख-रखाव।',
+          proof: 'MIT लाइसेंस प्रमाण पत्र • सार्वजनिक कोड रिपॉजिटरी: github.com/hasvolt/Daily-Khata-Pro',
           icon: FolderGit2,
           tagColor: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
         },
         {
-          title: 'सुरक्षा शोधकर्ता (Security Researcher)',
-          desc: 'क्लाइंट-साइड ज़ीरो-नॉलेज आर्किटेक्चर, डेटा एन्क्रिप्शन व प्राइवेसी एनालिसिस।',
-          icon: ShieldCheck,
+          title: 'स्वतंत्र तकनीक शोधकर्ता (Independent Tech Researcher)',
+          desc: 'ऑफ़लाइन-फ़र्स्ट डेटा मॉडल, लोकल ब्राउज़र सेल्फ-कस्टडी, और एयर-गैप्ड स्टोरेज का गहन विश्लेषण।',
+          proof: '100% प्राइवेट, एयर-गैप्ड डेटा आर्किटेक्चर, नो-क्लाउड प्राइवेसी मानक',
+          icon: Sparkles,
           tagColor: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30'
         },
         {
-          title: 'स्वतंत्र शोधकर्ता (Independent Researcher)',
-          desc: 'नई डिजिटल तकनीकों, उपयोगकर्ता सुरक्षा और डेटा प्राइवेसी पर निष्पक्ष शोध।',
-          icon: Search,
-          tagColor: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
+          title: 'सुरक्षा एवं प्राइवेसी शोधकर्ता (Security Researcher)',
+          proof: 'Web Crypto API SHA-256 हैशिंग, AES-GCM एन्क्रिप्शन, शून्य टेलीमेट्री/ट्रैकिंग',
+          desc: 'क्लाइंट-साइड ज़ीरो-नॉलेज सिस्टम, लोकल ब्राउज़र सेल्फ-कस्टडी और एंड-टू-एंड डेटा सुरक्षा।',
+          icon: ShieldCheck,
+          tagColor: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
         },
         {
-          title: 'टेक्नोलॉजी व डिजिटल सिस्टम्स (Technology Systems)',
-          desc: 'आधुनिक वेब स्टैंडर्ड्स, PWA ऑफ़लाइन तकनीक व हाई-परफ़ॉर्मेंस आर्किटेक्चर।',
-          icon: Cpu,
+          title: 'सॉफ़्टवेयर डेवलपर (Software Developer)',
+          desc: 'आधुनिक वेब एप्लिकेशन, डेटा स्ट्रक्चर्स और वित्तीय एल्गोरिदम का सुरक्षित एवं तेज़ विकास।',
+          proof: 'शून्य निर्भरता, मॉड्यूलर टाइपस्क्रिप्ट आर्किटेक्चर, क्रॉस-डिवाइस PWA रेस्पॉन्सिवनेस',
+          icon: Code2,
           tagColor: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30'
         },
         {
-          title: 'फ्रीलांसर एवं उद्यमी (Freelancer & Entrepreneur)',
-          desc: 'डिजिटल समाधान निर्माण, तकनीकी परामर्श और आत्मनिर्भर पब्लिक प्रोजेक्ट्स।',
-          icon: Briefcase,
+          title: 'फ्रीलांसर व उद्यमी (Freelancer & Entrepreneur)',
+          desc: 'हसन स्मार्ट इलेक्ट्रिकल सॉल्यूशंस ® (स्थापना 2012) के तहत एमएसएमई पंजीकृत औद्योगिक व डिजिटल परियोजनाएं।',
+          proof: 'MSME उद्यम पंजीकरण: UDYAM-DL-10-0098630 (सूक्ष्म उद्यम, भारत सरकार)',
+          icon: Building2,
           tagColor: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
         },
         {
           title: 'मानवता व लोक संसाधन सहायक (Humanity Public Resources Helper)',
-          desc: 'सार्वजनिक भलाई हेतु निःशुल्क, विज्ञापन-रहित व ट्रैकर-मुक्त सॉफ़्टवेयर टूल्स।',
+          proof: '100% निःशुल्क, पूर्णतः प्राइवेट व सुरक्षित डिजिटल पब्लिक टूल्स',
+          desc: 'आम नागरिकों, फ्रीलांसरों और छोटे व्यापारियों के वित्तीय अनुशासन हेतु डिजिटल सार्वजनिक उपयोगिता।',
           icon: Heart,
-          tagColor: 'text-[#14B8A6] bg-[#14B8A6]/10 border-[#14B8A6]/30'
+          tagColor: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
         }
       ]
     : [
         {
           title: 'Independent Developer',
-          desc: 'Building responsive, high-performance client-side web tools with zero external dependencies.',
-          icon: Code2,
+          desc: 'Self-directed development of offline-first, client-side digital utilities and modern financial software.',
+          proof: 'Direct browser execution, zero external server latency, fast & accurate computation',
+          icon: Terminal,
           tagColor: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30'
         },
         {
-          title: 'Software Developer',
-          desc: 'Designing clean modular software architectures, offline PWA engines, and state management.',
-          icon: Terminal,
-          tagColor: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
-        },
-        {
           title: 'Open Source Creator',
-          desc: 'Publishing free, MIT-licensed utilities allowing full code auditing and community empowerment.',
+          desc: 'Authoring and maintaining Daily Khata Pro under the official Open Source MIT License Certificate.',
+          proof: 'MIT License Certificate • Verified GitHub Repository: github.com/hasvolt/Daily-Khata-Pro',
           icon: FolderGit2,
           tagColor: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
         },
         {
-          title: 'Security Researcher',
-          desc: 'Analyzing client-side encryption, zero-knowledge storage, and browser sandboxing safety.',
-          icon: ShieldCheck,
+          title: 'Independent Tech Researcher',
+          desc: 'Investigating offline storage durability, zero-dependency calculation formulas, and private computing.',
+          proof: '100% private, air-gapped data persistence architectures, no-cloud standards',
+          icon: Sparkles,
           tagColor: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30'
         },
         {
-          title: 'Independent Researcher',
-          desc: 'Investigating privacy-preserving computing, local-first applications, and ethical digital workflows.',
-          icon: Search,
-          tagColor: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
+          title: 'Security & Privacy Researcher',
+          desc: 'Researching and deploying client-side zero-knowledge architecture, cryptographic PIN security & sandboxing.',
+          proof: 'Web Crypto API SHA-256 hashing, AES-GCM encrypted backups, 0 analytics trackers',
+          icon: ShieldCheck,
+          tagColor: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
         },
         {
-          title: 'Technology & Digital Systems',
-          desc: 'Exploring modern web capabilities, standards-compliant protocols, and lightweight frontend runtimes.',
-          icon: Cpu,
+          title: 'Software Developer',
+          desc: 'Engineering zero-dependency TypeScript & React offline-first Progressive Web Apps (PWAs).',
+          proof: 'Local browser compute, instant reactivity, verified air-gapped data persistence',
+          icon: Code2,
           tagColor: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30'
         },
         {
           title: 'Freelancer & Entrepreneur',
-          desc: 'Consulting on technical systems, self-funded digital initiatives, and sustainable utility tooling.',
-          icon: Briefcase,
+          desc: 'Operating Hasan Smart Electrical Solutions ® (Est. 2012) • Govt. of India Udyam Reg: UDYAM-DL-10-0098630.',
+          proof: 'Udyam Registration No.: UDYAM-DL-10-0098630 (Ministry of MSME, Govt. of India)',
+          icon: Building2,
           tagColor: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
         },
         {
-          title: 'Humanity & Public Resources Helper',
-          desc: 'Devoted to building accessible, permanent public digital utilities with zero paywalls or tracking.',
+          title: 'Humanity Public Resources Helper',
+          desc: 'Creating free, non-monetized financial management utilities empowering households and small businesses.',
+          proof: '100% free, zero data monetization public digital utilities',
           icon: Heart,
-          tagColor: 'text-[#14B8A6] bg-[#14B8A6]/10 border-[#14B8A6]/30'
+          tagColor: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
         }
       ];
 
@@ -189,14 +194,14 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
       </div>
 
       {/* Hero Developer Profile Card */}
-      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden">
+      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-8 shadow-sm relative overflow-hidden">
         {/* Decorative Top Accent */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-primary,#38BDF8)] via-[#10B981] to-[#8B5CF6]" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[var(--theme-primary,#38BDF8)] opacity-80" />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center">
           {/* Full Image Box */}
           <div className="md:col-span-5 flex flex-col items-center justify-center">
-            <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)]/70 shadow-2xl bg-[#070E18] p-1.5 relative group">
+            <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-2xl overflow-hidden border border-[var(--theme-border,#213E61)] shadow-sm bg-[var(--theme-surface,#0E1A29)] p-1.5 relative group">
               <img
                 src="/md-zafeer-hasan-yazdaan.jpg"
                 alt="MD Zafeer Hasan (YAZDAAN) - Developer & Creator"
@@ -325,7 +330,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             return (
               <div
                 key={i}
-                className="p-3.5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all space-y-1.5 text-left group"
+                className="p-3.5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all space-y-2 text-left group"
               >
                 <div className="flex items-center gap-2">
                   <div className={`p-1.5 rounded-lg border ${r.tagColor}`}>
@@ -338,9 +343,138 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 <p className="text-[11.5px] text-[#94A3B8] leading-relaxed pl-8">
                   {r.desc}
                 </p>
+                <div className="ml-8 p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 text-[10.5px] font-mono text-[#CBD5E1] flex items-start gap-1.5">
+                  <BadgeCheck className="w-3.5 h-3.5 text-[#10B981] shrink-0 mt-0.5" />
+                  <span className="leading-snug">{r.proof}</span>
+                </div>
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Official Legal Registrations & Verified Certificates */}
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-3xl p-5 sm:p-7 space-y-5 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#10B981]/15 border border-[#10B981]/30 flex items-center justify-center text-[#10B981]">
+              <Award className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="font-serif-display text-[18px] sm:text-[20px] font-bold text-[#F8FAFC]">
+                {isHindi ? 'वैधानिक पंजीकरण एवं आधिकारिक लाइसेंस प्रमाणपत्र' : 'Official Legal Registrations & Certificates'}
+              </h2>
+              <p className="text-[12px] text-[#94A3B8]">
+                {isHindi
+                  ? 'भारत सरकार पंजीकृत उद्यम एवं वैधानिक रूप से मान्य ओपन-सोर्स लाइसेंस विवरण'
+                  : 'Legally certified Government of India MSME registration & Open Source MIT compliance'}
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-3 py-1 rounded-md border border-[#10B981]/30 self-start sm:self-auto flex items-center gap-1.5">
+            <BadgeCheck className="w-3.5 h-3.5" />
+            <span>Legally Verified Records</span>
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Government of India MSME Certificate */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-3 relative overflow-hidden">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🇮🇳</span>
+                <div>
+                  <h3 className="text-[14px] sm:text-[15px] font-bold text-[#F8FAFC]">
+                    Government of India – MSME Registered Enterprise
+                  </h3>
+                  <span className="text-[11px] text-[#94A3B8]">Ministry of Micro, Small &amp; Medium Enterprises</span>
+                </div>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2.5 py-0.5 rounded border border-[#10B981]/25">
+                Govt. Certified
+              </span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 space-y-2 text-[12px]">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Enterprise Name:</span>
+                <span className="font-bold text-[#F8FAFC] text-right">HASAN SMART ELECTRICAL SOLUTIONS ®</span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Udyam Reg. No.:</span>
+                <span className="font-mono font-extrabold text-[#38BDF8] bg-[#38BDF8]/10 px-2 py-0.5 rounded border border-[#38BDF8]/25">
+                  UDYAM-DL-10-0098630
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Operating Authority:</span>
+                <span className="text-[#CBD5E1]">MD Zafeer Hasan (YAZDAAN)</span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Active Operational Since:</span>
+                <span className="text-[#F59E0B] font-bold">2012 (Pan-India Projects)</span>
+              </div>
+            </div>
+
+            <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
+              {isHindi
+                ? 'यह भारत सरकार के सूक्ष्म, लघु एवं मध्यम उद्यम मंत्रालय के अंतर्गत पंजीकृत आधिकारिक प्रतिष्ठान है, जो गुणवत्तापूर्ण इलेक्ट्रिकल समाधान एवं तकनीक संचालन हेतु प्राधिकृत है।'
+                : 'Formally registered under the Ministry of MSME, Government of India, certifying authentic business operations and authorized technological projects.'}
+            </p>
+          </div>
+
+          {/* Open Source MIT License Certificate */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-3 relative overflow-hidden">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-[#38BDF8]/15 border border-[#38BDF8]/30 text-[#38BDF8]">
+                  <FileCheck2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-[14px] sm:text-[15px] font-bold text-[#F8FAFC]">
+                    Open Source MIT License Certificate
+                  </h3>
+                  <span className="text-[11px] font-mono text-[#38BDF8]">SPDX-License-Identifier: MIT</span>
+                </div>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 px-2.5 py-0.5 rounded border border-[#38BDF8]/25">
+                OSI Approved
+              </span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 space-y-2 text-[12px]">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Protected Software:</span>
+                <span className="font-bold text-[#F8FAFC]">Daily Khata: Pro</span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Copyright Holder:</span>
+                <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan (YAZDAAN)</span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Public Repository:</span>
+                <a
+                  href="https://github.com/hasvolt/Daily-Khata-Pro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[var(--theme-primary,#38BDF8)] hover:underline flex items-center gap-1"
+                >
+                  <span>hasvolt/Daily-Khata-Pro</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#94A3B8]">Commercial &amp; Audit Rights:</span>
+                <span className="text-[#10B981] font-semibold">100% Free to Use &amp; Self-Host</span>
+              </div>
+            </div>
+
+            <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
+              {isHindi
+                ? 'यह सॉफ़्टवेयर अंतरराष्ट्रीय स्तर पर स्वीकृत MIT लाइसेंस के अंतर्गत सुरक्षित है। कोई भी व्यक्ति इसके सोर्स कोड का स्वतंत्र रूप से निरीक्षण एवं इस्तेमाल कर सकता है।'
+                : 'Guaranteed by the internationally recognized Open Source MIT License. Code transparency ensures independent verifiability and unrestricted community auditing.'}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -393,7 +527,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </>
             ) : (
               <>
-                Founded and owned by <strong>MD Zafeer Hasan (YAZDAAN)</strong>, <strong>Hasan Smart Electrical Solutions ®</strong> operates as the official parent organisation overseeing premier electrical service brands, engineering project works, and modern digital utilities (including Daily Khata Pro) since 2012.
+                Founded and owned by <strong>MD Zafeer Hasan (YAZDAAN)</strong>, <strong>Hasan Smart Electrical Solutions ®</strong> operates as the official parent organisation overseeing premier electrical service brands, electrical & technical project works, and modern digital utilities (including Daily Khata Pro) since 2012.
               </>
             )}
           </p>
@@ -574,6 +708,12 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 <span className="text-[#94A3B8]">License:</span>
                 <span className="font-mono font-extrabold text-[#10B981] bg-[#10B981]/15 px-2.5 py-0.5 rounded border border-[#10B981]/30">
                   Open Source (MIT)
+                </span>
+              </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
+                <span className="text-[#94A3B8]">Govt. MSME Reg. No.:</span>
+                <span className="font-mono font-extrabold text-[#F59E0B] bg-[#F59E0B]/10 px-2 py-0.5 rounded border border-[#F59E0B]/30">
+                  UDYAM-DL-10-0098630
                 </span>
               </div>
               <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">

@@ -151,22 +151,22 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 mt-3 sm:mt-0">
           <button
             type="button"
             onClick={() => onOpenWorkModal()}
-            className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] hover:brightness-110 font-bold text-[13px] flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-all active:scale-98"
+            className="flex-1 sm:flex-initial py-2 px-2.5 sm:px-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] hover:bg-[var(--theme-primary,#38BDF8)]/10 text-[var(--theme-primary,#38BDF8)] font-bold text-[11.5px] sm:text-[13px] flex items-center justify-center gap-1 sm:gap-2 shadow-sm cursor-pointer transition-all active:scale-95 whitespace-nowrap"
           >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
+            <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
             <span>{getTrackerText('logWorkBtn', language)}</span>
           </button>
 
           <button
             type="button"
             onClick={() => onOpenDailyLifeModal()}
-            className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl bg-[var(--theme-secondary,#FFC700)] text-[#040D17] hover:brightness-110 font-bold text-[13px] flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-all active:scale-98"
+            className="flex-1 sm:flex-initial py-2 px-2.5 sm:px-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-secondary,#FFC700)] hover:bg-[var(--theme-secondary,#FFC700)]/10 text-[var(--theme-secondary,#FFC700)] font-bold text-[11.5px] sm:text-[13px] flex items-center justify-center gap-1 sm:gap-2 shadow-sm cursor-pointer transition-all active:scale-95 whitespace-nowrap"
           >
-            <Sparkles className="w-4 h-4 stroke-[2.5]" />
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
             <span>{getTrackerText('todayStoryBtn', language)}</span>
           </button>
           
@@ -269,30 +269,30 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
       </div>
 
       {/* Sub-Tabs: Work Logs vs Daily Life Timeline */}
-      <div className="flex gap-2 border-b border-[var(--theme-border,#213E61)] pb-2">
+      <div className="flex gap-2 border-b border-[var(--theme-border,#213E61)] pb-2 overflow-x-auto no-scrollbar">
         <button
           type="button"
           onClick={() => setActiveTab('work')}
-          className={`py-2 px-4 rounded-xl font-bold text-[13.5px] sm:text-[14px] flex items-center gap-2 transition-all cursor-pointer ${
+          className={`flex-1 sm:flex-initial justify-center py-2 px-3 sm:px-4 rounded-xl font-bold text-[12.5px] sm:text-[14px] flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'work'
               ? 'bg-[var(--theme-card,#132438)] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/40 shadow-xs'
               : 'text-[#94A3B8] hover:text-[#F8FAFC]'
           }`}
         >
-          <Briefcase className="w-4 h-4" />
+          <Briefcase className="w-4 h-4 shrink-0" />
           <span>{getTrackerText('workTab', language)} ({workLogs.length})</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('life')}
-          className={`py-2 px-4 rounded-xl font-bold text-[13.5px] sm:text-[14px] flex items-center gap-2 transition-all cursor-pointer ${
+          className={`flex-1 sm:flex-initial justify-center py-2 px-3 sm:px-4 rounded-xl font-bold text-[12.5px] sm:text-[14px] flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'life'
               ? 'bg-[var(--theme-card,#132438)] text-[var(--theme-secondary,#FFC700)] border border-[var(--theme-secondary,#FFC700)]/40 shadow-xs'
               : 'text-[#94A3B8] hover:text-[#F8FAFC]'
           }`}
         >
-          <BookOpen className="w-4 h-4" />
+          <BookOpen className="w-4 h-4 shrink-0" />
           <span>{getTrackerText('lifeTab', language)} ({dailyLifeLogs.length})</span>
         </button>
       </div>
