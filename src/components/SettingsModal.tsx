@@ -974,7 +974,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </span>
                   </div>
                   <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
-                    v2.3.0 (Production)
+                    v2.4.0 (Production)
                   </span>
                 </div>
 

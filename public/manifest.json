@@ -18,7 +18,7 @@
   "note_taking": {
     "new_note_url": "/add"
   },
-  "background_color": "#070E18",
+  "background_color": "#060606",
   "theme_color": "#070E18",
   "orientation": "portrait-primary",
   "dir": "ltr",
@@ -123,12 +123,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
-    },
-    {
-      "src": "/daily-Khata-Pro.png",
-      "sizes": "1254x1254",
-      "type": "image/png",
-      "purpose": "any"
     }
   ],
   "shortcuts": [
