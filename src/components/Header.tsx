@@ -39,7 +39,8 @@ import {
   Bug,
   Lightbulb,
   HelpCircle,
-  Sparkles
+  Sparkles,
+  RotateCcw
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -108,6 +109,26 @@ export const Header: React.FC<HeaderProps> = ({
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isLayoutMenuOpen, setIsLayoutMenuOpen] = useState(false);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [isUpdatingApp, setIsUpdatingApp] = useState(false);
+
+  const handleForceUpdateApp = async () => {
+    setIsUpdatingApp(true);
+    setTimeout(async () => {
+      try {
+        if (typeof (window as unknown as { __DAILY_KHATA_FORCE_REFRESH__?: () => Promise<void> }).__DAILY_KHATA_FORCE_REFRESH__ === 'function') {
+          await (window as unknown as { __DAILY_KHATA_FORCE_REFRESH__: () => Promise<void> }).__DAILY_KHATA_FORCE_REFRESH__();
+        } else {
+          if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          }
+          window.location.reload();
+        }
+      } catch {
+        window.location.reload();
+      }
+    }, 450);
+  };
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const tr = getAppTranslation((language as AppLanguage) || 'en');
@@ -558,6 +579,28 @@ export const Header: React.FC<HeaderProps> = ({
                               <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                               <span>{tr.menu.userManualGuide}</span>
                             </button>
+
+                            {/* App Version Update */}
+                            <button
+                              type="button"
+                              onClick={handleForceUpdateApp}
+                              disabled={isUpdatingApp}
+                              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left disabled:opacity-60"
+                              title={isHindi ? 'नया वर्शन चेक व रीफ्रेश करें' : 'Check for Latest App Version & Refresh Cache'}
+                              id="header-app-version-update-mobile-btn"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <RotateCcw className={`w-4 h-4 text-[#10B981] shrink-0 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                                <span>
+                                  {isUpdatingApp
+                                    ? (isHindi ? 'अपडेट हो रहा है...' : 'Updating...')
+                                    : (isHindi ? 'ऐप वर्शन व अपडेट' : 'App Version & Update')}
+                                </span>
+                              </div>
+                              <span className="text-[9.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full border border-[#10B981]/30">
+                                v2.4.0
+                              </span>
+                            </button>
                           </div>
 
                           {/* Category: Theme & Language */}
@@ -919,6 +962,28 @@ export const Header: React.FC<HeaderProps> = ({
                     >
                       <BookOpen className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                       <span>{tr.menu.userManualGuide}</span>
+                    </button>
+
+                    {/* App Version Update */}
+                    <button
+                      type="button"
+                      onClick={handleForceUpdateApp}
+                      disabled={isUpdatingApp}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left disabled:opacity-60"
+                      title={isHindi ? 'नया वर्शन चेक व रीफ्रेश करें' : 'Check for Latest App Version & Refresh Cache'}
+                      id="header-app-version-update-desktop-btn"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <RotateCcw className={`w-4 h-4 text-[#10B981] shrink-0 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                        <span>
+                          {isUpdatingApp
+                            ? (isHindi ? 'अपडेट हो रहा है...' : 'Updating...')
+                            : (isHindi ? 'ऐप वर्शन व अपडेट' : 'App Version & Update')}
+                        </span>
+                      </div>
+                      <span className="text-[9.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full border border-[#10B981]/30">
+                        v2.4.0
+                      </span>
                     </button>
                   </div>
 
