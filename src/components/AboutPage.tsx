@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { getPageTranslation } from '../utils/pageTranslations';
+import { APP_RELEASE_LABEL } from '../utils/version';
 
 interface AboutPageProps {
   onBack: () => void;
@@ -75,7 +76,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           <div className="space-y-1.5 min-w-0">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 text-[11px] font-mono font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Official Release v1.0 • 100% Offline &amp; Private</span>
+              <span>{APP_RELEASE_LABEL}</span>
             </div>
             <h1 className="font-serif-display text-[24px] sm:text-[30px] font-bold text-[#F8FAFC] tracking-tight">
               {t.title}

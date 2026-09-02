@@ -56,6 +56,7 @@ import { ConfirmModal } from './ConfirmModal';
 import { HasVoltLogo } from './HasVoltLogo';
 import { TRANSLATIONS } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
+import { APP_VERSION_FULL, APP_VERSION_FOOTER } from '../utils/version';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -974,7 +975,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </span>
                   </div>
                   <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
-                    v2.4.0 (Production)
+                    {APP_VERSION_FULL}
                   </span>
                 </div>
 
@@ -1325,7 +1326,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               <div className="pt-2 text-[11.5px] text-[#94A3B8] border-t border-[var(--theme-border,#213E61)]">
-                Version 3.0.0 · Production Ready · Offline First · Free Open Source
+                {APP_VERSION_FOOTER}
               </div>
             </div>
           )}

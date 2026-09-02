@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { HasVoltLogo } from './HasVoltLogo';
 import { AppLanguage } from '../types';
+import { APP_VERSION_TAG } from '../utils/version';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: Array<string>;
@@ -446,7 +447,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                 <div>
                   <div className="font-bold text-[15px] text-[#F8FAFC] flex items-center gap-2">
                     <span>Daily Khata Pro</span>
-                    <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/30">v2.5</span>
+                    <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/30">{APP_VERSION_TAG}</span>
                   </div>
                   <div className="text-[12px] text-[#94A3B8] flex items-center gap-1.5 mt-0.5">
                     <WifiOff className="w-3.5 h-3.5 text-[#10B981]" />

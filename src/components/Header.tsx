@@ -47,6 +47,7 @@ import { HasVoltLogo } from './HasVoltLogo';
 import { AppTheme, AppLanguage, AppViewMode, AppLayout } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
+import { APP_VERSION_TAG } from '../utils/version';
 
 interface HeaderProps {
   currentTab?: NavTab;
@@ -598,7 +599,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 </span>
                               </div>
                               <span className="text-[9.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full border border-[#10B981]/30">
-                                v2.4.0
+                                {APP_VERSION_TAG}
                               </span>
                             </button>
                           </div>
@@ -982,7 +983,7 @@ export const Header: React.FC<HeaderProps> = ({
                         </span>
                       </div>
                       <span className="text-[9.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full border border-[#10B981]/30">
-                        v2.4.0
+                        {APP_VERSION_TAG}
                       </span>
                     </button>
                   </div>

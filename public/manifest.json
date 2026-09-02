@@ -18,8 +18,8 @@
   "note_taking": {
     "new_note_url": "/add"
   },
-  "background_color": "#060606",
-  "theme_color": "#070E18",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait-primary",
   "dir": "ltr",
   "lang": "en-IN",

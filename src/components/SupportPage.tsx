@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { HasVoltLogo } from './HasVoltLogo';
 import { AppLanguage } from '../types';
+import { APP_VERSION_TAG } from '../utils/version';
 
 export type SupportTab = 'help' | 'bug' | 'suggestion';
 
@@ -95,7 +96,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
     const ua = navigator.userAgent;
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
     const screenRes = `${window.innerWidth}x${window.innerHeight}`;
-    return `Daily Khata Pro v3.0 | ${isMobile ? 'Mobile' : 'Desktop'} | Screen: ${screenRes} | UA: ${ua.substring(0, 75)}...`;
+    return `Daily Khata Pro ${APP_VERSION_TAG} | ${isMobile ? 'Mobile' : 'Desktop'} | Screen: ${screenRes} | UA: ${ua.substring(0, 75)}...`;
   };
 
   // 1. Email Handler strictly using daily-Khata-Pro@gmail.com
