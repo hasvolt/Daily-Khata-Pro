@@ -18,7 +18,9 @@ import {
   Globe,
   FileCode,
   Sparkles,
-  Info
+  Info,
+  Database,
+  ArrowUpRight
 } from 'lucide-react';
 import { HasVoltLogo } from './HasVoltLogo';
 import { AppLanguage } from '../types';
@@ -55,6 +57,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
   const [isCopied, setIsCopied] = useState(false);
   const [isIframe, setIsIframe] = useState(false);
   const [downloadingOffline, setDownloadingOffline] = useState(false);
+  const [downloadingBackup, setDownloadingBackup] = useState(false);
   const [installStatusMsg, setInstallStatusMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -96,7 +99,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
         const choice = await promptEvent.userChoice;
         if (choice.outcome === 'accepted') {
           setInstallSuccess(true);
-          setInstallStatusMsg(isHindi ? 'ऐप सफलतापूर्वक इंस्टॉल हो गया!' : 'App successfully added to your home screen!');
+          setInstallStatusMsg(isHindi ? 'Daily Khata Pro सफलतापूर्वक इंस्टॉल हो गया!' : 'Daily Khata Pro added to your home screen!');
           setTimeout(() => {
             onClose();
           }, 2500);
@@ -145,7 +148,8 @@ export const InstallModal: React.FC<InstallModalProps> = ({
     try {
       await navigator.clipboard.writeText(window.location.href);
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      setInstallStatusMsg(isHindi ? 'ऐप लिंक सफलतापूर्वक कॉपी हो गया!' : 'App link copied to clipboard!');
+      setTimeout(() => setIsCopied(false), 2500);
     } catch {
       // Fallback copy
       const input = document.createElement('input');
@@ -155,50 +159,242 @@ export const InstallModal: React.FC<InstallModalProps> = ({
       document.execCommand('copy');
       document.body.removeChild(input);
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      setInstallStatusMsg(isHindi ? 'ऐप लिंक सफलतापूर्वक कॉपी हो गया!' : 'App link copied to clipboard!');
+      setTimeout(() => setIsCopied(false), 2500);
     }
   };
 
-  const handleDownloadOfflineHTML = () => {
-    setDownloadingOffline(true);
+  // Export full JSON backup of all khata transactions and funds
+  const handleExportDataBackup = () => {
+    setDownloadingBackup(true);
     try {
-      const offlineDoc = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Khata Pro - Offline App Launcher</title>
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; background: #070E18; color: #F8FAFC; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-    .card { background: #132438; border: 1px solid #213E61; border-radius: 16px; padding: 32px; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-    h1 { font-size: 24px; margin-bottom: 8px; color: #38BDF8; }
-    p { color: #94A3B8; font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #38BDF8; color: #040D17; font-weight: bold; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-size: 15px; margin: 6px; }
-    .btn:hover { filter: brightness(1.1); }
-    .btn-secondary { background: #1E293B; color: #F8FAFC; border: 1px solid #334155; }
-    .badge { display: inline-block; background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 16px; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="badge">OFFLINE BACKUP LAUNCHER</div>
-    <h1>Daily Khata Pro</h1>
-    <p>Professional Universal Daily Income & Expense Tracker with 6-Fund System, Deliverables, Goals & Ledger.</p>
-    <a href="${window.location.href}" class="btn">🚀 Open Full Web App</a>
-    <p style="margin-top: 20px; font-size: 12px; color: #64748B;">For full offline access, add this page to your mobile home screen via browser menu.</p>
-  </div>
-</body>
-</html>`;
-      const blob = new Blob([offlineDoc], { type: 'text/html;charset=utf-8' });
+      const allData: Record<string, unknown> = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith('daily_khata') || key.startsWith('khata_') || key.includes('khata'))) {
+          try {
+            allData[key] = JSON.parse(localStorage.getItem(key) || '{}');
+          } catch {
+            allData[key] = localStorage.getItem(key);
+          }
+        }
+      }
+      const dataStr = JSON.stringify(allData, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Daily-Khata-Pro-Offline-Launcher-${new Date().toISOString().slice(0, 10)}.html`;
+      link.download = `Daily-Khata-Pro-Backup-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      setInstallStatusMsg(isHindi ? 'ऑफलाइन HTML लॉन्चर डाउनलोड हो गया!' : 'Offline HTML Launcher downloaded successfully!');
+      setInstallStatusMsg(isHindi ? 'सभी खाता डेटा का JSON बैकअप डाउनलोड हो गया!' : 'All Khata Data JSON backup downloaded successfully!');
+    } catch (err) {
+      console.error('Backup error:', err);
+    } finally {
+      setTimeout(() => setDownloadingBackup(false), 1200);
+    }
+  };
+
+  // 100% Functional Standalone Single-File Offline Khata Application HTML
+  const handleDownloadOfflineHTML = () => {
+    setDownloadingOffline(true);
+    try {
+      const currentUrl = window.location.href;
+      const offlineDoc = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Daily Khata Pro - Offline Edition</title>
+  <meta name="theme-color" content="#070E18" />
+  <style>
+    :root {
+      --bg: #070E18;
+      --surface: #0E1A29;
+      --card: #132438;
+      --border: #213E61;
+      --primary: #38BDF8;
+      --text: #F8FAFC;
+      --text-dim: #94A3B8;
+      --green: #10B981;
+      --red: #EF4444;
+      --gold: #F59E0B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; min-height: 100vh; }
+    .container { max-width: 680px; margin: 0 auto; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo-box { width: 42px; height: 42px; background: #0A1624; border: 2px solid var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; color: var(--gold); }
+    h1 { font-size: 18px; font-weight: 800; color: #fff; }
+    .tagline { font-size: 12px; color: var(--primary); font-weight: 600; }
+    .badge { font-size: 10px; font-weight: 800; background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
+    .stat-label { font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
+    .stat-val { font-size: 18px; font-weight: 800; }
+    .stat-income { color: var(--green); }
+    .stat-expense { color: var(--red); }
+    .stat-net { color: var(--primary); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
+    .card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    label { font-size: 12px; font-weight: 600; color: var(--text-dim); }
+    input, select { width: 100%; padding: 10px 14px; background: #070E18; border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 14px; outline: none; }
+    input:focus, select:focus { border-color: var(--primary); }
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .btn { padding: 12px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.15s; }
+    .btn-income { background: var(--green); color: #04140D; }
+    .btn-expense { background: var(--red); color: #fff; }
+    .btn-sync { width: 100%; background: var(--primary); color: #040D17; margin-top: 12px; text-decoration: none; display: flex; justify-content: center; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 14px; }
+    .tx-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .tx-desc { font-weight: 600; font-size: 13.5px; color: #fff; }
+    .tx-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .tx-amount { font-weight: 800; font-size: 15px; }
+    .funds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+    .fund-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px; text-align: center; }
+    .fund-name { font-size: 10px; font-weight: 700; color: var(--text-dim); }
+    .fund-amt { font-size: 13px; font-weight: 800; color: var(--gold); margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-box">₹</div>
+        <div>
+          <h1>Daily Khata Pro</h1>
+          <div class="tagline">Income & Expense Tracker (100% Offline)</div>
+        </div>
+      </div>
+      <div class="badge">Offline Active</div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Income</div>
+        <div class="stat-val stat-income" id="totalIncome">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Expense</div>
+        <div class="stat-val stat-expense" id="totalExpense">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Net Balance</div>
+        <div class="stat-val stat-net" id="netBalance">₹0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Add Daily Transaction</div>
+      <div class="form-group">
+        <label>Amount (₹)</label>
+        <input type="number" id="txAmount" placeholder="e.g. 500" />
+      </div>
+      <div class="form-group">
+        <label>Title / Description</label>
+        <input type="text" id="txTitle" placeholder="e.g. Client Payment, Groceries, Fuel" />
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="txCategory">
+          <option value="General">General Income / Expense</option>
+          <option value="Client Payment">Client / Customer Payment</option>
+          <option value="Salary">Salary / Wage</option>
+          <option value="Food & Ration">Food, Groceries & Ration</option>
+          <option value="Shop Supplies">Shop / Business Supplies</option>
+          <option value="Bills & Rent">Electricity, Rent & Utilities</option>
+          <option value="Fuel & Transport">Fuel, Travel & Commute</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-income" onclick="addTx('income')">+ Add Income</button>
+        <button class="btn btn-expense" onclick="addTx('expense')">- Add Expense</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">6-Fund Money Split (Auto-Calculated)</div>
+      <div class="funds-grid">
+        <div class="fund-box"><div class="fund-name">Necessity (55%)</div><div class="fund-amt" id="fundNec">₹0</div></div>
+        <div class="fund-box"><div class="fund-name">Emergency (10%)</div><div class="fund-amt" id="fundEmg">₹0</div></div>
+        <div class="fund-box"><div class="fund-name">Investment (10%)</div><div class="fund-amt" id="fundInv">₹0</div></div>
+        <div class="fund-box"><div class="fund-name">Education (10%)</div><div class="fund-amt" id="fundEdu">₹0</div></div>
+        <div class="fund-box"><div class="fund-name">Play & Life (10%)</div><div class="fund-amt" id="fundPlay">₹0</div></div>
+        <div class="fund-box"><div class="fund-name">Give / Charity (5%)</div><div class="fund-amt" id="fundGive">₹0</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recent Transactions</div>
+      <div id="txList"></div>
+    </div>
+
+    <a href="${currentUrl}" class="btn-sync">🚀 Open Live Web App &amp; Sync Full Cloud</a>
+  </div>
+
+  <script>
+    let transactions = JSON.parse(localStorage.getItem('offline_khata_txs') || '[]');
+    function render() {
+      let inc = 0, exp = 0;
+      const list = document.getElementById('txList');
+      list.innerHTML = '';
+      if (transactions.length === 0) {
+        list.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-dim); font-size: 13px;">No offline transactions recorded yet.</div>';
+      } else {
+        transactions.slice().reverse().forEach((t) => {
+          if (t.type === 'income') inc += t.amount; else exp += t.amount;
+          const row = document.createElement('div');
+          row.className = 'tx-item';
+          row.innerHTML = '<div><div class="tx-desc">' + (t.title || 'Untitled') + '</div><div class="tx-meta">' + t.category + ' • ' + t.date + '</div></div><div class="tx-amount ' + (t.type === 'income' ? 'stat-income' : 'stat-expense') + '">' + (t.type === 'income' ? '+' : '-') + '₹' + t.amount.toLocaleString() + '</div>';
+          list.appendChild(row);
+        });
+      }
+      document.getElementById('totalIncome').innerText = '₹' + inc.toLocaleString();
+      document.getElementById('totalExpense').innerText = '₹' + exp.toLocaleString();
+      document.getElementById('netBalance').innerText = '₹' + (inc - exp).toLocaleString();
+      document.getElementById('fundNec').innerText = '₹' + Math.round(inc * 0.55).toLocaleString();
+      document.getElementById('fundEmg').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundInv').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundEdu').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundPlay').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundGive').innerText = '₹' + Math.round(inc * 0.05).toLocaleString();
+    }
+    function addTx(type) {
+      const amt = parseFloat(document.getElementById('txAmount').value);
+      const title = document.getElementById('txTitle').value.trim();
+      const cat = document.getElementById('txCategory').value;
+      if (!amt || amt <= 0) { alert('Please enter a valid amount'); return; }
+      transactions.push({
+        id: Date.now(),
+        type: type,
+        amount: amt,
+        title: title || (type === 'income' ? 'Daily Income' : 'Daily Expense'),
+        category: cat,
+        date: new Date().toLocaleDateString()
+      });
+      localStorage.setItem('offline_khata_txs', JSON.stringify(transactions));
+      document.getElementById('txAmount').value = '';
+      document.getElementById('txTitle').value = '';
+      render();
+    }
+    render();
+  </script>
+</body>
+</html>`;
+
+      const blob = new Blob([offlineDoc], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Daily-Khata-Pro-Offline-App-${new Date().toISOString().slice(0, 10)}.html`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setInstallStatusMsg(isHindi ? 'ऑफलाइन HTML ऐप सफलतापूर्वक डाउनलोड हो गया!' : 'Standalone Offline App HTML downloaded successfully!');
     } catch (err) {
       console.error('Download error:', err);
     } finally {
@@ -214,11 +410,11 @@ export const InstallModal: React.FC<InstallModalProps> = ({
         {/* Header */}
         <div className="px-5 py-4 border-b border-[var(--theme-border,#213E61)] flex justify-between items-center bg-[var(--theme-surface,#0E1A29)] shrink-0">
           <div className="flex items-center gap-3">
-            <HasVoltLogo size={36} />
+            <HasVoltLogo size={38} />
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-serif-display text-[17px] font-bold text-[#F8FAFC]">
-                  {isHindi ? 'ऐप इंस्टॉल / डाउनलोड करें' : 'Install & Download App'}
+                  {isHindi ? 'Daily Khata Pro इंस्टॉल / डाउनलोड करें' : 'Install & Download Daily Khata Pro'}
                 </h2>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
                   OFFLINE PWA
@@ -249,8 +445,8 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                 </div>
                 <div>
                   <div className="font-bold text-[15px] text-[#F8FAFC] flex items-center gap-2">
-                    <span>{isHindi ? 'डेली खाता: प्रो PWA' : 'Daily Khata: Pro App'}</span>
-                    <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/30">v2.4</span>
+                    <span>Daily Khata Pro</span>
+                    <span className="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/30">v2.5</span>
                   </div>
                   <div className="text-[12px] text-[#94A3B8] flex items-center gap-1.5 mt-0.5">
                     <WifiOff className="w-3.5 h-3.5 text-[#10B981]" />
@@ -263,7 +459,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
               {isInstalled ? (
                 <div className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#10B981]/20 border border-[#10B981]/40 text-[#10B981] font-bold text-[13px] flex items-center justify-center gap-1.5 shrink-0">
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>{isHindi ? 'इंस्टॉल हो चुका है' : 'Already Installed'}</span>
+                  <span>{isHindi ? 'होम स्क्रीन पर इंस्टॉल है' : 'Installed on Device'}</span>
                 </div>
               ) : installSuccess ? (
                 <div className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#10B981] text-[#04140D] font-bold text-[13px] flex items-center justify-center gap-1.5 shrink-0 animate-in fade-in">
@@ -277,7 +473,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                   className="w-full sm:w-auto px-5 py-3 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#040D17] font-extrabold text-[13.5px] flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer shrink-0"
                 >
                   <HardDriveDownload className="w-4.5 h-4.5" />
-                  <span>{hasNativePrompt ? (isHindi ? 'अभी इंस्टॉल करें' : 'Install App Now') : (isHindi ? 'इंस्टॉल / होम स्क्रीन' : 'Install / Add to Home')}</span>
+                  <span>{hasNativePrompt ? (isHindi ? 'होम स्क्रीन पर इंस्टॉल करें' : 'Install App Now') : (isHindi ? 'होम स्क्रीन पर जोड़ें' : 'Add to Home Screen')}</span>
                 </button>
               )}
             </div>
@@ -309,14 +505,14 @@ export const InstallModal: React.FC<InstallModalProps> = ({
             )}
           </div>
 
-          {/* Quick Utility Downloads (Offline HTML & Copy Link) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {/* Quick Utility Downloads (Offline HTML, Backup JSON, Launch Tab & Copy Link) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
               type="button"
               onClick={handleOpenInNewTab}
-              className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[12px] font-semibold text-[#F8FAFC] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[12px] font-semibold text-[#F8FAFC] flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-center"
             >
-              <Globe className="w-3.5 h-3.5 text-[#38BDF8]" />
+              <Globe className="w-4 h-4 text-[#38BDF8]" />
               <span>{isHindi ? 'नये टैब में खोलें' : 'Launch Full Tab'}</span>
             </button>
 
@@ -324,19 +520,29 @@ export const InstallModal: React.FC<InstallModalProps> = ({
               type="button"
               onClick={handleDownloadOfflineHTML}
               disabled={downloadingOffline}
-              className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[12px] font-semibold text-[#F8FAFC] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[12px] font-semibold text-[#F8FAFC] flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-center"
             >
-              <FileCode className="w-3.5 h-3.5 text-[#10B981]" />
-              <span>{downloadingOffline ? (isHindi ? 'डाउनलोड हो रहा...' : 'Downloading...') : (isHindi ? 'ऑफलाइन HTML फाइल' : 'Download Offline App')}</span>
+              <FileCode className="w-4 h-4 text-[#10B981]" />
+              <span>{downloadingOffline ? (isHindi ? 'डाउनलोडिंग...' : 'Saving...') : (isHindi ? 'ऑफलाइन HTML ऐप' : 'Download Offline App')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleExportDataBackup}
+              disabled={downloadingBackup}
+              className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#A855F7] text-[12px] font-semibold text-[#F8FAFC] flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-center"
+            >
+              <Database className="w-4 h-4 text-[#A855F7]" />
+              <span>{downloadingBackup ? (isHindi ? 'डाउनलोडिंग...' : 'Exporting...') : (isHindi ? 'डेटा बैकअप (JSON)' : 'Data Backup (JSON)')}</span>
             </button>
 
             <button
               type="button"
               onClick={handleCopyLink}
-              className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#F59E0B] text-[12px] font-semibold text-[#F8FAFC] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#F59E0B] text-[12px] font-semibold text-[#F8FAFC] flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-center"
             >
-              {isCopied ? <Check className="w-3.5 h-3.5 text-[#10B981]" /> : <Copy className="w-3.5 h-3.5 text-[#F59E0B]" />}
-              <span>{isCopied ? (isHindi ? 'लिंक कॉपी हो गया!' : 'Link Copied!') : (isHindi ? 'ऐप लिंक कॉपी करें' : 'Copy App Link')}</span>
+              {isCopied ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4 text-[#F59E0B]" />}
+              <span>{isCopied ? (isHindi ? 'कॉपी हो गया!' : 'Copied!') : (isHindi ? 'ऐप लिंक कॉपी' : 'Copy App Link')}</span>
             </button>
           </div>
 
@@ -344,7 +550,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
           <div className="space-y-3 pt-1">
             <div className="flex items-center justify-between">
               <span className="text-[11px] uppercase tracking-wider font-bold text-[#94A3B8]">
-                {isHindi ? 'अपने डिवाइस के अनुसार 3-स्टेप गाइड देखें:' : 'Step-by-Step Device Guide:'}
+                {isHindi ? 'डिवाइस अनुसार होम स्क्रीन पर जोड़ने का तरीका:' : 'Device-Specific Add to Home Screen Guide:'}
               </span>
             </div>
 
@@ -406,7 +612,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                     </span>
                     <span>
                       {isHindi ? (
-                        <>ऊपर दिए गए <strong className="text-[#F8FAFC]">"अभी इंस्टॉल करें"</strong> बटन को दबाएं, या Chrome ब्राउज़र में ऊपर दाएं कोने पर <strong>3 डॉट्स (⋮)</strong> मेनू खोलें।</>
+                        <>ऊपर दिए गए <strong className="text-[#F8FAFC]">"होम स्क्रीन पर इंस्टॉल करें"</strong> बटन को दबाएं, या Chrome में ऊपर दाएं कोने पर <strong>3 डॉट्स (⋮)</strong> मेनू खोलें।</>
                       ) : (
                         <>Tap the <strong className="text-[#F8FAFC]">"Install App Now"</strong> button above, or tap the top-right <strong>3 dots (⋮)</strong> menu in Chrome.</>
                       )}
@@ -432,9 +638,9 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                     </span>
                     <span>
                       {isHindi ? (
-                        <><strong className="text-[#10B981]">"Install"</strong> पर कन्फर्म करें। ऐप का आइकन तुरंत आपके फोन की होम स्क्रीन पर आ जाएगा और फुलस्क्रीन खुलेगा!</>
+                        <><strong className="text-[#10B981]">"Install"</strong> पर कन्फर्म करें। ऐप का नाम <strong className="text-[#F8FAFC]">"Daily Khata Pro"</strong> आपके फोन की होम स्क्रीन पर आ जाएगा!</>
                       ) : (
-                        <>Confirm <strong className="text-[#10B981]">"Install"</strong>. The Daily Khata icon will appear on your phone screen and open in full-screen standalone mode!</>
+                        <>Confirm <strong className="text-[#10B981]">"Install"</strong>. The app will be added as <strong className="text-[#F8FAFC]">"Daily Khata Pro"</strong> on your phone screen!</>
                       )}
                     </span>
                   </div>
@@ -485,9 +691,9 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                     </span>
                     <span>
                       {isHindi ? (
-                        <>ऊपर दाएं कोने में <strong className="text-[#10B981]">"Add"</strong> दबाएं। अब ऐप आपके iPhone पर बिना इंटरनेट के भी सुपरफास्ट चलेगा!</>
+                        <>ऊपर दाएं कोने में <strong className="text-[#10B981]">"Add"</strong> दबाएं। Daily Khata Pro अब आपके iPhone पर बिना इंटरनेट के भी सुपरफास्ट चलेगा!</>
                       ) : (
-                        <>Tap <strong className="text-[#10B981]">"Add"</strong> in the top right corner. Daily Khata is now installed on your iOS home screen!</>
+                        <>Tap <strong className="text-[#10B981]">"Add"</strong> in the top right corner. Daily Khata Pro is now installed on your iOS home screen!</>
                       )}
                     </span>
                   </div>
@@ -527,7 +733,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                       {isHindi ? (
                         <><strong className="text-[#10B981]">"Install"</strong> पर क्लिक करें। यह आपके कंप्यूटर पर एक अलग नेटिव डेस्कटॉप ऐप की तरह खुल जाएगा!</>
                       ) : (
-                        <>Click <strong className="text-[#10B981]">"Install"</strong>. Daily Khata will now run as a standalone desktop app with its own taskbar shortcut!</>
+                        <>Click <strong className="text-[#10B981]">"Install"</strong>. Daily Khata Pro will now run as a standalone desktop app with its own taskbar shortcut!</>
                       )}
                     </span>
                   </div>
@@ -539,7 +745,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
           {/* Benefits Grid */}
           <div className="space-y-2 pt-1">
             <span className="text-[11px] uppercase tracking-wider font-bold text-[#94A3B8]">
-              {isHindi ? 'ऐप इंस्टॉल करने के खास फायदे:' : 'Key App Features & Offline Benefits:'}
+              {isHindi ? 'Daily Khata Pro की मुख्य विशेषताएं:' : 'Daily Khata Pro Key Features & Benefits:'}
             </span>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -557,17 +763,15 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-start gap-2.5">
-                <div className="p-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] shrink-0 mt-0.5">
-                  <Zap className="w-4 h-4" />
+              <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] shrink-0 mt-0.5">
+                <Zap className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="font-bold text-[12.5px] text-[#F8FAFC]">
+                  {isHindi ? 'सुपरफास्ट स्पीड' : 'Instant Launch'}
                 </div>
-                <div>
-                  <div className="font-bold text-[12.5px] text-[#F8FAFC]">
-                    {isHindi ? 'सुपरफास्ट स्पीड' : 'Instant Launch'}
-                  </div>
-                  <div className="text-[11px] text-[#94A3B8]">
-                    {isHindi ? 'सीधे फुलस्क्रीन ऐप की तरह खुलता है' : 'Opens immediately from home screen in fullscreen'}
-                  </div>
+                <div className="text-[11px] text-[#94A3B8]">
+                  {isHindi ? 'सीधे फुलस्क्रीन ऐप की तरह खुलता है' : 'Opens immediately from home screen in fullscreen'}
                 </div>
               </div>
 
@@ -591,10 +795,10 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                 </div>
                 <div>
                   <div className="font-bold text-[12.5px] text-[#F8FAFC]">
-                    {isHindi ? 'हमेशा फ्री और नो ऐड्स' : 'Free Forever & No Ads'}
+                    {isHindi ? '6-फंड सिस्टम और कोई ऐड्स नहीं' : '6-Fund Rule & Zero Ads'}
                   </div>
                   <div className="text-[11px] text-[#94A3B8]">
-                    {isHindi ? 'कोई सब्सक्रिप्शन या छुपा शुल्क नहीं' : 'No subscription fees, 6-fund system included'}
+                    {isHindi ? 'बिना किसी शुल्क या रुकावट के पूरा खाता बही' : 'Automated 55/10/10/10/10/5 money allocation'}
                   </div>
                 </div>
               </div>
@@ -606,7 +810,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
         <div className="px-5 py-3.5 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-between shrink-0">
           <div className="text-[11px] text-[#94A3B8] flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-            <span>{isHindi ? 'PWA सर्विस वर्कर सक्रिय' : 'PWA Service Worker Active'}</span>
+            <span>{isHindi ? 'PWA सर्विस वर्कर एक्टिव' : 'PWA Service Worker Active'}</span>
           </div>
 
           <button

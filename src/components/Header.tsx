@@ -202,11 +202,11 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center gap-1 sm:gap-1.5">
               <span
                 onClick={() => onSelectTab && onSelectTab('home')}
-                className="font-serif-display font-bold text-[15px] sm:text-[20px] tracking-tight cursor-pointer transition-colors truncate"
+                className="font-serif-display font-bold text-[15px] sm:text-[19px] tracking-tight cursor-pointer transition-colors truncate"
               >
                 <span className="text-[#FFFFFF]">Daily</span>
-                <span className="ml-0.5 sm:ml-1" style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span>
-                <span className="text-[#F8FAFC]">: Pro</span>
+                <span className="ml-1" style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span>
+                <span className="text-[#F8FAFC] ml-1">Pro</span>
               </span>
               <span
                 className="hidden md:inline-block text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded border transition-colors"
@@ -219,12 +219,12 @@ export const Header: React.FC<HeaderProps> = ({
                 OFFICIAL
               </span>
             </div>
-            <div className="text-[9px] sm:text-[11.5px] text-[#94A3B8] hidden xs:flex items-center gap-1 font-medium truncate">
+            <div className="text-[9.5px] sm:text-[11px] text-[#94A3B8] flex items-center gap-1 font-medium truncate leading-tight mt-0.5">
               <span
-                className="font-bold truncate transition-colors"
+                className="font-semibold truncate transition-colors"
                 style={{ color: 'var(--theme-primary, #38BDF8)' }}
               >
-                {tr.menu.dailyIncomeExpense}
+                Income &amp; Expense Tracker
               </span>
               <span className="text-[#475569] mx-0.5 hidden sm:inline">•</span>
               <span className="text-[#94A3B8] hidden sm:inline truncate">{tr.menu.sixFundLedger}</span>

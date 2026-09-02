@@ -4,7 +4,7 @@
  * Comprehensive PWA Offline Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.1.0';
+const CACHE_NAME = 'daily-khata-pro-v2.2.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -16,9 +16,13 @@ const STATIC_ASSETS = [
   '/icons/icon-512x512.png',
   '/icons/icon-maskable-192x192.png',
   '/icons/icon-maskable-512x512.png',
+  '/favicon.png',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
+  '/favicon.ico',
+  '/apple-touch-icon.png',
   '/screenshots/screenshot-desktop.png',
   '/screenshots/screenshot-mobile.png',
-  '/favicon.svg',
   '/ads.txt',
   '/robots.txt',
   '/sitemap.xml'

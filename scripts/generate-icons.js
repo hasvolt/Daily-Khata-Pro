@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
+
+const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
   <defs>
     <!-- Background Gradient -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -132,4 +136,36 @@
 
   <!-- 6. Golden Star / Sparkle in Top-Left (Pro / Wealth Badge) -->
   <path d="M80 68 Q92 80 104 80 Q92 80 80 92 Q80 80 68 80 Q80 80 80 68 Z" fill="url(#goldMetallic)"/>
-</svg>
+</svg>`;
+
+async function generateAllIcons() {
+  console.log('Generating high-res SVG & PNG icons...');
+  const publicDir = path.resolve('public');
+  const iconsDir = path.resolve('public/icons');
+
+  if (!fs.existsSync(iconsDir)) {
+    fs.mkdirSync(iconsDir, { recursive: true });
+  }
+
+  // 1. Write public/favicon.svg
+  fs.writeFileSync(path.join(publicDir, 'favicon.svg'), svgIcon);
+
+  const svgBuffer = Buffer.from(svgIcon);
+
+  // 2. Generate 512x512 PNGs
+  await sharp(svgBuffer).resize(512, 512).png().toFile(path.join(publicDir, 'icon-512.png'));
+  await sharp(svgBuffer).resize(512, 512).png().toFile(path.join(publicDir, 'daily-Khata-Pro.png'));
+  await sharp(svgBuffer).resize(512, 512).png().toFile(path.join(iconsDir, 'icon-512x512.png'));
+  await sharp(svgBuffer).resize(512, 512).png().toFile(path.join(iconsDir, 'icon-maskable-512x512.png'));
+
+  // 3. Generate 192x192 PNGs
+  await sharp(svgBuffer).resize(192, 192).png().toFile(path.join(publicDir, 'icon-192.png'));
+  await sharp(svgBuffer).resize(192, 192).png().toFile(path.join(iconsDir, 'icon-192x192.png'));
+  await sharp(svgBuffer).resize(192, 192).png().toFile(path.join(iconsDir, 'icon-maskable-192x192.png'));
+
+  console.log('✅ All icons generated successfully!');
+}
+
+generateAllIcons().catch(err => {
+  console.error('Error generating icons:', err);
+});
