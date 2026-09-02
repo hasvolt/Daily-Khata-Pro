@@ -7,47 +7,52 @@ interface HasVoltLogoProps {
 }
 
 export const HasVoltLogo: React.FC<HasVoltLogoProps> = ({
-  size = 36,
+  size = 32,
   className = '',
   showText = false
 }) => {
   const [imageError, setImageError] = useState(false);
 
   // Normalize sizing whether number or preset like 'sm'
-  let pixelSize = 36;
+  let pixelSize = 32;
   if (typeof size === 'number') {
     pixelSize = size;
   } else if (size === 'sm') {
-    pixelSize = 24;
+    pixelSize = 22;
   } else if (size === 'md') {
-    pixelSize = 36;
+    pixelSize = 32;
   } else if (size === 'lg') {
-    pixelSize = 48;
+    pixelSize = 42;
   } else {
-    pixelSize = parseInt(String(size), 10) || 36;
+    pixelSize = parseInt(String(size), 10) || 32;
   }
 
   const dimension = `${pixelSize}px`;
 
   return (
-    <div className={`inline-flex items-center gap-2.5 ${className}`}>
+    <div className={`inline-flex items-center gap-2 ${className}`}>
       {!imageError ? (
-        <img
-          src="/daily-Khata-Pro.png"
-          alt="Daily Khata Pro Logo"
-          width={pixelSize}
-          height={pixelSize}
-          style={{ width: dimension, height: dimension, objectFit: 'cover' }}
-          className="shrink-0 rounded-xl shadow-md select-none transition-transform hover:scale-105 border border-[#213E61]/60"
-          onError={() => setImageError(true)}
-          loading="eager"
-        />
+        <div
+          style={{ width: dimension, height: dimension }}
+          className="shrink-0 rounded-xl bg-[#060606] border border-[#213E61]/60 shadow-md flex items-center justify-center p-0.5 overflow-hidden transition-transform hover:scale-105 select-none"
+        >
+          <img
+            src="/daily-Khata-Pro.png"
+            alt="Daily Khata Pro Logo"
+            width={pixelSize}
+            height={pixelSize}
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            className="select-none block"
+            onError={() => setImageError(true)}
+            loading="eager"
+          />
+        </div>
       ) : (
         <div
           style={{ width: dimension, height: dimension }}
           className="shrink-0 rounded-xl bg-[#0E1A29] border border-[#38BDF8] flex items-center justify-center font-bold text-[#F59E0B] shadow-md select-none"
         >
-          <span style={{ fontSize: `${Math.max(12, Math.round(pixelSize * 0.45))}px` }}>₹</span>
+          <span style={{ fontSize: `${Math.max(11, Math.round(pixelSize * 0.45))}px` }}>₹</span>
         </div>
       )}
 

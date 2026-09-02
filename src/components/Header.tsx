@@ -191,10 +191,10 @@ export const Header: React.FC<HeaderProps> = ({
             className="cursor-pointer active:scale-95 transition-transform shrink-0"
           >
             <div className="sm:hidden">
-              <HasVoltLogo size={28} />
+              <HasVoltLogo size={26} />
             </div>
             <div className="hidden sm:block">
-              <HasVoltLogo size={36} />
+              <HasVoltLogo size={32} />
             </div>
           </div>
 

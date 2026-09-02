@@ -4,7 +4,7 @@
  * Comprehensive PWA Offline Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.2.0';
+const CACHE_NAME = 'daily-khata-pro-v2.3.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -200,4 +200,27 @@ self.addEventListener('notificationclick', (event) => {
       }
     })
   );
+});
+
+// 8. Communication Channel with Client App (Force Update & Cache Purge)
+self.addEventListener('message', (event) => {
+  if (!event.data) return;
+
+  // Immediate worker takeover when requested by client
+  if (event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+
+  // Force wipe all existing caches (called from Settings > App Update)
+  if (event.data.type === 'PURGE_CACHE') {
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(cacheNames.map((name) => caches.delete(name)));
+      }).then(() => {
+        if (event.source && event.source.postMessage) {
+          event.source.postMessage({ type: 'CACHE_PURGED_SUCCESS' });
+        }
+      })
+    );
+  }
 });

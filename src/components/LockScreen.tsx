@@ -200,7 +200,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
           <div className="flex justify-center">
             <div className="relative">
               <div className="w-16 h-16 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-center shadow-inner relative z-10">
-                <HasVoltLogo size={42} />
+                <HasVoltLogo size={36} />
               </div>
               <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] flex items-center justify-center shadow-md z-20">
                 <Lock className="w-3.5 h-3.5" />

@@ -139,6 +139,27 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [customIncomeSourceInput, setCustomIncomeSourceInput] = useState('');
   const [customWorkCategoryInput, setCustomWorkCategoryInput] = useState('');
   const [customLifeTagInput, setCustomLifeTagInput] = useState('');
+  const [isUpdatingApp, setIsUpdatingApp] = useState(false);
+
+  const handleForceUpdateApp = async () => {
+    setIsUpdatingApp(true);
+    showFeedback('success', isHindi ? 'कैश रिफ्रेश किया जा रहा है व नया वर्शन लोड हो रहा है...' : 'Refreshing cache and loading latest build...');
+    setTimeout(async () => {
+      try {
+        if (typeof (window as unknown as { __DAILY_KHATA_FORCE_REFRESH__?: () => Promise<void> }).__DAILY_KHATA_FORCE_REFRESH__ === 'function') {
+          await (window as unknown as { __DAILY_KHATA_FORCE_REFRESH__: () => Promise<void> }).__DAILY_KHATA_FORCE_REFRESH__();
+        } else {
+          if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          }
+          window.location.reload();
+        }
+      } catch {
+        window.location.reload();
+      }
+    }, 500);
+  };
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi';
@@ -941,6 +962,41 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <span>{isHindi ? 'सभी डेटा मिटाएं व रीसेट करें' : 'Wipe & Reset All Khata Data'}</span>
                   </button>
                 </div>
+              </div>
+
+              {/* PWA Cache Versioning & Instant Update */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
+                    <Sparkles className="w-4 h-4 text-[#10B981]" />
+                    <span className="font-bold text-[13.5px] text-[#F8FAFC]">
+                      {isHindi ? 'ऐप वर्शन व कैश कंट्रोल' : 'App Version & PWA Cache Control'}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
+                    v2.3.0 (Production)
+                  </span>
+                </div>
+
+                <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
+                  {isHindi
+                    ? 'GitHub या Vercel पर अपडेट होने पर नया वर्शन ऑटोमैटिक लोड होता है। यदि तुरंत नया लोगो, JS या CSS लोड करना हो, तो नीचे क्लिक करें।'
+                    : 'App automatically detects and installs latest updates on launch. Click below if you need an instant manual cache wipe & fresh asset reload.'}
+                </p>
+
+                <button
+                  type="button"
+                  onClick={handleForceUpdateApp}
+                  disabled={isUpdatingApp}
+                  className="w-full py-2.5 px-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-primary,#38BDF8)]/10 text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <RotateCcw className={`w-4 h-4 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                  <span>
+                    {isUpdatingApp
+                      ? (isHindi ? 'अपडेट किया जा रहा है...' : 'Refreshing...')
+                      : (isHindi ? 'नवीनतम वर्शन चेक करें व कैश रीसेट करें' : 'Check for Updates & Force Fresh Cache')}
+                  </span>
+                </button>
               </div>
             </div>
           )}

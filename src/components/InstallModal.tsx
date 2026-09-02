@@ -410,7 +410,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
         {/* Header */}
         <div className="px-5 py-4 border-b border-[var(--theme-border,#213E61)] flex justify-between items-center bg-[var(--theme-surface,#0E1A29)] shrink-0">
           <div className="flex items-center gap-3">
-            <HasVoltLogo size={38} />
+            <HasVoltLogo size={34} />
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-serif-display text-[17px] font-bold text-[#F8FAFC]">
