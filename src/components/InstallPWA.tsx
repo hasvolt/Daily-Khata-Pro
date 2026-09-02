@@ -39,11 +39,12 @@ export const InstallPWA: React.FC<InstallPWAProps> = ({
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (installPrompt) {
+    const promptEvent = installPrompt || (typeof window !== 'undefined' && (window as any).deferredPrompt);
+    if (promptEvent && typeof promptEvent.prompt === 'function') {
       try {
-        await installPrompt.prompt();
-        const choice = await installPrompt.userChoice;
-        if (choice.outcome === 'accepted') {
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        if (choice && choice.outcome === 'accepted') {
           setIsDismissed(true);
         }
       } catch {

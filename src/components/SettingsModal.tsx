@@ -501,6 +501,38 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </button>
               </div>
 
+              {/* Install & Download Offline App */}
+              {onOpenInstall && (
+                <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3">
+                  <div>
+                    <div className="flex items-center gap-2 font-bold text-[13.5px] text-[#F8FAFC]">
+                      <Download className="w-4 h-4 text-[#10B981]" />
+                      <span>{isHindi ? 'ऐप इंस्टॉल / डाउनलोड करें' : 'Install & Download App'}</span>
+                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
+                        100% Offline
+                      </span>
+                    </div>
+                    <p className="text-[11.5px] text-[#94A3B8]">
+                      {isHindi
+                        ? 'बिना इंटरनेट चलाने के लिए मोबाइल या कंप्यूटर की होम स्क्रीन पर जोड़ें या ऑफलाइन पैकेज लें।'
+                        : 'Add to mobile/desktop home screen or download offline launcher for zero-internet use.'}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenInstall();
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-[#10B981] text-[#04140D] font-extrabold text-[12px] hover:brightness-110 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>{isHindi ? 'इंस्टॉल' : 'Install'}</span>
+                  </button>
+                </div>
+              )}
+
               {/* Share Direct Page Links */}
               {onOpenShare && (
                 <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3">

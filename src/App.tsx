@@ -132,11 +132,21 @@ export default function App() {
   useEffect(() => {
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
+      (window as any).deferredPrompt = e;
       setInstallPrompt(e);
     };
+    const handleAppInstalled = () => {
+      (window as any).deferredPrompt = null;
+      setInstallPrompt(null);
+      setToastMessage(language === 'hi' ? 'ऐप सफलतापूर्वक इंस्टॉल हो गया!' : 'Daily Khata App Installed Successfully!');
+    };
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-  }, []);
+    window.addEventListener('appinstalled', handleAppInstalled);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, [language]);
 
   // Deep Link URL Sync: Read query params on mount for backwards compatibility
   useEffect(() => {
