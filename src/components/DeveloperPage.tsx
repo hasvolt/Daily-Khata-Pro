@@ -11,11 +11,20 @@ import {
   Heart,
   Globe,
   Sparkles,
-  Layers,
   Terminal,
   Share2,
   Instagram,
-  Twitter
+  Twitter,
+  Search,
+  Briefcase,
+  Cpu,
+  Users,
+  Lock,
+  Compass,
+  Building2,
+  Zap,
+  MapPin,
+  Layers
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { AppLanguage } from '../types';
@@ -35,6 +44,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
   const [copied, setCopied] = useState(false);
   const pageT = getPageTranslation(language);
   const t = pageT.developer;
+  const isHindi = language === 'hi';
   const email = 'daily-Khata-Pro@gmail.com';
   const githubUrl = 'https://github.com/hasvolt/Daily-Khata-Pro';
 
@@ -46,6 +56,108 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
       setTimeout(() => setCopied(false), 2200);
     }
   };
+
+  const roles = isHindi
+    ? [
+        {
+          title: 'स्वतंत्र डेवलपर (Independent Developer)',
+          desc: 'स्वतंत्र रूप से आधुनिक वेब ऍप्लिकेशन्स और ऑफ़लाइन टूल्स का निर्माण।',
+          icon: Code2,
+          tagColor: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30'
+        },
+        {
+          title: 'सॉफ़्टवेयर डेवलपर (Software Developer)',
+          desc: 'मजबूत, स्वच्छ और स्केलेबल कोडबेस के साथ हाई-स्पीड यूटिलिटी सिस्टम्स।',
+          icon: Terminal,
+          tagColor: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
+        },
+        {
+          title: 'ओपन-सोर्स क्रिएटर (Open Source Creator)',
+          desc: 'पारदर्शी और मुफ़्त टूल्स का विकास ताकि समुदाय व डेवलपर्स सीधे लाभ ले सकें।',
+          icon: FolderGit2,
+          tagColor: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+        },
+        {
+          title: 'सुरक्षा शोधकर्ता (Security Researcher)',
+          desc: 'क्लाइंट-साइड ज़ीरो-नॉलेज आर्किटेक्चर, डेटा एन्क्रिप्शन व प्राइवेसी एनालिसिस।',
+          icon: ShieldCheck,
+          tagColor: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30'
+        },
+        {
+          title: 'स्वतंत्र शोधकर्ता (Independent Researcher)',
+          desc: 'नई डिजिटल तकनीकों, उपयोगकर्ता सुरक्षा और डेटा प्राइवेसी पर निष्पक्ष शोध।',
+          icon: Search,
+          tagColor: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
+        },
+        {
+          title: 'टेक्नोलॉजी व डिजिटल सिस्टम्स (Technology Systems)',
+          desc: 'आधुनिक वेब स्टैंडर्ड्स, PWA ऑफ़लाइन तकनीक व हाई-परफ़ॉर्मेंस आर्किटेक्चर।',
+          icon: Cpu,
+          tagColor: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30'
+        },
+        {
+          title: 'फ्रीलांसर एवं उद्यमी (Freelancer & Entrepreneur)',
+          desc: 'डिजिटल समाधान निर्माण, तकनीकी परामर्श और आत्मनिर्भर पब्लिक प्रोजेक्ट्स।',
+          icon: Briefcase,
+          tagColor: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
+        },
+        {
+          title: 'मानवता व लोक संसाधन सहायक (Humanity Public Resources Helper)',
+          desc: 'सार्वजनिक भलाई हेतु निःशुल्क, विज्ञापन-रहित व ट्रैकर-मुक्त सॉफ़्टवेयर टूल्स।',
+          icon: Heart,
+          tagColor: 'text-[#14B8A6] bg-[#14B8A6]/10 border-[#14B8A6]/30'
+        }
+      ]
+    : [
+        {
+          title: 'Independent Developer',
+          desc: 'Building responsive, high-performance client-side web tools with zero external dependencies.',
+          icon: Code2,
+          tagColor: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30'
+        },
+        {
+          title: 'Software Developer',
+          desc: 'Designing clean modular software architectures, offline PWA engines, and state management.',
+          icon: Terminal,
+          tagColor: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
+        },
+        {
+          title: 'Open Source Creator',
+          desc: 'Publishing free, MIT-licensed utilities allowing full code auditing and community empowerment.',
+          icon: FolderGit2,
+          tagColor: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+        },
+        {
+          title: 'Security Researcher',
+          desc: 'Analyzing client-side encryption, zero-knowledge storage, and browser sandboxing safety.',
+          icon: ShieldCheck,
+          tagColor: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30'
+        },
+        {
+          title: 'Independent Researcher',
+          desc: 'Investigating privacy-preserving computing, local-first applications, and ethical digital workflows.',
+          icon: Search,
+          tagColor: 'text-[#EC4899] bg-[#EC4899]/10 border-[#EC4899]/30'
+        },
+        {
+          title: 'Technology & Digital Systems',
+          desc: 'Exploring modern web capabilities, standards-compliant protocols, and lightweight frontend runtimes.',
+          icon: Cpu,
+          tagColor: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30'
+        },
+        {
+          title: 'Freelancer & Entrepreneur',
+          desc: 'Consulting on technical systems, self-funded digital initiatives, and sustainable utility tooling.',
+          icon: Briefcase,
+          tagColor: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
+        },
+        {
+          title: 'Humanity & Public Resources Helper',
+          desc: 'Devoted to building accessible, permanent public digital utilities with zero paywalls or tracking.',
+          icon: Heart,
+          tagColor: 'text-[#14B8A6] bg-[#14B8A6]/10 border-[#14B8A6]/30'
+        }
+      ];
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200 text-left">
@@ -87,7 +199,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)]/70 shadow-2xl bg-[#070E18] p-1.5 relative group">
               <img
                 src="/md-zafeer-hasan-yazdaan.jpg"
-                alt="MD Zafeer Hasan (YAZDAAN) - Independent Developer & Founder"
+                alt="MD Zafeer Hasan (YAZDAAN) - Developer & Creator"
                 className="w-full h-auto max-h-[380px] object-contain rounded-xl block mx-auto transition-transform duration-300 group-hover:scale-[1.02]"
                 referrerPolicy="no-referrer"
               />
@@ -97,7 +209,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </div>
             </div>
             <p className="text-[11px] text-[#94A3B8] text-center mt-2.5 font-mono">
-              MD Zafeer Hasan • Founder &amp; Developer
+              MD Zafeer Hasan • Developer &amp; Creator
             </p>
           </div>
 
@@ -111,8 +223,15 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               <h1 className="font-serif-display text-[26px] sm:text-[32px] font-bold text-[#F8FAFC] tracking-tight leading-tight">
                 MD Zafeer Hasan <span className="text-[var(--theme-primary,#38BDF8)]">(YAZDAAN)</span>
               </h1>
-              <p className="text-[14px] sm:text-[15px] font-medium text-[var(--theme-primary,#38BDF8)] mt-1">
-                Independent Developer &amp; Open-Source Creator
+              <p className="text-[14px] sm:text-[15px] font-semibold text-[var(--theme-primary,#38BDF8)] mt-1">
+                {isHindi
+                  ? 'स्वतंत्र सॉफ़्टवेयर डेवलपर • ओपन-सोर्स क्रिएटर • सुरक्षा शोधकर्ता'
+                  : 'Independent Software Developer • Open Source Creator • Security Researcher'}
+              </p>
+              <p className="text-[12.5px] text-[#94A3B8] mt-1.5 leading-relaxed">
+                {isHindi
+                  ? 'मानवता के लाभ के लिए स्वतंत्र शोध, पारदर्शी डिजिटल सिस्टम्स और 100% ऑफ़लाइन पब्लिक टूल्स का निर्माण।'
+                  : 'Devoted to independent technical research, digital security, and crafting transparent public software resources for humanity.'}
               </p>
             </div>
 
@@ -127,20 +246,22 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </a>
             </div>
 
-            {/* Focus Pills */}
-            <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8] mr-1">{t.skillsTitle}:</span>
-              <span className="text-[12px] font-semibold px-3 py-1 rounded-full bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 shadow-xs">
+            {/* Core Domain Badges */}
+            <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-1.5">
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30">
+                Independent Developer
+              </span>
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
                 Open Source
               </span>
-              <span className="text-[12px] font-semibold px-3 py-1 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30 shadow-xs">
-                Productivity
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30">
+                Security Research
               </span>
-              <span className="text-[12px] font-semibold px-3 py-1 rounded-full bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 shadow-xs">
-                Personal Finance
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#A855F7]/15 text-[#A855F7] border border-[#A855F7]/30">
+                Entrepreneurship
               </span>
-              <span className="text-[12px] font-semibold px-3 py-1 rounded-full bg-[#8B5CF6]/15 text-[#8B5CF6] border border-[#8B5CF6]/30 shadow-xs">
-                Digital Tools
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#14B8A6]/15 text-[#14B8A6] border border-[#14B8A6]/30">
+                Public Utilities
               </span>
             </div>
 
@@ -175,6 +296,242 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         </div>
       </div>
 
+      {/* Professional Roles & Competencies Section */}
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-3xl p-5 sm:p-7 space-y-4 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3.5">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)]">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="font-serif-display text-[17px] sm:text-[19px] font-bold text-[#F8FAFC]">
+                {isHindi ? 'पेशेवर भूमिकाएं एवं विशेषज्ञता' : 'Professional Roles & Focus Areas'}
+              </h2>
+              <p className="text-[12px] text-[#94A3B8]">
+                {isHindi
+                  ? 'तकनीक, शोध, ओपन सोर्स और जनहित में डिजिटल संसाधनों के निर्माण की रूपरेखा'
+                  : 'Core technical competencies, independent research domains, and public software contributions'}
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2.5 py-1 rounded-md border border-[#10B981]/30 self-start sm:self-auto">
+            Ethical &amp; Transparent
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          {roles.map((r, i) => {
+            const IconComponent = r.icon;
+            return (
+              <div
+                key={i}
+                className="p-3.5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all space-y-1.5 text-left group"
+              >
+                <div className="flex items-center gap-2">
+                  <div className={`p-1.5 rounded-lg border ${r.tagColor}`}>
+                    <IconComponent className="w-4 h-4" />
+                  </div>
+                  <span className="text-[13px] font-bold text-[#F8FAFC] group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
+                    {r.title}
+                  </span>
+                </div>
+                <p className="text-[11.5px] text-[#94A3B8] leading-relaxed pl-8">
+                  {r.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Business Ventures & Brands Ecosystem */}
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-3xl p-5 sm:p-7 space-y-5 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#F59E0B]/15 border border-[#F59E0B]/30 flex items-center justify-center text-[#F59E0B]">
+              <Building2 className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="font-serif-display text-[18px] sm:text-[20px] font-bold text-[#F8FAFC]">
+                {isHindi ? 'व्यावसायिक उपक्रम एवं ब्रांड्स इकोसिस्टम' : 'Business Ventures & Brands Ecosystem'}
+              </h2>
+              <p className="text-[12px] text-[#94A3B8]">
+                {isHindi
+                  ? 'हसन स्मार्ट इलेक्ट्रिकल सॉल्यूशंस ® (स्थापना 2012) के अंतर्गत संचालित आधिकारिक सेवाएं'
+                  : 'Official service brands & digital initiatives operated under Hasan Smart Electrical Solutions ®'}
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono font-bold text-[#F59E0B] bg-[#F59E0B]/15 px-3 py-1 rounded-md border border-[#F59E0B]/30 self-start sm:self-auto">
+            Operating Since 2012
+          </span>
+        </div>
+
+        {/* Parent Umbrella Card */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] relative overflow-hidden space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
+              <h3 className="text-[15px] sm:text-[16px] font-bold text-[#F8FAFC] tracking-wide">
+                HASAN SMART ELECTRICAL SOLUTIONS ®
+              </h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10.5px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 px-2.5 py-0.5 rounded border border-[#38BDF8]/30">
+                Official Parent Operator
+              </span>
+              <span className="text-[10.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2.5 py-0.5 rounded border border-[#10B981]/30">
+                Since 2012
+              </span>
+            </div>
+          </div>
+
+          <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
+            {isHindi ? (
+              <>
+                <strong>हसन स्मार्ट इलेक्ट्रिकल सॉल्यूशंस ®</strong> के संस्थापक एवं स्वामी <strong>MD ज़फ़ीर हसन (YAZDAAN)</strong> हैं। यह मूल संगठन 2012 से सभी प्रमुख इलेक्ट्रिकल सर्विस ब्रांड्स, टर्न-की प्रोजेक्ट्स तथा तकनीकी पहलों (जैसे Daily Khata Pro) का आधिकारिक संचालन और प्रबंधन करता है।
+              </>
+            ) : (
+              <>
+                Founded and owned by <strong>MD Zafeer Hasan (YAZDAAN)</strong>, <strong>Hasan Smart Electrical Solutions ®</strong> operates as the official parent organisation overseeing premier electrical service brands, engineering project works, and modern digital utilities (including Daily Khata Pro) since 2012.
+              </>
+            )}
+          </p>
+        </div>
+
+        {/* Service Brands Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          {/* Hasvolt Card */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8]/60 transition-all space-y-3 flex flex-col justify-between group">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-[#38BDF8]/15 border border-[#38BDF8]/30 text-[#38BDF8]">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
+                      Hasvolt : Professional Electrical Services
+                    </h4>
+                    <span className="text-[11px] font-mono text-[#38BDF8]">hasvolt.com</span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 px-2 py-0.5 rounded border border-[#38BDF8]/30">
+                  Launched 2026
+                </span>
+              </div>
+
+              <p className="text-[12px] text-[#94A3B8] leading-relaxed">
+                {isHindi
+                  ? 'इलेक्ट्रिकल सर्विसेज प्रोवाइडर ब्रांड जो इंस्टॉलेशन, रिपेयरिंग, इमरजेंसी मेंटेनेंस और प्रोजेक्ट वर्क प्रदान करता है। दिल्ली NCR और बिहार में संपूर्ण सेवाएं तथा पूरे भारत (Pan-India) में प्रोजेक्ट वर्क के लिए समर्पित। यह HSES Connect का 2026 में लॉन्च हुआ आधुनिक अपग्रेडेड वर्जन ब्रांड है।'
+                  : 'Premier electrical services provider delivering professional installations, repairs, emergency maintenance, and specialized project works. Providing complete field services in Delhi NCR and Bihar, with Pan-India availability for commercial and industrial project works. The 2026 upgraded evolution of HSES Connect.'}
+              </p>
+
+              {/* Badges / Key Specs */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20">
+                  Delhi NCR &amp; Bihar (Full Services)
+                </span>
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
+                  Pan-India (Project Work)
+                </span>
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20">
+                  Installation &amp; Maintenance
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/60 flex items-center justify-between">
+              <span className="text-[11px] text-[#64748B]">
+                {isHindi ? 'आधिकारिक वेबसाइट' : 'Official Website'}
+              </span>
+              <a
+                href="https://hasvolt.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[var(--theme-primary,#38BDF8)] hover:text-[#F8FAFC] font-mono text-[11.5px] font-bold transition-all"
+              >
+                <span>Visit hasvolt.com</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* HSES Connect Card */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981]/60 transition-all space-y-3 flex flex-col justify-between group">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-[#10B981]/15 border border-[#10B981]/30 text-[#10B981]">
+                    <Globe className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] group-hover:text-[#10B981] transition-colors">
+                      HSES CONNECT
+                    </h4>
+                    <span className="text-[11px] font-mono text-[#10B981]">hses247help.com</span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/30">
+                  Since 2012
+                </span>
+              </div>
+
+              <p className="text-[12px] text-[#94A3B8] leading-relaxed">
+                {isHindi
+                  ? '2012 से निरंतर सक्रिय प्रतिष्ठित इलेक्ट्रिकल सर्विसेज व प्रोजेक्ट वर्क समाधान। वर्ष 2026 से सभी परिचालन व ग्राहक सेवाओं को Hasvolt के तहत और अधिक गति व आधुनिकता के साथ संचालित किया जा रहा है।'
+                  : 'Established in 2012 providing dependable electrical solutions, maintenance services, and project works. As of 2026, all ongoing operations and services are strategically unified and powered through Hasvolt.'}
+              </p>
+
+              {/* Badges */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
+                  Established 2012
+                </span>
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20">
+                  Electrical Solutions &amp; Projects
+                </span>
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20">
+                  Transitioned into Hasvolt (2026)
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/60 flex items-center justify-between">
+              <span className="text-[11px] text-[#64748B]">
+                {isHindi ? 'सपोर्ट एवं हेल्पडेस्क' : 'Support & Solutions Portal'}
+              </span>
+              <a
+                href="https://hses247help.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#10B981] hover:text-[#F8FAFC] font-mono text-[11.5px] font-bold transition-all"
+              >
+                <span>Visit hses247help.com</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Note on Daily Khata Pro integration under the same umbrella */}
+        <div className="p-3.5 rounded-xl bg-[var(--theme-card,#132438)]/60 border border-[var(--theme-border,#213E61)] flex items-center justify-between flex-wrap gap-2 text-[12px]">
+          <div className="flex items-center gap-2 text-[#CBD5E1]">
+            <Code2 className="w-4 h-4 text-[#38BDF8] shrink-0" />
+            <span>
+              {isHindi ? (
+                <><strong>Daily Khata: Pro</strong> भी इसी प्रौद्योगिकी एवं लोक सेवा पहल के तहत संचालित एक डिजिटल टूल है।</>
+              ) : (
+                <><strong>Daily Khata: Pro</strong> is also developed and operated as a free digital public utility under this technology initiative.</>
+              )}
+            </span>
+          </div>
+          <span className="text-[10.5px] font-mono text-[#10B981] font-bold bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+            100% Free &amp; Offline
+          </span>
+        </div>
+      </div>
+
       {/* Developer Statement & Mission */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-3 shadow-lg">
@@ -188,6 +545,17 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
           <p className="text-[13px] text-[#CBD5E1] leading-relaxed">
             {t.visionDesc}
           </p>
+          <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] mt-2">
+            <div className="flex items-center gap-2 text-[#38BDF8] text-[12px] font-bold">
+              <Lock className="w-3.5 h-3.5" />
+              <span>{isHindi ? 'निजता एवं डेटा सुरक्षा का सिद्धांत' : 'Privacy & Security Principle'}</span>
+            </div>
+            <p className="text-[11.5px] text-[#94A3B8] mt-1">
+              {isHindi
+                ? 'उपयोगकर्ता का डेटा पूरी तरह उनका व्यक्तिगत अधिकार है। यह ऐप 100% आपके डिवाइस पर रहता है और कभी किसी बाहरी सर्वर पर नहीं भेजा जाता।'
+                : 'User data belongs strictly to the individual. Software must run locally, respect device boundaries, and never monetize user behavior.'}
+            </p>
+          </div>
         </div>
 
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-3.5 shadow-lg flex flex-col justify-between">
@@ -213,7 +581,31 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 <span className="font-bold text-[#38BDF8]">100% Offline-First Client Storage</span>
               </div>
               <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
-                <span className="text-[#94A3B8]">Official Domain:</span>
+                <span className="text-[#94A3B8]">Electrical Services:</span>
+                <a
+                  href="https://hasvolt.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-[#38BDF8] hover:underline font-mono text-[12px] flex items-center gap-1"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>hasvolt.com</span>
+                </a>
+              </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
+                <span className="text-[#94A3B8]">Solutions &amp; Support:</span>
+                <a
+                  href="https://hses247help.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-[#10B981] hover:underline font-mono text-[12px] flex items-center gap-1"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>hses247help.com</span>
+                </a>
+              </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
+                <span className="text-[#94A3B8]">App Domain:</span>
                 <a
                   href="https://rozfiber.com"
                   target="_blank"

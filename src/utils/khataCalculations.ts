@@ -17,20 +17,18 @@ export const getTodayISO = (): string => {
 
 export const splitIncome = (
   amount: number,
-  percentages: Record<FundType, number>
+  percentages: Record<FundType, number>,
+  fundKeys?: string[]
 ): Record<FundType, number> => {
-  const result: Record<FundType, number> = {
-    personal: 0,
-    family: 0,
-    buffer: 0,
-    emergency: 0,
-    saving: 0,
-    investment: 0
-  };
+  const result: Record<FundType, number> = {} as Record<FundType, number>;
+  const keys = fundKeys && fundKeys.length > 0 ? fundKeys : (Object.keys(percentages).length > 0 ? Object.keys(percentages) : FUND_ORDER);
+  keys.forEach((f) => {
+    result[f] = 0;
+  });
+
+  if (keys.length === 0) return result;
 
   let running = 0;
-  const keys = FUND_ORDER;
-
   for (let i = 0; i < keys.length - 1; i++) {
     const k = keys[i];
     const pct = percentages[k] || 0;
@@ -41,7 +39,7 @@ export const splitIncome = (
 
   // Ensure last fund takes remainder so total sum is mathematically exact
   const lastKey = keys[keys.length - 1];
-  result[lastKey] = Math.round(amount) - running;
+  result[lastKey] = Math.max(0, Math.round(amount) - running);
 
   return result;
 };
@@ -49,28 +47,27 @@ export const splitIncome = (
 export const calculateFundSplits = splitIncome;
 
 export const calculateFundTotals = (
-  entries: Entry[]
+  entries: Entry[],
+  fundKeys?: string[]
 ): Record<FundType, number> => {
-  const totals: Record<FundType, number> = {
-    personal: 0,
-    family: 0,
-    buffer: 0,
-    emergency: 0,
-    saving: 0,
-    investment: 0
-  };
+  const totals: Record<FundType, number> = {} as Record<FundType, number>;
+  const baseKeys = fundKeys && fundKeys.length > 0 ? fundKeys : FUND_ORDER;
+  baseKeys.forEach((f) => {
+    totals[f] = 0;
+  });
 
   entries.forEach((e) => {
     if (e.type === 'income') {
       if (e.splits) {
-        FUND_ORDER.forEach((f) => {
-          totals[f] += e.splits?.[f] || 0;
+        Object.entries(e.splits).forEach(([f, amt]) => {
+          totals[f] = (totals[f] || 0) + (amt || 0);
         });
+      } else if (e.targetFund || e.fund) {
+        const dest = (e.targetFund || e.fund)!;
+        totals[dest] = (totals[dest] || 0) + e.amount;
       }
     } else if (e.type === 'expense' && e.fund) {
-      if (totals[e.fund] !== undefined) {
-        totals[e.fund] -= e.amount;
-      }
+      totals[e.fund] = (totals[e.fund] || 0) - e.amount;
     }
   });
 

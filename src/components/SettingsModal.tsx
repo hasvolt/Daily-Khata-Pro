@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { KhataData, AppTheme, AppLanguage, AppViewMode, FundType, SecurityLockConfig, AppLayout } from '../types';
+import React, { useRef, useState, useEffect } from 'react';
+import { KhataData, AppTheme, AppLanguage, AppViewMode, FundType, FundConfig, SecurityLockConfig, AppLayout } from '../types';
 import {
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
   DEFAULT_INCOME_SOURCES,
   DEFAULT_WORK_CATEGORIES,
   DEFAULT_LIFE_TAGS,
+  DEFAULT_FUNDS,
   FUND_ORDER,
   FUND_LABELS,
   FUND_CONFIGS
@@ -49,12 +50,16 @@ import {
   LayoutGrid,
   HelpCircle,
   Bug,
-  Lightbulb
+  Lightbulb,
+  Pencil,
+  SlidersHorizontal
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import { getFundIcon } from '../utils/iconMap';
 import { ConfirmModal } from './ConfirmModal';
+import { FundEditorModal } from './FundEditorModal';
 import { HasVoltLogo } from './HasVoltLogo';
-import { TRANSLATIONS } from '../utils/translations';
+import { TRANSLATIONS, isPureHindi, isHinglish, isHindiOrHinglish, pickTranslation } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
 import { APP_VERSION_FULL, APP_VERSION_FOOTER } from '../utils/version';
 
@@ -62,6 +67,10 @@ interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   data: KhataData;
+  funds?: FundConfig[];
+  onUpdateFunds?: (funds: FundConfig[], percentages: Record<FundType, number>) => void;
+  homepageFundIds?: string[];
+  onUpdateHomepageFundIds?: (ids: string[]) => void;
   onRestoreData: (restored: KhataData) => void;
   onResetData: () => void;
   onLoadSampleData: () => void;
@@ -97,6 +106,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,
   onClose,
   data,
+  funds,
+  onUpdateFunds,
+  homepageFundIds,
+  onUpdateHomepageFundIds,
   onRestoreData,
   onResetData,
   onLoadSampleData,
@@ -130,10 +143,33 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [confirmAction, setConfirmAction] = useState<'reset' | 'sample' | null>(null);
   const [modalFeedback, setModalFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Custom Allocation Rule State
+  // Dynamic Funds & Allocation Rules State
+  const [currentFunds, setCurrentFunds] = useState<FundConfig[]>(() => {
+    if (funds && funds.length > 0) return funds;
+    if (data.funds && data.funds.length > 0) return data.funds;
+    if (data.settings?.funds && data.settings.funds.length > 0) return data.settings.funds;
+    return DEFAULT_FUNDS;
+  });
+
   const [customPercentages, setCustomPercentages] = useState<Record<FundType, number>>(
     data.settings?.percentages || DEFAULT_PERCENTAGES
   );
+
+  const [editingFundItem, setEditingFundItem] = useState<FundConfig | null>(null);
+  const [isFundEditorOpen, setIsFundEditorOpen] = useState(false);
+  const [fundToDelete, setFundToDelete] = useState<FundConfig | null>(null);
+
+  useEffect(() => {
+    if (funds && funds.length > 0) {
+      setCurrentFunds(funds);
+    }
+  }, [funds]);
+
+  useEffect(() => {
+    if (data.settings?.percentages) {
+      setCustomPercentages(data.settings.percentages);
+    }
+  }, [data.settings?.percentages]);
 
   // Custom Category & Source State
   const [customExpCategoryInput, setCustomExpCategoryInput] = useState('');
@@ -142,9 +178,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [customLifeTagInput, setCustomLifeTagInput] = useState('');
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
 
+  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const isPure = isPureHindi(language);
+  const isHing = isHinglish(language);
+  const isHindi = isPure;
+  const tr = getAppTranslation((language as AppLanguage) || 'en');
+  const tStr = (hi: string, hinglish: string, en: string) => pickTranslation(language, { hi, hinglish, en });
+
+  const currentCategories = data.categories || DEFAULT_CATEGORIES;
+  const currentIncomeSources = data.incomeSources || DEFAULT_INCOME_SOURCES;
+  const currentWorkCategories = data.workCategories || DEFAULT_WORK_CATEGORIES;
+  const currentLifeTags = data.lifeTags || DEFAULT_LIFE_TAGS;
+
+  const showFeedback = (type: 'success' | 'error', text: string) => {
+    setModalFeedback({ type, text });
+    setTimeout(() => {
+      setModalFeedback(null);
+    }, 3000);
+  };
+
   const handleForceUpdateApp = async () => {
     setIsUpdatingApp(true);
-    showFeedback('success', isHindi ? 'कैश रिफ्रेश किया जा रहा है व नया वर्शन लोड हो रहा है...' : 'Refreshing cache and loading latest build...');
+    showFeedback('success', tStr('कैश रिफ्रेश किया जा रहा है व नया वर्शन लोड हो रहा है...', 'Cache refresh ho raha hai aur fresh build load ho raha hai...', 'Refreshing cache and loading latest build...'));
     setTimeout(async () => {
       try {
         if (typeof (window as unknown as { __DAILY_KHATA_FORCE_REFRESH__?: () => Promise<void> }).__DAILY_KHATA_FORCE_REFRESH__ === 'function') {
@@ -162,23 +217,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     }, 500);
   };
 
-  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
-  const isHindi = language === 'hi';
-  const tr = getAppTranslation((language as AppLanguage) || 'en');
-
   if (!isOpen) return null;
-
-  const currentCategories = data.categories || DEFAULT_CATEGORIES;
-  const currentIncomeSources = data.incomeSources || DEFAULT_INCOME_SOURCES;
-  const currentWorkCategories = data.workCategories || DEFAULT_WORK_CATEGORIES;
-  const currentLifeTags = data.lifeTags || DEFAULT_LIFE_TAGS;
-
-  const showFeedback = (type: 'success' | 'error', text: string) => {
-    setModalFeedback({ type, text });
-    setTimeout(() => {
-      setModalFeedback(null);
-    }, 3000);
-  };
 
   const handleExportJSON = () => {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2));
@@ -189,7 +228,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     downloadAnchor.click();
     downloadAnchor.remove();
     triggerHapticSound('save');
-    showFeedback('success', isHindi ? 'JSON बैकअप सफलतापूर्वक डाउनलोड हो गया!' : 'JSON Backup downloaded successfully!');
+    showFeedback('success', tStr('JSON बैकअप सफलतापूर्वक डाउनलोड हो गया!', 'JSON backup download ho gaya!', 'JSON Backup downloaded successfully!'));
   };
 
   const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,43 +257,128 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               privacyMask: privacyMask
             }
           });
-          showFeedback('success', isHindi ? 'खाता डेटा सफलतापूर्वक रिस्टोर हो गया!' : 'Ledger data restored successfully!');
+          showFeedback('success', tStr('खाता डेटा सफलतापूर्वक रिस्टोर हो गया!', 'Ledger data restore ho gaya!', 'Ledger data restored successfully!'));
           setTimeout(() => onClose(), 1200);
         } else {
-          showFeedback('error', isHindi ? 'अमान्य प्रारूप। कृपया सही बैकअप फ़ाइल चुनें।' : 'Invalid format. Please select a valid Daily Khata: Pro JSON backup.');
+          showFeedback('error', tStr('अमान्य प्रारूप। कृपया सही बैकअप फ़ाइल चुनें।', 'Invalid format. Kripya valid Daily Khata JSON backup select karein.', 'Invalid format. Please select a valid Daily Khata: Pro JSON backup.'));
         }
       } catch (err) {
-        showFeedback('error', isHindi ? 'JSON पार्सिंग में त्रुटि।' : 'Failed to parse JSON file.');
+        showFeedback('error', tStr('JSON पार्सिंग में त्रुटि।', 'JSON parse karne mein error aaya.', 'Failed to parse JSON file.'));
       }
     };
     reader.readAsText(file);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // Rule percentage calculations
-  const totalPercent: number = FUND_ORDER.reduce((s: number, f: FundType) => s + (Number(customPercentages[f]) || 0), 0);
+  // Rule percentage calculations across all dynamic funds
+  const totalPercent: number = currentFunds.reduce((s: number, f: FundConfig) => s + (Number(customPercentages[f.id]) || 0), 0);
   const isPercentValid = Math.abs(totalPercent - 100) < 0.01;
+
+  const handleAutoBalance = () => {
+    if (currentFunds.length === 0) return;
+    const diff = 100 - totalPercent;
+    if (Math.abs(diff) < 0.01) return;
+
+    const updated = { ...customPercentages };
+    const firstId = currentFunds[0].id;
+    const currentVal = Number(updated[firstId]) || 0;
+    updated[firstId] = Math.max(0, Math.round((currentVal + diff) * 100) / 100);
+    setCustomPercentages(updated);
+    triggerHapticSound('click');
+    showFeedback(
+      'success',
+      tStr(
+        `100% संतुलित किया गया (${currentFunds[0].label} में समायोजित)`,
+        `100% balance kiya gaya (${currentFunds[0].label} mein adjust hua)`,
+        `Balanced to 100% (adjusted in ${currentFunds[0].label})`
+      )
+    );
+  };
 
   const handleSavePercentages = () => {
     if (!isPercentValid) {
-      showFeedback('error', isHindi ? 'कुल प्रतिशत ठीक 100% होना चाहिए।' : 'Total allocation percentage must equal 100% exactly.');
+      showFeedback('error', tStr('कुल प्रतिशत ठीक 100% होना चाहिए।', 'Total allocation exact 100% hona chahiye.', 'Total allocation percentage must equal 100% exactly.'));
       triggerHapticSound('error');
       return;
     }
-    if (onUpdatePercentages) {
+    if (onUpdateFunds) {
+      onUpdateFunds(currentFunds, customPercentages);
+    } else if (onUpdatePercentages) {
       onUpdatePercentages(customPercentages);
     }
     triggerHapticSound('save');
-    showFeedback('success', isHindi ? '6-फंड आवंटन नियम सफलतापूर्वक सहेजे गए!' : '6-Fund allocation rule updated successfully!');
+    showFeedback('success', tStr('फंड आवंटन नियम सफलतापूर्वक सहेजे गए!', 'Fund allocation rules save ho gaye!', 'Fund allocation rules updated successfully!'));
   };
 
   const handleResetPercentages = () => {
+    setCurrentFunds(DEFAULT_FUNDS);
     setCustomPercentages(DEFAULT_PERCENTAGES);
-    if (onUpdatePercentages) {
+    if (onUpdateFunds) {
+      onUpdateFunds(DEFAULT_FUNDS, DEFAULT_PERCENTAGES);
+    } else if (onUpdatePercentages) {
       onUpdatePercentages(DEFAULT_PERCENTAGES);
     }
     triggerHapticSound('click');
-    showFeedback('success', isHindi ? 'डिफ़ॉल्ट 6-फंड नियमों पर रीसेट कर दिया गया।' : 'Reset to default recommended 6-fund rules.');
+    showFeedback('success', tStr('डिफ़ॉल्ट फंड्स व नियमों पर रीसेट कर दिया गया।', 'Default funds aur rules par reset ho gaya.', 'Reset to default fund categories and rules.'));
+  };
+
+  const handleSaveFund = (savedFund: FundConfig) => {
+    const existingIndex = currentFunds.findIndex((f) => f.id === savedFund.id);
+    let updatedFunds: FundConfig[];
+    let updatedPct = { ...customPercentages };
+
+    if (existingIndex >= 0) {
+      updatedFunds = [...currentFunds];
+      updatedFunds[existingIndex] = savedFund;
+      if (savedFund.defaultPct !== undefined) {
+        updatedPct[savedFund.id] = savedFund.defaultPct;
+      }
+      showFeedback('success', tStr(`फंड "${savedFund.label}" अपडेट हो गया!`, `Fund "${savedFund.label}" update ho gaya!`, `Fund "${savedFund.label}" updated!`));
+    } else {
+      updatedFunds = [...currentFunds, savedFund];
+      updatedPct[savedFund.id] = savedFund.defaultPct;
+      showFeedback('success', tStr(`नया फंड "${savedFund.label}" जोड़ा गया!`, `Naya fund "${savedFund.label}" add ho gaya!`, `New fund "${savedFund.label}" added!`));
+    }
+
+    setCurrentFunds(updatedFunds);
+    setCustomPercentages(updatedPct);
+    if (onUpdateFunds) {
+      onUpdateFunds(updatedFunds, updatedPct);
+    } else if (onUpdatePercentages) {
+      onUpdatePercentages(updatedPct);
+    }
+    triggerHapticSound('save');
+  };
+
+  const handleConfirmDeleteFund = () => {
+    if (!fundToDelete) return;
+    if (currentFunds.length <= 1) {
+      showFeedback('error', tStr('कम से कम एक फंड होना आवश्यक है।', 'Kam se kam ek fund hona zaroori hai.', 'At least one fund must remain.'));
+      setFundToDelete(null);
+      return;
+    }
+
+    const updatedFunds = currentFunds.filter((f) => f.id !== fundToDelete.id);
+    const updatedPct = { ...customPercentages };
+    const freedPct = updatedPct[fundToDelete.id] || 0;
+    delete updatedPct[fundToDelete.id];
+
+    // Reallocate freed percentage to first remaining fund so sum remains 100%
+    if (updatedFunds.length > 0 && freedPct > 0) {
+      const firstId = updatedFunds[0].id;
+      updatedPct[firstId] = Math.round(((updatedPct[firstId] || 0) + freedPct) * 100) / 100;
+    }
+
+    setCurrentFunds(updatedFunds);
+    setCustomPercentages(updatedPct);
+    if (onUpdateFunds) {
+      onUpdateFunds(updatedFunds, updatedPct);
+    } else if (onUpdatePercentages) {
+      onUpdatePercentages(updatedPct);
+    }
+    triggerHapticSound('delete');
+    showFeedback('success', tStr(`फंड "${fundToDelete.label}" हटा दिया गया!`, `Fund "${fundToDelete.label}" remove ho gaya!`, `Fund "${fundToDelete.label}" removed!`));
+    setFundToDelete(null);
   };
 
   // Custom Categories Add/Delete
@@ -265,7 +389,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       if (onUpdateCategories) onUpdateCategories(updated);
       setCustomExpCategoryInput('');
       triggerHapticSound('save');
-      showFeedback('success', `${isHindi ? 'नई श्रेणी जोड़ी गई' : 'Category added'}: ${trimmed}`);
+      showFeedback('success', `${tStr('नई श्रेणी जोड़ी गई', 'Nayi category add hui', 'Category added')}: ${trimmed}`);
     }
   };
 
@@ -283,7 +407,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       if (onUpdateIncomeSources) onUpdateIncomeSources(updated);
       setCustomIncomeSourceInput('');
       triggerHapticSound('save');
-      showFeedback('success', `${isHindi ? 'नया आय स्रोत जोड़ा गया' : 'Income source added'}: ${trimmed}`);
+      showFeedback('success', `${tStr('नया आय स्रोत जोड़ा गया', 'Naya income source add hua', 'Income source added')}: ${trimmed}`);
     }
   };
 
@@ -301,7 +425,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       if (onUpdateWorkCategories) onUpdateWorkCategories(updated);
       setCustomWorkCategoryInput('');
       triggerHapticSound('save');
-      showFeedback('success', `${isHindi ? 'कार्य श्रेणी जोड़ी गई' : 'Work category added'}: ${trimmed}`);
+      showFeedback('success', `${tStr('कार्य श्रेणी जोड़ी गई', 'Work category add hui', 'Work category added')}: ${trimmed}`);
     }
   };
 
@@ -319,7 +443,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       if (onUpdateLifeTags) onUpdateLifeTags(updated);
       setCustomLifeTagInput('');
       triggerHapticSound('save');
-      showFeedback('success', `${isHindi ? 'टैग जोड़ा गया' : 'Life tag added'}: #${trimmed}`);
+      showFeedback('success', `${tStr('टैग जोड़ा गया', 'Tag add hua', 'Life tag added')}: #${trimmed}`);
     }
   };
 
@@ -336,8 +460,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     { id: 'emerald', label: 'Emerald Green', dot: '#10B981' },
     { id: 'purple', label: 'Royal Violet', dot: '#A855F7' },
     { id: 'cyan', label: 'Ocean Teal', dot: '#06B6D4' },
-    { id: 'light', label: isHindi ? 'दिन / वाइट मोड (Daylight)' : 'Daylight White', dot: '#0284C7', isLight: true },
-    { id: 'white', label: isHindi ? 'आउटडोर प्योर वाइट' : 'Outdoor Pure White', dot: '#2563EB', isLight: true }
+    { id: 'light', label: tStr('दिन / वाइट मोड (Daylight)', 'Day / White Mode (Daylight)', 'Daylight White'), dot: '#0284C7', isLight: true },
+    { id: 'white', label: tStr('आउटडोर प्योर वाइट', 'Outdoor Pure White', 'Outdoor Pure White'), dot: '#2563EB', isLight: true }
   ];
 
   return (
@@ -428,7 +552,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex items-center gap-2">
                   <Languages className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <label className="font-bold text-[13.5px] text-[#F8FAFC]">
-                    {isHindi ? 'ऐप की भाषा' : 'Application Language'}
+                    {tStr('ऐप की भाषा', 'App Ki Language', 'Application Language')}
                   </label>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2">
@@ -471,7 +595,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex items-center gap-2">
                   <Palette className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <label className="font-bold text-[13.5px] text-[#F8FAFC]">
-                    {isHindi ? 'कलर थीम' : 'Accent Color Palette'}
+                    {tStr('कलर थीम', 'Theme Color Palette', 'Accent Color Palette')}
                   </label>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -501,12 +625,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2 font-bold text-[13.5px] text-[#F8FAFC]">
                     {privacyMask ? <EyeOff className="w-4 h-4 text-[#F59E0B]" /> : <Eye className="w-4 h-4 text-[#94A3B8]" />}
-                    <span>{isHindi ? 'संख्या गोपनीयता मोड (Privacy Mask)' : 'Rupee Value Privacy Masking'}</span>
+                    <span>{tStr('संख्या गोपनीयता मोड (Privacy Mask)', 'Privacy Masking Mode', 'Rupee Value Privacy Masking')}</span>
                   </div>
                   <p className="text-[11.5px] text-[#94A3B8]">
-                    {isHindi
-                      ? 'सार्वजनिक स्थानों पर स्क्रीन पर दिखने वाली रुपये की राशि को छुपाएं।'
-                      : 'Mask numerical rupee amounts with dots for private viewing in public spaces.'}
+                    {tStr(
+                      'सार्वजनिक स्थानों पर स्क्रीन पर दिखने वाली रुपये की राशि को छुपाएं।',
+                      'Public jagahon par screen par rupee amount chupayein.',
+                      'Mask numerical rupee amounts with dots for private viewing in public spaces.'
+                    )}
                   </p>
                 </div>
 
@@ -519,7 +645,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       : 'bg-[var(--theme-bg,#070E18)] text-[#94A3B8] border-[var(--theme-border,#213E61)] hover:text-[#F8FAFC]'
                   }`}
                 >
-                  {privacyMask ? (isHindi ? 'सक्रिय (Masked)' : 'Enabled') : (isHindi ? 'निष्क्रिय' : 'Disabled')}
+                  {privacyMask ? tStr('सक्रिय (Masked)', 'Active (Masked)', 'Enabled') : tStr('निष्क्रिय', 'Band (Off)', 'Disabled')}
                 </button>
               </div>
 
@@ -529,15 +655,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div>
                     <div className="flex items-center gap-2 font-bold text-[13.5px] text-[#F8FAFC]">
                       <Download className="w-4 h-4 text-[#10B981]" />
-                      <span>{isHindi ? 'ऐप इंस्टॉल / डाउनलोड करें' : 'Install & Download App'}</span>
+                      <span>{tStr('ऐप इंस्टॉल / डाउनलोड करें', 'App Install / Download Karein', 'Install & Download App')}</span>
                       <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
                         100% Offline
                       </span>
                     </div>
                     <p className="text-[11.5px] text-[#94A3B8]">
-                      {isHindi
-                        ? 'बिना इंटरनेट चलाने के लिए मोबाइल या कंप्यूटर की होम स्क्रीन पर जोड़ें या ऑफलाइन पैकेज लें।'
-                        : 'Add to mobile/desktop home screen or download offline launcher for zero-internet use.'}
+                      {tStr(
+                        'बिना इंटरनेट चलाने के लिए मोबाइल या कंप्यूटर की होम स्क्रीन पर जोड़ें या ऑफलाइन पैकेज लें।',
+                        'Bina internet chalane ke liye mobile ya desktop par install karein.',
+                        'Add to mobile/desktop home screen or download offline launcher for zero-internet use.'
+                      )}
                     </p>
                   </div>
 
@@ -550,7 +678,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="px-3.5 py-2 rounded-xl bg-[#10B981] text-[#04140D] font-extrabold text-[12px] hover:brightness-110 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>{isHindi ? 'इंस्टॉल' : 'Install'}</span>
+                    <span>{tStr('इंस्टॉल', 'Install Karein', 'Install')}</span>
                   </button>
                 </div>
               )}
@@ -561,12 +689,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div>
                     <div className="flex items-center gap-2 font-bold text-[13.5px] text-[#F8FAFC]">
                       <Share2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-                      <span>{isHindi ? 'पेज डायरेक्ट लिंक शेयर करें' : 'Share Direct Page Links'}</span>
+                      <span>{tStr('पेज डायरेक्ट लिंक शेयर करें', 'Direct Page Links Share Karein', 'Share Direct Page Links')}</span>
                     </div>
                     <p className="text-[11.5px] text-[#94A3B8]">
-                      {isHindi
-                        ? 'होम, लेजर, लक्ष्य या ट्रैकर का डायरेक्ट लिंक WhatsApp या सोशल मीडिया पर शेयर करें।'
-                        : 'Share deep links to Home, History, Goals, or Tracker on WhatsApp, X, or Telegram.'}
+                      {tStr(
+                        'होम, लेजर, लक्ष्य या ट्रैकर का डायरेक्ट लिंक WhatsApp या सोशल मीडिया पर शेयर करें।',
+                        'Home, ledger, goals ya tracker ke links WhatsApp par share karein.',
+                        'Share deep links to Home, History, Goals, or Tracker on WhatsApp, X, or Telegram.'
+                      )}
                     </p>
                   </div>
 
@@ -579,7 +709,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="px-3.5 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] font-extrabold text-[12px] hover:brightness-110 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs"
                   >
                     <Share2 className="w-3.5 h-3.5" />
-                    <span>{isHindi ? 'शेयर करें' : 'Share'}</span>
+                    <span>{tStr('शेयर करें', 'Share Karein', 'Share')}</span>
                   </button>
                 </div>
               )}
@@ -595,7 +725,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="flex items-center gap-2">
                     <Layers className="w-4 h-4 text-[#EF4444]" />
                     <span className="font-bold text-[13.5px] text-[#F8FAFC]">
-                      {isHindi ? 'खर्च श्रेणियां (Expense Categories)' : 'Custom Expense Categories'} ({currentCategories.length})
+                      {tStr('खर्च श्रेणियां (Expense Categories)', 'Custom Expense Categories', 'Custom Expense Categories')} ({currentCategories.length})
                     </span>
                   </div>
                 </div>
@@ -603,7 +733,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder={isHindi ? 'नई खर्च श्रेणी का नाम...' : 'Add new expense category...'}
+                    placeholder={tStr('नई खर्च श्रेणी का नाम...', 'Nayi expense category ka naam...', 'Add new expense category...')}
                     value={customExpCategoryInput}
                     onChange={(e) => setCustomExpCategoryInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddExpenseCategory())}
@@ -614,7 +744,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={handleAddExpenseCategory}
                     className="px-3 py-1.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] font-bold text-[12px] cursor-pointer hover:brightness-110"
                   >
-                    + Add
+                    + {tStr('जोड़ें', 'Add', 'Add')}
                   </button>
                 </div>
 
@@ -644,7 +774,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="flex items-center gap-2">
                     <Store className="w-4 h-4 text-[#10B981]" />
                     <span className="font-bold text-[13.5px] text-[#F8FAFC]">
-                      {isHindi ? 'कमाई के स्रोत (Income Sources)' : 'Custom Income Sources'} ({currentIncomeSources.length})
+                      {tStr('कमाई के स्रोत (Income Sources)', 'Custom Income Sources', 'Custom Income Sources')} ({currentIncomeSources.length})
                     </span>
                   </div>
                 </div>
@@ -652,7 +782,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder={isHindi ? 'नया कमाई स्रोत नाम...' : 'Add new income source...'}
+                    placeholder={tStr('नया कमाई स्रोत नाम...', 'Naya income source ka naam...', 'Add new income source...')}
                     value={customIncomeSourceInput}
                     onChange={(e) => setCustomIncomeSourceInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddIncomeSource())}
@@ -663,7 +793,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={handleAddIncomeSource}
                     className="px-3 py-1.5 rounded-xl bg-[#10B981] text-[#04140D] font-bold text-[12px] cursor-pointer hover:brightness-110"
                   >
-                    + Add
+                    + {tStr('जोड़ें', 'Add', 'Add')}
                   </button>
                 </div>
 
@@ -693,7 +823,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="flex items-center gap-2">
                     <Briefcase className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                     <span className="font-bold text-[13.5px] text-[#F8FAFC]">
-                      {isHindi ? 'कार्य श्रेणियां (Work Categories)' : 'Custom Work Categories'} ({currentWorkCategories.length})
+                      {tStr('कार्य श्रेणियां (Work Categories)', 'Custom Work Categories', 'Custom Work Categories')} ({currentWorkCategories.length})
                     </span>
                   </div>
                 </div>
@@ -701,7 +831,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder={isHindi ? 'नई कार्य श्रेणी नाम...' : 'Add new work category...'}
+                    placeholder={tStr('नई कार्य श्रेणी नाम...', 'Nayi work category ka naam...', 'Add new work category...')}
                     value={customWorkCategoryInput}
                     onChange={(e) => setCustomWorkCategoryInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddWorkCategory())}
@@ -712,7 +842,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={handleAddWorkCategory}
                     className="px-3 py-1.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] font-bold text-[12px] cursor-pointer hover:brightness-110"
                   >
-                    + Add
+                    + {tStr('जोड़ें', 'Add', 'Add')}
                   </button>
                 </div>
 
@@ -742,7 +872,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="flex items-center gap-2">
                     <Tag className="w-4 h-4 text-[var(--theme-secondary,#FFC700)]" />
                     <span className="font-bold text-[13.5px] text-[#F8FAFC]">
-                      {isHindi ? 'दैनिक डायरी टैग्स (Life Tags)' : 'Custom Journal Tags'} ({currentLifeTags.length})
+                      {tStr('दैनिक डायरी टैग्स (Life Tags)', 'Custom Journal Tags', 'Custom Journal Tags')} ({currentLifeTags.length})
                     </span>
                   </div>
                 </div>
@@ -750,7 +880,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder={isHindi ? 'नया डायरी टैग...' : 'Add new life tag...'}
+                    placeholder={tStr('नया डायरी टैग...', 'Naya diary / life tag...', 'Add new life tag...')}
                     value={customLifeTagInput}
                     onChange={(e) => setCustomLifeTagInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddLifeTag())}
@@ -761,7 +891,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={handleAddLifeTag}
                     className="px-3 py-1.5 rounded-xl bg-[var(--theme-secondary,#FFC700)] text-[#040D17] font-bold text-[12px] cursor-pointer hover:brightness-110"
                   >
-                    + Add
+                    + {tStr('जोड़ें', 'Add', 'Add')}
                   </button>
                 </div>
 
@@ -787,85 +917,157 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           )}
 
-          {/* TAB 3: 6-FUND ALLOCATION RULES */}
+          {/* TAB 3: DYNAMIC FUND ALLOCATION RULES & CATEGORIES */}
           {activeTab === 'rules' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
-                <div className="flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                   <div>
-                    <h4 className="font-bold text-[14px] text-[#F8FAFC]">
-                      {isHindi ? '6-फंड स्वचालित प्रतिशत विभाजन अनुकूलक' : '6-Fund Allocation Percentage Customizer'}
+                    <h4 className="font-bold text-[14.5px] text-[#F8FAFC] flex items-center gap-2">
+                      <Percent className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                      <span>{tStr('फंड श्रेणियां व विभाजन प्रतिशत अनुकूलक', 'Fund Categories Aur Split Allocation Rules', 'Fund Categories & Split Allocation Rules')}</span>
                     </h4>
                     <p className="text-[11.5px] text-[#94A3B8]">
-                      {isHindi
-                        ? 'नई आने वाली कमाई का प्रतिशत नियम निर्धारित करें। कुल योग 100% होना चाहिए।'
-                        : 'Adjust the automated split ratio for incoming revenue. Total must equal 100% exactly.'}
+                      {tStr(
+                        'अपनी जरूरत के अनुसार नए फंड जोड़ें, नाम/आइकन बदलें या हटाएं। कुल आवंटन ठीक 100% होना चाहिए।',
+                        'Naye funds add karein, icons/labels edit karein. Total allocation 100% hona chahiye.',
+                        'Add custom funds, edit icons/labels, or remove funds. Incoming income will be split according to these rules (Total must equal 100%).'
+                      )}
                     </p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={handleResetPercentages}
-                    className="text-[12px] font-bold text-[var(--theme-primary,#38BDF8)] hover:underline flex items-center gap-1 cursor-pointer shrink-0"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>{isHindi ? 'डिफ़ॉल्ट रीसेट' : 'Reset Rules'}</span>
-                  </button>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingFundItem(null);
+                        setIsFundEditorOpen(true);
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] font-bold text-[12px] flex items-center gap-1.5 hover:brightness-110 cursor-pointer shadow-xs active:scale-95 transition-all"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>{tStr('+ नया फंड जोड़ें', '+ Naya Fund Add Karein', '+ Add Fund')}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleResetPercentages}
+                      className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] font-semibold text-[11.5px] flex items-center gap-1 cursor-pointer"
+                      title="Reset all funds & percentages to defaults"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>{tStr('रीसेट', 'Reset', 'Reset')}</span>
+                    </button>
+                  </div>
                 </div>
 
-                {/* Fund percentage inputs */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  {FUND_ORDER.map((f) => {
-                    const cfg = FUND_CONFIGS[f];
-                    const val = customPercentages[f] ?? cfg.defaultPct;
+                {/* Fund cards list with Edit, Delete, Icon & Percentage input */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                  {currentFunds.map((cfg) => {
+                    const FundIcon = getFundIcon(cfg.id, cfg.iconName);
+                    const val = customPercentages[cfg.id] ?? cfg.defaultPct;
+
                     return (
                       <div
-                        key={f}
-                        className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3"
+                        key={cfg.id}
+                        className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-2.5 hover:border-[var(--theme-primary,#38BDF8)]/50 transition-colors"
                       >
-                        <div className="min-w-0">
-                          <span className="font-bold text-[13px] text-[#F8FAFC] block truncate">
-                            {FUND_LABELS[f]}
-                          </span>
-                          <span className="text-[11px] text-[#94A3B8] block truncate">{cfg.description}</span>
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                          <div
+                            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-xs"
+                            style={{ backgroundColor: `${cfg.color}25`, color: cfg.color }}
+                          >
+                            <FundIcon className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-bold text-[13px] text-[#F8FAFC] truncate">
+                                {cfg.label}
+                              </span>
+                              {cfg.isCustom && (
+                                <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30 shrink-0">
+                                  Custom
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10.5px] text-[#94A3B8] block truncate">
+                              {cfg.description}
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="flex items-center gap-1 shrink-0">
-                          <input
-                            type="number"
-                            step="0.25"
-                            min="0"
-                            max="100"
-                            value={val}
-                            onChange={(e) => {
-                              const num = parseFloat(e.target.value) || 0;
-                              setCustomPercentages({
-                                ...customPercentages,
-                                [f]: num
-                              });
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              step="0.5"
+                              min="0"
+                              max="100"
+                              value={val}
+                              onChange={(e) => {
+                                const num = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0));
+                                setCustomPercentages({
+                                  ...customPercentages,
+                                  [cfg.id]: num
+                                });
+                              }}
+                              className="w-14 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-lg px-2 py-1 text-right text-[12.5px] font-mono font-bold text-[#F8FAFC] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+                            />
+                            <span className="text-[11.5px] text-[#94A3B8] font-bold">%</span>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingFundItem(cfg);
+                              setIsFundEditorOpen(true);
                             }}
-                            className="w-16 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-lg px-2 py-1 text-right text-[13px] font-mono font-bold text-[#F8FAFC] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
-                          />
-                          <span className="text-[12px] text-[#94A3B8] font-bold">%</span>
+                            className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)] cursor-pointer transition-colors"
+                            title="Edit Fund"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setFundToDelete(cfg)}
+                            className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#EF4444] hover:border-[#EF4444]/40 cursor-pointer transition-colors"
+                            title="Remove Fund"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       </div>
                     );
                   })}
                 </div>
 
-                {/* Live total verification indicator */}
-                <div className="flex items-center justify-between pt-3 border-t border-[var(--theme-border,#213E61)]">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[12.5px] font-bold text-[#94A3B8]">
-                      {isHindi ? 'कुल प्रतिशत योग' : 'Total Allocation'}:
-                    </span>
-                    <span
-                      className={`font-mono font-bold text-[14px] ${
-                        isPercentValid ? 'text-[#10B981]' : 'text-[#EF4444]'
-                      }`}
-                    >
-                      {totalPercent.toFixed(2)}%
-                    </span>
+                {/* Live total verification indicator & Auto Balance */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[var(--theme-border,#213E61)]">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[12.5px] font-bold text-[#94A3B8]">
+                        {tStr('कुल प्रतिशत योग', 'Total Allocation', 'Total Allocation')}:
+                      </span>
+                      <span
+                        className={`font-mono font-bold text-[14px] ${
+                          isPercentValid ? 'text-[#10B981]' : 'text-[#EF4444]'
+                        }`}
+                      >
+                        {totalPercent.toFixed(2)}%
+                      </span>
+                    </div>
+
+                    {!isPercentValid && (
+                      <button
+                        type="button"
+                        onClick={handleAutoBalance}
+                        className="px-2.5 py-1 rounded-lg bg-[#F59E0B]/15 border border-[#F59E0B]/30 text-[#F59E0B] font-bold text-[11px] flex items-center gap-1 hover:bg-[#F59E0B]/25 cursor-pointer transition-all active:scale-95"
+                      >
+                        <Sparkles className="w-3 h-3" />
+                        <span>{tStr('स्वतः 100% करें', 'Auto-Balance Karein', 'Auto-Balance')}</span>
+                      </button>
+                    )}
                   </div>
 
                   <button
@@ -878,7 +1080,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         : 'bg-[var(--theme-border,#213E61)] text-[#64748B] cursor-not-allowed'
                     }`}
                   >
-                    {isHindi ? 'नया नियम सहेजें' : 'Save Allocation Rule'}
+                    {tStr('नियम सहेजें', 'Rules Save Karein', 'Save Allocation Rules')}
                   </button>
                 </div>
               </div>
@@ -891,12 +1093,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <div>
                   <h4 className="font-bold text-[14px] text-[#F8FAFC]">
-                    {isHindi ? 'लोकल स्टोरेज बैकअप और रिस्टोर' : 'Local Storage Backup & Restore'}
+                    {tStr('लोकल स्टोरेज बैकअप और रिस्टोर', 'Local Storage Backup Aur Restore', 'Local Storage Backup & Restore')}
                   </h4>
                   <p className="text-[11.5px] text-[#94A3B8]">
-                    {isHindi
-                      ? 'आपका संपूर्ण खाता डेटा 100% आपके डिवाइस में सुरक्षित है। नियमित बैकअप JSON डाउनलोड करें।'
-                      : 'Your financial data is 100% client-side. Export offline backups regularly to prevent cache loss.'}
+                    {tStr(
+                      'आपका संपूर्ण खाता डेटा 100% आपके डिवाइस में सुरक्षित है। नियमित बैकअप JSON डाउनलोड करें।',
+                      'Aapka financial data 100% aapke device mein safe hai. Regular JSON backup download karein.',
+                      'Your financial data is 100% client-side. Export offline backups regularly to prevent cache loss.'
+                    )}
                   </p>
                 </div>
 
@@ -909,10 +1113,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <Download className="w-5 h-5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <div>
                       <div className="font-bold text-[13px] text-[#F8FAFC]">
-                        {isHindi ? 'JSON बैकअप डाउनलोड करें' : 'Export JSON Backup'}
+                        {tStr('JSON बैकअप डाउनलोड करें', 'JSON Backup Download Karein', 'Export JSON Backup')}
                       </div>
                       <div className="text-[11px] text-[#94A3B8]">
-                        {isHindi ? 'पूर्ण डेटा, सेटिंग्स व इतिहास' : 'Complete data, goals & logs'}
+                        {tStr('पूर्ण डेटा, सेटिंग्स व इतिहास', 'Complete data, goals aur logs', 'Complete data, goals & logs')}
                       </div>
                     </div>
                   </button>
@@ -921,10 +1125,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <Upload className="w-5 h-5 text-[var(--theme-secondary,#FFC700)] shrink-0" />
                     <div>
                       <div className="font-bold text-[13px] text-[#F8FAFC]">
-                        {isHindi ? 'JSON फ़ाइल से रिस्टोर करें' : 'Restore from JSON File'}
+                        {tStr('JSON फ़ाइल से रिस्टोर करें', 'JSON File Se Restore Karein', 'Restore from JSON File')}
                       </div>
                       <div className="text-[11px] text-[#94A3B8]">
-                        {isHindi ? 'पहले सहेजा बैकअप लोड करें' : 'Import previously saved ledger'}
+                        {tStr('पहले सहेजा बैकअप लोड करें', 'Pehle ka saved backup load karein', 'Import previously saved ledger')}
                       </div>
                     </div>
                     <input
@@ -941,7 +1145,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {/* Sample Data & Reset Danger Zone */}
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <h4 className="font-bold text-[13.5px] text-[#F8FAFC]">
-                  {isHindi ? 'नमूना डेटा व रीसेट' : 'Sample Data & Reset Control'}
+                  {tStr('नमूना डेटा व रीसेट', 'Sample Data Aur Reset Control', 'Sample Data & Reset Control')}
                 </h4>
 
                 <div className="flex flex-col sm:flex-row gap-2.5">
@@ -951,7 +1155,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="flex-1 py-2.5 px-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
                     <RefreshCw className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-                    <span>{isHindi ? 'नमूना डेटा लोड करें' : 'Load Demo Sample Data'}</span>
+                    <span>{tStr('नमूना डेटा लोड करें', 'Sample Demo Data Load Karein', 'Load Demo Sample Data')}</span>
                   </button>
 
                   <button
@@ -960,7 +1164,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="flex-1 py-2.5 px-3 rounded-xl bg-[#EF4444]/15 border border-[#EF4444]/30 hover:bg-[#EF4444]/25 text-[#EF4444] text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
-                    <span>{isHindi ? 'सभी डेटा मिटाएं व रीसेट करें' : 'Wipe & Reset All Khata Data'}</span>
+                    <span>{tStr('सभी डेटा मिटाएं व रीसेट करें', 'Sabhi Data Wipe Aur Reset Karein', 'Wipe & Reset All Khata Data')}</span>
                   </button>
                 </div>
               </div>
@@ -971,7 +1175,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
                     <Sparkles className="w-4 h-4 text-[#10B981]" />
                     <span className="font-bold text-[13.5px] text-[#F8FAFC]">
-                      {isHindi ? 'ऐप वर्शन व कैश कंट्रोल' : 'App Version & PWA Cache Control'}
+                      {tStr('ऐप वर्शन व कैश कंट्रोल', 'App Version Aur Cache Control', 'App Version & PWA Cache Control')}
                     </span>
                   </div>
                   <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
@@ -980,9 +1184,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
 
                 <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
-                  {isHindi
-                    ? 'GitHub या Vercel पर अपडेट होने पर नया वर्शन ऑटोमैटिक लोड होता है। यदि तुरंत नया लोगो, JS या CSS लोड करना हो, तो नीचे क्लिक करें।'
-                    : 'App automatically detects and installs latest updates on launch. Click below if you need an instant manual cache wipe & fresh asset reload.'}
+                  {tStr(
+                    'GitHub या Vercel पर अपडेट होने पर नया वर्शन ऑटोमैटिक लोड होता है। यदि तुरंत नया लोगो, JS या CSS लोड करना हो, तो नीचे क्लिक करें।',
+                    'Naya update aane par app auto-detect karta hai. Instant cache wipe aur fresh reload ke liye neeche click karein.',
+                    'App automatically detects and installs latest updates on launch. Click below if you need an instant manual cache wipe & fresh asset reload.'
+                  )}
                 </p>
 
                 <button
@@ -994,8 +1200,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <RotateCcw className={`w-4 h-4 ${isUpdatingApp ? 'animate-spin' : ''}`} />
                   <span>
                     {isUpdatingApp
-                      ? (isHindi ? 'अपडेट किया जा रहा है...' : 'Refreshing...')
-                      : (isHindi ? 'नवीनतम वर्शन चेक करें व कैश रीसेट करें' : 'Check for Updates & Force Fresh Cache')}
+                      ? tStr('अपडेट किया जा रहा है...', 'Refresh ho raha hai...', 'Refreshing...')
+                      : tStr('नवीनतम वर्शन चेक करें व कैश रीसेट करें', 'Updates Check Karein Aur Cache Reset Karein', 'Check for Updates & Force Fresh Cache')}
                   </span>
                 </button>
               </div>
@@ -1012,12 +1218,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <Lock className="w-5 h-5" />
                     <div>
                       <h4 className="font-bold text-[15px] text-[#F8FAFC]">
-                        {isHindi ? 'ऐप पासकोड व पिन लॉक' : 'App Passcode & PIN Lock'}
+                        {tStr('ऐप पासकोड व पिन लॉक', 'App Passcode Aur PIN Lock', 'App Passcode & PIN Lock')}
                       </h4>
                       <p className="text-[11px] text-[#94A3B8]">
-                        {isHindi
-                          ? 'वित्तीय प्रविष्टियों और डायरी को सुरक्षित रखने हेतु 4-अंकीय पिन व रिकवरी सवाल'
-                          : 'Protect financial records and journal entries with a 4-digit PIN & recovery question'}
+                        {tStr(
+                          'वित्तीय प्रविष्टियों और डायरी को सुरक्षित रखने हेतु 4-अंकीय पिन व रिकवरी सवाल',
+                          'Financial records aur diary ko protect karne ke liye 4-digit PIN aur recovery question',
+                          'Protect financial records and journal entries with a 4-digit PIN & recovery question'
+                        )}
                       </p>
                     </div>
                   </div>
@@ -1030,12 +1238,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     }`}
                   >
                     {securityLock?.isEnabled
-                      ? isHindi
-                        ? 'सुरक्षा सक्रिय (Active)'
-                        : 'Locked / Protected'
-                      : isHindi
-                      ? 'अक्रिय (Disabled)'
-                      : 'Disabled'}
+                      ? tStr('सुरक्षा सक्रिय (Active)', 'Security Active', 'Locked / Protected')
+                      : tStr('अक्रिय (Disabled)', 'Security Off (Disabled)', 'Disabled')}
                   </span>
                 </div>
 
@@ -1052,12 +1256,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <Lock className="w-4 h-4" />
                       <span>
                         {securityLock?.isEnabled
-                          ? isHindi
-                            ? 'पिन व रिकवरी सेटिंग्स बदलें'
-                            : 'Modify Passcode & Recovery'
-                          : isHindi
-                          ? 'सुरक्षा पिन सेट करें (Set PIN)'
-                          : 'Set Up App Passcode'}
+                          ? tStr('पिन व रिकवरी सेटिंग्स बदलें', 'PIN Aur Recovery Settings Badlein', 'Modify Passcode & Recovery')
+                          : tStr('सुरक्षा पिन सेट करें (Set PIN)', 'Security PIN Set Karein', 'Set Up App Passcode')}
                       </span>
                     </button>
                   )}
@@ -1072,7 +1272,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="py-2.5 px-4 rounded-xl bg-[#EF4444]/15 border border-[#EF4444]/30 hover:bg-[#EF4444]/25 text-[#EF4444] text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
                     >
                       <Lock className="w-4 h-4" />
-                      <span>{isHindi ? 'अभी लॉक करें' : 'Lock Now'}</span>
+                      <span>{tStr('अभी लॉक करें', 'Abhi Lock Karein', 'Lock Now')}</span>
                     </button>
                   )}
                 </div>
@@ -1083,7 +1283,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
                   <ShieldCheck className="w-5 h-5 text-[#10B981]" />
                   <h4 className="font-bold text-[15px] text-[#F8FAFC]">
-                    {isHindi ? '100% ऑफलाइन व सुरक्षित आर्किटेक्चर' : '100% Offline & Client-Side Architecture'}
+                    {tStr('100% ऑफलाइन व सुरक्षित आर्किटेक्चर', '100% Offline Aur Secure Architecture', '100% Offline & Client-Side Architecture')}
                   </h4>
                 </div>
                 <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
@@ -1236,7 +1436,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="p-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[#F8FAFC] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <HelpCircle className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                      <span>{isHindi ? 'सहायता केंद्र' : 'Help Centre'}</span>
+                      <span>{tStr('सहायता केंद्र', 'Help Centre', 'Help Centre')}</span>
                     </button>
 
                     <button
@@ -1248,7 +1448,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="p-2 rounded-xl bg-[#EF4444]/10 border border-[#EF4444]/30 hover:bg-[#EF4444]/20 text-[#FCA5A5] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <Bug className="w-3.5 h-3.5 text-[#EF4444]" />
-                      <span>{isHindi ? 'बग रिपोर्ट करें' : 'Report Bug'}</span>
+                      <span>{tStr('बग रिपोर्ट करें', 'Bug Report Karein', 'Report Bug')}</span>
                     </button>
 
                     <button
@@ -1260,7 +1460,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="p-2 rounded-xl bg-[#F59E0B]/10 border border-[#F59E0B]/30 hover:bg-[#F59E0B]/20 text-[#FCD34D] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <Lightbulb className="w-3.5 h-3.5 text-[#F59E0B]" />
-                      <span>{isHindi ? 'सुझाव दें' : 'Suggestion'}</span>
+                      <span>{tStr('सुझाव दें', 'Suggestion Dein', 'Suggestion')}</span>
                     </button>
                   </div>
                 )}
@@ -1339,7 +1539,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={onClose}
             className="px-5 py-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] hover:brightness-110 font-bold text-[13px] shadow-sm cursor-pointer transition-all active:scale-98"
           >
-            {isHindi ? 'पूर्ण' : 'Done'}
+            {tStr('पूर्ण', 'Done', 'Done')}
           </button>
         </div>
       </div>
@@ -1348,19 +1548,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       {confirmAction === 'reset' && (
         <ConfirmModal
           isOpen={true}
-          title={isHindi ? 'सभी डेटा रीसेट करें?' : 'Reset All Ledger Data?'}
+          title={tStr('सभी डेटा रीसेट करें?', 'Sabhi Data Reset Karein?', 'Reset All Ledger Data?')}
           description={
-            isHindi
-              ? 'यह आपके सभी लेन-देन, लक्ष्य और कार्य रिकॉर्ड को मिटा देगा। यह क्रिया वापस नहीं ली जा सकती।'
-              : 'This will permanently erase all ledger transactions, goals and work deliverables from local memory.'
+            tStr(
+              'यह आपके सभी लेन-देन, लक्ष्य और कार्य रिकॉर्ड को मिटा देगा। यह क्रिया वापस नहीं ली जा सकती।',
+              'Yeh aapke sabhi transactions, goals aur work records ko delete kar dega. Yeh action undo nahi ho sakta.',
+              'This will permanently erase all ledger transactions, goals and work deliverables from local memory.'
+            )
           }
-          confirmLabel={isHindi ? 'हां, सब मिटाएं' : 'Yes, Wipe Everything'}
-          cancelLabel={isHindi ? 'रद्द करें' : 'Cancel'}
+          confirmLabel={tStr('हां, सब मिटाएं', 'Haan, Sab Delete Karein', 'Yes, Wipe Everything')}
+          cancelLabel={tStr('रद्द करें', 'Cancel Karein', 'Cancel')}
           isDanger={true}
           onConfirm={() => {
             onResetData();
             setConfirmAction(null);
-            showFeedback('success', isHindi ? 'सभी डेटा रीसेट हो गया।' : 'All ledger data reset.');
+            showFeedback('success', tStr('सभी डेटा रीसेट हो गया।', 'Sabhi data reset ho gaya.', 'All ledger data reset.'));
           }}
           onCancel={() => setConfirmAction(null)}
         />
@@ -1369,22 +1571,56 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       {confirmAction === 'sample' && (
         <ConfirmModal
           isOpen={true}
-          title={isHindi ? 'नमूना डेटा लोड करें?' : 'Load Demo Sample Data?'}
+          title={tStr('नमूना डेटा लोड करें?', 'Sample Demo Data Load Karein?', 'Load Demo Sample Data?')}
           description={
-            isHindi
-              ? 'यह आपके मौजूदा डेटा को नए व्यावहारिक उदाहरण लेन-देन के साथ बदल देगा।'
-              : 'This will populate your ledger with sample income entries and active fund allocations.'
+            tStr(
+              'यह आपके मौजूदा डेटा को नए व्यावहारिक उदाहरण लेन-देन के साथ बदल देगा।',
+              'Yeh aapke current data ko sample income entries aur fund allocations ke sath replace kar dega.',
+              'This will populate your ledger with sample income entries and active fund allocations.'
+            )
           }
-          confirmLabel={isHindi ? 'लोड करें' : 'Load Demo'}
-          cancelLabel={isHindi ? 'रद्द करें' : 'Cancel'}
+          confirmLabel={tStr('लोड करें', 'Load Karein', 'Load Demo')}
+          cancelLabel={tStr('रद्द करें', 'Cancel Karein', 'Cancel')}
           onConfirm={() => {
             onLoadSampleData();
             setConfirmAction(null);
-            showFeedback('success', isHindi ? 'नमूना डेटा लोड हो गया!' : 'Sample demo data loaded!');
+            showFeedback('success', tStr('नमूना डेटा लोड हो गया!', 'Sample demo data load ho gaya!', 'Sample demo data loaded!'));
           }}
           onCancel={() => setConfirmAction(null)}
         />
       )}
+      {/* Fund Deletion Confirmation */}
+      {fundToDelete && (
+        <ConfirmModal
+          isOpen={true}
+          title={tStr(`फंड "${fundToDelete.label}" हटाएं?`, `Fund "${fundToDelete.label}" delete karein?`, `Remove Fund "${fundToDelete.label}"?`)}
+          description={
+            tStr(
+              `क्या आप वाकई "${fundToDelete.label}" फंड हटाना चाहते हैं? इसका प्रतिशत शेष फंड्स में स्वतः समायोजित हो जाएगा।`,
+              `Kya aap waqai "${fundToDelete.label}" fund remove karna chahte hain? Iska percentage bache hue funds mein adjust ho jayega.`,
+              `Are you sure you want to remove "${fundToDelete.label}"? Its split allocation percentage will be automatically reallocated to keep the total at 100%.`
+            )
+          }
+          confirmLabel={tStr('हां, हटाएं', 'Haan, Remove Karein', 'Yes, Remove')}
+          cancelLabel={tStr('रद्द करें', 'Cancel Karein', 'Cancel')}
+          isDanger={true}
+          onConfirm={handleConfirmDeleteFund}
+          onCancel={() => setFundToDelete(null)}
+        />
+      )}
+
+      {/* Fund Editor Modal (Add/Edit) */}
+      <FundEditorModal
+        isOpen={isFundEditorOpen}
+        onClose={() => {
+          setIsFundEditorOpen(false);
+          setEditingFundItem(null);
+        }}
+        onSave={handleSaveFund}
+        editingFund={editingFundItem}
+        existingFunds={currentFunds}
+        language={language}
+      />
     </div>
   );
 };

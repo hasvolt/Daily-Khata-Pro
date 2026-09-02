@@ -1,7 +1,7 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "../utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
-import { Entry, FundType, PaymentMode, AppLanguage } from '../types';
-import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_INCOME_SOURCES, DEFAULT_CATEGORIES } from '../data/defaults';
+import { Entry, FundType, FundConfig, PaymentMode, AppLanguage } from '../types';
+import { DEFAULT_FUNDS, FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_INCOME_SOURCES, DEFAULT_CATEGORIES } from '../data/defaults';
 import { formatCurrency, calculateFundSplits, triggerHapticSound } from '../utils/khataCalculations';
 import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
@@ -18,7 +18,10 @@ import {
   Plus,
   X,
   Layers,
-  Sparkles
+  Sparkles,
+  Sliders,
+  Target,
+  Briefcase
 } from 'lucide-react';
 
 interface AddViewProps {
@@ -27,6 +30,7 @@ interface AddViewProps {
   categories: string[];
   incomeSources?: string[];
   percentages: Record<FundType, number>;
+  funds?: FundConfig[];
   fundTotals?: Record<FundType, number>;
   editingEntry?: Entry | null;
   onSaveEntry: (entry: Omit<Entry, 'id' | 'createdAt'>, editingId?: string) => void;
@@ -43,6 +47,7 @@ export const AddView: React.FC<AddViewProps> = ({
   categories = DEFAULT_CATEGORIES,
   incomeSources = DEFAULT_INCOME_SOURCES,
   percentages,
+  funds,
   editingEntry,
   onSaveEntry,
   onAddCategory,
@@ -52,7 +57,10 @@ export const AddView: React.FC<AddViewProps> = ({
   privacyMask = false
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
-  const isHindi = language === 'hi';
+  const isHindi = language === 'hi' || language === 'hinglish';
+
+  const activeFunds: FundConfig[] = funds && funds.length > 0 ? funds : DEFAULT_FUNDS;
+  const fundKeys = activeFunds.map((f) => f.id);
 
   const [type, setType] = useState<'income' | 'expense'>(editingEntry ? editingEntry.type : initialType);
   const [amountStr, setAmountStr] = useState<string>(
@@ -60,12 +68,20 @@ export const AddView: React.FC<AddViewProps> = ({
   );
   const [source, setSource] = useState<string>(editingEntry?.source || incomeSources[0] || 'Salary & Wages');
   const [category, setCategory] = useState<string>(editingEntry?.category || categories[0] || 'Food & Groceries');
-  const [selectedFund, setSelectedFund] = useState<FundType>(editingEntry?.fund || 'personal');
+  const [selectedFund, setSelectedFund] = useState<FundType>(editingEntry?.fund || activeFunds[0]?.id || 'personal');
   const [paymentMode, setPaymentMode] = useState<PaymentMode>(editingEntry?.paymentMode || 'upi');
   const [clientName, setClientName] = useState<string>(editingEntry?.clientName || '');
   const [note, setNote] = useState<string>(editingEntry?.note || '');
   const [date, setDate] = useState<string>(editingEntry?.date || new Date().toISOString().split('T')[0]);
   const [error, setError] = useState<string>('');
+
+  // Income Allocation Choice: Split across all funds VS single specific fund
+  const [incomeAllocationMode, setIncomeAllocationMode] = useState<'all' | 'single'>(
+    editingEntry?.allocationMode || (editingEntry?.targetFund || (editingEntry?.type === 'income' && editingEntry?.fund) ? 'single' : 'all')
+  );
+  const [incomeSingleFund, setIncomeSingleFund] = useState<FundType>(
+    editingEntry?.targetFund || (editingEntry?.type === 'income' && editingEntry?.fund) || (activeFunds.find(f => f.id === 'business')?.id || activeFunds[0]?.id || 'business')
+  );
 
   // Inline custom category / source input state
   const [isAddingCustomCategory, setIsAddingCustomCategory] = useState<boolean>(false);
@@ -80,7 +96,7 @@ export const AddView: React.FC<AddViewProps> = ({
   }, [initialAmount, editingEntry]);
 
   const parsedAmount = parseFloat(amountStr) || 0;
-  const splits = calculateFundSplits(parsedAmount, percentages);
+  const splits = calculateFundSplits(parsedAmount, percentages, fundKeys);
   const quickAmounts = [500, 1000, 2000, 5000, 10000, 25000, 50000];
 
   const handleCreateCustomCategory = () => {
@@ -123,7 +139,25 @@ export const AddView: React.FC<AddViewProps> = ({
       paymentMode,
       clientName: clientName.trim() || undefined,
       note: note.trim() || undefined,
-      ...(type === 'income' ? { source, splits } : { category, fund: selectedFund })
+      ...(type === 'income'
+        ? (incomeAllocationMode === 'single'
+            ? {
+                source,
+                allocationMode: 'single' as const,
+                fund: incomeSingleFund,
+                targetFund: incomeSingleFund,
+                splits: {
+                  ...activeFunds.reduce((acc, f) => ({ ...acc, [f.id]: 0 }), {} as Record<FundType, number>),
+                  [incomeSingleFund]: parsedAmount
+                }
+              }
+            : {
+                source,
+                allocationMode: 'all' as const,
+                splits
+              }
+          )
+        : { category, fund: selectedFund })
     };
 
     triggerHapticSound('save');
@@ -194,7 +228,7 @@ export const AddView: React.FC<AddViewProps> = ({
 
           <div className="relative">
             <span
-              className="absolute left-4 top-1/2 -translate-y-1/2 font-serif-display text-[30px] font-bold"
+              className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-[28px] font-bold"
               style={{ color: 'var(--theme-primary, #38BDF8)' }}
             >{getCurrencyConfig(getCurrentLanguage()).symbol}</span>
             <input
@@ -208,7 +242,7 @@ export const AddView: React.FC<AddViewProps> = ({
                 setAmountStr(e.target.value);
                 if (error) setError('');
               }}
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-serif-display text-[30px] sm:text-[36px] font-bold rounded-2xl pl-12 pr-4 py-3.5 focus:outline-none transition-all placeholder:text-[#64748B]"
+              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-mono text-[28px] sm:text-[34px] font-bold tracking-tight rounded-2xl pl-12 pr-4 py-3.5 focus:outline-none transition-all placeholder:text-[#64748B]"
               style={{
                 borderColor: amountStr ? 'var(--theme-primary, #38BDF8)' : undefined
               }}
@@ -382,15 +416,15 @@ export const AddView: React.FC<AddViewProps> = ({
               <label className="text-[12.5px] font-bold uppercase tracking-wider text-[#94A3B8] block mb-2">
                 {t.add.fundDeductLabel}
               </label>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {FUND_ORDER.map((f) => {
-                  const cfg = FUND_CONFIGS[f];
-                  const isSelected = selectedFund === f;
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                {activeFunds.map((cfg) => {
+                  const isSelected = selectedFund === cfg.id;
+                  const label = isHindi && cfg.hindiLabel ? cfg.hindiLabel : cfg.label;
                   return (
                     <button
-                      key={f}
+                      key={cfg.id}
                       type="button"
-                      onClick={() => setSelectedFund(f)}
+                      onClick={() => setSelectedFund(cfg.id)}
                       className={`py-2 px-2.5 rounded-xl border text-[12px] font-bold text-center transition-all cursor-pointer truncate ${
                         isSelected
                           ? 'border-[var(--theme-primary,#38BDF8)] shadow-xs'
@@ -402,7 +436,7 @@ export const AddView: React.FC<AddViewProps> = ({
                         borderColor: isSelected ? cfg.color : undefined
                       }}
                     >
-                      {FUND_LABELS[f]}
+                      {label}
                     </button>
                   );
                 })}
@@ -411,32 +445,185 @@ export const AddView: React.FC<AddViewProps> = ({
           </div>
         )}
 
-        {/* 3. Automatic 6-Fund Split Live Breakdown (for Income) */}
-        {type === 'income' && parsedAmount > 0 && (
-          <div className="p-4 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-2xl space-y-3">
-            <div className="flex items-center justify-between text-[12.5px] font-bold text-[#94A3B8] border-b border-[var(--theme-border,#213E61)] pb-2">
-              <span>{t.add.incomeSplitsPreview}</span>
-              <span className="font-mono text-[#F8FAFC]">{formatCurrency(parsedAmount, privacyMask)}</span>
+        {/* 3. Income Allocation Mode Selector (All Funds vs Single Specific Fund) */}
+        {type === 'income' && (
+          <div className="p-4 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-2xl space-y-3.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-[var(--theme-border,#213E61)] pb-2.5">
+              <div>
+                <label className="text-[12.5px] font-bold uppercase tracking-wider text-[#F8FAFC] flex items-center gap-1.5">
+                  <Sliders className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                  <span>{isHindi ? 'फंड आवंटन का तरीका (Income Allocation)' : 'Income Allocation Option'}</span>
+                </label>
+                <p className="text-[11px] text-[#94A3B8] mt-0.5">
+                  {isHindi
+                    ? 'चुनें कि आय को सभी फंड्स में बांटना है या किसी एक फंड में रखना है'
+                    : 'Choose whether to distribute across all funds or deposit directly into a single fund'}
+                </p>
+              </div>
+              {parsedAmount > 0 && (
+                <span className="font-mono text-[13px] font-bold text-[#10B981] shrink-0">
+                  +{formatCurrency(parsedAmount, privacyMask)}
+                </span>
+              )}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-              {FUND_ORDER.map((f) => {
-                const cfg = FUND_CONFIGS[f];
-                const pct = percentages[f] ?? cfg.defaultPct;
-                const allocated = splits[f] || 0;
-                return (
-                  <div key={f} className="p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
-                    <div className="flex justify-between items-center text-[11px] text-[#94A3B8]">
-                      <span className="font-medium truncate">{FUND_LABELS[f]}</span>
-                      <span className="font-mono font-bold text-[#CBD5E1]">{pct}%</span>
-                    </div>
-                    <div className="font-serif-display font-bold text-[15px] sm:text-[16px] text-[#F8FAFC] mt-0.5">
-                      {formatCurrency(allocated, privacyMask)}
-                    </div>
+            {/* Two Allocation Choices */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Option A: Split across all funds */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIncomeAllocationMode('all');
+                  triggerHapticSound('click');
+                }}
+                className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-2.5 ${
+                  incomeAllocationMode === 'all'
+                    ? 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-primary,#38BDF8)] ring-1 ring-[var(--theme-primary,#38BDF8)]/50 shadow-sm'
+                    : 'bg-[var(--theme-card,#132438)]/50 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                }`}
+              >
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
+                    incomeAllocationMode === 'all'
+                      ? 'bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)]'
+                      : 'bg-white/5 text-[#94A3B8]'
+                  }`}
+                >
+                  <Sliders className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[13px] text-[#F8FAFC] flex items-center justify-between">
+                    <span>{isHindi ? 'सभी फंड्स में बांटें (% Rule)' : 'Split Across All Funds'}</span>
+                    {incomeAllocationMode === 'all' && (
+                      <Check className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                    )}
                   </div>
-                );
-              })}
+                  <div className="text-[11px] text-[#94A3B8] mt-0.5 leading-snug">
+                    {isHindi ? 'विभाजन नियम के अनुसार सभी फंड्स में स्वचालित विभाजन' : 'Automated split across all funds according to your % rules'}
+                  </div>
+                </div>
+              </button>
+
+              {/* Option B: Single Fund Direct */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIncomeAllocationMode('single');
+                  triggerHapticSound('click');
+                }}
+                className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-2.5 ${
+                  incomeAllocationMode === 'single'
+                    ? 'bg-[var(--theme-surface,#0E1A29)] border-[#A855F7] ring-1 ring-[#A855F7]/50 shadow-sm'
+                    : 'bg-[var(--theme-card,#132438)]/50 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                }`}
+              >
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
+                    incomeAllocationMode === 'single'
+                      ? 'bg-[#A855F7]/20 text-[#A855F7]'
+                      : 'bg-white/5 text-[#94A3B8]'
+                  }`}
+                >
+                  <Target className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[13px] text-[#F8FAFC] flex items-center justify-between">
+                    <span>{isHindi ? 'किसी एक फंड में (Single Fund)' : 'Deposit to Single Fund'}</span>
+                    {incomeAllocationMode === 'single' && (
+                      <Check className="w-3.5 h-3.5 text-[#A855F7]" />
+                    )}
+                  </div>
+                  <div className="text-[11px] text-[#94A3B8] mt-0.5 leading-snug">
+                    {isHindi ? '100% पूरी राशि किसी एक चुने हुए फंड (जैसे Business, Savings आदि) में' : '100% of this income goes directly into one chosen fund'}
+                  </div>
+                </div>
+              </button>
             </div>
+
+            {/* When Single Fund is Selected: Fund Selector Grid */}
+            {incomeAllocationMode === 'single' && (
+              <div className="p-3 bg-[var(--theme-surface,#0E1A29)] border border-[#A855F7]/30 rounded-xl space-y-2.5 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between text-[11.5px] font-bold text-[#F8FAFC]">
+                  <span className="text-[#A855F7] flex items-center gap-1.5">
+                    <Target className="w-3.5 h-3.5" />
+                    {isHindi ? 'किस फंड में 100% जमा करना चाहते हैं?' : 'Select destination fund pot:'}
+                  </span>
+                  <span className="font-mono text-[11px] text-[#94A3B8]">100% Allocation</span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                  {activeFunds.map((cfg) => {
+                    const isSelected = incomeSingleFund === cfg.id;
+                    const label = isHindi && cfg.hindiLabel ? cfg.hindiLabel : cfg.label;
+                    return (
+                      <button
+                        key={cfg.id}
+                        type="button"
+                        onClick={() => {
+                          setIncomeSingleFund(cfg.id);
+                          triggerHapticSound('click');
+                        }}
+                        className={`p-2 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'shadow-sm ring-1 ring-[#A855F7]/50'
+                            : 'bg-[var(--theme-card,#132438)]/60 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                        }`}
+                        style={{
+                          borderColor: isSelected ? cfg.color : undefined,
+                          backgroundColor: isSelected ? `${cfg.color}25` : undefined,
+                          color: isSelected ? cfg.color : undefined
+                        }}
+                      >
+                        <div
+                          className="w-2.5 h-2.5 rounded-full shrink-0"
+                          style={{ backgroundColor: cfg.color }}
+                        />
+                        <span className="text-[12px] font-bold truncate">
+                          {label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {parsedAmount > 0 && (
+                  <div className="p-2.5 rounded-lg bg-[#10B981]/10 border border-[#10B981]/25 flex items-center justify-between text-[12px] font-mono text-[#10B981]">
+                    <span>
+                      100% Direct Deposit to {activeFunds.find((f) => f.id === incomeSingleFund)?.label || incomeSingleFund}:
+                    </span>
+                    <span className="font-bold">+{formatCurrency(parsedAmount, privacyMask)}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* When All Funds is Selected: Live Breakdown */}
+            {incomeAllocationMode === 'all' && parsedAmount > 0 && (
+              <div className="space-y-2 pt-1 animate-in fade-in duration-150">
+                <div className="flex justify-between items-center text-[11px] text-[#94A3B8]">
+                  <span>{t.add.incomeSplitsPreview}</span>
+                  <span className="font-mono text-[10.5px]">Sum: 100%</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                  {activeFunds.map((cfg) => {
+                    const pct = percentages[cfg.id] ?? cfg.defaultPct;
+                    const allocated = splits[cfg.id] || 0;
+                    const label = isHindi && cfg.hindiLabel ? cfg.hindiLabel : cfg.label;
+                    return (
+                      <div key={cfg.id} className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
+                        <div className="flex justify-between items-center text-[10.5px] text-[#94A3B8]">
+                          <span className="font-medium truncate">{label}</span>
+                          <span className="font-mono font-bold text-[#CBD5E1]">{pct}%</span>
+                        </div>
+                        <div className="font-mono font-bold text-[12.5px] sm:text-[13.5px] text-[#F8FAFC] mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                          {formatCurrency(allocated, privacyMask)}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

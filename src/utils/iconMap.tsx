@@ -84,10 +84,57 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   // Funds
   personal: User,
   family: Home,
+  fund_business: Briefcase,
   buffer: ShieldAlert,
   emergency: HeartPulse,
   saving: PiggyBank,
   fund_investment: TrendingUp
+};
+
+export const AVAILABLE_FUND_ICONS: { name: string; label: string; icon: LucideIcon }[] = [
+  { name: 'User', label: 'Personal / Self', icon: User },
+  { name: 'Home', label: 'Family & Home', icon: Home },
+  { name: 'Briefcase', label: 'Business / Work', icon: Briefcase },
+  { name: 'Store', label: 'Shop / Commerce', icon: Store },
+  { name: 'ShieldAlert', label: 'Buffer / Security', icon: ShieldAlert },
+  { name: 'HeartPulse', label: 'Emergency / Health', icon: HeartPulse },
+  { name: 'PiggyBank', label: 'Savings / Pot', icon: PiggyBank },
+  { name: 'TrendingUp', label: 'Investment / Growth', icon: TrendingUp },
+  { name: 'Coins', label: 'Gold / Assets', icon: Coins },
+  { name: 'GraduationCap', label: 'Education / Skill', icon: GraduationCap },
+  { name: 'ShoppingBag', label: 'Shopping / Lifestyle', icon: ShoppingBag },
+  { name: 'Bike', label: 'Vehicle / Transport', icon: Bike },
+  { name: 'Plane', label: 'Travel / Trips', icon: Plane },
+  { name: 'Smartphone', label: 'Tech / Gadgets', icon: Smartphone },
+  { name: 'CreditCard', label: 'EMI / Loans', icon: CreditCard },
+  { name: 'Building', label: 'Property / Office', icon: Building },
+  { name: 'Gift', label: 'Charity / Donation', icon: Gift },
+  { name: 'Sparkles', label: 'Special / Luxury', icon: Sparkles },
+  { name: 'Layers', label: 'General / Reserve', icon: Layers }
+];
+
+export const getFundIcon = (fundId: string, iconName?: string): LucideIcon => {
+  if (iconName) {
+    const matched = AVAILABLE_FUND_ICONS.find((item) => item.name.toLowerCase() === iconName.toLowerCase());
+    if (matched) return matched.icon;
+  }
+  const id = fundId.toLowerCase();
+  if (id === 'personal') return User;
+  if (id === 'family') return Home;
+  if (id === 'business') return Briefcase;
+  if (id === 'buffer') return ShieldAlert;
+  if (id === 'emergency') return HeartPulse;
+  if (id === 'saving') return PiggyBank;
+  if (id === 'investment') return TrendingUp;
+  if (id.includes('shop') || id.includes('retail')) return Store;
+  if (id.includes('health') || id.includes('medic')) return HeartPulse;
+  if (id.includes('travel') || id.includes('trip') || id.includes('tour')) return Plane;
+  if (id.includes('vehic') || id.includes('car') || id.includes('bike')) return Bike;
+  if (id.includes('educat') || id.includes('study') || id.includes('school')) return GraduationCap;
+  if (id.includes('tech') || id.includes('gadget') || id.includes('phone')) return Smartphone;
+  if (id.includes('gift') || id.includes('charity') || id.includes('zakat')) return Gift;
+  if (id.includes('gold') || id.includes('asset') || id.includes('crypto')) return Coins;
+  return Layers;
 };
 
 export const getCategoryIcon = (categoryName: string): LucideIcon => {

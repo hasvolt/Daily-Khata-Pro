@@ -59,10 +59,10 @@ export const PrintArea: React.FC<PrintAreaProps> = ({ entries, targetMonth = new
         </div>
       </div>
 
-      {/* 6-Fund Balances Summary */}
+      {/* Fund Balances Summary */}
       <div className="mb-5">
         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-800 border-b border-slate-300 pb-1 mb-2">
-          6-Fund Pot Balances (All-Time)
+          Capital Pot Balances (All-Time)
         </h2>
         <table className="w-full border-collapse text-xs">
           <thead>

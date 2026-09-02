@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Entry, FundType, AppLanguage } from '../types';
-import { FUND_ORDER, FUND_LABELS } from '../data/defaults';
+import { Entry, FundType, FundConfig, AppLanguage } from '../types';
+import { DEFAULT_FUNDS, getFundLabel } from '../data/defaults';
 import { formatCurrency, triggerHapticSound, downloadCSVReport } from '../utils/khataCalculations';
 import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
@@ -15,6 +15,7 @@ interface HistoryViewProps {
   onDeleteEntry: (id: string) => void;
   onNavigateAdd: () => void;
   onTriggerPrint?: (targetMonth?: Date) => void;
+  funds?: FundConfig[];
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
   language?: AppLanguage;
@@ -29,12 +30,16 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   onDeleteEntry,
   onNavigateAdd,
   onTriggerPrint,
+  funds,
   searchQuery: propSearchQuery,
   onSearchChange: propOnSearchChange,
   language = 'en',
   privacyMask = false
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const isHindi = language === 'hi' || language === 'hinglish';
+  const activeFunds: FundConfig[] = funds && funds.length > 0 ? funds : DEFAULT_FUNDS;
+
   const [internalSearchQuery, setInternalSearchQuery] = useState('');
   const searchQuery = propSearchQuery !== undefined ? propSearchQuery : internalSearchQuery;
   const setSearchQuery = propOnSearchChange || setInternalSearchQuery;
@@ -45,9 +50,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     { key: 'all', label: t.history?.all || 'All' },
     { key: 'income', label: t.history?.incomeOnly || 'Incomes' },
     { key: 'expense', label: t.history?.expenseOnly || 'Expenses' },
-    ...FUND_ORDER.map((f) => ({
-      key: `fund:${f}`,
-      label: t.funds?.[f]?.name ? t.funds[f].name.split(' (')[0] : FUND_LABELS[f]
+    ...activeFunds.map((f) => ({
+      key: `fund:${f.id}`,
+      label: isHindi && f.hindiLabel ? f.hindiLabel.split(' (')[0] : f.label
     }))
   ];
 
@@ -66,6 +71,8 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     const fundKey = activeFilter.split(':')[1] as FundType;
     filtered = filtered.filter((e) => {
       if (e.type === 'expense') return e.fund === fundKey;
+      if (e.targetFund) return e.targetFund === fundKey;
+      if (e.fund && e.allocationMode === 'single') return e.fund === fundKey;
       return (e.splits?.[fundKey] ?? 0) > 0;
     });
   }
@@ -311,7 +318,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     const ItemIcon = isIncome
                       ? getSourceIcon(entry.source || 'other')
                       : getCategoryIcon(entry.category || 'misc');
-                    const fundLabel = entry.fund && t.funds?.[entry.fund]?.name ? t.funds[entry.fund].name.split(' (')[0] : (entry.fund ? FUND_LABELS[entry.fund] : 'Fund');
+                    const fundLabel = entry.fund ? getFundLabel(entry.fund, activeFunds) : 'Fund';
 
                     return (
                       <div
@@ -342,7 +349,14 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                             <div className="text-[12px] sm:text-[12.5px] text-[#94A3B8] truncate">
                               {isIncome ? (
                                 <span>
-                                  {entry.note ? `${entry.note} · ` : ''}6-Fund Smart Allocation
+                                  {entry.note ? `${entry.note} · ` : ''}
+                                  {entry.allocationMode === 'single' || entry.targetFund || (entry.fund && (!entry.splits || entry.splits[entry.fund] === entry.amount)) ? (
+                                    <span className="text-[#A855F7] font-semibold">
+                                      Direct · {entry.targetFund ? getFundLabel(entry.targetFund, activeFunds) : (entry.fund ? getFundLabel(entry.fund, activeFunds) : 'Single Fund')}
+                                    </span>
+                                  ) : (
+                                    'All-Fund Split Rule'
+                                  )}
                                 </span>
                               ) : (
                                 <span>
@@ -357,7 +371,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                         {/* Right Amount and Controls */}
                         <div className="shrink-0 flex items-center gap-2 sm:gap-3 text-right">
                           <div
-                            className={`font-serif-display text-[16px] sm:text-[18px] font-bold num whitespace-nowrap ${
+                            className={`font-mono text-[15.5px] sm:text-[17.5px] font-bold tracking-tight whitespace-nowrap ${
                               isIncome ? 'text-[#10B981]' : 'text-[#EF4444]'
                             }`}
                           >

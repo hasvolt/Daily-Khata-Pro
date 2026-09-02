@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Entry, FundType, AppLanguage } from '../types';
-import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
+import { Entry, FundType, FundConfig, AppLanguage } from '../types';
+import { DEFAULT_FUNDS, FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES, getFundConfig, getFundLabel } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats, downloadCSVReport, triggerHapticSound } from '../utils/khataCalculations';
 import { getCategoryIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
@@ -10,6 +10,7 @@ interface ReportViewProps {
   entries: Entry[];
   categories: string[];
   percentages: Record<FundType, number>;
+  funds?: FundConfig[];
   onUpdatePercentages: (newPct: Record<FundType, number>) => void;
   onAddCategory: (categoryName: string) => void;
   onRemoveCategory: (categoryName: string) => void;
@@ -22,6 +23,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
   entries,
   categories,
   percentages,
+  funds,
   onUpdatePercentages,
   onAddCategory,
   onRemoveCategory,
@@ -31,6 +33,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi';
+  const activeFunds = funds && funds.length > 0 ? funds : DEFAULT_FUNDS;
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [localPct, setLocalPct] = useState<Record<FundType, number>>({ ...percentages });
   const [newCatInput, setNewCatInput] = useState<string>('');
@@ -41,7 +44,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
     setLocalPct({ ...percentages });
   }, [percentages]);
 
-  const fundTotals = calculateFundTotals(entries);
+  const fundTotals = calculateFundTotals(entries, activeFunds.map((f) => f.id));
   const grandTotal = Object.values(fundTotals).reduce((sum, v) => sum + v, 0);
 
   const monthStats = calculatePeriodStats(entries, { type: 'month', targetDate: selectedDate });
@@ -83,9 +86,13 @@ export const ReportView: React.FC<ReportViewProps> = ({
   };
 
   const handleResetToDefaultPercentages = () => {
-    setLocalPct({ ...DEFAULT_PERCENTAGES });
-    onUpdatePercentages(DEFAULT_PERCENTAGES);
-    setPctSuccessMsg(isHindi ? 'डिफ़ॉल्ट 50-20-10-10-5-5 नियम रीसेट हो गया।' : 'Reset to default fund percentages.');
+    const defaultMap: Record<string, number> = {};
+    activeFunds.forEach((f) => {
+      defaultMap[f.id] = f.defaultPct || 0;
+    });
+    setLocalPct(defaultMap);
+    onUpdatePercentages(defaultMap);
+    setPctSuccessMsg(isHindi ? 'डिफ़ॉल्ट नियम रीसेट हो गया।' : 'Reset to default fund percentages.');
     triggerHapticSound('save');
     setTimeout(() => setPctSuccessMsg(''), 2500);
   };
@@ -95,10 +102,11 @@ export const ReportView: React.FC<ReportViewProps> = ({
     triggerHapticSound('click');
   };
 
-  const handleAdjustFundPct = (fund: FundType, delta: number) => {
-    const current = localPct[fund] ?? FUND_CONFIGS[fund].defaultPct;
+  const handleAdjustFundPct = (fundId: string, delta: number) => {
+    const fundCfg = getFundConfig(fundId, activeFunds);
+    const current = localPct[fundId] ?? fundCfg.defaultPct;
     const next = Math.max(0, Math.min(100, current + delta));
-    setLocalPct({ ...localPct, [fund]: next });
+    setLocalPct({ ...localPct, [fundId]: next });
     triggerHapticSound('click');
   };
 
@@ -257,7 +265,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
                           <span className="text-[#F8FAFC] font-medium truncate">{cat}</span>
                           <span className="text-[10px] text-[#94A3B8] font-mono shrink-0">({pctOfTotal}%)</span>
                         </div>
-                        <span className="font-serif-display font-bold text-[#EF4444] num shrink-0 ml-1">
+                        <span className="font-mono font-bold text-[12.5px] sm:text-[13px] text-[#EF4444] shrink-0 ml-1">
                           -{formatCurrency(amt, privacyMask)}
                         </span>
                       </div>
@@ -282,10 +290,10 @@ export const ReportView: React.FC<ReportViewProps> = ({
             <h3 className="font-serif-display text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] flex items-center justify-between gap-2">
               <span className="flex items-center gap-2 truncate">
                 <Wallet className="w-4 h-4 shrink-0" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
-                <span className="truncate">6-Fund Total Portfolio</span>
+                <span className="truncate">Capital & Funds Portfolio</span>
               </span>
               <span
-                className="text-[11.5px] sm:text-[12px] font-sans font-bold font-mono shrink-0"
+                className="text-[12px] sm:text-[13px] font-mono font-bold shrink-0"
                 style={{ color: 'var(--theme-primary, #38BDF8)' }}
               >
                 {formatCurrency(grandTotal, privacyMask)}
@@ -293,13 +301,15 @@ export const ReportView: React.FC<ReportViewProps> = ({
             </h3>
 
             <div className="space-y-1.5 pt-1">
-              {FUND_ORDER.map((f) => {
-                const val = fundTotals[f] ?? 0;
-                const config = FUND_CONFIGS[f];
-                const fundLabel = t.funds?.[f]?.name ? t.funds[f].name.split(' (')[0] : FUND_LABELS[f];
+              {activeFunds.map((f) => {
+                const val = fundTotals[f.id] ?? 0;
+                const config = getFundConfig(f.id, activeFunds);
+                const fundLabel = (language === 'hi' && f.labelHi)
+                  ? f.labelHi
+                  : (t.funds?.[f.id]?.name ? t.funds[f.id].name.split(' (')[0] : getFundLabel(f.id, activeFunds));
                 return (
                   <div
-                    key={f}
+                    key={f.id}
                     className="flex justify-between items-center text-[12px] sm:text-[13px] py-1 border-b border-[var(--theme-border,#213E61)] last:border-none gap-2 min-w-0"
                   >
                     <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -307,7 +317,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
                       <span className="text-[#94A3B8] font-medium truncate">{fundLabel}</span>
                     </div>
                     <span
-                      className={`font-serif-display font-bold num shrink-0 ml-1 ${
+                      className={`font-mono font-bold text-[12.5px] sm:text-[13.5px] shrink-0 ml-1 ${
                         val < 0 ? 'text-[#EF4444]' : 'text-[#F8FAFC]'
                       }`}
                     >
@@ -330,8 +340,8 @@ export const ReportView: React.FC<ReportViewProps> = ({
                 </h3>
                 <p className="text-[11px] text-[#94A3B8] line-clamp-1 sm:line-clamp-none mt-0.5">
                   {isHindi
-                    ? 'आय दर्ज करने पर 6 फंड्स में ऑटो-विभाजन का प्रतिशत नियम'
-                    : 'Custom split applied automatically whenever income is recorded.'}
+                    ? 'आय दर्ज करने पर फंड्स में ऑटो-विभाजन का प्रतिशत नियम'
+                    : 'Custom split applied automatically whenever income is split across all funds.'}
                 </p>
               </div>
 
@@ -351,19 +361,22 @@ export const ReportView: React.FC<ReportViewProps> = ({
             {/* Visual Multi-Fund Allocation Bar */}
             <div className="space-y-1">
               <div className="w-full h-2.5 bg-[var(--theme-bg,#070E18)] rounded-full overflow-hidden flex border border-[var(--theme-border,#213E61)]">
-                {FUND_ORDER.map((f) => {
-                  const pct = localPct[f] ?? FUND_CONFIGS[f].defaultPct;
-                  const config = FUND_CONFIGS[f];
+                {activeFunds.map((f) => {
+                  const config = getFundConfig(f.id, activeFunds);
+                  const pct = localPct[f.id] ?? config.defaultPct;
+                  const fundLabel = (language === 'hi' && f.labelHi)
+                    ? f.labelHi
+                    : (t.funds?.[f.id]?.name ? t.funds[f.id].name.split(' (')[0] : getFundLabel(f.id, activeFunds));
                   if (pct <= 0) return null;
                   return (
                     <div
-                      key={f}
+                      key={f.id}
                       className="h-full transition-all duration-300 relative group"
                       style={{
                         width: `${pct}%`,
                         backgroundColor: config.color
                       }}
-                      title={`${FUND_LABELS[f]}: ${pct}%`}
+                      title={`${fundLabel}: ${pct}%`}
                     />
                   );
                 })}
@@ -378,14 +391,16 @@ export const ReportView: React.FC<ReportViewProps> = ({
 
             {/* Fund Percentage Inputs Grid: 1 col on mobile, 2 col on tablet/desktop */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 w-full min-w-0">
-              {FUND_ORDER.map((f) => {
-                const config = FUND_CONFIGS[f];
-                const fundLabel = t.funds?.[f]?.name ? t.funds[f].name.split(' (')[0] : FUND_LABELS[f];
-                const currentPct = localPct[f] ?? config.defaultPct;
+              {activeFunds.map((f) => {
+                const config = getFundConfig(f.id, activeFunds);
+                const fundLabel = (language === 'hi' && f.labelHi)
+                  ? f.labelHi
+                  : (t.funds?.[f.id]?.name ? t.funds[f.id].name.split(' (')[0] : getFundLabel(f.id, activeFunds));
+                const currentPct = localPct[f.id] ?? config.defaultPct;
 
                 return (
                   <div
-                    key={f}
+                    key={f.id}
                     className="bg-[var(--theme-bg,#070E18)] p-2.5 sm:p-3 rounded-xl border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-2 min-w-0 shadow-2xs hover:border-[var(--theme-primary,#38BDF8)]/40 transition-colors"
                   >
                     {/* Fund Label + Color Dot */}
@@ -403,7 +418,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
-                        onClick={() => handleAdjustFundPct(f, -5)}
+                        onClick={() => handleAdjustFundPct(f.id, -5)}
                         className="w-6 h-6 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)] flex items-center justify-center cursor-pointer transition-colors active:scale-95 text-xs font-bold"
                         title="-5%"
                       >
@@ -418,7 +433,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
                           value={currentPct}
                           onChange={(e) => {
                             const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                            setLocalPct({ ...localPct, [f]: val });
+                            setLocalPct({ ...localPct, [f.id]: val });
                           }}
                           className="w-11 sm:w-12 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] font-mono text-center font-bold text-[13px] rounded-lg py-1 text-[#F8FAFC] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
                         />
@@ -427,7 +442,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
 
                       <button
                         type="button"
-                        onClick={() => handleAdjustFundPct(f, 5)}
+                        onClick={() => handleAdjustFundPct(f.id, 5)}
                         className="w-6 h-6 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[var(--theme-primary,#38BDF8)] flex items-center justify-center cursor-pointer transition-colors active:scale-95 text-xs font-bold"
                         title="+5%"
                       >

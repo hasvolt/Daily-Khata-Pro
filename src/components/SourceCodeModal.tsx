@@ -663,7 +663,7 @@ export interface KhataData {
                   100% Client-Side Privacy Guarantee
                 </h3>
                 <p className="text-[12.5px] text-[#94A3B8] leading-relaxed">
-                  Daily Khata: Pro is engineered with an <strong>offline-first, zero-knowledge architecture</strong>. Your financial data never leaves your browser and is never transmitted to any third-party or cloud server without your explicit manual export.
+                  Daily Khata: Pro is built with an <strong>offline-first, zero-knowledge architecture</strong>. Your financial data never leaves your browser and is never transmitted to any third-party or cloud server without your explicit manual export.
                 </p>
               </div>
             </div>

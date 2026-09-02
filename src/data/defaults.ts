@@ -1,34 +1,34 @@
 import { FundConfig, FundType, Entry, SecurityLockConfig } from '../types';
 
-export const FUND_ORDER: FundType[] = [
-  'personal',
-  'family',
-  'buffer',
-  'emergency',
-  'saving',
-  'investment'
-];
-
-export const FUND_CONFIGS: Record<FundType, FundConfig> = {
-  personal: {
+export const DEFAULT_FUNDS: FundConfig[] = [
+  {
     id: 'personal',
     label: 'Personal',
     hindiLabel: 'खुद का खर्च (Personal)',
-    defaultPct: 30,
+    defaultPct: 25,
     color: '#38BDF8', // Sky / Cyan
     description: 'Personal daily expenses, dining, grooming & lifestyle',
     iconName: 'User'
   },
-  family: {
+  {
     id: 'family',
     label: 'Family & Home',
     hindiLabel: 'परिवार व घर (Family & Home)',
-    defaultPct: 35,
+    defaultPct: 30,
     color: '#FFC700', // Volt Yellow
     description: 'House rent, groceries, family support & home utilities',
     iconName: 'Home'
   },
-  buffer: {
+  {
+    id: 'business',
+    label: 'Business & More',
+    hindiLabel: 'व्यापार व काम (Business)',
+    defaultPct: 15,
+    color: '#A855F7', // Royal Purple
+    description: 'Business revenue, invoices, commerce, inventory & office',
+    iconName: 'Briefcase'
+  },
+  {
     id: 'buffer',
     label: 'Buffer Reserve',
     hindiLabel: 'बफ़र / आकस्मिक (Buffer)',
@@ -37,51 +37,70 @@ export const FUND_CONFIGS: Record<FundType, FundConfig> = {
     description: 'Quick temporary cushion for unexpected fluctuations',
     iconName: 'ShieldAlert'
   },
-  emergency: {
+  {
     id: 'emergency',
     label: 'Emergency Fund',
     hindiLabel: 'इमरजेंसी फंड (Emergency)',
-    defaultPct: 11.25,
+    defaultPct: 10,
     color: '#F87171', // Red / Rose
     description: 'Medical, urgent repairs & sudden emergency reserve',
     iconName: 'HeartPulse'
   },
-  saving: {
+  {
     id: 'saving',
     label: 'Liquid Savings',
     hindiLabel: 'सुरक्षित बचत (Saving)',
-    defaultPct: 7.5,
+    defaultPct: 5,
     color: '#10B981', // Emerald Green
     description: 'Liquid cash savings & short-term target milestones',
     iconName: 'PiggyBank'
   },
-  investment: {
+  {
     id: 'investment',
     label: 'Growth & Investment',
     hindiLabel: 'निवेश / भविष्य (Investment)',
-    defaultPct: 11.25,
+    defaultPct: 10,
     color: '#F59E0B', // Amber Gold
     description: 'Long-term wealth, SIP, assets & future financial growth',
     iconName: 'TrendingUp'
   }
+];
+
+export const FUND_ORDER: FundType[] = DEFAULT_FUNDS.map((f) => f.id);
+
+export const FUND_CONFIGS: Record<string, FundConfig> = DEFAULT_FUNDS.reduce(
+  (acc, f) => ({ ...acc, [f.id]: f }),
+  {} as Record<string, FundConfig>
+);
+
+export const FUND_LABELS: Record<string, string> = DEFAULT_FUNDS.reduce(
+  (acc, f) => ({ ...acc, [f.id]: f.label }),
+  {} as Record<string, string>
+);
+
+export const DEFAULT_PERCENTAGES: Record<string, number> = DEFAULT_FUNDS.reduce(
+  (acc, f) => ({ ...acc, [f.id]: f.defaultPct }),
+  {} as Record<string, number>
+);
+
+export const getFundConfig = (fundId: string, customFunds?: FundConfig[]): FundConfig => {
+  const allFunds = customFunds && customFunds.length > 0 ? customFunds : DEFAULT_FUNDS;
+  const found = allFunds.find((f) => f.id === fundId);
+  if (found) return found;
+  if (FUND_CONFIGS[fundId]) return FUND_CONFIGS[fundId];
+  return {
+    id: fundId,
+    label: fundId.charAt(0).toUpperCase() + fundId.slice(1).replace(/_/g, ' '),
+    defaultPct: 0,
+    color: '#38BDF8',
+    description: 'Custom fund category',
+    iconName: 'Layers',
+    isCustom: true
+  };
 };
 
-export const FUND_LABELS: Record<FundType, string> = {
-  personal: 'Personal',
-  family: 'Family & Home',
-  buffer: 'Buffer Reserve',
-  emergency: 'Emergency Fund',
-  saving: 'Liquid Savings',
-  investment: 'Growth & Investment'
-};
-
-export const DEFAULT_PERCENTAGES: Record<FundType, number> = {
-  personal: 30,
-  family: 35,
-  buffer: 5,
-  emergency: 11.25,
-  saving: 7.5,
-  investment: 11.25
+export const getFundLabel = (fundId: string, customFunds?: FundConfig[]): string => {
+  return getFundConfig(fundId, customFunds).label;
 };
 
 export const DEFAULT_CATEGORIES: string[] = [
@@ -219,8 +238,9 @@ export const INITIAL_SAMPLE_ENTRIES: Entry[] = [
     note: 'Professional monthly revenue credit',
     paymentMode: 'bank',
     splits: {
-      personal: 7500,
-      family: 8750,
+      personal: 5000,
+      family: 7500,
+      business: 3750,
       buffer: 1250,
       emergency: 2812.5,
       saving: 1875,

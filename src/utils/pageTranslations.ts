@@ -140,7 +140,7 @@ export interface PageTranslations {
       docsDesc: string;
     };
   };
-  homeSubtitles: Record<FundType, string>;
+  homeSubtitles: { [K in FundType]?: string } & Record<'personal' | 'family' | 'buffer' | 'emergency' | 'saving' | 'investment', string>;
   common: {
     back: string;
     save: string;
@@ -280,15 +280,15 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     developer: {
       badge: 'Developer Profile',
       title: 'Developer Profile & Creator',
-      subtitle: 'Engineered with passion by MD Zafeer Hasan • Dedicated to digital privacy and user empowerment.',
+      subtitle: 'Built with dedication by MD Zafeer Hasan • Dedicated to digital privacy, security research & public resources.',
       backToHome: 'Back to Home',
       bioTitle: 'About MD Zafeer Hasan',
-      bioDesc: 'MD Zafeer Hasan is a passionate software engineer and open-source creator focused on building high-speed, privacy-first web utilities.',
-      skillsTitle: 'Core Technologies & Competencies',
+      bioDesc: 'MD Zafeer Hasan is an independent software developer, security researcher, and open-source creator focused on building privacy-first digital tools and public resources for humanity.',
+      skillsTitle: 'Professional Roles & Domains',
       visionTitle: 'The Vision Behind Daily Khata: Pro',
-      visionDesc: 'To provide every individual, student, freelancer, and small business owner with a world-class financial engine that is 100% free, runs offline, and never monetizes user data.',
-      connectTitle: 'Connect & Follow',
-      connectDesc: 'Reach out for feedback, technical collaboration, or open-source contribution via official channels.'
+      visionDesc: 'To provide every individual, freelancer, and small business owner with a reliable, private financial engine that is 100% free, runs offline, and never monetizes personal user data.',
+      connectTitle: 'Connect & Reach Out',
+      connectDesc: 'Reach out for feedback, technical collaboration, or open-source contributions via official channels.'
     },
     support: {
       badge: 'Help Center',
@@ -330,6 +330,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'Personal daily expenses, dining, grooming & lifestyle',
       family: 'House rent, groceries, family support & home utilities',
+      business: 'Business revenue, invoices, commerce, inventory & office',
       buffer: 'Quick temporary cushion for unexpected fluctuations',
       emergency: 'Medical, urgent repairs & sudden emergency reserve',
       saving: 'Liquid cash savings & short-term target milestones',
@@ -473,13 +474,13 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     developer: {
       badge: 'डेवलपर प्रोफाइल',
       title: 'डेवलपर प्रोफाइल एवं परिचय',
-      subtitle: 'MD ज़फ़ीर हसन द्वारा निर्मित • उपयोगकर्ता गोपनीयता के प्रति समर्पित।',
+      subtitle: 'MD ज़फ़ीर हसन द्वारा निर्मित • डिजिटल गोपनीयता, सुरक्षा शोध एवं लोक संसाधन हेतु समर्पित।',
       backToHome: 'होम पर वापस जाएं',
       bioTitle: 'MD ज़फ़ीर हसन के बारे में',
-      bioDesc: 'MD ज़फ़ीर हसन एक उत्साही सॉफ़्टवेयर इंजीनियर और ओपन-सोर्स क्रिएटर हैं जो नैतिक और तेज़ टूल्स बनाते हैं।',
-      skillsTitle: 'प्रमुख तकनीक एवं दक्षता',
+      bioDesc: 'MD ज़फ़ीर हसन एक स्वतंत्र सॉफ़्टवेयर डेवलपर, सुरक्षा शोधकर्ता और ओपन-सोर्स क्रिएटर हैं जो समाज के लिए नैतिक, सुरक्षित और उपयोगी सार्वजनिक डिजिटल टूल्स बनाते हैं।',
+      skillsTitle: 'पेशेवर प्रोफ़ाइल एवं विशेषज्ञता',
       visionTitle: 'डेली खाता: प्रो का दृष्टिकोण',
-      visionDesc: 'हर नागरिक को एक ऐसा शक्तिशाली वित्तीय सिस्टम देना जो पूरी तरह निःशुल्क हो और 100% ऑफ़लाइन चले।',
+      visionDesc: 'हर नागरिक, फ्रीलांसर और छोटे व्यापारी को एक ऐसा शक्तिशाली वित्तीय सिस्टम देना जो पूरी तरह निःशुल्क हो, ऑफ़लाइन चले और कभी उपयोगकर्ता डेटा का दुरुपयोग न करे।',
       connectTitle: 'संपर्क एवं सोशल चैनल',
       connectDesc: 'प्रतिक्रिया या तकनीकी सहयोग के लिए ईमेल या गिटहब के माध्यम से जुड़ें।'
     },
@@ -523,6 +524,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'व्यक्तिगत जरूरतें, भोजन व लाइफस्टाइल',
       family: 'घर का खर्च, किराया व राशन सहायता',
+      business: 'व्यापारिक आय, इनवॉइस, दुकान व ऑफिस खर्च',
       buffer: 'दैनिक अप्रत्याशित खर्चे व बिल',
       emergency: 'आपातकालीन संकट व चिकित्सा सुरक्षा',
       saving: 'अल्पकालिक बचत व खरीदारी फंड',
@@ -666,13 +668,13 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     developer: {
       badge: 'Developer Profile',
       title: 'Developer Profile & Creator',
-      subtitle: 'Created by MD Zafeer Hasan • Dedicated to user privacy.',
+      subtitle: 'Created by MD Zafeer Hasan • Dedicated to digital privacy, security research & public resources.',
       backToHome: 'Home Par Wapas Jayein',
       bioTitle: 'About MD Zafeer Hasan',
-      bioDesc: 'MD Zafeer Hasan ek passionate software engineer aur open-source creator hain jo clean, fast aur privacy-first tools banate hain.',
-      skillsTitle: 'Core Technologies',
+      bioDesc: 'MD Zafeer Hasan ek independent software developer, security researcher aur open-source creator hain jo clean, secure aur public utility tools banate hain.',
+      skillsTitle: 'Professional Roles & Domains',
       visionTitle: 'Daily Khata: Pro ka Vision',
-      visionDesc: 'Har user ko ek aisa private, free aur lifetime offline financial engine dena jo unka data kabhi na beche.',
+      visionDesc: 'Har user, freelancer aur small business ko ek aisa private, free aur lifetime offline financial engine dena jo unka data kabhi na beche.',
       connectTitle: 'Connect & Follow',
       connectDesc: 'Feedback, collaborations ya open-source contribution ke liye connect karein.'
     },
@@ -716,6 +718,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'Personal zarooratein, khana aur lifestyle',
       family: 'Ghar ka kharch, rent aur grocery',
+      business: 'Business revenue, billing, inventory & office kharche',
       buffer: 'Daily unexpected expenses aur bills',
       emergency: 'Emergency crisis aur medical safety',
       saving: 'Short-term savings aur shopping goals',

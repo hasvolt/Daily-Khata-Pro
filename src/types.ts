@@ -1,4 +1,4 @@
-export type FundType = 'personal' | 'family' | 'buffer' | 'emergency' | 'saving' | 'investment';
+export type FundType = 'personal' | 'family' | 'business' | 'buffer' | 'emergency' | 'saving' | 'investment' | (string & {});
 
 export type TransactionType = 'income' | 'expense';
 
@@ -64,11 +64,12 @@ export interface DailyLifeLog {
 export interface FundConfig {
   id: FundType;
   label: string;
-  hindiLabel: string;
+  hindiLabel?: string;
   defaultPct: number;
   color: string;
   description: string;
-  iconName: string;
+  iconName?: string;
+  isCustom?: boolean;
 }
 
 export interface Entry {
@@ -79,7 +80,9 @@ export interface Entry {
   source?: string; // Income source
   note?: string;
   splits?: Record<FundType, number>; // For income entries
-  fund?: FundType; // For expense entries
+  fund?: FundType; // For expense entries or single-fund income
+  allocationMode?: 'all' | 'single'; // 'all' = split across all funds, 'single' = direct to 1 fund
+  targetFund?: FundType; // specific fund when single fund was chosen
   category?: string; // For expense entries
   paymentMode?: PaymentMode; // Cash, UPI, Bank, Card, Cheque, Wallet, Other
   clientName?: string; // Optional client or reference
@@ -134,6 +137,8 @@ export interface PersonalNote {
 
 export interface KhataSettings {
   percentages: Record<FundType, number>;
+  funds?: FundConfig[];
+  homepageFundIds?: string[];
   categories: string[];
   incomeSources?: string[];
   workCategories?: string[];
@@ -152,6 +157,8 @@ export interface KhataSettings {
 
 export interface KhataData {
   entries: Entry[];
+  funds?: FundConfig[];
+  homepageFundIds?: string[];
   categories: string[];
   incomeSources?: string[];
   workCategories?: string[];
@@ -162,6 +169,8 @@ export interface KhataData {
   personalNotes?: PersonalNote[];
   settings: {
     percentages: Record<FundType, number>;
+    funds?: FundConfig[];
+    homepageFundIds?: string[];
     theme?: AppTheme;
     language?: AppLanguage;
     privacyMask?: boolean;

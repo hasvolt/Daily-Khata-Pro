@@ -68,7 +68,7 @@ const MANUAL_EN: UserManualTranslation = {
       title: '1. Introduction & Overview',
       subtitle: 'Zero-telemetry, 100% offline, self-custodied financial ledger',
       overviewHeading: 'Core Philosophy & Architecture',
-      overviewText: 'Daily Khata: Pro is engineered for freelancers, business owners, professionals, and households who seek uncompromising financial discipline. Every incoming rupee is instantly portioned across 6 distinct purpose-driven fund buckets before discretionary spending begins. The entire application runs client-side inside your browser with zero remote database connections.',
+      overviewText: 'Daily Khata: Pro is designed for freelancers, business owners, professionals, and households who seek uncompromising financial discipline. Every incoming rupee is instantly portioned across 6 distinct purpose-driven fund buckets before discretionary spending begins. The entire application runs client-side inside your browser with zero remote database connections.',
       cardsHeading: 'Three Pillars of Daily Khata',
       cards: [
         {

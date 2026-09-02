@@ -181,7 +181,15 @@ export interface Translations {
     dangerZone: string;
     resetAllDataBtn: string;
   };
-  funds: Record<FundType, { name: string; desc: string }>;
+  funds: {
+    personal: { name: string; desc: string };
+    family: { name: string; desc: string };
+    business?: { name: string; desc: string };
+    buffer: { name: string; desc: string };
+    emergency: { name: string; desc: string };
+    saving: { name: string; desc: string };
+    investment: { name: string; desc: string };
+  } & { [K in FundType]?: { name: string; desc: string } };
 }
 
 export const TRANSLATIONS: Record<AppLanguage, Translations> = {
@@ -371,8 +379,12 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
         desc: 'Personal daily expenses, dining, grooming & lifestyle'
       },
       family: {
-        name: 'Family & Home (35%)',
+        name: 'Family & Home (30%)',
         desc: 'House rent, groceries, family support & home utilities'
+      },
+      business: {
+        name: 'Business & More (15%)',
+        desc: 'Business income, invoices, commerce, inventory & office'
       },
       buffer: {
         name: 'Buffer Reserve (5%)',
@@ -578,8 +590,12 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
         desc: 'व्यक्तिगत दैनिक खर्च, डाइनिंग, ग्रूमिंग और जीवनशैली'
       },
       family: {
-        name: 'परिवार व घर (35%)',
+        name: 'परिवार व घर (30%)',
         desc: 'घर का किराया, राशन, परिवार की मदद और घरेलू बिल'
+      },
+      business: {
+        name: 'व्यापार व काम (15%)',
+        desc: 'व्यापार आय, चालान, बिक्री, इन्वेंट्री व दुकान/ऑफिस खर्च'
       },
       buffer: {
         name: 'बफ़र / आकस्मिक (5%)',
@@ -782,27 +798,31 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     funds: {
       personal: {
         name: 'Personal (30%)',
-        desc: 'Personal daily expenses, dining, grooming & lifestyle'
+        desc: 'Personal daily kharche, khana, dining, kapde & lifestyle'
       },
       family: {
-        name: 'Family & Home (35%)',
-        desc: 'House rent, groceries, family support & home utility'
+        name: 'Family & Home (30%)',
+        desc: 'Ghar ka rent, rashan, parivar support & bijli-paani'
+      },
+      business: {
+        name: 'Business & More (15%)',
+        desc: 'Business aamdani, billing, inventory & office kharche'
       },
       buffer: {
         name: 'Buffer Reserve (5%)',
-        desc: 'Quick temporary cushion for unexpected fluctuations'
+        desc: 'Achanak aane wale chote kharchon ke liye temporary cushion'
       },
       emergency: {
         name: 'Emergency Fund (11.25%)',
-        desc: 'Medical, urgent repairs & sudden emergency reserve'
+        desc: 'Medical emergency, hospital & achanak sankat reserve'
       },
       saving: {
         name: 'Liquid Savings (7.5%)',
-        desc: 'Liquid cash savings & short-term target milestones'
+        desc: 'Liquid cash savings & short-term target khareedari'
       },
       investment: {
         name: 'Growth & Investment (11.25%)',
-        desc: 'Long-term wealth, SIP, assets & future financial growth'
+        desc: 'Long-term wealth, SIP, shares & future financial growth'
       }
     }
   },
@@ -3084,4 +3104,21 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   }
 };
+
+export const isPureHindi = (lang?: string): boolean => lang === 'hi';
+export const isHinglish = (lang?: string): boolean => lang === 'hinglish';
+export const isHindiOrHinglish = (lang?: string): boolean => lang === 'hi' || lang === 'hinglish';
+
+export function pickTranslation<T>(
+  lang: AppLanguage | string | undefined,
+  options: {
+    hi: T;
+    hinglish: T;
+    en: T;
+  }
+): T {
+  if (lang === 'hi') return options.hi;
+  if (lang === 'hinglish') return options.hinglish;
+  return options.en;
+}
 

@@ -1,8 +1,9 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Entry, FundType, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout } from './types';
+import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout } from './types';
 import {
+  DEFAULT_FUNDS,
   DEFAULT_PERCENTAGES,
   DEFAULT_CATEGORIES,
   DEFAULT_INCOME_SOURCES,
@@ -72,6 +73,12 @@ export default function App() {
   const [incomeSources, setIncomeSources] = useState<string[]>(DEFAULT_INCOME_SOURCES);
   const [workCategories, setWorkCategories] = useState<string[]>(DEFAULT_WORK_CATEGORIES);
   const [lifeTags, setLifeTags] = useState<string[]>(DEFAULT_LIFE_TAGS);
+
+  // Dynamic Funds & Homepage Categories
+  const [funds, setFunds] = useState<FundConfig[]>(DEFAULT_FUNDS);
+  const [homepageFundIds, setHomepageFundIds] = useState<string[]>(
+    DEFAULT_FUNDS.slice(0, 6).map((f) => f.id)
+  );
 
   const [percentages, setPercentages] = useState<Record<FundType, number>>(DEFAULT_PERCENTAGES);
   const [theme, setTheme] = useState<AppTheme>('blue');
@@ -223,6 +230,16 @@ export default function App() {
         if (parsed.lifeTags && Array.isArray(parsed.lifeTags)) {
           setLifeTags(parsed.lifeTags);
         }
+        if (parsed.funds && Array.isArray(parsed.funds) && parsed.funds.length > 0) {
+          setFunds(parsed.funds);
+        } else if (parsed.settings?.funds && Array.isArray(parsed.settings.funds) && parsed.settings.funds.length > 0) {
+          setFunds(parsed.settings.funds);
+        }
+        if (parsed.homepageFundIds && Array.isArray(parsed.homepageFundIds) && parsed.homepageFundIds.length > 0) {
+          setHomepageFundIds(parsed.homepageFundIds);
+        } else if (parsed.settings?.homepageFundIds && Array.isArray(parsed.settings.homepageFundIds) && parsed.settings.homepageFundIds.length > 0) {
+          setHomepageFundIds(parsed.settings.homepageFundIds);
+        }
         if (parsed.settings?.percentages) {
           setPercentages(parsed.settings.percentages);
         }
@@ -258,13 +275,33 @@ export default function App() {
         setIncomeSources(DEFAULT_INCOME_SOURCES);
         setWorkCategories(DEFAULT_WORK_CATEGORIES);
         setLifeTags(DEFAULT_LIFE_TAGS);
+        setFunds(DEFAULT_FUNDS);
+        setHomepageFundIds(DEFAULT_FUNDS.slice(0, 6).map((f) => f.id));
         setTheme('blue');
         setLanguage('en');
         setViewMode('auto');
         setAppLayout('dashboard');
         setSecurityLock(DEFAULT_SECURITY_LOCK);
         setIsAppLocked(false);
-        saveToLocalStorage([], [], DEFAULT_CATEGORIES, DEFAULT_INCOME_SOURCES, DEFAULT_WORK_CATEGORIES, DEFAULT_LIFE_TAGS, DEFAULT_PERCENTAGES, 'blue', 'en', false, [], [], DEFAULT_SECURITY_LOCK, [], 'auto');
+        saveToLocalStorage({
+          entries: [],
+          goals: [],
+          categories: DEFAULT_CATEGORIES,
+          incomeSources: DEFAULT_INCOME_SOURCES,
+          workCategories: DEFAULT_WORK_CATEGORIES,
+          lifeTags: DEFAULT_LIFE_TAGS,
+          funds: DEFAULT_FUNDS,
+          homepageFundIds: DEFAULT_FUNDS.slice(0, 6).map((f) => f.id),
+          percentages: DEFAULT_PERCENTAGES,
+          theme: 'blue',
+          language: 'en',
+          privacyMask: false,
+          workLogs: [],
+          dailyLifeLogs: [],
+          securityLock: DEFAULT_SECURITY_LOCK,
+          personalNotes: [],
+          viewMode: 'auto'
+        });
       }
     } catch (e) {
       console.error('Failed to load local data', e);
@@ -295,6 +332,8 @@ export default function App() {
       incomeSources?: string[];
       workCategories?: string[];
       lifeTags?: string[];
+      funds?: FundConfig[];
+      homepageFundIds?: string[];
       percentages?: Record<FundType, number>;
       theme?: AppTheme;
       language?: AppLanguage;
@@ -320,15 +359,21 @@ export default function App() {
     newSecurityLock?: SecurityLockConfig,
     newPersonalNotes?: PersonalNote[],
     newViewMode?: AppViewMode,
-    newAppLayout?: AppLayout
+    newAppLayout?: AppLayout,
+    newFunds?: FundConfig[],
+    newHomepageFundIds?: string[]
   ) => {
     try {
       let data: KhataData;
 
       if (arg1 && !Array.isArray(arg1) && typeof arg1 === 'object') {
         const updates = arg1;
+        const currentFunds = updates.funds ?? funds;
+        const currentHomepage = updates.homepageFundIds ?? homepageFundIds;
         data = {
           entries: updates.entries ?? entries,
+          funds: currentFunds,
+          homepageFundIds: currentHomepage,
           categories: updates.categories ?? categories,
           incomeSources: updates.incomeSources ?? incomeSources,
           workCategories: updates.workCategories ?? workCategories,
@@ -339,6 +384,8 @@ export default function App() {
           personalNotes: updates.personalNotes ?? personalNotes,
           settings: {
             percentages: updates.percentages ?? percentages,
+            funds: currentFunds,
+            homepageFundIds: currentHomepage,
             theme: updates.theme ?? theme,
             language: updates.language ?? language,
             privacyMask: updates.privacyMask ?? privacyMask,
@@ -348,8 +395,12 @@ export default function App() {
           }
         };
       } else {
+        const currentFunds = newFunds ?? funds;
+        const currentHomepage = newHomepageFundIds ?? homepageFundIds;
         data = {
           entries: (Array.isArray(arg1) ? arg1 : undefined) ?? entries,
+          funds: currentFunds,
+          homepageFundIds: currentHomepage,
           categories: newCategories ?? categories,
           incomeSources: newIncomeSources ?? incomeSources,
           workCategories: newWorkCategories ?? workCategories,
@@ -360,6 +411,8 @@ export default function App() {
           personalNotes: newPersonalNotes ?? personalNotes,
           settings: {
             percentages: newPct ?? percentages,
+            funds: currentFunds,
+            homepageFundIds: currentHomepage,
             theme: newTheme ?? theme,
             language: newLang ?? language,
             privacyMask: newMask ?? privacyMask,
@@ -586,8 +639,33 @@ export default function App() {
 
   const handleUpdatePercentages = (newPct: Record<FundType, number>) => {
     setPercentages(newPct);
-    saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, newPct, theme, language, privacyMask, workLogs, dailyLifeLogs);
-    showToast('6-Fund allocation rules updated');
+    saveToLocalStorage({ percentages: newPct });
+    showToast(language === 'hi' ? 'फंड आवंटन नियम अपडेट हुए' : 'Fund allocation rules updated');
+  };
+
+  const handleUpdateFunds = (newFunds: FundConfig[], newPercentages: Record<FundType, number>) => {
+    setFunds(newFunds);
+    setPercentages(newPercentages);
+    const validIds = newFunds.map((f) => f.id);
+    let updatedHomepage = homepageFundIds.filter((id) => validIds.includes(id));
+    if (updatedHomepage.length === 0) {
+      updatedHomepage = validIds.slice(0, 6);
+    }
+    setHomepageFundIds(updatedHomepage);
+    saveToLocalStorage({
+      funds: newFunds,
+      percentages: newPercentages,
+      homepageFundIds: updatedHomepage
+    });
+    showToast(language === 'hi' ? 'फंड श्रेणियां व नियम सुरक्षित हो गए!' : 'Fund categories and rules updated successfully!');
+  };
+
+  const handleUpdateHomepageFundIds = (newIds: string[]) => {
+    setHomepageFundIds(newIds);
+    saveToLocalStorage({
+      homepageFundIds: newIds
+    });
+    showToast(language === 'hi' ? 'होमपेज श्रेणियां अपडेट हुईं!' : 'Homepage categories updated!');
   };
 
   // Edit action
@@ -952,6 +1030,17 @@ export default function App() {
     setIncomeSources(restored.incomeSources || DEFAULT_INCOME_SOURCES);
     setWorkCategories(restored.workCategories || DEFAULT_WORK_CATEGORIES);
     setLifeTags(restored.lifeTags || DEFAULT_LIFE_TAGS);
+    
+    const restoredFunds = (restored.funds && Array.isArray(restored.funds) && restored.funds.length > 0)
+      ? restored.funds
+      : ((restored.settings?.funds && Array.isArray(restored.settings.funds) && restored.settings.funds.length > 0) ? restored.settings.funds : DEFAULT_FUNDS);
+    setFunds(restoredFunds);
+
+    const restoredHomepage = (restored.homepageFundIds && Array.isArray(restored.homepageFundIds) && restored.homepageFundIds.length > 0)
+      ? restored.homepageFundIds
+      : ((restored.settings?.homepageFundIds && Array.isArray(restored.settings.homepageFundIds) && restored.settings.homepageFundIds.length > 0) ? restored.settings.homepageFundIds : restoredFunds.slice(0, 6).map((f) => f.id));
+    setHomepageFundIds(restoredHomepage);
+
     setPercentages(restored.settings?.percentages || DEFAULT_PERCENTAGES);
     if (restored.settings?.theme) {
       setTheme(restored.settings.theme);
@@ -959,22 +1048,24 @@ export default function App() {
     if (restored.settings?.language) {
       setLanguage(restored.settings.language);
     }
-    saveToLocalStorage(
-      restored.entries || [],
-      restored.goals || [],
-      restored.categories || DEFAULT_CATEGORIES,
-      restored.incomeSources || DEFAULT_INCOME_SOURCES,
-      restored.workCategories || DEFAULT_WORK_CATEGORIES,
-      restored.lifeTags || DEFAULT_LIFE_TAGS,
-      restored.settings?.percentages || DEFAULT_PERCENTAGES,
-      restored.settings?.theme || theme,
-      restored.settings?.language || language,
-      typeof restored.settings?.privacyMask === 'boolean' ? restored.settings.privacyMask : privacyMask,
-      restored.workLogs || [],
-      restored.dailyLifeLogs || [],
-      restored.settings?.securityLock || securityLock,
-      restored.personalNotes || []
-    );
+    saveToLocalStorage({
+      entries: restored.entries || [],
+      goals: restored.goals || [],
+      categories: restored.categories || DEFAULT_CATEGORIES,
+      incomeSources: restored.incomeSources || DEFAULT_INCOME_SOURCES,
+      workCategories: restored.workCategories || DEFAULT_WORK_CATEGORIES,
+      lifeTags: restored.lifeTags || DEFAULT_LIFE_TAGS,
+      funds: restoredFunds,
+      homepageFundIds: restoredHomepage,
+      percentages: restored.settings?.percentages || DEFAULT_PERCENTAGES,
+      theme: restored.settings?.theme || theme,
+      language: restored.settings?.language || language,
+      privacyMask: typeof restored.settings?.privacyMask === 'boolean' ? restored.settings.privacyMask : privacyMask,
+      workLogs: restored.workLogs || [],
+      dailyLifeLogs: restored.dailyLifeLogs || [],
+      securityLock: restored.settings?.securityLock || securityLock,
+      personalNotes: restored.personalNotes || []
+    });
     showToast('Backup restored successfully');
   };
 
@@ -985,7 +1076,26 @@ export default function App() {
     setWorkLogs([]);
     setDailyLifeLogs([]);
     setPersonalNotes([]);
-    saveToLocalStorage([], [], categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, [], [], securityLock, []);
+    setFunds(DEFAULT_FUNDS);
+    setHomepageFundIds(DEFAULT_FUNDS.slice(0, 6).map((f) => f.id));
+    saveToLocalStorage({
+      entries: [],
+      goals: [],
+      categories,
+      incomeSources,
+      workCategories,
+      lifeTags,
+      funds: DEFAULT_FUNDS,
+      homepageFundIds: DEFAULT_FUNDS.slice(0, 6).map((f) => f.id),
+      percentages: DEFAULT_PERCENTAGES,
+      theme,
+      language,
+      privacyMask,
+      workLogs: [],
+      dailyLifeLogs: [],
+      securityLock,
+      personalNotes: []
+    });
     showToast('All local data reset');
   };
 
@@ -1096,7 +1206,7 @@ export default function App() {
     setIsPrintModalOpen(true);
   };
 
-  const fundTotals = calculateFundTotals(entries);
+  const fundTotals = calculateFundTotals(entries, funds.map((f) => f.id));
 
   return (
     <div
@@ -1153,6 +1263,10 @@ export default function App() {
               dailyLifeLogs={dailyLifeLogs}
               personalNotes={personalNotes}
               percentages={percentages}
+              funds={funds}
+              homepageFundIds={homepageFundIds}
+              onUpdateHomepageFundIds={handleUpdateHomepageFundIds}
+              onOpenFundSettings={() => setIsSettingsOpen(true)}
               onAddClick={handleAddClick}
               onFilterFund={handleFilterFund}
               onViewHistory={() => {
@@ -1208,6 +1322,7 @@ export default function App() {
               categories={categories}
               incomeSources={incomeSources}
               percentages={percentages}
+              funds={funds}
               fundTotals={fundTotals}
               onSaveEntry={handleSaveEntry}
               onCancelEdit={() => {
@@ -1279,6 +1394,7 @@ export default function App() {
               }}
               language={language}
               privacyMask={privacyMask}
+              funds={funds}
             />
           } />
 
@@ -1287,6 +1403,7 @@ export default function App() {
               entries={entries}
               categories={categories}
               percentages={percentages}
+              funds={funds}
               onUpdatePercentages={handleUpdatePercentages}
               onAddCategory={handleAddCategory}
               onRemoveCategory={(cat) => handleUpdateCategories(categories.filter((c) => c !== cat))}
@@ -1397,12 +1514,17 @@ export default function App() {
           
           <Route path="*" element={<HomeView
               appLayout={appLayout}
+              onLayoutChange={handleAppLayoutChange}
               entries={entries}
               goals={goals}
               workLogs={workLogs}
               dailyLifeLogs={dailyLifeLogs}
               personalNotes={personalNotes}
               percentages={percentages}
+              funds={funds}
+              homepageFundIds={homepageFundIds}
+              onUpdateHomepageFundIds={handleUpdateHomepageFundIds}
+              onOpenFundSettings={() => setIsSettingsOpen(true)}
               onAddClick={handleAddClick}
               onFilterFund={handleFilterFund}
               onViewHistory={() => {
@@ -1633,8 +1755,14 @@ export default function App() {
           incomeSources,
           workCategories,
           lifeTags,
-          settings: { percentages, theme, language, privacyMask, viewMode, appLayout, securityLock }
+          funds,
+          homepageFundIds,
+          settings: { percentages, funds, homepageFundIds, theme, language, privacyMask, viewMode, appLayout, securityLock }
         }}
+        funds={funds}
+        onUpdateFunds={handleUpdateFunds}
+        homepageFundIds={homepageFundIds}
+        onUpdateHomepageFundIds={handleUpdateHomepageFundIds}
         onRestoreData={handleRestoreData}
         onResetData={handleResetData}
         onLoadSampleData={handleLoadSampleData}
