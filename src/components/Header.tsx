@@ -248,16 +248,14 @@ export const Header: React.FC<HeaderProps> = ({
                 Daily Khata
               </span>
               <span
-                className="font-black text-[15px] sm:text-[18px] tracking-tight transition-colors drop-shadow-xs"
-                style={{ color: 'var(--theme-primary, #00D26A)' }}
+                className="font-black text-[15px] sm:text-[18px] tracking-tight transition-colors drop-shadow-xs text-[#38BDF8]"
               >
                 Pro
               </span>
             </div>
             <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
               <span
-                className="w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ backgroundColor: 'var(--theme-primary, #00D26A)' }}
+                className="w-1.5 h-1.5 rounded-full shrink-0 bg-[#38BDF8]"
               />
               <span
                 className="text-[10px] sm:text-[11.5px] font-medium tracking-wide truncate transition-colors"
@@ -428,14 +426,14 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 ${
                 isMoreMenuOpen
-                  ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.2))] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] ring-2 ring-[var(--theme-primary,#38BDF8)]/40'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/60'
+                  ? 'bg-[#38BDF8]/20 border-[#38BDF8] text-[#38BDF8] ring-2 ring-[#38BDF8]/40'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[#38BDF8] hover:text-[#38BDF8] hover:border-[#38BDF8]/60'
               }`}
               title={tr.menu.menuAndTools}
               aria-label={tr.menu.mainMenu}
               id="header-main-menu-btn"
             >
-              <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--theme-primary,#38BDF8)]" />
+              <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-[#38BDF8]" />
             </button>
 
             {/* UNIFIED MAIN MENU FOR MOBILE DRAWER & DESKTOP DROPDOWN */}
@@ -470,7 +468,7 @@ export const Header: React.FC<HeaderProps> = ({
                             <div>
                               <div className="font-bold text-[14.5px] text-[var(--theme-text,#F8FAFC)] flex items-center gap-1">
                                 <span>Daily Khata</span>
-                                <span style={{ color: 'var(--theme-primary, #00D26A)' }} className="font-black">Pro</span>
+                                <span className="font-black text-[#38BDF8]">Pro</span>
                               </div>
                               <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] font-medium">
                                 {tr.menu.menuAndTools}

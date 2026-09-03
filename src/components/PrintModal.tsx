@@ -65,10 +65,12 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     .badge { display: inline-block; padding: 2px 6px; font-size: 10px; font-weight: 700; border-radius: 4px; text-transform: uppercase; }
     .badge-inc { background: #dcfce7; color: #166534; }
     .badge-exp { background: #fee2e2; color: #991b1b; }
-    .footer { position: relative; z-index: 1; margin-top: 30px; border-top: 1.5px solid #cbd5e1; padding-top: 12px; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; }
+    .footer { position: relative; z-index: 1; margin-top: 26px; border-top: 1.5px solid #cbd5e1; padding-top: 12px; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; }
+    .developer-footer-watermark { position: relative; z-index: 1; margin-top: 20px; padding-top: 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; color: #64748b; page-break-inside: avoid; break-inside: avoid; }
     @media print {
       body { padding: 0; }
       .no-print { display: none !important; }
+      .developer-footer-watermark { break-inside: avoid; page-break-inside: avoid; }
     }
   </style>
 </head>
@@ -77,7 +79,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     <div>
       <div class="brand-title">Daily Khata Pro — Financial Statement</div>
       <div class="brand-sub">6-Fund Money Ledger &amp; Wealth Record</div>
-      <div class="brand-website">Powered by HASVOLT</div>
+      <div class="brand-website">Powered by HASVOLT · www.hasvolt.com</div>
     </div>
     <div style="text-align: right; font-size: 11px; color: #475569;">
       <div>Official Record</div>
@@ -170,15 +172,18 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     </tbody>
   </table>
 
-  <div class="footer">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
-      <span>
-        <strong>Daily Khata Pro</strong> · Confidential &amp; Verified Record<br>
-        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan (YAZDAAN)</span>
-      </span>
+  <div class="footer" style="page-break-inside: avoid; break-inside: avoid;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #0284C7;" />
+      <div>
+        <div style="font-weight: 800; color: #0f172a; font-size: 11px;">MD Zafeer Hasan (YAZDAAN)</div>
+        <div style="font-size: 9.5px; color: #0284c7; font-weight: 600;">Developer &amp; Software Architect · Daily Khata Pro</div>
+      </div>
     </div>
-    <span>Signature / Digital Stamp: ___________________</span>
+    <div style="text-align: right; font-size: 10px; color: #64748b;">
+      <div>Verified Digital Statement</div>
+      <div style="margin-top: 4px;">Signature / Stamp: ___________________</div>
+    </div>
   </div>
 </body>
 </html>`;

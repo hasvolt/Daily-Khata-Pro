@@ -60,8 +60,8 @@ export const HasVoltLogo: React.FC<HasVoltLogoProps> = ({
         <div className="flex flex-col text-left">
           <span className="font-serif-display font-bold text-[18px] tracking-tight">
             <span className="text-[#FFFFFF]">Daily</span>
-            <span className="text-[var(--theme-primary,#38BDF8)] ml-1">Khata</span>
-            <span className="text-[#F8FAFC] ml-1">Pro</span>
+            <span className="text-[#F8FAFC] ml-1">Khata</span>
+            <span className="text-[#38BDF8] ml-1">Pro</span>
           </span>
           <span className="text-[10px] text-[#94A3B8] font-medium">
             Income &amp; Expense Tracker

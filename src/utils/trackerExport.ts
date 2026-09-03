@@ -150,11 +150,12 @@ export const printTrackerData = (workLogs: WorkLog[], dailyLifeLogs: DailyLifeLo
       <div style="text-align:center; margin-top:30px;">
         <button onclick="window.print()" style="padding:10px 20px; font-size:16px; cursor:pointer;">Print / Save as PDF</button>
       </div>
-      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: #666;">
-        <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
-        <span>
-          <strong>Daily Khata Pro</strong> powered by <strong>HASVOLT</strong> · Developed by MD Zafeer Hasan (YAZDAAN)
-        </span>
+      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 11.5px; color: #475569; page-break-inside: avoid; break-inside: avoid;">
+        <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #0284C7;" />
+        <div style="text-align: left;">
+          <div style="font-weight: 800; color: #0F172A; font-size: 11px;">MD Zafeer Hasan (YAZDAAN)</div>
+          <div style="font-size: 9.5px; color: #0284C7; font-weight: 600;">Developer &amp; Software Architect · Daily Khata Pro</div>
+        </div>
       </div>
       <script>
         window.onload = () => { setTimeout(() => window.print(), 500); }

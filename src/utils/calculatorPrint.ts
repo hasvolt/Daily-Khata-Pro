@@ -201,10 +201,13 @@ export function generateCalculatorSlipHTML(params: CalcPrintParams): string {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
     @media print {
       body { padding: 0; }
       .no-print { display: none !important; }
+      .footer { page-break-inside: avoid; break-inside: avoid; }
     }
   </style>
 </head>
@@ -285,13 +288,13 @@ export function generateCalculatorSlipHTML(params: CalcPrintParams): string {
       : ''
   }
 
-  <div class="footer">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
-      <span>
-        <strong>Daily Khata Pro</strong> · Modern Financial Ledger Utility<br>
-        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan (YAZDAAN)</span>
-      </span>
+  <div class="footer" style="page-break-inside: avoid; break-inside: avoid;">
+    <div style="display: flex; align-items: center; gap: 9px;">
+      <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #0284C7;" />
+      <div>
+        <div style="font-weight: 800; color: #0F172A; font-size: 11px;">MD Zafeer Hasan (YAZDAAN)</div>
+        <div style="font-size: 9.5px; color: #0284c7; font-weight: 600;">Developer &amp; Software Architect · Daily Khata Pro</div>
+      </div>
     </div>
     <div style="text-align: right;">
       <span>Verified Digital Computation</span><br>

@@ -44,11 +44,11 @@ export const PrintArea: React.FC<PrintAreaProps> = ({ entries, targetMonth = new
         }}
       >
         Daily Khata Pro<br />
-        <span style={{ fontSize: '24px', fontWeight: 700 }}>Website: www.rozfiber.com</span>
+        <span style={{ fontSize: '24px', fontWeight: 700 }}>Website: www.hasvolt.com</span>
       </div>
 
       {/* Brand Header */}
-      <div className="border-b-2 border-[#FFC700] pb-3 mb-5 flex justify-between items-start relative z-10">
+      <div className="border-b-2 border-[#38BDF8] pb-3 mb-5 flex justify-between items-start relative z-10">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">
             Daily Khata Pro — Financial Statement
@@ -57,7 +57,7 @@ export const PrintArea: React.FC<PrintAreaProps> = ({ entries, targetMonth = new
             6-Fund Income &amp; Expense Money Ledger
           </p>
           <p className="text-xs font-bold text-sky-600 mt-0.5">
-            Website: www.rozfiber.com
+            Website: www.hasvolt.com
           </p>
         </div>
         <div className="text-right text-xs text-slate-600">
@@ -168,12 +168,35 @@ export const PrintArea: React.FC<PrintAreaProps> = ({ entries, targetMonth = new
       </div>
 
       {/* Footer Statement */}
-      <div className="border-t border-slate-300 pt-3 flex justify-between items-center text-[10.5px] text-slate-500 relative z-10">
+      <div className="border-t border-slate-300 pt-3 flex justify-between items-center text-[10.5px] text-slate-500 relative z-10 mb-4">
         <div>
           <span>Daily Khata Pro · Verified Ledger Statement · </span>
-          <span className="font-bold text-sky-600">Website: www.rozfiber.com</span>
+          <span className="font-bold text-sky-600">Website: www.hasvolt.com</span>
         </div>
         <span>Signature / Stamp: ___________________</span>
+      </div>
+
+      {/* Developer Footer Watermark (Final Page Bottom) */}
+      <div className="border-t border-slate-200 pt-3 mt-4 flex items-center justify-between text-xs text-slate-500 relative z-10 break-inside-avoid">
+        <div className="flex items-center gap-2.5">
+          <img
+            src="/md-zafeer-hasan-yazdaan.jpg"
+            alt="MD Zafeer Hasan (YAZDAAN)"
+            className="w-7 h-7 rounded-full object-cover border border-sky-600 shadow-xs"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://avatars.githubusercontent.com/mdzafeerhasan';
+            }}
+          />
+          <div className="flex flex-col text-left">
+            <span className="font-bold text-slate-900 text-[11px] leading-tight">MD Zafeer Hasan (YAZDAAN)</span>
+            <span className="text-[9.5px] text-sky-600 font-semibold leading-tight">Developer &amp; Creator · Daily Khata Pro</span>
+          </div>
+        </div>
+        <div className="text-right text-[10px] text-slate-500">
+          <span>Verified Independent Developer</span>
+          <span className="mx-1.5 text-slate-400">•</span>
+          <span className="font-semibold text-slate-700">hasvolt.com</span>
+        </div>
       </div>
     </div>
   );
