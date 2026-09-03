@@ -151,9 +151,9 @@ export const printTrackerData = (workLogs: WorkLog[], dailyLifeLogs: DailyLifeLo
         <button onclick="window.print()" style="padding:10px 20px; font-size:16px; cursor:pointer;">Print / Save as PDF</button>
       </div>
       <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: #666;">
-        <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
+        <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
         <span>
-          <strong>Daily Khata Pro</strong> powered by <strong>HASVOLT</strong> · Developed by MD Zafeer Hasan
+          <strong>Daily Khata Pro</strong> powered by <strong>HASVOLT</strong> · Developed by MD Zafeer Hasan (YAZDAAN)
         </span>
       </div>
       <script>

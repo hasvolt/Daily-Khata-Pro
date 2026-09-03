@@ -117,7 +117,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             <div className="text-[11px] text-[#94A3B8] font-medium">{t.creatorLabel}</div>
             <div className="text-[14px] font-bold text-amber-300 mt-0.5 truncate flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>MD Zafeer Hasan</span>
+              <span>MD Zafeer Hasan (YAZDAAN)</span>
             </div>
           </div>
         </div>

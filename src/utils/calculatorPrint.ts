@@ -287,10 +287,10 @@ export function generateCalculatorSlipHTML(params: CalcPrintParams): string {
 
   <div class="footer">
     <div style="display: flex; align-items: center; gap: 8px;">
-      <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
+      <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
       <span>
         <strong>Daily Khata Pro</strong> · Modern Financial Ledger Utility<br>
-        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan</span>
+        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan (YAZDAAN)</span>
       </span>
     </div>
     <div style="text-align: right;">

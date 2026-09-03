@@ -204,7 +204,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-2xl overflow-hidden border border-[var(--theme-border,#213E61)] shadow-sm bg-[var(--theme-surface,#0E1A29)] p-1.5 relative group">
               <img
                 src="/md-zafeer-hasan-yazdaan.jpg"
-                alt="MD Zafeer Hasan - Developer & Creator"
+                alt="MD Zafeer Hasan (YAZDAAN) - Developer & Creator"
                 className="w-full h-auto max-h-[380px] object-contain rounded-xl block mx-auto transition-transform duration-300 group-hover:scale-[1.02]"
                 referrerPolicy="no-referrer"
               />
@@ -214,7 +214,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </div>
             </div>
             <p className="text-[11px] text-[#94A3B8] text-center mt-2.5 font-mono">
-              MD Zafeer Hasan • Developer &amp; Creator
+              MD Zafeer Hasan (YAZDAAN) • Developer &amp; Creator
             </p>
           </div>
 
@@ -404,7 +404,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </div>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[#94A3B8]">Copyright Holder:</span>
-                <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan</span>
+                <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan (YAZDAAN)</span>
               </div>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[#94A3B8]">Public Repository:</span>
@@ -482,7 +482,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </>
             ) : (
               <>
-                Founded by <strong>MD Zafeer Hasan</strong>, <strong>HASVOLT</strong> develops modern digital utilities (including Daily Khata Pro).
+                Founded by <strong>MD Zafeer Hasan (YAZDAAN)</strong>, <strong>HASVOLT</strong> develops modern digital utilities (including Daily Khata Pro).
               </>
             )}
           </p>

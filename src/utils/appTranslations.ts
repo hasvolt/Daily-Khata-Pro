@@ -293,7 +293,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'backup', title: '11. Backup & Privacy Security', subtitle: 'Export JSON snapshots, local restore & offline safety' },
         { id: 'source_code', title: '12. Source Code & Verification', subtitle: 'Open source GitHub repo, MIT license & code inspection' },
         { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Answers to common questions and edge cases' },
-        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan & HasVolt project' }
+        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan (YAZDAAN) & HasVolt project' }
       ]
     },
     settings: {
@@ -437,7 +437,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       subtitle: 'Developer, Founder & Project Overview',
       badge: 'Independent Creator',
       backToHome: 'Back to Khata',
-      name: 'MD Zafeer Hasan',
+      name: 'MD Zafeer Hasan (YAZDAAN)',
       alias: '(YAZDAAN)',
       role: 'Independent Developer • Open Source Creator • Security Researcher',
       creatorTag: 'Open-Source Creator',
@@ -673,7 +673,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       subtitle: 'डेवलपर, फाउंडर व प्रोजेक्ट प्रोफाइल',
       badge: 'स्वतंत्र क्रिएटर',
       backToHome: 'वापस खाता पर जाएं',
-      name: 'MD Zafeer Hasan',
+      name: 'MD Zafeer Hasan (YAZDAAN)',
       alias: '(YAZDAAN)',
       role: 'स्वतंत्र डेवलपर • ओपन-सोर्स क्रिएटर • सुरक्षा शोधकर्ता',
       creatorTag: 'ओपन-सोर्स क्रिएटर',
@@ -765,7 +765,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'backup', title: '11. Backup & Privacy Security', subtitle: 'JSON export snapshots aur offline safety' },
         { id: 'source_code', title: '12. Source Code & Verification', subtitle: 'Open source GitHub repo aur code audit' },
         { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Common questions aur quick solutions' },
-        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan & HasVolt project' }
+        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan (YAZDAAN) & HasVolt project' }
       ]
     },
     settings: {
@@ -909,7 +909,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       subtitle: 'Developer, Founder & Project Overview',
       badge: 'Independent Creator',
       backToHome: 'Back to Khata',
-      name: 'MD Zafeer Hasan',
+      name: 'MD Zafeer Hasan (YAZDAAN)',
       alias: '(YAZDAAN)',
       role: 'Independent Developer • Open Source Creator • Security Researcher',
       creatorTag: 'Open-Source Creator',

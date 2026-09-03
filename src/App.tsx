@@ -1916,10 +1916,12 @@ export default function App() {
       {/* Unified Global Footer with Integrated Sponsor Promo Banner & Advertisement */}
       <footer className="no-print mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-xs select-none">
         <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-24 sm:pb-28 space-y-3">
-          {/* Sponsor / HasVolt Promo Banner (Anchored inside Footer) */}
-          <section aria-label="Sponsored Partner" className="w-full">
-            <HasVoltPromoBanner />
-          </section>
+          {/* Sponsor / HasVolt Promo Banner (Anchored inside Footer on other pages) */}
+          {currentTab !== 'home' && (
+            <section aria-label="Sponsored Partner" className="w-full">
+              <HasVoltPromoBanner variant="bar" />
+            </section>
+          )}
 
           {/* Google AdSense Responsive Ad Unit */}
           <section aria-label="Advertisement Space" className="w-full">
@@ -1933,12 +1935,12 @@ export default function App() {
               <button
                 onClick={() => setCurrentTab('developer')}
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-2xs active:scale-95 text-[11px]"
-                title="View Developer Profile (MD Zafeer Hasan)"
+                title="View Developer Profile (MD Zafeer Hasan (YAZDAAN))"
               >
                 <div className="w-4 h-4 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] bg-[#070E18] shrink-0">
                   <img
                     src="/md-zafeer-hasan-yazdaan.jpg"
-                    alt="MD Zafeer Hasan"
+                    alt="MD Zafeer Hasan (YAZDAAN)"
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                     onError={(e) => {
@@ -1947,7 +1949,7 @@ export default function App() {
                   />
                 </div>
                 <span className="text-[#94A3B8]">By</span>
-                <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan</span>
+                <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan (YAZDAAN)</span>
                 <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1.5 py-0.2 rounded font-bold">Developer</span>
               </button>
 

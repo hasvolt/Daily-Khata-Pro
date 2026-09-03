@@ -444,14 +444,14 @@ const MANUAL_EN: UserManualTranslation = {
     {
       id: 'developer',
       title: '14. Developer & Founder Profile',
-      subtitle: 'Created by MD Zafeer Hasan • HasVolt Official Mission',
+      subtitle: 'Created by MD Zafeer Hasan (YAZDAAN) • HasVolt Official Mission',
       overviewHeading: 'Creator Mission & Philosophy',
-      overviewText: 'Daily Khata Pro was envisioned, architected, and built by MD Zafeer Hasan under HasVolt. The project was created with a clear vision: building private, aesthetic, high-performance financial tools that put complete power and data sovereignty into the hands of users.',
+      overviewText: 'Daily Khata Pro was envisioned, architected, and built by MD Zafeer Hasan (YAZDAAN) under HasVolt. The project was created with a clear vision: building private, aesthetic, high-performance financial tools that put complete power and data sovereignty into the hands of users.',
       cardsHeading: 'Developer Specifications',
       cards: [
         {
           title: 'Founder & Architect',
-          desc: 'MD Zafeer Hasan — Dedicated to creating privacy-first digital tools.'
+          desc: 'MD Zafeer Hasan (YAZDAAN) — Dedicated to creating privacy-first digital tools.'
         },
         {
           title: 'Official Platform',

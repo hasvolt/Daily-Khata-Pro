@@ -9,7 +9,7 @@ export const BRAND_WATERMARK_CONFIG = {
   tagline: 'Simple Income & Expense Tracker',
   companyName: 'HASVOLT',
   license: 'Open Source MIT License',
-  developer: 'MD Zafeer Hasan',
+  developer: 'MD Zafeer Hasan (YAZDAAN)',
   website: 'https://hasvolt.com',
   supportPortal: 'https://hses247help.com',
   year: '2026'
@@ -175,7 +175,7 @@ export function getWatermarkAndHeaderHTML(docTitle: string, subtitle?: string): 
   const footerHTML = `
     <div class="brand-footer-box">
       <div style="display: flex; align-items: center; gap: 8px;">
-        <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
+        <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
         <span>
           <span class="brand-footer-legal">Daily Khata Pro</span> · Developed by <strong>${BRAND_WATERMARK_CONFIG.developer}</strong>
         </span>

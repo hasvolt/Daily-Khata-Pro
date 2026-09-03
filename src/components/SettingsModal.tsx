@@ -1339,7 +1339,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <div className="w-28 h-auto max-h-36 sm:w-32 sm:max-h-40 rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)] shadow-lg bg-[#060B11] p-1">
                       <img
                         src="/md-zafeer-hasan-yazdaan.jpg"
-                        alt="MD Zafeer Hasan"
+                        alt="MD Zafeer Hasan (YAZDAAN)"
                         className="w-full h-auto object-contain rounded-xl"
                         referrerPolicy="no-referrer"
                       />
@@ -1354,7 +1354,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="text-center sm:text-left space-y-1 min-w-0 flex-1">
                     <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                       <h4 className="font-serif-display text-[18px] sm:text-[20px] font-bold text-[#F8FAFC]">
-                        MD Zafeer Hasan
+                        MD Zafeer Hasan (YAZDAAN)
                       </h4>
                       <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
                        

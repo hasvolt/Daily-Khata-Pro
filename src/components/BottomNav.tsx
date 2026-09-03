@@ -62,13 +62,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
                 <div
                   className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
                     isActive
-                      ? 'bg-[#10B981] text-[#04140D] ring-3 sm:ring-4 ring-[#10B981]/30 shadow-[#10B981]/50 scale-105'
-                      : 'bg-gradient-to-tr from-[#10B981] to-[#34D399] text-[#04140D] hover:scale-105 shadow-[#10B981]/30'
+                      ? 'bg-[var(--theme-primary,#00D26A)] text-[#04140D] ring-3 sm:ring-4 ring-[var(--theme-primary,#00D26A)]/30 shadow-[var(--theme-primary,#00D26A)]/50 scale-105'
+                      : 'bg-gradient-to-tr from-[#00D26A] to-[#00E676] text-[#04140D] hover:scale-105 shadow-[var(--theme-primary,#00D26A)]/30'
                   }`}
                 >
                   <Plus className="w-5 h-5 sm:w-7 sm:h-7 stroke-[3] transition-transform group-hover:rotate-90 duration-200" />
                 </div>
-                <span className="text-[10px] sm:text-[12.5px] font-extrabold text-[#10B981] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
+                <span className="text-[10px] sm:text-[12.5px] font-extrabold text-[var(--theme-primary,#00D26A)] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
                   {tab.label}
                 </span>
               </button>
@@ -84,17 +84,17 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
               onClick={() => handleTabClick(tab)}
               className={`relative flex flex-col items-center justify-center py-0.5 sm:py-2 px-0.5 sm:px-3 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-pointer select-none w-full ${
                 isActive
-                  ? 'text-[var(--theme-primary,#38BDF8)] font-extrabold bg-[var(--theme-card,#132438)]/60'
-                  : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]/40 active:scale-95'
+                  ? 'text-[var(--theme-primary,#00D26A)] font-extrabold bg-[var(--theme-card,#132438)]/60'
+                  : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)]/40 active:scale-95'
               }`}
             >
               {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[var(--theme-primary,#38BDF8)] rounded-b-full shadow-[0_2px_8px_rgba(56,189,248,0.5)] animate-in fade-in zoom-in duration-300"></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[var(--theme-primary,#00D26A)] rounded-b-full shadow-[0_2px_8px_rgba(56,189,248,0.5)] animate-in fade-in zoom-in duration-300"></div>
               )}
               <div
                 className={`relative p-1 sm:p-2 rounded-lg sm:rounded-xl transition-all duration-300 ${
                   isActive
-                    ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] scale-105 sm:scale-110'
+                    ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#00D26A)] scale-105 sm:scale-110'
                     : 'text-[#94A3B8]'
                 }`}
               >

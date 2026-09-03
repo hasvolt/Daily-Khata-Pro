@@ -187,7 +187,7 @@ export const AddView: React.FC<AddViewProps> = ({
           className={`flex-1 py-3 rounded-xl font-extrabold text-[14.5px] sm:text-[15.5px] flex items-center justify-center gap-2 transition-all cursor-pointer ${
             type === 'income'
               ? 'bg-[#10B981] text-[#04140D] shadow-md scale-[1.01]'
-              : 'text-[#94A3B8] hover:text-[#F8FAFC]'
+              : 'text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
           }`}
         >
           <ArrowUpRight className="w-4.5 h-4.5 stroke-[3]" />
@@ -203,7 +203,7 @@ export const AddView: React.FC<AddViewProps> = ({
           className={`flex-1 py-3 rounded-xl font-extrabold text-[14.5px] sm:text-[15.5px] flex items-center justify-center gap-2 transition-all cursor-pointer ${
             type === 'expense'
               ? 'bg-[#EF4444] text-white shadow-md scale-[1.01]'
-              : 'text-[#94A3B8] hover:text-[#F8FAFC]'
+              : 'text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
           }`}
         >
           <ArrowDownRight className="w-4.5 h-4.5 stroke-[3]" />
@@ -242,7 +242,7 @@ export const AddView: React.FC<AddViewProps> = ({
                 setAmountStr(e.target.value);
                 if (error) setError('');
               }}
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-mono text-[28px] sm:text-[34px] font-bold tracking-tight rounded-2xl pl-12 pr-4 py-3.5 focus:outline-none transition-all placeholder:text-[#64748B]"
+              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] font-mono text-[28px] sm:text-[34px] font-bold tracking-tight rounded-2xl pl-12 pr-4 py-3.5 focus:outline-none transition-all placeholder:text-[#64748B]"
               style={{
                 borderColor: amountStr ? 'var(--theme-primary, #38BDF8)' : undefined
               }}
@@ -261,7 +261,7 @@ export const AddView: React.FC<AddViewProps> = ({
                   triggerHapticSound('click');
                   if (error) setError('');
                 }}
-                className="px-3 py-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC] border border-[var(--theme-border,#213E61)] text-[12.5px] font-mono font-bold shrink-0 transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)] border border-[var(--theme-border,#213E61)] text-[12.5px] font-mono font-bold shrink-0 transition-colors cursor-pointer"
               >
                 +{getCurrencyConfig(getCurrentLanguage()).symbol}{q >= 1000 ? `${q / 1000}k` : q}
               </button>
@@ -297,7 +297,7 @@ export const AddView: React.FC<AddViewProps> = ({
                   value={customSourceInput}
                   onChange={(e) => setCustomSourceInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleCreateCustomSource())}
-                  className="flex-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-lg px-3 py-1.5 text-[13px] text-[#F8FAFC] focus:outline-none"
+                  className="flex-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-lg px-3 py-1.5 text-[13px] text-[var(--theme-text,#F8FAFC)] focus:outline-none"
                   autoFocus
                 />
                 <button
@@ -310,7 +310,7 @@ export const AddView: React.FC<AddViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddingCustomSource(false)}
-                  className="p-1.5 text-[#94A3B8] hover:text-[#F8FAFC] cursor-pointer"
+                  className="p-1.5 text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)] cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -329,7 +329,7 @@ export const AddView: React.FC<AddViewProps> = ({
                     className={`p-3 rounded-xl border text-[13px] sm:text-[13.5px] font-bold flex items-center gap-2.5 transition-all cursor-pointer text-left min-w-0 ${
                       isSelected
                         ? 'shadow-sm'
-                        : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                        : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                     }`}
                     style={{
                       backgroundColor: isSelected ? 'var(--theme-btn-bg, #38BDF8)' : undefined,
@@ -369,7 +369,7 @@ export const AddView: React.FC<AddViewProps> = ({
                   value={customCategoryInput}
                   onChange={(e) => setCustomCategoryInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleCreateCustomCategory())}
-                  className="flex-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-lg px-3 py-1.5 text-[13px] text-[#F8FAFC] focus:outline-none"
+                  className="flex-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-lg px-3 py-1.5 text-[13px] text-[var(--theme-text,#F8FAFC)] focus:outline-none"
                   autoFocus
                 />
                 <button
@@ -382,7 +382,7 @@ export const AddView: React.FC<AddViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddingCustomCategory(false)}
-                  className="p-1.5 text-[#94A3B8] hover:text-[#F8FAFC] cursor-pointer"
+                  className="p-1.5 text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)] cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -401,7 +401,7 @@ export const AddView: React.FC<AddViewProps> = ({
                     className={`p-3 rounded-xl border text-[13px] sm:text-[13.5px] font-bold flex items-center gap-2.5 transition-all cursor-pointer text-left min-w-0 ${
                       isSelected
                         ? 'bg-[#EF4444] text-white border-[#EF4444] shadow-sm'
-                        : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                        : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                     }`}
                   >
                     <CatIcon className="w-4 h-4 shrink-0" />
@@ -428,7 +428,7 @@ export const AddView: React.FC<AddViewProps> = ({
                       className={`py-2 px-2.5 rounded-xl border text-[12px] font-bold text-center transition-all cursor-pointer truncate ${
                         isSelected
                           ? 'border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                          : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                          : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                       }`}
                       style={{
                         backgroundColor: isSelected ? `${cfg.color}25` : undefined,
@@ -450,7 +450,7 @@ export const AddView: React.FC<AddViewProps> = ({
           <div className="p-4 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-2xl space-y-3.5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-[var(--theme-border,#213E61)] pb-2.5">
               <div>
-                <label className="text-[12.5px] font-bold uppercase tracking-wider text-[#F8FAFC] flex items-center gap-1.5">
+                <label className="text-[12.5px] font-bold uppercase tracking-wider text-[var(--theme-text,#F8FAFC)] flex items-center gap-1.5">
                   <Sliders className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <span>{isHindi ? 'फंड आवंटन का तरीका (Income Allocation)' : 'Income Allocation Option'}</span>
                 </label>
@@ -479,7 +479,7 @@ export const AddView: React.FC<AddViewProps> = ({
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-2.5 ${
                   incomeAllocationMode === 'all'
                     ? 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-primary,#38BDF8)] ring-1 ring-[var(--theme-primary,#38BDF8)]/50 shadow-sm'
-                    : 'bg-[var(--theme-card,#132438)]/50 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                    : 'bg-[var(--theme-card,#132438)]/50 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
               >
                 <div
@@ -492,7 +492,7 @@ export const AddView: React.FC<AddViewProps> = ({
                   <Sliders className="w-4 h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="font-bold text-[13px] text-[#F8FAFC] flex items-center justify-between">
+                  <div className="font-bold text-[13px] text-[var(--theme-text,#F8FAFC)] flex items-center justify-between">
                     <span>{isHindi ? 'सभी फंड्स में बांटें (% Rule)' : 'Split Across All Funds'}</span>
                     {incomeAllocationMode === 'all' && (
                       <Check className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
@@ -514,7 +514,7 @@ export const AddView: React.FC<AddViewProps> = ({
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start gap-2.5 ${
                   incomeAllocationMode === 'single'
                     ? 'bg-[var(--theme-surface,#0E1A29)] border-[#A855F7] ring-1 ring-[#A855F7]/50 shadow-sm'
-                    : 'bg-[var(--theme-card,#132438)]/50 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                    : 'bg-[var(--theme-card,#132438)]/50 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
               >
                 <div
@@ -527,7 +527,7 @@ export const AddView: React.FC<AddViewProps> = ({
                   <Target className="w-4 h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="font-bold text-[13px] text-[#F8FAFC] flex items-center justify-between">
+                  <div className="font-bold text-[13px] text-[var(--theme-text,#F8FAFC)] flex items-center justify-between">
                     <span>{isHindi ? 'किसी एक फंड में (Single Fund)' : 'Deposit to Single Fund'}</span>
                     {incomeAllocationMode === 'single' && (
                       <Check className="w-3.5 h-3.5 text-[#A855F7]" />
@@ -543,7 +543,7 @@ export const AddView: React.FC<AddViewProps> = ({
             {/* When Single Fund is Selected: Fund Selector Grid */}
             {incomeAllocationMode === 'single' && (
               <div className="p-3 bg-[var(--theme-surface,#0E1A29)] border border-[#A855F7]/30 rounded-xl space-y-2.5 animate-in fade-in duration-150">
-                <div className="flex items-center justify-between text-[11.5px] font-bold text-[#F8FAFC]">
+                <div className="flex items-center justify-between text-[11.5px] font-bold text-[var(--theme-text,#F8FAFC)]">
                   <span className="text-[#A855F7] flex items-center gap-1.5">
                     <Target className="w-3.5 h-3.5" />
                     {isHindi ? 'किस फंड में 100% जमा करना चाहते हैं?' : 'Select destination fund pot:'}
@@ -566,7 +566,7 @@ export const AddView: React.FC<AddViewProps> = ({
                         className={`p-2 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer ${
                           isSelected
                             ? 'shadow-sm ring-1 ring-[#A855F7]/50'
-                            : 'bg-[var(--theme-card,#132438)]/60 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                            : 'bg-[var(--theme-card,#132438)]/60 border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                         }`}
                         style={{
                           borderColor: isSelected ? cfg.color : undefined,
@@ -615,7 +615,7 @@ export const AddView: React.FC<AddViewProps> = ({
                           <span className="font-medium truncate">{label}</span>
                           <span className="font-mono font-bold text-[#CBD5E1]">{pct}%</span>
                         </div>
-                        <div className="font-mono font-bold text-[12.5px] sm:text-[13.5px] text-[#F8FAFC] mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">
+                        <div className="font-mono font-bold text-[12.5px] sm:text-[13.5px] text-[var(--theme-text,#F8FAFC)] mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">
                           {formatCurrency(allocated, privacyMask)}
                         </div>
                       </div>
@@ -646,7 +646,7 @@ export const AddView: React.FC<AddViewProps> = ({
                     className={`py-2 px-2 rounded-xl border text-[11.5px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       isSelected
                         ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[#F8FAFC]'
+                        : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                     }`}
                   >
                     <ModeIcon className="w-3.5 h-3.5" />
@@ -666,7 +666,7 @@ export const AddView: React.FC<AddViewProps> = ({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2.5 text-[13.5px] text-[#F8FAFC] font-mono focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2.5 text-[13.5px] text-[var(--theme-text,#F8FAFC)] font-mono focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
             />
           </div>
         </div>
@@ -682,7 +682,7 @@ export const AddView: React.FC<AddViewProps> = ({
               placeholder={t.add.clientPlaceholder}
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2 text-[13px] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2 text-[13px] text-[var(--theme-text,#F8FAFC)] placeholder:text-[#64748B] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
             />
           </div>
 
@@ -695,7 +695,7 @@ export const AddView: React.FC<AddViewProps> = ({
               placeholder={t.add.notesPlaceholder}
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2 text-[13px] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2 text-[13px] text-[var(--theme-text,#F8FAFC)] placeholder:text-[#64748B] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
             />
           </div>
         </div>

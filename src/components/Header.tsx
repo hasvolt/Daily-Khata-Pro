@@ -187,7 +187,7 @@ export const Header: React.FC<HeaderProps> = ({
     bgClass: string;
     textClass: string;
   }[] = [
-    { id: 'blue', label: 'Electric Blue (Dark)', dotColor: '#38BDF8', bgClass: 'bg-[#38BDF8]', textClass: 'text-[#38BDF8]' },
+    { id: 'blue', label: 'Electric Mint (Dark)', dotColor: '#00D26A', bgClass: 'bg-[#00D26A]', textClass: 'text-[#00D26A]' },
     { id: 'yellow', label: 'Volt Gold (Dark)', dotColor: '#FFC700', bgClass: 'bg-[#FFC700]', textClass: 'text-[#FFC700]' },
     { id: 'orange', label: 'Sunset Orange (Dark)', dotColor: '#F97316', bgClass: 'bg-[#F97316]', textClass: 'text-[#FB923C]' },
     { id: 'emerald', label: 'Emerald Green (Dark)', dotColor: '#10B981', bgClass: 'bg-[#10B981]', textClass: 'text-[#10B981]' },
@@ -224,50 +224,47 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-md sticky top-0 z-30 shadow-md transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2.5 flex items-center justify-between gap-1.5 sm:gap-2">
-        {/* Brand Icon & Name (Refined, 20% compact on mobile) */}
-        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 shrink-0">
+        {/* Brand Icon & Name (Slightly increased logo & theme-matched branding) */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink-0">
           <div
             onClick={() => onSelectTab && onSelectTab('home')}
             className="cursor-pointer active:scale-95 transition-transform shrink-0"
+            title="Daily Khata Pro"
           >
             <div className="sm:hidden">
-              <HasVoltLogo size={26} />
+              <HasVoltLogo size={34} />
             </div>
             <div className="hidden sm:block">
-              <HasVoltLogo size={32} />
+              <HasVoltLogo size={42} />
             </div>
           </div>
 
-          <div className="flex flex-col text-left min-w-0">
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              <span
-                onClick={() => onSelectTab && onSelectTab('home')}
-                className="font-serif-display font-bold text-[15px] sm:text-[19px] tracking-tight cursor-pointer transition-colors truncate"
-              >
-                <span className="text-[#FFFFFF]">Daily</span>
-                <span className="ml-1" style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span>
-                <span className="text-[#F8FAFC] ml-1">Pro</span>
+          <div className="flex flex-col text-left min-w-0 justify-center">
+            <div
+              onClick={() => onSelectTab && onSelectTab('home')}
+              className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group"
+            >
+              <span className="font-bold text-[16px] sm:text-[19px] tracking-tight text-[var(--theme-text,#F8FAFC)] group-hover:opacity-95 transition-opacity truncate">
+                Daily Khata
               </span>
               <span
-                className="hidden md:inline-block text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded border transition-colors"
-                style={{
-                  backgroundColor: 'var(--theme-primary-dim, rgba(56,189,248,0.15))',
-                  color: 'var(--theme-primary, #38BDF8)',
-                  borderColor: 'var(--theme-primary-border, rgba(56,189,248,0.35))'
-                }}
+                className="font-black text-[15px] sm:text-[18px] tracking-tight transition-colors drop-shadow-xs"
+                style={{ color: 'var(--theme-primary, #00D26A)' }}
               >
-                OFFICIAL
+                Pro
               </span>
             </div>
-            <div className="text-[9.5px] sm:text-[11px] text-[#94A3B8] flex items-center gap-1 font-medium truncate leading-tight mt-0.5">
+            <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
               <span
-                className="font-semibold truncate transition-colors"
-                style={{ color: 'var(--theme-primary, #38BDF8)' }}
+                className="w-1.5 h-1.5 rounded-full shrink-0"
+                style={{ backgroundColor: 'var(--theme-primary, #00D26A)' }}
+              />
+              <span
+                className="text-[10px] sm:text-[11.5px] font-medium tracking-wide truncate transition-colors"
+                style={{ color: 'var(--theme-text-muted, #8BA4D0)' }}
               >
                 Income &amp; Expense Tracker
               </span>
-              <span className="text-[#475569] mx-0.5 hidden sm:inline">•</span>
-              <span className="text-[#94A3B8] hidden sm:inline truncate">{tr.menu.sixFundLedger}</span>
             </div>
           </div>
         </div>
@@ -468,13 +465,14 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         {/* Drawer Header */}
                         <div className="p-3.5 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] flex items-center justify-between shrink-0">
-                          <div className="flex items-center gap-2">
-                            <HasVoltLogo size={24} />
+                          <div className="flex items-center gap-2.5">
+                            <HasVoltLogo size={28} />
                             <div>
-                              <div className="font-bold text-[14px] text-[var(--theme-text,#F8FAFC)]">
-                                Daily <span style={{ color: 'var(--theme-primary, #38BDF8)' }}>Khata</span> Pro
+                              <div className="font-bold text-[14.5px] text-[var(--theme-text,#F8FAFC)] flex items-center gap-1">
+                                <span>Daily Khata</span>
+                                <span style={{ color: 'var(--theme-primary, #00D26A)' }} className="font-black">Pro</span>
                               </div>
-                              <div className="text-[9.5px] text-[var(--theme-text-muted,#94A3B8)] font-medium">
+                              <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] font-medium">
                                 {tr.menu.menuAndTools}
                               </div>
                             </div>
@@ -936,7 +934,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 </div>
                                 <div className="flex flex-col">
                                   <span className="leading-tight font-bold">{tr.menu.developerProfile}</span>
-                                  <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan</span>
+                                  <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan (YAZDAAN)</span>
                                 </div>
                               </button>
                             )}
@@ -1431,7 +1429,7 @@ export const Header: React.FC<HeaderProps> = ({
                           </div>
                           <div className="flex flex-col">
                             <span className="leading-tight font-bold">{tr.menu.developerProfile}</span>
-                            <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan</span>
+                            <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan (YAZDAAN)</span>
                           </div>
                         </button>
                       )}

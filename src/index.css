@@ -2,43 +2,43 @@
 
 @layer base {
   :root {
-    /* Default: Electric Blue */
-    --theme-primary: #38BDF8;
-    --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.15);
-    --theme-primary-border: rgba(56, 189, 248, 0.35);
-    --theme-glow: rgba(56, 189, 248, 0.2);
-    --theme-bg: #070E18;
-    --theme-surface: #0E1A29;
-    --theme-card: #132438;
-    --theme-card-hover: #19304A;
-    --theme-border: #213E61;
+    /* Default: Electric Navy & Emerald */
+    --theme-primary: #00D26A;
+    --theme-primary-hover: #00E676;
+    --theme-primary-dim: rgba(0, 210, 106, 0.16);
+    --theme-primary-border: rgba(0, 210, 106, 0.38);
+    --theme-glow: rgba(0, 210, 106, 0.25);
+    --theme-bg: #020816;
+    --theme-surface: #020A1A;
+    --theme-card: #040E24;
+    --theme-card-hover: #07173B;
+    --theme-border: #0D2654;
     --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
-    --theme-badge-text: #38BDF8;
-    --theme-btn-bg: #38BDF8;
-    --theme-btn-hover: #0EA5E9;
+    --theme-text-muted: #8BA4D0;
+    --theme-text-dim: #5572A1;
+    --theme-badge-text: #00D26A;
+    --theme-btn-bg: #00D26A;
+    --theme-btn-hover: #00E676;
     --theme-btn-text: #040D17;
   }
 
   [data-theme="blue"] {
-    --theme-primary: #38BDF8;
-    --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.16);
-    --theme-primary-border: rgba(56, 189, 248, 0.38);
-    --theme-glow: rgba(56, 189, 248, 0.25);
-    --theme-bg: #070E18;
-    --theme-surface: #0E1A29;
-    --theme-card: #132438;
-    --theme-card-hover: #19304A;
-    --theme-border: #213E61;
+    --theme-primary: #00D26A;
+    --theme-primary-hover: #00E676;
+    --theme-primary-dim: rgba(0, 210, 106, 0.16);
+    --theme-primary-border: rgba(0, 210, 106, 0.38);
+    --theme-glow: rgba(0, 210, 106, 0.25);
+    --theme-bg: #020816;
+    --theme-surface: #020A1A;
+    --theme-card: #040E24;
+    --theme-card-hover: #07173B;
+    --theme-border: #0D2654;
     --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
-    --theme-badge-text: #38BDF8;
-    --theme-btn-bg: #38BDF8;
-    --theme-btn-hover: #0EA5E9;
+    --theme-text-muted: #8BA4D0;
+    --theme-text-dim: #5572A1;
+    --theme-badge-text: #00D26A;
+    --theme-btn-bg: #00D26A;
+    --theme-btn-hover: #00E676;
     --theme-btn-text: #040D17;
   }
 
@@ -429,8 +429,66 @@
 [data-theme="light"] [class*="bg-\[\#060B12\]"],
 [data-theme="white"] [class*="bg-\[\#060B12\]"],
 [data-theme="light"] [class*="bg-\[\#060B11\]"],
-[data-theme="white"] [class*="bg-\[\#060B11\]"] {
+[data-theme="white"] [class*="bg-\[\#060B11\]"],
+[data-theme="light"] [class*="bg-\[\#020A1A\]"],
+[data-theme="white"] [class*="bg-\[\#020A1A\]"],
+[data-theme="light"] [class*="bg-\[\#040E24\]"],
+[data-theme="white"] [class*="bg-\[\#040E24\]"],
+[data-theme="light"] [class*="bg-\[\#020816\]"],
+[data-theme="white"] [class*="bg-\[\#020816\]"],
+[data-theme="light"] [class*="bg-\[\#0A245C\]"],
+[data-theme="white"] [class*="bg-\[\#0A245C\]"],
+[data-theme="light"] [class*="bg-\[\#0B2A6B\]"],
+[data-theme="white"] [class*="bg-\[\#0B2A6B\]"],
+[data-theme="light"] [class*="bg-\[\#022A20\]"],
+[data-theme="white"] [class*="bg-\[\#022A20\]"] {
   background-color: #F8FAFC;
+}
+
+/* Banking Card 3D Light & White Mode Adaptation */
+[data-theme="light"] .banking-card-3d,
+[data-theme="white"] .banking-card-3d {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 55%, #F0F7FF 100%) !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-title,
+[data-theme="white"] .banking-card-3d .banking-card-title {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-subtitle,
+[data-theme="white"] .banking-card-3d .banking-card-subtitle {
+  color: #64748B !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-label,
+[data-theme="white"] .banking-card-3d .banking-card-label {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-amount,
+[data-theme="white"] .banking-card-3d .banking-card-amount {
+  color: #0F172A !important;
+  text-shadow: none !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-icon-box,
+[data-theme="white"] .banking-card-3d .banking-card-icon-box {
+  background-color: #E0F2FE !important;
+  border-color: #BAE6FD !important;
+  color: #0284C7 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-waves,
+[data-theme="white"] .banking-card-3d .banking-card-waves {
+  opacity: 0.35 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-glare,
+[data-theme="white"] .banking-card-3d .banking-card-glare {
+  background: radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, transparent 60%) !important;
 }
 
 [data-theme="light"] [class*="bg-\[\#0E1A29\]"],
@@ -459,7 +517,21 @@
 [data-theme="light"] [class*="border-\[\#19304A\]"],
 [data-theme="white"] [class*="border-\[\#19304A\]"],
 [data-theme="light"] [class*="border-\[\#2B3D54\]"],
-[data-theme="white"] [class*="border-\[\#2B3D54\]"] {
+[data-theme="white"] [class*="border-\[\#2B3D54\]"],
+[data-theme="light"] [class*="border-\[\#0D2654\]"],
+[data-theme="white"] [class*="border-\[\#0D2654\]"],
+[data-theme="light"] [class*="border-\[\#0A2249\]"],
+[data-theme="white"] [class*="border-\[\#0A2249\]"],
+[data-theme="light"] [class*="border-\[\#0D2B5E\]"],
+[data-theme="white"] [class*="border-\[\#0D2B5E\]"],
+[data-theme="light"] [class*="border-\[\#0A1E42\]"],
+[data-theme="white"] [class*="border-\[\#0A1E42\]"],
+[data-theme="light"] [class*="border-\[\#0E3680\]"],
+[data-theme="white"] [class*="border-\[\#0E3680\]"],
+[data-theme="light"] [class*="border-\[\#123680\]"],
+[data-theme="white"] [class*="border-\[\#123680\]"],
+[data-theme="light"] [class*="border-\[\#17459E\]"],
+[data-theme="white"] [class*="border-\[\#17459E\]"] {
   border-color: #CBD5E1;
 }
 

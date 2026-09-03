@@ -612,7 +612,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           </button>
 
           <div className="min-w-0">
-            <h1 className="text-[16px] sm:text-[19px] font-bold text-[#F8FAFC] flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <h1 className="text-[16px] sm:text-[19px] font-bold text-[var(--theme-text,#F8FAFC)] flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="truncate">{isHindi ? 'वित्तीय कैलकुलेटर' : 'Financial Calculator'}</span>
               <span className="text-[9px] sm:text-[10px] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] px-1.5 sm:px-2 py-0.5 rounded-md border border-[var(--theme-primary,#38BDF8)]/30 shrink-0">
                 PRO • CUSTOM
@@ -674,7 +674,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 className={`px-3 py-2 rounded-xl text-[12px] font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   isSelected
                     ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] shadow-sm font-extrabold'
-                    : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-surface,#0E1A29)]'
+                    : 'text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-surface,#0E1A29)]'
                 }`}
                 id={`calc-tab-${tab.id}`}
               >
@@ -742,7 +742,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 }}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
                   calcScale === 'normal'
-                    ? 'bg-[var(--theme-card,#132438)] text-[#F8FAFC] border border-[var(--theme-border,#213E61)] shadow-xs'
+                    ? 'bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] border border-[var(--theme-border,#213E61)] shadow-xs'
                     : 'text-[#64748B] hover:text-[#CBD5E1]'
                 }`}
               >
@@ -951,7 +951,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   onClick={() => handleKeypadPress(btn.val)}
                   className={`${heightClass} font-mono font-bold flex items-center justify-center transition-all cursor-pointer active:scale-90 select-none shadow-md border ${
                     btn.cls ||
-                    'bg-[var(--theme-bg,#070E18)] text-[#F8FAFC] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)] hover:border-[var(--theme-primary,#38BDF8)]/50'
+                    'bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)] hover:border-[var(--theme-primary,#38BDF8)]/50'
                   }`}
                 >
                   {btn.label}
@@ -1016,7 +1016,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
-              <h2 className="text-[16px] font-bold text-[#F8FAFC]">
+              <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)]">
                 {isHindi ? '6-फंड आय विभाजन (कस्टम राशि)' : '6-Fund Income Split Allocation'}
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
@@ -1055,7 +1055,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 step="any"
                 value={fundAmountInput}
                 onChange={(e) => setFundAmountInput(e.target.value)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[22px] font-mono font-bold rounded-xl pl-10 pr-4 py-2.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none shadow-inner"
+                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[22px] font-mono font-bold rounded-xl pl-10 pr-4 py-2.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none shadow-inner"
                 placeholder="50000"
               />
             </div>
@@ -1149,7 +1149,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: cfg.color }} />
                     <div className="min-w-0">
-                      <div className="text-[13px] font-bold text-[#F8FAFC] truncate">
+                      <div className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                         {FUND_LABELS[fund]}
                       </div>
                       <div className="text-[10px] text-[#94A3B8] font-mono">
@@ -1159,7 +1159,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   </div>
 
                   <div className="text-right shrink-0">
-                    <div className="text-[15px] font-mono font-bold text-[#F8FAFC]">
+                    <div className="text-[15px] font-mono font-bold text-[var(--theme-text,#F8FAFC)]">
                       {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : formatCurrency(allocatedAmt)}
                     </div>
                   </div>
@@ -1190,7 +1190,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
-              <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+              <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
                 <span>{isHindi ? 'SIP एवं वेल्थ कम्पाउंडर' : 'SIP & Wealth Compounder'}</span>
                 <span className="text-[10px] bg-[#10B981]/15 text-[#10B981] font-mono px-1.5 py-0.5 rounded border border-[#10B981]/30">
                   UNLIMITED
@@ -1208,7 +1208,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
                   sipMode === 'sip'
                     ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
-                    : 'text-[#94A3B8] hover:text-[#F8FAFC]'
+                    : 'text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
               >
                 Monthly SIP
@@ -1219,7 +1219,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
                   sipMode === 'lumpsum'
                     ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold'
-                    : 'text-[#94A3B8] hover:text-[#F8FAFC]'
+                    : 'text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
               >
                 Lumpsum
@@ -1249,7 +1249,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   step="any"
                   value={sipAmountInput}
                   onChange={(e) => setSipAmountInput(e.target.value)}
-                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-lg pl-7 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[16px] font-mono font-bold rounded-lg pl-7 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
                   placeholder="5000"
                 />
               </div>
@@ -1377,7 +1377,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   value={sipStepUpInput}
                   onChange={(e) => setSipStepUpInput(e.target.value)}
                   placeholder="Custom %"
-                  className="w-16 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-mono text-[11px] rounded px-2 py-1 outline-none text-right"
+                  className="w-16 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] font-mono text-[11px] rounded px-2 py-1 outline-none text-right"
                 />
               </div>
             </div>
@@ -1387,7 +1387,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#94A3B8] font-bold">Invested Amount</div>
-              <div className="text-[16px] font-mono font-bold text-[#F8FAFC] mt-0.5">
+              <div className="text-[16px] font-mono font-bold text-[var(--theme-text,#F8FAFC)] mt-0.5">
                 {formatCurrency(Math.round(sipCalculation.totalInvested))}
               </div>
             </div>
@@ -1422,7 +1422,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       {activeTab === 'emi' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
-            <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+            <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
               <span>{isHindi ? 'लोन EMI एवं ब्याज गणना' : 'Loan EMI & Interest Calculator'}</span>
               <span className="text-[10px] bg-[#8B5CF6]/15 text-[#8B5CF6] font-mono px-1.5 py-0.5 rounded border border-[#8B5CF6]/30">
                 FLEXIBLE
@@ -1453,7 +1453,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   step="any"
                   value={loanPrincipalInput}
                   onChange={(e) => setLoanPrincipalInput(e.target.value)}
-                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-lg pl-7 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[16px] font-mono font-bold rounded-lg pl-7 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
                   placeholder="500000"
                 />
               </div>
@@ -1582,7 +1582,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
             <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)]">
               <div className="text-[10.5px] text-[#94A3B8] font-bold">Principal Loan ({emiCalculation.principalPct}%)</div>
-              <div className="text-[16px] font-mono font-bold text-[#F8FAFC] mt-0.5">
+              <div className="text-[16px] font-mono font-bold text-[var(--theme-text,#F8FAFC)] mt-0.5">
                 {formatCurrency(Math.round(loanPrincipalNum))}
               </div>
             </div>
@@ -1604,7 +1604,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
-              <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+              <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
                 <span>{isHindi ? 'GST टैक्स कैलकुलेटर' : 'GST & Tax Invoice Splitter'}</span>
                 <span className="text-[10px] bg-[#EC4899]/15 text-[#EC4899] font-mono px-1.5 py-0.5 rounded border border-[#EC4899]/30">
                   CUSTOM SLAB
@@ -1682,7 +1682,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   step="any"
                   value={gstAmountInput}
                   onChange={(e) => setGstAmountInput(e.target.value)}
-                  className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[18px] font-mono font-bold rounded-xl pl-8 pr-4 py-2 focus:border-[#EC4899] focus:outline-none"
+                  className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[18px] font-mono font-bold rounded-xl pl-8 pr-4 py-2 focus:border-[#EC4899] focus:outline-none"
                   placeholder="10000"
                 />
               </div>
@@ -1753,7 +1753,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                       setGstSlabMode('custom');
                     }}
                     placeholder="e.g. 0.25, 6, 40"
-                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-mono text-[13px] font-bold rounded-lg px-3 py-1.5 focus:border-[#EC4899] outline-none"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] font-mono text-[13px] font-bold rounded-lg px-3 py-1.5 focus:border-[#EC4899] outline-none"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] font-mono text-[#94A3B8]">
                     %
@@ -1766,7 +1766,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2.5 font-mono text-[13px]">
             <div className="flex justify-between text-[#94A3B8]">
               <span>Net Base Price:</span>
-              <span className="font-bold text-[#F8FAFC]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstBase.toFixed(2)}</span>
+              <span className="font-bold text-[var(--theme-text,#F8FAFC)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstBase.toFixed(2)}</span>
             </div>
 
             {gstTaxType === 'intra' ? (
@@ -1792,7 +1792,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstTotalTax.toFixed(2)}</span>
             </div>
 
-            <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
+            <div className="flex justify-between text-[var(--theme-text,#F8FAFC)] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
               <span className="font-bold">Total Final Gross Price:</span>
               <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstFinalGross.toFixed(2)}</span>
             </div>
@@ -1807,7 +1807,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
-              <h2 className="text-[16px] font-bold text-[#F8FAFC]">
+              <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)]">
                 {isHindi ? 'छूट एवं मार्जिन' : 'Discount & Profit Margin'}
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
@@ -1848,7 +1848,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     step="any"
                     value={discOriginalPriceInput}
                     onChange={(e) => setDiscOriginalPriceInput(e.target.value)}
-                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
 
@@ -1883,7 +1883,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                       setDiscPercentInput('0');
                     }}
                     placeholder="0"
-                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
               </div>
@@ -1893,7 +1893,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   <span>Discount Saved ({effectiveDiscPct.toFixed(1)}%):</span>
                   <span className="font-bold">-{getCurrencyConfig(getCurrentLanguage()).symbol}{discSaved.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-[#F8FAFC] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
+                <div className="flex justify-between text-[var(--theme-text,#F8FAFC)] border-t border-[var(--theme-border,#213E61)] pt-2 text-[16px]">
                   <span className="font-bold">Final Payable Price:</span>
                   <span className="font-extrabold text-[var(--theme-primary,#38BDF8)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{discFinal.toFixed(2)}</span>
                 </div>
@@ -1910,7 +1910,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     step="any"
                     value={costPriceInput}
                     onChange={(e) => setCostPriceInput(e.target.value)}
-                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
                 <div className="space-y-1">
@@ -1921,7 +1921,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     step="any"
                     value={sellingPriceInput}
                     onChange={(e) => setSellingPriceInput(e.target.value)}
-                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
               </div>
@@ -1951,7 +1951,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       {activeTab === 'inflation' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
           <div className="border-b border-[var(--theme-border,#213E61)] pb-3">
-            <h2 className="text-[16px] font-bold text-[#F8FAFC] flex items-center gap-2">
+            <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
               <span>{isHindi ? 'मुद्रास्फीति एवं भविष्य लक्ष्य' : 'Inflation & Goal Horizon Planner'}</span>
               <span className="text-[10px] bg-[#EAB308]/15 text-[#EAB308] font-mono px-1.5 py-0.5 rounded border border-[#EAB308]/30">
                 CUSTOM GOALS
@@ -1970,7 +1970,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 type="text"
                 value={goalNameInput}
                 onChange={(e) => setGoalNameInput(e.target.value)}
-                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[13px] font-bold rounded-lg px-3 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] outline-none"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[13px] font-bold rounded-lg px-3 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] outline-none"
                 placeholder="e.g. Higher Education / Car / Flat"
               />
             </div>
@@ -1993,7 +1993,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   step="any"
                   value={goalTargetTodayInput}
                   onChange={(e) => setGoalTargetTodayInput(e.target.value)}
-                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[15px] font-mono font-bold rounded-lg pl-6 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] outline-none"
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[15px] font-mono font-bold rounded-lg pl-6 pr-2 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] outline-none"
                   placeholder="1000000"
                 />
               </div>
@@ -2102,7 +2102,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-center">
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[#EF4444]/30">
               <div className="text-[10.5px] text-[#EF4444] font-bold">Future Cost in {goalYearsNum} Yrs</div>
-              <div className="text-[17px] font-mono font-bold text-[#F8FAFC] mt-0.5">
+              <div className="text-[17px] font-mono font-bold text-[var(--theme-text,#F8FAFC)] mt-0.5">
                 {formatCurrency(Math.round(futureInflatedCost))}
               </div>
               <div className="text-[10px] text-[#94A3B8] mt-0.5">

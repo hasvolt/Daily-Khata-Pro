@@ -4,7 +4,7 @@ import { DEFAULT_FUNDS, getFundLabel } from '../data/defaults';
 import { formatCurrency, triggerHapticSound, downloadCSVReport } from '../utils/khataCalculations';
 import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
-import { Search, Edit3, Trash2, Plus, Zap, Banknote, Smartphone, Building2, Calendar, Download, Printer } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, Edit3, Trash2, Plus, Zap, Banknote, Smartphone, Building2, Calendar, Download, Printer } from 'lucide-react';
 import { ConfirmModal } from './ConfirmModal';
 
 interface HistoryViewProps {
@@ -44,6 +44,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   const searchQuery = propSearchQuery !== undefined ? propSearchQuery : internalSearchQuery;
   const setSearchQuery = propOnSearchChange || setInternalSearchQuery;
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [activeMonth, setActiveMonth] = useState<string>('all');
 
   // Filter options
   const filterOptions = [
@@ -57,6 +58,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   ];
 
   // Filter entries
+  // Unique months extraction
+  const uniqueMonths = Array.from(new Set(entries.map(e => e.date.substring(0, 7)))).sort((a: string, b: string) => b.localeCompare(a));
+  
   let filtered = entries.slice().sort((a, b) => {
     const dateComp = b.date.localeCompare(a.date);
     if (dateComp !== 0) return dateComp;
@@ -75,6 +79,11 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
       if (e.fund && e.allocationMode === 'single') return e.fund === fundKey;
       return (e.splits?.[fundKey] ?? 0) > 0;
     });
+  }
+
+  // Month filter
+  if (activeMonth !== 'all') {
+    filtered = filtered.filter(e => e.date.startsWith(activeMonth));
   }
 
   // Search filter
@@ -159,12 +168,12 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             placeholder={t.history.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] placeholder-[#64748B] text-[13.5px] sm:text-[14.5px] rounded-xl pl-10 pr-8 py-2.5 focus:outline-none shadow-sm transition-colors focus:border-[var(--theme-primary,#38BDF8)]"
+            className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] placeholder-[#64748B] text-[13.5px] sm:text-[14.5px] rounded-xl pl-10 pr-8 py-2.5 focus:outline-none shadow-sm transition-colors focus:border-[var(--theme-primary,#38BDF8)]"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-[#94A3B8] hover:text-[#F8FAFC] p-1 cursor-pointer"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-[#94A3B8] hover:text-[var(--theme-text,#F8FAFC)] p-1 cursor-pointer"
             >
               Clear
             </button>
@@ -176,7 +185,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           <button
             onClick={() => downloadCSVReport(entries, new Date())}
             title={t.history?.exportCsv || 'Export CSV'}
-            className="h-[40px] sm:h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="h-[40px] sm:h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <Download className="w-4 h-4 shrink-0" />
             <span className="hidden sm:inline">{t.history?.exportCsv || 'Export CSV'}</span>
@@ -186,7 +195,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             <button
               onClick={() => onTriggerPrint(new Date())}
               title={t.history?.printPdf || 'Print Statement'}
-              className="h-[40px] sm:h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="h-[40px] sm:h-[44px] px-3 sm:px-3.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <Printer className="w-4 h-4 shrink-0" />
               <span className="hidden sm:inline">{t.history?.printPdf || 'Print / PDF'}</span>
@@ -204,34 +213,79 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         </div>
       </div>
 
+      
       {/* Filter Chips Bar */}
       <div className="flex gap-2 overflow-x-auto pb-1.5 no-scrollbar no-print w-full">
-        {filterOptions.map((opt) => {
-          const isActive = activeFilter === opt.key;
-          return (
-            <button
-              key={opt.key}
-              onClick={() => {
-                onFilterChange(opt.key);
-                triggerHapticSound('click');
-              }}
-              className={`whitespace-nowrap px-3.5 py-2 rounded-xl text-[12.5px] sm:text-[13px] font-bold transition-all cursor-pointer border shrink-0 ${
-                isActive
-                  ? 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] shadow-sm'
-                  : 'bg-[var(--theme-card,#132438)] text-[#94A3B8] border-[var(--theme-border,#213E61)] hover:text-[#F8FAFC]'
+        {filterOptions.map((opt) => (
+          <button
+            key={opt.key}
+            onClick={() => onFilterChange(opt.key)}
+            className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[12px] sm:text-[13px] font-bold transition-all shrink-0 whitespace-nowrap shadow-sm ${
+              activeFilter === opt.key
+                ? 'bg-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
+                : 'bg-[var(--theme-card,#132438)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] hover:text-[var(--theme-text,#F8FAFC)]'
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
+      
+      {/* Month Filter Navigator */}
+      {uniqueMonths.length > 0 && (
+        <div className="flex items-center justify-between mt-2 mb-1 p-1.5 sm:p-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-sm w-full no-print">
+          <button
+            onClick={() => {
+              if (activeMonth === 'all') {
+                setActiveMonth(uniqueMonths[0]);
+              } else {
+                const idx = uniqueMonths.indexOf(activeMonth);
+                if (idx < uniqueMonths.length - 1) setActiveMonth(uniqueMonths[idx + 1]);
+              }
+            }}
+            disabled={activeMonth !== 'all' && uniqueMonths.indexOf(activeMonth) === uniqueMonths.length - 1}
+            className="p-1.5 sm:p-2 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center justify-center shrink-0"
+          >
+            <ChevronLeft className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+          </button>
+          
+          <div className="flex-1 flex justify-center text-center truncate px-2">
+            <button 
+              onClick={() => setActiveMonth('all')}
+              className={`px-3 sm:px-4 py-1.5 rounded-lg text-[12.5px] sm:text-[14px] font-bold transition-all truncate ${
+                activeMonth === 'all' 
+                  ? 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 border border-[var(--theme-primary,#38BDF8)]/20'
+                  : 'text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)]'
               }`}
             >
-              {opt.label}
+              {activeMonth === 'all' ? (isHindi ? 'सभी महीने' : 'All Months') : (
+                new Date(`${activeMonth}-01T00:00:00`).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', { month: 'long', year: 'numeric' })
+              )}
             </button>
-          );
-        })}
-      </div>
+          </div>
+          
+          <button
+            onClick={() => {
+              if (activeMonth !== 'all') {
+                const idx = uniqueMonths.indexOf(activeMonth);
+                if (idx > 0) setActiveMonth(uniqueMonths[idx - 1]);
+                else if (idx === 0) setActiveMonth('all');
+              }
+            }}
+            disabled={activeMonth === 'all'}
+            className="p-1.5 sm:p-2 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center justify-center shrink-0"
+          >
+            <ChevronRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+          </button>
+        </div>
+      )}
 
       {/* Filter Stats Bar */}
       {entries.length > 0 && (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 gap-1.5 sm:gap-2">
           <span className="text-[11px] sm:text-[14px] text-[#94A3B8] truncate">
-            Showing <strong className="text-[#F8FAFC] font-bold">{filtered.length}</strong> records
+            Showing <strong className="text-[var(--theme-text,#F8FAFC)] font-bold">{filtered.length}</strong> records
           </span>
           <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
             <span className="text-[#10B981] font-bold font-mono text-[11px] sm:text-[14px] truncate" title={formatCurrency(totalFilteredIn, privacyMask)}>+{formatCurrency(totalFilteredIn, privacyMask)}</span>
@@ -252,7 +306,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           >
             <Zap className="w-7 h-7" style={{ color: 'var(--theme-primary, #38BDF8)' }} />
           </div>
-          <p className="leading-relaxed text-[#F8FAFC] font-bold text-[16px]">
+          <p className="leading-relaxed text-[var(--theme-text,#F8FAFC)] font-bold text-[16px]">
             {t.history.noTransactions}
           </p>
           <p className="text-[13.5px] text-[#94A3B8] max-w-sm mx-auto">
@@ -282,20 +336,22 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             const dayNet = dayInc - dayExp;
 
             return (
-              <div key={dateStr} className="space-y-2.5 w-full">
+              <div key={dateStr} className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl sm:rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
                 {/* Day Header */}
-                <div className="flex justify-between items-center px-1 text-[13px] sm:text-[14px] text-[#94A3B8]">
-                  <span className="font-bold text-[#F8FAFC] flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                <div className="flex justify-between items-center px-4 sm:px-5 py-3 sm:py-4 bg-[var(--theme-surface,#0E1A29)]/50 border-b border-[var(--theme-border,#213E61)]/50 backdrop-blur-sm">
+                  <span className="font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2 text-[13px] sm:text-[14px]">
+                    <div className="p-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/20 shadow-sm">
+                      <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" />
+                    </div>
                     <span>{dayLabel}</span>
                   </span>
-                  <span className="font-mono text-[#94A3B8]">
-                    Net: <span className={dayNet < 0 ? 'text-[#EF4444] font-bold' : 'text-[#10B981] font-bold'}>{formatCurrency(dayNet, privacyMask)}</span>
+                  <span className="font-mono text-[11px] sm:text-[12.5px] font-semibold text-[#94A3B8] bg-[var(--theme-card,#132438)] px-2 py-1 rounded-lg border border-[var(--theme-border,#213E61)]/50">
+                    Net: <span className={dayNet < 0 ? 'text-[#EF4444]' : 'text-[#10B981]'}>{formatCurrency(dayNet, privacyMask)}</span>
                   </span>
                 </div>
 
                 {/* Day Items List */}
-                <div className="space-y-2.5 w-full">
+                <div className="flex flex-col w-full">
                   {dayEntries.map((entry) => {
                     const isIncome = entry.type === 'income';
                     const ItemIcon = isIncome
@@ -307,7 +363,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       <div
                         key={entry.id}
                         id={`entry-row-${entry.id}`}
-                        className="w-full flex items-center justify-between bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 rounded-2xl p-3 sm:p-4 shadow-sm transition-all group overflow-hidden min-w-0"
+                        className="w-full flex items-center justify-between p-3.5 sm:p-5 border-b border-[var(--theme-border,#213E61)]/30 hover:bg-[var(--theme-surface,#0E1A29)]/50 transition-colors group overflow-hidden min-w-0 last:border-b-0"
                       >
                         {/* Left Icon & Text Info */}
                         <div className="flex items-center gap-2.5 sm:gap-3.5 flex-1 min-w-0 pr-1.5 sm:pr-2">
@@ -322,7 +378,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                           </div>
                           <div className="flex flex-col gap-0.5 sm:gap-1 min-w-0 flex-1 text-left">
                             <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                              <span className="text-[13.5px] sm:text-[15px] font-bold text-[#F8FAFC] truncate">
+                              <span className="text-[13.5px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                                 {isIncome ? (entry.source || entry.note || 'Income') : (entry.category || 'Expense')}
                               </span>
                               {renderPaymentIcon(entry.paymentMode)}

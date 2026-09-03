@@ -181,7 +181,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 <div className="w-28 h-auto max-h-36 sm:w-32 sm:max-h-40 rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)] shadow-lg bg-[var(--theme-bg,#070E18)] p-1">
                   <img
                     src="/md-zafeer-hasan-yazdaan.jpg"
-                    alt="MD Zafeer Hasan"
+                    alt="MD Zafeer Hasan (YAZDAAN)"
                     className="w-full h-auto object-contain rounded-xl"
                     referrerPolicy="no-referrer"
                     onError={(e) => {
@@ -199,7 +199,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               <div className="text-center sm:text-left space-y-1.5 min-w-0 flex-1">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                   <h3 className="font-serif-display text-[19px] sm:text-[21px] font-bold text-[#F8FAFC]">
-                    MD Zafeer Hasan
+                    MD Zafeer Hasan (YAZDAAN)
                   </h3>
                   <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
                    
@@ -299,7 +299,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 </div>
                 <div>
                   <span className="text-[#94A3B8]">Copyright: </span>
-                  <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan</span>
+                  <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan (YAZDAAN)</span>
                 </div>
                 <div>
                   <span className="text-[#94A3B8]">Terms: </span>
@@ -370,7 +370,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               <p className="text-[11px] text-[#94A3B8] leading-relaxed">
                 {isHindi
                   ? 'संस्थापक एवं स्वामी: MD ज़फ़ीर हसन। 2012 से सभी इलेक्ट्रिकल सर्विसेज, प्रोजेक्ट सॉल्यूशंस और डिजिटल इनिशिएटिव्स (जैसे Daily Khata Pro) का आधिकारिक संचालन।'
-                  : 'Founder & Owner: MD Zafeer Hasan. Officially operating and managing electrical services, project solutions, and digital initiatives (including Daily Khata Pro) since 2012.'}
+                  : 'Founder & Owner: MD Zafeer Hasan (YAZDAAN). Officially operating and managing electrical services, project solutions, and digital initiatives (including Daily Khata Pro) since 2012.'}
               </p>
             </div>
 
