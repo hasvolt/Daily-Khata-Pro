@@ -153,7 +153,7 @@ export const printTrackerData = (workLogs: WorkLog[], dailyLifeLogs: DailyLifeLo
       <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: #666;">
         <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
         <span>
-          Generated via <strong>Daily Khata Pro</strong> · Developed by MD Zafeer Hasan (YAZDAAN) · www.rozfiber.com
+          <strong>Daily Khata Pro</strong> powered by <strong>HASVOLT</strong> · Developed by MD Zafeer Hasan
         </span>
       </div>
       <script>

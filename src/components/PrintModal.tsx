@@ -40,7 +40,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Daily Khata: Pro — Financial Statement (${monthLabel})</title>
+  <title>Daily Khata Pro — Financial Statement (${monthLabel})</title>
   <style>
     @page { size: A4 portrait; margin: 12mm 14mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,7 +77,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     <div>
       <div class="brand-title">Daily Khata Pro — Financial Statement</div>
       <div class="brand-sub">6-Fund Money Ledger &amp; Wealth Record</div>
-      <div class="brand-website">Website: www.rozfiber.com</div>
+      <div class="brand-website">Powered by HASVOLT</div>
     </div>
     <div style="text-align: right; font-size: 11px; color: #475569;">
       <div>Official Record</div>
@@ -175,7 +175,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
       <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
       <span>
         <strong>Daily Khata Pro</strong> · Confidential &amp; Verified Record<br>
-        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan (YAZDAAN)</span>
+        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan</span>
       </span>
     </div>
     <span>Signature / Digital Stamp: ___________________</span>
@@ -254,7 +254,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
                 Financial Statement Preview
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
-                {monthLabel} · Daily Khata: Pro Official Statement
+                {monthLabel} · Daily Khata Pro Official Statement
               </p>
             </div>
           </div>
@@ -305,7 +305,7 @@ export const PrintModal: React.FC<PrintModalProps> = ({
             <div>
               <div className="font-serif-display text-[20px] font-bold text-[#F8FAFC] flex items-center gap-2">
                 <Zap className="w-5 h-5 text-[#FFC700]" />
-                <span>Daily Khata: Pro Ledger</span>
+                <span>Daily Khata Pro Ledger</span>
               </div>
               <div className="text-[11px] text-[#94A3B8]">
                 6-Fund Systematic Financial Record · Verified

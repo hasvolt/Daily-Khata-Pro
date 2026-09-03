@@ -99,8 +99,8 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         },
         {
           title: 'फ्रीलांसर व उद्यमी (Freelancer & Entrepreneur)',
-          desc: 'हसन स्मार्ट इलेक्ट्रिकल सॉल्यूशंस ® (स्थापना 2012) के तहत एमएसएमई पंजीकृत औद्योगिक व डिजिटल परियोजनाएं।',
-          proof: 'MSME उद्यम पंजीकरण: UDYAM-DL-10-0098630 (सूक्ष्म उद्यम, भारत सरकार)',
+          desc: 'HASVOLT (स्थापना 2012) के तहत एमएसएमई पंजीकृत औद्योगिक व डिजिटल परियोजनाएं।',
+          proof: 'Powered by HASVOLT',
           icon: Building2,
           tagColor: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
         },
@@ -136,7 +136,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         },
         {
           title: 'Security & Privacy Researcher',
-          desc: 'Researching and deploying client-side zero-knowledge architecture, cryptographic PIN security & sandboxing.',
+          desc: 'Researching and deploying client-side zero-knowledge architecture, PIN security.',
           proof: 'Web Crypto API SHA-256 hashing, AES-GCM encrypted backups, 0 analytics trackers',
           icon: ShieldCheck,
           tagColor: 'text-[#818CF8] bg-[#818CF8]/10 border-[#818CF8]/30'
@@ -144,14 +144,14 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         {
           title: 'Software Developer',
           desc: 'Engineering zero-dependency TypeScript & React offline-first Progressive Web Apps (PWAs).',
-          proof: 'Local browser compute, instant reactivity, verified air-gapped data persistence',
+          proof: 'Local browser compute, instant reactivity, offline data storage',
           icon: Code2,
           tagColor: 'text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/30'
         },
         {
           title: 'Freelancer & Entrepreneur',
-          desc: 'Operating Hasan Smart Electrical Solutions ® (Est. 2012) • Govt. of India Udyam Reg: UDYAM-DL-10-0098630.',
-          proof: 'Udyam Registration No.: UDYAM-DL-10-0098630 (Ministry of MSME, Govt. of India)',
+          desc: 'Operating HASVOLT (Est. 2012) • Powered by HASVOLT.',
+          proof: 'Powered by HASVOLT',
           icon: Building2,
           tagColor: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
         },
@@ -204,7 +204,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <div className="w-full max-w-[280px] sm:max-w-[320px] rounded-2xl overflow-hidden border border-[var(--theme-border,#213E61)] shadow-sm bg-[var(--theme-surface,#0E1A29)] p-1.5 relative group">
               <img
                 src="/md-zafeer-hasan-yazdaan.jpg"
-                alt="MD Zafeer Hasan (YAZDAAN) - Developer & Creator"
+                alt="MD Zafeer Hasan - Developer & Creator"
                 className="w-full h-auto max-h-[380px] object-contain rounded-xl block mx-auto transition-transform duration-300 group-hover:scale-[1.02]"
                 referrerPolicy="no-referrer"
               />
@@ -362,12 +362,12 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             </div>
             <div>
               <h2 className="font-serif-display text-[18px] sm:text-[20px] font-bold text-[#F8FAFC]">
-                {isHindi ? 'वैधानिक पंजीकरण एवं आधिकारिक लाइसेंस प्रमाणपत्र' : 'Official Legal Registrations & Certificates'}
+                {isHindi ? 'ऐप विवरण और जानकारी' : 'App Details & Information'}
               </h2>
               <p className="text-[12px] text-[#94A3B8]">
                 {isHindi
-                  ? 'भारत सरकार पंजीकृत उद्यम एवं वैधानिक रूप से मान्य ओपन-सोर्स लाइसेंस विवरण'
-                  : 'Legally certified Government of India MSME registration & Open Source MIT compliance'}
+                  ? 'HASVOLT द्वारा विकसित और MIT ओपन सोर्स'
+                  : 'App developed under HASVOLT and MIT Open Source License'}
               </p>
             </div>
           </div>
@@ -378,51 +378,6 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Government of India MSME Certificate */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-3 relative overflow-hidden">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🇮🇳</span>
-                <div>
-                  <h3 className="text-[14px] sm:text-[15px] font-bold text-[#F8FAFC]">
-                    Government of India – MSME Registered Enterprise
-                  </h3>
-                  <span className="text-[11px] text-[#94A3B8]">Ministry of Micro, Small &amp; Medium Enterprises</span>
-                </div>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2.5 py-0.5 rounded border border-[#10B981]/25">
-                Govt. Certified
-              </span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 space-y-2 text-[12px]">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[#94A3B8]">Enterprise Name:</span>
-                <span className="font-bold text-[#F8FAFC] text-right">HASAN SMART ELECTRICAL SOLUTIONS ®</span>
-              </div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[#94A3B8]">Udyam Reg. No.:</span>
-                <span className="font-mono font-extrabold text-[#38BDF8] bg-[#38BDF8]/10 px-2 py-0.5 rounded border border-[#38BDF8]/25">
-                  UDYAM-DL-10-0098630
-                </span>
-              </div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[#94A3B8]">Operating Authority:</span>
-                <span className="text-[#CBD5E1]">MD Zafeer Hasan (YAZDAAN)</span>
-              </div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[#94A3B8]">Active Operational Since:</span>
-                <span className="text-[#F59E0B] font-bold">2012 (Pan-India Projects)</span>
-              </div>
-            </div>
-
-            <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
-              {isHindi
-                ? 'यह भारत सरकार के सूक्ष्म, लघु एवं मध्यम उद्यम मंत्रालय के अंतर्गत पंजीकृत आधिकारिक प्रतिष्ठान है, जो गुणवत्तापूर्ण इलेक्ट्रिकल समाधान एवं तकनीक संचालन हेतु प्राधिकृत है।'
-                : 'Formally registered under the Ministry of MSME, Government of India, certifying authentic business operations and authorized technological projects.'}
-            </p>
-          </div>
-
           {/* Open Source MIT License Certificate */}
           <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-3 relative overflow-hidden">
             <div className="flex items-center justify-between flex-wrap gap-2">
@@ -445,11 +400,11 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 space-y-2 text-[12px]">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[#94A3B8]">Protected Software:</span>
-                <span className="font-bold text-[#F8FAFC]">Daily Khata: Pro</span>
+                <span className="font-bold text-[#F8FAFC]">Daily Khata Pro</span>
               </div>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[#94A3B8]">Copyright Holder:</span>
-                <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan (YAZDAAN)</span>
+                <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan</span>
               </div>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[#94A3B8]">Public Repository:</span>
@@ -478,7 +433,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         </div>
       </div>
 
-      {/* Business Ventures & Brands Ecosystem */}
+      {/* Projects Business Ventures & Brands Ecosystem Applications */}
       <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-3xl p-5 sm:p-7 space-y-5 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-4">
           <div className="flex items-center gap-2.5">
@@ -487,12 +442,12 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             </div>
             <div>
               <h2 className="font-serif-display text-[18px] sm:text-[20px] font-bold text-[#F8FAFC]">
-                {isHindi ? 'व्यावसायिक उपक्रम एवं ब्रांड्स इकोसिस्टम' : 'Business Ventures & Brands Ecosystem'}
+                {isHindi ? 'प्रोजेक्ट्स और एप्लीकेशन' : 'Projects Business Ventures & Brands Ecosystem Applications'}
               </h2>
               <p className="text-[12px] text-[#94A3B8]">
                 {isHindi
-                  ? 'हसन स्मार्ट इलेक्ट्रिकल सॉल्यूशंस ® (स्थापना 2012) के अंतर्गत संचालित आधिकारिक सेवाएं'
-                  : 'Official service brands & digital initiatives operated under Hasan Smart Electrical Solutions ®'}
+                  ? 'HASVOLT द्वारा विकसित एप्लीकेशन'
+                  : 'Applications and tools developed by HASVOLT'}
               </p>
             </div>
           </div>
@@ -507,7 +462,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
               <h3 className="text-[15px] sm:text-[16px] font-bold text-[#F8FAFC] tracking-wide">
-                HASAN SMART ELECTRICAL SOLUTIONS ®
+                HASVOLT
               </h3>
             </div>
             <div className="flex items-center gap-2">
@@ -523,11 +478,11 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
           <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
             {isHindi ? (
               <>
-                <strong>हसन स्मार्ट इलेक्ट्रिकल सॉल्यूशंस ®</strong> के संस्थापक एवं स्वामी <strong>MD ज़फ़ीर हसन (YAZDAAN)</strong> हैं। यह मूल संगठन 2012 से सभी प्रमुख इलेक्ट्रिकल सर्विस ब्रांड्स, टर्न-की प्रोजेक्ट्स तथा तकनीकी पहलों (जैसे Daily Khata Pro) का आधिकारिक संचालन और प्रबंधन करता है।
+                <strong>HASVOLT</strong> के संस्थापक <strong>MD ज़फ़ीर हसन</strong> हैं। यह आधुनिक तकनीकी पहलों (जैसे Daily Khata Pro) का विकास करता है।
               </>
             ) : (
               <>
-                Founded and owned by <strong>MD Zafeer Hasan (YAZDAAN)</strong>, <strong>Hasan Smart Electrical Solutions ®</strong> operates as the official parent organisation overseeing premier electrical service brands, electrical & technical project works, and modern digital utilities (including Daily Khata Pro) since 2012.
+                Founded by <strong>MD Zafeer Hasan</strong>, <strong>HASVOLT</strong> develops modern digital utilities (including Daily Khata Pro).
               </>
             )}
           </p>
@@ -654,9 +609,9 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <Code2 className="w-4 h-4 text-[#38BDF8] shrink-0" />
             <span>
               {isHindi ? (
-                <><strong>Daily Khata: Pro</strong> भी इसी प्रौद्योगिकी एवं लोक सेवा पहल के तहत संचालित एक डिजिटल टूल है।</>
+                <><strong>Daily Khata Pro</strong> भी इसी प्रौद्योगिकी एवं लोक सेवा पहल के तहत संचालित एक डिजिटल टूल है।</>
               ) : (
-                <><strong>Daily Khata: Pro</strong> is also developed and operated as a free digital public utility under this technology initiative.</>
+                <><strong>Daily Khata Pro</strong> is also developed and operated as a free digital public utility under this technology initiative.</>
               )}
             </span>
           </div>
@@ -702,7 +657,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             <div className="mt-3 space-y-2.5 text-[12.5px]">
               <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
                 <span className="text-[#94A3B8]">Project:</span>
-                <span className="font-bold text-[#F8FAFC]">Daily Khata: Pro™</span>
+                <span className="font-bold text-[#F8FAFC]">Daily Khata Pro</span>
               </div>
               <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
                 <span className="text-[#94A3B8]">License:</span>
@@ -711,9 +666,9 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 </span>
               </div>
               <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
-                <span className="text-[#94A3B8]">Govt. MSME Reg. No.:</span>
+                <span className="text-[#94A3B8]">Powered by:</span>
                 <span className="font-mono font-extrabold text-[#F59E0B] bg-[#F59E0B]/10 px-2 py-0.5 rounded border border-[#F59E0B]/30">
-                  UDYAM-DL-10-0098630
+                  HASVOLT
                 </span>
               </div>
               <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">

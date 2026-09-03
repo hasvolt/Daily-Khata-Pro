@@ -68,7 +68,7 @@ const MANUAL_EN: UserManualTranslation = {
       title: '1. Introduction & Overview',
       subtitle: 'Zero-telemetry, 100% offline, self-custodied financial ledger',
       overviewHeading: 'Core Philosophy & Architecture',
-      overviewText: 'Daily Khata: Pro is designed for freelancers, business owners, professionals, and households who seek uncompromising financial discipline. Every incoming rupee is instantly portioned across 6 distinct purpose-driven fund buckets before discretionary spending begins. The entire application runs client-side inside your browser with zero remote database connections.',
+      overviewText: 'Daily Khata Pro is designed for freelancers, business owners, professionals, and households who seek simple financial tracking. Every incoming rupee is instantly portioned across 6 distinct purpose-driven fund buckets before discretionary spending begins. The entire application runs client-side inside your browser with zero remote database connections.',
       cardsHeading: 'Three Pillars of Daily Khata',
       cards: [
         {
@@ -91,7 +91,7 @@ const MANUAL_EN: UserManualTranslation = {
       title: '2. App Passcode Lock & Security Vault',
       subtitle: 'Custom 4–6 digit numeric PIN lock with privacy auto-lock',
       overviewHeading: 'How the Security Vault Operates',
-      overviewText: 'Daily Khata: Pro includes a built-in cryptographic passcode lock. When enabled, your financial balances, client billing numbers, and personal journal notes are completely hidden behind a PIN challenge screen. It activates whenever you switch browser tabs or minimize your phone.',
+      overviewText: 'Daily Khata Pro includes a built-in app lock. When enabled, your financial balances, client billing numbers, and personal journal notes are completely hidden behind a PIN challenge screen. It activates whenever you switch browser tabs or minimize your phone.',
       stepsHeading: 'Setup Instructions:',
       steps: [
         {
@@ -390,7 +390,7 @@ const MANUAL_EN: UserManualTranslation = {
       title: '12. Source Code & Safety Audit',
       subtitle: 'MIT open-source transparency, GitHub repository, and DIY verification guide',
       overviewHeading: 'Open Transparency Guarantee',
-      overviewText: 'We believe you should never have to take a developer\'s word for privacy. Daily Khata: Pro is 100% open source under the MIT License. Anyone can inspect, build, audit, and run the code independently.',
+      overviewText: 'We believe you should never have to take a developer\'s word for privacy. Daily Khata Pro is 100% open source under the MIT License. Anyone can inspect, build, audit, and run the code independently.',
       cardsHeading: 'Transparency Commitments',
       cards: [
         {
@@ -421,14 +421,14 @@ const MANUAL_EN: UserManualTranslation = {
       faqList: [
         {
           q: 'Is my financial data stored on any server?',
-          a: 'No. Daily Khata: Pro operates on a 100% client-side architecture. All balances, transactions, goals, and notes are saved strictly in your device\'s local storage (hasvolt_khata_v1).'
+          a: 'No. Daily Khata Pro operates on a 100% client-side architecture. All balances, transactions, goals, and notes are saved strictly in your device\'s local storage (hasvolt_khata_v1).'
         },
         {
           q: 'What happens if I forget my App Lock PIN?',
           a: 'Click "Forgot PIN?" on the lock screen. You will be prompted to answer the security recovery question you selected during PIN setup. Upon answering correctly, you can set a new PIN without losing any data.'
         },
         {
-          q: 'Can I use Daily Khata: Pro on multiple devices?',
+          q: 'Can I use Daily Khata Pro on multiple devices?',
           a: 'Yes. Simply export a JSON backup from your primary device (Settings > Data & Backup > Export JSON) and import it into Daily Khata on your other device.'
         },
         {
@@ -437,21 +437,21 @@ const MANUAL_EN: UserManualTranslation = {
         },
         {
           q: 'Does this app require an active internet connection?',
-          a: 'No. Daily Khata: Pro is a progressive offline application. It runs with complete functionality without an active internet connection.'
+          a: 'No. Daily Khata Pro is a progressive offline application. It runs with complete functionality without an active internet connection.'
         }
       ]
     },
     {
       id: 'developer',
       title: '14. Developer & Founder Profile',
-      subtitle: 'Created by MD Zafeer Hasan (YAZDAAN) • HasVolt Official Mission',
+      subtitle: 'Created by MD Zafeer Hasan • HasVolt Official Mission',
       overviewHeading: 'Creator Mission & Philosophy',
-      overviewText: 'Daily Khata: Pro was envisioned, architected, and built by MD Zafeer Hasan (YAZDAAN) under HasVolt. The project was created with a clear vision: building private, aesthetic, high-performance financial tools that put complete power and data sovereignty into the hands of users.',
+      overviewText: 'Daily Khata Pro was envisioned, architected, and built by MD Zafeer Hasan under HasVolt. The project was created with a clear vision: building private, aesthetic, high-performance financial tools that put complete power and data sovereignty into the hands of users.',
       cardsHeading: 'Developer Specifications',
       cards: [
         {
           title: 'Founder & Architect',
-          desc: 'MD Zafeer Hasan (YAZDAAN) — Dedicated to creating privacy-first digital tools.'
+          desc: 'MD Zafeer Hasan — Dedicated to creating privacy-first digital tools.'
         },
         {
           title: 'Official Platform',
@@ -491,7 +491,7 @@ const MANUAL_HI: UserManualTranslation = {
       title: '1. परिचय एवं मुख्य अवलोकन',
       subtitle: 'शून्य टेलीमेट्री, 100% निजी व ऑफलाइन सुरक्षित वित्तीय लेजर इंजन',
       overviewHeading: 'मुख्य डिज़ाइन दर्शन एवं आर्किटेक्चर',
-      overviewText: 'Daily Khata: Pro फ्रीलांसर्स, व्यापार मालिकों, पेशेवरों एवं परिवारों के लिए तैयार किया गया एक अनुशासित धन प्रबंधन उपकरण है। जैसे ही आपकी कमाई दर्ज होती है, वह तुरंत 6 अलग-अलग उद्देश्य-आधारित फंड्स में विभाजित हो जाती है। यह पूरा एप्लिकेशन आपके ब्राउज़र के भीतर 100% ऑफलाइन चलता है, बिना किसी बाहरी सर्वर या डेटाबेस कनेक्शन के।',
+      overviewText: 'Daily Khata Pro फ्रीलांसर्स, व्यापार मालिकों, पेशेवरों एवं परिवारों के लिए तैयार किया गया एक अनुशासित धन प्रबंधन उपकरण है। जैसे ही आपकी कमाई दर्ज होती है, वह तुरंत 6 अलग-अलग उद्देश्य-आधारित फंड्स में विभाजित हो जाती है। यह पूरा एप्लिकेशन आपके ब्राउज़र के भीतर 100% ऑफलाइन चलता है, बिना किसी बाहरी सर्वर या डेटाबेस कनेक्शन के।',
       cardsHeading: 'डेली खाता के तीन मुख्य आधार',
       cards: [
         {
@@ -514,7 +514,7 @@ const MANUAL_HI: UserManualTranslation = {
       title: '2. ऐप पासकोड लॉक एवं सुरक्षा वॉल्ट',
       subtitle: '4–6 अंकों का सुरक्षित पिन लॉक व प्राइवेसी ऑटो-लॉक सुरक्षा',
       overviewHeading: 'सुरक्षा वॉल्ट कैसे काम करता है',
-      overviewText: 'Daily Khata: Pro में एक अंतर्निहित सुरक्षा पासकोड लॉक दिया गया है। जब यह सक्रिय होता है, तो आपकी वित्तीय शेष राशि, बिलिंग विवरण और पर्सनल नोट्स एक पिन लॉक स्क्रीन के पीछे सुरक्षित हो जाते हैं। ब्राउज़र टैब बदलते ही या विंडो मिनिमाइज़ होते ही यह अपने आप लॉक हो जाता है।',
+      overviewText: 'Daily Khata Pro में एक अंतर्निहित सुरक्षा पासकोड लॉक दिया गया है। जब यह सक्रिय होता है, तो आपकी वित्तीय शेष राशि, बिलिंग विवरण और पर्सनल नोट्स एक पिन लॉक स्क्रीन के पीछे सुरक्षित हो जाते हैं। ब्राउज़र टैब बदलते ही या विंडो मिनिमाइज़ होते ही यह अपने आप लॉक हो जाता है।',
       stepsHeading: 'पासकोड लॉक सेटअप करने के चरण:',
       steps: [
         {
@@ -813,7 +813,7 @@ const MANUAL_HI: UserManualTranslation = {
       title: '12. सोर्स कोड, गिटहब एवं सुरक्षा ऑडिट',
       subtitle: 'MIT ओपन-सोर्स पारदर्शिता, गिटहब रिपॉजिटरी व स्वयं सत्यापन गाइड',
       overviewHeading: 'खुली पारदर्शिता का वचन',
-      overviewText: 'हमारा मानना है कि प्राइवेसी के लिए किसी के वादे पर निर्भर नहीं रहना चाहिए। Daily Khata: Pro MIT लाइसेंस के तहत 100% ओपन सोर्स है। कोई भी व्यक्ति कोड की स्वतंत्र रूप से समीक्षा, ऑडिट और संचालन कर सकता है।',
+      overviewText: 'हमारा मानना है कि प्राइवेसी के लिए किसी के वादे पर निर्भर नहीं रहना चाहिए। Daily Khata Pro MIT लाइसेंस के तहत 100% ओपन सोर्स है। कोई भी व्यक्ति कोड की स्वतंत्र रूप से समीक्षा, ऑडिट और संचालन कर सकता है।',
       cardsHeading: 'पारदर्शिता की प्रमुख बातें',
       cards: [
         {
@@ -844,7 +844,7 @@ const MANUAL_HI: UserManualTranslation = {
       faqList: [
         {
           q: 'क्या मेरा वित्तीय डेटा किसी सर्वर पर सुरक्षित है?',
-          a: 'नहीं। Daily Khata: Pro पूरी तरह से 100% क्लाइंट-साइड ऑफलाइन चलता है। आपके सभी बैलेंस, लेनदेन, लक्ष्य और नोट्स केवल आपके डिवाइस के लोकल स्टोरेज (hasvolt_khata_v1) में सहेजे जाते हैं।'
+          a: 'नहीं। Daily Khata Pro पूरी तरह से 100% क्लाइंट-साइड ऑफलाइन चलता है। आपके सभी बैलेंस, लेनदेन, लक्ष्य और नोट्स केवल आपके डिवाइस के लोकल स्टोरेज (hasvolt_khata_v1) में सहेजे जाते हैं।'
         },
         {
           q: 'अगर मैं ऐप लॉक का पिन भूल जाऊं तो क्या होगा?',
@@ -860,21 +860,21 @@ const MANUAL_HI: UserManualTranslation = {
         },
         {
           q: 'क्या इस ऐप को चलाने के लिए इंटरनेट कनेक्शन ज़रूरी है?',
-          a: 'बिल्कुल नहीं। Daily Khata: Pro एक प्रोग्रेसिव ऑफलाइन वेब ऐप (PWA) है और बिना इंटरनेट के भी सभी सुविधाएं पूरी तरह काम करती हैं।'
+          a: 'बिल्कुल नहीं। Daily Khata Pro एक प्रोग्रेसिव ऑफलाइन वेब ऐप (PWA) है और बिना इंटरनेट के भी सभी सुविधाएं पूरी तरह काम करती हैं।'
         }
       ]
     },
     {
       id: 'developer',
       title: '14. डेवलपर एवं संस्थापक प्रोफाइल',
-      subtitle: 'एमडी जफीर हसन (YAZDAAN) द्वारा निर्मित • HasVolt ऑफिशियल मिशन',
+      subtitle: 'एमडी जफीर हसन द्वारा निर्मित • HasVolt ऑफिशियल मिशन',
       overviewHeading: 'संस्थापक का मिशन एवं दृष्टिकोण',
-      overviewText: 'Daily Khata: Pro की परिकल्पना और निर्माण एमडी जफीर हसन (YAZDAAN) द्वारा HasVolt के तहत किया गया है। इसका उद्देश्य एक ऐसा स्वतंत्र, सुरुचिपूर्ण और सुरक्षित वित्तीय उपकरण बनाना है जो उपयोगकर्ताओं को उनके डेटा की पूरी गोपनीयता और संप्रभुता दे।',
+      overviewText: 'Daily Khata Pro की परिकल्पना और निर्माण एमडी जफीर हसन द्वारा HasVolt के तहत किया गया है। इसका उद्देश्य एक ऐसा स्वतंत्र, सुरुचिपूर्ण और सुरक्षित वित्तीय उपकरण बनाना है जो उपयोगकर्ताओं को उनके डेटा की पूरी गोपनीयता और संप्रभुता दे।',
       cardsHeading: 'डेवलपर विनिर्देश',
       cards: [
         {
           title: 'संस्थापक एवं आर्किटेक्ट',
-          desc: 'एमडी जफीर हसन (YAZDAAN) — प्राइवेसी-फर्स्ट डिजिटल टूल्स के निर्माता।'
+          desc: 'एमडी जफीर हसन — प्राइवेसी-फर्स्ट डिजिटल टूल्स के निर्माता।'
         },
         {
           title: 'आधिकारिक प्लेटफॉर्म',

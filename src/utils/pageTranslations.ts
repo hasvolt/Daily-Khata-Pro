@@ -164,8 +164,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
   en: {
     about: {
       backToHome: 'Back to Home',
-      badge: 'About Daily Khata: Pro',
-      title: 'About Daily Khata: Pro™',
+      badge: 'About Daily Khata Pro',
+      title: 'About Daily Khata Pro',
       subtitle: 'Universal Financial Ledger, 6-Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
       platformLabel: 'Platform',
       architectureLabel: 'Architecture',
@@ -173,8 +173,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       licenseLabel: 'License',
       creatorLabel: 'Creator',
       missionTitle: 'Our Mission & Purpose',
-      missionP1: 'Daily Khata: Pro was created with a single uncompromising mission: to give individuals, freelancers, shopkeepers, and families an honest, lightning-fast financial ledger that respects their complete privacy without requiring cloud logins, phone number tracking, or hidden subscriptions.',
-      missionP2: 'Most modern finance apps upload your transactions to remote servers, mine your purchasing behavior for marketing, or lock essential export features behind paywalls. Daily Khata: Pro flips this model entirely — your data never leaves your browser or phone, all calculations happen instantly on your device, and every single feature is permanently free under the MIT Open Source license.',
+      missionP1: 'Daily Khata Pro was created with a single uncompromising mission: to give individuals, freelancers, shopkeepers, and families an honest, lightning-fast financial ledger that respects their complete privacy without requiring cloud logins, phone number tracking, or hidden subscriptions.',
+      missionP2: 'Most modern finance apps upload your transactions to remote servers, mine your purchasing behavior for marketing, or lock essential export features behind paywalls. Daily Khata Pro flips this model entirely — your data never leaves your browser or phone, all calculations happen instantly on your device, and every single feature is permanently free under the MIT Open Source license.',
       capabilitiesTitle: 'Core Capabilities & Architecture',
       pillars: {
         fundsTitle: 'Automated 6-Fund Allocation Rule',
@@ -200,7 +200,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Your financial data is 100% local, self-custodied, and never transmitted over the internet.',
       backToHome: 'Back to Home',
       corePledgeTitle: 'Zero Tracking & Complete Confidentiality',
-      corePledgeDesc: 'Daily Khata: Pro operates on a strict zero-knowledge architecture. We do not maintain any cloud database, user accounts, or analytics trackers.',
+      corePledgeDesc: 'Daily Khata Pro operates on a strict zero-knowledge architecture. We do not maintain any cloud database, user accounts, or analytics trackers.',
       highlights: {
         offlineTitle: '100% Offline & Private',
         offlineDesc: 'All transactions, notes, goals, and journal entries are computed and stored directly on your browser or device.',
@@ -214,7 +214,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       dataRetentionTitle: 'Data Retention & Control',
       dataRetentionDesc: 'Since all records remain in your browser LocalStorage, you retain complete authority over your financial data. Clearing browser site data or pressing Reset will permanently purge all local records.',
       thirdPartyTitle: 'Third-Party Services',
-      thirdPartyDesc: 'Daily Khata: Pro does not send your personal financial entries, client names, or monetary amounts to any third-party marketing network.',
+      thirdPartyDesc: 'Daily Khata Pro does not send your personal financial entries, client names, or monetary amounts to any third-party marketing network.',
       userRightsTitle: 'Your Data Rights',
       userRightsDesc: 'You have full rights to export your data into standard JSON/CSV files, inspect the open-source code, and run this application offline without internet connectivity.'
     },
@@ -224,7 +224,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Standard MIT Open Source License Terms • Official Domain: rozfiber.com',
       backToHome: 'Back to Home',
       openSourceTitle: 'MIT Open Source License Agreement',
-      openSourceDesc: 'Daily Khata: Pro is provided free and open-source under the terms of the MIT License.',
+      openSourceDesc: 'Daily Khata Pro is provided free and open-source under the terms of the MIT License.',
       termsList: {
         ownershipTitle: '1. Absolute Data Ownership',
         ownershipDesc: 'You retain 100% exclusive ownership and responsibility over all financial records, personal notes, and data entered.',
@@ -242,7 +242,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Important notice regarding automated calculations, tax estimations, and self-custodied financial ledgers.',
       backToHome: 'Back to Home',
       alertTitle: 'Informational & Educational Calculator Tool',
-      alertDesc: 'Daily Khata: Pro is an offline organizational tool. It does not provide certified financial, investment, or legal tax advice.',
+      alertDesc: 'Daily Khata Pro is an offline organizational tool. It does not provide certified financial, investment, or legal tax advice.',
       sections: {
         nonAdvisoryTitle: '1. Non-Advisory Nature',
         nonAdvisoryDesc: 'The 6-Fund allocation rule is a financial rule-of-thumb. You should customize the ratios in Settings to suit your personal situation.',
@@ -255,7 +255,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     safety: {
       badge: 'Security Architecture',
       title: 'Safety, PIN Vault & Data Protection',
-      subtitle: 'How Daily Khata: Pro keeps your numbers and private reflections safe from prying eyes.',
+      subtitle: 'How Daily Khata Pro keeps your numbers and private reflections safe from prying eyes.',
       backToHome: 'Back to Home',
       vaultProtectionTitle: 'Multi-Layered Local Security Framework',
       vaultProtectionDesc: 'Device-level isolated storage, client-side 4-digit PIN lock, and one-click privacy masking.',
@@ -285,7 +285,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       bioTitle: 'About MD Zafeer Hasan',
       bioDesc: 'MD Zafeer Hasan is an independent software developer, security researcher, and open-source creator focused on building privacy-first digital tools and public resources for humanity.',
       skillsTitle: 'Professional Roles & Domains',
-      visionTitle: 'The Vision Behind Daily Khata: Pro',
+      visionTitle: 'The Vision Behind Daily Khata Pro',
       visionDesc: 'To provide every individual, freelancer, and small business owner with a reliable, private financial engine that is 100% free, runs offline, and never monetizes personal user data.',
       connectTitle: 'Connect & Reach Out',
       connectDesc: 'Reach out for feedback, technical collaboration, or open-source contributions via official channels.'
@@ -303,7 +303,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         },
         {
           q: 'Does this app work offline without internet?',
-          a: 'Yes! Daily Khata: Pro is a fully offline Progressive Web App (PWA). You can record transactions and print statements without internet.'
+          a: 'Yes! Daily Khata Pro is a fully offline Progressive Web App (PWA). You can record transactions and print statements without internet.'
         },
         {
           q: 'How does the 6-Fund Rule work?',
@@ -359,7 +359,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     about: {
       backToHome: 'होम पर वापस जाएं',
       badge: 'डेली खाता: प्रो के बारे में',
-      title: 'डेली खाता: प्रो™ के बारे में',
+      title: 'डेली खाता प्रो के बारे में',
       subtitle: 'सार्वभौमिक वित्तीय लेज़र, 6-फंड स्मार्ट विभाजन, कार्य डिलीवरेबल्स एवं दैनिक जीवन डायरी।',
       platformLabel: 'प्लेटफ़ॉर्म',
       architectureLabel: 'आर्किटेक्चर',
@@ -552,8 +552,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
   hinglish: {
     about: {
       backToHome: 'Home Par Wapas Jayein',
-      badge: 'About Daily Khata: Pro',
-      title: 'Daily Khata: Pro™ ke Baare Mein',
+      badge: 'About Daily Khata Pro',
+      title: 'Daily Khata Pro ke Baare Mein',
       subtitle: 'Universal Financial Ledger, 6-Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
       platformLabel: 'Platform',
       architectureLabel: 'Architecture',
@@ -561,8 +561,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       licenseLabel: 'License',
       creatorLabel: 'Creator & Developer',
       missionTitle: 'Hamara Mission aur Vision',
-      missionP1: 'Daily Khata: Pro ko ek simple mission ke saath banaya gaya hai: har individual, freelancer, shopkeeper aur family ko ek honest, super-fast aur private ledger dena jisme bina login ya server tracking ke poora financial control aapke haath me ho.',
-      missionP2: 'Baaki apps aapka data server par upload karte hain. Daily Khata: Pro me aapka data kabhi bhi aapke phone ya laptop se bahar nahi jata, aur ye MIT Open Source license ke tehat lifetime 100% free hai.',
+      missionP1: 'Daily Khata Pro ko ek simple mission ke saath banaya gaya hai: har individual, freelancer, shopkeeper aur family ko ek honest, super-fast aur private ledger dena jisme bina login ya server tracking ke poora financial control aapke haath me ho.',
+      missionP2: 'Baaki apps aapka data server par upload karte hain. Daily Khata Pro me aapka data kabhi bhi aapke phone ya laptop se bahar nahi jata, aur ye MIT Open Source license ke tehat lifetime 100% free hai.',
       capabilitiesTitle: 'Core Capabilities aur Features',
       pillars: {
         fundsTitle: 'Automatic 6-Fund Allocation Rule',
@@ -588,7 +588,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Aapka financial data 100% local, self-custodied aur private hai.',
       backToHome: 'Home Par Wapas Jayein',
       corePledgeTitle: 'Zero Tracking & Complete Privacy',
-      corePledgeDesc: 'Daily Khata: Pro strict zero-knowledge architecture par kaam karta hai. Hum koi user data save ya track nahi karte.',
+      corePledgeDesc: 'Daily Khata Pro strict zero-knowledge architecture par kaam karta hai. Hum koi user data save ya track nahi karte.',
       highlights: {
         offlineTitle: '100% Offline & Private',
         offlineDesc: 'Sabhi transactions aur notes aapke browser me hi process hote hain.',
@@ -602,7 +602,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       dataRetentionTitle: 'Data Retention & Control',
       dataRetentionDesc: 'Kyunki sabhi entries browser LocalStorage me rehti hain, isliye data par 100% aapka hi control hai. Browser clear karne se pehle backup zaroor lein.',
       thirdPartyTitle: 'Third-Party Services',
-      thirdPartyDesc: 'Daily Khata: Pro kisi bhi third-party ko aapka data share nahi karta.',
+      thirdPartyDesc: 'Daily Khata Pro kisi bhi third-party ko aapka data share nahi karta.',
       userRightsTitle: 'Aapke Data Rights',
       userRightsDesc: 'Aapko data export karne, code inspect karne aur app offline use karne ka poora adhikar hai.'
     },
@@ -612,7 +612,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Standard MIT Open Source License • Official Domain: rozfiber.com',
       backToHome: 'Home Par Wapas Jayein',
       openSourceTitle: 'MIT Open Source License Agreement',
-      openSourceDesc: 'Daily Khata: Pro MIT License ke tehat bilkul free aur open-source available hai.',
+      openSourceDesc: 'Daily Khata Pro MIT License ke tehat bilkul free aur open-source available hai.',
       termsList: {
         ownershipTitle: '1. 100% Data Ownership',
         ownershipDesc: 'Aapke entries aur khata records par poori tarah se aapka hi haq hai.',
@@ -630,7 +630,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Financial guidance aur self-custody ledger ke regarding important notice.',
       backToHome: 'Home Par Wapas Jayein',
       alertTitle: 'Informational & Educational Calculator Tool',
-      alertDesc: 'Daily Khata: Pro ek calculation aur khata tool hai, certified investment ya tax advisor nahi.',
+      alertDesc: 'Daily Khata Pro ek calculation aur khata tool hai, certified investment ya tax advisor nahi.',
       sections: {
         nonAdvisoryTitle: '1. Non-Advisory Nature',
         nonAdvisoryDesc: '6-Fund split formula ek financial rule of thumb hai. Aap apni zaroorat ke hisab se ratio set kar sakte hain.',
@@ -643,7 +643,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     safety: {
       badge: 'Security Architecture',
       title: 'Safety, PIN Vault & Data Protection',
-      subtitle: 'Daily Khata: Pro aapke balance aur records ko safe kaise rakhta hai.',
+      subtitle: 'Daily Khata Pro aapke balance aur records ko safe kaise rakhta hai.',
       backToHome: 'Home Par Wapas Jayein',
       vaultProtectionTitle: 'Multi-Layered Local Security',
       vaultProtectionDesc: 'Device-level storage, 4-digit PIN lock aur instant privacy mask ke saath complete safety.',
@@ -673,7 +673,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       bioTitle: 'About MD Zafeer Hasan',
       bioDesc: 'MD Zafeer Hasan ek independent software developer, security researcher aur open-source creator hain jo clean, secure aur public utility tools banate hain.',
       skillsTitle: 'Professional Roles & Domains',
-      visionTitle: 'Daily Khata: Pro ka Vision',
+      visionTitle: 'Daily Khata Pro ka Vision',
       visionDesc: 'Har user, freelancer aur small business ko ek aisa private, free aur lifetime offline financial engine dena jo unka data kabhi na beche.',
       connectTitle: 'Connect & Follow',
       connectDesc: 'Feedback, collaborations ya open-source contribution ke liye connect karein.'
@@ -691,7 +691,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         },
         {
           q: 'Kya ye bina internet (offline) kaam karta hai?',
-          a: 'Haan! Daily Khata: Pro poori tarah offline kaam karta hai.'
+          a: 'Haan! Daily Khata Pro poori tarah offline kaam karta hai.'
         },
         {
           q: '6-Fund rule kya hai?',
@@ -747,7 +747,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     about: {
       backToHome: 'ہوم پر واپس جائیں',
       badge: 'ڈیلی کھاتہ پرو کا تعارف',
-      title: 'ڈیلی کھاتہ: پرو™ کا تعارف',
+      title: 'Daily Khata Pro کا تعارف',
       subtitle: 'عالمی مالیاتی لیجر، 6-فنڈ منی مینیجر، ورک ڈلیوریبلز اور روزمرہ ڈائری۔',
       platformLabel: 'پلیٹ فارم',
       architectureLabel: 'آرکیٹیکچر',
@@ -940,7 +940,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     about: {
       backToHome: 'হোমে ফিরে যান',
       badge: 'ডেইলি খাতা প্রো পরিচিতি',
-      title: 'ডেইলি খাতা: প্রো™ সম্পর্কে',
+      title: 'Daily Khata Pro সম্পর্কে',
       subtitle: 'সার্বজনীন আর্থিক লেজার, ৬-তহবিল অর্থ ব্যবস্থাপনা, কর্ম ও দৈনন্দিন জীবনের ডায়েরি।',
       platformLabel: 'প্ল্যাটফর্ম',
       architectureLabel: 'স্থাপত্য',
@@ -1132,8 +1132,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
   es: {
     about: {
       backToHome: 'Volver al Inicio',
-      badge: 'Acerca de Daily Khata: Pro',
-      title: 'Acerca de Daily Khata: Pro™',
+      badge: 'Acerca de Daily Khata Pro',
+      title: 'Acerca de Daily Khata Pro',
       subtitle: 'Libro contable financiero universal, gestor de dinero de 6 fondos y diario personal.',
       platformLabel: 'Plataforma',
       architectureLabel: 'Arquitectura',
@@ -1141,7 +1141,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       licenseLabel: 'Licencia',
       creatorLabel: 'Creador',
       missionTitle: 'Nuestra Misión y Propósito',
-      missionP1: 'Daily Khata: Pro se creó para ofrecer a personas, autónomos y familias un libro contable rápido, honesto y 100% privado sin registros en la nube ni cargos ocultos.',
+      missionP1: 'Daily Khata Pro se creó para ofrecer a personas, autónomos y familias un libro contable rápido, honesto y 100% privado sin registros en la nube ni cargos ocultos.',
       missionP2: 'A diferencia de las aplicaciones bancarias tradicionales, sus datos nunca salen de su navegador ni dispositivo. Todo el código es de código abierto bajo licencia MIT.',
       capabilitiesTitle: 'Capacidades y Arquitectura',
       pillars: {
@@ -1168,7 +1168,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Sus datos financieros son 100% locales, privados y nunca se transmiten por internet.',
       backToHome: 'Volver al Inicio',
       corePledgeTitle: 'Cero Rastreo y Confidencialidad Absoluta',
-      corePledgeDesc: 'Daily Khata: Pro opera bajo una estricta arquitectura de conocimiento cero. No recopilamos datos personales.',
+      corePledgeDesc: 'Daily Khata Pro opera bajo una estricta arquitectura de conocimiento cero. No recopilamos datos personales.',
       highlights: {
         offlineTitle: '100% Fuera de Línea',
         offlineDesc: 'Todas las transacciones se calculan directamente en su navegador.',
@@ -1192,7 +1192,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Términos estándar MIT de Código Abierto • Dominio oficial: rozfiber.com',
       backToHome: 'Volver al Inicio',
       openSourceTitle: 'Acuerdo de Licencia de Código Abierto MIT',
-      openSourceDesc: 'Daily Khata: Pro se distribuye de forma gratuita y abierta bajo la licencia MIT.',
+      openSourceDesc: 'Daily Khata Pro se distribuye de forma gratuita y abierta bajo la licencia MIT.',
       termsList: {
         ownershipTitle: '1. Propiedad de los Datos',
         ownershipDesc: 'Usted es el único propietario de todas las transacciones y notas registradas.',
@@ -1210,7 +1210,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Información importante sobre cálculos financieros y autocustodia de registros.',
       backToHome: 'Volver al Inicio',
       alertTitle: 'Herramienta de Cálculo Educativa e Informativa',
-      alertDesc: 'Daily Khata: Pro es un organizador matemático. No proporciona asesoramiento fiscal o de inversión certificado.',
+      alertDesc: 'Daily Khata Pro es un organizador matemático. No proporciona asesoramiento fiscal o de inversión certificado.',
       sections: {
         nonAdvisoryTitle: '1. Carácter No Asesor',
         nonAdvisoryDesc: 'La regla de los 6 fondos es una guía general. Personalice los porcentajes en Configuración según sus necesidades.',
@@ -1223,7 +1223,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     safety: {
       badge: 'Seguridad',
       title: 'Seguridad, Bóveda PIN y Protección de Datos',
-      subtitle: 'Cómo Daily Khata: Pro mantiene sus números a salvo de miradas ajenas.',
+      subtitle: 'Cómo Daily Khata Pro mantiene sus números a salvo de miradas ajenas.',
       backToHome: 'Volver al Inicio',
       vaultProtectionTitle: 'Defensa Local Multinivel',
       vaultProtectionDesc: 'Almacenamiento local aislado, bloqueo por código PIN y enmascaramiento instantáneo de números.',
@@ -1253,7 +1253,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       bioTitle: 'Sobre MD Zafeer Hasan',
       bioDesc: 'MD Zafeer Hasan es un ingeniero de software y creador de código abierto enfocado en herramientas rápidas y éticas.',
       skillsTitle: 'Tecnologías Principales',
-      visionTitle: 'La Visión de Daily Khata: Pro',
+      visionTitle: 'La Visión de Daily Khata Pro',
       visionDesc: 'Proporcionar un sistema contable de nivel mundial que sea gratuito, funcione sin conexión y nunca monetice sus datos.',
       connectTitle: 'Conectar y Seguir',
       connectDesc: 'Póngase en contacto a través de correo electrónico o GitHub para colaboraciones y sugerencias.'
@@ -1326,7 +1326,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     about: {
       backToHome: 'العودة إلى الصفحة الرئيسية',
       badge: 'حول تطبيق ديلي خاتا برو',
-      title: 'حول Daily Khata: Pro™',
+      title: 'حول Daily Khata Pro',
       subtitle: 'دفتر الأستاذ المالي الشامل، ونظام تقسيم الأموال وفق قاعدة الصناديق الستة، وسجل العمل والحياة اليومية.',
       platformLabel: 'المنصة',
       architectureLabel: 'البنية البرمجية',
@@ -1334,7 +1334,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       licenseLabel: 'الترخيص',
       creatorLabel: 'المطور والمنشئ',
       missionTitle: 'مهمتنا وغايتنا',
-      missionP1: 'تم إنشاء Daily Khata: Pro بهدف تقديم دفتر حسابات صادق وسريع وفائق الخصوصية للأفراد والعائلات وأصحاب المشاريع الحرة دون الحاجة إلى تسجيل دخول سحابي أو تتبع.',
+      missionP1: 'تم إنشاء Daily Khata Pro بهدف تقديم دفتر حسابات صادق وسريع وفائق الخصوصية للأفراد والعائلات وأصحاب المشاريع الحرة دون الحاجة إلى تسجيل دخول سحابي أو تتبع.',
       missionP2: 'جميع بياناتك تظل مشفرة ومخزنة حصرياً داخل متصفحك أو هاتفك المحمول ولا تغادره أبداً. هذا التطبيق مجاني بالكامل ومفتوح المصدر بموجب ترخيص MIT.',
       capabilitiesTitle: 'القدرات الأساسية',
       pillars: {
@@ -1519,8 +1519,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
   fr: {
     about: {
       backToHome: 'Retour à l’accueil',
-      badge: 'À propos de Daily Khata: Pro',
-      title: 'À propos de Daily Khata: Pro™',
+      badge: 'À propos de Daily Khata Pro',
+      title: 'À propos de Daily Khata Pro',
       subtitle: 'Livre de comptes financier universel, gestionnaire 6 fonds et journal personnel.',
       platformLabel: 'Plateforme',
       architectureLabel: 'Architecture',
@@ -1528,7 +1528,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       licenseLabel: 'Licence',
       creatorLabel: 'Créateur',
       missionTitle: 'Notre Mission & Vision',
-      missionP1: 'Daily Khata: Pro a été conçu avec une mission claire : offrir un livre de comptes honnête, ultra-rapide et totalement confidentiel sans aucun suivi dans le cloud.',
+      missionP1: 'Daily Khata Pro a été conçu avec une mission claire : offrir un livre de comptes honnête, ultra-rapide et totalement confidentiel sans aucun suivi dans le cloud.',
       missionP2: 'Vos données financières ne quittent jamais votre appareil. Tout est calculé localement sous licence libre MIT.',
       capabilitiesTitle: 'Fonctionnalités Clés',
       pillars: {
@@ -1597,7 +1597,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Note importante sur les calculs automatiques.',
       backToHome: 'Retour à l’accueil',
       alertTitle: 'Outil Pédagogique et Informatif',
-      alertDesc: 'Daily Khata: Pro est un calculateur financier, pas un conseiller en investissement.',
+      alertDesc: 'Daily Khata Pro est un calculateur financier, pas un conseiller en investissement.',
       sections: {
         nonAdvisoryTitle: '1. Absence de Conseil',
         nonAdvisoryDesc: 'La règle des 6 fonds est indicative et personnalisable dans les paramètres.',
@@ -1658,7 +1658,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         },
         {
           q: 'L’application fonctionne-t-elle hors ligne ?',
-          a: 'Oui, Daily Khata: Pro fonctionne parfaitement sans connexion internet.'
+          a: 'Oui, Daily Khata Pro fonctionne parfaitement sans connexion internet.'
         },
         {
           q: 'Comment fonctionne la règle des 6 fonds ?',

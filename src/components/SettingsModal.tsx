@@ -260,7 +260,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           showFeedback('success', tStr('खाता डेटा सफलतापूर्वक रिस्टोर हो गया!', 'Ledger data restore ho gaya!', 'Ledger data restored successfully!'));
           setTimeout(() => onClose(), 1200);
         } else {
-          showFeedback('error', tStr('अमान्य प्रारूप। कृपया सही बैकअप फ़ाइल चुनें।', 'Invalid format. Kripya valid Daily Khata JSON backup select karein.', 'Invalid format. Please select a valid Daily Khata: Pro JSON backup.'));
+          showFeedback('error', tStr('अमान्य प्रारूप। कृपया सही बैकअप फ़ाइल चुनें।', 'Invalid format. Kripya valid Daily Khata JSON backup select karein.', 'Invalid format. Please select a valid Daily Khata Pro JSON backup.'));
         }
       } catch (err) {
         showFeedback('error', tStr('JSON पार्सिंग में त्रुटि।', 'JSON parse karne mein error aaya.', 'Failed to parse JSON file.'));
@@ -1287,7 +1287,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </h4>
                 </div>
                 <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
-                  Daily Khata: Pro operates strictly on your local device memory (IndexedDB / localStorage). Your
+                  Daily Khata Pro operates strictly on your local device memory (IndexedDB / localStorage). Your
                   financial records, invoices, work deliverables, and daily journals are never transmitted to external
                   servers or cloud databases without your explicit export.
                 </p>
@@ -1339,7 +1339,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <div className="w-28 h-auto max-h-36 sm:w-32 sm:max-h-40 rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)] shadow-lg bg-[#060B11] p-1">
                       <img
                         src="/md-zafeer-hasan-yazdaan.jpg"
-                        alt="MD Zafeer Hasan (YAZDAAN)"
+                        alt="MD Zafeer Hasan"
                         className="w-full h-auto object-contain rounded-xl"
                         referrerPolicy="no-referrer"
                       />
@@ -1357,7 +1357,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         MD Zafeer Hasan
                       </h4>
                       <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                        (YAZDAAN)
+                       
                       </span>
                     </div>
 
@@ -1494,7 +1494,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3.5">
               <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
                 <Scale className="w-5 h-5" />
-                <h4 className="font-bold text-[15px] text-[#F8FAFC]">Daily Khata: Pro Legal &amp; Entity</h4>
+                <h4 className="font-bold text-[15px] text-[#F8FAFC]">Daily Khata Pro Legal &amp; Entity</h4>
               </div>
               <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
                 Developed as a high-precision universal personal and enterprise financial accounting tool. Designed to

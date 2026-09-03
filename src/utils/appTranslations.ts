@@ -293,7 +293,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'backup', title: '11. Backup & Privacy Security', subtitle: 'Export JSON snapshots, local restore & offline safety' },
         { id: 'source_code', title: '12. Source Code & Verification', subtitle: 'Open source GitHub repo, MIT license & code inspection' },
         { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Answers to common questions and edge cases' },
-        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan (YAZDAAN) & HasVolt project' }
+        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan & HasVolt project' }
       ]
     },
     settings: {
@@ -446,7 +446,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       bioTitle: 'Founder Mission & Philosophy',
       bioDesc: 'Crafting elegant, private, and high-performance offline-first utility tools that empower individuals and small businesses to master their finances without giving up their data.',
       visionTitle: 'Open Source Commitment',
-      visionDesc: 'Daily Khata: Pro is built under the MIT license, completely free, with no trackers, no external cloud dependencies, and zero corporate telemetry.',
+      visionDesc: 'Daily Khata Pro is built under the MIT license, completely free, with no trackers, no external cloud dependencies, and zero corporate telemetry.',
       connectTitle: 'Contact via Email',
       copyEmail: 'Copy Email Address',
       emailCopied: 'Email Copied!',
@@ -458,7 +458,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       supportLabel: 'Support'
     },
     brand: {
-      appName: 'Daily Khata: Pro',
+      appName: 'Daily Khata Pro',
       appSubtitle: 'Universal Daily Financial Ledger & 6-Fund Capital Engine',
       tagline: '100% Offline • Private • Open Source',
       offlineBadge: '100% Offline & Private'
@@ -529,7 +529,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'backup', title: '11. बैकअप एवं डेटा सुरक्षा', subtitle: 'JSON बैकअप, ऑफलाइन रिस्टोर व पूर्ण डेटा नियंत्रण' },
         { id: 'source_code', title: '12. सोर्स कोड व सत्यापन', subtitle: 'MIT ओपन सोर्स कोड, गिटहब व पारदर्शिता ऑडिट' },
         { id: 'faq', title: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)', subtitle: 'सामान्य प्रश्नों और समाधानों की विस्तृत सूची' },
-        { id: 'developer', title: '14. डेवलपर एवं फाउंडर प्रोफाइल', subtitle: 'एमडी जफीर हसन (YAZDAAN) व HasVolt मिशन' }
+        { id: 'developer', title: '14. डेवलपर एवं फाउंडर प्रोफाइल', subtitle: 'एमडी जफीर हसन व HasVolt मिशन' }
       ]
     },
     settings: {
@@ -765,7 +765,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'backup', title: '11. Backup & Privacy Security', subtitle: 'JSON export snapshots aur offline safety' },
         { id: 'source_code', title: '12. Source Code & Verification', subtitle: 'Open source GitHub repo aur code audit' },
         { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Common questions aur quick solutions' },
-        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan (YAZDAAN) & HasVolt project' }
+        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan & HasVolt project' }
       ]
     },
     settings: {
@@ -918,7 +918,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       bioTitle: 'Founder Mission & Philosophy',
       bioDesc: 'Crafting elegant, private, and high-performance offline-first utility tools that empower individuals and small businesses to master their finances without giving up their data.',
       visionTitle: 'Open Source Commitment',
-      visionDesc: 'Daily Khata: Pro is built under the MIT license, completely free, with no trackers, no external cloud dependencies, and zero corporate telemetry.',
+      visionDesc: 'Daily Khata Pro is built under the MIT license, completely free, with no trackers, no external cloud dependencies, and zero corporate telemetry.',
       connectTitle: 'Contact via Email',
       copyEmail: 'Copy Email Address',
       emailCopied: 'Email Copied!',
@@ -930,7 +930,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       supportLabel: 'Support'
     },
     brand: {
-      appName: 'Daily Khata: Pro',
+      appName: 'Daily Khata Pro',
       appSubtitle: 'Universal Daily Financial Ledger & 6-Fund Capital Engine',
       tagline: '100% Offline • Private • Open Source',
       offlineBadge: '100% Offline & Private'
@@ -1034,7 +1034,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = 'Trabajo y Vida';
       base.menu.notes = 'Bóveda';
       base.menu.analytics = 'Analítica';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = 'Información del Desarrollador';
       base.developer.role = 'Desarrollador y Fundador Independiente';
       base.calc.title = 'Calculadora Financiera Multipropósito';
@@ -1054,7 +1054,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = 'Travail & Vie';
       base.menu.notes = 'Coffre';
       base.menu.analytics = 'Analytique';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = 'Informations sur le Développeur';
       base.developer.role = 'Développeur & Fondateur Indépendant';
       base.calc.title = 'Calculatrice Financière Polyvalente';
@@ -1074,7 +1074,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = 'Arbeit & Leben';
       base.menu.notes = 'Notizen';
       base.menu.analytics = 'Berichte';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = 'Entwickler-Informationen';
       base.developer.role = 'Unabhängiger Entwickler & Gründer';
       base.calc.title = 'Mehrzweck-Finanzrechner';
@@ -1094,7 +1094,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = 'Работа и жизнь';
       base.menu.notes = 'Сейф';
       base.menu.analytics = 'Отчеты';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = 'Информация о разработчике';
       base.developer.role = 'Независимый разработчик и основатель';
       base.calc.title = 'Универсальный финансовый калькулятор';
@@ -1114,7 +1114,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = 'Trabalho e Vida';
       base.menu.notes = 'Cofre';
       base.menu.analytics = 'Relatórios';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = 'Informações do Desenvolvedor';
       base.developer.role = 'Desenvolvedor e Fundador Independente';
       base.calc.title = 'Calculadora Financeira Multiuso';
@@ -1134,7 +1134,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = 'Kerja & Hidup';
       base.menu.notes = 'Brankas';
       base.menu.analytics = 'Laporan';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = 'Informasi Pengembang';
       base.developer.role = 'Pengembang & Pendiri Independen';
       base.calc.title = 'Kalkulator Keuangan Serbaguna';
@@ -1154,7 +1154,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = '仕事と生活';
       base.menu.notes = '金庫';
       base.menu.analytics = 'レポート';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = '開発者情報';
       base.developer.role = '個人開発者・創設者';
       base.calc.title = '多目的財務計算ツール';
@@ -1174,7 +1174,7 @@ supportedLangs.forEach((lang) => {
       base.menu.workAndLife = '工作生活';
       base.menu.notes = '保密库';
       base.menu.analytics = '分析';
-      base.brand.appName = 'Daily Khata: Pro';
+      base.brand.appName = 'Daily Khata Pro';
       base.developer.title = '开发者资料';
       base.developer.role = '独立开发者兼创始人';
       base.calc.title = '多功能财务计算器';

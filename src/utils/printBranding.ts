@@ -1,16 +1,15 @@
 /**
- * Daily Khata: Pro — Standardized Branded Print & PDF Export Utility
+ * Daily Khata Pro — Standardized Branded Print & PDF Export Utility
  * Ensures all printed and downloaded documents carry the official App & Company Watermark,
  * Enterprise details, and authentic verification credentials.
  */
 
 export const BRAND_WATERMARK_CONFIG = {
-  appName: 'Daily Khata: Pro',
-  tagline: 'Multi-Bucket Systematic Financial Ledger',
-  companyName: 'HASAN SMART ELECTRICAL SOLUTIONS ®',
-  msmeRegistration: 'UDYAM-DL-10-0098630',
+  appName: 'Daily Khata Pro',
+  tagline: 'Simple Income & Expense Tracker',
+  companyName: 'HASVOLT',
   license: 'Open Source MIT License',
-  developer: 'MD Zafeer Hasan (YAZDAAN)',
+  developer: 'MD Zafeer Hasan',
   website: 'https://hasvolt.com',
   supportPortal: 'https://hses247help.com',
   year: '2026'
@@ -163,13 +162,12 @@ export function getWatermarkAndHeaderHTML(docTitle: string, subtitle?: string): 
         <div class="brand-left-title">${docTitle}</div>
         <div class="brand-left-sub">${subtitle || BRAND_WATERMARK_CONFIG.tagline}</div>
         <div class="brand-company-tag">
-          Official Record · <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong> (MSME: ${BRAND_WATERMARK_CONFIG.msmeRegistration})
+          <strong>Daily Khata Pro</strong> powered by <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong>
         </div>
       </div>
       <div class="brand-right-meta">
-        <div><span class="brand-badge">CONFIDENTIAL RECORD</span></div>
+        <div><span class="brand-badge">REPORT</span></div>
         <div>Date: <strong>${currentDate}</strong></div>
-        <div>Portal: <strong>${BRAND_WATERMARK_CONFIG.website.replace('https://', '')}</strong></div>
       </div>
     </div>
   `;
@@ -179,11 +177,11 @@ export function getWatermarkAndHeaderHTML(docTitle: string, subtitle?: string): 
       <div style="display: flex; align-items: center; gap: 8px;">
         <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
         <span>
-          <span class="brand-footer-legal">Daily Khata: Pro</span> · Developed by <strong>${BRAND_WATERMARK_CONFIG.developer}</strong> · ${BRAND_WATERMARK_CONFIG.license}
+          <span class="brand-footer-legal">Daily Khata Pro</span> · Developed by <strong>${BRAND_WATERMARK_CONFIG.developer}</strong>
         </span>
       </div>
       <div>
-        Enterprise: <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong> (Govt. MSME: ${BRAND_WATERMARK_CONFIG.msmeRegistration}) · <a class="brand-footer-link" href="${BRAND_WATERMARK_CONFIG.website}" target="_blank">${BRAND_WATERMARK_CONFIG.website.replace('https://', '')}</a>
+        Powered by <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong>
       </div>
     </div>
   `;

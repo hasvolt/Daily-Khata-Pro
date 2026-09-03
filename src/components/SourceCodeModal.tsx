@@ -76,7 +76,7 @@ export const SourceCodeModal: React.FC<SourceCodeModalProps> = ({
       icon: FileCode,
       language: 'typescript',
       content: `/**
- * Daily Khata: Pro — Core Financial Calculations Engine
+ * Daily Khata Pro — Core Financial Calculations Engine
  * 100% Client-Side Pure Functions | Zero External Telemetry
  */
 
@@ -154,7 +154,7 @@ export function downloadCSVReport(entries: Entry[], targetMonth: Date): void {
       icon: Database,
       language: 'typescript',
       content: `/**
- * Daily Khata: Pro — Storage & Data Privacy Architecture
+ * Daily Khata Pro — Storage & Data Privacy Architecture
  * Proof of Offline-First / Zero Remote Database Architecture
  */
 
@@ -202,7 +202,7 @@ export function saveToLocalStorage(data: StorageDataModel): void {
       icon: Code2,
       language: 'typescript',
       content: `/**
- * Daily Khata: Pro — TypeScript Data Schema
+ * Daily Khata Pro — TypeScript Data Schema
  */
 
 export type FundType = 'emergency' | 'needs' | 'investments' | 'personal' | 'learning' | 'charity';
@@ -250,7 +250,7 @@ export interface KhataData {
       icon: ShieldCheck,
       language: 'json',
       content: `{
-  "application": "Daily Khata: Pro",
+  "application": "Daily Khata Pro",
   "developer": "HasVolt Official",
   "license": "MIT / Open Transparency",
   "architecture": "Single-Page Client-Side Application (SPA)",
@@ -663,7 +663,7 @@ export interface KhataData {
                   100% Client-Side Privacy Guarantee
                 </h3>
                 <p className="text-[12.5px] text-[#94A3B8] leading-relaxed">
-                  Daily Khata: Pro is built with an <strong>offline-first, zero-knowledge architecture</strong>. Your financial data never leaves your browser and is never transmitted to any third-party or cloud server without your explicit manual export.
+                  Daily Khata Pro is built with an <strong>offline-first, zero-knowledge architecture</strong>. Your financial data never leaves your browser and is never transmitted to any third-party or cloud server without your explicit manual export.
                 </p>
               </div>
             </div>
@@ -730,7 +730,7 @@ export interface KhataData {
                 <div className="p-3 rounded-lg bg-[#10B981]/10 border border-[#10B981]/20 space-y-1 text-[#10B981]">
                   <div className="font-bold flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
-                    <span>Daily Khata: Pro Architecture</span>
+                    <span>Daily Khata Pro Architecture</span>
                   </div>
                   <p className="text-[11px] text-[#64748B] dark:text-[#CBD5E1] leading-relaxed">
                     100% on your device. Client-side state + LocalStorage. Mathematical calculations execute on your CPU. Zero data scraping.

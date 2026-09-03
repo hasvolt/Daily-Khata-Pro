@@ -1933,7 +1933,7 @@ export default function App() {
               <button
                 onClick={() => setCurrentTab('developer')}
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-2xs active:scale-95 text-[11px]"
-                title="View Developer Profile (MD Zafeer Hasan - YAZDAAN)"
+                title="View Developer Profile (MD Zafeer Hasan)"
               >
                 <div className="w-4 h-4 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] bg-[#070E18] shrink-0">
                   <img
@@ -2059,7 +2059,7 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-1.5 font-medium text-[10.5px] text-[#64748B]">
-              <span className="font-semibold text-[#94A3B8]">Daily Khata: Pro™</span>
+              <span className="font-semibold text-[#94A3B8]">Daily Khata Pro</span>
               <span>•</span>
               <span>Official Domain: <strong>rozfiber.com</strong></span>
               <span>•</span>

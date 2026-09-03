@@ -194,7 +194,7 @@ export interface Translations {
 
 export const TRANSLATIONS: Record<AppLanguage, Translations> = {
   en: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Universal Daily Financial Ledger & 6-Fund Capital Engine',
     nav: {
       home: 'Khata',
@@ -616,7 +616,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   hinglish: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Universal Daily Financial Ledger & 6-Fund Capital Engine',
     nav: {
       home: 'Khata',
@@ -827,7 +827,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   es: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Libro Contable Financiero Diario y Motor de 6 Fondos',
     nav: {
       home: 'Inicio',
@@ -1034,7 +1034,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   ar: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'دفتر الحسابات المالية اليومي ومحرك الصناديق الستة',
     nav: {
       home: 'الرئيسية',
@@ -1241,7 +1241,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   fr: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Grand Livre Financier Quotidien et Moteur à 6 Fonds',
     nav: {
       home: 'Accueil',
@@ -1448,7 +1448,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   de: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Universelles Tägliches Finanzbuch & 6-Töpfe-Kapitalmotor',
     nav: {
       home: 'Buch',
@@ -1655,7 +1655,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   ru: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Универсальный Финансовый Учет и Движок 6 Фондов',
     nav: {
       home: 'Главная',
@@ -1862,7 +1862,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   pt: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Livro Financeiro Diário e Motor dos 6 Fundos de Capital',
     nav: {
       home: 'Início',
@@ -2483,7 +2483,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   id: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: 'Buku Kas Keuangan Harian & Mesin Modal 6 Dana',
     nav: {
       home: 'Kas',
@@ -2690,7 +2690,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   ja: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: '毎日の財務台帳＆6ファンド資本エンジン',
     nav: {
       home: 'ホーム',
@@ -2897,7 +2897,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
     }
   },
   zh: {
-    appName: 'Daily Khata: Pro',
+    appName: 'Daily Khata Pro',
     appSubtitle: '通用每日财务账本与六基金资本引擎',
     nav: {
       home: '账本',

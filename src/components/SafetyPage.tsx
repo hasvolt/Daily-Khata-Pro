@@ -57,7 +57,7 @@ export const SafetyPage: React.FC<SafetyPageProps> = ({
       icon: FileCode,
       language: 'typescript',
       content: `/**
- * Daily Khata: Pro — Core Financial Calculations Engine
+ * Daily Khata Pro — Core Financial Calculations Engine
  * 100% Client-Side Pure Functions | Zero External Telemetry
  */
 
@@ -135,7 +135,7 @@ export function downloadCSVReport(entries: Entry[], targetMonth: Date): void {
       icon: Database,
       language: 'typescript',
       content: `/**
- * Daily Khata: Pro — Local Storage Security & Persistence
+ * Daily Khata Pro — Local Storage Security & Persistence
  * Zero Remote Database | Zero Telemetry | Pure Browser Custody
  */
 
@@ -183,7 +183,7 @@ export function exportJSONBackup(): void {
       icon: Cpu,
       language: 'typescript',
       content: `/**
- * Daily Khata: Pro — TypeScript Data Schema
+ * Daily Khata Pro — TypeScript Data Schema
  */
 
 export type FundType = 'emergency' | 'needs' | 'investments' | 'personal' | 'learning' | 'charity';
@@ -219,7 +219,7 @@ export interface Goal {
       icon: ShieldCheck,
       language: 'json',
       content: `{
-  "application": "Daily Khata: Pro",
+  "application": "Daily Khata Pro",
   "developer": "HasVolt Official",
   "license": "MIT / Open Transparency",
   "architecture": "Single-Page Client-Side Application (SPA)",

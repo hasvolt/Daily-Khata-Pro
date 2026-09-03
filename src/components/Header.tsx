@@ -936,7 +936,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 </div>
                                 <div className="flex flex-col">
                                   <span className="leading-tight font-bold">{tr.menu.developerProfile}</span>
-                                  <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan (YAZDAAN)</span>
+                                  <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan</span>
                                 </div>
                               </button>
                             )}
@@ -964,7 +964,7 @@ export const Header: React.FC<HeaderProps> = ({
                             <div className="flex items-center gap-1.5 min-w-0">
                               <Award className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
                               <span className="text-[10px] font-mono text-[#CBD5E1] truncate">
-                                MSME: <strong className="text-[#38BDF8]">UDYAM-DL-10-0098630</strong>
+                                Powered by: <strong className="text-[\#38BDF8]">HASVOLT</strong>
                               </span>
                             </div>
                             <span className="text-[9px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded border border-[#10B981]/25 shrink-0">
@@ -1431,7 +1431,7 @@ export const Header: React.FC<HeaderProps> = ({
                           </div>
                           <div className="flex flex-col">
                             <span className="leading-tight font-bold">{tr.menu.developerProfile}</span>
-                            <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan (YAZDAAN)</span>
+                            <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan</span>
                           </div>
                         </button>
                       )}
@@ -1459,7 +1459,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <div className="flex items-center gap-1.5 min-w-0">
                         <Award className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
                         <span className="text-[10px] font-mono text-[#CBD5E1] truncate">
-                          MSME: <strong className="text-[#38BDF8]">UDYAM-DL-10-0098630</strong>
+                          Powered by: <strong className="text-[\#38BDF8]">HASVOLT</strong>
                         </span>
                       </div>
                       <span className="text-[9px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded border border-[#10B981]/25 shrink-0">

@@ -551,7 +551,7 @@ header,
 }
 
 /* Allow text selection specifically for data fields, transaction amounts, note bodies */
-p, span, td, th, input, textarea, code, pre {
+input, textarea, code, pre {
   -webkit-user-select: auto;
   user-select: auto;
 }

@@ -60,10 +60,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     { id: 'report', label: isHindi ? 'रिपोर्ट व विश्लेषण' : 'Analytics & Reports', desc: isHindi ? 'मासिक चार्ट और पीएफडी एक्सपोर्ट' : 'Fund breakdown & financial reports', icon: BarChart3 }
   ];
 
-  const shareTitle = "Daily Khata: Pro — Universal 6-Fund Accounting";
+  const shareTitle = "Daily Khata Pro — Universal 6-Fund Accounting";
   const shareText = isHindi
-    ? `Daily Khata: Pro पर मेरा वित्तीय लेजर और 6-फंड अकाउंटिंग देखें: ${currentShareUrl}`
-    : `Check out Daily Khata: Pro — Universal 6-Fund Accounting & Personal Ledger: ${currentShareUrl}`;
+    ? `Daily Khata Pro पर मेरा वित्तीय लेजर और 6-फंड अकाउंटिंग देखें: ${currentShareUrl}`
+    : `Check out Daily Khata Pro — Universal 6-Fund Accounting & Personal Ledger: ${currentShareUrl}`;
 
   const handleNativeShare = async () => {
     triggerHapticSound('click');

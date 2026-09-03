@@ -88,7 +88,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
         },
         {
           label: 'फ्रीलांसर एवं उद्यमी (Freelancer & Entrepreneur)',
-          proof: 'संस्थापक: Hasan Smart Electrical Solutions ® (MSME Registered) व Hasvolt',
+          proof: 'संस्थापक: HASVOLT (Company) व Hasvolt',
           icon: Briefcase,
           color: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
         },
@@ -132,7 +132,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
         },
         {
           label: 'Freelancer & Entrepreneur',
-          proof: 'Founder: Hasan Smart Electrical Solutions ® (MSME Enterprise) & Hasvolt',
+          proof: 'Founder: HASVOLT (Company) & Hasvolt',
           icon: Briefcase,
           color: 'text-[#A855F7] bg-[#A855F7]/10 border-[#A855F7]/30'
         },
@@ -181,7 +181,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 <div className="w-28 h-auto max-h-36 sm:w-32 sm:max-h-40 rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)] shadow-lg bg-[var(--theme-bg,#070E18)] p-1">
                   <img
                     src="/md-zafeer-hasan-yazdaan.jpg"
-                    alt="MD Zafeer Hasan (YAZDAAN)"
+                    alt="MD Zafeer Hasan"
                     className="w-full h-auto object-contain rounded-xl"
                     referrerPolicy="no-referrer"
                     onError={(e) => {
@@ -202,7 +202,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                     MD Zafeer Hasan
                   </h3>
                   <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                    (YAZDAAN)
+                   
                   </span>
                 </div>
 
@@ -278,40 +278,6 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               </span>
             </div>
 
-            {/* Govt of India MSME Certificate */}
-            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-1.5">
-              <div className="flex items-center justify-between flex-wrap gap-1.5">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base leading-none">🇮🇳</span>
-                  <span className="text-[12px] font-bold text-[#F8FAFC]">
-                    Government of India – MSME Registered Enterprise
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/25">
-                  Govt. of India
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11.5px] pt-1">
-                <div>
-                  <span className="text-[#94A3B8]">Enterprise: </span>
-                  <span className="font-bold text-[#CBD5E1]">HASAN SMART ELECTRICAL SOLUTIONS ®</span>
-                </div>
-                <div>
-                  <span className="text-[#94A3B8]">Udyam Reg. No.: </span>
-                  <span className="font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 px-1.5 py-0.5 rounded">
-                    UDYAM-DL-10-0098630
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[#94A3B8]">Ministry: </span>
-                  <span className="text-[#CBD5E1]">Ministry of MSME, Govt. of India</span>
-                </div>
-                <div>
-                  <span className="text-[#94A3B8]">Operational Status: </span>
-                  <span className="text-[#F59E0B] font-semibold">Active Since 2012</span>
-                </div>
-              </div>
-            </div>
 
             {/* Open Source MIT License Certificate */}
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-1.5">
@@ -329,11 +295,11 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11.5px] pt-1">
                 <div>
                   <span className="text-[#94A3B8]">Software: </span>
-                  <span className="font-semibold text-[#CBD5E1]">Daily Khata: Pro (Multi-Bucket Financial Ledger)</span>
+                  <span className="font-semibold text-[#CBD5E1]">Daily Khata Pro (Multi-Bucket Financial Ledger)</span>
                 </div>
                 <div>
                   <span className="text-[#94A3B8]">Copyright: </span>
-                  <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan (YAZDAAN)</span>
+                  <span className="font-mono text-[#CBD5E1]">© 2026 MD Zafeer Hasan</span>
                 </div>
                 <div>
                   <span className="text-[#94A3B8]">Terms: </span>
@@ -395,7 +361,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-1">
               <div className="flex items-center justify-between flex-wrap gap-1">
                 <span className="text-[12.5px] font-bold text-[#F8FAFC] tracking-wide">
-                  HASAN SMART ELECTRICAL SOLUTIONS ®
+                  HASVOLT
                 </span>
                 <span className="text-[10px] font-mono text-[#38BDF8] bg-[#38BDF8]/10 px-2 py-0.5 rounded border border-[#38BDF8]/20">
                   Parent Operator
@@ -403,8 +369,8 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               </div>
               <p className="text-[11px] text-[#94A3B8] leading-relaxed">
                 {isHindi
-                  ? 'संस्थापक एवं स्वामी: MD ज़फ़ीर हसन (YAZDAAN)। 2012 से सभी इलेक्ट्रिकल सर्विसेज, प्रोजेक्ट सॉल्यूशंस और डिजिटल इनिशिएटिव्स (जैसे Daily Khata Pro) का आधिकारिक संचालन।'
-                  : 'Founder & Owner: MD Zafeer Hasan (YAZDAAN). Officially operating and managing electrical services, project solutions, and digital initiatives (including Daily Khata Pro) since 2012.'}
+                  ? 'संस्थापक एवं स्वामी: MD ज़फ़ीर हसन। 2012 से सभी इलेक्ट्रिकल सर्विसेज, प्रोजेक्ट सॉल्यूशंस और डिजिटल इनिशिएटिव्स (जैसे Daily Khata Pro) का आधिकारिक संचालन।'
+                  : 'Founder & Owner: MD Zafeer Hasan. Officially operating and managing electrical services, project solutions, and digital initiatives (including Daily Khata Pro) since 2012.'}
               </p>
             </div>
 
@@ -474,7 +440,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                     Est. 2012
                   </span>
                   <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20">
-                    Operated by Hasan Smart Electrical Solutions ®
+                    Operated by HASVOLT
                   </span>
                 </div>
               </div>
@@ -494,10 +460,6 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               </span>
             </div>
             <div className="flex items-center justify-between text-[#94A3B8]">
-              <span className="font-semibold text-[#CBD5E1]">{isHindi ? 'एमएसएमई पंजीकरण:' : 'MSME Reg:'}</span>
-              <span className="text-[#F59E0B] font-mono font-bold">
-                UDYAM-DL-10-0098630
-              </span>
             </div>
             <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="font-semibold text-[#CBD5E1]">{isHindi ? 'गोपनीयता:' : 'Data Privacy:'}</span>

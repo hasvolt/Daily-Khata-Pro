@@ -213,7 +213,7 @@ export function generateCalculatorSlipHTML(params: CalcPrintParams): string {
     <div>
       <div class="brand-title">Daily Khata Pro</div>
       <div class="brand-subtitle">Smart Financial &amp; Calculation Slip · ${params.type}</div>
-      <div class="brand-website">Website: www.rozfiber.com</div>
+      <div class="brand-website">Powered by HASVOLT</div>
     </div>
     <div style="text-align: right; font-size: 11px; color: #475569;">
       <div>Verified Calculation Record</div>
@@ -290,7 +290,7 @@ export function generateCalculatorSlipHTML(params: CalcPrintParams): string {
       <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
       <span>
         <strong>Daily Khata Pro</strong> · Modern Financial Ledger Utility<br>
-        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan (YAZDAAN)</span>
+        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan</span>
       </span>
     </div>
     <div style="text-align: right;">
