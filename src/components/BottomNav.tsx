@@ -82,14 +82,17 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
               id={`nav-btn-${tab.id}`}
               type="button"
               onClick={() => handleTabClick(tab)}
-              className={`flex flex-col items-center justify-center py-0.5 sm:py-2 px-0.5 sm:px-3 rounded-xl sm:rounded-2xl transition-all cursor-pointer select-none w-full ${
+              className={`relative flex flex-col items-center justify-center py-0.5 sm:py-2 px-0.5 sm:px-3 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-pointer select-none w-full ${
                 isActive
                   ? 'text-[var(--theme-primary,#38BDF8)] font-extrabold bg-[var(--theme-card,#132438)]/60'
                   : 'text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[var(--theme-card,#132438)]/40 active:scale-95'
               }`}
             >
+              {isActive && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[var(--theme-primary,#38BDF8)] rounded-b-full shadow-[0_2px_8px_rgba(56,189,248,0.5)] animate-in fade-in zoom-in duration-300"></div>
+              )}
               <div
-                className={`p-1 sm:p-2 rounded-lg sm:rounded-xl transition-all ${
+                className={`relative p-1 sm:p-2 rounded-lg sm:rounded-xl transition-all duration-300 ${
                   isActive
                     ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] scale-105 sm:scale-110'
                     : 'text-[#94A3B8]'
