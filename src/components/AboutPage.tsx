@@ -63,7 +63,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#070E18] border border-[var(--theme-primary,#38BDF8)]/40 p-2 shrink-0 shadow-lg flex items-center justify-center">
             <img
-              src="/daily-Khata-Pro.png"
+              src="/daily-khata-pro-v4.png"
               alt="Daily Khata Pro Logo"
               className="w-full h-full object-contain rounded-xl"
               onError={(e) => {

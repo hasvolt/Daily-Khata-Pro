@@ -37,7 +37,7 @@ export const HasVoltLogo: React.FC<HasVoltLogoProps> = ({
           className="shrink-0 rounded-xl bg-[#060606] border border-[#213E61]/60 shadow-md flex items-center justify-center p-0.5 overflow-hidden transition-transform hover:scale-105 select-none"
         >
           <img
-            src="/daily-Khata-Pro.png"
+            src="/daily-khata-pro-v4.png"
             alt="Daily Khata Pro Logo"
             width={pixelSize}
             height={pixelSize}

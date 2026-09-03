@@ -82,14 +82,31 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
           </p>
         </div>
 
-        {/* 2. Calculation Integrity */}
+        {/* 2. Calculation Integrity & System Errors */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] font-bold text-[15px]">
             <ShieldAlert className="w-4.5 h-4.5" />
-            <h2>{t.sections.calculationTitle}</h2>
+            <h2>{t.sections.calculationTitle} &amp; Technical Limitations</h2>
           </div>
           <p className="leading-relaxed">
             {t.sections.calculationDesc}
+          </p>
+          <div className="mt-3 p-3 bg-[#EF4444]/10 border border-[#EF4444]/30 rounded-xl">
+            <h3 className="font-bold text-[#EF4444] mb-1">Important Disclaimer on Calculations</h3>
+            <p className="text-[#F8FAFC]">
+              Although our calculators and algorithms are designed for precision, technical glitches or calculation mistakes can occasionally happen. <strong>Always manually verify any financial numbers, interest, or margins before making actual financial decisions.</strong> The app is not responsible for any financial loss due to calculation errors.
+            </p>
+          </div>
+        </div>
+
+        {/* Ads and Free Version Disclaimer */}
+        <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
+          <div className="flex items-center gap-2 text-[#F59E0B] font-bold text-[15px]">
+            <AlertTriangle className="w-4.5 h-4.5" />
+            <h2>Free Version &amp; App Sponsorships</h2>
+          </div>
+          <p className="leading-relaxed">
+            Please be informed that in the <strong>Free version</strong> of Daily Khata Pro, you may see occasional advertisements, sponsored links, or developer watermarks on generated PDFs and exports. This helps us maintain server costs and provide updates for free. You may upgrade to a premium plan (if available) to remove watermarks and ads.
           </p>
         </div>
 

@@ -1014,7 +1014,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       {/* ========================================================================= */}
       {activeTab === 'funds' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)] pb-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
               <h2 className="text-[16px] font-bold text-[#F8FAFC]">
                 {isHindi ? '6-फंड आय विभाजन (कस्टम राशि)' : '6-Fund Income Split Allocation'}
@@ -1805,7 +1805,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       {/* ========================================================================= */}
       {activeTab === 'discount' && (
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)] pb-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
               <h2 className="text-[16px] font-bold text-[#F8FAFC]">
                 {isHindi ? 'छूट एवं मार्जिन' : 'Discount & Profit Margin'}

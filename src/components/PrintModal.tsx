@@ -73,12 +73,6 @@ export const PrintModal: React.FC<PrintModalProps> = ({
   </style>
 </head>
 <body>
-  <!-- Official Company Watermark -->
-  <div class="watermark-bg">
-    Daily Khata Pro<br>
-    <span style="font-size: 26px; font-weight: 700; letter-spacing: 1px;">Website: www.rozfiber.com</span>
-  </div>
-
   <div class="brand-header">
     <div>
       <div class="brand-title">Daily Khata Pro — Financial Statement</div>
@@ -177,9 +171,12 @@ export const PrintModal: React.FC<PrintModalProps> = ({
   </table>
 
   <div class="footer">
-    <div>
-      <strong>Daily Khata Pro</strong> · Confidential &amp; Verified Record<br>
-      <span style="color: #0284c7; font-weight: 700;">Website: www.rozfiber.com</span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
+      <span>
+        <strong>Daily Khata Pro</strong> · Confidential &amp; Verified Record<br>
+        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan (YAZDAAN)</span>
+      </span>
     </div>
     <span>Signature / Digital Stamp: ___________________</span>
   </div>

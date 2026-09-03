@@ -155,13 +155,7 @@ export function getWatermarkAndHeaderHTML(docTitle: string, subtitle?: string): 
     year: 'numeric'
   });
 
-  const watermarkHTML = `
-    <div class="print-watermark-bg" aria-hidden="true">
-      <div>DAILY KHATA: PRO · HASVOLT.COM</div>
-      <div class="print-watermark-secondary">HASAN SMART ELECTRICAL SOLUTIONS ® (EST. 2012)</div>
-      <div class="print-watermark-secondary">MSME REG: UDYAM-DL-10-0098630</div>
-    </div>
-  `;
+  const watermarkHTML = ``;
 
   const headerHTML = `
     <div class="brand-header-box">
@@ -182,8 +176,11 @@ export function getWatermarkAndHeaderHTML(docTitle: string, subtitle?: string): 
 
   const footerHTML = `
     <div class="brand-footer-box">
-      <div>
-        <span class="brand-footer-legal">Daily Khata: Pro</span> · Developed by <strong>${BRAND_WATERMARK_CONFIG.developer}</strong> · ${BRAND_WATERMARK_CONFIG.license}
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
+        <span>
+          <span class="brand-footer-legal">Daily Khata: Pro</span> · Developed by <strong>${BRAND_WATERMARK_CONFIG.developer}</strong> · ${BRAND_WATERMARK_CONFIG.license}
+        </span>
       </div>
       <div>
         Enterprise: <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong> (Govt. MSME: ${BRAND_WATERMARK_CONFIG.msmeRegistration}) · <a class="brand-footer-link" href="${BRAND_WATERMARK_CONFIG.website}" target="_blank">${BRAND_WATERMARK_CONFIG.website.replace('https://', '')}</a>

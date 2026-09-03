@@ -413,7 +413,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
         </table>
 
         <div class="footer">
-          Generated via Daily Khata Pro · Verified Personal Record · www.rozfiber.com
+          <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
+            <span>
+              Generated via <strong>Daily Khata Pro</strong> · Developed by MD Zafeer Hasan (YAZDAAN) · www.rozfiber.com
+            </span>
+          </div>
         </div>
       </body>
       </html>

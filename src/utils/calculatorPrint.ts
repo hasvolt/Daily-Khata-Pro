@@ -209,12 +209,6 @@ export function generateCalculatorSlipHTML(params: CalcPrintParams): string {
   </style>
 </head>
 <body>
-  <!-- Official Watermark -->
-  <div class="watermark-bg">
-    Daily Khata Pro<br>
-    <span style="font-size: 26px; font-weight: 700; letter-spacing: 1px;">Website: www.rozfiber.com</span>
-  </div>
-
   <div class="brand-header">
     <div>
       <div class="brand-title">Daily Khata Pro</div>
@@ -292,9 +286,12 @@ export function generateCalculatorSlipHTML(params: CalcPrintParams): string {
   }
 
   <div class="footer">
-    <div>
-      <strong>Daily Khata Pro</strong> · Modern Financial Ledger Utility<br>
-      <span style="color: #0284c7; font-weight: 700;">Website: www.rozfiber.com</span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <img src="https://avatars.githubusercontent.com/mdzafeerhasan" alt="MD Zafeer Hasan" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #0284C7;" />
+      <span>
+        <strong>Daily Khata Pro</strong> · Modern Financial Ledger Utility<br>
+        <span style="color: #0284c7; font-weight: 700;">Developed by MD Zafeer Hasan (YAZDAAN)</span>
+      </span>
     </div>
     <div style="text-align: right;">
       <span>Verified Digital Computation</span><br>

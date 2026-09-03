@@ -384,7 +384,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onThemeChange('light');
                 }
               }}
-              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0 ${
+              className={`flex p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold items-center gap-1 shrink-0 ${
                 isLightMode
                   ? 'bg-[#0284C7]/15 border-[#0284C7]/40 text-[#0284C7] hover:bg-[#0284C7]/25'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
@@ -408,7 +408,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenSimulator}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1.5 shrink-0"
+              className="hidden sm:flex p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold items-center gap-1.5 shrink-0"
               title={tr.calc.title}
               id="header-calculator-btn"
             >
@@ -416,27 +416,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="hidden sm:inline font-semibold">
                 {tr.menu.calculator}
               </span>
-            </button>
-          )}
-
-          {/* Smart Alerts & Reminders Button */}
-          {onOpenReminders && (
-            <button
-              type="button"
-              onClick={onOpenReminders}
-              className="relative p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1.5 shrink-0"
-              title={isHindi ? 'चेतावनी एवं रिमाइंडर' : 'Alerts & Reminders'}
-              id="header-reminders-btn"
-            >
-              <Bell className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-              <span className="hidden sm:inline font-semibold">
-                {isHindi ? 'अलर्ट' : 'Alerts'}
-              </span>
-              {remindersCount > 0 && (
-                <span className="text-[9px] font-bold text-white bg-[#EF4444] px-1.5 py-0.2 rounded-full min-w-[16px] text-center">
-                  {remindersCount}
-                </span>
-              )}
             </button>
           )}
 
@@ -1048,6 +1027,50 @@ export const Header: React.FC<HeaderProps> = ({
                           <Calculator className="w-4 h-4 text-[#F59E0B] shrink-0" />
                           <span>{tr.menu.calculator}</span>
                         </div>
+                      </button>
+                    )}
+
+                    {/* Attendance & Work Register */}
+                    {onSelectTab && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectTab('attendance');
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                        id="header-desktop-attendance-btn"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <CalendarCheck className="w-4 h-4 text-[#10B981] shrink-0" />
+                          <span>{isHindi ? 'उपस्थिति व कार्य रजिस्टर' : 'Attendance & Work'}</span>
+                        </div>
+                        <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded">
+                          Duty
+                        </span>
+                      </button>
+                    )}
+
+                    {/* Alerts & Reminders */}
+                    {onOpenReminders && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenReminders();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                        id="header-desktop-alerts-btn"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <BellRing className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                          <span>{isHindi ? 'चेतावनी एवं रिमाइंडर' : 'Alerts & Reminders'}</span>
+                        </div>
+                        {remindersCount > 0 && (
+                          <span className="text-[9px] font-bold text-white bg-[#EF4444] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                            {remindersCount}
+                          </span>
+                        )}
                       </button>
                     )}
 
