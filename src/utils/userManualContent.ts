@@ -76,7 +76,7 @@ const MANUAL_EN: UserManualTranslation = {
           desc: 'Data remains strictly in your device local storage. No server tracking or external telemetries.'
         },
         {
-          title: 'Automated 6-Fund Split',
+          title: 'Automated 7-Fund Split',
           desc: 'Mathematical capital division across 6 dedicated pots prevents lifestyle inflation.'
         },
         {
@@ -160,10 +160,10 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'six_funds',
-      title: '4. The 6-Fund Allocation Rule',
+      title: '4. The 7-Fund Allocation Rule',
       subtitle: 'Systematic 30/35/5/11.25/7.5/11.25 capital division formula',
-      overviewHeading: 'Why the 6-Fund Rule Works',
-      overviewText: 'Traditional budgeting fails because people spend first and save whatever remains. The 6-Fund Formula reverses this: whenever income arrives, it is immediately partitioned into 6 dedicated purpose-driven accounts, guaranteeing that living expenses, safety reserves, and investments grow simultaneously.',
+      overviewHeading: 'Why the 7-Fund Rule Works',
+      overviewText: 'Traditional budgeting fails because people spend first and save whatever remains. The 7-Fund Formula reverses this: whenever income arrives, it is immediately partitioned into 6 dedicated purpose-driven accounts, guaranteeing that living expenses, safety reserves, and investments grow simultaneously.',
       cardsHeading: 'The 6 Dedicated Fund Pots',
       cards: [
         {
@@ -197,7 +197,7 @@ const MANUAL_EN: UserManualTranslation = {
           desc: 'Long-term wealth generation: mutual funds, equities, real estate, gold, and retirement.'
         }
       ],
-      proTip: 'You can adjust these percentages in Settings > 6-Fund Rules anytime to match your life stage.'
+      proTip: 'You can adjust these percentages in Settings > 7-Fund Rules anytime to match your life stage.'
     },
     {
       id: 'add_income',
@@ -432,8 +432,8 @@ const MANUAL_EN: UserManualTranslation = {
           a: 'Yes. Simply export a JSON backup from your primary device (Settings > Data & Backup > Export JSON) and import it into Daily Khata on your other device.'
         },
         {
-          q: 'Can I customize the 6-Fund percentage allocation?',
-          a: 'Yes. Go to Settings > 6-Fund Rules. You can customize the percentage assigned to each of the 6 pots as long as the total equals 100%.'
+          q: 'Can I customize the 7-Fund percentage allocation?',
+          a: 'Yes. Go to Settings > 7-Fund Rules. You can customize the percentage assigned to each of the 6 pots as long as the total equals 100%.'
         },
         {
           q: 'Does this app require an active internet connection?',
@@ -474,7 +474,7 @@ const MANUAL_EN: UserManualTranslation = {
 // Hindi Translation Bundle
 const MANUAL_HI: UserManualTranslation = {
   title: 'उपयोग निर्देशिका एवं संपूर्ण गाइड',
-  subtitle: 'वित्तीय अनुशासन, 6-फंड फॉर्मूला व शून्य-टेलीमेट्री ऑफलाइन धन प्रबंधन की आधिकारिक मार्गदर्शिका।',
+  subtitle: 'वित्तीय अनुशासन, 7-फंड फॉर्मूला व शून्य-टेलीमेट्री ऑफलाइन धन प्रबंधन की आधिकारिक मार्गदर्शिका।',
   searchPlaceholder: 'यूजर गाइड में खोजें (उदा. 6 फंड, ऐप लॉक, बैकअप, लक्ष्य, रिपोर्ट्स)...',
   officialGuide: 'आधिकारिक उपयोगकर्ता मार्गदर्शिका',
   poweredBy: 'संचालित',
@@ -499,7 +499,7 @@ const MANUAL_HI: UserManualTranslation = {
           desc: 'डेटा केवल आपके डिवाइस में सुरक्षित रहता है। कोई सर्वर ट्रैकिंग या बाहरी टेलीमेट्री नहीं।'
         },
         {
-          title: 'स्वचालित 6-फंड विभाजन',
+          title: 'स्वचालित 7-फंड विभाजन',
           desc: '6 समर्पित फंड पॉट्स में गणितीय पूंजी विभाजन फिजूलखर्ची पर पूर्ण विराम लगाता है।'
         },
         {
@@ -583,10 +583,10 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'six_funds',
-      title: '4. 6-फंड फॉर्मूला एलोकेशन नियम',
+      title: '4. 7-फंड फॉर्मूला एलोकेशन नियम',
       subtitle: '30/35/5/11.25/7.5/11.25 स्वचालित पूंजी विभाजन फॉर्मूला',
-      overviewHeading: '6-फंड नियम क्यों सफल है',
-      overviewText: 'पारंपरिक बजटिंग इसलिए असफल हो जाती है क्योंकि लोग पहले खर्च करते हैं और जो बचता है उसे बचाने का प्रयास करते हैं। 6-फंड फॉर्मूला इसे उलट देता है: आमदनी मिलते ही वह तुरंत 6 निश्चित खातों में बँट जाती है, जिससे जीवन-यापन, सुरक्षा और निवेश साथ-साथ बढ़ते हैं।',
+      overviewHeading: '7-फंड नियम क्यों सफल है',
+      overviewText: 'पारंपरिक बजटिंग इसलिए असफल हो जाती है क्योंकि लोग पहले खर्च करते हैं और जो बचता है उसे बचाने का प्रयास करते हैं। 7-फंड फॉर्मूला इसे उलट देता है: आमदनी मिलते ही वह तुरंत 6 निश्चित खातों में बँट जाती है, जिससे जीवन-यापन, सुरक्षा और निवेश साथ-साथ बढ़ते हैं।',
       cardsHeading: '6 समर्पित फंड पॉट्स का विवरण',
       cards: [
         {
@@ -620,7 +620,7 @@ const MANUAL_HI: UserManualTranslation = {
           desc: 'दीर्घकालिक संपत्ति निर्माण: म्यूचुअल फंड SIP, शेयर बाजार, सोना, रियल एस्टेट व रिटायरमेंट।'
         }
       ],
-      proTip: 'आप सेटिंग्स > 6-फंड नियम में जाकर इन प्रतिशतों को अपनी जीवन स्थिति के अनुसार कभी भी बदल सकते हैं।'
+      proTip: 'आप सेटिंग्स > 7-फंड नियम में जाकर इन प्रतिशतों को अपनी जीवन स्थिति के अनुसार कभी भी बदल सकते हैं।'
     },
     {
       id: 'add_income',
@@ -642,7 +642,7 @@ const MANUAL_HI: UserManualTranslation = {
         },
         {
           step: 'चरण 3',
-          title: '6-फंड विभाजन प्रीव्यू देखें',
+          title: '7-फंड विभाजन प्रीव्यू देखें',
           desc: 'स्क्रीन पर तुरंत देखें कि आपकी कमाई में से किस फंड पॉट में कितने रुपये जमा हो रहे हैं।'
         }
       ],
@@ -741,8 +741,8 @@ const MANUAL_HI: UserManualTranslation = {
           desc: 'कुल आय, कुल खर्च और शुद्ध बचत की आपस में सीधी तुलना।'
         },
         {
-          title: '6-फंड आवंटन चार्ट',
-          desc: 'जांचें कि आपका वास्तविक खर्च आपके 6-फंड गणितीय नियमों के अनुसार चल रहा है या नहीं।'
+          title: '7-फंड आवंटन चार्ट',
+          desc: 'जांचें कि आपका वास्तविक खर्च आपके 7-फंड गणितीय नियमों के अनुसार चल रहा है या नहीं।'
         },
         {
           title: 'प्रिंट-रेडी PDF स्टेटमेंट',
@@ -758,9 +758,9 @@ const MANUAL_HI: UserManualTranslation = {
     {
       id: 'settings',
       title: '10. कस्टम सेटिंग्स व रूल्स इंजन',
-      subtitle: 'थीम कस्टमाइज़ेशन, कस्टम श्रेणियां व 6-फंड प्रतिशत अनुकूलक',
+      subtitle: 'थीम कस्टमाइज़ेशन, कस्टम श्रेणियां व 7-फंड प्रतिशत अनुकूलक',
       overviewHeading: 'अपनी ज़रूरतों के अनुसार खाता ढालें',
-      overviewText: 'रंग थीम बदलें, 14 अंतरराष्ट्रीय भाषाओं में स्विच करें, अपनी कस्टम श्रेणियां व आय स्रोत जोड़ें, 6-फंड प्रतिशत नियम को अनुकूलित करें और बैकअप प्रबंधित करें।',
+      overviewText: 'रंग थीम बदलें, 14 अंतरराष्ट्रीय भाषाओं में स्विच करें, अपनी कस्टम श्रेणियां व आय स्रोत जोड़ें, 7-फंड प्रतिशत नियम को अनुकूलित करें और बैकअप प्रबंधित करें।',
       featuresHeading: 'कस्टमाइज़ेशन विकल्प',
       features: [
         {
@@ -780,7 +780,7 @@ const MANUAL_HI: UserManualTranslation = {
           desc: 'अपनी ज़रूरत के अनुसार 6 फंडों के प्रतिशत अनुपात को कभी भी कस्टमाइज़ करें।'
         }
       ],
-      proTip: 'जब भी 6-फंड प्रतिशत बदलें, सुनिश्चित करें कि सभी 6 फंडों का कुल योग ठीक 100% हो।'
+      proTip: 'जब भी 7-फंड प्रतिशत बदलें, सुनिश्चित करें कि सभी 6 फंडों का कुल योग ठीक 100% हो।'
     },
     {
       id: 'backup',
@@ -855,8 +855,8 @@ const MANUAL_HI: UserManualTranslation = {
           a: 'हाँ। बस अपने पहले फ़ोन से JSON बैकअप डाउनलोड करें (Settings > डेटा बैकअप > Export JSON) और दूसरे फ़ोन में Daily Khata खोलकर उसे रिस्टोर (Import JSON) कर लें।'
         },
         {
-          q: 'क्या मैं 6-फंड के प्रतिशत को बदल सकता हूँ?',
-          a: 'हाँ। Settings > 6-फंड नियम में जाएं। आप अपनी इच्छा अनुसार 6 फंडों के प्रतिशत बदल सकते हैं, बस सभी का कुल योग 100% होना चाहिए।'
+          q: 'क्या मैं 7-फंड के प्रतिशत को बदल सकता हूँ?',
+          a: 'हाँ। Settings > 7-फंड नियम में जाएं। आप अपनी इच्छा अनुसार 6 फंडों के प्रतिशत बदल सकते हैं, बस सभी का कुल योग 100% होना चाहिए।'
         },
         {
           q: 'क्या इस ऐप को चलाने के लिए इंटरनेट कनेक्शन ज़रूरी है?',

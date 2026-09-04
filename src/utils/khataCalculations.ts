@@ -3,8 +3,8 @@ import { FUND_ORDER } from '../data/defaults';
 import confetti from 'canvas-confetti';
 import { formatCurrencyByLang } from './currencyConfig';
 
-export const formatCurrency = (n: number, mask: boolean = false): string => {
-  return formatCurrencyByLang(n, undefined, mask);
+export const formatCurrency = (n: number, mask: boolean = false, compact: boolean = true): string => {
+  return formatCurrencyByLang(n, undefined, mask, compact);
 };
 
 export const formatPercent = (n: number): string => {

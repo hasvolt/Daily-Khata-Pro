@@ -75,7 +75,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
 
   // Suggestion Form State
   const [suggestionTitle, setSuggestionTitle] = useState('');
-  const [suggestionCategory, setSuggestionCategory] = useState<string>('Ledger & 6-Funds');
+  const [suggestionCategory, setSuggestionCategory] = useState<string>('Ledger & 7-Funds');
   const [suggestionDescription, setSuggestionDescription] = useState('');
 
   // FAQ Accordion State
@@ -148,7 +148,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
       qEn: 'Where is my financial data stored? Is it safe?',
       qHi: 'मेरा वित्तीय डेटा कहाँ सुरक्षित रहता है? क्या यह सुरक्षित है?',
       aEn: 'Daily Khata Pro operates on a 100% Offline-First architecture. All your ledger transactions, 6-fund balances, savings goals, and notes are encrypted and stored in your device\'s local storage (`localStorage`). No data is sent to external servers.',
-      aHi: 'Daily Khata Pro शत-प्रतिशत ऑफलाइन-फर्स्ट आर्किटेक्चर पर काम करता है। आपका सारा वित्तीय रिकॉर्ड, 6-फंड हिसाब, गोल्स और नोट्स केवल आपके डिवाइस के लोकल स्टोरेज में सुरक्षित रहते हैं। कोई डेटा किसी बाहरी सर्वर पर नहीं भेजा जाता।'
+      aHi: 'Daily Khata Pro शत-प्रतिशत ऑफलाइन-फर्स्ट आर्किटेक्चर पर काम करता है। आपका सारा वित्तीय रिकॉर्ड, 7-फंड हिसाब, गोल्स और नोट्स केवल आपके डिवाइस के लोकल स्टोरेज में सुरक्षित रहते हैं। कोई डेटा किसी बाहरी सर्वर पर नहीं भेजा जाता।'
     },
     {
       id: 'faq-2',
@@ -159,8 +159,8 @@ export const SupportPage: React.FC<SupportPageProps> = ({
     },
     {
       id: 'faq-3',
-      qEn: 'How does the 6-Fund Rule work?',
-      qHi: '6-फंड (6-Jar) वित्तीय नियम कैसे काम करता है?',
+      qEn: 'How does the 7-Fund Rule work?',
+      qHi: '7-फंड (6-Jar) वित्तीय नियम कैसे काम करता है?',
       aEn: 'Whenever you log income, it is automatically partitioned into 6 dedicated funds: Necessities (50%), Long-Term Savings (10%), Financial Freedom/Investments (10%), Education (10%), Play & Joy (10%), and Giving/Charity (10%). You can customize these percentages anytime in Settings.',
       aHi: 'जब भी आप कोई आय दर्ज करते हैं, वह स्वचालित रूप से 6 फंडों में बंट जाती है: आवश्यकताएं (50%), बचत (10%), वित्तीय स्वतंत्रता (10%), शिक्षा (10%), आनंद (10%), और दान (10%)। आप सेटिंग्स में जाकर इन प्रतिशत को कभी भी बदल सकते हैं।'
     },
@@ -325,7 +325,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                     {isHindi ? 'विस्तृत यूजर मैनुअल गाइड' : 'Interactive User Manual'}
                   </div>
                   <div className="text-[12px] text-[#94A3B8] mt-0.5">
-                    {isHindi ? '6-फंड सिस्टम, बैकअप, और सभी फीचर्स की पूरी गाइड' : 'Complete step-by-step documentation & tutorials'}
+                    {isHindi ? '7-फंड सिस्टम, बैकअप, और सभी फीचर्स की पूरी गाइड' : 'Complete step-by-step documentation & tutorials'}
                   </div>
                 </div>
               </button>
@@ -609,7 +609,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                 onChange={(e) => setSuggestionCategory(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[13px] text-[#F8FAFC] focus:outline-none focus:border-[#F59E0B]"
               >
-                <option value="Ledger & 6-Funds">खाता एवं 6-फंड (Ledger &amp; 6-Funds)</option>
+                <option value="Ledger & 7-Funds">खाता एवं 7-फंड (Ledger &amp; 7-Funds)</option>
                 <option value="Calculators">कैलकुलेटर एवं टूल्स (Calculators &amp; Suite)</option>
                 <option value="Reports & Print">रिपोर्ट्स एवं A4 प्रिंट (Reports &amp; PDF)</option>
                 <option value="Security & Backup">सुरक्षा एवं बैकअप (Security &amp; PIN)</option>

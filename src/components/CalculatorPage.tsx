@@ -121,7 +121,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const [memoryVal, setMemoryVal] = useState<number>(0);
   const [calcScale, setCalcScale] = useState<'normal' | 'large' | 'jumbo'>('large');
 
-  // --- 2. 6-Fund Split State ---
+  // --- 2. 7-Fund Split State ---
   const [fundAmountInput, setFundAmountInput] = useState<string>('50000');
   const [fundCustomPct, setFundCustomPct] = useState<Record<FundType, number>>(percentages);
   const [showFundSliders, setShowFundSliders] = useState<boolean>(false);
@@ -275,7 +275,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeTab, handleKeypadPress]);
 
-  // --- Calculations for 6-Fund Split ---
+  // --- Calculations for 7-Fund Split ---
   const fundInflowNum = parseFloat(fundAmountInput) || 0;
   const totalFundPct = (Object.values(fundCustomPct) as number[]).reduce((sum, v) => sum + (Number(v) || 0), 0);
   const isFundBalanced = Math.abs(totalFundPct - 100) < 0.01;
@@ -445,7 +445,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   // Clean, focused tool tabs
   const navTabs: { id: CalculatorViewType; label: string; hindi: string; icon: any }[] = [
     { id: 'standard', label: 'Calculator', hindi: 'साधारण कैलकुलेटर', icon: Calculator },
-    { id: 'funds', label: '6-Fund Split', hindi: '6-फंड विभाजन', icon: Layers },
+    { id: 'funds', label: '7-Fund Split', hindi: '7-फंड विभाजन', icon: Layers },
     { id: 'sip', label: 'SIP & Wealth', hindi: 'SIP वेल्थ', icon: TrendingUp },
     { id: 'emi', label: 'Loan EMI', hindi: 'लोन EMI', icon: Landmark },
     { id: 'gst', label: 'GST Tax', hindi: 'GST टैक्स', icon: Percent },
@@ -477,7 +477,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
     if (activeTab === 'funds') {
       return {
-        title: isHindi ? '6-फंड धन आवंटन स्लिप' : '6-Fund Money Allocation Slip',
+        title: isHindi ? '7-फंड धन आवंटन स्लिप' : '7-Fund Money Allocation Slip',
         type: 'Income Allocation Rule',
         mainResult: formatCurrency(fundInflowNum),
         resultLabel: isHindi ? 'कुल आय / इनफ्लो' : 'Total Inflow Amount',
@@ -490,7 +490,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             isHighlight: f === 'savings' || f === 'investment'
           }))
         ],
-        notes: isHindi ? '6-फंड नियम के अनुसार विभाजित' : 'Divided as per 6-Fund Wealth Management Rule'
+        notes: isHindi ? '7-फंड नियम के अनुसार विभाजित' : 'Divided as per 7-Fund Wealth Management Rule'
       };
     }
 
@@ -1017,7 +1017,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
               <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)]">
-                {isHindi ? '6-फंड आय विभाजन (कस्टम राशि)' : '6-Fund Income Split Allocation'}
+                {isHindi ? '7-फंड आय विभाजन (कस्टम राशि)' : '7-Fund Income Split Allocation'}
               </h2>
               <p className="text-[11px] text-[#94A3B8]">
                 {isHindi ? 'किसी भी राशि को 6 आवश्यक फंड्स में सीधे बांटें (असीमित इनपुट)' : 'Divide any custom income across 6 funds with zero amount restrictions.'}

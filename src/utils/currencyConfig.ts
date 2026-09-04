@@ -141,7 +141,8 @@ export function getCurrentLanguage(): AppLanguage {
 export function formatCurrencyByLang(
   amount: number,
   lang: AppLanguage = currentLang,
-  mask: boolean = false
+  mask: boolean = false,
+  compact: boolean = true
 ): string {
   const cfg = getCurrencyConfig(lang);
   if (mask) {
@@ -151,7 +152,7 @@ export function formatCurrencyByLang(
   const abs = Math.abs(Math.round(amount));
   let formattedNumber = '';
 
-  if (abs >= 10000) {
+  if (compact && abs >= 10000) {
     const isIndian = cfg.code === 'INR' || cfg.code === 'BDT' || cfg.code === 'PKR';
     const compactLocale = isIndian ? 'en-IN' : 'en-US';
     try {
