@@ -26,7 +26,8 @@ import {
   History,
   Download,
   Sliders,
-  Layers
+  Layers,
+  X
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -71,6 +72,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   // Homepage 6-category limit and customization state
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+  const [isPromoHidden, setIsPromoHidden] = useState(() => localStorage.getItem("hide_promo_home") === "true");
   const [isViewMoreExpanded, setIsViewMoreExpanded] = useState(false);
 
   // Exactly 6 primary funds displayed open on the homepage
@@ -145,7 +147,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 2 & 3. DAILY & MONTHLY INCOME & EXPENSE */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 scale-[0.97] origin-top">
         {/* Daily Stats */}
-        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3">
+        <div className="bg-gradient-to-br from-[var(--theme-card,#040E24)] to-[var(--theme-surface,#020A1A)] border border-[var(--theme-primary,#38BDF8)]/20 hover:border-[#38BDF8]/40 rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 transform scale-[0.97] sm:scale-100 origin-top">
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-2 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[var(--theme-primary,#38BDF8)] shadow-xs shrink-0 transition-colors">
@@ -200,7 +202,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         {/* Monthly Stats */}
-        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 min-w-0 overflow-hidden">
+        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 min-w-0 overflow-hidden transform scale-[0.97] sm:scale-100 origin-top">
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-2 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[var(--theme-primary,#38BDF8)] shadow-xs shrink-0 transition-colors">
@@ -457,10 +459,25 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
         </div>
 
+        
         {/* HasVolt Sponsored Ad Card */}
-        <div className="h-full">
-          <HasVoltPromoBanner variant="card" language={language} />
-        </div>
+        {!isPromoHidden && (
+          <div className="relative h-full animate-in fade-in zoom-in-95 duration-300">
+            <button
+              onClick={() => {
+                setIsPromoHidden(true);
+                localStorage.setItem("hide_promo_home", "true");
+              }}
+              className="absolute -top-1 -right-1 z-10 p-1.5 bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-white rounded-full border border-[var(--theme-border,#213E61)] shadow-md transition-colors"
+              title="Hide Banner"
+              aria-label="Hide Banner"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+            <HasVoltPromoBanner variant="card" language={language} />
+          </div>
+        )}
+
       </div>
 
       {/* Homepage Fund Selector Modal */}

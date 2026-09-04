@@ -1549,6 +1549,28 @@ export default function App() {
 
   const fundTotals = calculateFundTotals(entries, funds.map((f) => f.id));
 
+
+  const isLockedState = isAppLocked && securityLock.isEnabled && securityLock.pin;
+
+  if (isLockedState) {
+    return (
+      <div
+        data-theme={theme}
+        data-view-mode={viewMode}
+        className="min-h-screen w-full h-full fixed inset-0 overflow-hidden bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex flex-col font-sans"
+        style={{ touchAction: 'none' }}
+      >
+        <LockScreen
+          securityConfig={securityLock}
+          onUnlockSuccess={handleUnlockSuccess}
+          onUpdateSecurityConfig={handleSaveSecurityConfig}
+          onResetAllData={handleEmergencyReset}
+          language={language}
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       data-theme={theme}
@@ -2363,17 +2385,6 @@ export default function App() {
         onInstantLock={handleInstantLock}
         language={language}
       />
-
-      {/* Global App Passcode Vault Lock Screen */}
-      {isAppLocked && securityLock.isEnabled && securityLock.pin && (
-        <LockScreen
-          securityConfig={securityLock}
-          onUnlockSuccess={handleUnlockSuccess}
-          onUpdateSecurityConfig={handleSaveSecurityConfig}
-          onResetAllData={handleEmergencyReset}
-          language={language}
-        />
-      )}
     </div>
   );
 }

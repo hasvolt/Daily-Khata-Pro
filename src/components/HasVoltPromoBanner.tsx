@@ -105,7 +105,7 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
 
   return (
     <>
-      <div style={{ zoom: 0.6 }} className={`hasvolt-promo-wrapper ${className} w-full`}>
+      <div className={`hasvolt-promo-wrapper ${className} w-full`}>
       {variant === 'card' ? (
         /* HasVolt Professional Services Card - 100% Theme Adaptive (Light & Dark), Solid Border, Ultra-Compact */
         <div

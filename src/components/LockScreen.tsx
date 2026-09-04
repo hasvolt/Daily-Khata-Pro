@@ -46,6 +46,21 @@ export const LockScreen: React.FC<LockScreenProps> = ({
   const [confirmNewPinInput, setConfirmNewPinInput] = useState<string>('');
   const [isEmergencyResetConfirmOpen, setIsEmergencyResetConfirmOpen] = useState<boolean>(false);
 
+
+  // Lock body scroll completely while lock screen is active
+  useEffect(() => {
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+    
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      document.documentElement.style.overflow = originalHtmlOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+    };
+  }, []);
+
   const isHindi = language === 'hi';
   const expectedPin = (securityConfig.pin || '').trim();
   const targetPinLength = expectedPin.length > 0 ? expectedPin.length : 4;
