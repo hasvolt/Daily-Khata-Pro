@@ -516,7 +516,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
         {/* Footer */}
         <div className="p-3.5 sm:p-4 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-between">
           <span className="text-[11px] text-[#64748B]">
-            {isHindi ? 'पारदर्शी • निःशुल्क • ओपन-सोर्स' : 'Transparent • Free • Open Source'}
+            {isHindi ? 'पारदर्शी • सुरक्षित • ओपन-सोर्स' : 'Transparent • Secure • Open Source'}
           </span>
           <button
             onClick={onClose}

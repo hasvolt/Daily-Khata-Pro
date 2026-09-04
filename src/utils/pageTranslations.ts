@@ -174,7 +174,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       creatorLabel: 'Creator',
       missionTitle: 'Our Mission & Purpose',
       missionP1: 'Daily Khata Pro was created with a single uncompromising mission: to give individuals, freelancers, shopkeepers, and families an honest, lightning-fast financial record that respects their complete privacy without requiring cloud logins, phone number tracking, or hidden subscriptions.',
-      missionP2: 'Most modern finance apps upload your transactions to remote servers, mine your purchasing behavior for marketing, or lock essential export features behind paywalls. Daily Khata Pro flips this model entirely — your data never leaves your browser or phone, all calculations happen instantly on your device, and every single feature is permanently free under the MIT Open Source license.',
+      missionP2: 'Most modern finance apps upload your transactions to remote servers, mine your purchasing behavior for marketing, or lock essential export features behind paywalls. Daily Khata Pro flips this model entirely — your data never leaves your browser or phone, all calculations happen instantly on your device, and every single feature is permanently available under the MIT Open Source license.',
       capabilitiesTitle: 'Core Capabilities & Architecture',
       pillars: {
         fundsTitle: 'Automated Smart Fund Allocation Rule',
@@ -224,7 +224,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Standard MIT Open Source License Terms • Official Domain: rozfiber.com',
       backToHome: 'Back to Home',
       openSourceTitle: 'MIT Open Source License Agreement',
-      openSourceDesc: 'Daily Khata Pro is provided free and open-source under the terms of the MIT License.',
+      openSourceDesc: 'Daily Khata Pro is provided as open-source under the terms of the MIT License.',
       termsList: {
         ownershipTitle: '1. Absolute Data Ownership',
         ownershipDesc: 'You retain 100% exclusive ownership and responsibility over all financial records, personal notes, and data entered.',
@@ -286,7 +286,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       bioDesc: 'MD Zafeer Hasan (YAZDAAN) is an independent software developer, security researcher, and open-source creator focused on building privacy-first digital tools and public resources for humanity.',
       skillsTitle: 'Professional Roles & Domains',
       visionTitle: 'The Vision Behind Daily Khata Pro',
-      visionDesc: 'To provide every individual, freelancer, and small business owner with a reliable, private financial engine that is 100% free, runs offline, and never monetizes personal user data.',
+      visionDesc: 'To provide every individual, freelancer, and small business owner with a reliable, private financial engine that runs offline, and never monetizes personal user data.',
       connectTitle: 'Connect & Reach Out',
       connectDesc: 'Reach out for feedback, technical collaboration, or open-source contributions via official channels.'
     },
@@ -562,7 +562,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       creatorLabel: 'Creator & Developer',
       missionTitle: 'Hamara Mission aur Vision',
       missionP1: 'Daily Khata Pro ko ek simple mission ke saath banaya gaya hai: har individual, freelancer, shopkeeper aur family ko ek honest, super-fast aur private record dena jisme bina login ya server tracking ke poora financial control aapke haath me ho.',
-      missionP2: 'Baaki apps aapka data server par upload karte hain. Daily Khata Pro me aapka data kabhi bhi aapke phone ya laptop se bahar nahi jata, aur ye MIT Open Source license ke tehat lifetime 100% free hai.',
+      missionP2: 'Baaki apps aapka data server par upload karte hain. Daily Khata Pro me aapka data kabhi bhi aapke phone ya laptop se bahar nahi jata, aur ye MIT Open Source license ke tehat lifetime uplabdh hai.',
       capabilitiesTitle: 'Core Capabilities aur Features',
       pillars: {
         fundsTitle: 'Automatic Smart Fund Allocation Rule',
@@ -612,7 +612,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       subtitle: 'Standard MIT Open Source License • Official Domain: rozfiber.com',
       backToHome: 'Home Par Wapas Jayein',
       openSourceTitle: 'MIT Open Source License Agreement',
-      openSourceDesc: 'Daily Khata Pro MIT License ke tehat bilkul free aur open-source available hai.',
+      openSourceDesc: 'Daily Khata Pro MIT License ke tehat bilkul open-source available hai.',
       termsList: {
         ownershipTitle: '1. 100% Data Ownership',
         ownershipDesc: 'Aapke entries aur khata records par poori tarah se aapka hi haq hai.',
@@ -674,7 +674,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       bioDesc: 'MD Zafeer Hasan (YAZDAAN) ek independent software developer, security researcher aur open-source creator hain jo clean, secure aur public utility tools banate hain.',
       skillsTitle: 'Professional Roles & Domains',
       visionTitle: 'Daily Khata Pro ka Vision',
-      visionDesc: 'Har user, freelancer aur small business ko ek aisa private, free aur lifetime offline financial engine dena jo unka data kabhi na beche.',
+      visionDesc: 'Har user, freelancer aur small business ko ek aisa private, aur lifetime offline financial engine dena jo unka data kabhi na beche.',
       connectTitle: 'Connect & Follow',
       connectDesc: 'Feedback, collaborations ya open-source contribution ke liye connect karein.'
     },

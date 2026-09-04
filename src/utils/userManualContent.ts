@@ -459,7 +459,7 @@ const MANUAL_EN: UserManualTranslation = {
         },
         {
           title: 'Open Source License',
-          desc: 'MIT Permissive License — Free for the world to use and inspect.'
+          desc: 'MIT Permissive License — Open for the world to use and inspect.'
         },
         {
           title: 'Direct Creator Support',

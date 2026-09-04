@@ -105,12 +105,13 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
 
   return (
     <>
+      <div style={{ zoom: 0.6 }} className={`hasvolt-promo-wrapper ${className} w-full`}>
       {variant === 'card' ? (
-        /* HasVolt Sponsored Ad Card - 100% Theme Adaptive (Light & Dark), Solid Border, Ultra-Compact */
+        /* HasVolt Professional Services Card - 100% Theme Adaptive (Light & Dark), Solid Border, Ultra-Compact */
         <div
           role="region"
-          aria-label="Sponsored Ad: HasVolt Professional Electrical Services"
-          className={`w-full bg-[var(--theme-card,#FFFFFF)] border border-[var(--theme-border,#E2E8F0)] hover:border-[var(--theme-primary,#0284C7)]/60 rounded-2xl p-3 sm:p-3.5 shadow-sm hover:shadow-md flex flex-col justify-between space-y-2 text-left transition-all duration-300 ${className}`}
+          aria-label="HasVolt Professional Electrical Services"
+          className={`w-full bg-[var(--theme-card,#FFFFFF)] border border-[var(--theme-border,#E2E8F0)] hover:border-[var(--theme-primary,#0284C7)]/60 rounded-2xl p-3 sm:p-3.5 shadow-sm hover:shadow-md flex flex-col justify-between space-y-2 text-left transition-all duration-300`}
         >
           {/* Top Bar: Brand, Ad Badge, Tagline & View Flyer */}
           <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-border,#E2E8F0)]/70 pb-2">
@@ -143,9 +144,6 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="text-[13px] sm:text-[14px] font-black text-[var(--theme-text,#0F172A)] tracking-tight">
                     {brand}
-                  </span>
-                  <span className="font-mono font-bold text-[8px] uppercase px-1.5 py-0.2 rounded bg-[var(--theme-primary-dim,rgba(2,132,199,0.1))] text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary-border,rgba(2,132,199,0.25))]">
-                    AD &bull; SPONSORED
                   </span>
                 </div>
                 <p className="text-[10.5px] sm:text-[11px] font-bold text-[var(--theme-primary,#0284C7)] truncate">
@@ -267,7 +265,7 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="font-mono font-bold text-[8px] uppercase px-1.5 py-0.2 rounded bg-[var(--theme-primary-dim,rgba(2,132,199,0.1))] text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary-border,rgba(2,132,199,0.25))]">
-                  AD
+                  PARTNER
                 </span>
                 <span className="font-black text-[var(--theme-text,#0F172A)] text-[12.5px] sm:text-[13px]">
                   {brand}
@@ -351,7 +349,7 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-[8.5px] uppercase px-1.5 py-0.5 rounded bg-[var(--theme-primary-dim,rgba(2,132,199,0.1))] text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary-border,rgba(2,132,199,0.25))]">
-                      AD &bull; SPONSORED
+                      PARTNER
                     </span>
                     <h4 className="text-[15px] sm:text-[17px] font-black text-[var(--theme-text,#0F172A)]">
                       {brand}
@@ -459,6 +457,7 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
           </div>,
           document.body
         )}
+      </div>
     </>
   );
 };

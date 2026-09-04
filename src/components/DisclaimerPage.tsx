@@ -106,7 +106,7 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
             <h2>Free Version &amp; App Sponsorships</h2>
           </div>
           <p className="leading-relaxed">
-            Please be informed that in the <strong>Free version</strong> of Daily Khata Pro, you may see occasional advertisements, sponsored links, or developer watermarks on generated PDFs and exports. This helps us maintain server costs and provide updates for free. You may upgrade to a premium plan (if available) to remove watermarks and ads.
+            Please be informed that you may occasionally see promotional links or developer credits within the application. These help support continuous development.
           </p>
         </div>
 
