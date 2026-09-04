@@ -1919,7 +1919,7 @@ export default function App() {
           {/* Sponsor / HasVolt Promo Banner (Anchored inside Footer on other pages) */}
           {currentTab !== 'home' && (
             <section aria-label="Sponsored Partner" className="w-full">
-              <HasVoltPromoBanner variant="bar" />
+              <HasVoltPromoBanner variant="bar" language={language} />
             </section>
           )}
 
@@ -1950,7 +1950,7 @@ export default function App() {
                 </div>
                 <span className="text-[#94A3B8]">By</span>
                 <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan (YAZDAAN)</span>
-                <span className="text-[9.5px] bg-[#10B981]/20 text-[#10B981] px-1.5 py-0.2 rounded font-bold">Developer</span>
+                <span className="text-[9.5px] bg-[#38BDF8]/20 text-[#38BDF8] px-1.5 py-0.2 rounded font-bold">Developer</span>
               </button>
 
               {/* Compact Verified Social & Email Links with Main Menu trigger */}
@@ -1972,7 +1972,7 @@ export default function App() {
                   href="https://github.com/hasvolt/Daily-Khata-Pro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 sm:p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#94A3B8] hover:text-[#10B981] transition-colors"
+                  className="p-1.5 sm:p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8] text-[#94A3B8] hover:text-[#38BDF8] transition-colors"
                   title="GitHub Repository (hasvolt/Daily-Khata-Pro)"
                 >
                   <FolderGit2 className="w-4 h-4" />
@@ -2040,7 +2040,7 @@ export default function App() {
               <span>•</span>
               <button
                 onClick={() => setCurrentTab('safety')}
-                className={`text-[#10B981] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'safety' ? 'font-bold' : ''}`}
+                className={`text-[#38BDF8] hover:underline font-medium transition-colors cursor-pointer ${currentTab === 'safety' ? 'font-bold' : ''}`}
               >
                 Source Safety
               </button>

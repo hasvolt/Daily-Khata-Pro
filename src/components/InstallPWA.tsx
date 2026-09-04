@@ -70,7 +70,7 @@ export const InstallPWA: React.FC<InstallPWAProps> = ({
               <span className="text-[13px] font-bold text-[#F8FAFC] truncate">
                 {isHindi ? 'डेली खाता ऐप इंस्टॉल करें' : 'Install Daily Khata App'}
               </span>
-              <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30 shrink-0">
+              <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30 shrink-0">
                 100% Offline
               </span>
             </div>

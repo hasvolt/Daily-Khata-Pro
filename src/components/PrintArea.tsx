@@ -167,35 +167,36 @@ export const PrintArea: React.FC<PrintAreaProps> = ({ entries, targetMonth = new
         )}
       </div>
 
-      {/* Footer Statement */}
-      <div className="border-t border-slate-300 pt-3 flex justify-between items-center text-[10.5px] text-slate-500 relative z-10 mb-4">
+      {/* Document Verification & Footer */}
+      <div className="border-t border-slate-300 pt-3 flex justify-between items-center text-[10.5px] text-slate-500 relative z-10 mb-3">
         <div>
           <span>Daily Khata Pro · Verified Ledger Statement · </span>
-          <span className="font-bold text-sky-600">Website: www.hasvolt.com</span>
+          <span className="font-semibold text-slate-700">hasvolt.com</span>
         </div>
-        <span>Signature / Stamp: ___________________</span>
+        <span className="font-mono text-[10px]">Official Ledger Audit · Confidential</span>
       </div>
 
-      {/* Developer Footer Watermark (Final Page Bottom) */}
-      <div className="border-t border-slate-200 pt-3 mt-4 flex items-center justify-between text-xs text-slate-500 relative z-10 break-inside-avoid">
-        <div className="flex items-center gap-2.5">
+      {/* Developer Discreet Watermark Signature (Final Page Bottom) */}
+      <div className="border-t border-dashed border-slate-300 pt-2.5 mt-2 flex items-center justify-between text-[9.5px] text-slate-500 relative z-10 break-inside-avoid opacity-90">
+        <div className="flex items-center gap-2">
           <img
             src="/md-zafeer-hasan-yazdaan.jpg"
             alt="MD Zafeer Hasan (YAZDAAN)"
-            className="w-7 h-7 rounded-full object-cover border border-sky-600 shadow-xs"
+            className="w-5 h-5 rounded-full object-cover border border-slate-400 shadow-2xs opacity-85"
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'https://avatars.githubusercontent.com/mdzafeerhasan';
             }}
           />
-          <div className="flex flex-col text-left">
-            <span className="font-bold text-slate-900 text-[11px] leading-tight">MD Zafeer Hasan (YAZDAAN)</span>
-            <span className="text-[9.5px] text-sky-600 font-semibold leading-tight">Developer &amp; Creator · Daily Khata Pro</span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-slate-800 text-[10px]">MD Zafeer Hasan (YAZDAAN)</span>
+            <span className="text-slate-400">·</span>
+            <span className="text-[9px] text-slate-500">Developer &amp; Software Architect · Daily Khata Pro</span>
           </div>
         </div>
-        <div className="text-right text-[10px] text-slate-500">
-          <span>Verified Independent Developer</span>
-          <span className="mx-1.5 text-slate-400">•</span>
-          <span className="font-semibold text-slate-700">hasvolt.com</span>
+        <div className="text-right text-[9px] font-mono text-slate-400 flex items-center gap-1.5">
+          <span>Watermark Signature</span>
+          <span>·</span>
+          <span className="text-slate-600 font-semibold">HASVOLT</span>
         </div>
       </div>
     </div>

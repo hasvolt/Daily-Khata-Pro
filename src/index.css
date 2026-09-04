@@ -2,12 +2,12 @@
 
 @layer base {
   :root {
-    /* Default: Electric Navy & Emerald */
-    --theme-primary: #00D26A;
-    --theme-primary-hover: #00E676;
-    --theme-primary-dim: rgba(0, 210, 106, 0.16);
-    --theme-primary-border: rgba(0, 210, 106, 0.38);
-    --theme-glow: rgba(0, 210, 106, 0.25);
+    /* Default: Electric Navy & Sky Blue Theme */
+    --theme-primary: #38BDF8;
+    --theme-primary-hover: #0EA5E9;
+    --theme-primary-dim: rgba(56, 189, 248, 0.16);
+    --theme-primary-border: rgba(56, 189, 248, 0.38);
+    --theme-glow: rgba(56, 189, 248, 0.25);
     --theme-bg: #020816;
     --theme-surface: #020A1A;
     --theme-card: #040E24;
@@ -16,18 +16,18 @@
     --theme-text: #F8FAFC;
     --theme-text-muted: #8BA4D0;
     --theme-text-dim: #5572A1;
-    --theme-badge-text: #00D26A;
-    --theme-btn-bg: #00D26A;
-    --theme-btn-hover: #00E676;
-    --theme-btn-text: #040D17;
+    --theme-badge-text: #38BDF8;
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0EA5E9;
+    --theme-btn-text: #FFFFFF;
   }
 
   [data-theme="blue"] {
-    --theme-primary: #00D26A;
-    --theme-primary-hover: #00E676;
-    --theme-primary-dim: rgba(0, 210, 106, 0.16);
-    --theme-primary-border: rgba(0, 210, 106, 0.38);
-    --theme-glow: rgba(0, 210, 106, 0.25);
+    --theme-primary: #38BDF8;
+    --theme-primary-hover: #0EA5E9;
+    --theme-primary-dim: rgba(56, 189, 248, 0.16);
+    --theme-primary-border: rgba(56, 189, 248, 0.38);
+    --theme-glow: rgba(56, 189, 248, 0.25);
     --theme-bg: #020816;
     --theme-surface: #020A1A;
     --theme-card: #040E24;
@@ -36,10 +36,10 @@
     --theme-text: #F8FAFC;
     --theme-text-muted: #8BA4D0;
     --theme-text-dim: #5572A1;
-    --theme-badge-text: #00D26A;
-    --theme-btn-bg: #00D26A;
-    --theme-btn-hover: #00E676;
-    --theme-btn-text: #040D17;
+    --theme-badge-text: #38BDF8;
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0EA5E9;
+    --theme-btn-text: #FFFFFF;
   }
 
   [data-theme="yellow"] {
@@ -749,4 +749,38 @@ main {
     height: 90px;
     min-height: 90px;
   }
+}
+
+/* =========================================================================
+   SENSITIVE DATA PROTECTION (Amounts, Dates, Notes, PINs, Internal System)
+   Prevents text-selection, long-press copy menu, and touch callouts
+   ========================================================================= */
+body,
+#root,
+#app-root,
+.select-none,
+.secure-sensitive,
+.secure-sensitive *,
+.sensitive-amount,
+.sensitive-date,
+.sensitive-note,
+.sensitive-pin,
+[data-sensitive="true"],
+[data-sensitive="true"] * {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* Ensure user input fields and textareas remain fully editable */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
 }

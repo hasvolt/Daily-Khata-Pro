@@ -337,13 +337,13 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                   else if (onNavigateTab) onNavigateTab('safety');
                   else navigate('/safety');
                 }}
-                className="p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981]/50 transition-all text-left flex items-start gap-3.5 cursor-pointer group shadow-sm"
+                className="p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all text-left flex items-start gap-3.5 cursor-pointer group shadow-sm"
               >
-                <div className="p-2.5 rounded-xl bg-[#10B981]/15 text-[#10B981] shrink-0">
+                <div className="p-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] shrink-0">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-[13.5px] font-bold text-[#F8FAFC] group-hover:text-[#10B981] transition-colors">
+                  <div className="text-[13.5px] font-bold text-[#F8FAFC] group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
                     {isHindi ? 'सुरक्षा एवं प्राइवेसी ऑडिट' : 'Safety & Security Audit'}
                   </div>
                   <div className="text-[12px] text-[#94A3B8] mt-0.5">
@@ -379,9 +379,9 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                   href="https://github.com/hasvolt/Daily-Khata-Pro"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[12.5px] text-[#CBD5E1] hover:text-[#10B981] flex items-center gap-2 transition-colors font-semibold"
+                  className="px-4 py-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[12.5px] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] flex items-center gap-2 transition-colors font-semibold"
                 >
-                  <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+                  <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <span>GitHub Repo</span>
                   <ExternalLink className="w-3.5 h-3.5 text-[#64748B]" />
                 </a>
@@ -551,7 +551,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                 rel="noopener noreferrer"
                 className="px-4 py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#F8FAFC]/40 text-[#CBD5E1] hover:text-[#F8FAFC] font-semibold text-[13px] flex items-center gap-2 transition-colors cursor-pointer"
               >
-                <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+                <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                 <span>GitHub Issue</span>
                 <ExternalLink className="w-3.5 h-3.5 text-[#64748B]" />
               </a>
@@ -561,7 +561,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                 onClick={() => handleCopyDetails('bug')}
                 className="px-4 py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#94A3B8] hover:text-[#F8FAFC] font-medium text-[13px] flex items-center gap-2 transition-colors cursor-pointer ml-auto"
               >
-                {copied ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" /> : <Copy className="w-4 h-4" />}
                 <span>{copied ? (isHindi ? 'कॉपी हो गया' : 'Copied') : (isHindi ? 'विवरण कॉपी करें' : 'Copy Details')}</span>
               </button>
             </div>
@@ -652,7 +652,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                 onClick={() => handleCopyDetails('suggestion')}
                 className="px-4 py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#94A3B8] hover:text-[#F8FAFC] font-medium text-[13px] flex items-center gap-2 transition-colors cursor-pointer ml-auto"
               >
-                {copied ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" /> : <Copy className="w-4 h-4" />}
                 <span>{copied ? (isHindi ? 'कॉपी हो गया' : 'Copied') : (isHindi ? 'विवरण कॉपी करें' : 'Copy Details')}</span>
               </button>
             </div>

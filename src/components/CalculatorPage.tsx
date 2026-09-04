@@ -639,11 +639,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <button
             type="button"
             onClick={handleDownloadCurrent}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[12px] font-bold text-[#CBD5E1] hover:text-[#10B981] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[12px] font-bold text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
             title="Download Calculation PDF"
             id="calc-download-pdf-btn"
           >
-            <FileDown className="w-3.5 h-3.5 text-[#10B981]" />
+            <FileDown className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
             <span className="hidden sm:inline">PDF</span>
           </button>
 
@@ -720,11 +720,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               <button
                 type="button"
                 onClick={handleDownloadCurrent}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12px] font-mono text-[#CBD5E1] hover:text-[#10B981] hover:border-[#10B981] transition-all cursor-pointer shadow-xs active:scale-95"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12px] font-mono text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95"
                 title="Download Calculation PDF"
                 id="calc-std-pdf-btn"
               >
-                <FileDown className="w-3.5 h-3.5 text-[#10B981]" />
+                <FileDown className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                 <span className="hidden xs:inline">PDF</span>
               </button>
             </div>
@@ -770,7 +770,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 }}
                 className={`px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer ${
                   calcScale === 'jumbo'
-                    ? 'bg-[#10B981] text-[#040D17] shadow-xs'
+                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] shadow-xs'
                     : 'text-[#94A3B8] hover:text-[#CBD5E1]'
                 }`}
               >
@@ -785,7 +785,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           }`}>
             <div className="flex items-center justify-between text-[#94A3B8]">
               {memoryVal !== 0 ? (
-                <span className="text-[11px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-md border border-[#10B981]/30">
+                <span className="text-[11px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded-md border border-[var(--theme-primary,#38BDF8)]/30">
                   MEMORY: {memoryVal}
                 </span>
               ) : (
@@ -887,7 +887,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 setMemoryVal((prev) => prev + cur);
                 triggerHapticSound('click');
               }}
-              className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[#10B981] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] transition-all cursor-pointer shadow-xs active:scale-95 ${
+              className={`rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-bg,#070E18)] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 ${
                 calcScale === 'jumbo' ? 'py-3.5 text-[15px]' : calcScale === 'large' ? 'py-3 text-[13.5px]' : 'py-2 text-[11px]'
               }`}
             >
@@ -1002,7 +1002,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               onClick={() => handleCopy(stdLiveResult, 'std')}
               className="ml-auto text-[12px] font-mono text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] flex items-center gap-1.5 cursor-pointer transition-colors p-1"
             >
-              {copiedKey === 'std' ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4" />}
+              {copiedKey === 'std' ? <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" /> : <Copy className="w-4 h-4" />}
               <span className="font-bold">{copiedKey === 'std' ? 'Copied to Clipboard!' : 'Copy Result'}</span>
             </button>
           </div>
@@ -1192,7 +1192,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div>
               <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
                 <span>{isHindi ? 'SIP एवं वेल्थ कम्पाउंडर' : 'SIP & Wealth Compounder'}</span>
-                <span className="text-[10px] bg-[#10B981]/15 text-[#10B981] font-mono px-1.5 py-0.5 rounded border border-[#10B981]/30">
+                <span className="text-[10px] bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] font-mono px-1.5 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                   UNLIMITED
                 </span>
               </h2>
@@ -1272,7 +1272,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="space-y-1.5 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
               <div className="flex justify-between items-center text-[11.5px]">
                 <span className="text-[#CBD5E1] font-bold">Expected Return (% p.a.)</span>
-                <span className="font-mono text-[10.5px] text-[#10B981] font-bold">Annual CAGR</span>
+                <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Annual CAGR</span>
               </div>
 
               <div className="relative">
@@ -1283,10 +1283,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   step="0.1"
                   value={sipRateInput}
                   onChange={(e) => setSipRateInput(e.target.value)}
-                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#10B981] text-[16px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#10B981] focus:outline-none"
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] text-[16px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] focus:outline-none"
                   placeholder="12"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] font-mono font-bold text-[#10B981]">
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[14px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
                   %
                 </span>
               </div>
@@ -1297,7 +1297,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     key={rate}
                     type="button"
                     onClick={() => setSipRateInput(rate.toString())}
-                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
                   >
                     {rate}%
                   </button>
@@ -1855,7 +1855,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11.5px]">
                     <span className="font-bold text-[#CBD5E1]">Discount %:</span>
-                    <span className="font-mono font-bold text-[#10B981]">{discPctNum}%</span>
+                    <span className="font-mono font-bold text-[var(--theme-primary,#38BDF8)]">{discPctNum}%</span>
                   </div>
                   <input
                     type="number"
@@ -1867,7 +1867,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                       setDiscPercentInput(e.target.value);
                       setDiscFlatAmountInput('0');
                     }}
-                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#10B981] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
+                    className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] text-[16px] font-mono font-bold rounded-xl px-3 py-2"
                   />
                 </div>
 
@@ -1889,7 +1889,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
 
               <div className="p-4 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2 font-mono text-[13px]">
-                <div className="flex justify-between text-[#10B981]">
+                <div className="flex justify-between text-[var(--theme-primary,#38BDF8)]">
                   <span>Discount Saved ({effectiveDiscPct.toFixed(1)}%):</span>
                   <span className="font-bold">-{getCurrencyConfig(getCurrentLanguage()).symbol}{discSaved.toFixed(2)}</span>
                 </div>
@@ -2026,7 +2026,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div className="space-y-1 p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]">
               <div className="flex justify-between items-center text-[11.5px]">
                 <label className="font-bold text-[#CBD5E1]">Target Horizon:</label>
-                <span className="font-mono text-[10.5px] text-[#10B981] font-bold">
+                <span className="font-mono text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">
                   {Math.round(goalYearsNum * 12)} Mos
                 </span>
               </div>
@@ -2038,10 +2038,10 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   step="1"
                   value={goalYearsInput}
                   onChange={(e) => setGoalYearsInput(e.target.value)}
-                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#10B981] text-[15px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[#10B981] outline-none"
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] text-[15px] font-mono font-bold rounded-lg px-3 py-1.5 focus:border-[var(--theme-primary,#38BDF8)] outline-none"
                   placeholder="7"
                 />
-                <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[12px] font-mono font-bold text-[#10B981]">
+                <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[12px] font-mono font-bold text-[var(--theme-primary,#38BDF8)]">
                   Yrs
                 </span>
               </div>
@@ -2066,7 +2066,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           {/* Return Rate Custom Input */}
           <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#10B981]" />
+              <TrendingUp className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
               <span className="text-[12px] font-bold text-[#CBD5E1]">
                 Expected Investment Return Rate (% p.a.):
               </span>
@@ -2079,7 +2079,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   onClick={() => setGoalExpectedReturnInput(r.toString())}
                   className={`px-2 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
                     parseFloat(goalExpectedReturnInput) === r
-                      ? 'bg-[#10B981] text-[#070E18]'
+                      ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
                       : 'bg-[var(--theme-surface,#0E1A29)] text-[#94A3B8] border border-[var(--theme-border,#213E61)]'
                   }`}
                 >
@@ -2094,7 +2094,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 value={goalExpectedReturnInput}
                 onChange={(e) => setGoalExpectedReturnInput(e.target.value)}
                 placeholder="12"
-                className="w-16 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#10B981] font-mono text-[11px] font-bold rounded px-2 py-1 outline-none text-right"
+                className="w-16 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] font-mono text-[11px] font-bold rounded px-2 py-1 outline-none text-right"
               />
             </div>
           </div>
@@ -2110,9 +2110,9 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[#10B981]/30">
-              <div className="text-[10.5px] text-[#10B981] font-bold">Required Monthly SIP</div>
-              <div className="text-[17px] font-mono font-bold text-[#10B981] mt-0.5">
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/30">
+              <div className="text-[10.5px] text-[var(--theme-primary,#38BDF8)] font-bold">Required Monthly SIP</div>
+              <div className="text-[17px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] mt-0.5">
                 {formatCurrency(Math.round(requiredMonthlySIP))}<span className="text-[11px] font-normal text-[#94A3B8]"> /mo</span>
               </div>
               <div className="text-[10px] text-[#94A3B8] mt-0.5">

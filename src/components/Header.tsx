@@ -187,7 +187,7 @@ export const Header: React.FC<HeaderProps> = ({
     bgClass: string;
     textClass: string;
   }[] = [
-    { id: 'blue', label: 'Electric Mint (Dark)', dotColor: '#00D26A', bgClass: 'bg-[#00D26A]', textClass: 'text-[#00D26A]' },
+    { id: 'blue', label: 'Electric Blue (Theme)', dotColor: '#38BDF8', bgClass: 'bg-[#38BDF8]', textClass: 'text-[#38BDF8]' },
     { id: 'yellow', label: 'Volt Gold (Dark)', dotColor: '#FFC700', bgClass: 'bg-[#FFC700]', textClass: 'text-[#FFC700]' },
     { id: 'orange', label: 'Sunset Orange (Dark)', dotColor: '#F97316', bgClass: 'bg-[#F97316]', textClass: 'text-[#FB923C]' },
     { id: 'emerald', label: 'Emerald Green (Dark)', dotColor: '#10B981', bgClass: 'bg-[#10B981]', textClass: 'text-[#10B981]' },
@@ -586,10 +586,10 @@ export const Header: React.FC<HeaderProps> = ({
                                 id="header-drawer-attendance-btn"
                               >
                                 <div className="flex items-center gap-2.5">
-                                  <CalendarCheck className="w-4 h-4 text-[#10B981] shrink-0" />
+                                  <CalendarCheck className="w-4 h-4 text-[#38BDF8] shrink-0" />
                                   <span>{isHindi ? 'उपस्थिति व कार्य रजिस्टर' : 'Attendance & Work'}</span>
                                 </div>
-                                <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded">
+                                <span className="text-[9px] font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-1.5 py-0.5 rounded">
                                   Duty
                                 </span>
                               </button>
@@ -642,14 +642,14 @@ export const Header: React.FC<HeaderProps> = ({
                                   onOpenSecurity();
                                   closeAllMenus();
                                 }}
-                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                               >
                                 <div className="flex items-center gap-2.5">
-                                  <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
+                                  <Lock className="w-4 h-4 text-[#38BDF8] shrink-0" />
                                   <span>{tr.menu.securityPinLock}</span>
                                 </div>
                                 {isLockEnabled && (
-                                  <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full">
+                                  <span className="text-[9px] font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-2 py-0.5 rounded-full">
                                     {tr.menu.active}
                                   </span>
                                 )}
@@ -689,19 +689,19 @@ export const Header: React.FC<HeaderProps> = ({
                               type="button"
                               onClick={handleForceUpdateApp}
                               disabled={isUpdatingApp}
-                              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left disabled:opacity-60"
+                              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left disabled:opacity-60"
                               title={isHindi ? 'नया वर्शन चेक व रीफ्रेश करें' : 'Check for Latest App Version & Refresh Cache'}
                               id="header-app-version-update-mobile-btn"
                             >
                               <div className="flex items-center gap-2.5">
-                                <RotateCcw className={`w-4 h-4 text-[#10B981] shrink-0 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                                <RotateCcw className={`w-4 h-4 text-[#38BDF8] shrink-0 ${isUpdatingApp ? 'animate-spin' : ''}`} />
                                 <span>
                                   {isUpdatingApp
                                     ? (isHindi ? 'अपडेट हो रहा है...' : 'Updating...')
                                     : (isHindi ? 'ऐप वर्शन व अपडेट' : 'App Version & Update')}
                                 </span>
                               </div>
-                              <span className="text-[9.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full border border-[#10B981]/30">
+                              <span className="text-[9.5px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-2 py-0.5 rounded-full border border-[#38BDF8]/30">
                                 {APP_VERSION_TAG}
                               </span>
                             </button>
@@ -868,9 +868,9 @@ export const Header: React.FC<HeaderProps> = ({
                                   onOpenSourceCode();
                                   closeAllMenus();
                                 }}
-                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                               >
-                                <Code2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                                <Code2 className="w-4 h-4 text-[#38BDF8] shrink-0" />
                                 <span>{tr.menu.safetySourceCode}</span>
                               </button>
                             )}
@@ -898,7 +898,7 @@ export const Header: React.FC<HeaderProps> = ({
                                   onOpenInstall();
                                   closeAllMenus();
                                 }}
-                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#10B981] bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/30 transition-colors cursor-pointer text-left"
+                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#38BDF8] bg-[#38BDF8]/15 hover:bg-[#38BDF8]/25 border border-[#38BDF8]/30 transition-colors cursor-pointer text-left"
                               >
                                 <Download className="w-4 h-4 shrink-0" />
                                 <span>{tr.menu.installApp}</span>
@@ -941,7 +941,7 @@ export const Header: React.FC<HeaderProps> = ({
                               href="https://github.com/hasvolt/Daily-Khata-Pro"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] text-[10.5px] font-semibold transition-colors shrink-0"
+                              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)] text-[10.5px] font-semibold transition-colors shrink-0"
                               title="GitHub Profile"
                             >
                               <FolderGit2 className="w-3.5 h-3.5" />
@@ -955,15 +955,15 @@ export const Header: React.FC<HeaderProps> = ({
                               if (onOpenDeveloper) onOpenDeveloper();
                               closeAllMenus();
                             }}
-                            className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/80 flex items-center justify-between gap-1.5 cursor-pointer hover:border-[#10B981]/50 transition-colors"
+                            className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/80 flex items-center justify-between gap-1.5 cursor-pointer hover:border-[#38BDF8]/50 transition-colors"
                           >
                             <div className="flex items-center gap-1.5 min-w-0">
-                              <Award className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                              <Award className="w-3.5 h-3.5 text-[#38BDF8] shrink-0" />
                               <span className="text-[10px] font-mono text-[#CBD5E1] truncate">
-                                Powered by: <strong className="text-[\#38BDF8]">HASVOLT</strong>
+                                Powered by: <strong className="text-[#38BDF8]">HASVOLT</strong>
                               </span>
                             </div>
-                            <span className="text-[9px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded border border-[#10B981]/25 shrink-0">
+                            <span className="text-[9px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-1.5 py-0.5 rounded border border-[#38BDF8]/25 shrink-0">
                               MIT License
                             </span>
                           </div>
@@ -1038,10 +1038,10 @@ export const Header: React.FC<HeaderProps> = ({
                         id="header-desktop-attendance-btn"
                       >
                         <div className="flex items-center gap-2.5">
-                          <CalendarCheck className="w-4 h-4 text-[#10B981] shrink-0" />
+                          <CalendarCheck className="w-4 h-4 text-[#38BDF8] shrink-0" />
                           <span>{isHindi ? 'उपस्थिति व कार्य रजिस्टर' : 'Attendance & Work'}</span>
                         </div>
-                        <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded">
+                        <span className="text-[9px] font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-1.5 py-0.5 rounded">
                           Duty
                         </span>
                       </button>
@@ -1138,14 +1138,14 @@ export const Header: React.FC<HeaderProps> = ({
                           onOpenSecurity();
                           closeAllMenus();
                         }}
-                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                       >
                         <div className="flex items-center gap-2.5">
-                          <Lock className="w-4 h-4 text-[#10B981] shrink-0" />
+                          <Lock className="w-4 h-4 text-[#38BDF8] shrink-0" />
                           <span>{tr.menu.securityPinLock}</span>
                         </div>
                         {isLockEnabled && (
-                          <span className="text-[9px] font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full">
+                          <span className="text-[9px] font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-2 py-0.5 rounded-full">
                             {tr.menu.active}
                           </span>
                         )}
@@ -1185,19 +1185,19 @@ export const Header: React.FC<HeaderProps> = ({
                       type="button"
                       onClick={handleForceUpdateApp}
                       disabled={isUpdatingApp}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left disabled:opacity-60"
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left disabled:opacity-60"
                       title={isHindi ? 'नया वर्शन चेक व रीफ्रेश करें' : 'Check for Latest App Version & Refresh Cache'}
                       id="header-app-version-update-desktop-btn"
                     >
                       <div className="flex items-center gap-2.5">
-                        <RotateCcw className={`w-4 h-4 text-[#10B981] shrink-0 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                        <RotateCcw className={`w-4 h-4 text-[#38BDF8] shrink-0 ${isUpdatingApp ? 'animate-spin' : ''}`} />
                         <span>
                           {isUpdatingApp
                             ? (isHindi ? 'अपडेट हो रहा है...' : 'Updating...')
                             : (isHindi ? 'ऐप वर्शन व अपडेट' : 'App Version & Update')}
                         </span>
                       </div>
-                      <span className="text-[9.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-full border border-[#10B981]/30">
+                      <span className="text-[9.5px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-2 py-0.5 rounded-full border border-[#38BDF8]/30">
                         {APP_VERSION_TAG}
                       </span>
                     </button>
@@ -1364,9 +1364,9 @@ export const Header: React.FC<HeaderProps> = ({
                           onOpenSourceCode();
                           closeAllMenus();
                         }}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
                       >
-                        <Code2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                        <Code2 className="w-4 h-4 text-[#38BDF8] shrink-0" />
                         <span>{tr.menu.safetySourceCode}</span>
                       </button>
                     )}
@@ -1394,7 +1394,7 @@ export const Header: React.FC<HeaderProps> = ({
                           onOpenInstall();
                           closeAllMenus();
                         }}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#10B981] bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/30 transition-colors cursor-pointer text-left"
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[#38BDF8] bg-[#38BDF8]/15 hover:bg-[#38BDF8]/25 border border-[#38BDF8]/30 transition-colors cursor-pointer text-left"
                       >
                         <Download className="w-4 h-4 shrink-0" />
                         <span>{tr.menu.installApp}</span>
@@ -1436,7 +1436,7 @@ export const Header: React.FC<HeaderProps> = ({
                         href="https://github.com/hasvolt/Daily-Khata-Pro"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#10B981] border border-[var(--theme-border,#213E61)] text-[10.5px] font-semibold transition-colors shrink-0"
+                        className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[#38BDF8] border border-[var(--theme-border,#213E61)] text-[10.5px] font-semibold transition-colors shrink-0"
                         title="GitHub Profile"
                       >
                         <FolderGit2 className="w-3.5 h-3.5" />
@@ -1450,15 +1450,15 @@ export const Header: React.FC<HeaderProps> = ({
                         if (onOpenDeveloper) onOpenDeveloper();
                         closeAllMenus();
                       }}
-                      className="p-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)]/80 flex items-center justify-between gap-1.5 cursor-pointer hover:border-[#10B981]/50 transition-colors"
+                      className="p-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)]/80 flex items-center justify-between gap-1.5 cursor-pointer hover:border-[#38BDF8]/50 transition-colors"
                     >
                       <div className="flex items-center gap-1.5 min-w-0">
-                        <Award className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                        <Award className="w-3.5 h-3.5 text-[#38BDF8] shrink-0" />
                         <span className="text-[10px] font-mono text-[#CBD5E1] truncate">
-                          Powered by: <strong className="text-[\#38BDF8]">HASVOLT</strong>
+                          Powered by: <strong className="text-[#38BDF8]">HASVOLT</strong>
                         </span>
                       </div>
-                      <span className="text-[9px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.5 rounded border border-[#10B981]/25 shrink-0">
+                      <span className="text-[9px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/15 px-1.5 py-0.5 rounded border border-[#38BDF8]/25 shrink-0">
                         MIT License
                       </span>
                     </div>

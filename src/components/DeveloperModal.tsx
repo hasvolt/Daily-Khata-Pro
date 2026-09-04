@@ -66,7 +66,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           label: 'ओपन-सोर्स क्रिएटर (Open Source Creator)',
           proof: 'MIT लाइसेंस प्रमाण पत्र • GitHub: hasvolt/Daily-Khata-Pro',
           icon: FolderGit2,
-          color: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+          color: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 border-[var(--theme-primary,#38BDF8)]/30'
         },
         {
           label: 'स्वतंत्र व तकनीकी शोधकर्ता (Independent Tech Researcher)',
@@ -110,7 +110,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           label: 'Open Source Creator',
           proof: 'MIT License Certificate • GitHub: hasvolt/Daily-Khata-Pro',
           icon: FolderGit2,
-          color: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+          color: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 border-[var(--theme-primary,#38BDF8)]/30'
         },
         {
           label: 'Independent Tech Researcher',
@@ -189,7 +189,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                     }}
                   />
                 </div>
-                <div className="mt-1.5 px-2.5 py-0.5 rounded-md bg-[#10B981] text-[#04140D] text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
+                <div className="mt-1.5 px-2.5 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
                   <Check className="w-2.5 h-2.5 stroke-[3]" />
                   <span>Verified Creator</span>
                 </div>
@@ -238,7 +238,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 <Sparkles className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                 <span>{isHindi ? 'पेशेवर भूमिकाएं एवं वास्तविक विवरण' : 'Professional Roles & Proven Focus Areas'}</span>
               </span>
-              <span className="text-[10px] text-[#10B981] font-mono font-bold bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+              <span className="text-[10px] text-[var(--theme-primary,#38BDF8)] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                 Verified Records
               </span>
             </div>
@@ -268,12 +268,12 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
           <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
             <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)] pb-2.5">
               <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-[#10B981]" />
+                <Award className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                 <span className="text-[13px] font-bold text-[#F8FAFC]">
                   {isHindi ? 'वैधानिक पंजीकरण एवं लाइसेंस प्रमाणपत्र' : 'Official Legal Registrations & Certificates'}
                 </span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+              <span className="text-[10px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                 Verified Legal
               </span>
             </div>
@@ -303,7 +303,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                 </div>
                 <div>
                   <span className="text-[#94A3B8]">Terms: </span>
-                  <span className="text-[#10B981] font-semibold">100% Free &amp; Unrestricted Audit Rights</span>
+                  <span className="text-[var(--theme-primary,#38BDF8)] font-semibold">100% Free &amp; Unrestricted Audit Rights</span>
                 </div>
                 <div>
                   <span className="text-[#94A3B8]">Source Code: </span>
@@ -403,7 +403,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                   <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20">
                     Delhi NCR &amp; Bihar
                   </span>
-                  <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
+                  <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/10 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/20">
                     Pan-India Projects
                   </span>
                   <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20">
@@ -413,10 +413,10 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               </div>
 
               {/* HSES Connect */}
-              <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981]/50 transition-colors space-y-1.5">
+              <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-colors space-y-1.5">
                 <div className="flex items-center justify-between flex-wrap gap-1.5">
                   <div className="flex items-center gap-1.5">
-                    <Globe className="w-3.5 h-3.5 text-[#10B981]" />
+                    <Globe className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                     <span className="text-[12px] font-bold text-[#F8FAFC]">hses247help.com</span>
                     <span className="text-[11px] text-[#CBD5E1]">| HSES CONNECT</span>
                   </div>
@@ -424,7 +424,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                     href="https://hses247help.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-[#10B981] hover:underline font-mono"
+                    className="inline-flex items-center gap-1 text-[11px] text-[var(--theme-primary,#38BDF8)] hover:underline font-mono"
                   >
                     <span>hses247help.com</span>
                     <ExternalLink className="w-3 h-3" />
@@ -436,7 +436,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                     : 'Established in 2012 delivering comprehensive electrical solutions & project works. From 2026, active field services transition and are powered through Hasvolt.'}
                 </p>
                 <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                  <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
+                  <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/10 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/20">
                     Est. 2012
                   </span>
                   <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20">
@@ -455,7 +455,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
             </div>
             <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="font-semibold text-[#CBD5E1]">{isHindi ? 'लाइसेंस:' : 'License:'}</span>
-              <span className="text-[#10B981] font-mono font-bold bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+              <span className="text-[var(--theme-primary,#38BDF8)] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                 Open Source (MIT)
               </span>
             </div>
@@ -489,8 +489,8 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-[#10B981] stroke-[3]" />
-                  <span className="text-[#10B981]">{isHindi ? 'ईमेल कॉपी हो गया!' : 'Email Copied!'}</span>
+                  <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] stroke-[3]" />
+                  <span className="text-[var(--theme-primary,#38BDF8)]">{isHindi ? 'ईमेल कॉपी हो गया!' : 'Email Copied!'}</span>
                 </>
               ) : (
                 <>
@@ -505,9 +505,9 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
             href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full py-2.5 px-4 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] font-bold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] font-bold text-[12.5px] flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
-            <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+            <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
             <span>{isHindi ? 'गिटहब रिपॉजिटरी देखें' : 'View GitHub Repository'} (hasvolt/Daily-Khata-Pro)</span>
             <ExternalLink className="w-3.5 h-3.5 text-[#64748B]" />
           </a>

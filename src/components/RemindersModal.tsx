@@ -247,13 +247,13 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
           {browserPermission !== 'granted' && (
             <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[12px]">
               <div className="flex items-center gap-2 text-[var(--theme-text,#F8FAFC)]">
-                <Smartphone className="w-4 h-4 text-[#10B981] shrink-0" />
+                <Smartphone className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                 <span>{isHindi ? 'ब्राउज़र पुश नोटिफिकेशन चालू करें' : 'Enable device/browser push notifications for instant alerts'}</span>
               </div>
               <button
                 type="button"
                 onClick={requestBrowserPermission}
-                className="px-2.5 py-1 rounded-lg bg-[#10B981] text-[#04140D] font-bold text-[11px] shrink-0 cursor-pointer hover:opacity-95"
+                className="px-2.5 py-1 rounded-lg bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-bold text-[11px] shrink-0 cursor-pointer hover:opacity-95"
               >
                 {isHindi ? 'चालू करें' : 'Enable'}
               </button>
@@ -457,7 +457,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
                       }}
                       className={`w-6 h-6 rounded-lg border mt-0.5 flex items-center justify-center cursor-pointer transition-all ${
                         r.isCompleted
-                          ? 'bg-[#10B981] border-[#10B981] text-white'
+                          ? 'bg-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
                           : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]'
                       }`}
                     >

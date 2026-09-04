@@ -115,13 +115,11 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="banking-card-subtitle text-[9.5px] sm:text-[11.5px] font-semibold tracking-wider text-[#8BA4D0] uppercase hidden xs:inline transition-colors">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-[#0B2A6B]/90 border border-[#17459E] text-[#38BDF8] shadow-sm shrink-0">
+              <Calendar className="w-3.5 h-3.5 text-[#38BDF8] shrink-0" />
+              <span className="banking-card-date text-[10.5px] sm:text-[12px] font-bold tracking-wide text-[#E2E8F0] uppercase whitespace-nowrap transition-colors">
                 {dateFormatted}
               </span>
-              <div className="banking-card-icon-box p-1.5 sm:p-2 rounded-xl bg-[#0B2A6B] border border-[#17459E] text-[#38BDF8] flex items-center justify-center shadow-sm transition-colors">
-                <Calendar className="w-4 h-4" />
-              </div>
             </div>
           </div>
 

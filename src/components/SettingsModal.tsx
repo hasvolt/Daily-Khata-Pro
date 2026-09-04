@@ -495,7 +495,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <div
             className={`px-4 py-2.5 text-[12.5px] font-bold flex items-center gap-2 border-b animate-in fade-in ${
               modalFeedback.type === 'success'
-                ? 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30'
+                ? 'bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)]/30'
                 : 'bg-[#EF4444]/15 text-[#EF4444] border-[#EF4444]/30'
             }`}
           >
@@ -654,9 +654,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 font-bold text-[13.5px] text-[#F8FAFC]">
-                      <Download className="w-4 h-4 text-[#10B981]" />
+                      <Download className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                       <span>{tStr('ऐप इंस्टॉल / डाउनलोड करें', 'App Install / Download Karein', 'Install & Download App')}</span>
-                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
+                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
                         100% Offline
                       </span>
                     </div>
@@ -675,7 +675,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onClose();
                       onOpenInstall();
                     }}
-                    className="px-3.5 py-2 rounded-xl bg-[#10B981] text-[#04140D] font-extrabold text-[12px] hover:brightness-110 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs"
+                    className="px-3.5 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12px] hover:brightness-110 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>{tStr('इंस्टॉल', 'Install Karein', 'Install')}</span>
@@ -772,7 +772,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Store className="w-4 h-4 text-[#10B981]" />
+                    <Store className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                     <span className="font-bold text-[13.5px] text-[#F8FAFC]">
                       {tStr('कमाई के स्रोत (Income Sources)', 'Custom Income Sources', 'Custom Income Sources')} ({currentIncomeSources.length})
                     </span>
@@ -791,7 +791,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <button
                     type="button"
                     onClick={handleAddIncomeSource}
-                    className="px-3 py-1.5 rounded-xl bg-[#10B981] text-[#04140D] font-bold text-[12px] cursor-pointer hover:brightness-110"
+                    className="px-3 py-1.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-bold text-[12px] cursor-pointer hover:brightness-110"
                   >
                     + {tStr('जोड़ें', 'Add', 'Add')}
                   </button>
@@ -1173,12 +1173,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
-                    <Sparkles className="w-4 h-4 text-[#10B981]" />
+                    <Sparkles className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                     <span className="font-bold text-[13.5px] text-[#F8FAFC]">
                       {tStr('ऐप वर्शन व कैश कंट्रोल', 'App Version Aur Cache Control', 'App Version & PWA Cache Control')}
                     </span>
                   </div>
-                  <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
+                  <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
                     {APP_VERSION_FULL}
                   </span>
                 </div>
@@ -1233,7 +1233,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <span
                     className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full border uppercase tracking-wider ${
                       securityLock?.isEnabled
-                        ? 'bg-[#10B981]/20 text-[#10B981] border-[#10B981]/40'
+                        ? 'bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)]/40'
                         : 'bg-[#64748B]/20 text-[#94A3B8] border-[#64748B]/40'
                     }`}
                   >
@@ -1281,7 +1281,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {/* Offline Architecture Info */}
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3.5">
                 <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
-                  <ShieldCheck className="w-5 h-5 text-[#10B981]" />
+                  <ShieldCheck className="w-5 h-5 text-[var(--theme-primary,#38BDF8)]" />
                   <h4 className="font-bold text-[15px] text-[#F8FAFC]">
                     {tStr('100% ऑफलाइन व सुरक्षित आर्किटेक्चर', '100% Offline Aur Secure Architecture', '100% Offline & Client-Side Architecture')}
                   </h4>
@@ -1293,15 +1293,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11.5px]">
                   <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <span>Zero Server Tracking</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <span>Instant Client Math</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <span>Local JSON Portability</span>
                   </div>
                 </div>
@@ -1309,7 +1309,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 {/* GitHub Repo Card */}
                 <div className="p-3 rounded-xl bg-[#060B11] border border-[#213E61] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                   <div className="flex items-center gap-2.5">
-                    <FolderGit2 className="w-5 h-5 text-[#10B981] shrink-0" />
+                    <FolderGit2 className="w-5 h-5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <div>
                       <div className="text-[12.5px] font-bold text-[#F8FAFC]">GitHub Open Source Repository</div>
                       <div className="text-[11px] text-[#94A3B8]">github.com/hasvolt/Daily-Khata-Pro</div>
@@ -1344,7 +1344,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         referrerPolicy="no-referrer"
                       />
                     </div>
-                    <div className="mt-1.5 px-2 py-0.5 rounded-md bg-[#10B981] text-[#04140D] text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
+                    <div className="mt-1.5 px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
                       <Check className="w-2.5 h-2.5 stroke-[3]" />
                       <span>Creator &amp; Founder</span>
                     </div>
@@ -1377,7 +1377,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 {/* Focus Badges */}
                 <div className="pt-2 border-t border-[var(--theme-border,#213E61)] flex flex-wrap items-center justify-center sm:justify-start gap-1.5">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] mr-1">Focus:</span>
-                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
+                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30">
                     Open Source
                   </span>
                   <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30">
@@ -1412,7 +1412,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
                   <div className="flex items-center justify-between text-[#94A3B8]">
                     <span className="font-semibold text-[#CBD5E1]">License:</span>
-                    <span className="text-[#10B981] font-mono font-bold bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+                    <span className="text-[var(--theme-primary,#38BDF8)] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                       Open Source (MIT)
                     </span>
                   </div>
@@ -1481,7 +1481,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     rel="noopener noreferrer"
                     className="p-2.5 rounded-xl bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-bold text-[12px] flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
-                    <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+                    <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                     <span>GitHub Repository</span>
                   </a>
                 </div>
@@ -1505,10 +1505,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="p-3.5 rounded-xl bg-[#060B11] border border-[#213E61] space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[12px] font-bold text-[#F8FAFC] flex items-center gap-1.5">
-                    <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+                    <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                     <span>Official Open-Source License</span>
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
                     MIT License
                   </span>
                 </div>

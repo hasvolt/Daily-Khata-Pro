@@ -172,17 +172,17 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     </tbody>
   </table>
 
-  <div class="footer" style="page-break-inside: avoid; break-inside: avoid;">
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #0284C7;" />
-      <div>
-        <div style="font-weight: 800; color: #0f172a; font-size: 11px;">MD Zafeer Hasan (YAZDAAN)</div>
-        <div style="font-size: 9.5px; color: #0284c7; font-weight: 600;">Developer &amp; Software Architect · Daily Khata Pro</div>
+  <div class="footer" style="page-break-inside: avoid; break-inside: avoid; border-top: 1px dashed #cbd5e1; padding-top: 8px; margin-top: 24px; font-size: 9.5px; color: #64748b;">
+    <div style="display: flex; align-items: center; gap: 7px;">
+      <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1px solid #94a3b8; opacity: 0.85;" />
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span style="font-weight: 700; color: #334155; font-size: 10px;">MD Zafeer Hasan (YAZDAAN)</span>
+        <span style="color: #94a3b8;">·</span>
+        <span style="font-size: 9px; color: #64748b;">Developer &amp; Creator · Daily Khata Pro</span>
       </div>
     </div>
-    <div style="text-align: right; font-size: 10px; color: #64748b;">
-      <div>Verified Digital Statement</div>
-      <div style="margin-top: 4px;">Signature / Stamp: ___________________</div>
+    <div style="text-align: right; font-family: monospace; font-size: 9px; color: #94a3b8;">
+      <span>Watermark Signature · <strong>HASVOLT</strong></span>
     </div>
   </div>
 </body>
@@ -467,9 +467,9 @@ export const PrintModal: React.FC<PrintModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handleDownloadCSV}
-              className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:text-[#10B981] font-bold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] hover:text-[var(--theme-primary,#38BDF8)] font-bold text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
-              <FileSpreadsheet className="w-4 h-4 text-[#10B981]" />
+              <FileSpreadsheet className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
               <span className="hidden sm:inline">Export</span> CSV
             </button>
 

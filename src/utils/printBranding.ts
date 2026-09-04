@@ -173,17 +173,17 @@ export function getWatermarkAndHeaderHTML(docTitle: string, subtitle?: string): 
   `;
 
   const footerHTML = `
-    <div class="brand-footer-box" style="page-break-inside: avoid; break-inside: avoid;">
-      <div style="display: flex; align-items: center; gap: 9px;">
-        <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="${BRAND_WATERMARK_CONFIG.developer}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #0284C7;" />
-        <div>
-          <div style="font-weight: 800; color: #0F172A; font-size: 11px;">${BRAND_WATERMARK_CONFIG.developer}</div>
-          <div style="font-size: 9.5px; color: #0284C7; font-weight: 600;">Developer &amp; Software Architect · Daily Khata Pro</div>
-        </div>
+    <div class="brand-footer-box" style="page-break-inside: avoid; break-inside: avoid; border-top: 1px dashed #CBD5E1; padding-top: 8px; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: #64748B;">
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="${BRAND_WATERMARK_CONFIG.developer}" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1px solid #94A3B8; opacity: 0.85;" />
+        <span style="letter-spacing: 0.2px;">
+          <span style="font-weight: 700; color: #334155;">${BRAND_WATERMARK_CONFIG.developer}</span>
+          <span style="color: #94A3B8; margin: 0 4px;">·</span>
+          <span style="color: #64748B;">Developer &amp; Creator · Daily Khata Pro</span>
+        </span>
       </div>
-      <div style="text-align: right; font-size: 10px; color: #64748B;">
-        <div>Powered by <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong></div>
-        <div style="font-weight: 600; color: #0284C7;">${BRAND_WATERMARK_CONFIG.website}</div>
+      <div style="text-align: right; font-family: monospace; font-size: 9px; color: #94A3B8;">
+        <span>Authentic Signature · <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong></span>
       </div>
     </div>
   `;

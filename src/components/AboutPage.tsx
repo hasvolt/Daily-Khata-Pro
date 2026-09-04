@@ -74,7 +74,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </div>
 
           <div className="space-y-1.5 min-w-0">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 text-[11px] font-mono font-bold">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30 text-[11px] font-mono font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>{APP_RELEASE_LABEL}</span>
             </div>
@@ -99,8 +99,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
           <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
             <div className="text-[11px] text-[#94A3B8] font-medium">{t.architectureLabel}</div>
-            <div className="text-[14px] font-bold text-[#10B981] mt-0.5 flex items-center gap-1">
-              <Lock className="w-3.5 h-3.5 text-[#10B981]" />
+            <div className="text-[14px] font-bold text-[var(--theme-primary,#38BDF8)] mt-0.5 flex items-center gap-1">
+              <Lock className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
               <span>{t.architectureValue}</span>
             </div>
           </div>
@@ -155,7 +155,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </div>
 
           <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4.5 space-y-2">
-            <div className="flex items-center gap-2 text-[#10B981] font-bold text-[14px]">
+            <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] font-bold text-[14px]">
               <Lock className="w-4 h-4" />
               <h4>{t.pillars.privacyTitle}</h4>
             </div>
@@ -229,14 +229,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             href="https://github.com/hasvolt/Daily-Khata-Pro"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] transition-colors group"
+            className="flex items-center gap-3 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] transition-colors group"
           >
-            <div className="w-9 h-9 rounded-lg bg-[#10B981]/15 text-[#10B981] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0">
               <FolderGit2 className="w-4.5 h-4.5" />
             </div>
             <div className="min-w-0">
               <div className="text-[11px] text-[#94A3B8] font-medium">{t.githubRepo}</div>
-              <div className="text-[13px] font-bold text-[#F8FAFC] truncate group-hover:text-[#10B981]">hasvolt/Daily-Khata-Pro</div>
+              <div className="text-[13px] font-bold text-[#F8FAFC] truncate group-hover:text-[var(--theme-primary,#38BDF8)]">hasvolt/Daily-Khata-Pro</div>
             </div>
           </a>
 

@@ -74,7 +74,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
           desc: 'आधिकारिक ओपन सोर्स MIT लाइसेंस प्रमाण पत्र के तहत Daily Khata Pro का निर्माण व रख-रखाव।',
           proof: 'MIT लाइसेंस प्रमाण पत्र • सार्वजनिक कोड रिपॉजिटरी: github.com/hasvolt/Daily-Khata-Pro',
           icon: FolderGit2,
-          tagColor: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+          tagColor: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 border-[var(--theme-primary,#38BDF8)]/30'
         },
         {
           title: 'स्वतंत्र तकनीक शोधकर्ता (Independent Tech Researcher)',
@@ -125,7 +125,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
           desc: 'Authoring and maintaining Daily Khata Pro under the official Open Source MIT License Certificate.',
           proof: 'MIT License Certificate • Verified GitHub Repository: github.com/hasvolt/Daily-Khata-Pro',
           icon: FolderGit2,
-          tagColor: 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30'
+          tagColor: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 border-[var(--theme-primary,#38BDF8)]/30'
         },
         {
           title: 'Independent Tech Researcher',
@@ -187,7 +187,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
             </button>
           )}
 
-          <span className="text-[11px] font-mono font-extrabold uppercase px-2.5 py-1 rounded-lg bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
+          <span className="text-[11px] font-mono font-extrabold uppercase px-2.5 py-1 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
             {t.badge}
           </span>
         </div>
@@ -208,7 +208,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 className="w-full h-auto max-h-[380px] object-contain rounded-xl block mx-auto transition-transform duration-300 group-hover:scale-[1.02]"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-[#10B981] text-[#04140D] text-[11px] font-extrabold flex items-center gap-1 shadow-lg">
+              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] text-[11px] font-extrabold flex items-center gap-1 shadow-lg">
                 <Check className="w-3.5 h-3.5 stroke-[3]" />
                 <span>Verified Creator</span>
               </div>
@@ -256,7 +256,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30">
                 Independent Developer
               </span>
-              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
                 Open Source
               </span>
               <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30">
@@ -286,8 +286,8 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               >
                 {copied ? (
                   <>
-                    <Check className="w-4 h-4 text-[#10B981] stroke-[3]" />
-                    <span className="text-[#10B981]">Email Copied!</span>
+                    <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] stroke-[3]" />
+                    <span className="text-[var(--theme-primary,#38BDF8)]">Email Copied!</span>
                   </>
                 ) : (
                   <>
@@ -319,7 +319,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </p>
             </div>
           </div>
-          <span className="text-[11px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2.5 py-1 rounded-md border border-[#10B981]/30 self-start sm:self-auto">
+          <span className="text-[11px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 px-2.5 py-1 rounded-md border border-[var(--theme-primary,#38BDF8)]/30 self-start sm:self-auto">
             Ethical &amp; Transparent
           </span>
         </div>
@@ -344,7 +344,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                   {r.desc}
                 </p>
                 <div className="ml-8 p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 text-[10.5px] font-mono text-[#CBD5E1] flex items-start gap-1.5">
-                  <BadgeCheck className="w-3.5 h-3.5 text-[#10B981] shrink-0 mt-0.5" />
+                  <BadgeCheck className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0 mt-0.5" />
                   <span className="leading-snug">{r.proof}</span>
                 </div>
               </div>
@@ -357,7 +357,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
       <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-3xl p-5 sm:p-7 space-y-5 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#10B981]/15 border border-[#10B981]/30 flex items-center justify-center text-[#10B981]">
+            <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)]">
               <Award className="w-4 h-4" />
             </div>
             <div>
@@ -371,7 +371,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </p>
             </div>
           </div>
-          <span className="text-[11px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-3 py-1 rounded-md border border-[#10B981]/30 self-start sm:self-auto flex items-center gap-1.5">
+          <span className="text-[11px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 px-3 py-1 rounded-md border border-[var(--theme-primary,#38BDF8)]/30 self-start sm:self-auto flex items-center gap-1.5">
             <BadgeCheck className="w-3.5 h-3.5" />
             <span>Legally Verified Records</span>
           </span>
@@ -420,7 +420,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </div>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[#94A3B8]">Commercial &amp; Audit Rights:</span>
-                <span className="text-[#10B981] font-semibold">100% Free to Use &amp; Self-Host</span>
+                <span className="text-[var(--theme-primary,#38BDF8)] font-semibold">100% Free to Use &amp; Self-Host</span>
               </div>
             </div>
 
@@ -460,7 +460,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] relative overflow-hidden space-y-2">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-wrap">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--theme-primary,#38BDF8)] animate-pulse" />
               <h3 className="text-[15px] sm:text-[16px] font-bold text-[#F8FAFC] tracking-wide">
                 HASVOLT
               </h3>
@@ -469,7 +469,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               <span className="text-[10.5px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 px-2.5 py-0.5 rounded border border-[#38BDF8]/30">
                 Official Parent Operator
               </span>
-              <span className="text-[10.5px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2.5 py-0.5 rounded border border-[#10B981]/30">
+              <span className="text-[10.5px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 px-2.5 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                 Since 2012
               </span>
             </div>
@@ -521,7 +521,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20">
                   Delhi NCR &amp; Bihar (Full Services)
                 </span>
-                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/10 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/20">
                   Pan-India (Project Work)
                 </span>
                 <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20">
@@ -547,21 +547,21 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
           </div>
 
           {/* HSES Connect Card */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981]/60 transition-all space-y-3 flex flex-col justify-between group">
+          <div className="p-4 sm:p-5 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all space-y-3 flex flex-col justify-between group">
             <div className="space-y-2.5">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-[#10B981]/15 border border-[#10B981]/30 text-[#10B981]">
+                  <div className="p-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 text-[var(--theme-primary,#38BDF8)]">
                     <Globe className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] group-hover:text-[#10B981] transition-colors">
+                    <h4 className="text-[14px] sm:text-[15px] font-bold text-[#F8FAFC] group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
                       HSES CONNECT
                     </h4>
-                    <span className="text-[11px] font-mono text-[#10B981]">hses247help.com</span>
+                    <span className="text-[11px] font-mono text-[var(--theme-primary,#38BDF8)]">hses247help.com</span>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/30">
+                <span className="text-[10px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 px-2 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                   Since 2012
                 </span>
               </div>
@@ -574,7 +574,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
 
               {/* Badges */}
               <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
+                <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/10 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/20">
                   Established 2012
                 </span>
                 <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20">
@@ -594,7 +594,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                 href="https://hses247help.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#10B981] hover:text-[#F8FAFC] font-mono text-[11.5px] font-bold transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] hover:text-[#F8FAFC] font-mono text-[11.5px] font-bold transition-all"
               >
                 <span>Visit hses247help.com</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -615,7 +615,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               )}
             </span>
           </div>
-          <span className="text-[10.5px] font-mono text-[#10B981] font-bold bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30">
+          <span className="text-[10.5px] font-mono text-[var(--theme-primary,#38BDF8)] font-bold bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
             100% Free &amp; Offline
           </span>
         </div>
@@ -649,8 +649,8 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
 
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-3.5 shadow-lg flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-2 text-[#10B981] font-bold text-[14px]">
-              <ShieldCheck className="w-4 h-4 text-[#10B981]" />
+            <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] font-bold text-[14px]">
+              <ShieldCheck className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
               <span>Project &amp; License Specifications</span>
             </div>
             
@@ -661,7 +661,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               </div>
               <div className="flex items-center justify-between py-1.5 border-b border-[var(--theme-border,#213E61)]/50">
                 <span className="text-[#94A3B8]">License:</span>
-                <span className="font-mono font-extrabold text-[#10B981] bg-[#10B981]/15 px-2.5 py-0.5 rounded border border-[#10B981]/30">
+                <span className="font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 px-2.5 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
                   Open Source (MIT)
                 </span>
               </div>
@@ -693,7 +693,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                   href="https://hses247help.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-bold text-[#10B981] hover:underline font-mono text-[12px] flex items-center gap-1"
+                  className="font-bold text-[var(--theme-primary,#38BDF8)] hover:underline font-mono text-[12px] flex items-center gap-1"
                 >
                   <Globe className="w-3.5 h-3.5" />
                   <span>hses247help.com</span>
@@ -726,9 +726,9 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="py-2.5 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[#CBD5E1] hover:text-[#10B981] font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              className="py-2.5 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
-              <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+              <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
               <span>GitHub</span>
             </a>
 

@@ -540,7 +540,7 @@ export const MasterEditModal: React.FC<MasterEditModalProps> = ({
               <div className="space-y-3 bg-[var(--theme-surface,#0E1A29)] p-4 rounded-2xl border border-[var(--theme-border,#213E61)]">
                 <div className="flex items-center justify-between">
                   <h3 className="text-[14px] font-bold text-white flex items-center gap-1.5">
-                    <ArrowUpRight className="w-4 h-4 text-[#10B981]" />
+                    <ArrowUpRight className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                     <span>Income Sources ({incomeSources.length})</span>
                   </h3>
                 </div>
@@ -562,7 +562,7 @@ export const MasterEditModal: React.FC<MasterEditModalProps> = ({
                         triggerHapticSound('save');
                       }
                     }}
-                    className="px-3 py-2 rounded-xl bg-[#10B981]/20 hover:bg-[#10B981]/30 text-[#10B981] border border-[#10B981]/40 font-bold text-xs flex items-center gap-1 cursor-pointer"
+                    className="px-3 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)]/20 hover:bg-[var(--theme-primary,#38BDF8)]/30 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/40 font-bold text-xs flex items-center gap-1 cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Add</span>
@@ -612,7 +612,7 @@ export const MasterEditModal: React.FC<MasterEditModalProps> = ({
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-bold text-white truncate">{goal.title}</span>
-                            <span className="text-[10px] font-mono text-[#10B981] bg-[#10B981]/15 px-1.5 py-0.2 rounded">
+                            <span className="text-[10px] font-mono text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 px-1.5 py-0.2 rounded">
                               {pct}%
                             </span>
                           </div>

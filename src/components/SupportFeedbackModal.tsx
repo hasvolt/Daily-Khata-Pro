@@ -336,13 +336,13 @@ export const SupportFeedbackModal: React.FC<SupportFeedbackModalProps> = ({
                       onClose();
                       onOpenSourceCode();
                     }}
-                    className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981]/50 transition-colors text-left flex items-start gap-2.5 cursor-pointer group"
+                    className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-colors text-left flex items-start gap-2.5 cursor-pointer group"
                   >
-                    <div className="p-2 rounded-lg bg-[#10B981]/15 text-[#10B981] shrink-0">
+                    <div className="p-2 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] shrink-0">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-[12.5px] font-bold text-[#F8FAFC] group-hover:text-[#10B981]">
+                      <div className="text-[12.5px] font-bold text-[#F8FAFC] group-hover:text-[var(--theme-primary,#38BDF8)]">
                         {isHindi ? 'सुरक्षा एवं प्राइवेसी ऑडिट' : 'Safety & Security Audit'}
                       </div>
                       <div className="text-[11px] text-[#94A3B8]">
@@ -374,9 +374,9 @@ export const SupportFeedbackModal: React.FC<SupportFeedbackModalProps> = ({
                     href="https://github.com/hasvolt/Daily-Khata-Pro"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#10B981] text-[12px] text-[#CBD5E1] hover:text-[#10B981] flex items-center gap-1.5 transition-colors font-semibold"
+                    className="px-3 py-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[12px] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] flex items-center gap-1.5 transition-colors font-semibold"
                   >
-                    <FolderGit2 className="w-3.5 h-3.5 text-[#10B981]" />
+                    <FolderGit2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                     <span>GitHub</span>
                     <ExternalLink className="w-3 h-3 text-[#64748B]" />
                   </a>
@@ -545,7 +545,7 @@ export const SupportFeedbackModal: React.FC<SupportFeedbackModalProps> = ({
                   rel="noopener noreferrer"
                   className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#F8FAFC]/40 text-[#CBD5E1] hover:text-[#F8FAFC] font-semibold text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <FolderGit2 className="w-4 h-4 text-[#10B981]" />
+                  <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <span>GitHub Issue</span>
                   <ExternalLink className="w-3 h-3 text-[#64748B]" />
                 </a>
@@ -556,7 +556,7 @@ export const SupportFeedbackModal: React.FC<SupportFeedbackModalProps> = ({
                   className="px-3 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#94A3B8] hover:text-[#F8FAFC] font-medium text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer ml-auto"
                   title="Copy details to clipboard"
                 >
-                  {copied ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" /> : <Copy className="w-4 h-4" />}
                   <span>{copied ? (isHindi ? 'कॉपी हो गया' : 'Copied') : (isHindi ? 'कॉपी करें' : 'Copy')}</span>
                 </button>
               </div>
@@ -648,7 +648,7 @@ export const SupportFeedbackModal: React.FC<SupportFeedbackModalProps> = ({
                   className="px-3 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#94A3B8] hover:text-[#F8FAFC] font-medium text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer ml-auto"
                   title="Copy details to clipboard"
                 >
-                  {copied ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" /> : <Copy className="w-4 h-4" />}
                   <span>{copied ? (isHindi ? 'कॉपी हो गया' : 'Copied') : (isHindi ? 'कॉपी करें' : 'Copy')}</span>
                 </button>
               </div>

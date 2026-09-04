@@ -116,9 +116,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   const today = new Date();
   const dateFormatted = today.toLocaleDateString(localeMap[language] || 'en-IN', {
-    weekday: 'long',
+    weekday: 'short',
     day: 'numeric',
-    month: 'long',
+    month: 'short',
     year: 'numeric'
   });
 
@@ -166,34 +166,34 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-3.5 min-w-0">
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
+            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#00D26A]/15 text-[#00D26A] flex items-center justify-center shrink-0">
                   <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.todayIncome}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#00D26A] tracking-tight truncate w-full block" title={formatCurrency(todayStats.income, privacyMask)}>
+              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#00D26A] tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(todayStats.income, privacyMask)}>
                 +{formatCurrency(todayStats.income, privacyMask)}
               </div>
             </div>
 
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
+            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#FF334B]/15 text-[#FF334B] flex items-center justify-center shrink-0">
                   <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.todayExpense}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#FF334B] tracking-tight truncate w-full block" title={formatCurrency(todayStats.expense, privacyMask)}>
+              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#FF334B] tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(todayStats.expense, privacyMask)}>
                 -{formatCurrency(todayStats.expense, privacyMask)}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[13px] min-w-0 overflow-hidden relative">
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[13px] min-w-0 overflow-hidden relative select-none secure-sensitive" data-sensitive="true">
             <span className="text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate mr-1.5 z-10">{pageT.common.todaysNet}</span>
-            <span className={`font-mono font-bold text-[12px] sm:text-[15px] truncate max-w-[60%] text-right z-10 ${todayStats.net >= 0 ? 'text-[#00D26A]' : 'text-[#FF334B]'}`} title={formatCurrency(todayStats.net, privacyMask)}>
+            <span className={`font-mono font-bold text-[12px] sm:text-[15px] truncate max-w-[60%] text-right z-10 sensitive-amount ${todayStats.net >= 0 ? 'text-[#00D26A]' : 'text-[#FF334B]'}`} title={formatCurrency(todayStats.net, privacyMask)}>
               {todayStats.net >= 0 ? '+' : ''}{formatCurrency(todayStats.net, privacyMask)}
             </span>
           </div>
@@ -215,40 +215,40 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </span>
               </div>
             </div>
-            <span className="text-[10px] sm:text-[11.5px] font-semibold text-[#10B981] bg-[#10B981]/15 px-2.5 py-1 rounded-lg border border-[#10B981]/30 shrink-0">
+            <span className="text-[10px] sm:text-[11.5px] font-semibold text-[#38BDF8] bg-[#38BDF8]/15 px-2.5 py-1 rounded-lg border border-[#38BDF8]/30 shrink-0 select-none secure-sensitive">
               {monthFormatted}
             </span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-3.5 min-w-0">
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
+            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#00D26A]/15 text-[#00D26A] flex items-center justify-center shrink-0">
                   <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.thisMonthIncome}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#00D26A] tracking-tight truncate w-full block" title={formatCurrency(monthStats.income, privacyMask)}>
+              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#00D26A] tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(monthStats.income, privacyMask)}>
                 +{formatCurrency(monthStats.income, privacyMask)}
               </div>
             </div>
 
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center">
+            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#FF334B]/15 text-[#FF334B] flex items-center justify-center shrink-0">
                   <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </div>
                 <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.thisMonthExpense}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#FF334B] tracking-tight truncate w-full block" title={formatCurrency(monthStats.expense, privacyMask)}>
+              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-[#FF334B] tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(monthStats.expense, privacyMask)}>
                 -{formatCurrency(monthStats.expense, privacyMask)}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[13px] min-w-0 overflow-hidden">
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[13px] min-w-0 overflow-hidden select-none secure-sensitive" data-sensitive="true">
             <span className="text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate mr-1.5">{t.home.thisMonthNet}:</span>
-            <span className={`font-mono font-bold text-[12px] sm:text-[15px] truncate max-w-[60%] text-right ${monthStats.net >= 0 ? 'text-[#00D26A]' : 'text-[#FF334B]'}`} title={formatCurrency(monthStats.net, privacyMask)}>
+            <span className={`font-mono font-bold text-[12px] sm:text-[15px] truncate max-w-[60%] text-right sensitive-amount ${monthStats.net >= 0 ? 'text-[#00D26A]' : 'text-[#FF334B]'}`} title={formatCurrency(monthStats.net, privacyMask)}>
               {monthStats.net >= 0 ? '+' : ''}{formatCurrency(monthStats.net, privacyMask)}
             </span>
           </div>
@@ -328,11 +328,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
         {/* View More Drawer for Categories beyond 6 */}
         {overflowFunds.length > 0 && (
           <div className="pt-1">
-            <div className="flex items-center justify-between py-1 px-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 py-1.5 px-0.5">
               <button
                 type="button"
                 onClick={() => setIsViewMoreExpanded(!isViewMoreExpanded)}
-                className="text-[11.5px] sm:text-[13px] font-bold text-[#38BDF8] hover:text-white bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-98"
+                className="text-[11.5px] sm:text-[12.5px] font-bold text-[#38BDF8] hover:text-white bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] px-3 py-1.5 rounded-xl flex items-center justify-between sm:justify-start gap-2 transition-all shadow-xs cursor-pointer active:scale-98 shrink-0"
               >
                 <span>
                   {isViewMoreExpanded
@@ -340,17 +340,17 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       ? 'कम श्रेणियां दिखाएं (Collapse)'
                       : 'Show Fewer Categories'
                     : isHindi
-                    ? `और श्रेणियां देखें (+${overflowFunds.length} फंड्स)`
+                    ? `+${overflowFunds.length} और श्रेणियां देखें`
                     : `View More Categories (+${overflowFunds.length} More)`}
                 </span>
                 {isViewMoreExpanded ? (
-                  <ChevronUp className="w-4 h-4" />
+                  <ChevronUp className="w-4 h-4 text-[#38BDF8] shrink-0" />
                 ) : (
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown className="w-4 h-4 text-[#38BDF8] shrink-0" />
                 )}
               </button>
 
-              <span className="text-[10px] sm:text-[11.5px] text-[var(--theme-text-muted,#8BA4D0)] font-medium">
+              <span className="text-[10px] sm:text-[11.5px] text-[var(--theme-text-muted,#8BA4D0)] font-medium self-end sm:self-center px-1">
                 {isHindi
                   ? `होम पर 6 सक्रिय • कुल ${activeFunds.length} श्रेणियां`
                   : `6 open on Home • ${activeFunds.length} total`}
@@ -459,7 +459,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
         {/* HasVolt Sponsored Ad Card */}
         <div className="h-full">
-          <HasVoltPromoBanner variant="card" />
+          <HasVoltPromoBanner variant="card" language={language} />
         </div>
       </div>
 

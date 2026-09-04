@@ -7,36 +7,73 @@ import {
   X,
   MapPin,
   Globe,
-  Wrench,
   Zap,
   ShieldCheck,
   CheckCircle2,
-  Briefcase
+  ThumbsUp,
+  Wrench,
+  Building2
 } from 'lucide-react';
+import { AppLanguage } from '../types';
+import { getCurrentLanguage } from '../utils/currencyConfig';
 
 interface HasVoltPromoBannerProps {
   className?: string;
   variant?: 'card' | 'bar';
+  language?: AppLanguage;
 }
 
 export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
   className = '',
-  variant = 'card'
+  variant = 'card',
+  language
 }) => {
   const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>('/Hasvolt-peofasianal-electrical-services-ads-1.png');
   const [imgError, setImgError] = useState(false);
 
-  const brand = 'HasVolt';
-  const tagline = 'Professional Electrical Services';
-  const websiteUrl = 'https://www.hasvolt.com';
-  const whatsappNumber = '+91 8383098574';
-  const whatsappUrl = `https://wa.me/918383098574?text=${encodeURIComponent('Hi HasVolt, I need electrical service assistance.')}`;
+  const currentLang = language || getCurrentLanguage();
+  const isHindi = currentLang === 'hi';
 
-  const services = ['Repairing', 'Installation', 'Maintenance', 'Project Work'];
-  const teamInfo = 'Verified Electrician & Technician';
-  const primaryServiceArea = 'Delhi NCR & Bihar';
-  const secondaryServiceArea = 'Pan-India Project Work Only';
+  const brand = 'HASVOLT';
+  const tagline = isHindi
+    ? 'प्रोफेशनल इलेक्ट्रिकल सर्विसेज'
+    : 'Professional Electrical Services';
+
+  const subDesc = isHindi
+    ? 'घरेलू व दुकान वायरिंग, शॉर्ट सर्किट व फॉल्ट रिपेयर, इंडस्ट्रियल प्रोजेक्ट्स एवं AMC।'
+    : 'Wiring, breakdown repairs, industrial electrical projects & annual maintenance.';
+
+  const websiteUrl = 'https://www.hasvolt.com';
+  const reviewUrl = 'https://g.page/r/CdgSZ8fLkYKVEBM/review';
+  const whatsappNumber = '+91 8383098574';
+  const whatsappUrl = `https://wa.me/918383098574?text=${encodeURIComponent(
+    isHindi
+      ? 'नमस्ते HasVolt, मुझे इलेक्ट्रिकल सर्विस / इलेक्ट्रीशियन की आवश्यकता है।'
+      : 'Hi HasVolt, I need electrical service assistance / electrician booking.'
+  )}`;
+
+  const primaryServiceArea = isHindi ? 'दिल्ली एनसीआर एवं बिहार' : 'Delhi NCR & Bihar';
+  const secondaryServiceArea = isHindi ? 'पैन-इंडिया प्रोजेक्ट्स' : 'Pan-India Projects';
+
+  const servicePills = [
+    {
+      icon: Zap,
+      label: isHindi ? 'वायरिंग व फिटिंग' : 'Wiring & Fitting'
+    },
+    {
+      icon: Wrench,
+      label: isHindi ? 'फाल्ट व रिपेयर' : 'Fault Repairs'
+    },
+    {
+      icon: Building2,
+      label: isHindi ? 'इंडस्ट्रियल वर्क' : 'Industrial Work'
+    },
+    {
+      icon: ShieldCheck,
+      label: isHindi ? 'वार्षिक AMC' : 'AMC Care'
+    }
+  ];
 
   // Keyboard escape listener & body scroll lock
   useEffect(() => {
@@ -69,21 +106,21 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
   return (
     <>
       {variant === 'card' ? (
-        /* HasVolt Sponsored Ad Card (Homepage - 50% Compact Size) */
+        /* HasVolt Sponsored Ad Card - 100% Theme Adaptive (Light & Dark), Solid Border, Ultra-Compact */
         <div
           role="region"
-          aria-label="HasVolt Professional Electrical Services"
-          className={`w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8]/60 rounded-xl p-2.5 sm:p-3 shadow-xs flex flex-col justify-between space-y-2 text-left transition-all duration-300 ${className}`}
+          aria-label="Sponsored Ad: HasVolt Professional Electrical Services"
+          className={`w-full bg-[var(--theme-card,#FFFFFF)] border border-[var(--theme-border,#E2E8F0)] hover:border-[var(--theme-primary,#0284C7)]/60 rounded-2xl p-3 sm:p-3.5 shadow-sm hover:shadow-md flex flex-col justify-between space-y-2 text-left transition-all duration-300 ${className}`}
         >
-          {/* Brand Header */}
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex items-center gap-2.5 min-w-0">
-              {/* Logo / Poster Thumbnail with click to expand */}
+          {/* Top Bar: Brand, Ad Badge, Tagline & View Flyer */}
+          <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-border,#E2E8F0)]/70 pb-2">
+            <div className="flex items-center gap-2 min-w-0">
+              {/* Clickable Flyer Thumbnail */}
               <button
                 type="button"
                 onClick={() => setIsPosterModalOpen(true)}
-                className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-lg overflow-hidden border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] hover:border-[#38BDF8] transition-colors flex items-center justify-center shadow-xs cursor-pointer group"
-                title="View full HasVolt poster"
+                className="relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-lg overflow-hidden border border-[var(--theme-border,#E2E8F0)] bg-[var(--theme-surface,#F8FAFC)] hover:border-[var(--theme-primary,#0284C7)] transition-all flex items-center justify-center shadow-2xs cursor-pointer group"
+                title={isHindi ? 'हसवोल्ट पोस्टर देखें' : 'View HasVolt poster'}
                 aria-label="View HasVolt poster"
               >
                 {!imgError ? (
@@ -95,128 +132,124 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                   />
                 ) : (
-                  <div className="p-1 text-center">
-                    <Zap className="w-4 h-4 text-[#38BDF8] mx-auto" />
-                  </div>
+                  <Zap className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)]" />
                 )}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Maximize2 className="w-3 h-3 text-white drop-shadow" />
+                  <Maximize2 className="w-2.5 h-2.5 text-white" />
                 </div>
               </button>
 
-              {/* Brand & Tagline */}
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="font-extrabold uppercase px-1 py-0.2 rounded text-[7.5px] tracking-wider bg-[#0284C7] text-white shadow-2xs">
-                    SPONSORED
-                  </span>
-                  <span className="text-[var(--theme-text,#F8FAFC)] font-black text-[13px] sm:text-[14px] tracking-tight">
+                  <span className="text-[13px] sm:text-[14px] font-black text-[var(--theme-text,#0F172A)] tracking-tight">
                     {brand}
                   </span>
+                  <span className="font-mono font-bold text-[8px] uppercase px-1.5 py-0.2 rounded bg-[var(--theme-primary-dim,rgba(2,132,199,0.1))] text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary-border,rgba(2,132,199,0.25))]">
+                    AD &bull; SPONSORED
+                  </span>
                 </div>
-                <p className="text-[10.5px] sm:text-[11px] font-semibold text-[#38BDF8] tracking-tight truncate">
+                <p className="text-[10.5px] sm:text-[11px] font-bold text-[var(--theme-primary,#0284C7)] truncate">
                   {tagline}
                 </p>
-                <div className="flex items-center gap-1 text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)]">
-                  <ShieldCheck className="w-3 h-3 text-[#10B981] shrink-0" />
-                  <span className="font-medium truncate">{teamInfo}</span>
-                </div>
               </div>
             </div>
 
-            {/* Poster quick open icon */}
             <button
               type="button"
               onClick={() => setIsPosterModalOpen(true)}
-              className="p-1 rounded-md text-[var(--theme-text-muted,#8BA4D0)] hover:text-[#38BDF8] hover:bg-[var(--theme-surface,#0E1A29)] transition-colors shrink-0 cursor-pointer"
-              title="View full poster"
-              aria-label="View full poster"
+              className="text-[10px] sm:text-[10.5px] font-semibold text-[var(--theme-primary,#0284C7)] hover:underline flex items-center gap-1 px-1.5 py-0.5 rounded bg-[var(--theme-surface,#F8FAFC)] border border-[var(--theme-border,#E2E8F0)] shrink-0 transition-colors cursor-pointer"
+              title={isHindi ? 'विज्ञापन पोस्टर बड़ा करके देखें' : 'View full Ad poster'}
             >
-              <Maximize2 className="w-3.5 h-3.5" />
+              <Maximize2 className="w-2.5 h-2.5" />
+              <span>{isHindi ? 'पोस्टर' : 'Poster'}</span>
             </button>
           </div>
 
-          {/* Compact Services & Coverage */}
-          <div className="space-y-1">
-            <div className="flex flex-wrap gap-1">
-              {services.map((svc) => (
+          {/* Service Highlights (Compact 4 Pills) */}
+          <div className="grid grid-cols-2 gap-1 sm:gap-1.5">
+            {servicePills.map((pill, idx) => {
+              const IconComp = pill.icon;
+              return (
                 <div
-                  key={svc}
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[9.5px] font-medium text-[var(--theme-text,#F8FAFC)]"
+                  key={idx}
+                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[var(--theme-surface,#F8FAFC)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text,#0F172A)] text-[10px] font-medium truncate"
                 >
-                  <CheckCircle2 className="w-2.5 h-2.5 text-[#38BDF8] shrink-0" />
-                  <span className="truncate">{svc}</span>
+                  <IconComp className="w-2.5 h-2.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+                  <span className="truncate">{pill.label}</span>
                 </div>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-1 text-[9px] text-[var(--theme-text-muted,#8BA4D0)] truncate pt-0.5">
-              <MapPin className="w-2.5 h-2.5 text-[#38BDF8] shrink-0" />
-              <span className="truncate">{primaryServiceArea}</span>
-              <span className="text-slate-500">•</span>
-              <Briefcase className="w-2.5 h-2.5 text-[#F59E0B] shrink-0" />
-              <span className="truncate">{secondaryServiceArea}</span>
-            </div>
+              );
+            })}
           </div>
 
-          {/* Glassy WhatsApp Button & Website */}
-          <div className="pt-1.5 border-t border-[var(--theme-border,#213E61)] space-y-1.5">
-            <div className="flex items-center justify-between text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] px-0.5">
-              <span>WA: <strong className="text-[var(--theme-text,#F8FAFC)]">{whatsappNumber}</strong></span>
-              <a
-                href={websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#38BDF8] hover:underline font-semibold"
-              >
-                hasvolt.com
-              </a>
-            </div>
+          {/* Location & Verified Strip */}
+          <div className="flex items-center justify-between gap-1 text-[9.5px] px-2 py-1 rounded-lg bg-[var(--theme-surface,#F8FAFC)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text-muted,#475569)]">
+            <span className="flex items-center gap-1 truncate">
+              <MapPin className="w-2.5 h-2.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+              <span className="truncate">{primaryServiceArea} &bull; {secondaryServiceArea}</span>
+            </span>
+            <span className="text-[9px] font-mono text-[var(--theme-primary,#0284C7)] font-semibold shrink-0">
+              {isHindi ? 'वेरिफाइड टीम' : 'Verified Team'}
+            </span>
+          </div>
 
-            <div className="flex items-center gap-1.5">
-              {/* Glassy WhatsApp Button */}
+          {/* Action Buttons: WhatsApp Booking, Google Review & Website */}
+          <div className="pt-0.5 flex items-center justify-between gap-1.5">
+            <div className="flex items-center gap-1.5 min-w-0">
+              {/* WhatsApp Booking CTA */}
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative overflow-hidden flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 active:scale-95 text-emerald-300 hover:text-white border border-emerald-400/40 hover:border-emerald-300/80 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_2px_8px_rgba(16,185,129,0.15)] font-bold text-[11px] sm:text-[11.5px] flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer group"
-                title={`WhatsApp Chat (${whatsappNumber})`}
+                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-[10px] sm:text-[10.5px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs shrink-0"
+                title={`Chat on WhatsApp (${whatsappNumber})`}
+                aria-label="Chat on WhatsApp"
               >
-                {/* Subtle glass reflection highlight */}
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-white/15 to-transparent pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity" />
-                <MessageSquare className="w-3.5 h-3.5 fill-emerald-400/25 text-emerald-400 group-hover:scale-110 transition-transform" />
-                <span className="relative z-10 tracking-tight">WhatsApp Chat</span>
+                <MessageSquare className="w-3 h-3 fill-white/20 text-white" />
+                <span>{isHindi ? 'बुकिंग / चैट' : 'Book / Chat'}</span>
               </a>
 
+              {/* Compact Review Button with ThumbsUp & Zero Yellow */}
               <a
-                href={websiteUrl}
+                href={reviewUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="py-1.5 px-2.5 rounded-lg bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[#38BDF8]/60 text-[var(--theme-text,#F8FAFC)] hover:text-[#38BDF8] font-bold text-[11px] sm:text-[11.5px] flex items-center justify-center gap-1 transition-all cursor-pointer shadow-2xs backdrop-blur-xs"
-                title="Visit HasVolt Official Website (https://www.hasvolt.com)"
+                className="px-2 py-1 rounded-lg bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] active:scale-95 border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text-muted,#475569)] hover:text-[var(--theme-text,#0F172A)] font-medium text-[10px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs shrink-0"
+                title={isHindi ? 'गूगल पर हसवोल्ट का रिव्यू दें' : 'Review HasVolt on Google'}
+                aria-label="Review on Google"
               >
-                <Globe className="w-3.5 h-3.5 text-[#38BDF8]" />
-                <span className="hidden sm:inline">Website</span>
-                <ExternalLink className="w-2.5 h-2.5 text-[var(--theme-text-muted,#8BA4D0)]" />
+                <ThumbsUp className="w-2.5 h-2.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+                <span>{isHindi ? 'रिव्यू' : 'Review'}</span>
               </a>
             </div>
+
+            {/* Official Website Link */}
+            <a
+              href={websiteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2 py-1 rounded-lg bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-primary,#0284C7)] font-medium text-[10px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs truncate"
+              title="Visit HasVolt Official Website (https://www.hasvolt.com)"
+            >
+              <Globe className="w-2.5 h-2.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+              <span className="truncate">hasvolt.com</span>
+              <ExternalLink className="w-2 h-2 opacity-70 shrink-0" />
+            </a>
           </div>
         </div>
       ) : (
-        /* Footer Bar Variant */
+        /* Footer Bar Variant - Theme-Adaptive, Solid Border & Compact */
         <div
           role="region"
-          aria-label="Sponsored Partner Banner: HasVolt"
-          className={`w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-3 text-left ${className}`}
+          aria-label="Sponsored Ad: HasVolt Electrical Services"
+          className={`w-full bg-[var(--theme-card,#FFFFFF)] border border-[var(--theme-border,#E2E8F0)] hover:border-[var(--theme-primary,#0284C7)]/60 rounded-2xl p-2.5 sm:p-3 shadow-xs flex flex-col lg:flex-row items-center justify-between gap-2 text-left ${className}`}
         >
           {/* Left Brand & Details */}
-          <div className="flex items-center gap-3 min-w-0 w-full lg:w-auto">
+          <div className="flex items-center gap-2.5 min-w-0 w-full lg:w-auto">
             <button
               type="button"
               onClick={() => setIsPosterModalOpen(true)}
-              className="w-11 h-11 rounded-xl overflow-hidden border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] shrink-0 cursor-pointer flex items-center justify-center hover:border-[#38BDF8] transition-colors"
-              title="View full HasVolt poster"
-              aria-label="View full HasVolt poster"
+              className="w-8 h-8 rounded-lg overflow-hidden border border-[var(--theme-border,#E2E8F0)] bg-[var(--theme-surface,#F8FAFC)] shrink-0 flex items-center justify-center cursor-pointer hover:border-[var(--theme-primary,#0284C7)] transition-colors shadow-2xs"
+              title="View HasVolt poster"
             >
               {!imgError ? (
                 <img
@@ -227,55 +260,73 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Zap className="w-5 h-5 text-[#38BDF8]" />
+                <Zap className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)]" />
               )}
             </button>
+
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-extrabold uppercase px-1.5 py-0.5 rounded text-[8.5px] tracking-wider bg-[#0284C7] text-white">
-                  SPONSORED
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="font-mono font-bold text-[8px] uppercase px-1.5 py-0.2 rounded bg-[var(--theme-primary-dim,rgba(2,132,199,0.1))] text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary-border,rgba(2,132,199,0.25))]">
+                  AD
                 </span>
-                <span className="font-bold text-[var(--theme-text,#F8FAFC)] text-[14px]">
+                <span className="font-black text-[var(--theme-text,#0F172A)] text-[12.5px] sm:text-[13px]">
                   {brand}
                 </span>
-                <span className="text-[12px] text-[#38BDF8] font-semibold">
-                  • {tagline}
+                <span className="text-[10.5px] sm:text-[11px] text-[var(--theme-primary,#0284C7)] font-bold truncate">
+                  &bull; {tagline}
                 </span>
               </div>
-              <p className="text-[11px] text-[var(--theme-text-muted,#8BA4D0)] truncate mt-0.5">
-                {services.join(' • ')} | {primaryServiceArea} ({secondaryServiceArea})
+              <p className="text-[9.5px] sm:text-[10px] text-[var(--theme-text-muted,#475569)] truncate mt-0.5">
+                {isHindi
+                  ? 'वायरिंग, फिटिंग, रिपेयर व इंडस्ट्रियल प्रोजेक्ट्स &bull; ' + primaryServiceArea
+                  : 'Wiring, Installation, Fault Repairs & Industrial Projects &bull; ' + primaryServiceArea}
               </p>
             </div>
           </div>
 
-          {/* Right Action Buttons (NO CALL BUTTON) */}
-          <div className="flex items-center gap-2 w-full lg:w-auto justify-end">
+          {/* Right Action Buttons */}
+          <div className="flex items-center gap-1.5 w-full lg:w-auto justify-end flex-wrap">
             <button
               type="button"
               onClick={() => setIsPosterModalOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[12px] font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="px-2 py-1 rounded-lg bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text,#0F172A)] text-[10px] font-medium flex items-center gap-1 cursor-pointer transition-colors"
             >
-              <Maximize2 className="w-3.5 h-3.5 text-[#38BDF8]" />
-              <span>Poster</span>
+              <Maximize2 className="w-2.5 h-2.5 text-[var(--theme-primary,#0284C7)]" />
+              <span>{isHindi ? 'पोस्टर' : 'Poster'}</span>
             </button>
+
+            {/* Small Review Button without yellow */}
+            <a
+              href={reviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2 py-1 rounded-lg bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text-muted,#475569)] hover:text-[var(--theme-text,#0F172A)] text-[10px] font-medium flex items-center gap-1 cursor-pointer transition-all shadow-2xs"
+              title="Review HasVolt Services on Google"
+            >
+              <ThumbsUp className="w-2.5 h-2.5 text-[var(--theme-primary,#0284C7)]" />
+              <span>{isHindi ? 'रिव्यू' : 'Review'}</span>
+            </a>
+
             <a
               href={websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[12px] font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="px-2 py-1 rounded-lg bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-primary,#0284C7)] text-[10px] font-medium flex items-center gap-1 cursor-pointer transition-colors"
             >
-              <Globe className="w-3.5 h-3.5 text-[#38BDF8]" />
-              <span>Website</span>
+              <Globe className="w-2.5 h-2.5 text-[var(--theme-primary,#0284C7)]" />
+              <span>{isHindi ? 'वेबसाइट' : 'Website'}</span>
             </a>
+
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative overflow-hidden px-3.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 hover:text-white border border-emerald-400/40 hover:border-emerald-300/80 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_2px_8px_rgba(16,185,129,0.15)] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 group"
+              className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-95 shrink-0 shadow-2xs"
+              title={`Chat on WhatsApp (${whatsappNumber})`}
+              aria-label="Chat on WhatsApp"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-white/15 to-transparent pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity" />
-              <MessageSquare className="w-3.5 h-3.5 fill-emerald-400/25 text-emerald-400 group-hover:scale-110 transition-transform" />
-              <span className="relative z-10">WhatsApp</span>
+              <MessageSquare className="w-3 h-3 fill-white/20 text-white" />
+              <span>WhatsApp</span>
             </a>
           </div>
         </div>
@@ -285,35 +336,35 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
       {isPosterModalOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-200"
+            className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-200"
             onClick={() => setIsPosterModalOpen(false)}
             role="dialog"
             aria-modal="true"
             aria-label="HasVolt Professional Electrical Services Poster"
           >
             <div
-              className="relative max-w-xl w-full max-h-[92vh] bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+              className="relative max-w-xl w-full max-h-[92vh] bg-[var(--theme-card,#FFFFFF)] border border-[var(--theme-border,#E2E8F0)] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between p-3.5 sm:p-4 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]">
+              <div className="flex items-center justify-between p-3.5 sm:p-4 border-b border-[var(--theme-border,#E2E8F0)] bg-[var(--theme-surface,#F8FAFC)]">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-extrabold uppercase px-1.5 py-0.5 rounded text-[9px] tracking-wider bg-[#0284C7] text-white">
-                      SPONSORED
+                    <span className="font-mono font-bold text-[8.5px] uppercase px-1.5 py-0.5 rounded bg-[var(--theme-primary-dim,rgba(2,132,199,0.1))] text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary-border,rgba(2,132,199,0.25))]">
+                      AD &bull; SPONSORED
                     </span>
-                    <h4 className="text-[15px] sm:text-[17px] font-extrabold text-[var(--theme-text,#F8FAFC)]">
+                    <h4 className="text-[15px] sm:text-[17px] font-black text-[var(--theme-text,#0F172A)]">
                       {brand}
                     </h4>
                   </div>
-                  <p className="text-[12px] font-semibold text-[#38BDF8]">
+                  <p className="text-[11.5px] sm:text-[12px] font-semibold text-[var(--theme-primary,#0284C7)] mt-0.5">
                     {tagline}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsPosterModalOpen(false)}
-                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#8BA4D0)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text-muted,#475569)] hover:text-[var(--theme-text,#0F172A)] transition-colors cursor-pointer"
                   aria-label="Close poster"
                 >
                   <X className="w-5 h-5" />
@@ -321,8 +372,8 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
               </div>
 
               {/* Modal Content: Poster Image & Details */}
-              <div className="p-4 overflow-y-auto max-h-[60vh] space-y-3 bg-[var(--theme-surface,#0E1A29)]/60">
-                <div className="flex items-center justify-center bg-black/40 rounded-xl p-2 border border-[var(--theme-border,#213E61)]">
+              <div className="p-4 overflow-y-auto max-h-[60vh] space-y-3 bg-[var(--theme-surface,#F8FAFC)]/50">
+                <div className="flex items-center justify-center bg-black/5 rounded-xl p-2 border border-[var(--theme-border,#E2E8F0)]">
                   <img
                     src={imgSrc}
                     alt="HasVolt Professional Electrical Services Poster"
@@ -333,54 +384,75 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                 </div>
 
                 {/* Service Highlights */}
-                <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2">
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#38BDF8]">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
-                    <span>{teamInfo}</span>
+                <div className="p-3 rounded-xl bg-[var(--theme-card,#FFFFFF)] border border-[var(--theme-border,#E2E8F0)] space-y-2.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--theme-primary,#0284C7)]">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)]" />
+                    <span>{isHindi ? 'प्रमाणित इलेक्ट्रीशियन व टेक्नीशियन टीम' : 'Verified Electrician & Technician Team'}</span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1.5 text-[11.5px] text-[var(--theme-text,#F8FAFC)]">
-                    {services.map((svc) => (
-                      <div key={svc} className="flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3 h-3 text-[#38BDF8] shrink-0" />
-                        <span>{svc}</span>
-                      </div>
-                    ))}
+                  <div className="grid grid-cols-2 gap-2 text-[11.5px] text-[var(--theme-text,#0F172A)]">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+                      <span>{isHindi ? 'घरेलू व दुकान वायरिंग' : 'Wiring & Fitting'}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+                      <span>{isHindi ? 'शॉर्ट सर्किट व रिपेयरिंग' : 'Fault Repair & Breakdown'}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+                      <span>{isHindi ? 'इंडस्ट्रियल प्रोजेक्ट' : 'Industrial Projects'}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)] shrink-0" />
+                      <span>{isHindi ? 'वार्षिक मेंटेनेंस (AMC)' : 'Annual AMC Care'}</span>
+                    </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/60 flex items-center justify-between flex-wrap gap-1 text-[11px] text-[var(--theme-text-muted,#8BA4D0)]">
+                  <div className="pt-2 border-t border-[var(--theme-border,#E2E8F0)]/60 flex items-center justify-between flex-wrap gap-1 text-[11px] text-[var(--theme-text-muted,#475569)]">
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-[#38BDF8]" />
+                      <MapPin className="w-3 h-3 text-[var(--theme-primary,#0284C7)]" />
                       <span>{primaryServiceArea}</span>
                     </span>
-                    <span className="text-[#F59E0B] font-medium">
+                    <span className="text-[var(--theme-primary,#0284C7)] font-medium">
                       {secondaryServiceArea}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Modal Footer Quick Actions (NO CALL BUTTON) */}
-              <div className="p-3.5 sm:p-4 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-between gap-3">
+              {/* Modal Footer Quick Actions */}
+              <div className="p-3.5 sm:p-4 border-t border-[var(--theme-border,#E2E8F0)] bg-[var(--theme-surface,#F8FAFC)] flex items-center justify-between gap-2 flex-wrap">
                 <a
                   href={websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                  className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text,#0F172A)] text-[11px] font-medium flex items-center gap-1.5 cursor-pointer transition-colors"
                 >
-                  <Globe className="w-4 h-4 text-[#38BDF8]" />
-                  <span>Visit Website</span>
+                  <Globe className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)]" />
+                  <span>{isHindi ? 'वेबसाइट' : 'Website'}</span>
+                </a>
+
+                {/* Small Clean Review Button - Zero Yellow */}
+                <a
+                  href={reviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#F8FAFC)] hover:bg-[var(--theme-card-hover,#F1F5F9)] border border-[var(--theme-border,#E2E8F0)] text-[var(--theme-text-muted,#475569)] hover:text-[var(--theme-text,#0F172A)] text-[11px] font-medium flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs"
+                  title="Review HasVolt Services on Google"
+                >
+                  <ThumbsUp className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)]" />
+                  <span>{isHindi ? 'गूगल रिव्यू' : 'Google Review'}</span>
                 </a>
 
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative overflow-hidden flex-1 max-w-[200px] py-2 px-3.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 active:scale-95 text-emerald-300 hover:text-white border border-emerald-400/40 hover:border-emerald-300/80 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_2px_8px_rgba(16,185,129,0.15)] font-bold text-[12.5px] flex items-center justify-center gap-1.5 transition-all cursor-pointer group"
+                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-white/15 to-transparent pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity" />
-                  <MessageSquare className="w-4 h-4 fill-emerald-400/25 text-emerald-400 group-hover:scale-110 transition-transform" />
-                  <span className="relative z-10">WhatsApp Chat</span>
+                  <MessageSquare className="w-3.5 h-3.5 fill-white/20 text-white" />
+                  <span>{isHindi ? 'व्हाट्सएप पर संपर्क करें' : 'Contact on WhatsApp'}</span>
                 </a>
               </div>
             </div>

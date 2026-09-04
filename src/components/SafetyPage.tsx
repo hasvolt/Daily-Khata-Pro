@@ -276,7 +276,7 @@ export interface Goal {
               <h1 className="font-serif-display text-[22px] sm:text-[26px] font-bold text-[#F8FAFC]">
                 {tr.safety.title}
               </h1>
-              <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30">
+              <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
                 {tr.safety.openSourceBadge}
               </span>
             </div>
@@ -327,7 +327,7 @@ export interface Goal {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="p-6 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-primary,#38BDF8)]/30 shadow-lg space-y-4">
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-[#10B981] shrink-0">
+                    <div className="w-14 h-14 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0">
                       <FolderGit2 className="w-7 h-7" />
                     </div>
                     <div>
@@ -365,7 +365,7 @@ export interface Goal {
                       onClick={handleCopyClone}
                       className="p-2 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-card-hover,#19304A)] text-[#F8FAFC] transition-all cursor-pointer shrink-0"
                     >
-                      {copiedClone ? <Check className="w-4 h-4 text-[#10B981]" /> : <Copy className="w-4 h-4 text-[#94A3B8]" />}
+                      {copiedClone ? <Check className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" /> : <Copy className="w-4 h-4 text-[#94A3B8]" />}
                     </button>
                   </div>
                   <p className="text-[12px] text-[#64748B]">
@@ -380,7 +380,7 @@ export interface Goal {
                     title: tr.safety.mitLicenseTitle,
                     desc: tr.safety.mitLicenseDesc,
                     icon: ShieldCheck,
-                    color: '#10B981'
+                    color: 'var(--theme-primary, #38BDF8)'
                   },
                   {
                     title: tr.safety.modernStackTitle,
@@ -443,7 +443,7 @@ export interface Goal {
                     onClick={handleCopyCode}
                     className="px-3 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[12px] font-bold text-[#F8FAFC] flex items-center gap-2 hover:bg-[var(--theme-card-hover,#19304A)] transition-all cursor-pointer"
                   >
-                    {copied ? <Check className="w-3.5 h-3.5 text-[#10B981]" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copied ? <Check className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copied ? tr.safety.copied : tr.safety.copyCode}</span>
                   </button>
                 </div>
@@ -456,8 +456,8 @@ export interface Goal {
 
           {activeTab === 'audit' && (
             <div className="p-6 sm:p-8 space-y-6 animate-in fade-in">
-              <div className="p-6 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[#10B981]/30 flex items-start gap-5">
-                <div className="w-12 h-12 rounded-2xl bg-[#10B981]/20 text-[#10B981] flex items-center justify-center shrink-0">
+              <div className="p-6 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-primary,#38BDF8)]/30 flex items-start gap-5">
+                <div className="w-12 h-12 rounded-2xl bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-7 h-7" />
                 </div>
                 <div>
