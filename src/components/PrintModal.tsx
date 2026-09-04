@@ -45,11 +45,10 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     @page { size: A4 portrait; margin: 12mm 14mm; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 24px; color: #0f172a; max-width: 820px; margin: 0 auto; line-height: 1.45; background: #fff; position: relative; }
-    .watermark-bg { position: fixed; top: 48%; left: 50%; transform: translate(-50%, -50%) rotate(-28deg); font-size: 48px; font-weight: 900; color: rgba(15, 23, 42, 0.045); letter-spacing: 2px; pointer-events: none; z-index: 0; text-align: center; line-height: 1.35; user-select: none; }
-    .brand-header { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #FFC700; padding-bottom: 12px; margin-bottom: 16px; }
+    .watermark-bg { position: fixed; top: 48%; left: 50%; transform: translate(-50%, -50%) rotate(-28deg); font-size: 42px; font-weight: 900; color: rgba(15, 23, 42, 0.035); letter-spacing: 3px; pointer-events: none; z-index: 0; text-align: center; line-height: 1.35; user-select: none; }
+    .brand-header { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #0284c7; padding-bottom: 12px; margin-bottom: 16px; }
     .brand-title { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
     .brand-sub { font-size: 11.5px; color: #64748b; margin-top: 2px; }
-    .brand-website { font-size: 11px; font-weight: 700; color: #0284c7; margin-top: 3px; }
     .meta-box { position: relative; z-index: 1; font-size: 12px; color: #475569; display: flex; justify-content: space-between; background: #f8fafc; padding: 10px 14px; border-radius: 6px; margin-bottom: 18px; border: 1px solid #e2e8f0; }
     .summary-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; background: #0f172a; color: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
     .summary-label { font-size: 10.5px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px; }
@@ -65,24 +64,28 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     .badge { display: inline-block; padding: 2px 6px; font-size: 10px; font-weight: 700; border-radius: 4px; text-transform: uppercase; }
     .badge-inc { background: #dcfce7; color: #166534; }
     .badge-exp { background: #fee2e2; color: #991b1b; }
-    .footer { position: relative; z-index: 1; margin-top: 26px; border-top: 1.5px solid #cbd5e1; padding-top: 12px; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; align-items: center; }
-    .developer-footer-watermark { position: relative; z-index: 1; margin-top: 20px; padding-top: 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; color: #64748b; page-break-inside: avoid; break-inside: avoid; }
+    .doc-end-divider { position: relative; z-index: 1; margin-top: 28px; padding-top: 10px; border-top: 1.5px solid #e2e8f0; font-size: 10.5px; color: #64748b; display: flex; justify-content: space-between; align-items: center; }
+    .developer-colophon-box { position: relative; z-index: 1; margin-top: 16px; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #64748b; page-break-inside: avoid; break-inside: avoid; }
     @media print {
       body { padding: 0; }
       .no-print { display: none !important; }
-      .developer-footer-watermark { break-inside: avoid; page-break-inside: avoid; }
+      .developer-colophon-box { break-inside: avoid; page-break-inside: avoid; }
     }
   </style>
 </head>
 <body>
+  <div class="watermark-bg">
+    DAILY KHATA PRO<br>
+    <span style="font-size: 22px; font-weight: 700; letter-spacing: 4px;">OFFICIAL FINANCIAL STATEMENT</span>
+  </div>
+
   <div class="brand-header">
     <div>
       <div class="brand-title">Daily Khata Pro — Financial Statement</div>
-      <div class="brand-sub">6-Fund Money Ledger &amp; Wealth Record</div>
-      <div class="brand-website">Powered by HASVOLT · www.hasvolt.com</div>
+      <div class="brand-sub">6-Fund Systematic Money Ledger &amp; Wealth Audit</div>
     </div>
     <div style="text-align: right; font-size: 11px; color: #475569;">
-      <div>Official Record</div>
+      <div style="font-weight: 700; color: #0f172a;">Official Record</div>
       <div>Confidential &amp; Verified</div>
       <div style="font-size: 10px; color: #0284c7; font-weight: 600; margin-top: 2px;">Daily Khata Pro</div>
     </div>
@@ -172,17 +175,24 @@ export const PrintModal: React.FC<PrintModalProps> = ({
     </tbody>
   </table>
 
-  <div class="footer" style="page-break-inside: avoid; break-inside: avoid; border-top: 1px dashed #cbd5e1; padding-top: 8px; margin-top: 24px; font-size: 9.5px; color: #64748b;">
-    <div style="display: flex; align-items: center; gap: 7px;">
-      <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1px solid #94a3b8; opacity: 0.85;" />
-      <div style="display: flex; align-items: center; gap: 6px;">
-        <span style="font-weight: 700; color: #334155; font-size: 10px;">MD Zafeer Hasan (YAZDAAN)</span>
-        <span style="color: #94a3b8;">·</span>
-        <span style="font-size: 9px; color: #64748b;">Developer &amp; Creator · Daily Khata Pro</span>
+  <!-- Statement End Divider -->
+  <div class="doc-end-divider">
+    <span>• End of Financial Statement Record •</span>
+    <span>Daily Khata Pro Systematic Ledger</span>
+  </div>
+
+  <!-- Dedicated Distinct Developer Colophon & Watermark Signature at the Absolute Bottom -->
+  <div class="developer-colophon-box">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="MD Zafeer Hasan (YAZDAAN)" style="width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid #0284c7;" />
+      <div>
+        <div style="font-weight: 700; color: #0f172a; font-size: 10.5px;">MD Zafeer Hasan (YAZDAAN)</div>
+        <div style="font-size: 9px; color: #64748b;">Developer &amp; Creator · Daily Khata Pro</div>
       </div>
     </div>
-    <div style="text-align: right; font-family: monospace; font-size: 9px; color: #94a3b8;">
-      <span>Watermark Signature · <strong>HASVOLT</strong></span>
+    <div style="text-align: right; border-left: 1px solid #e2e8f0; padding-left: 12px;">
+      <div style="font-family: monospace; font-size: 9px; font-weight: 700; color: #0f172a; letter-spacing: 0.5px;">WATERMARK SIGNATURE · HASVOLT</div>
+      <div style="font-size: 8.5px; color: #64748b; margin-top: 2px;">Professional Engineering &bull; www.hasvolt.com</div>
     </div>
   </div>
 </body>

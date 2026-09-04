@@ -445,6 +445,97 @@
   background-color: #F8FAFC;
 }
 
+/* Banking Card 3D Multi-Theme Adaptation */
+[data-theme="yellow"] .banking-card-3d {
+  background: linear-gradient(135deg, #1C1502 0%, #3D2F05 55%, #140E01 100%) !important;
+  border-color: #665008 !important;
+  box-shadow: 0 20px 50px rgba(50, 40, 4, 0.5) !important;
+}
+[data-theme="yellow"] .banking-card-3d .banking-card-icon-box,
+[data-theme="yellow"] .banking-card-3d .banking-card-date-box {
+  background-color: #3D2F05 !important;
+  border-color: #665008 !important;
+  color: #FFC700 !important;
+}
+[data-theme="yellow"] .banking-card-3d .banking-card-label {
+  color: #FCD34D !important;
+}
+[data-theme="yellow"] .banking-card-3d .banking-card-subtitle {
+  color: #F59E0B !important;
+}
+
+[data-theme="orange"] .banking-card-3d {
+  background: linear-gradient(135deg, #1C0B02 0%, #421B07 55%, #140701 100%) !important;
+  border-color: #742E0B !important;
+  box-shadow: 0 20px 50px rgba(66, 27, 7, 0.5) !important;
+}
+[data-theme="orange"] .banking-card-3d .banking-card-icon-box,
+[data-theme="orange"] .banking-card-3d .banking-card-date-box {
+  background-color: #421B07 !important;
+  border-color: #742E0B !important;
+  color: #FB923C !important;
+}
+[data-theme="orange"] .banking-card-3d .banking-card-label {
+  color: #FDBA74 !important;
+}
+[data-theme="orange"] .banking-card-3d .banking-card-subtitle {
+  color: #FB923C !important;
+}
+
+[data-theme="emerald"] .banking-card-3d {
+  background: linear-gradient(135deg, #02170D 0%, #063920 55%, #011209 100%) !important;
+  border-color: #0E5E36 !important;
+  box-shadow: 0 20px 50px rgba(6, 57, 32, 0.5) !important;
+}
+[data-theme="emerald"] .banking-card-3d .banking-card-icon-box,
+[data-theme="emerald"] .banking-card-3d .banking-card-date-box {
+  background-color: #063920 !important;
+  border-color: #0E5E36 !important;
+  color: #34D399 !important;
+}
+[data-theme="emerald"] .banking-card-3d .banking-card-label {
+  color: #6EE7B7 !important;
+}
+[data-theme="emerald"] .banking-card-3d .banking-card-subtitle {
+  color: #34D399 !important;
+}
+
+[data-theme="purple"] .banking-card-3d {
+  background: linear-gradient(135deg, #140521 0%, #351052 55%, #0F031A 100%) !important;
+  border-color: #591D8C !important;
+  box-shadow: 0 20px 50px rgba(53, 16, 82, 0.5) !important;
+}
+[data-theme="purple"] .banking-card-3d .banking-card-icon-box,
+[data-theme="purple"] .banking-card-3d .banking-card-date-box {
+  background-color: #351052 !important;
+  border-color: #591D8C !important;
+  color: #C084FC !important;
+}
+[data-theme="purple"] .banking-card-3d .banking-card-label {
+  color: #D8B4FE !important;
+}
+[data-theme="purple"] .banking-card-3d .banking-card-subtitle {
+  color: #C084FC !important;
+}
+
+[data-theme="cyan"] .banking-card-3d {
+  background: linear-gradient(135deg, #02161E 0%, #063749 55%, #011117 100%) !important;
+  border-color: #0E5874 !important;
+  box-shadow: 0 20px 50px rgba(6, 55, 73, 0.5) !important;
+}
+[data-theme="cyan"] .banking-card-3d .banking-card-icon-box,
+[data-theme="cyan"] .banking-card-3d .banking-card-date-box {
+  background-color: #063749 !important;
+  border-color: #0E5874 !important;
+  color: #22D3EE !important;
+}
+[data-theme="cyan"] .banking-card-3d .banking-card-label {
+  color: #67E8F9 !important;
+}
+[data-theme="cyan"] .banking-card-3d .banking-card-subtitle {
+  color: #22D3EE !important;
+}
+
 /* Banking Card 3D Light & White Mode Adaptation */
 [data-theme="light"] .banking-card-3d,
 [data-theme="white"] .banking-card-3d {
@@ -475,10 +566,17 @@
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-icon-box,
-[data-theme="white"] .banking-card-3d .banking-card-icon-box {
+[data-theme="white"] .banking-card-3d .banking-card-icon-box,
+[data-theme="light"] .banking-card-3d .banking-card-date-box,
+[data-theme="white"] .banking-card-3d .banking-card-date-box {
   background-color: #E0F2FE !important;
   border-color: #BAE6FD !important;
   color: #0284C7 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-date,
+[data-theme="white"] .banking-card-3d .banking-card-date {
+  color: #0F172A !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-waves,

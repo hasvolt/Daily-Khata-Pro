@@ -64,27 +64,27 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
           <svg className="w-full h-full" viewBox="0 0 500 240" fill="none" preserveAspectRatio="none">
             <defs>
               <linearGradient id="waveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#00D2FF" stopOpacity="0" />
-                <stop offset="30%" stopColor="#00D2FF" stopOpacity="0.8" />
-                <stop offset="70%" stopColor="#38BDF8" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#2563EB" stopOpacity="0.2" />
+                <stop offset="0%" stopColor="var(--theme-primary, #00D2FF)" stopOpacity="0" />
+                <stop offset="30%" stopColor="var(--theme-primary, #00D2FF)" stopOpacity="0.8" />
+                <stop offset="70%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="var(--theme-glow, #2563EB)" stopOpacity="0.2" />
               </linearGradient>
               <linearGradient id="waveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#38BDF8" stopOpacity="0" />
-                <stop offset="40%" stopColor="#38BDF8" stopOpacity="0.75" />
-                <stop offset="80%" stopColor="#0284C7" stopOpacity="0.85" />
-                <stop offset="100%" stopColor="#1E40AF" stopOpacity="0" />
+                <stop offset="0%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0" />
+                <stop offset="40%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.75" />
+                <stop offset="80%" stopColor="var(--theme-primary, #0284C7)" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="var(--theme-glow, #1E40AF)" stopOpacity="0" />
               </linearGradient>
               <pattern id="dotGrid" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1.1" fill="#38BDF8" fillOpacity="0.2" />
+                <circle cx="2" cy="2" r="1.1" fill="var(--theme-primary, #38BDF8)" fillOpacity="0.25" />
               </pattern>
             </defs>
             <rect x="80" y="0" width="420" height="240" fill="url(#dotGrid)" />
             {/* Smooth luminous stream curves */}
-            <path d="M 0 160 C 140 160, 220 100, 350 78 C 410 68, 470 82, 500 92" stroke="url(#waveGrad1)" strokeWidth="2.8" filter="drop-shadow(0 0 10px rgba(56,189,248,0.9))" />
-            <path d="M 40 178 C 170 170, 250 115, 370 88 C 420 78, 470 90, 500 98" stroke="url(#waveGrad2)" strokeWidth="2" filter="drop-shadow(0 0 6px rgba(56,189,248,0.7))" />
+            <path d="M 0 160 C 140 160, 220 100, 350 78 C 410 68, 470 82, 500 92" stroke="url(#waveGrad1)" strokeWidth="2.8" />
+            <path d="M 40 178 C 170 170, 250 115, 370 88 C 420 78, 470 90, 500 98" stroke="url(#waveGrad2)" strokeWidth="2" />
             <path d="M 80 195 C 200 185, 280 130, 390 100 C 440 90, 480 102, 500 110" stroke="url(#waveGrad1)" strokeWidth="1.2" opacity="0.6" />
-            <path d="M 0 145 C 130 145, 210 90, 330 70 C 390 60, 460 72, 500 80" stroke="#38BDF8" strokeWidth="1" opacity="0.35" />
+            <path d="M 0 145 C 130 145, 210 90, 330 70 C 390 60, 460 72, 500 80" stroke="var(--theme-primary, #38BDF8)" strokeWidth="1" opacity="0.35" />
           </svg>
         </div>
 
@@ -92,7 +92,7 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
         <motion.div 
           className="banking-card-glare absolute inset-0 pointer-events-none z-20"
           style={{
-            background: "radial-gradient(circle at center, rgba(56,189,248,0.12) 0%, transparent 60%)",
+            background: "radial-gradient(circle at center, var(--theme-glow, rgba(56,189,248,0.12)) 0%, transparent 60%)",
             x: useTransform(mouseXSpring, [-0.5, 0.5], ["-40%", "40%"]),
             y: useTransform(mouseYSpring, [-0.5, 0.5], ["-40%", "40%"]),
           }}
@@ -102,7 +102,7 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
           {/* Header Row: Total Net Balance & Date */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="banking-card-icon-box p-2 sm:p-2.5 rounded-xl bg-[#0B2A6B] border border-[#17459E] text-[#38BDF8] flex items-center justify-center shrink-0 shadow-sm transition-colors">
+              <div className="banking-card-icon-box p-2 sm:p-2.5 rounded-xl bg-[var(--theme-surface,#0B2A6B)] border border-[var(--theme-border,#17459E)] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-sm transition-colors">
                 <Wallet className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div className="flex flex-col min-w-0">
@@ -115,8 +115,8 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-[#0B2A6B]/90 border border-[#17459E] text-[#38BDF8] shadow-sm shrink-0">
-              <Calendar className="w-3.5 h-3.5 text-[#38BDF8] shrink-0" />
+            <div className="banking-card-date-box flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-[var(--theme-surface,#0B2A6B)] border border-[var(--theme-border,#17459E)] text-[var(--theme-primary,#38BDF8)] shadow-sm shrink-0">
+              <Calendar className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
               <span className="banking-card-date text-[10.5px] sm:text-[12px] font-bold tracking-wide text-[#E2E8F0] uppercase whitespace-nowrap transition-colors">
                 {dateFormatted}
               </span>
@@ -136,13 +136,13 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
             </div>
           </div>
           
-          {/* Action Buttons: Add Income (Green) & Add Expense (Red) */}
+          {/* Action Buttons: Add Income (Green) & Add Expense (Red) - Deep Rich Solid Colors */}
           <div className="flex items-center justify-between pt-2">
             <div className="flex items-center gap-3 sm:gap-4 w-full">
               <button
                 type="button"
                 onClick={() => onAddClick('income')}
-                className="flex-1 py-2.5 sm:py-3 px-4 rounded-xl sm:rounded-2xl bg-[#00D26A] hover:bg-[#00E676] !text-white font-bold text-[13px] sm:text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_16px_rgba(0,210,106,0.35)] hover:scale-[1.02] active:scale-95 cursor-pointer"
+                className="flex-1 py-2.5 sm:py-3 px-4 rounded-xl sm:rounded-2xl bg-[#059669] hover:bg-[#047857] active:bg-[#065F46] !text-white font-bold text-[13px] sm:text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_16px_rgba(5,150,105,0.45)] hover:scale-[1.02] active:scale-95 cursor-pointer"
               >
                 <Plus className="w-4 h-4 stroke-[3] !text-white" />
                 <span className="truncate !text-white">Add Income</span>
@@ -150,7 +150,7 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
               <button
                 type="button"
                 onClick={() => onAddClick('expense')}
-                className="flex-1 py-2.5 sm:py-3 px-4 rounded-xl sm:rounded-2xl bg-[#FF334B] hover:bg-[#FF1733] !text-white font-bold text-[13px] sm:text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_16px_rgba(255,51,75,0.35)] hover:scale-[1.02] active:scale-95 cursor-pointer"
+                className="flex-1 py-2.5 sm:py-3 px-4 rounded-xl sm:rounded-2xl bg-[#DC2626] hover:bg-[#B91C1C] active:bg-[#991B1B] !text-white font-bold text-[13px] sm:text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_16px_rgba(220,38,38,0.45)] hover:scale-[1.02] active:scale-95 cursor-pointer"
               >
                 <Minus className="w-4 h-4 stroke-[3] !text-white" />
                 <span className="truncate !text-white">Add Expense</span>
