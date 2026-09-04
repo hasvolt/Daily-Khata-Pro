@@ -198,7 +198,7 @@ export function saveToLocalStorage(data: StorageDataModel): void {
     {
       name: 'types.ts',
       category: 'Schema & Types',
-      description: 'TypeScript definitions for financial ledger records, goals, and fund rules',
+      description: 'TypeScript definitions for financial record records, goals, and fund rules',
       icon: Code2,
       language: 'typescript',
       content: `/**
@@ -686,7 +686,7 @@ export interface KhataData {
                   <span>Isolated LocalStorage</span>
                 </div>
                 <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
-                  All ledger records live securely in your browser&apos;s sandboxed storage (<code className="text-[var(--theme-primary,#38BDF8)]">hasvolt_khata_v1</code>). Other websites cannot access it.
+                  All record records live securely in your browser&apos;s sandboxed storage (<code className="text-[var(--theme-primary,#38BDF8)]">hasvolt_khata_v1</code>). Other websites cannot access it.
                 </p>
               </div>
 
@@ -706,7 +706,7 @@ export interface KhataData {
                   <span>Zero Telemetry, No Popups, No Lock-in</span>
                 </div>
                 <p className="text-[11.5px] text-[#94A3B8] leading-relaxed">
-                  You can export your complete ledger as a standard JSON or CSV at any time, giving you 100% unconstrained ownership of your data.
+                  You can export your complete record as a standard JSON or CSV at any time, giving you 100% unconstrained ownership of your data.
                 </p>
               </div>
             </div>

@@ -1280,9 +1280,9 @@ export const NOTES_TRANSLATIONS: Record<string, Record<AppLanguage, string>> = {
     zh: '个人备忘与私密笔记'
   },
   vaultSubtitle: {
-    en: 'A dedicated private space isolated from ledgers and finances. Keep your personal reflections, passwords hints, ideas, and checklists 100% offline in your browser.',
+    en: 'A dedicated private space isolated from records and finances. Keep your personal reflections, passwords hints, ideas, and checklists 100% offline in your browser.',
     hi: 'खाता और खर्चों से बिल्कुल अलग अपना पर्सनल स्पेस। यहाँ अपने गुप्त विचार, जरूरी क्रेडेंशियल्स, पासवर्ड हिंट्स, टू-डू लिस्ट और मेमो 100% सुरक्षित और ऑफलाइन रखें।',
-    hinglish: 'Ledger se alag aapka personal space. Apne private ideas, passwords hints aur checklist offline safe rakhein.',
+    hinglish: 'Record se alag aapka personal space. Apne private ideas, passwords hints aur checklist offline safe rakhein.',
     ur: 'کھاتہ اور حساب کتاب سے الگ ایک نجی گوشہ۔ اپنے خفیہ خیالات، پاس ورڈ کے اشارے اور نوٹس مکمل آف لائن محفوظ رکھیں۔',
     bn: 'হিসাব খাতা থেকে আলাদা আপনার একান্ত ব্যক্তিগত জায়গা। পাসওয়ার্ড হিন্টস, টু-ডু লিস্ট ও গুরুত্বপূর্ণ চিন্তা নিরাপদে রাখুন।',
     es: 'Un espacio privado aislado de finanzas. Guarde reflexiones, contraseñas, ideas y listas 100% fuera de línea en su navegador.',

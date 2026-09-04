@@ -75,7 +75,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
 
   // Suggestion Form State
   const [suggestionTitle, setSuggestionTitle] = useState('');
-  const [suggestionCategory, setSuggestionCategory] = useState<string>('Ledger & Smart Funds');
+  const [suggestionCategory, setSuggestionCategory] = useState<string>('Record & Smart Funds');
   const [suggestionDescription, setSuggestionDescription] = useState('');
 
   // FAQ Accordion State
@@ -147,12 +147,12 @@ export const SupportPage: React.FC<SupportPageProps> = ({
       id: 'faq-1',
       qEn: 'Where is my financial data stored? Is it safe?',
       qHi: 'मेरा वित्तीय डेटा कहाँ सुरक्षित रहता है? क्या यह सुरक्षित है?',
-      aEn: 'Daily Khata Pro operates on a 100% Offline-First architecture. All your ledger transactions, 6-fund balances, savings goals, and notes are encrypted and stored in your device\'s local storage (`localStorage`). No data is sent to external servers.',
+      aEn: 'Daily Khata Pro operates on a 100% Offline-First architecture. All your record transactions, 6-fund balances, savings goals, and notes are encrypted and stored in your device\'s local storage (`localStorage`). No data is sent to external servers.',
       aHi: 'Daily Khata Pro शत-प्रतिशत ऑफलाइन-फर्स्ट आर्किटेक्चर पर काम करता है। आपका सारा वित्तीय रिकॉर्ड, स्मार्ट फंड हिसाब, गोल्स और नोट्स केवल आपके डिवाइस के लोकल स्टोरेज में सुरक्षित रहते हैं। कोई डेटा किसी बाहरी सर्वर पर नहीं भेजा जाता।'
     },
     {
       id: 'faq-2',
-      qEn: 'How can I backup and restore my ledger data?',
+      qEn: 'How can I backup and restore my record data?',
       qHi: 'मैं अपने खाता डेटा का बैकअप और रिस्टोर कैसे करूँ?',
       aEn: 'Open App Settings > Data Backup & Restore. Click "Download JSON Backup" to save a secure backup file. When switching devices, simply click "Restore from Backup" and upload your JSON file.',
       aHi: 'ऐप सेटिंग्स > डेटा बैकअप एवं रिस्टोर खोलें। "JSON बैकअप डाउनलोड करें" पर क्लिक करें। नया फोन या कंप्यूटर बदलने पर "बैकअप से रिस्टोर करें" पर क्लिक करके फाइल अपलोड करें।'
@@ -182,8 +182,8 @@ export const SupportPage: React.FC<SupportPageProps> = ({
       id: 'faq-6',
       qEn: 'Can I print or generate monthly A4 PDF statements?',
       qHi: 'क्या मैं मासिक A4 PDF स्टेटमेंट प्रिंट या डाउनलोड कर सकता हूँ?',
-      aEn: 'Yes! In the Ledger or Reports view, click the "Print / PDF Statement" button. You can customize the month, filter by category, and generate a clean, official A4 ledger report with summary totals.',
-      aHi: 'हाँ! लेजर या रिपोर्ट्स पेज में "प्रिंट / PDF स्टेटमेंट" बटन पर क्लिक करें। आप माह चुनकर साफ़-सुथरी A4 स्टेटमेंट प्रिंट या PDF सेव कर सकते हैं।'
+      aEn: 'Yes! In the Record or Reports view, click the "Print / PDF Statement" button. You can customize the month, filter by category, and generate a clean, official A4 record report with summary totals.',
+      aHi: 'हाँ! रिकॉर्ड या रिपोर्ट्स पेज में "प्रिंट / PDF स्टेटमेंट" बटन पर क्लिक करें। आप माह चुनकर साफ़-सुथरी A4 स्टेटमेंट प्रिंट या PDF सेव कर सकते हैं।'
     }
   ];
 
@@ -461,8 +461,8 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                 type="text"
                 placeholder={
                   isHindi
-                    ? 'उदा. लेजर में फ़िल्टर काम नहीं कर रहा, या प्रिंट बटन रिस्पॉन्ड नहीं कर रहा'
-                    : 'e.g., Filter not responding on Ledger, or Print preview blank'
+                    ? 'उदा. रिकॉर्ड में फ़िल्टर काम नहीं कर रहा, या प्रिंट बटन रिस्पॉन्ड नहीं कर रहा'
+                    : 'e.g., Filter not responding on Record, or Print preview blank'
                 }
                 value={bugTitle}
                 onChange={(e) => setBugTitle(e.target.value)}
@@ -609,7 +609,7 @@ export const SupportPage: React.FC<SupportPageProps> = ({
                 onChange={(e) => setSuggestionCategory(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[13px] text-[#F8FAFC] focus:outline-none focus:border-[#F59E0B]"
               >
-                <option value="Ledger & Smart Funds">खाता एवं स्मार्ट फंड (Ledger &amp; Smart Funds)</option>
+                <option value="Record & Smart Funds">खाता एवं स्मार्ट फंड (Record &amp; Smart Funds)</option>
                 <option value="Calculators">कैलकुलेटर एवं टूल्स (Calculators &amp; Suite)</option>
                 <option value="Reports & Print">रिपोर्ट्स एवं A4 प्रिंट (Reports &amp; PDF)</option>
                 <option value="Security & Backup">सुरक्षा एवं बैकअप (Security &amp; PIN)</option>

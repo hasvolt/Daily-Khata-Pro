@@ -257,7 +257,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               privacyMask: privacyMask
             }
           });
-          showFeedback('success', tStr('खाता डेटा सफलतापूर्वक रिस्टोर हो गया!', 'Ledger data restore ho gaya!', 'Ledger data restored successfully!'));
+          showFeedback('success', tStr('खाता डेटा सफलतापूर्वक रिस्टोर हो गया!', 'Record data restore ho gaya!', 'Record data restored successfully!'));
           setTimeout(() => onClose(), 1200);
         } else {
           showFeedback('error', tStr('अमान्य प्रारूप। कृपया सही बैकअप फ़ाइल चुनें।', 'Invalid format. Kripya valid Daily Khata JSON backup select karein.', 'Invalid format. Please select a valid Daily Khata Pro JSON backup.'));
@@ -693,8 +693,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </div>
                     <p className="text-[11.5px] text-[#94A3B8]">
                       {tStr(
-                        'होम, लेजर, लक्ष्य या ट्रैकर का डायरेक्ट लिंक WhatsApp या सोशल मीडिया पर शेयर करें।',
-                        'Home, ledger, goals ya tracker ke links WhatsApp par share karein.',
+                        'होम, रिकॉर्ड, लक्ष्य या ट्रैकर का डायरेक्ट लिंक WhatsApp या सोशल मीडिया पर शेयर करें।',
+                        'Home, record, goals ya tracker ke links WhatsApp par share karein.',
                         'Share deep links to Home, History, Goals, or Tracker on WhatsApp, X, or Telegram.'
                       )}
                     </p>
@@ -1128,7 +1128,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         {tStr('JSON फ़ाइल से रिस्टोर करें', 'JSON File Se Restore Karein', 'Restore from JSON File')}
                       </div>
                       <div className="text-[11px] text-[#94A3B8]">
-                        {tStr('पहले सहेजा बैकअप लोड करें', 'Pehle ka saved backup load karein', 'Import previously saved ledger')}
+                        {tStr('पहले सहेजा बैकअप लोड करें', 'Pehle ka saved backup load karein', 'Import previously saved record')}
                       </div>
                     </div>
                     <input
@@ -1548,12 +1548,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       {confirmAction === 'reset' && (
         <ConfirmModal
           isOpen={true}
-          title={tStr('सभी डेटा रीसेट करें?', 'Sabhi Data Reset Karein?', 'Reset All Ledger Data?')}
+          title={tStr('सभी डेटा रीसेट करें?', 'Sabhi Data Reset Karein?', 'Reset All Record Data?')}
           description={
             tStr(
               'यह आपके सभी लेन-देन, लक्ष्य और कार्य रिकॉर्ड को मिटा देगा। यह क्रिया वापस नहीं ली जा सकती।',
               'Yeh aapke sabhi transactions, goals aur work records ko delete kar dega. Yeh action undo nahi ho sakta.',
-              'This will permanently erase all ledger transactions, goals and work deliverables from local memory.'
+              'This will permanently erase all record transactions, goals and work deliverables from local memory.'
             )
           }
           confirmLabel={tStr('हां, सब मिटाएं', 'Haan, Sab Delete Karein', 'Yes, Wipe Everything')}
@@ -1562,7 +1562,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           onConfirm={() => {
             onResetData();
             setConfirmAction(null);
-            showFeedback('success', tStr('सभी डेटा रीसेट हो गया।', 'Sabhi data reset ho gaya.', 'All ledger data reset.'));
+            showFeedback('success', tStr('सभी डेटा रीसेट हो गया।', 'Sabhi data reset ho gaya.', 'All record data reset.'));
           }}
           onCancel={() => setConfirmAction(null)}
         />
@@ -1576,7 +1576,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             tStr(
               'यह आपके मौजूदा डेटा को नए व्यावहारिक उदाहरण लेन-देन के साथ बदल देगा।',
               'Yeh aapke current data ko sample income entries aur fund allocations ke sath replace kar dega.',
-              'This will populate your ledger with sample income entries and active fund allocations.'
+              'This will populate your record with sample income entries and active fund allocations.'
             )
           }
           confirmLabel={tStr('लोड करें', 'Load Karein', 'Load Demo')}

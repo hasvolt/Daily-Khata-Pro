@@ -42,7 +42,7 @@ export interface Translations {
     sixFundsSub: string;
     allocationRule: string;
     recentTransactions: string;
-    viewAllLedger: string;
+    viewAllRecord: string;
     noEntriesYet: string;
     noEntriesSub: string;
     startByAdding: string;
@@ -195,13 +195,13 @@ export interface Translations {
 export const TRANSLATIONS: Record<AppLanguage, Translations> = {
   en: {
     appName: 'Daily Khata Pro',
-    appSubtitle: 'Universal Daily Financial Ledger & Smart Fund Capital Engine',
+    appSubtitle: 'Universal Daily Financial Record & Smart Fund Capital Engine',
     nav: {
       home: 'Khata',
       add: 'Add +',
       tracker: 'Work & Life',
       goals: 'Goals',
-      history: 'Ledger',
+      history: 'Record',
       reports: 'Analytics'
     },
     header: {
@@ -233,8 +233,8 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsHeading: 'Smart Fund Money Pots',
       sixFundsSub: 'Systematic auto-partitioned balances based on discipline rules',
       allocationRule: 'Split Rule',
-      recentTransactions: 'Recent Ledger Entries',
-      viewAllLedger: 'View Full Ledger →',
+      recentTransactions: 'Recent Record Entries',
+      viewAllRecord: 'View Full Record →',
       noEntriesYet: 'No Transactions Yet',
       noEntriesSub: 'Start logging your daily income or expense to activate automatic fund splits.',
       startByAdding: 'Record First Entry',
@@ -294,7 +294,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       createFirstGoal: 'Create First Goal'
     },
     history: {
-      heading: 'Transaction Ledger & Statement',
+      heading: 'Transaction Record & Statement',
       sub: 'Complete searchable audit trail of all historical income and expense transactions.',
       searchPlaceholder: 'Filter by keyword, note, client, category...',
       all: 'All Records',
@@ -366,11 +366,11 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       saveRuleBtn: 'Save New Allocation Rule',
       resetRuleBtn: 'Reset to Recommended Smart Fund Rules',
       backupHeading: 'Local Storage Backup & Restore',
-      backupDesc: 'Your ledger is stored 100% locally. Export regular backups to prevent accidental loss.',
+      backupDesc: 'Your record is stored 100% locally. Export regular backups to prevent accidental loss.',
       exportJsonBtn: 'Export JSON Backup',
       importJsonBtn: 'Restore from JSON File',
-      exportCsvBtn: 'Export Ledger (CSV / Excel)',
-      dangerZone: 'Ledger Reset Zone',
+      exportCsvBtn: 'Export Record (CSV / Excel)',
+      dangerZone: 'Record Reset Zone',
       resetAllDataBtn: 'Wipe & Reset All Khata Data'
     },
     funds: {
@@ -406,13 +406,13 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
   },
   hi: {
     appName: 'डेली खाता: प्रो',
-    appSubtitle: 'सार्वभौमिक वित्तीय लेजर व स्मार्ट फंड स्मार्ट विभाजन इंजन',
+    appSubtitle: 'सार्वभौमिक वित्तीय रिकॉर्ड व स्मार्ट फंड स्मार्ट विभाजन इंजन',
     nav: {
       home: 'खाता',
       add: 'जोड़ें +',
       tracker: 'काम व जीवन',
       goals: 'लक्ष्य',
-      history: 'लेजर रिकॉर्ड',
+      history: 'रिकॉर्ड रिकॉर्ड',
       reports: 'रिपोर्ट्स'
     },
     header: {
@@ -445,7 +445,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'अनुशासित वित्तीय नियमों के तहत स्वचालित रूप से विभाजित बैलेंस',
       allocationRule: 'विभाजन नियम',
       recentTransactions: 'हाल के लेन-देन',
-      viewAllLedger: 'पूरा खाता देखें →',
+      viewAllRecord: 'पूरा खाता देखें →',
       noEntriesYet: 'अभी कोई लेन-देन नहीं है',
       noEntriesSub: 'अपनी दैनिक कमाई या खर्च दर्ज करके स्मार्ट फंड विभाजन सक्रिय करें।',
       startByAdding: 'पहला लेन-देन जोड़ें',
@@ -505,7 +505,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       createFirstGoal: 'पहला लक्ष्य बनाएं'
     },
     history: {
-      heading: 'खाता लेजर और लेन-देन विवरण',
+      heading: 'खाता रिकॉर्ड और लेन-देन विवरण',
       sub: 'आपकी पिछली सभी कमाई और खर्चों का संपूर्ण और सुरक्षित लेखा-जोखा।',
       searchPlaceholder: 'कीवर्ड, नोट, ग्राहक या श्रेणी खोजें...',
       all: 'सभी रिकॉर्ड',
@@ -580,7 +580,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       backupDesc: 'आपका डेटा आपके डिवाइस में 100% सुरक्षित है। नियमित बैकअप JSON फ़ाइल डाउनलोड करें।',
       exportJsonBtn: 'JSON बैकअप डाउनलोड करें',
       importJsonBtn: 'JSON फ़ाइल से रिस्टोर करें',
-      exportCsvBtn: 'लेजर CSV / Excel डाउनलोड करें',
+      exportCsvBtn: 'रिकॉर्ड CSV / Excel डाउनलोड करें',
       dangerZone: 'डेटा रीसेट क्षेत्र',
       resetAllDataBtn: 'सभी खाता डेटा मिटाएं और रीसेट करें'
     },
@@ -617,13 +617,13 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
   },
   hinglish: {
     appName: 'Daily Khata Pro',
-    appSubtitle: 'Universal Daily Financial Ledger & Smart Fund Capital Engine',
+    appSubtitle: 'Universal Daily Financial Record & Smart Fund Capital Engine',
     nav: {
       home: 'Khata',
       add: 'Add +',
       tracker: 'Work & Life',
       goals: 'Goals',
-      history: 'Ledger',
+      history: 'Record',
       reports: 'Analytics'
     },
     header: {
@@ -656,7 +656,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'Discipline rule ke hisaab se auto-split balance pots',
       allocationRule: 'Split Rule',
       recentTransactions: 'Recent Transactions',
-      viewAllLedger: 'Pura Ledger Dekhein →',
+      viewAllRecord: 'Pura Record Dekhein →',
       noEntriesYet: 'Abhi koi entry nahi hai',
       noEntriesSub: 'Apni daily income ya expense enter karke 6-fund split start karein.',
       startByAdding: 'First Entry Record Karein',
@@ -716,7 +716,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       createFirstGoal: 'New Goal Banayein'
     },
     history: {
-      heading: 'Transaction Ledger & Statement',
+      heading: 'Transaction Record & Statement',
       sub: 'Aapke sabhi income aur expense entries ka complete audit trail.',
       searchPlaceholder: 'Keywords, notes, client ya category search karein...',
       all: 'Sabhi Records',
@@ -791,8 +791,8 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       backupDesc: 'Aapka data 100% aapke browser mein secure hai. Regular JSON backup download karein.',
       exportJsonBtn: 'Export JSON Backup',
       importJsonBtn: 'Restore from JSON File',
-      exportCsvBtn: 'Export Ledger (CSV / Excel)',
-      dangerZone: 'Ledger Reset Zone',
+      exportCsvBtn: 'Export Record (CSV / Excel)',
+      dangerZone: 'Record Reset Zone',
       resetAllDataBtn: 'Sabhi Khata Data Reset Karein'
     },
     funds: {
@@ -867,7 +867,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'Saldos divididos automáticamente según reglas de disciplina financiera',
       allocationRule: 'Regla de División',
       recentTransactions: 'Transacciones Recientes',
-      viewAllLedger: 'Ver Libro Completo →',
+      viewAllRecord: 'Ver Libro Completo →',
       noEntriesYet: 'Sin Transacciones Aún',
       noEntriesSub: 'Registra tus ingresos o gastos diarios para activar la división de fondos.',
       startByAdding: 'Registrar Primera Entrada',
@@ -1074,7 +1074,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'أرصدة مقسمة تلقائياً وفق قواعد الانضباط المالي',
       allocationRule: 'قاعدة التقسيم',
       recentTransactions: 'أحدث المعاملات',
-      viewAllLedger: 'عرض السجل كاملاً ←',
+      viewAllRecord: 'عرض السجل كاملاً ←',
       noEntriesYet: 'لا توجد معاملات بعد',
       noEntriesSub: 'ابدأ بتسجيل دخلك أو مصاريفك اليومية لتفعيل تقسيم الصناديق.',
       startByAdding: 'سجل أول معاملة',
@@ -1281,7 +1281,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'Soldes répartis automatiquement selon des règles financières strictes',
       allocationRule: 'Règle de Répartition',
       recentTransactions: 'Transactions Récentes',
-      viewAllLedger: 'Voir Grand Livre Complet →',
+      viewAllRecord: 'Voir Grand Livre Complet →',
       noEntriesYet: 'Aucune Transaction',
       noEntriesSub: 'Enregistrez vos revenus ou dépenses pour activer la répartition automatique.',
       startByAdding: 'Enregistrer Première Entrée',
@@ -1488,7 +1488,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'Automatisch aufgeteilte Guthaben nach disziplinierten Finanzregeln',
       allocationRule: 'Aufteilungsregel',
       recentTransactions: 'Letzte Buchungen',
-      viewAllLedger: 'Gesamtes Buch anzeigen →',
+      viewAllRecord: 'Gesamtes Buch anzeigen →',
       noEntriesYet: 'Noch keine Buchungen',
       noEntriesSub: 'Trage deine täglichen Einnahmen oder Ausgaben ein, um die 6-Töpfe-Aufteilung zu starten.',
       startByAdding: 'Ersten Eintrag buchen',
@@ -1695,7 +1695,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'Автоматическое распределение баланса по правилам финансовой дисциплины',
       allocationRule: 'Правило распределения',
       recentTransactions: 'Последние операции',
-      viewAllLedger: 'Открыть полный журнал →',
+      viewAllRecord: 'Открыть полный журнал →',
       noEntriesYet: 'Нет транзакций',
       noEntriesSub: 'Начните вносить ежедневные доходы и расходы для авто-распределения.',
       startByAdding: 'Внести первую запись',
@@ -1902,7 +1902,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'Saldos divididos automaticamente por regras de disciplina financeira',
       allocationRule: 'Regra de Divisão',
       recentTransactions: 'Transações Recentes',
-      viewAllLedger: 'Ver Livro Completo →',
+      viewAllRecord: 'Ver Livro Completo →',
       noEntriesYet: 'Nenhuma Transação Ainda',
       noEntriesSub: 'Comece registrando suas receitas ou despesas diárias.',
       startByAdding: 'Registrar Primeiro Lançamento',
@@ -2109,7 +2109,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'নিয়মমাফিক স্বয়ংক্রিয়ভাবে ভাগ করা তহবিলের ব্যালেন্স',
       allocationRule: 'বন্টন নিয়ম',
       recentTransactions: 'সাম্প্রতিক লেনদেন',
-      viewAllLedger: 'সম্পূর্ণ খাতা দেখুন →',
+      viewAllRecord: 'সম্পূর্ণ খাতা দেখুন →',
       noEntriesYet: 'এখনও কোনো লেনদেন নেই',
       noEntriesSub: 'স্বয়ংক্রিয় ৬-তহবিল ভাগ সক্রিয় করতে আয় বা ব্যয় যোগ করুন।',
       startByAdding: 'প্রথম হিসাব যোগ করুন',
@@ -2316,7 +2316,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'مالیاتی نظم و ضبط کے تحت خودکار تقسیم شدہ فنڈز',
       allocationRule: 'تقسیم کا اصول',
       recentTransactions: 'حالیہ لین دین',
-      viewAllLedger: 'مکمل کھاتہ دیکھیں ←',
+      viewAllRecord: 'مکمل کھاتہ دیکھیں ←',
       noEntriesYet: 'کوئی لین دین درج نہیں',
       noEntriesSub: 'فنڈز کی خودکار تقسیم فعال کرنے کے لیے آمدنی یا خرچ درج کریں۔',
       startByAdding: 'پہلا اندراج درج کریں',
@@ -2523,7 +2523,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: 'Saldo dibagi otomatis sesuai aturan disiplin keuangan',
       allocationRule: 'Aturan Pembagian',
       recentTransactions: 'Transaksi Terkini',
-      viewAllLedger: 'Lihat Semua Buku Kas →',
+      viewAllRecord: 'Lihat Semua Buku Kas →',
       noEntriesYet: 'Belum Ada Transaksi',
       noEntriesSub: 'Mulai catat pemasukan atau pengeluaran harian Anda.',
       startByAdding: 'Catat Transaksi Pertama',
@@ -2730,7 +2730,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: '規律ある財務ルールに基づき自動分割された残高',
       allocationRule: '配分ルール',
       recentTransactions: '最近の取引履歴',
-      viewAllLedger: '台帳全体を表示 →',
+      viewAllRecord: '台帳全体を表示 →',
       noEntriesYet: '取引はまだありません',
       noEntriesSub: '日々の収入や支出を記録して自動分割を開始しましょう。',
       startByAdding: '最初の取引を記録',
@@ -2937,7 +2937,7 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       sixFundsSub: '根据严谨的财务纪律规则自动分流资金',
       allocationRule: '分账规则',
       recentTransactions: '近期交易流水',
-      viewAllLedger: '查看全部账本 →',
+      viewAllRecord: '查看全部账本 →',
       noEntriesYet: '暂无交易记录',
       noEntriesSub: '开始记录每日收入或支出，即可激活六基金自动分流。',
       startByAdding: '记录第一笔账',

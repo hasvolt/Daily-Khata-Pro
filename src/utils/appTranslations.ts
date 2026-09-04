@@ -25,7 +25,7 @@ export interface AppTranslationBundle {
     githubProfile: string;
     searchPlaceholder: string;
     dailyIncomeExpense: string;
-    sixFundLedger: string;
+    sixFundRecord: string;
     official: string;
     mask: string;
     hidden: string;
@@ -33,7 +33,7 @@ export interface AppTranslationBundle {
     day: string;
     night: string;
     khata: string;
-    ledger: string;
+    record: string;
     goals: string;
     workAndLife: string;
     notes: string;
@@ -252,7 +252,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       githubProfile: 'GitHub Profile',
       searchPlaceholder: 'Search transactions, notes, categories, amounts...',
       dailyIncomeExpense: 'Daily Income & Expense',
-      sixFundLedger: 'Smart Fund Ledger',
+      sixFundRecord: 'Smart Fund Record',
       official: 'OFFICIAL',
       mask: 'Mask',
       hidden: 'Hidden',
@@ -260,7 +260,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       day: 'Day',
       night: 'Night',
       khata: 'Khata',
-      ledger: 'Ledger',
+      record: 'Record',
       goals: 'Goals',
       workAndLife: 'Work & Life',
       notes: 'Notes',
@@ -315,7 +315,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       privacyMaskHeading: 'Privacy Masking Mode',
       privacyMaskDesc: 'Hide numerical rupee values on screen when in public or shared spaces.',
       securityPinHeading: 'App Passcode Lock',
-      securityPinDesc: 'Protect your ledger and notes with a secure 4-digit PIN lock.',
+      securityPinDesc: 'Protect your record and notes with a secure 4-digit PIN lock.',
       securityPinConfigure: 'Configure PIN Lock',
       lockNowBtn: 'Lock App Now',
       customCategoriesHeading: 'Custom Expense Categories',
@@ -336,19 +336,19 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       saveRuleBtn: 'Save New Allocation Rule',
       resetRuleBtn: 'Reset to Recommended Smart Fund Rules',
       backupHeading: 'Local Storage Backup & Restore',
-      backupDesc: 'Your ledger is stored 100% locally. Export regular backups to prevent accidental loss.',
+      backupDesc: 'Your record is stored 100% locally. Export regular backups to prevent accidental loss.',
       exportJsonBtn: 'Export JSON Backup',
       importJsonBtn: 'Restore from JSON File',
-      exportCsvBtn: 'Export Ledger (CSV / Excel)',
-      sampleDataHeading: 'Demo Sample Ledger',
+      exportCsvBtn: 'Export Record (CSV / Excel)',
+      sampleDataHeading: 'Demo Sample Record',
       sampleDataDesc: 'Populate sample data to explore features, analytics, goals, and fund charts.',
       loadSampleDataBtn: 'Load Demo Sample Data',
-      dangerZone: 'Ledger Reset Zone',
+      dangerZone: 'Record Reset Zone',
       resetAllDataBtn: 'Wipe & Reset All Khata Data',
       ruleSavedSuccess: 'Smart Fund allocation rule updated successfully!',
       ruleResetSuccess: 'Reset to default recommended 6-fund rules.',
       backupDownloadedSuccess: 'JSON Backup downloaded successfully!',
-      dataRestoredSuccess: 'Ledger data restored successfully!',
+      dataRestoredSuccess: 'Record data restored successfully!',
       resetConfirmTitle: 'Wipe All Data?',
       resetConfirmDesc: 'This will permanently erase all entries, notes, goals, and settings.'
     },
@@ -459,7 +459,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
     },
     brand: {
       appName: 'Daily Khata Pro',
-      appSubtitle: 'Universal Daily Financial Ledger & Smart Fund Capital Engine',
+      appSubtitle: 'Universal Daily Financial Record & Smart Fund Capital Engine',
       tagline: '100% Offline • Private • Open Source',
       offlineBadge: '100% Offline & Private'
     }
@@ -488,7 +488,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       githubProfile: 'गिटहब प्रोफाइल',
       searchPlaceholder: 'लेनदेन, विवरण, श्रेणी या राशि खोजें...',
       dailyIncomeExpense: 'दैनिक आय-व्यय ट्रैकर',
-      sixFundLedger: 'स्मार्ट फंड लेजर',
+      sixFundRecord: 'स्मार्ट फंड रिकॉर्ड',
       official: 'आधिकारिक',
       mask: 'छुपाएं',
       hidden: 'छिपा हुआ',
@@ -496,7 +496,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       day: 'डे',
       night: 'नाइट',
       khata: 'खाता',
-      ledger: 'लेजर',
+      record: 'रिकॉर्ड',
       goals: 'लक्ष्य',
       workAndLife: 'काम व जीवन',
       notes: 'वॉल्ट',
@@ -575,7 +575,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       backupDesc: 'आपका डेटा आपके डिवाइस में 100% सुरक्षित है। नियमित बैकअप JSON फ़ाइल डाउनलोड करें।',
       exportJsonBtn: 'JSON बैकअप डाउनलोड करें',
       importJsonBtn: 'JSON फ़ाइल से रिस्टोर करें',
-      exportCsvBtn: 'लेजर CSV / Excel डाउनलोड करें',
+      exportCsvBtn: 'रिकॉर्ड CSV / Excel डाउनलोड करें',
       sampleDataHeading: 'डेमो खाता डेटा',
       sampleDataDesc: 'सभी सुविधाओं, चार्ट्स और लक्ष्यों को देखने के लिए डेमो डेटा लोड करें।',
       loadSampleDataBtn: 'डेमो डेटा लोड करें',
@@ -695,7 +695,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
     },
     brand: {
       appName: 'डेली खाता: प्रो',
-      appSubtitle: 'सार्वभौमिक वित्तीय लेजर व स्मार्ट फंड स्मार्ट विभाजन इंजन',
+      appSubtitle: 'सार्वभौमिक वित्तीय रिकॉर्ड व स्मार्ट फंड स्मार्ट विभाजन इंजन',
       tagline: '100% ऑफलाइन • सुरक्षित • ओपन सोर्स',
       offlineBadge: '100% सुरक्षित और ऑफलाइन'
     }
@@ -724,7 +724,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       githubProfile: 'GitHub Profile',
       searchPlaceholder: 'Search transactions, notes, categories, amounts...',
       dailyIncomeExpense: 'Daily Income & Expense',
-      sixFundLedger: 'Smart Fund Ledger',
+      sixFundRecord: 'Smart Fund Record',
       official: 'OFFICIAL',
       mask: 'Mask',
       hidden: 'Hidden',
@@ -732,7 +732,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       day: 'Day',
       night: 'Night',
       khata: 'Khata',
-      ledger: 'Ledger',
+      record: 'Record',
       goals: 'Goals',
       workAndLife: 'Work & Life',
       notes: 'Notes',
@@ -787,7 +787,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       privacyMaskHeading: 'Privacy Masking Mode',
       privacyMaskDesc: 'Public places mein screen par rupee amount chupayein.',
       securityPinHeading: 'App Passcode Lock',
-      securityPinDesc: 'Apne ledger aur notes ko 4-digit secure PIN se lock karein.',
+      securityPinDesc: 'Apne record aur notes ko 4-digit secure PIN se lock karein.',
       securityPinConfigure: 'PIN Lock Set Karein',
       lockNowBtn: 'Lock App Now',
       customCategoriesHeading: 'Custom Expense Categories',
@@ -811,8 +811,8 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       backupDesc: 'Aapka data aapke device mein 100% private hai. Regular JSON backup download karein.',
       exportJsonBtn: 'JSON Backup Download Karein',
       importJsonBtn: 'JSON File Se Restore Karein',
-      exportCsvBtn: 'Ledger CSV / Excel Download Karein',
-      sampleDataHeading: 'Demo Sample Ledger',
+      exportCsvBtn: 'Record CSV / Excel Download Karein',
+      sampleDataHeading: 'Demo Sample Record',
       sampleDataDesc: 'Saare features explore karne ke liye sample data load karein.',
       loadSampleDataBtn: 'Sample Data Load Karein',
       dangerZone: 'Data Reset Zone',
@@ -820,7 +820,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       ruleSavedSuccess: 'Smart Fund allocation rule successfully save ho gaya!',
       ruleResetSuccess: 'Default 6-fund rules par reset ho gaya.',
       backupDownloadedSuccess: 'JSON backup successfully download ho gaya!',
-      dataRestoredSuccess: 'Ledger data successfully restore ho gaya!',
+      dataRestoredSuccess: 'Record data successfully restore ho gaya!',
       resetConfirmTitle: 'Wipe All Data?',
       resetConfirmDesc: 'Yeh saare transactions, notes, goals aur settings delete kar dega.'
     },
@@ -931,7 +931,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
     },
     brand: {
       appName: 'Daily Khata Pro',
-      appSubtitle: 'Universal Daily Financial Ledger & Smart Fund Capital Engine',
+      appSubtitle: 'Universal Daily Financial Record & Smart Fund Capital Engine',
       tagline: '100% Offline • Private • Open Source',
       offlineBadge: '100% Offline & Private'
     }
@@ -969,7 +969,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'حفاظت اور سورس کوڈ';
       base.menu.developerProfile = 'ڈویلپر پروفائل';
       base.menu.khata = 'کھاتہ';
-      base.menu.ledger = 'لیجر';
+      base.menu.record = 'لیجر';
       base.menu.goals = 'اہداف';
       base.menu.workAndLife = 'کام اور زندگی';
       base.menu.notes = 'نوٹس';
@@ -989,7 +989,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'নিরাপত্তা ও সোর্স কোড';
       base.menu.developerProfile = 'ডেভেলপার প্রোফাইল';
       base.menu.khata = 'খাতা';
-      base.menu.ledger = 'লেজার';
+      base.menu.record = 'লেজার';
       base.menu.goals = 'লক্ষ্য';
       base.menu.workAndLife = 'কাজ ও জীবন';
       base.menu.notes = 'নোট';
@@ -1009,7 +1009,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'الأمان والشفرة المصدرية';
       base.menu.developerProfile = 'ملف المطور';
       base.menu.khata = 'الدفتر';
-      base.menu.ledger = 'السجل';
+      base.menu.record = 'السجل';
       base.menu.goals = 'الأهداف';
       base.menu.workAndLife = 'العمل والحياة';
       base.menu.notes = 'الملاحظات';
@@ -1029,7 +1029,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'Seguridad y Código Fuente';
       base.menu.developerProfile = 'Perfil del Desarrollador';
       base.menu.khata = 'Libro';
-      base.menu.ledger = 'Historial';
+      base.menu.record = 'Historial';
       base.menu.goals = 'Metas';
       base.menu.workAndLife = 'Trabajo y Vida';
       base.menu.notes = 'Bóveda';
@@ -1049,7 +1049,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'Sécurité & Code Source';
       base.menu.developerProfile = 'Profil du Développeur';
       base.menu.khata = 'Grand Livre';
-      base.menu.ledger = 'Historique';
+      base.menu.record = 'Historique';
       base.menu.goals = 'Objectifs';
       base.menu.workAndLife = 'Travail & Vie';
       base.menu.notes = 'Coffre';
@@ -1069,7 +1069,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'Sicherheit & Quellcode';
       base.menu.developerProfile = 'Entwicklerprofil';
       base.menu.khata = 'Buchhaltung';
-      base.menu.ledger = 'Kassenbuch';
+      base.menu.record = 'Kassenbuch';
       base.menu.goals = 'Ziele';
       base.menu.workAndLife = 'Arbeit & Leben';
       base.menu.notes = 'Notizen';
@@ -1089,7 +1089,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'Безопасность и исходный код';
       base.menu.developerProfile = 'Профиль разработчика';
       base.menu.khata = 'Книга';
-      base.menu.ledger = 'Журнал';
+      base.menu.record = 'Журнал';
       base.menu.goals = 'Цели';
       base.menu.workAndLife = 'Работа и жизнь';
       base.menu.notes = 'Сейф';
@@ -1109,7 +1109,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'Segurança e Código-Fonte';
       base.menu.developerProfile = 'Perfil do Desenvolvedor';
       base.menu.khata = 'Livro-Razão';
-      base.menu.ledger = 'Histórico';
+      base.menu.record = 'Histórico';
       base.menu.goals = 'Metas';
       base.menu.workAndLife = 'Trabalho e Vida';
       base.menu.notes = 'Cofre';
@@ -1129,7 +1129,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = 'Keamanan & Kode Sumber';
       base.menu.developerProfile = 'Profil Pengembang';
       base.menu.khata = 'Buku Kas';
-      base.menu.ledger = 'Jurnal';
+      base.menu.record = 'Jurnal';
       base.menu.goals = 'Target';
       base.menu.workAndLife = 'Kerja & Hidup';
       base.menu.notes = 'Brankas';
@@ -1149,7 +1149,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = '安全性とソースコード';
       base.menu.developerProfile = '開発者プロフィール';
       base.menu.khata = '家計簿';
-      base.menu.ledger = '元帳';
+      base.menu.record = '元帳';
       base.menu.goals = '目標';
       base.menu.workAndLife = '仕事と生活';
       base.menu.notes = '金庫';
@@ -1169,7 +1169,7 @@ supportedLangs.forEach((lang) => {
       base.menu.safetySourceCode = '安全与源码';
       base.menu.developerProfile = '开发者信息';
       base.menu.khata = '账本';
-      base.menu.ledger = '明细';
+      base.menu.record = '明细';
       base.menu.goals = '目标';
       base.menu.workAndLife = '工作生活';
       base.menu.notes = '保密库';

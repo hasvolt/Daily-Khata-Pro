@@ -66,7 +66,7 @@ const MANUAL_EN: UserManualTranslation = {
     {
       id: 'intro',
       title: '1. Introduction & Overview',
-      subtitle: 'Zero-telemetry, 100% offline, self-custodied financial ledger',
+      subtitle: 'Zero-telemetry, 100% offline, self-custodied financial record',
       overviewHeading: 'Core Philosophy & Architecture',
       overviewText: 'Daily Khata Pro is designed for freelancers, business owners, professionals, and households who seek simple financial tracking. Every incoming rupee is instantly portioned across 6 distinct purpose-driven fund buckets before discretionary spending begins. The entire application runs client-side inside your browser with zero remote database connections.',
       cardsHeading: 'Three Pillars of Daily Khata',
@@ -129,14 +129,14 @@ const MANUAL_EN: UserManualTranslation = {
           desc: 'Click the Eye icon to obscure all monetary amounts with asterisks in public settings.'
         }
       ],
-      proTip: 'Always configure a security recovery question you remember so you never get locked out of your ledger.'
+      proTip: 'Always configure a security recovery question you remember so you never get locked out of your record.'
     },
     {
       id: 'personal_notes',
       title: '3. Personal Notes & Private Vault',
       subtitle: 'Confidential scratchpad, password hints, and personal journal',
       overviewHeading: 'Isolated Confidential Workspace',
-      overviewText: 'The Personal Notes Vault is completely separated from your financial ledger balances. It serves as your private offline scratchpad for business ideas, tax notes, sensitive reminders, meeting minutes, and financial strategies.',
+      overviewText: 'The Personal Notes Vault is completely separated from your financial record balances. It serves as your private offline scratchpad for business ideas, tax notes, sensitive reminders, meeting minutes, and financial strategies.',
       cardsHeading: 'Vault Capabilities',
       cards: [
         {
@@ -261,7 +261,7 @@ const MANUAL_EN: UserManualTranslation = {
       cardsHeading: 'Tracking Modules',
       cards: [
         {
-          title: 'Work Project Ledger',
+          title: 'Work Project Record',
           desc: 'Log deliverables, client names, hourly work, project costs, and completion status.'
         },
         {
@@ -295,7 +295,7 @@ const MANUAL_EN: UserManualTranslation = {
         {
           step: 'Step 2',
           title: 'Make Direct Deposits',
-          desc: 'Click "Deposit" to allocate funds toward your goal from your existing ledger balance.'
+          desc: 'Click "Deposit" to allocate funds toward your goal from your existing record balance.'
         },
         {
           step: 'Step 3',
@@ -336,7 +336,7 @@ const MANUAL_EN: UserManualTranslation = {
       id: 'settings',
       title: '10. Custom Settings & Rules Engine',
       subtitle: 'Theme customization, custom categories, and 6-fund percentage rule editor',
-      overviewHeading: 'Tailor the Ledger to Your Needs',
+      overviewHeading: 'Tailor the Record to Your Needs',
       overviewText: 'Customize color themes, switch between 14 international languages, add custom income sources and expense categories, adjust the 6-fund allocation percentages, and manage your offline data backup files.',
       featuresHeading: 'Customization Options',
       features: [
@@ -489,7 +489,7 @@ const MANUAL_HI: UserManualTranslation = {
     {
       id: 'intro',
       title: '1. परिचय एवं मुख्य अवलोकन',
-      subtitle: 'शून्य टेलीमेट्री, 100% निजी व ऑफलाइन सुरक्षित वित्तीय लेजर इंजन',
+      subtitle: 'शून्य टेलीमेट्री, 100% निजी व ऑफलाइन सुरक्षित वित्तीय रिकॉर्ड इंजन',
       overviewHeading: 'मुख्य डिज़ाइन दर्शन एवं आर्किटेक्चर',
       overviewText: 'Daily Khata Pro फ्रीलांसर्स, व्यापार मालिकों, पेशेवरों एवं परिवारों के लिए तैयार किया गया एक अनुशासित धन प्रबंधन उपकरण है। जैसे ही आपकी कमाई दर्ज होती है, वह तुरंत 6 अलग-अलग उद्देश्य-आधारित फंड्स में विभाजित हो जाती है। यह पूरा एप्लिकेशन आपके ब्राउज़र के भीतर 100% ऑफलाइन चलता है, बिना किसी बाहरी सर्वर या डेटाबेस कनेक्शन के।',
       cardsHeading: 'डेली खाता के तीन मुख्य आधार',
@@ -559,11 +559,11 @@ const MANUAL_HI: UserManualTranslation = {
       title: '3. पर्सनल नोट्स एवं प्राइवेट वॉल्ट',
       subtitle: 'गोपनीय स्क्रैचपैड, पासवर्ड हिंट्स व व्यक्तिगत डायरी',
       overviewHeading: 'स्वतंत्र गोपनीय कार्यक्षेत्र',
-      overviewText: 'पर्सनल नोट्स वॉल्ट आपके वित्तीय लेजर से पूरी तरह अलग एक स्वतंत्र गोपनीय स्पेस है। यहाँ आप व्यावसायिक विचार, टैक्स नोट्स, संवेदनशील पासवर्ड हिंट्स, मीटिंग मिनट्स और वित्तीय रणनीतियां सुरक्षित रख सकते हैं।',
+      overviewText: 'पर्सनल नोट्स वॉल्ट आपके वित्तीय रिकॉर्ड से पूरी तरह अलग एक स्वतंत्र गोपनीय स्पेस है। यहाँ आप व्यावसायिक विचार, टैक्स नोट्स, संवेदनशील पासवर्ड हिंट्स, मीटिंग मिनट्स और वित्तीय रणनीतियां सुरक्षित रख सकते हैं।',
       cardsHeading: 'वॉल्ट की प्रमुख विशेषताएं',
       cards: [
         {
-          title: 'वित्तीय लेजर से पूरी तरह अलग',
+          title: 'वित्तीय रिकॉर्ड से पूरी तरह अलग',
           desc: 'नोट्स आपकी दैनिक लेनदेन गणनाओं से स्वतंत्र रहते हैं, जिससे डेटा व्यवस्थित रहता है।'
         },
         {
@@ -684,7 +684,7 @@ const MANUAL_HI: UserManualTranslation = {
       cardsHeading: 'ट्रैकिंग मॉड्यूल',
       cards: [
         {
-          title: 'वर्क प्रोजेक्ट लेजर',
+          title: 'वर्क प्रोजेक्ट रिकॉर्ड',
           desc: 'क्लाइंट नाम, डिलीवरेबल्स, काम के घंटे, प्रोजेक्ट लागत और कार्य स्थिति दर्ज करें।'
         },
         {
@@ -718,7 +718,7 @@ const MANUAL_HI: UserManualTranslation = {
         {
           step: 'चरण 2',
           title: 'सीधे फंड जमा करें',
-          desc: '"Deposit" बटन पर क्लिक करके अपने लेजर बैलेंस से लक्ष्य में राशि जोड़ें।'
+          desc: '"Deposit" बटन पर क्लिक करके अपने रिकॉर्ड बैलेंस से लक्ष्य में राशि जोड़ें।'
         },
         {
           step: 'चरण 3',

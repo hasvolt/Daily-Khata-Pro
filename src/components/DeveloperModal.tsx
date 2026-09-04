@@ -58,7 +58,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
     ? [
         {
           label: 'स्वतंत्र डेवलपर (Independent Developer)',
-          proof: 'ऑफ़लाइन-फर्स्ट आर्किटेक्चर, जीरो-सर्वर प्राइवेसी लेजर टूल्स',
+          proof: 'ऑफ़लाइन-फर्स्ट आर्किटेक्चर, जीरो-सर्वर प्राइवेसी रिकॉर्ड टूल्स',
           icon: Code2,
           color: 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30'
         },
@@ -295,7 +295,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11.5px] pt-1">
                 <div>
                   <span className="text-[#94A3B8]">Software: </span>
-                  <span className="font-semibold text-[#CBD5E1]">Daily Khata Pro (Multi-Bucket Financial Ledger)</span>
+                  <span className="font-semibold text-[#CBD5E1]">Daily Khata Pro (Multi-Bucket Financial Record)</span>
                 </div>
                 <div>
                   <span className="text-[#94A3B8]">Copyright: </span>

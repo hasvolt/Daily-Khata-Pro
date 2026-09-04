@@ -348,7 +348,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
       <body>
         <div class="header">
           <div class="brand">DAILY KHATA PRO</div>
-          <div class="subbrand">Personal Ledger & Attendance Register · Official Website: www.rozfiber.com</div>
+          <div class="subbrand">Personal Record & Attendance Register · Official Website: www.rozfiber.com</div>
           <div class="title">Monthly Attendance & Work Slip: ${formatMonthTitle(selectedMonth)}</div>
         </div>
 

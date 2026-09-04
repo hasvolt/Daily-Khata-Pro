@@ -231,7 +231,7 @@
 }
 
 /* Subtle HasVolt grid micro-pattern */
-.ledger-texture {
+.record-texture {
   background-image: radial-gradient(var(--theme-primary, #38BDF8) 0.75px, transparent 0.75px);
   background-size: 24px 24px;
 }

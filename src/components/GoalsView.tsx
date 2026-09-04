@@ -82,7 +82,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({
         id="goals-overview-banner"
         className="bg-gradient-to-br from-[var(--theme-card,#132438)] via-[var(--theme-surface,#0E1A29)] to-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/40 rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden text-left transition-all"
       >
-        <div className="absolute inset-0 ledger-texture pointer-events-none opacity-30" />
+        <div className="absolute inset-0 record-texture pointer-events-none opacity-30" />
 
         <div className="relative flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="space-y-1.5 min-w-0">
@@ -399,7 +399,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({
       <ConfirmModal
         isOpen={Boolean(deletingId)}
         title="Delete Milestone Goal"
-        message="Are you sure you want to remove this financial target goal? Your recorded fund transactions will remain safely saved in the ledger."
+        message="Are you sure you want to remove this financial target goal? Your recorded fund transactions will remain safely saved in the record."
         confirmLabel="Delete Goal"
         cancelLabel="Cancel"
         confirmVariant="danger"

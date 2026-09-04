@@ -220,7 +220,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           {/* Quick Add Button */}
           <button
             onClick={onNavigateAdd}
-            className="h-[40px] sm:h-[44px] px-3.5 sm:px-5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-bold text-[12px] sm:text-[13.5px] flex items-center justify-center gap-1 sm:gap-1.5 transition-all shadow-sm hover:brightness-110 active:scale-95 cursor-pointer shrink-0 whitespace-nowrap"
+            className="h-[40px] sm:h-[44px] px-3.5 sm:px-5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#0F172A] hover:bg-[var(--theme-primary-hover,#0EA5E9)] font-bold text-[12px] sm:text-[13.5px] flex items-center justify-center gap-1 sm:gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer shrink-0 whitespace-nowrap"
           >
             <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
             <span>{t.home?.newTransaction || 'New Entry'}</span>
@@ -239,7 +239,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               onClick={() => onFilterChange(opt.key)}
               className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[12px] sm:text-[13px] font-bold transition-all shrink-0 whitespace-nowrap shadow-sm flex items-center gap-1.5 cursor-pointer active:scale-95 ${
                 activeFilter === opt.key
-                  ? 'bg-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
+                  ? 'bg-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)] text-[#0F172A]'
                   : 'bg-[var(--theme-card,#132438)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] hover:text-[var(--theme-text,#F8FAFC)]'
               }`}
             >

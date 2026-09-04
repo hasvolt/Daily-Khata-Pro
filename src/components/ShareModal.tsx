@@ -53,7 +53,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const tabsInfo: { id: NavTab; label: string; desc: string; icon: React.ElementType }[] = [
     { id: 'home', label: isHindi ? 'होम पेज' : 'Home Page', desc: isHindi ? 'नेट बैलेंस और 6-फंड सारांश' : 'Net balance & 6-fund summary', icon: Home },
-    { id: 'history', label: isHindi ? 'खाता लेजर' : 'Khata Ledger', desc: isHindi ? 'सभी आय और व्यय का इतिहास' : 'Complete income & expense history', icon: Receipt },
+    { id: 'history', label: isHindi ? 'खाता रिकॉर्ड' : 'Khata Record', desc: isHindi ? 'सभी आय और व्यय का इतिहास' : 'Complete income & expense history', icon: Receipt },
     { id: 'add', label: isHindi ? 'लेन-देन जोड़ें' : 'Add Entry', desc: isHindi ? 'नई आय व व्यय एंट्री फॉर्म' : 'Direct transaction entry form', icon: PlusCircle },
     { id: 'goals', label: isHindi ? 'वित्तीय लक्ष्य' : 'Financial Goals', desc: isHindi ? 'सेविंग्स टारगेट व प्रोग्रेस' : 'Savings targets & milestone progress', icon: Target },
     { id: 'tracker', label: isHindi ? 'वर्क व लाइफ ट्रैकर' : 'Work & Life', desc: isHindi ? 'कार्य घंटे व दैनिक दिनचर्या' : 'Deliverables & daily life routine', icon: Briefcase },
@@ -62,8 +62,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const shareTitle = "Daily Khata Pro — Universal 6-Fund Accounting";
   const shareText = isHindi
-    ? `Daily Khata Pro पर मेरा वित्तीय लेजर और 6-फंड अकाउंटिंग देखें: ${currentShareUrl}`
-    : `Check out Daily Khata Pro — Universal 6-Fund Accounting & Personal Ledger: ${currentShareUrl}`;
+    ? `Daily Khata Pro पर मेरा वित्तीय रिकॉर्ड और 6-फंड अकाउंटिंग देखें: ${currentShareUrl}`
+    : `Check out Daily Khata Pro — Universal 6-Fund Accounting & Personal Record: ${currentShareUrl}`;
 
   const handleNativeShare = async () => {
     triggerHapticSound('click');

@@ -268,7 +268,7 @@ export const Header: React.FC<HeaderProps> = ({
           <nav className="hidden lg:flex items-center gap-1 mx-1.5">
             {[
               { id: 'home' as NavTab, label: tr.menu.khata, icon: Home },
-              { id: 'history' as NavTab, label: tr.menu.ledger, icon: History },
+              { id: 'history' as NavTab, label: tr.menu.record, icon: History },
               { id: 'attendance' as NavTab, label: isHindi ? 'उपस्थिति' : 'Attendance', icon: CalendarCheck },
               { id: 'goals' as NavTab, label: tr.menu.goals, icon: Target },
               { id: 'tracker' as NavTab, label: tr.menu.workAndLife, icon: Briefcase },

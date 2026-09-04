@@ -275,7 +275,7 @@ export default function App() {
           }
         }
       } else {
-        // Clean ledger start
+        // Clean record start
         setEntries([]);
         setGoals([]);
         setWorkLogs([]);
@@ -1078,7 +1078,7 @@ export default function App() {
     const updatedEntries = [newEntry, ...entries];
     setEntries(updatedEntries);
     saveToLocalStorage(updatedEntries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
-    showToast(language === 'hi' ? `${getCurrencyConfig(getCurrentLanguage()).symbol}${work.earningsOrCost} खाता में दर्ज` : `${getCurrencyConfig(getCurrentLanguage()).symbol}${work.earningsOrCost} recorded to ledger`);
+    showToast(language === 'hi' ? `${getCurrencyConfig(getCurrentLanguage()).symbol}${work.earningsOrCost} खाता में दर्ज` : `${getCurrencyConfig(getCurrentLanguage()).symbol}${work.earningsOrCost} recorded to record`);
   };
 
   // Personal Notes Handlers
@@ -1930,43 +1930,8 @@ export default function App() {
           {/* Streamlined Minimal Footer Details */}
           <div className="pt-1 text-center text-[11px] text-[#64748B] space-y-2">
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {/* Developer Minimal Pill */}
-              <button
-                onClick={() => setCurrentTab('developer')}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 text-[#CBD5E1] hover:text-[#F8FAFC] transition-all cursor-pointer shadow-2xs active:scale-95 text-[11px]"
-                title="View Developer Profile (MD Zafeer Hasan (YAZDAAN))"
-              >
-                <div className="w-4 h-4 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] bg-[#070E18] shrink-0">
-                  <img
-                    src="/md-zafeer-hasan-yazdaan.jpg"
-                    alt="MD Zafeer Hasan (YAZDAAN)"
-                    className="w-full h-full object-cover"
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.display = 'none';
-                    }}
-                  />
-                </div>
-                <span className="text-[#94A3B8]">By</span>
-                <span className="font-bold text-[#F8FAFC]">MD Zafeer Hasan (YAZDAAN)</span>
-                <span className="text-[9.5px] bg-[#38BDF8]/20 text-[#38BDF8] px-1.5 py-0.2 rounded font-bold">Developer</span>
-              </button>
-
-              {/* Compact Verified Social & Email Links with Main Menu trigger */}
+              {/* Compact Verified Social & Email Links */}
               <div className="flex items-center gap-1.5 sm:gap-2">
-                {/* Main Menu Button in Footer */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent('open-main-menu'));
-                  }}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] font-bold text-[11px] transition-all cursor-pointer shadow-2xs active:scale-95"
-                  title="Open Main Menu & Tools"
-                >
-                  <Menu className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span>Main Menu</span>
-                </button>
-
                 <a
                   href="https://github.com/hasvolt/Daily-Khata-Pro"
                   target="_blank"

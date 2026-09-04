@@ -605,7 +605,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             type="button"
             onClick={onBack}
             className="mt-1 sm:mt-0 p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
-            title="Back to Ledger"
+            title="Back to Record"
             id="calc-back-to-home"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -652,7 +652,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             onClick={onBack}
             className="px-3 py-1.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[var(--theme-btn-text,#040D17)] text-[12px] font-extrabold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs shrink-0 ml-auto sm:ml-0"
           >
-            <span>{isHindi ? 'खाता' : 'Ledger'}</span>
+            <span>{isHindi ? 'खाता' : 'Record'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -960,7 +960,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             })}
           </div>
 
-          {/* Quick 1-Click Send to Ledger Actions */}
+          {/* Quick 1-Click Send to Record Actions */}
           <div className="grid grid-cols-2 gap-3 pt-2">
             <button
               type="button"

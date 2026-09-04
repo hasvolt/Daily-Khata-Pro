@@ -197,9 +197,11 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
           </button>
         </div>
 
-        {/* Smart Live Warnings Banner */}
-        <div className="p-4 bg-[var(--theme-surface,#0E1A29)]/70 border-b border-[var(--theme-border,#213E61)] space-y-2.5 shrink-0">
-          {/* Daily Khata Entry Alert */}
+        {/* Scrollable Content Area */}
+        <div className="overflow-y-auto flex-1 flex flex-col">
+          {/* Smart Live Warnings Banner */}
+          <div className="p-4 bg-[var(--theme-surface,#0E1A29)]/70 border-b border-[var(--theme-border,#213E61)] space-y-2.5 shrink-0">
+            {/* Daily Khata Entry Alert */}
           {!hasTransactionsToday && (
             <div className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-[12.5px]">
               <div className="flex items-center gap-2 text-[#F59E0B] font-bold">
@@ -348,7 +350,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
                   className="w-full bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] text-[12.5px] px-3 py-2 rounded-xl border border-[var(--theme-border,#213E61)]"
                 >
                   <option value="payment">{isHindi ? 'भुगतान / बिल (Payment)' : 'Payment / Bill'}</option>
-                  <option value="khata">{isHindi ? 'खाता लॉग (Khata Ledger)' : 'Khata Ledger Check'}</option>
+                  <option value="khata">{isHindi ? 'खाता लॉग (Khata Record)' : 'Khata Record Check'}</option>
                   <option value="attendance">{isHindi ? 'उपस्थिति (Attendance)' : 'Attendance'}</option>
                   <option value="custom">{isHindi ? 'कस्टम कार्य (Custom Task)' : 'Custom Task'}</option>
                 </select>
@@ -414,7 +416,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
         )}
 
         {/* Reminders List */}
-        <div className="p-4 space-y-3 overflow-y-auto flex-1">
+        <div className="p-4 space-y-3 pb-8">
           {filteredReminders.length === 0 ? (
             <div className="text-center py-12 px-4 text-[#94A3B8] space-y-2">
               <Bell className="w-9 h-9 mx-auto text-[#64748B]" />
@@ -426,7 +428,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
               <p className="text-[12px] text-[#94A3B8] max-w-sm mx-auto">
                 {isHindi
                   ? 'ऊपर "+ नया रिमाइंडर" बटन दबाकर भुगतान या कार्य का अलार्म सेट करें।'
-                  : 'Click "+ New Reminder" above to schedule bill reminders, daily ledger checks, or tasks.'}
+                  : 'Click "+ New Reminder" above to schedule bill reminders, daily record checks, or tasks.'}
               </p>
             </div>
           ) : (
@@ -536,9 +538,10 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
             })
           )}
         </div>
+        </div>
 
         {/* Modal Footer */}
-        <div className="px-5 py-3 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-between text-[11.5px] text-[var(--theme-text-muted,#94A3B8)]">
+        <div className="px-5 py-3 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-between text-[11.5px] text-[var(--theme-text-muted,#94A3B8)] shrink-0">
           <span>{isHindi ? 'सभी अलर्ट्स आपके डिवाइस में सुरक्षित रहते हैं।' : 'All reminders and alerts are stored locally.'}</span>
           <button
             type="button"

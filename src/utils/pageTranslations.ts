@@ -155,7 +155,7 @@ export interface PageTranslations {
     netBalanceDesc: string;
     disciplinedSplit: string;
     safeOffline: string;
-    viewLedger: string;
+    viewRecord: string;
     todaysNet: string;
   };
 }
@@ -166,14 +166,14 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       backToHome: 'Back to Home',
       badge: 'About Daily Khata Pro',
       title: 'About Daily Khata Pro',
-      subtitle: 'Universal Financial Ledger, Smart Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
+      subtitle: 'Universal Financial Record, Smart Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
       platformLabel: 'Platform',
       architectureLabel: 'Architecture',
       architectureValue: '100% Local Storage',
       licenseLabel: 'License',
       creatorLabel: 'Creator',
       missionTitle: 'Our Mission & Purpose',
-      missionP1: 'Daily Khata Pro was created with a single uncompromising mission: to give individuals, freelancers, shopkeepers, and families an honest, lightning-fast financial ledger that respects their complete privacy without requiring cloud logins, phone number tracking, or hidden subscriptions.',
+      missionP1: 'Daily Khata Pro was created with a single uncompromising mission: to give individuals, freelancers, shopkeepers, and families an honest, lightning-fast financial record that respects their complete privacy without requiring cloud logins, phone number tracking, or hidden subscriptions.',
       missionP2: 'Most modern finance apps upload your transactions to remote servers, mine your purchasing behavior for marketing, or lock essential export features behind paywalls. Daily Khata Pro flips this model entirely — your data never leaves your browser or phone, all calculations happen instantly on your device, and every single feature is permanently free under the MIT Open Source license.',
       capabilitiesTitle: 'Core Capabilities & Architecture',
       pillars: {
@@ -239,7 +239,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     disclaimer: {
       badge: 'Legal Disclaimer',
       title: 'Financial & Legal Disclaimer',
-      subtitle: 'Important notice regarding automated calculations, tax estimations, and self-custodied financial ledgers.',
+      subtitle: 'Important notice regarding automated calculations, tax estimations, and self-custodied financial records.',
       backToHome: 'Back to Home',
       alertTitle: 'Informational & Educational Calculator Tool',
       alertDesc: 'Daily Khata Pro is an offline organizational tool. It does not provide certified financial, investment, or legal tax advice.',
@@ -350,7 +350,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: 'Consolidated real-time net capital across your 6 disciplined fund pots',
       disciplinedSplit: '100% Disciplined Split Ratio',
       safeOffline: '100% Safe, Private & Offline',
-      viewLedger: 'View Full Ledger',
+      viewRecord: 'View Full Record',
       todaysNet: "Today's Net:"
     }
   },
@@ -360,14 +360,14 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       backToHome: 'होम पर वापस जाएं',
       badge: 'डेली खाता: प्रो के बारे में',
       title: 'डेली खाता प्रो के बारे में',
-      subtitle: 'सार्वभौमिक वित्तीय लेज़र, स्मार्ट फंड स्मार्ट विभाजन, कार्य डिलीवरेबल्स एवं दैनिक जीवन डायरी।',
+      subtitle: 'सार्वभौमिक वित्तीय रिकॉर्ड, स्मार्ट फंड स्मार्ट विभाजन, कार्य डिलीवरेबल्स एवं दैनिक जीवन डायरी।',
       platformLabel: 'प्लेटफ़ॉर्म',
       architectureLabel: 'आर्किटेक्चर',
       architectureValue: '100% लोकल स्टोरेज (ऑफ़लाइन)',
       licenseLabel: 'लाइसेंस',
       creatorLabel: 'निर्माता एवं डेवलपर',
       missionTitle: 'हमारा उद्देश्य एवं मिशन',
-      missionP1: 'डेली खाता: प्रो को एक स्पष्ट उद्देश्य के साथ बनाया गया है: प्रत्येक व्यक्ति, विद्यार्थी, फ्रीलांसर, दुकानदार और परिवार को एक ऐसा तेज़, सच्चा और सुरक्षित लेज़र देना जो उनकी पूर्ण गोपनीयता का सम्मान करता है।',
+      missionP1: 'डेली खाता: प्रो को एक स्पष्ट उद्देश्य के साथ बनाया गया है: प्रत्येक व्यक्ति, विद्यार्थी, फ्रीलांसर, दुकानदार और परिवार को एक ऐसा तेज़, सच्चा और सुरक्षित रिकॉर्ड देना जो उनकी पूर्ण गोपनीयता का सम्मान करता है।',
       missionP2: 'पारंपरिक वित्त ऐप्स आपका डेटा दूरस्थ सर्वर पर अपलोड करते हैं। डेली खाता: प्रो में आपका डेटा कभी भी आपके फ़ोन या लैपटॉप से बाहर नहीं जाता। यह MIT ओपन सोर्स लाइसेंस के तहत हमेशा 100% मुफ़्त है।',
       capabilitiesTitle: 'प्रमुख विशेषताएं एवं वास्तुकला',
       pillars: {
@@ -544,7 +544,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: 'स्मार्ट फंड ऑटो-स्प्लिट नियम के अनुसार आपका कुल सुरक्षित संचित बैलेंस',
       disciplinedSplit: '100% अनुशासित विभाजन नियम',
       safeOffline: '100% सुरक्षित और ऑफ़लाइन',
-      viewLedger: 'पूरा लेज़र देखें',
+      viewRecord: 'पूरा रिकॉर्ड देखें',
       todaysNet: 'आज का नेट:'
     }
   },
@@ -554,14 +554,14 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       backToHome: 'Home Par Wapas Jayein',
       badge: 'About Daily Khata Pro',
       title: 'Daily Khata Pro ke Baare Mein',
-      subtitle: 'Universal Financial Ledger, Smart Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
+      subtitle: 'Universal Financial Record, Smart Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
       platformLabel: 'Platform',
       architectureLabel: 'Architecture',
       architectureValue: '100% Local Storage (Offline)',
       licenseLabel: 'License',
       creatorLabel: 'Creator & Developer',
       missionTitle: 'Hamara Mission aur Vision',
-      missionP1: 'Daily Khata Pro ko ek simple mission ke saath banaya gaya hai: har individual, freelancer, shopkeeper aur family ko ek honest, super-fast aur private ledger dena jisme bina login ya server tracking ke poora financial control aapke haath me ho.',
+      missionP1: 'Daily Khata Pro ko ek simple mission ke saath banaya gaya hai: har individual, freelancer, shopkeeper aur family ko ek honest, super-fast aur private record dena jisme bina login ya server tracking ke poora financial control aapke haath me ho.',
       missionP2: 'Baaki apps aapka data server par upload karte hain. Daily Khata Pro me aapka data kabhi bhi aapke phone ya laptop se bahar nahi jata, aur ye MIT Open Source license ke tehat lifetime 100% free hai.',
       capabilitiesTitle: 'Core Capabilities aur Features',
       pillars: {
@@ -617,7 +617,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         ownershipTitle: '1. 100% Data Ownership',
         ownershipDesc: 'Aapke entries aur khata records par poori tarah se aapka hi haq hai.',
         usageTitle: '2. Proper Usage',
-        usageDesc: 'Aap is software ko personal budget, freelance ledger ya shop business ke liye use kar sakte hain.',
+        usageDesc: 'Aap is software ko personal budget, freelance record ya shop business ke liye use kar sakte hain.',
         disclaimerTitle: '3. No Financial Warranty',
         disclaimerDesc: 'Ye app ek smart financial calculator hai, certified CA ya tax consultant nahi.',
         backupTitle: '4. Backup Responsibility',
@@ -627,7 +627,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     disclaimer: {
       badge: 'Legal Disclaimer',
       title: 'Financial & Legal Disclaimer',
-      subtitle: 'Financial guidance aur self-custody ledger ke regarding important notice.',
+      subtitle: 'Financial guidance aur self-custody record ke regarding important notice.',
       backToHome: 'Home Par Wapas Jayein',
       alertTitle: 'Informational & Educational Calculator Tool',
       alertDesc: 'Daily Khata Pro ek calculation aur khata tool hai, certified investment ya tax advisor nahi.',
@@ -738,7 +738,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: 'Smart Fund auto-split rule ke mutabiq aapka total real-time balance',
       disciplinedSplit: '100% Disciplined Split Ratio',
       safeOffline: '100% Safe, Private & Offline',
-      viewLedger: 'Poora Ledger Dekhein',
+      viewRecord: 'Poora Record Dekhein',
       todaysNet: 'Aaj ka Net:'
     }
   },
@@ -931,7 +931,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: '6-فنڈ اصول کے تحت آپ کا محفوظ اور اصل بیلنس',
       disciplinedSplit: '100% منظم تقسیم کا تناسب',
       safeOffline: '100% محفوظ اور آف لائن',
-      viewLedger: 'مکمل لیجر دیکھیں',
+      viewRecord: 'مکمل لیجر دیکھیں',
       todaysNet: 'آج کا نیٹ:'
     }
   },
@@ -1124,7 +1124,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: '৬-তহবিল নিয়মে আপনার মোট প্রকৃত সুরক্ষিত ব্যালেন্স',
       disciplinedSplit: '১০০% সুশৃঙ্খল বিভাজন নিয়ম',
       safeOffline: '১০০% নিরাপদ, ব্যক্তিগত ও অফলাইন',
-      viewLedger: 'সম্পূর্ণ লেজার দেখুন',
+      viewRecord: 'সম্পূর্ণ লেজার দেখুন',
       todaysNet: 'আজকের মোট লাভ:'
     }
   },
@@ -1317,7 +1317,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: 'Saldo neto consolidado en tiempo real distribuido en los 6 fondos',
       disciplinedSplit: 'Ratio de División 100% Disciplinado',
       safeOffline: '100% Seguro, Privado y Fuera de Línea',
-      viewLedger: 'Ver Libro Completo',
+      viewRecord: 'Ver Libro Completo',
       todaysNet: 'Neto de Hoy:'
     }
   },
@@ -1510,7 +1510,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: 'الرصيد الصافي الفعلي الموزع بانتظام على الصناديق الستة',
       disciplinedSplit: 'نسبة تقسيم منضبطة 100%',
       safeOffline: '100% آمن، خاص وبدون إنترنت',
-      viewLedger: 'عرض دفتر الأستاذ كاملاً',
+      viewRecord: 'عرض دفتر الأستاذ كاملاً',
       todaysNet: 'صافي اليوم:'
     }
   },
@@ -1704,7 +1704,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       netBalanceDesc: 'Solde net consolidé réparti sur les 6 fonds disciplinés',
       disciplinedSplit: 'Répartition Disciplinée à 100%',
       safeOffline: '100% Sécurisé, Privé et Hors Ligne',
-      viewLedger: 'Voir le Registre Complet',
+      viewRecord: 'Voir le Registre Complet',
       todaysNet: 'Net du jour :'
     }
   },
@@ -1779,37 +1779,37 @@ otherLangs.forEach((lang) => {
           back: 'Zurück', save: 'Speichern', cancel: 'Abbrechen', delete: 'Löschen', edit: 'Bearbeiten',
           deposit: 'Einzahlen', filter: 'Filtern', search: 'Suchen...', today: 'Heute', thisMonth: 'Diesen Monat',
           netBalanceDesc: 'Konsolidierter Saldo auf die 6 Töpfe verteilt', disciplinedSplit: '100% Disziplinierte Aufteilung',
-          safeOffline: '100% Sicher, Privat & Offline', viewLedger: 'Gesamtes Buch anzeigen', todaysNet: 'Tages-Netto:'
+          safeOffline: '100% Sicher, Privat & Offline', viewRecord: 'Gesamtes Buch anzeigen', todaysNet: 'Tages-Netto:'
         },
         ru: {
           back: 'Назад', save: 'Сохранить', cancel: 'Отмена', delete: 'Удалить', edit: 'Изменить',
           deposit: 'Внести', filter: 'Фильтр', search: 'Поиск...', today: 'Сегодня', thisMonth: 'В этом месяце',
           netBalanceDesc: 'Общий чистый баланс по 6 фондам', disciplinedSplit: '100% Дисциплинированное распределение',
-          safeOffline: '100% Безопасно, Приватно и Офлайн', viewLedger: 'Открыть всю книгу', todaysNet: 'Итог за день:'
+          safeOffline: '100% Безопасно, Приватно и Офлайн', viewRecord: 'Открыть всю книгу', todaysNet: 'Итог за день:'
         },
         pt: {
           back: 'Voltar', save: 'Salvar', cancel: 'Cancelar', delete: 'Excluir', edit: 'Editar',
           deposit: 'Depositar', filter: 'Filtrar', search: 'Buscar...', today: 'Hoje', thisMonth: 'Este Mês',
           netBalanceDesc: 'Saldo líquido consolidado distribuído nos 6 fundos', disciplinedSplit: 'Divisão 100% Disciplinada',
-          safeOffline: '100% Seguro, Privado e Offline', viewLedger: 'Ver Livro Completo', todaysNet: 'Líquido de Hoje:'
+          safeOffline: '100% Seguro, Privado e Offline', viewRecord: 'Ver Livro Completo', todaysNet: 'Líquido de Hoje:'
         },
         id: {
           back: 'Kembali', save: 'Simpan', cancel: 'Batal', delete: 'Hapus', edit: 'Edit',
           deposit: 'Setor', filter: 'Filter', search: 'Cari...', today: 'Hari Ini', thisMonth: 'Bulan Ini',
           netBalanceDesc: 'Total saldo bersih terbagi dalam 6 pos keuangan', disciplinedSplit: '100% Rasio Pembagian Disiplin',
-          safeOffline: '100% Aman, Privat & Offline', viewLedger: 'Lihat Semua Catatan', todaysNet: 'Net Hari Ini:'
+          safeOffline: '100% Aman, Privat & Offline', viewRecord: 'Lihat Semua Catatan', todaysNet: 'Net Hari Ini:'
         },
         ja: {
           back: '戻る', save: '保存', cancel: 'キャンセル', delete: '削除', edit: '編集',
           deposit: '入金', filter: '絞り込み', search: '検索...', today: '今日', thisMonth: '今月',
           netBalanceDesc: '6つの資金ポットに分散された実質純残高', disciplinedSplit: '100% 規律ある分配比率',
-          safeOffline: '100% 安全・プライベート・オフライン', viewLedger: '全台帳を表示', todaysNet: '本日の純増減:'
+          safeOffline: '100% 安全・プライベート・オフライン', viewRecord: '全台帳を表示', todaysNet: '本日の純増減:'
         },
         zh: {
           back: '返回', save: '保存', cancel: '取消', delete: '删除', edit: '编辑',
           deposit: '存入', filter: '筛选', search: '搜索...', today: '今日', thisMonth: '本月',
           netBalanceDesc: '按6个资金账户自动分配的净资产总额', disciplinedSplit: '100% 纪律性分配规则',
-          safeOffline: '100% 安全、隐私与离线运行', viewLedger: '查看完整账本', todaysNet: '今日净结余:'
+          safeOffline: '100% 安全、隐私与离线运行', viewRecord: '查看完整账本', todaysNet: '今日净结余:'
         }
       }[lang] || PAGE_TRANSLATIONS.en.common
     };

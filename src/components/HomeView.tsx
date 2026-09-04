@@ -143,112 +143,112 @@ export const HomeView: React.FC<HomeViewProps> = ({
       />
 
       {/* 2 & 3. DAILY & MONTHLY INCOME & EXPENSE */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 scale-[0.97] origin-top">
         {/* Daily Stats */}
-        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 sm:space-y-4">
+        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-2 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[var(--theme-primary,#38BDF8)] shadow-xs shrink-0 transition-colors">
-                <Calendar className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                <Calendar className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <span className="text-[13px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                  {t.home.dailySummaryHeading}
+                <span className="text-[12.5px] sm:text-[14px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                  Today's Financial Overview
                 </span>
-                <span className="text-[10px] sm:text-[11.5px] text-[var(--theme-text-muted,#7E9BC9)] block truncate">
-                  Track your daily income, expense and see your net result.
+                <span className="text-[10px] sm:text-[11px] text-[var(--theme-text-muted,#7E9BC9)] block truncate">
+                  Real-time daily cashflow and net performance
                 </span>
               </div>
             </div>
-            <span className="text-[10px] sm:text-[11.5px] font-semibold text-[var(--theme-text-muted,#8BA4D0)] bg-[var(--theme-surface,#020A1A)] px-2.5 py-1 rounded-lg border border-[var(--theme-border,#0A2249)] shrink-0">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[var(--theme-text-muted,#8BA4D0)] bg-[var(--theme-surface,#020A1A)] px-2 py-1 rounded-lg border border-[var(--theme-border,#0A2249)] shrink-0 shadow-xs">
               {pageT.common.today}
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-3.5 min-w-0">
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                  <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 min-w-0">
+            <div className="p-2.5 sm:p-3 rounded-xl sm:rounded-[18px] bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive shadow-xs" data-sensitive="true">
+              <div className="flex items-center gap-1.5">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </div>
-                <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.todayIncome}</span>
+                <span className="text-[10.5px] sm:text-[11.5px] text-[var(--theme-text-muted,#8BA4D0)] font-bold truncate">{t.home.todayIncome}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-emerald-600 dark:text-emerald-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(todayStats.income, privacyMask)}>
+              <div className="font-mono font-bold text-[13px] sm:text-[16px] text-emerald-600 dark:text-emerald-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(todayStats.income, privacyMask)}>
                 +{formatCurrency(todayStats.income, privacyMask)}
               </div>
             </div>
 
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-rose-600/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                  <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+            <div className="p-2.5 sm:p-3 rounded-xl sm:rounded-[18px] bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive shadow-xs" data-sensitive="true">
+              <div className="flex items-center gap-1.5">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-rose-600/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                  <ArrowDownRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </div>
-                <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.todayExpense}</span>
+                <span className="text-[10.5px] sm:text-[11.5px] text-[var(--theme-text-muted,#8BA4D0)] font-bold truncate">{t.home.todayExpense}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-rose-600 dark:text-rose-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(todayStats.expense, privacyMask)}>
+              <div className="font-mono font-bold text-[13px] sm:text-[16px] text-rose-600 dark:text-rose-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(todayStats.expense, privacyMask)}>
                 -{formatCurrency(todayStats.expense, privacyMask)}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[13px] min-w-0 overflow-hidden relative select-none secure-sensitive" data-sensitive="true">
-            <span className="text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate mr-1.5 z-10">{pageT.common.todaysNet}</span>
-            <span className={`font-mono font-bold text-[12px] sm:text-[15px] truncate max-w-[60%] text-right z-10 sensitive-amount ${todayStats.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`} title={formatCurrency(todayStats.net, privacyMask)}>
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[12.5px] min-w-0 overflow-hidden relative select-none secure-sensitive shadow-xs" data-sensitive="true">
+            <span className="text-[var(--theme-text-muted,#8BA4D0)] font-bold truncate mr-1.5 z-10">{pageT.common.todaysNet}</span>
+            <span className={`font-mono font-bold text-[13px] sm:text-[15px] truncate max-w-[60%] text-right z-10 sensitive-amount ${todayStats.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`} title={formatCurrency(todayStats.net, privacyMask)}>
               {todayStats.net >= 0 ? '+' : ''}{formatCurrency(todayStats.net, privacyMask)}
             </span>
           </div>
         </div>
 
         {/* Monthly Stats */}
-        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 sm:space-y-4 min-w-0 overflow-hidden">
+        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-2 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[var(--theme-primary,#38BDF8)] shadow-xs shrink-0 transition-colors">
-                <CalendarDays className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                <CalendarDays className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <span className="text-[13px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                  {t.home.monthlySummaryHeading}
+                <span className="text-[12.5px] sm:text-[14px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                  Monthly Financial Overview
                 </span>
-                <span className="text-[10px] sm:text-[11.5px] text-[var(--theme-text-muted,#7E9BC9)] block truncate">
-                  Track your monthly income, expense and see your net result.
+                <span className="text-[10px] sm:text-[11px] text-[var(--theme-text-muted,#7E9BC9)] block truncate">
+                  Comprehensive monthly cashflow analytics
                 </span>
               </div>
             </div>
-            <span className="text-[10px] sm:text-[11.5px] font-semibold text-[#38BDF8] bg-[#38BDF8]/15 px-2.5 py-1 rounded-lg border border-[#38BDF8]/30 shrink-0 select-none secure-sensitive">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[#0F172A] bg-[#38BDF8] px-2 py-1 rounded-lg border border-[#38BDF8]/30 shrink-0 select-none secure-sensitive shadow-xs">
               {monthFormatted}
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-3.5 min-w-0">
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                  <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 min-w-0">
+            <div className="p-2.5 sm:p-3 rounded-xl sm:rounded-[18px] bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive shadow-xs" data-sensitive="true">
+              <div className="flex items-center gap-1.5">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </div>
-                <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.thisMonthIncome}</span>
+                <span className="text-[10.5px] sm:text-[11.5px] text-[var(--theme-text-muted,#8BA4D0)] font-bold truncate">{t.home.thisMonthIncome}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-emerald-600 dark:text-emerald-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(monthStats.income, privacyMask)}>
+              <div className="font-mono font-bold text-[13px] sm:text-[16px] text-emerald-600 dark:text-emerald-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(monthStats.income, privacyMask)}>
                 +{formatCurrency(monthStats.income, privacyMask)}
               </div>
             </div>
 
-            <div className="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 sm:space-y-1.5 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive" data-sensitive="true">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-rose-600/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                  <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+            <div className="p-2.5 sm:p-3 rounded-xl sm:rounded-[18px] bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] space-y-1 min-w-0 overflow-hidden flex flex-col justify-center select-none secure-sensitive shadow-xs" data-sensitive="true">
+              <div className="flex items-center gap-1.5">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-rose-600/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                  <ArrowDownRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </div>
-                <span className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate">{t.home.thisMonthExpense}</span>
+                <span className="text-[10.5px] sm:text-[11.5px] text-[var(--theme-text-muted,#8BA4D0)] font-bold truncate">{t.home.thisMonthExpense}</span>
               </div>
-              <div className="font-mono font-bold text-[12px] xs:text-[14px] sm:text-[18px] text-rose-600 dark:text-rose-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(monthStats.expense, privacyMask)}>
+              <div className="font-mono font-bold text-[13px] sm:text-[16px] text-rose-600 dark:text-rose-400 tracking-tight truncate w-full block sensitive-amount" title={formatCurrency(monthStats.expense, privacyMask)}>
                 -{formatCurrency(monthStats.expense, privacyMask)}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[13px] min-w-0 overflow-hidden select-none secure-sensitive" data-sensitive="true">
-            <span className="text-[var(--theme-text-muted,#8BA4D0)] font-medium truncate mr-1.5">{t.home.thisMonthNet}:</span>
-            <span className={`font-mono font-bold text-[12px] sm:text-[15px] truncate max-w-[60%] text-right sensitive-amount ${monthStats.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`} title={formatCurrency(monthStats.net, privacyMask)}>
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 rounded-xl bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0A2249)] text-[11px] sm:text-[12.5px] min-w-0 overflow-hidden select-none secure-sensitive shadow-xs" data-sensitive="true">
+            <span className="text-[var(--theme-text-muted,#8BA4D0)] font-bold truncate mr-1.5">{t.home.thisMonthNet}:</span>
+            <span className={`font-mono font-bold text-[13px] sm:text-[15px] truncate max-w-[60%] text-right sensitive-amount ${monthStats.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`} title={formatCurrency(monthStats.net, privacyMask)}>
               {monthStats.net >= 0 ? '+' : ''}{formatCurrency(monthStats.net, privacyMask)}
             </span>
           </div>
