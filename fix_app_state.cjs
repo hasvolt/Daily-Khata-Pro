@@ -1,71 +1,37 @@
 const fs = require('fs');
+
 let content = fs.readFileSync('src/App.tsx', 'utf8');
 
-// Add state
-content = content.replace(
-  "const [viewMode, setViewMode] = useState<AppViewMode>('auto');",
-  "const [viewMode, setViewMode] = useState<AppViewMode>('auto');\n  const [appLayout, setAppLayout] = useState<AppLayout>('dashboard');"
-);
+// Replace state initializations with lazy initializers from localStorage
+const originalSecurityLock = "const [securityLock, setSecurityLock] = useState<SecurityLockConfig>(DEFAULT_SECURITY_LOCK);";
+const newSecurityLock = `  const [securityLock, setSecurityLock] = useState<SecurityLockConfig>(() => {
+    try {
+      const saved = localStorage.getItem('khata_security_config');
+      return saved ? JSON.parse(saved) : DEFAULT_SECURITY_LOCK;
+    } catch (e) {
+      return DEFAULT_SECURITY_LOCK;
+    }
+  });`;
 
-// In load from localStorage
-content = content.replace(
-  "if (parsed.settings.viewMode) setViewMode(parsed.settings.viewMode);",
-  "if (parsed.settings.viewMode) setViewMode(parsed.settings.viewMode);\n          if (parsed.settings.appLayout) setAppLayout(parsed.settings.appLayout);"
-);
+const originalIsAppLocked = "const [isAppLocked, setIsAppLocked] = useState<boolean>(false);";
+const newIsAppLocked = `  const [isAppLocked, setIsAppLocked] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('khata_security_config');
+      if (saved) {
+        const config = JSON.parse(saved);
+        return config.isEnabled && !!config.pin;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  });`;
 
-// In saveToLocalStorage parameters (arg1 object)
-content = content.replace(
-  "viewMode?: AppViewMode;",
-  "viewMode?: AppViewMode;\n      appLayout?: AppLayout;"
-);
+content = content.replace(originalSecurityLock, newSecurityLock);
+content = content.replace(originalIsAppLocked, newIsAppLocked);
 
-// In saveToLocalStorage parameters (positional)
-content = content.replace(
-  "newViewMode?: AppViewMode",
-  "newViewMode?: AppViewMode,\n    newAppLayout?: AppLayout"
-);
-
-// In saveToLocalStorage data construction (arg1)
-content = content.replace(
-  "viewMode: updates.viewMode ?? viewMode,",
-  "viewMode: updates.viewMode ?? viewMode,\n            appLayout: updates.appLayout ?? appLayout,"
-);
-
-// In saveToLocalStorage data construction (positional)
-content = content.replace(
-  "viewMode: newViewMode ?? viewMode,",
-  "viewMode: newViewMode ?? viewMode,\n            appLayout: newAppLayout ?? appLayout,"
-);
-
-// In set settings
-content = content.replace(
-  "newViewMode?: AppViewMode",
-  "newViewMode?: AppViewMode, newAppLayout?: AppLayout"
-);
-content = content.replace(
-  "if (newViewMode !== undefined) setViewMode(newViewMode);",
-  "if (newViewMode !== undefined) setViewMode(newViewMode);\n    if (newAppLayout !== undefined) setAppLayout(newAppLayout);"
-);
-content = content.replace(
-  "newViewMode",
-  "newViewMode, newAppLayout"
-);
-
-// Pass appLayout to SettingsModal
-content = content.replace(
-  "viewMode={viewMode}",
-  "viewMode={viewMode}\n          appLayout={appLayout}"
-);
-
-content = content.replace(
-  "onUpdateSettings={(pct, thm, lang, mask, mode) => {",
-  "onUpdateSettings={(pct, thm, lang, mask, mode, layout) => {"
-);
-
-content = content.replace(
-  "saveAndApplySettings(pct, thm, lang, mask, mode);",
-  "saveAndApplySettings(pct, thm, lang, mask, mode, layout);"
-);
-
-
+// There's a useEffect in App.tsx that loads the security config again, we should remove it if it exists to avoid double load, or just keep it as it's harmless.
+// Actually let's just write this back.
 fs.writeFileSync('src/App.tsx', content, 'utf8');
+
+console.log("App state fixed");

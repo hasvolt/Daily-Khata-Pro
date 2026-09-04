@@ -516,7 +516,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             { id: 'rules', label: tr.settings.tabRules, icon: Percent },
             { id: 'backup', label: tr.settings.tabBackup, icon: Download },
             { id: 'privacy', label: tr.settings.tabPrivacy, icon: ShieldCheck },
-            { id: 'developer', label: tr.settings.tabDeveloper, icon: User },
             { id: 'legal', label: tr.settings.tabLegal, icon: Scale }
           ].map((tab) => {
             const Icon = tab.icon;

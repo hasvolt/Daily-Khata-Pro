@@ -105,7 +105,22 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
 
   return (
     <>
-      <div className={`hasvolt-promo-wrapper ${className} w-full`}>
+      <div className={`hasvolt-promo-wrapper ${className} w-full relative`}>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            setIsHidden(true);
+            localStorage.setItem("hide_hasvolt_promo", "true");
+          }}
+          className="absolute -top-2 -right-2 z-50 p-1 bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-white rounded-full border border-[var(--theme-border,#213E61)] shadow-md transition-colors"
+          title="Hide Banner"
+          aria-label="Hide Banner"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
       {variant === 'card' ? (
         /* HasVolt Professional Services Card - 100% Theme Adaptive (Light & Dark), Solid Border, Ultra-Compact */
         <div

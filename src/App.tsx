@@ -89,8 +89,26 @@ export default function App() {
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<AppViewMode>('auto');
   const [appLayout, setAppLayout] = useState<AppLayout>('dashboard');
-  const [securityLock, setSecurityLock] = useState<SecurityLockConfig>(DEFAULT_SECURITY_LOCK);
-  const [isAppLocked, setIsAppLocked] = useState<boolean>(false);
+    const [securityLock, setSecurityLock] = useState<SecurityLockConfig>(() => {
+    try {
+      const saved = localStorage.getItem('khata_security_config');
+      return saved ? JSON.parse(saved) : DEFAULT_SECURITY_LOCK;
+    } catch (e) {
+      return DEFAULT_SECURITY_LOCK;
+    }
+  });
+    const [isAppLocked, setIsAppLocked] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('khata_security_config');
+      if (saved) {
+        const config = JSON.parse(saved);
+        return config.isEnabled && !!config.pin;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  });
   
   // Re-add currentTab and normalize it based on pathname
   const rawPath = location.pathname.substring(1);

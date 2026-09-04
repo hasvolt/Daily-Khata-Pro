@@ -1370,32 +1370,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Divider & Developer Footer with Verified Legal Credentials */}
                   <div className="pt-2.5 border-t border-[var(--theme-border,#213E61)]/70 flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-2">
-                      {onOpenDeveloper && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            onOpenDeveloper();
-                            closeAllMenus();
-                          }}
-                          className="flex items-center gap-2 text-[11.5px] font-semibold text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] cursor-pointer text-left"
-                        >
-                          <div className="w-6 h-6 rounded-full overflow-hidden border border-[var(--theme-primary,#38BDF8)] shrink-0 bg-[#070E18]">
-                            <img
-                              src="/md-zafeer-hasan-yazdaan.jpg"
-                              alt="Developer Profile"
-                              className="w-full h-full object-cover"
-                              referrerPolicy="no-referrer"
-                              onError={(e) => {
-                                (e.target as HTMLElement).style.display = 'none';
-                              }}
-                            />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="leading-tight font-bold">{tr.menu.developerProfile}</span>
-                            <span className="text-[9.5px] text-[#94A3B8] font-normal">MD Zafeer Hasan (YAZDAAN)</span>
-                          </div>
-                        </button>
-                      )}
+                      
 
                       <a
                         href="https://github.com/hasvolt/Daily-Khata-Pro"

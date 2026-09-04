@@ -147,7 +147,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 2 & 3. DAILY & MONTHLY INCOME & EXPENSE */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 scale-[0.97] origin-top">
         {/* Daily Stats */}
-        <div className="bg-gradient-to-br from-[var(--theme-card,#040E24)] to-[var(--theme-surface,#020A1A)] border border-[var(--theme-primary,#38BDF8)]/20 hover:border-[#38BDF8]/40 rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 transform scale-[0.97] sm:scale-100 origin-top">
+        <div className="bg-gradient-to-br from-[var(--theme-card,#040E24)] via-[#0A1930] to-[var(--theme-surface,#020A1A)] border-2 border-[var(--theme-primary,#38BDF8)]/40 hover:border-[#38BDF8]/70 rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-[0_0_15px_rgba(56,189,248,0.1)] hover:shadow-[0_0_25px_rgba(56,189,248,0.2)] transition-all duration-300 space-y-3 transform scale-[0.97] sm:scale-100 origin-top relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent opacity-70"></div>
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-2 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[var(--theme-primary,#38BDF8)] shadow-xs shrink-0 transition-colors">
@@ -202,7 +203,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         {/* Monthly Stats */}
-        <div className="bg-[var(--theme-card,#040E24)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 min-w-0 overflow-hidden transform scale-[0.97] sm:scale-100 origin-top">
+        <div className="bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 min-w-0 overflow-hidden transform scale-[0.97] sm:scale-100 origin-top relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--theme-primary,#38BDF8)]/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-2 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[var(--theme-primary,#38BDF8)] shadow-xs shrink-0 transition-colors">
@@ -460,27 +462,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         
-        {/* HasVolt Sponsored Ad Card */}
-        {!isPromoHidden && (
-          <div className="relative h-full animate-in fade-in zoom-in-95 duration-300">
-            <button
-              onClick={() => {
-                setIsPromoHidden(true);
-                localStorage.setItem("hide_promo_home", "true");
-              }}
-              className="absolute -top-1 -right-1 z-10 p-1.5 bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] hover:text-white rounded-full border border-[var(--theme-border,#213E61)] shadow-md transition-colors"
-              title="Hide Banner"
-              aria-label="Hide Banner"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-            <HasVoltPromoBanner variant="card" language={language} />
-          </div>
-        )}
-
+        {/* Homepage Fund Selector Modal */}
       </div>
-
-      {/* Homepage Fund Selector Modal */}
       <HomepageFundSelectorModal
         isOpen={isSelectorOpen}
         onClose={() => setIsSelectorOpen(false)}
