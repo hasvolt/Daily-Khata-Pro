@@ -166,7 +166,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       backToHome: 'Back to Home',
       badge: 'About Daily Khata Pro',
       title: 'About Daily Khata Pro',
-      subtitle: 'Universal Financial Ledger, 7-Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
+      subtitle: 'Universal Financial Ledger, Smart Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
       platformLabel: 'Platform',
       architectureLabel: 'Architecture',
       architectureValue: '100% Local Storage',
@@ -177,7 +177,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       missionP2: 'Most modern finance apps upload your transactions to remote servers, mine your purchasing behavior for marketing, or lock essential export features behind paywalls. Daily Khata Pro flips this model entirely — your data never leaves your browser or phone, all calculations happen instantly on your device, and every single feature is permanently free under the MIT Open Source license.',
       capabilitiesTitle: 'Core Capabilities & Architecture',
       pillars: {
-        fundsTitle: 'Automated 7-Fund Allocation Rule',
+        fundsTitle: 'Automated Smart Fund Allocation Rule',
         fundsDesc: 'Whenever you log an income entry, Daily Khata Pro automatically allocates it across 6 intelligent pots: Personal (30%), Family (30%), Buffer (10%), Emergency (10%), Savings (10%), and Investment (10%). Percentages are completely customizable in Settings.',
         privacyTitle: 'Zero-Knowledge Client Storage',
         privacyDesc: 'Your entries are saved exclusively in your device LocalStorage. No centralized database, no server tracking, and zero tracking cookies.',
@@ -245,7 +245,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       alertDesc: 'Daily Khata Pro is an offline organizational tool. It does not provide certified financial, investment, or legal tax advice.',
       sections: {
         nonAdvisoryTitle: '1. Non-Advisory Nature',
-        nonAdvisoryDesc: 'The 7-Fund allocation rule is a financial rule-of-thumb. You should customize the ratios in Settings to suit your personal situation.',
+        nonAdvisoryDesc: 'The Smart Fund allocation rule is a financial rule-of-thumb. You should customize the ratios in Settings to suit your personal situation.',
         calculationTitle: '2. Calculation Accuracy',
         calculationDesc: 'While all mathematical algorithms are thoroughly tested, users must independently verify numbers before filing taxes.',
         selfResponsibilityTitle: '3. Data Custody & Backups',
@@ -306,7 +306,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
           a: 'Yes! Daily Khata Pro is a fully offline Progressive Web App (PWA). You can record transactions and print statements without internet.'
         },
         {
-          q: 'How does the 7-Fund Rule work?',
+          q: 'How does the Smart Fund Rule work?',
           a: 'When you record income, it automatically splits into 6 pots: Personal (30%), Family (30%), Buffer (10%), Emergency (10%), Savings (10%), and Investment (10%). Customize in Settings.'
         },
         {
@@ -360,7 +360,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       backToHome: 'होम पर वापस जाएं',
       badge: 'डेली खाता: प्रो के बारे में',
       title: 'डेली खाता प्रो के बारे में',
-      subtitle: 'सार्वभौमिक वित्तीय लेज़र, 7-फंड स्मार्ट विभाजन, कार्य डिलीवरेबल्स एवं दैनिक जीवन डायरी।',
+      subtitle: 'सार्वभौमिक वित्तीय लेज़र, स्मार्ट फंड स्मार्ट विभाजन, कार्य डिलीवरेबल्स एवं दैनिक जीवन डायरी।',
       platformLabel: 'प्लेटफ़ॉर्म',
       architectureLabel: 'आर्किटेक्चर',
       architectureValue: '100% लोकल स्टोरेज (ऑफ़लाइन)',
@@ -371,7 +371,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       missionP2: 'पारंपरिक वित्त ऐप्स आपका डेटा दूरस्थ सर्वर पर अपलोड करते हैं। डेली खाता: प्रो में आपका डेटा कभी भी आपके फ़ोन या लैपटॉप से बाहर नहीं जाता। यह MIT ओपन सोर्स लाइसेंस के तहत हमेशा 100% मुफ़्त है।',
       capabilitiesTitle: 'प्रमुख विशेषताएं एवं वास्तुकला',
       pillars: {
-        fundsTitle: 'स्वचालित 7-फंड विभाजन नियम',
+        fundsTitle: 'स्वचालित स्मार्ट फंड विभाजन नियम',
         fundsDesc: 'कमाई जोड़ते ही यह 6 फंड्स में विभाजित होती है: व्यक्तिगत (30%), परिवार (30%), बफर (10%), इमरजेंसी (10%), बचत (10%) और निवेश (10%)। सेटिंग्स में प्रतिशत बदल सकते हैं।',
         privacyTitle: 'जीरो-नॉलेज क्लाइंट स्टोरेज',
         privacyDesc: 'सभी प्रविष्टियां आपके डिवाइस के लोकल स्टोरेज में सुरक्षित रहती हैं। कोई केंद्रीय डेटाबेस या थर्ड-पार्टी ट्रैकिंग नहीं है।',
@@ -439,7 +439,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       alertDesc: 'डेली खाता: प्रो एक गणितीय और बहीखाता प्रबंधन उपकरण है। यह कोई प्रमाणित वित्तीय सलाह नहीं देता।',
       sections: {
         nonAdvisoryTitle: '1. गैर-सलाहकारी प्रकृति',
-        nonAdvisoryDesc: '7-फंड विभाजन नियम एक सामान्य वित्तीय नियम है। सेटिंग्स में प्रतिशत अपनी सुविधानुसार बदलें।',
+        nonAdvisoryDesc: 'स्मार्ट फंड विभाजन नियम एक सामान्य वित्तीय नियम है। सेटिंग्स में प्रतिशत अपनी सुविधानुसार बदलें।',
         calculationTitle: '2. गणना की सटीकता',
         calculationDesc: 'सरकारी टैक्स फाइलिंग या ऑडिट के लिए अंकों की पुनः पुष्टि अवश्य करें।',
         selfResponsibilityTitle: '3. डेटा बैकअप की ज़िम्मेदारी',
@@ -500,7 +500,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
           a: 'हाँ! डेली खाता: प्रो पूरी तरह से ऑफ़लाइन चलता है। आप बिना इंटरनेट के लेनदेन जोड़ और प्रिंट ले सकते हैं।'
         },
         {
-          q: '7-फंड विभाजन नियम क्या है?',
+          q: 'स्मार्ट फंड विभाजन नियम क्या है?',
           a: 'जब भी आप कोई आमदनी जोड़ते हैं, यह स्वतः 6 फंड्स में विभाजित होती है: व्यक्तिगत (30%), परिवार (30%), बफर (10%), इमरजेंसी (10%), बचत (10%) और निवेश (10%)।'
         },
         {
@@ -541,7 +541,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       search: 'खोजें...',
       today: 'आज',
       thisMonth: 'इस महीने',
-      netBalanceDesc: '7-फंड ऑटो-स्प्लिट नियम के अनुसार आपका कुल सुरक्षित संचित बैलेंस',
+      netBalanceDesc: 'स्मार्ट फंड ऑटो-स्प्लिट नियम के अनुसार आपका कुल सुरक्षित संचित बैलेंस',
       disciplinedSplit: '100% अनुशासित विभाजन नियम',
       safeOffline: '100% सुरक्षित और ऑफ़लाइन',
       viewLedger: 'पूरा लेज़र देखें',
@@ -554,7 +554,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       backToHome: 'Home Par Wapas Jayein',
       badge: 'About Daily Khata Pro',
       title: 'Daily Khata Pro ke Baare Mein',
-      subtitle: 'Universal Financial Ledger, 7-Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
+      subtitle: 'Universal Financial Ledger, Smart Fund Rule Money Manager, Work Deliverables & Daily Life Journal.',
       platformLabel: 'Platform',
       architectureLabel: 'Architecture',
       architectureValue: '100% Local Storage (Offline)',
@@ -565,7 +565,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       missionP2: 'Baaki apps aapka data server par upload karte hain. Daily Khata Pro me aapka data kabhi bhi aapke phone ya laptop se bahar nahi jata, aur ye MIT Open Source license ke tehat lifetime 100% free hai.',
       capabilitiesTitle: 'Core Capabilities aur Features',
       pillars: {
-        fundsTitle: 'Automatic 7-Fund Allocation Rule',
+        fundsTitle: 'Automatic Smart Fund Allocation Rule',
         fundsDesc: 'Income add karte hi automatically 6 pots me divide hoti hai: Personal (30%), Family (30%), Buffer (10%), Emergency (10%), Savings (10%), aur Investment (10%). Percentages aap Settings me change kar sakte hain.',
         privacyTitle: 'Zero-Knowledge Client Storage',
         privacyDesc: 'Aapki sabhi entries device ke LocalStorage me save hoti hain. Koi cloud database nahi, zero cookies aur zero tracking.',
@@ -633,7 +633,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       alertDesc: 'Daily Khata Pro ek calculation aur khata tool hai, certified investment ya tax advisor nahi.',
       sections: {
         nonAdvisoryTitle: '1. Non-Advisory Nature',
-        nonAdvisoryDesc: '7-Fund split formula ek financial rule of thumb hai. Aap apni zaroorat ke hisab se ratio set kar sakte hain.',
+        nonAdvisoryDesc: 'Smart Fund split formula ek financial rule of thumb hai. Aap apni zaroorat ke hisab se ratio set kar sakte hain.',
         calculationTitle: '2. Calculation Accuracy',
         calculationDesc: 'Sabhi mathematical formulas tested hain, fir bhi tax return ke liye numbers verify zaroor karein.',
         selfResponsibilityTitle: '3. Data Backup Responsibility',
@@ -694,7 +694,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
           a: 'Haan! Daily Khata Pro poori tarah offline kaam karta hai.'
         },
         {
-          q: '7-Fund rule kya hai?',
+          q: 'Smart Fund rule kya hai?',
           a: 'Income enter karte hi 6 funds me auto divide hoti hai: Personal (30%), Family (30%), Buffer (10%), Emergency (10%), Saving (10%), aur Investment (10%).'
         },
         {
@@ -735,7 +735,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       search: 'Search...',
       today: 'Aaj',
       thisMonth: 'Is Mahine',
-      netBalanceDesc: '7-Fund auto-split rule ke mutabiq aapka total real-time balance',
+      netBalanceDesc: 'Smart Fund auto-split rule ke mutabiq aapka total real-time balance',
       disciplinedSplit: '100% Disciplined Split Ratio',
       safeOffline: '100% Safe, Private & Offline',
       viewLedger: 'Poora Ledger Dekhein',

@@ -1498,7 +1498,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
               <p className="text-[12.5px] text-[#CBD5E1] leading-relaxed">
                 Developed as a high-precision universal personal and enterprise financial accounting tool. Designed to
-                cultivate rigorous wealth discipline using the proven 7-Fund money allocation model.
+                cultivate rigorous wealth discipline using the proven Smart Fund money allocation model.
               </p>
 
               {/* GitHub & License Card */}

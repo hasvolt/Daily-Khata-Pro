@@ -38,7 +38,6 @@ import { TrashModal } from './components/TrashModal';
 import { MasterEditModal } from './components/MasterEditModal';
 import { HasVoltPromoBanner } from './components/HasVoltPromoBanner';
 import { GoogleAdBanner } from './components/GoogleAdBanner';
-import { PrintArea } from './components/PrintArea';
 import { PrintModal } from './components/PrintModal';
 import { SourceCodeModal } from './components/SourceCodeModal';
 import { InstallPWA } from './components/InstallPWA';
@@ -2327,9 +2326,6 @@ export default function App() {
           {toastMessage}
         </div>
       )}
-
-      {/* Print View for PDF generation */}
-      <PrintArea entries={entries} targetMonth={printMonthDate} />
 
       {/* Interactive Print & PDF Statement Modal */}
       <PrintModal

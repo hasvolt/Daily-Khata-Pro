@@ -129,7 +129,7 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
               AVAILABLE BALANCE
             </p>
             <div 
-              className="banking-card-amount font-mono text-[24px] xs:text-[28px] sm:text-[50px] md:text-[56px] font-extrabold text-white tracking-tight leading-none drop-shadow-md truncate max-w-full transition-colors" 
+              className="banking-card-amount font-mono text-[22.5px] xs:text-[26.5px] sm:text-[50px] md:text-[56px] font-extrabold text-white tracking-tight leading-none drop-shadow-md truncate max-w-full transition-colors" 
               title={formatCurrency(totalWealth, privacyMask)}
             >
               {formatCurrency(totalWealth, privacyMask)}

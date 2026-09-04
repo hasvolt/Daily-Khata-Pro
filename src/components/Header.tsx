@@ -255,7 +255,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
             <div className="mt-0.5 min-w-0">
               <span
-                className="text-[10.5px] sm:text-[11.5px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block"
+                className="text-[8.5px] sm:text-[11.5px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block"
               >
                 {isHindi ? 'दैनिक आय-व्यय ट्रैकर' : 'Daily Income & Expense Tracker'}
               </span>

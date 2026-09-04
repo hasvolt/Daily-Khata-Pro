@@ -264,7 +264,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
             <div>
               <h3 className="text-[15px] sm:text-[18px] font-bold tracking-tight text-[var(--theme-text,#F8FAFC)]">
-                {t.home.sixFundsHeading || '7-Fund Money Pots'}
+                {t.home.sixFundsHeading || 'Smart Fund Money Pots'}
               </h3>
               <p className="text-[10.5px] sm:text-[12px] text-[var(--theme-text-muted,#7E9BC9)]">
                 {t.home.sixFundsSub || 'Distribute your money into smart pots and stay financially balanced.'}
