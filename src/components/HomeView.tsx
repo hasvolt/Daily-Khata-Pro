@@ -145,10 +145,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
       />
 
       {/* 2 & 3. DAILY & MONTHLY INCOME & EXPENSE */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 scale-[0.97] origin-top">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 scale-[0.97] sm:scale-100 origin-top">
         {/* Daily Stats */}
-        <div className="bg-gradient-to-br from-[var(--theme-card,#040E24)] via-[#0A1930] to-[var(--theme-surface,#020A1A)] border-2 border-[var(--theme-primary,#38BDF8)]/40 hover:border-[#38BDF8]/70 rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-[0_0_15px_rgba(56,189,248,0.1)] hover:shadow-[0_0_25px_rgba(56,189,248,0.2)] transition-all duration-300 space-y-3 transform scale-[0.97] sm:scale-100 origin-top relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent opacity-70"></div>
+        <div className="bg-[var(--theme-card,#040E24)] border-2 border-[var(--theme-primary,#38BDF8)]/40 hover:border-[var(--theme-primary,#38BDF8)]/70 rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)] to-transparent opacity-80"></div>
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-2 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[var(--theme-primary,#38BDF8)] shadow-xs shrink-0 transition-colors">
@@ -163,7 +163,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </span>
               </div>
             </div>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[var(--theme-text-muted,#8BA4D0)] bg-[var(--theme-surface,#020A1A)] px-2 py-1 rounded-lg border border-[var(--theme-border,#0A2249)] shrink-0 shadow-xs">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] px-2.5 py-1 rounded-lg border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] shrink-0 shadow-xs">
               {pageT.common.today}
             </span>
           </div>
@@ -203,7 +203,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         {/* Monthly Stats */}
-        <div className="bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 min-w-0 overflow-hidden transform scale-[0.97] sm:scale-100 origin-top relative">
+        <div className="bg-[var(--theme-surface,#020A1A)] border border-[var(--theme-border,#0D2654)] hover:border-[#1E4E9E] rounded-[20px] sm:rounded-3xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 space-y-3 min-w-0 overflow-hidden relative">
           <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--theme-primary,#38BDF8)]/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
           <div className="flex items-center justify-between pb-2 border-b border-[var(--theme-border,#0D2654)]/70">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -219,7 +219,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </span>
               </div>
             </div>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#0F172A] bg-[#38BDF8] px-2 py-1 rounded-lg border border-[#38BDF8]/30 shrink-0 select-none secure-sensitive shadow-xs">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[#0F172A] dark:text-[#0F172A] bg-[#38BDF8] px-2.5 py-1 rounded-lg border border-[#38BDF8]/30 shrink-0 select-none secure-sensitive shadow-xs">
               {monthFormatted}
             </span>
           </div>

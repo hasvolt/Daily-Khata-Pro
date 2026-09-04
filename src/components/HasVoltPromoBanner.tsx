@@ -31,6 +31,13 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
   const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>('/Hasvolt-peofasianal-electrical-services-ads-1.png');
   const [imgError, setImgError] = useState(false);
+  const [isHidden, setIsHidden] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('hide_hasvolt_promo') === 'true';
+    } catch {
+      return false;
+    }
+  });
 
   const currentLang = language || getCurrentLanguage();
   const isHindi = currentLang === 'hi';
@@ -102,6 +109,8 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
       setImgError(true);
     }
   };
+
+  if (isHidden) return null;
 
   return (
     <>

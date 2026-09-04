@@ -292,8 +292,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'settings', title: '10. Custom Settings & Rules', subtitle: 'Theme colors, custom categories & custom % rules' },
         { id: 'backup', title: '11. Backup & Privacy Security', subtitle: 'Export JSON snapshots, local restore & offline safety' },
         { id: 'source_code', title: '12. Source Code & Verification', subtitle: 'Open source GitHub repo, MIT license & code inspection' },
-        { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Answers to common questions and edge cases' },
-        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan (YAZDAAN) & HasVolt project' }
+        { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Answers to common questions and edge cases' }
       ]
     },
     settings: {
@@ -528,8 +527,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'settings', title: '10. कस्टम सेटिंग्स व रूल्स', subtitle: 'थीम, कस्टम श्रेणियां व प्रतिशत विभाजन अनुकूलक' },
         { id: 'backup', title: '11. बैकअप एवं डेटा सुरक्षा', subtitle: 'JSON बैकअप, ऑफलाइन रिस्टोर व पूर्ण डेटा नियंत्रण' },
         { id: 'source_code', title: '12. सोर्स कोड व सत्यापन', subtitle: 'MIT ओपन सोर्स कोड, गिटहब व पारदर्शिता ऑडिट' },
-        { id: 'faq', title: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)', subtitle: 'सामान्य प्रश्नों और समाधानों की विस्तृत सूची' },
-        { id: 'developer', title: '14. डेवलपर एवं फाउंडर प्रोफाइल', subtitle: 'एमडी जफीर हसन व HasVolt मिशन' }
+        { id: 'faq', title: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)', subtitle: 'सामान्य प्रश्नों और समाधानों की विस्तृत सूची' }
       ]
     },
     settings: {
@@ -764,8 +762,7 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
         { id: 'settings', title: '10. Custom Settings & Rules', subtitle: 'Themes, custom categories aur percentage rules' },
         { id: 'backup', title: '11. Backup & Privacy Security', subtitle: 'JSON export snapshots aur offline safety' },
         { id: 'source_code', title: '12. Source Code & Verification', subtitle: 'Open source GitHub repo aur code audit' },
-        { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Common questions aur quick solutions' },
-        { id: 'developer', title: '14. Developer & Founder Info', subtitle: 'MD Zafeer Hasan (YAZDAAN) & HasVolt project' }
+        { id: 'faq', title: '13. Frequently Asked Questions', subtitle: 'Common questions aur quick solutions' }
       ]
     },
     settings: {

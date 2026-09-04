@@ -69,8 +69,7 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
     settings: Settings,
     backup: ShieldCheck,
     source_code: Code2,
-    faq: HelpCircle,
-    developer: User
+    faq: HelpCircle
   };
 
   const sections = manual.sections.map((s) => ({

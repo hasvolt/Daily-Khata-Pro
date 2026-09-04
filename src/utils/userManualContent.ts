@@ -440,33 +440,6 @@ const MANUAL_EN: UserManualTranslation = {
           a: 'No. Daily Khata Pro is a progressive offline application. It runs with complete functionality without an active internet connection.'
         }
       ]
-    },
-    {
-      id: 'developer',
-      title: '14. Developer & Founder Profile',
-      subtitle: 'Created by MD Zafeer Hasan (YAZDAAN) • HasVolt Official Mission',
-      overviewHeading: 'Creator Mission & Philosophy',
-      overviewText: 'Daily Khata Pro was envisioned, architected, and built by MD Zafeer Hasan (YAZDAAN) under HasVolt. The project was created with a clear vision: building private, aesthetic, high-performance financial tools that put complete power and data sovereignty into the hands of users.',
-      cardsHeading: 'Developer Specifications',
-      cards: [
-        {
-          title: 'Founder & Architect',
-          desc: 'MD Zafeer Hasan (YAZDAAN) — Dedicated to creating privacy-first digital tools.'
-        },
-        {
-          title: 'Official Platform',
-          desc: 'HasVolt Digital Tools — hasvolt.com & rozfiber.com'
-        },
-        {
-          title: 'Open Source License',
-          desc: 'MIT Permissive License — Open for the world to use and inspect.'
-        },
-        {
-          title: 'Direct Creator Support',
-          desc: 'Contact: mdzafeerhasan.official@gmail.com'
-        }
-      ],
-      proTip: 'For suggestions, code contributions, or feature requests, visit the official GitHub repository.'
     }
   ]
 };
@@ -863,33 +836,6 @@ const MANUAL_HI: UserManualTranslation = {
           a: 'बिल्कुल नहीं। Daily Khata Pro एक प्रोग्रेसिव ऑफलाइन वेब ऐप (PWA) है और बिना इंटरनेट के भी सभी सुविधाएं पूरी तरह काम करती हैं।'
         }
       ]
-    },
-    {
-      id: 'developer',
-      title: '14. डेवलपर एवं संस्थापक प्रोफाइल',
-      subtitle: 'एमडी जफीर हसन द्वारा निर्मित • HasVolt ऑफिशियल मिशन',
-      overviewHeading: 'संस्थापक का मिशन एवं दृष्टिकोण',
-      overviewText: 'Daily Khata Pro की परिकल्पना और निर्माण एमडी जफीर हसन द्वारा HasVolt के तहत किया गया है। इसका उद्देश्य एक ऐसा स्वतंत्र, सुरुचिपूर्ण और सुरक्षित वित्तीय उपकरण बनाना है जो उपयोगकर्ताओं को उनके डेटा की पूरी गोपनीयता और संप्रभुता दे।',
-      cardsHeading: 'डेवलपर विनिर्देश',
-      cards: [
-        {
-          title: 'संस्थापक एवं आर्किटेक्ट',
-          desc: 'एमडी जफीर हसन — प्राइवेसी-फर्स्ट डिजिटल टूल्स के निर्माता।'
-        },
-        {
-          title: 'आधिकारिक प्लेटफॉर्म',
-          desc: 'HasVolt Digital Tools — hasvolt.com एवं rozfiber.com'
-        },
-        {
-          title: 'ओपन सोर्स लाइसेंस',
-          desc: 'MIT Permissive License — दुनिया भर के उपयोग और अध्ययन के लिए मुफ्त।'
-        },
-        {
-          title: 'सीधा संपर्क एवं सपोर्ट',
-          desc: 'ईमेल: mdzafeerhasan.official@gmail.com'
-        }
-      ],
-      proTip: 'सुझावों, कोड योगदान या नई सुविधाओं के अनुरोध के लिए आधिकारिक गिटहब रिपॉजिटरी पर जाएं।'
     }
   ]
 };

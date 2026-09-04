@@ -83,7 +83,6 @@ interface SettingsModalProps {
   onOpenSourceCode?: () => void;
   onOpenInstall?: () => void;
   onOpenShare?: () => void;
-  onOpenDeveloper?: () => void;
   onOpenSecurityModal?: () => void;
   onOpenSupport?: (tab?: 'help' | 'bug' | 'suggestion') => void;
   securityLock?: SecurityLockConfig;
@@ -100,7 +99,7 @@ interface SettingsModalProps {
   onLayoutChange?: (layout: AppLayout) => void;
 }
 
-type TabType = 'preferences' | 'custom' | 'rules' | 'backup' | 'privacy' | 'developer' | 'legal';
+type TabType = 'preferences' | 'custom' | 'rules' | 'backup' | 'privacy' | 'legal';
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,
@@ -122,7 +121,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onOpenSourceCode,
   onOpenInstall,
   onOpenShare,
-  onOpenDeveloper,
   onOpenSecurityModal,
   onOpenSupport,
   securityLock,
@@ -1322,166 +1320,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>Inspect Code</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB: DEVELOPER INFORMATION */}
-          {activeTab === 'developer' && (
-            <div className="space-y-4">
-              <div className="p-4 sm:p-5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-4">
-                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                  {/* Photo - Full Unclipped */}
-                  <div className="relative shrink-0 flex flex-col items-center">
-                    <div className="w-28 h-auto max-h-36 sm:w-32 sm:max-h-40 rounded-2xl overflow-hidden border-2 border-[var(--theme-primary,#38BDF8)] shadow-lg bg-[#060B11] p-1">
-                      <img
-                        src="/md-zafeer-hasan-yazdaan.jpg"
-                        alt="MD Zafeer Hasan (YAZDAAN)"
-                        className="w-full h-auto object-contain rounded-xl"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    <div className="mt-1.5 px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] text-[10px] font-extrabold flex items-center gap-1 shadow-sm">
-                      <Check className="w-2.5 h-2.5 stroke-[3]" />
-                      <span>Creator &amp; Founder</span>
-                    </div>
-                  </div>
-
-                  {/* Details */}
-                  <div className="text-center sm:text-left space-y-1 min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                      <h4 className="font-serif-display text-[18px] sm:text-[20px] font-bold text-[#F8FAFC]">
-                        MD Zafeer Hasan (YAZDAAN)
-                      </h4>
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                       
-                      </span>
-                    </div>
-
-                    <div className="text-[12.5px] font-medium text-[var(--theme-primary,#38BDF8)]">
-                      Independent Developer, Creator &amp; Founder
-                    </div>
-
-                    <div className="text-[11.5px] text-[#94A3B8] flex items-center justify-center sm:justify-start gap-1.5 pt-0.5">
-                      <Mail className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                      <a href="mailto:daily-Khata-Pro@gmail.com" className="hover:underline text-[#CBD5E1] hover:text-[var(--theme-primary,#38BDF8)] font-mono">
-                        daily-Khata-Pro@gmail.com
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Focus Badges */}
-                <div className="pt-2 border-t border-[var(--theme-border,#213E61)] flex flex-wrap items-center justify-center sm:justify-start gap-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] mr-1">Focus:</span>
-                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30">
-                    Open Source
-                  </span>
-                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30">
-                    Productivity
-                  </span>
-                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30">
-                    Personal Finance
-                  </span>
-                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#8B5CF6]/15 text-[#8B5CF6] border border-[#8B5CF6]/30">
-                    Digital Tools
-                  </span>
-                </div>
-
-                {/* Bio text */}
-                <div className="p-3.5 rounded-xl bg-[#060B11] border border-[#213E61] space-y-2 text-[12.5px] text-[#CBD5E1] leading-relaxed">
-                  <p>
-                    I&apos;m an independent developer focused on creating simple, practical, and privacy-conscious digital tools that are useful in everyday life.
-                  </p>
-                  <p>
-                    This project is developed with the goal of providing a simple and accessible way for users to manage their daily income, expenses, and financial records.
-                  </p>
-                  <p className="text-[#F8FAFC] font-medium italic border-l-2 border-[var(--theme-primary,#38BDF8)] pl-2.5 text-[12px]">
-                    &ldquo;I believe in building useful software that is transparent, easy to use, and accessible to everyone.&rdquo;
-                  </p>
-                </div>
-
-                {/* Project Specs */}
-                <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5 text-[11.5px]">
-                  <div className="flex items-center justify-between text-[#94A3B8]">
-                    <span className="font-semibold text-[#CBD5E1]">Project:</span>
-                    <span className="text-[#F8FAFC] font-bold">Daily Income &amp; Expense Tracker (Daily Khata Pro)</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[#94A3B8]">
-                    <span className="font-semibold text-[#CBD5E1]">License:</span>
-                    <span className="text-[var(--theme-primary,#38BDF8)] font-mono font-bold bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/30">
-                      Open Source (MIT)
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[#94A3B8]">
-                    <span className="font-semibold text-[#CBD5E1]">Support &amp; Feedback:</span>
-                    <a href="mailto:daily-Khata-Pro@gmail.com" className="text-[var(--theme-primary,#38BDF8)] hover:underline font-mono text-[11.5px]">
-                      daily-Khata-Pro@gmail.com
-                    </a>
-                  </div>
-                </div>
-
-                {/* Quick Bug / Suggestion / Help buttons */}
-                {onOpenSupport && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        onOpenSupport('help');
-                      }}
-                      className="p-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[#CBD5E1] hover:text-[#F8FAFC] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <HelpCircle className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                      <span>{tStr('सहायता केंद्र', 'Help Centre', 'Help Centre')}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        onOpenSupport('bug');
-                      }}
-                      className="p-2 rounded-xl bg-[#EF4444]/10 border border-[#EF4444]/30 hover:bg-[#EF4444]/20 text-[#FCA5A5] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <Bug className="w-3.5 h-3.5 text-[#EF4444]" />
-                      <span>{tStr('बग रिपोर्ट करें', 'Bug Report Karein', 'Report Bug')}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        onOpenSupport('suggestion');
-                      }}
-                      className="p-2 rounded-xl bg-[#F59E0B]/10 border border-[#F59E0B]/30 hover:bg-[#F59E0B]/20 text-[#FCD34D] font-semibold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <Lightbulb className="w-3.5 h-3.5 text-[#F59E0B]" />
-                      <span>{tStr('सुझाव दें', 'Suggestion Dein', 'Suggestion')}</span>
-                    </button>
-                  </div>
-                )}
-
-                {/* Action Contact Buttons */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                  <a
-                    href="mailto:daily-Khata-Pro@gmail.com"
-                    className="p-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#040D17] font-extrabold text-[12px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span>Contact via Email</span>
-                  </a>
-
-                  <a
-                    href="https://github.com/hasvolt/Daily-Khata-Pro"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2.5 rounded-xl bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] font-bold text-[12px] flex items-center justify-center gap-2 transition-all cursor-pointer"
-                  >
-                    <FolderGit2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-                    <span>GitHub Repository</span>
                   </a>
                 </div>
               </div>

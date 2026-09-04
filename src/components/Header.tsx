@@ -73,7 +73,6 @@ interface HeaderProps {
   onOpenSourceCode?: () => void;
   onOpenInstall?: () => void;
   onOpenShare?: () => void;
-  onOpenDeveloper?: () => void;
   onOpenSecurity?: () => void;
   isLockEnabled?: boolean;
   onLockNow?: () => void;
@@ -107,7 +106,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSourceCode,
   onOpenInstall,
   onOpenShare,
-  onOpenDeveloper,
   onOpenSecurity,
   isLockEnabled = false,
   onLockNow,

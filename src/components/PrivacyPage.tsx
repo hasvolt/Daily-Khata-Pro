@@ -185,13 +185,6 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
             >
               Terms of Service
             </button>
-            <span>•</span>
-            <button
-              onClick={() => onNavigateTab('developer')}
-              className="hover:text-white underline cursor-pointer"
-            >
-              Developer Profile
-            </button>
           </>
         )}
       </div>

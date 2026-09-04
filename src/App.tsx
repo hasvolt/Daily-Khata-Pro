@@ -1,6 +1,6 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder } from './types';
 import {
   DEFAULT_FUNDS,
@@ -43,7 +43,6 @@ import { SourceCodeModal } from './components/SourceCodeModal';
 import { InstallPWA } from './components/InstallPWA';
 import { InstallModal } from './components/InstallModal';
 import { ShareModal } from './components/ShareModal';
-import { DeveloperModal } from './components/DeveloperModal';
 import { SupportFeedbackModal, SupportTab } from './components/SupportFeedbackModal';
 import { DeveloperPage } from './components/DeveloperPage';
 import { AboutPage } from './components/AboutPage';
@@ -129,7 +128,6 @@ export default function App() {
   const [isManualOpen, setIsManualOpen] = useState<boolean>(false);
   const [isSourceCodeOpen, setIsSourceCodeOpen] = useState<boolean>(false);
   const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
-  const [isDeveloperOpen, setIsDeveloperOpen] = useState<boolean>(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState<boolean>(false);
   const [supportModalTab, setSupportModalTab] = useState<SupportTab>('help');
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
@@ -195,7 +193,9 @@ export default function App() {
         if (tabParam && location.pathname === '/') {
           const normalized = tabParam.toLowerCase();
           if (normalized === 'reports') setCurrentTab('report');
-          else if (normalized === 'dev' || normalized === 'creator' || normalized === 'founder') setCurrentTab('developer');
+          else if (normalized === 'dev' || normalized === 'creator' || normalized === 'founder' || normalized === 'developer') {
+            navigate('/developer');
+          }
           else if (normalized === 'about-us') setCurrentTab('about');
           else if (normalized === 'privacy-policy') setCurrentTab('privacy');
           else if (normalized === 'terms-of-service') setCurrentTab('terms');
@@ -1616,7 +1616,6 @@ export default function App() {
           onOpenSourceCode={() => setCurrentTab('safety')}
           onOpenInstall={() => setIsInstallModalOpen(true)}
           onOpenShare={() => setIsShareOpen(true)}
-          onOpenDeveloper={() => setIsDeveloperOpen(true)}
           onOpenSecurity={() => setIsSecurityModalOpen(true)}
           isLockEnabled={Boolean(securityLock.isEnabled && securityLock.pin)}
           onLockNow={handleInstantLock}
@@ -1813,11 +1812,17 @@ export default function App() {
 
           <Route path="/developer" element={
             <DeveloperPage
-              onBack={() => setCurrentTab('home')}
+              onBack={() => {
+                navigate('/');
+                setCurrentTab('home');
+              }}
               language={language}
               onOpenShare={() => setIsShareOpen(true)}
             />
           } />
+          <Route path="/developer/" element={<Navigate to="/developer" replace />} />
+          <Route path="/dev" element={<Navigate to="/developer" replace />} />
+          <Route path="/creator" element={<Navigate to="/developer" replace />} />
 
           <Route path="/about" element={
             <AboutPage
@@ -2140,7 +2145,6 @@ export default function App() {
         onOpenSourceCode={() => setIsSourceCodeOpen(true)}
         onOpenInstall={() => setIsInstallModalOpen(true)}
         onOpenShare={() => setIsShareOpen(true)}
-        onOpenDeveloper={() => setIsDeveloperOpen(true)}
         onOpenSupport={(tab) => {
           setSupportModalTab(tab || 'help');
           setIsSupportModalOpen(true);
@@ -2370,13 +2374,6 @@ export default function App() {
           setCurrentTab(tab);
           setIsShareOpen(false);
         }}
-      />
-
-      {/* Developer Information Modal */}
-      <DeveloperModal
-        isOpen={isDeveloperOpen}
-        onClose={() => setIsDeveloperOpen(false)}
-        language={language}
       />
 
       {/* Bug Report, Suggestion & Help Centre Modal */}
