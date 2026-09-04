@@ -333,7 +333,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
       <div id="txList"></div>
     </div>
 
-    <a href="${currentUrl}" class="btn-sync">🚀 Open Live Web App &amp; Sync Full Cloud</a>
+    <a href="${currentUrl}" class="btn-sync">Open Live Web App &amp; Sync Full Cloud</a>
   </div>
 
   <script>

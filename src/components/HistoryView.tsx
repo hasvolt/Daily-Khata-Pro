@@ -4,7 +4,7 @@ import { DEFAULT_FUNDS, getFundLabel } from '../data/defaults';
 import { formatCurrency, triggerHapticSound, downloadCSVReport } from '../utils/khataCalculations';
 import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
-import { ChevronLeft, ChevronRight, Search, Edit3, Trash2, Plus, Zap, Banknote, Smartphone, Building2, Calendar, Download, Printer } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, Edit3, Trash2, Plus, Zap, Banknote, Smartphone, Building2, CreditCard, Calendar, Download, Printer } from 'lucide-react';
 import { ConfirmModal } from './ConfirmModal';
 
 interface HistoryViewProps {
@@ -47,10 +47,18 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   const [activeMonth, setActiveMonth] = useState<string>('all');
 
   // Filter options
-  const filterOptions = [
+  const filterOptions: {
+    key: string;
+    label: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }[] = [
     { key: 'all', label: t.history?.all || 'All' },
     { key: 'income', label: t.history?.incomeOnly || 'Incomes' },
     { key: 'expense', label: t.history?.expenseOnly || 'Expenses' },
+    { key: 'pay:upi', label: 'UPI', icon: Smartphone },
+    { key: 'pay:cash', label: 'Cash', icon: Banknote },
+    { key: 'pay:bank', label: 'Bank', icon: Building2 },
+    { key: 'pay:card', label: 'Card', icon: CreditCard },
     ...activeFunds.map((f) => ({
       key: `fund:${f.id}`,
       label: isHindi && f.hindiLabel ? f.hindiLabel.split(' (')[0] : f.label
@@ -71,6 +79,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     filtered = filtered.filter((e) => e.type === 'income');
   } else if (activeFilter === 'expense') {
     filtered = filtered.filter((e) => e.type === 'expense');
+  } else if (activeFilter.startsWith('pay:')) {
+    const payMode = activeFilter.split(':')[1];
+    filtered = filtered.filter((e) => (e.paymentMode || 'cash') === payMode);
   } else if (activeFilter.startsWith('fund:')) {
     const fundKey = activeFilter.split(':')[1] as FundType;
     filtered = filtered.filter((e) => {
@@ -95,6 +106,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         (e.note && e.note.toLowerCase().includes(q)) ||
         (e.category && e.category.toLowerCase().includes(q)) ||
         (e.clientName && e.clientName.toLowerCase().includes(q)) ||
+        (e.paymentMode && e.paymentMode.toLowerCase().includes(q)) ||
         e.date.includes(q) ||
         String(e.amount).includes(q)
     );
@@ -129,28 +141,31 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     switch (mode) {
       case 'upi':
         return (
-          <span className="inline-flex items-center gap-1 text-[11px] sm:text-[11.5px] px-2 py-0.5 rounded bg-[#38BDF8]/15 text-[#38BDF8] font-bold border border-[#38BDF8]/30 shrink-0">
-            <Smartphone className="w-3 h-3" /> UPI
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md bg-sky-500/15 text-sky-500 dark:text-sky-400 border border-sky-500/30 shrink-0 leading-none">
+            <Smartphone className="w-2.5 h-2.5 sm:w-3 sm:h-3 stroke-[2.5]" />
+            <span>UPI</span>
           </span>
         );
       case 'bank':
         return (
-          <span className="inline-flex items-center gap-1 text-[11px] sm:text-[11.5px] px-2 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] font-bold border border-[#10B981]/30 shrink-0">
-            <Building2 className="w-3 h-3" /> Bank
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shrink-0 leading-none">
+            <Building2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 stroke-[2.5]" />
+            <span>Bank</span>
+          </span>
+        );
+      case 'card':
+        return (
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 shrink-0 leading-none">
+            <CreditCard className="w-2.5 h-2.5 sm:w-3 sm:h-3 stroke-[2.5]" />
+            <span>Card</span>
           </span>
         );
       case 'cash':
       default:
         return (
-          <span
-            className="inline-flex items-center gap-1 text-[11px] sm:text-[11.5px] px-2 py-0.5 rounded font-bold border shrink-0"
-            style={{
-              backgroundColor: 'var(--theme-primary-dim, rgba(56,189,248,0.15))',
-              color: 'var(--theme-primary, #38BDF8)',
-              borderColor: 'var(--theme-primary-border, rgba(56,189,248,0.3))'
-            }}
-          >
-            <Banknote className="w-3 h-3" /> Cash
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 shrink-0 leading-none">
+            <Banknote className="w-2.5 h-2.5 sm:w-3 sm:h-3 stroke-[2.5]" />
+            <span>Cash</span>
           </span>
         );
     }
@@ -216,19 +231,23 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
       
       {/* Filter Chips Bar */}
       <div className="flex gap-2 overflow-x-auto pb-1.5 no-scrollbar no-print w-full">
-        {filterOptions.map((opt) => (
-          <button
-            key={opt.key}
-            onClick={() => onFilterChange(opt.key)}
-            className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[12px] sm:text-[13px] font-bold transition-all shrink-0 whitespace-nowrap shadow-sm ${
-              activeFilter === opt.key
-                ? 'bg-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
-                : 'bg-[var(--theme-card,#132438)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] hover:text-[var(--theme-text,#F8FAFC)]'
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
+        {filterOptions.map((opt) => {
+          const Icon = opt.icon;
+          return (
+            <button
+              key={opt.key}
+              onClick={() => onFilterChange(opt.key)}
+              className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[12px] sm:text-[13px] font-bold transition-all shrink-0 whitespace-nowrap shadow-sm flex items-center gap-1.5 cursor-pointer active:scale-95 ${
+                activeFilter === opt.key
+                  ? 'bg-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]'
+                  : 'bg-[var(--theme-card,#132438)] text-[#94A3B8] border border-[var(--theme-border,#213E61)] hover:text-[var(--theme-text,#F8FAFC)]'
+              }`}
+            >
+              {Icon && <Icon className="w-3.5 h-3.5 stroke-[2.5]" />}
+              <span>{opt.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       
@@ -377,29 +396,31 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                             <ItemIcon className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
                           </div>
                           <div className="flex flex-col gap-0.5 sm:gap-1 min-w-0 flex-1 text-left">
-                            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            <div className="flex items-center gap-2 min-w-0">
                               <span className="text-[13.5px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                                 {isIncome ? (entry.source || entry.note || 'Income') : (entry.category || 'Expense')}
                               </span>
-                              {renderPaymentIcon(entry.paymentMode)}
                             </div>
-                            <div className="text-[11px] sm:text-[12.5px] text-[#94A3B8] truncate">
-                              {isIncome ? (
-                                <span>
-                                  {entry.note ? `${entry.note} · ` : ''}
-                                  {entry.allocationMode === 'single' || entry.targetFund || (entry.fund && (!entry.splits || entry.splits[entry.fund] === entry.amount)) ? (
+                            <div className="flex items-center flex-wrap gap-1.5 text-[11px] sm:text-[12px] text-[#94A3B8] min-w-0">
+                              {renderPaymentIcon(entry.paymentMode)}
+                              <span className="text-slate-500 dark:text-slate-400 font-medium truncate max-w-[125px] sm:max-w-[180px]">
+                                {isIncome ? (
+                                  entry.allocationMode === 'single' || entry.targetFund || (entry.fund && (!entry.splits || entry.splits[entry.fund] === entry.amount)) ? (
                                     <span className="text-[#A855F7] font-semibold">
                                       Direct · {entry.targetFund ? getFundLabel(entry.targetFund, activeFunds) : (entry.fund ? getFundLabel(entry.fund, activeFunds) : 'Single Fund')}
                                     </span>
                                   ) : (
                                     'All-Fund Split Rule'
-                                  )}
-                                </span>
-                              ) : (
-                                <span>
-                                  {fundLabel} Fund
-                                  {entry.note ? ` · ${entry.note}` : ''}
-                                </span>
+                                  )
+                                ) : (
+                                  `${fundLabel} Fund`
+                                )}
+                              </span>
+                              {entry.note && (
+                                <>
+                                  <span className="text-slate-600 font-bold">&bull;</span>
+                                  <span className="truncate max-w-[100px] sm:max-w-[160px] text-slate-400">{entry.note}</span>
+                                </>
                               )}
                             </div>
                           </div>

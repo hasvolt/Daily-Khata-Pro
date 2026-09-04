@@ -332,7 +332,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsViewMoreExpanded(!isViewMoreExpanded)}
-                className="text-[12px] sm:text-[13px] font-extrabold text-[#0284C7] dark:text-[#38BDF8] hover:text-white bg-[var(--theme-card,#040E24)] border-2 border-[#0284C7]/40 hover:border-[#0284C7] px-3.5 py-1.5 rounded-xl flex items-center justify-between sm:justify-start gap-2 transition-all shadow-xs cursor-pointer active:scale-98 shrink-0"
+                className="text-[12px] sm:text-[13px] font-black text-[#0369A1] dark:text-[#38BDF8] hover:text-white bg-[var(--theme-card,#040E24)] border-2 border-[#0369A1] hover:border-[#0284C7] px-3.5 py-1.5 rounded-xl flex items-center justify-between sm:justify-start gap-2 transition-all shadow-xs cursor-pointer active:scale-98 shrink-0"
               >
                 <span>
                   {isViewMoreExpanded
@@ -344,9 +344,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     : `View More Categories (+${overflowFunds.length} More)`}
                 </span>
                 {isViewMoreExpanded ? (
-                  <ChevronUp className="w-4 h-4 text-[#0284C7] dark:text-[#38BDF8] stroke-[2.5] shrink-0" />
+                  <ChevronUp className="w-4 h-4 text-[#0369A1] dark:text-[#38BDF8] stroke-[3] shrink-0" />
                 ) : (
-                  <ChevronDown className="w-4 h-4 text-[#0284C7] dark:text-[#38BDF8] stroke-[2.5] shrink-0" />
+                  <ChevronDown className="w-4 h-4 text-[#0369A1] dark:text-[#38BDF8] stroke-[3] shrink-0" />
                 )}
               </button>
 
@@ -412,10 +412,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <button 
                 type="button" 
                 onClick={onViewHistory} 
-                className="text-[#0284C7] dark:text-[#38BDF8] hover:underline flex items-center gap-1 font-extrabold text-[12px] transition-all cursor-pointer hover:scale-105 active:scale-95"
+                className="text-[#0369A1] dark:text-[#38BDF8] hover:underline flex items-center gap-1 font-black text-[12px] transition-all cursor-pointer hover:scale-105 active:scale-95"
               >
                 <span>{isHindi ? 'सभी देखें' : 'View All'}</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-3.5 h-3.5 stroke-[3]" />
               </button>
             )}
           </div>

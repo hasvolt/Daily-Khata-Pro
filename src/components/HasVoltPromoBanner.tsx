@@ -195,16 +195,16 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
           {/* Action Buttons: WhatsApp Booking, Google Review & Website */}
           <div className="pt-0.5 flex items-center justify-between gap-1.5">
             <div className="flex items-center gap-1.5 min-w-0">
-              {/* WhatsApp Booking CTA */}
+              {/* WhatsApp Booking CTA - Light Glassy Aesthetic */}
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-[10px] sm:text-[10.5px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs shrink-0"
+                className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 active:scale-95 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 backdrop-blur-xs font-bold text-[10px] sm:text-[10.5px] flex items-center gap-1 transition-all cursor-pointer shadow-xs shrink-0"
                 title={`Chat on WhatsApp (${whatsappNumber})`}
                 aria-label="Chat on WhatsApp"
               >
-                <MessageSquare className="w-3 h-3 fill-white/20 text-white" />
+                <MessageSquare className="w-3 h-3 text-emerald-600 dark:text-emerald-400 fill-emerald-500/20" />
                 <span>{isHindi ? 'बुकिंग / चैट' : 'Book / Chat'}</span>
               </a>
 
@@ -321,11 +321,11 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-95 shrink-0 shadow-2xs"
+              className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 active:scale-95 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 backdrop-blur-xs font-bold text-[10px] flex items-center justify-center gap-1 cursor-pointer transition-all shrink-0 shadow-xs"
               title={`Chat on WhatsApp (${whatsappNumber})`}
               aria-label="Chat on WhatsApp"
             >
-              <MessageSquare className="w-3 h-3 fill-white/20 text-white" />
+              <MessageSquare className="w-3 h-3 text-emerald-600 dark:text-emerald-400 fill-emerald-500/20" />
               <span>WhatsApp</span>
             </a>
           </div>
@@ -449,9 +449,9 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0"
+                  className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 active:scale-95 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 backdrop-blur-xs font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs shrink-0"
                 >
-                  <MessageSquare className="w-3.5 h-3.5 fill-white/20 text-white" />
+                  <MessageSquare className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 fill-emerald-500/20" />
                   <span>{isHindi ? 'व्हाट्सएप पर संपर्क करें' : 'Contact on WhatsApp'}</span>
                 </a>
               </div>

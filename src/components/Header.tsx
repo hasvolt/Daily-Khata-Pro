@@ -248,20 +248,16 @@ export const Header: React.FC<HeaderProps> = ({
                 Daily Khata
               </span>
               <span
-                className="font-black text-[15px] sm:text-[18px] tracking-tight transition-colors drop-shadow-xs text-[#38BDF8]"
+                className="font-black text-[15px] sm:text-[18px] tracking-tight transition-colors drop-shadow-xs text-[var(--theme-primary,#38BDF8)]"
               >
                 Pro
               </span>
             </div>
-            <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
+            <div className="mt-0.5 min-w-0">
               <span
-                className="w-1.5 h-1.5 rounded-full shrink-0 bg-[#38BDF8]"
-              />
-              <span
-                className="text-[10px] sm:text-[11.5px] font-medium tracking-wide truncate transition-colors"
-                style={{ color: 'var(--theme-text-muted, #8BA4D0)' }}
+                className="text-[10.5px] sm:text-[11.5px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block"
               >
-                Income &amp; Expense Tracker
+                {isHindi ? 'दैनिक आय-व्यय ट्रैकर' : 'Daily Income & Expense Tracker'}
               </span>
             </div>
           </div>

@@ -62,13 +62,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
                 <div
                   className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
                     isActive
-                      ? 'bg-[#0284C7] text-white ring-3 sm:ring-4 ring-[#0284C7]/40 shadow-lg shadow-[#0284C7]/60 scale-105'
-                      : 'bg-gradient-to-tr from-[#025a8b] via-[#0284C7] to-[#0369A1] text-white hover:scale-105 shadow-md shadow-[#0284C7]/50'
+                      ? 'bg-[#0369A1] text-white ring-3 sm:ring-4 ring-[#0369A1]/50 shadow-lg shadow-[#082F49]/70 scale-105'
+                      : 'bg-gradient-to-tr from-[#082F49] via-[#0C4A6E] to-[#0369A1] text-white hover:scale-105 shadow-md shadow-[#082F49]/60'
                   }`}
                 >
-                  <Plus className="w-5 h-5 sm:w-7 sm:h-7 stroke-[3] transition-transform group-hover:rotate-90 duration-200" />
+                  <Plus className="w-5 h-5 sm:w-7 sm:h-7 stroke-[3] !text-white transition-transform group-hover:rotate-90 duration-200" />
                 </div>
-                <span className="text-[10.5px] sm:text-[13px] font-black text-[#0284C7] dark:text-[var(--theme-primary,#38BDF8)] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
+                <span className="text-[10.5px] sm:text-[13px] font-black text-[#0369A1] dark:text-[var(--theme-primary,#38BDF8)] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
                   {tab.label}
                 </span>
               </button>

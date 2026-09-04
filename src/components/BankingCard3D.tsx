@@ -57,7 +57,7 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        className="banking-card-3d relative bg-gradient-to-r from-[#021338] via-[#05286E] to-[#011438] border border-[#0E3680] rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-8 shadow-[0_20px_50px_rgba(0,18,50,0.5)] overflow-hidden"
+        className="banking-card-3d relative bg-gradient-to-r from-[#021338] via-[#05286E] to-[#011438] border border-[#0E3680] rounded-xl sm:rounded-3xl p-3.5 sm:p-7 md:p-8 shadow-[0_12px_30px_rgba(0,18,50,0.4)] sm:shadow-[0_20px_50px_rgba(0,18,50,0.5)] overflow-hidden"
       >
         {/* Luminous Glowing Waves & Dot Matrix Pattern on the Right */}
         <div className="banking-card-waves absolute right-0 top-0 bottom-0 w-3/5 sm:w-1/2 pointer-events-none overflow-hidden select-none opacity-80">
@@ -90,7 +90,7 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
 
         {/* Animated 3D Interactive Glare */}
         <motion.div 
-          className="banking-card-glare absolute inset-0 pointer-events-none z-20"
+          className="banking-card-glare absolute inset-0 pointer-events-none z-0"
           style={{
             background: "radial-gradient(circle at center, var(--theme-glow, rgba(56,189,248,0.12)) 0%, transparent 60%)",
             x: useTransform(mouseXSpring, [-0.5, 0.5], ["-40%", "40%"]),
@@ -98,62 +98,68 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
           }}
         />
 
-        <div className="relative z-10 flex flex-col justify-between h-full space-y-6 sm:space-y-8" style={{ transform: "translateZ(30px)" }}>
+        <div className="relative z-20 flex flex-col justify-between h-full space-y-3.5 sm:space-y-8" style={{ transform: "translateZ(30px)" }}>
           {/* Header Row: Total Net Balance & Date */}
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="banking-card-icon-box p-2 sm:p-2.5 rounded-xl bg-[var(--theme-surface,#0B2A6B)] border border-[var(--theme-border,#17459E)] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-sm transition-colors">
-                <Wallet className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <div className="banking-card-icon-box p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0B2A6B)] border border-[var(--theme-border,#17459E)] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-sm transition-colors">
+                <Wallet className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="banking-card-title text-[12px] sm:text-[14px] font-extrabold tracking-wider text-white uppercase truncate transition-colors">
+                <span className="banking-card-title text-[10.5px] sm:text-[14px] font-extrabold tracking-wider text-white uppercase truncate transition-colors">
                   TOTAL NET BALANCE
                 </span>
-                <span className="banking-card-subtitle text-[10px] sm:text-[11.5px] text-[#8BA4D0] truncate transition-colors">
+                <span className="banking-card-subtitle text-[9px] sm:text-[11.5px] text-[#8BA4D0] truncate transition-colors">
                   Your overall financial summary
                 </span>
               </div>
             </div>
 
-            <div className="banking-card-date-box flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-[var(--theme-surface,#0B2A6B)] border border-[var(--theme-border,#17459E)] text-[var(--theme-primary,#38BDF8)] shadow-sm shrink-0">
-              <Calendar className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-              <span className="banking-card-date text-[10.5px] sm:text-[12px] font-bold tracking-wide text-[#E2E8F0] uppercase whitespace-nowrap transition-colors">
+            <div className="banking-card-date-box flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0B2A6B)] border border-[var(--theme-border,#17459E)] text-[var(--theme-primary,#38BDF8)] shadow-sm shrink-0">
+              <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+              <span className="banking-card-date text-[9.5px] sm:text-[12px] font-bold tracking-wide text-[#E2E8F0] uppercase whitespace-nowrap transition-colors">
                 {dateFormatted}
               </span>
             </div>
           </div>
 
           {/* Available Balance Amount */}
-          <div className="space-y-1 sm:space-y-1.5">
-            <p className="banking-card-label text-[10.5px] sm:text-[12px] text-[#7E9BC9] tracking-widest uppercase font-semibold transition-colors">
+          <div className="space-y-0.5 sm:space-y-1.5">
+            <p className="banking-card-label text-[9px] sm:text-[12px] text-[#7E9BC9] tracking-widest uppercase font-semibold transition-colors">
               AVAILABLE BALANCE
             </p>
             <div 
-              className="banking-card-amount font-mono text-[34px] xs:text-[40px] sm:text-[50px] md:text-[56px] font-extrabold text-white tracking-tight leading-none drop-shadow-md truncate max-w-full transition-colors" 
+              className="banking-card-amount font-mono text-[24px] xs:text-[28px] sm:text-[50px] md:text-[56px] font-extrabold text-white tracking-tight leading-none drop-shadow-md truncate max-w-full transition-colors" 
               title={formatCurrency(totalWealth, privacyMask)}
             >
               {formatCurrency(totalWealth, privacyMask)}
             </div>
           </div>
           
-          {/* Action Buttons: Add Income (Green) & Add Expense (Red) - Deep Rich Solid Colors */}
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex items-center gap-3 sm:gap-4 w-full">
+          {/* Action Buttons: Add Income & Add Expense - Clean, Solid, High-Contrast & Sharp */}
+          <div className="pt-2.5 sm:pt-4.5 mt-0.5 sm:mt-1 border-t border-white/10 w-full">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4 w-full">
               <button
                 type="button"
                 onClick={() => onAddClick('income')}
-                className="flex-1 py-2.5 sm:py-3 px-4 rounded-xl sm:rounded-2xl bg-[#059669] hover:bg-[#047857] active:bg-[#065F46] !text-white font-bold text-[13px] sm:text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_16px_rgba(5,150,105,0.45)] hover:scale-[1.02] active:scale-95 cursor-pointer"
+                className="py-2 sm:py-3.5 px-3 sm:px-4 rounded-lg sm:rounded-2xl bg-[#059669] hover:bg-[#047857] active:bg-[#065F46] !text-white font-bold text-[12px] sm:text-[15.5px] flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-md shadow-black/25 hover:shadow-lg active:scale-95 cursor-pointer border border-[#047857]"
+                id="hero-add-income-btn"
               >
-                <Plus className="w-4 h-4 stroke-[3] !text-white" />
-                <span className="truncate !text-white">Add Income</span>
+                <Plus className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[3] !text-white shrink-0" />
+                <span className="truncate !text-white tracking-wide">
+                  {t.home?.addIncome || 'Add Income'}
+                </span>
               </button>
               <button
                 type="button"
                 onClick={() => onAddClick('expense')}
-                className="flex-1 py-2.5 sm:py-3 px-4 rounded-xl sm:rounded-2xl bg-[#DC2626] hover:bg-[#B91C1C] active:bg-[#991B1B] !text-white font-bold text-[13px] sm:text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_16px_rgba(220,38,38,0.45)] hover:scale-[1.02] active:scale-95 cursor-pointer"
+                className="py-2 sm:py-3.5 px-3 sm:px-4 rounded-lg sm:rounded-2xl bg-[#DC2626] hover:bg-[#B91C1C] active:bg-[#991B1B] !text-white font-bold text-[12px] sm:text-[15.5px] flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-md shadow-black/25 hover:shadow-lg active:scale-95 cursor-pointer border border-[#B91C1C]"
+                id="hero-add-expense-btn"
               >
-                <Minus className="w-4 h-4 stroke-[3] !text-white" />
-                <span className="truncate !text-white">Add Expense</span>
+                <Minus className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[3] !text-white shrink-0" />
+                <span className="truncate !text-white tracking-wide">
+                  {t.home?.addExpense || 'Add Expense'}
+                </span>
               </button>
             </div>
           </div>
