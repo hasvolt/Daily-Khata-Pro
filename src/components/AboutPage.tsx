@@ -279,6 +279,41 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </a>
         </div>
       </div>
+
+      {/* Navigation Footer Links */}
+      <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[12px] text-[#94A3B8]">
+        {onNavigateTab && (
+          <>
+            <button
+              onClick={() => onNavigateTab('privacy')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Privacy
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('cookies')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Cookies
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('disclaimer')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Disclaimer
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('terms')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Terms of Service
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

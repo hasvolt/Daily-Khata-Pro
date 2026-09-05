@@ -149,6 +149,20 @@ export const TermsPage: React.FC<TermsPageProps> = ({
             </button>
             <span>•</span>
             <button
+              onClick={() => onNavigateTab('privacy')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Privacy
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('cookies')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Cookies
+            </button>
+            <span>•</span>
+            <button
               onClick={() => onNavigateTab('disclaimer')}
               className="hover:text-white underline cursor-pointer"
             >

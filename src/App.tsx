@@ -1,6 +1,6 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
 import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder } from './types';
 import {
   DEFAULT_FUNDS,
@@ -54,6 +54,8 @@ import { SafetyPage } from './components/SafetyPage';
 import { SupportPage } from './components/SupportPage';
 import { CalculatorPage } from './components/CalculatorPage';
 import { AttendancePage } from './components/AttendancePage';
+import { WealthAcademyPage } from './components/WealthAcademyPage';
+import { WealthArticlePage } from './components/WealthArticlePage';
 import { CookiesPage } from './components/CookiesPage';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { RemindersModal } from './components/RemindersModal';
@@ -64,6 +66,16 @@ import { updatePageSEO } from './utils/seo';
 import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu, Shield, ShieldCheck, Github, Globe, Heart } from 'lucide-react';
 
 const STORAGE_KEY = 'daily-khata-pro-v3';
+
+const ArticleWrapper: React.FC<{ language: AppLanguage; onBack: () => void; onNavigateArticle: (id: string) => void; onNavigateTab: (tab: string) => void }> = ({
+  language,
+  onBack,
+  onNavigateArticle,
+  onNavigateTab
+}) => {
+  const { id } = useParams<{ id: string }>();
+  return <WealthArticlePage articleId={id || ''} language={language} onBack={onBack} onNavigateArticle={onNavigateArticle} onNavigateTab={onNavigateTab} />;
+};
 
 export default function App() {
   const navigate = useNavigate();
@@ -140,6 +152,7 @@ export default function App() {
   const [isTrashOpen, setIsTrashOpen] = useState<boolean>(false);
   const [isMasterEditOpen, setIsMasterEditOpen] = useState<boolean>(false);
   const [isCookieBannerForceOpen, setIsCookieBannerForceOpen] = useState<boolean>(false);
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [trashItems, setTrashItems] = useState<TrashItem[]>([]);
   const [attendanceLogs, setAttendanceLogs] = useState<AttendanceLog[]>([]);
   const [reminders, setReminders] = useState<AppReminder[]>([]);
@@ -1825,6 +1838,27 @@ export default function App() {
             />
           } />
 
+          <Route path="/academy" element={
+            <WealthAcademyPage
+              onBack={() => setCurrentTab('home')}
+              onSelectArticle={(id) => {
+                setSelectedArticleId(id);
+                navigate(`/academy/${id}`);
+              }}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
+
+          <Route path="/academy/:id" element={
+            <ArticleWrapper 
+              language={language}
+              onBack={() => navigate('/academy')}
+              onNavigateArticle={(id) => navigate(`/academy/${id}`)}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+            />
+          } />
+
           <Route path="/tracker" element={
             <WorkLifeTrackerView
               workLogs={workLogs}
@@ -2020,6 +2054,7 @@ export default function App() {
           <Route path="/safety" element={
             <SafetyPage
               onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
               language={language}
             />
           } />
@@ -2148,10 +2183,12 @@ export default function App() {
               {/* Layer 3: Clean Navigation Links */}
               <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[12px] font-medium text-[var(--theme-text-muted,#94A3B8)] w-full">
                 <button onClick={() => setCurrentTab('about')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'हमारे बारे में' : 'About Us'}</button>
+                <button onClick={() => setCurrentTab('academy')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer text-[var(--theme-primary,#38BDF8)]">{language === 'hi' ? 'वेल्थ अकादमी' : 'Wealth Academy'}</button>
                 <button onClick={() => setCurrentTab('guide')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'यूज़र गाइड' : 'User Guide'}</button>
                 <button onClick={() => setCurrentTab('calculator')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'कैलकुलेटर' : 'Calculators'}</button>
                 <button onClick={() => setIsSettingsOpen(true)} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'सेटिंग्स' : 'Settings'}</button>
                 <button onClick={() => setCurrentTab('privacy')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'प्राइवेसी' : 'Privacy Policy'}</button>
+                <button onClick={() => setCurrentTab('cookies')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'कुकीज़' : 'Cookies'}</button>
                 <button onClick={() => setCurrentTab('terms')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'शर्तें' : 'Terms'}</button>
                 <button onClick={() => setCurrentTab('disclaimer')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer">{language === 'hi' ? 'डिस्क्लेमर' : 'Disclaimer'}</button>
                 <button onClick={() => setCurrentTab('safety')} className="hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer flex items-center gap-1.5">

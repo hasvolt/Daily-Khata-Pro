@@ -5,6 +5,8 @@
  * without canonical conflicts or duplicate page errors.
  */
 
+import { ACADEMY_ARTICLES } from '../data/wealthAcademy';
+
 export interface PageSEOMeta {
   title: string;
   description: string;
@@ -18,6 +20,11 @@ export const ROUTE_SEO_MAP: Record<string, PageSEOMeta> = {
     title: 'Daily Khata Pro — Universal Financial Ledger & 6-Fund Accounting',
     description: 'Universal professional daily income & expense ledger with automated 6-fund wealth allocation, financial goals, work deliverables, and daily life timeline tracker. 100% offline-first and private.',
     canonicalPath: '/'
+  },
+  '/academy': {
+    title: 'Wealth Academy — Financial Education & Mastery | Daily Khata Pro',
+    description: 'Learn the secrets of wealth, budgeting, and financial discipline in our comprehensive Wealth Academy. 40+ articles to help you master your money.',
+    canonicalPath: '/academy'
   },
   '/developer': {
     title: 'Developer Profile — MD Zafeer Hasan (YAZDAAN) | Daily Khata Pro',
@@ -108,11 +115,29 @@ export function updatePageSEO(pathname: string): void {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
   const cleanPath = pathname.toLowerCase().replace(/\/$/, '') || '/';
-  const seo = ROUTE_SEO_MAP[cleanPath] || {
-    title: 'Daily Khata Pro — Universal Financial Ledger',
-    description: 'Universal daily income and expense ledger with automated 6-fund allocation. 100% offline-first and private.',
-    canonicalPath: cleanPath
-  };
+  
+  let seo = ROUTE_SEO_MAP[cleanPath];
+
+  // Dynamic Academy Article SEO
+  if (!seo && cleanPath.startsWith('/academy/')) {
+    const articleId = cleanPath.split('/').pop();
+    const article = ACADEMY_ARTICLES.find(a => a.id === articleId);
+    if (article) {
+      seo = {
+        title: `${article.title} — Wealth Academy | Daily Khata Pro`,
+        description: article.description,
+        canonicalPath: cleanPath
+      };
+    }
+  }
+
+  if (!seo) {
+    seo = {
+      title: 'Daily Khata Pro — Universal Financial Ledger',
+      description: 'Universal daily income and expense ledger with automated 6-fund allocation. 100% offline-first and private.',
+      canonicalPath: cleanPath
+    };
+  }
 
   // 1. Update Title
   document.title = seo.title;

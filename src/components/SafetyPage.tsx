@@ -23,6 +23,7 @@ import { getAppTranslation } from '../utils/appTranslations';
 
 interface SafetyPageProps {
   onBack: () => void;
+  onNavigateTab?: (tab: string) => void;
   language?: AppLanguage;
 }
 
@@ -40,6 +41,7 @@ const GITHUB_CLONE_URL = 'https://github.com/hasvolt/Daily-Khata-Pro.git';
 
 export const SafetyPage: React.FC<SafetyPageProps> = ({
   onBack,
+  onNavigateTab,
   language = 'en'
 }) => {
   const [selectedFileIndex, setSelectedFileIndex] = useState(0);
@@ -556,6 +558,41 @@ export interface Goal {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Navigation Footer Links */}
+      <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[12px] text-[#94A3B8]">
+        <button
+          onClick={() => onBack()}
+          className="hover:text-white underline cursor-pointer"
+        >
+          {tr.safety.backToHome}
+        </button>
+        {onNavigateTab && (
+          <>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('privacy')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Privacy
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('cookies')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Cookies
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('terms')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Terms
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

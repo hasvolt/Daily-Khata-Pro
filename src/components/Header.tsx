@@ -27,6 +27,7 @@ import {
   ChevronRight,
   Download,
   BookOpen,
+  GraduationCap,
   KeyRound,
   ShieldCheck,
   Database,
@@ -556,6 +557,36 @@ export const Header: React.FC<HeaderProps> = ({
                           </span>
                           <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
                             {isHindi ? 'कार्य घंटे, क्लॉक इन/आउट और हाजिरी' : 'Track daily shift, overtime & duty hours'}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0" />
+                    </button>
+                  )}
+
+                  {/* Wealth Academy Education Center */}
+                  {onSelectTab && (
+                    <button
+                      type="button"
+                      onClick={() => handleMenuAction(() => onSelectTab('academy'))}
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-card,#132438)]/50 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)]/50 hover:border-[var(--theme-primary,#38BDF8)]/40 transition-all cursor-pointer text-left"
+                      id="menu-academy-btn"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0">
+                          <GraduationCap className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                              {isHindi ? 'वेल्थ अकादमी (Education)' : 'Wealth Academy'}
+                            </span>
+                            <span className="text-[8.5px] font-mono font-extrabold px-1 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
+                              NEW
+                            </span>
+                          </div>
+                          <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                            {isHindi ? 'अमीरी के नियम और वित्तीय शिक्षा' : 'Wealth discipline & financial mastery'}
                           </span>
                         </div>
                       </div>

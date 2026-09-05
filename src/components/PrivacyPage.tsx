@@ -180,6 +180,13 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
             </button>
             <span>•</span>
             <button
+              onClick={() => onNavigateTab('cookies')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Cookies
+            </button>
+            <span>•</span>
+            <button
               onClick={() => onNavigateTab('terms')}
               className="hover:text-white underline cursor-pointer"
             >
