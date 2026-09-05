@@ -268,23 +268,6 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          {/* Advance Search Button (Mobile & Small Screens) */}
-          {onOpenPageSearch ? (
-            <button
-              type="button"
-              onClick={onOpenPageSearch}
-              className="md:hidden p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
-              title={isHindi ? 'एडवांस सर्च व नेविगेटर (Ctrl+K)' : 'Advanced Search & Navigator (Ctrl+K)'}
-              id="header-page-search-btn"
-              aria-label="Search pages and tools"
-            >
-              <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
-              <span className="text-[11px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)]">
-                {isHindi ? 'खोजें' : 'Search'}
-              </span>
-            </button>
-          ) : null}
-
           {/* Privacy Eye Toggle */}
           {onTogglePrivacyMask && (
             <button
