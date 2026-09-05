@@ -34,7 +34,7 @@ export interface SearchItem {
   id: string;
   title: string;
   subtitle: string;
-  category: 'developer' | 'pages' | 'finance' | 'tools' | 'settings';
+  category: 'pages' | 'finance' | 'tools' | 'settings';
   categoryLabel: string;
   icon: React.ComponentType<{ className?: string }>;
   targetTab?: string;
@@ -64,26 +64,7 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
 
   // Master index of searchable pages, features, and tools
   const searchItems: SearchItem[] = useMemo(() => [
-    // 1. Developer Profile (Priority Item)
-    {
-      id: 'developer-profile',
-      title: isHindi ? 'डेवलपर प्रोफाइल (एमडी ज़फीर हसन - YAZDAAN)' : 'Developer Profile & Creator (MD Zafeer Hasan - YAZDAAN)',
-      subtitle: isHindi
-        ? 'HASVOLT, ओपन-सोर्स MIT लाइसेंस, आधिकारिक प्रमाण पत्र, संपर्क विवरण'
-        : 'HASVOLT Founder, MIT Open Source, Verified Credentials, Projects & Contacts',
-      category: 'developer',
-      categoryLabel: isHindi ? 'डेवलपर एवं क्रिएटर' : 'Developer & Creator',
-      icon: Code2,
-      targetTab: 'developer',
-      routePath: '/developer',
-      keywords: [
-        'developer', 'dev', 'devloper', 'profile', 'creator', 'founder', 'md zafeer hasan',
-        'zafeer', 'yazdaan', 'hasvolt', 'owner', 'contact', 'email', 'photo', 'info',
-        'डेवलपर', 'निर्माता', 'ज़फीर', 'हसन', 'प्रोफाइल'
-      ],
-      badge: 'Creator'
-    },
-    // 2. Core Navigation Pages
+    // 1. Core Navigation Pages
     {
       id: 'home',
       title: isHindi ? 'होम / मुख्य डैशबोर्ड' : 'Home Dashboard & 6-Fund Overview',
@@ -400,7 +381,7 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={isHindi ? 'पेज, टूल, फीचर या डेवलपर खोजें... (उदा: developer, khata, goal)' : 'Search any page, tool, feature or developer... (e.g. developer, report, sip)'}
+              placeholder={isHindi ? 'पेज, टूल या फीचर खोजें... (उदा: khata, goal, report, sip)' : 'Search pages, tools or features... (e.g. khata, report, sip, settings)'}
               className="w-full bg-transparent text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#64748B)] text-[14px] sm:text-[15px] font-medium outline-none pr-8"
               autoComplete="off"
               spellCheck="false"
@@ -432,45 +413,58 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
           </div>
         </div>
 
-        {/* Quick Filter Badges */}
-        <div className="px-3.5 sm:px-4 py-2 border-b border-[var(--theme-border,#213E61)]/60 bg-[var(--theme-surface,#0E1A29)]/50 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-[11px]">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] shrink-0 mr-1">
+        {/* Quick Filter Badges - 100% Professional, No Emojis */}
+        <div className="px-3.5 sm:px-4 py-2 border-b border-[var(--theme-border,#213E61)]/60 bg-[var(--theme-surface,#0E1A29)]/50 flex items-center gap-2 overflow-x-auto no-scrollbar text-[11px]">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] shrink-0 mr-0.5">
             {isHindi ? 'त्वरित:' : 'Quick:'}
           </span>
           <button
             type="button"
-            onClick={() => setQuery('developer')}
-            className="px-2.5 py-1 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 hover:bg-[var(--theme-primary,#38BDF8)]/25 text-[var(--theme-primary,#38BDF8)] font-semibold border border-[var(--theme-primary,#38BDF8)]/30 shrink-0 cursor-pointer transition-colors"
-          >
-            👨‍💻 Developer Profile
-          </button>
-          <button
-            type="button"
             onClick={() => setQuery('calculator')}
-            className="px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] font-semibold border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-medium border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
           >
-            🧮 Calculators
+            <Calculator className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+            <span>{isHindi ? 'कैलकुलेटर' : 'Calculators'}</span>
           </button>
           <button
             type="button"
-            onClick={() => setQuery('reports')}
-            className="px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] font-semibold border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
+            onClick={() => setQuery('report')}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-medium border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
           >
-            📊 Reports
+            <BarChart3 className="w-3.5 h-3.5 text-[#10B981]" />
+            <span>{isHindi ? 'रिपोर्ट्स' : 'Reports'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setQuery('goals')}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-medium border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
+          >
+            <Target className="w-3.5 h-3.5 text-[#F59E0B]" />
+            <span>{isHindi ? 'लक्ष्य' : 'Goals'}</span>
           </button>
           <button
             type="button"
             onClick={() => setQuery('guide')}
-            className="px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] font-semibold border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-medium border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
           >
-            📖 Manual Guide
+            <FileText className="w-3.5 h-3.5 text-[#818CF8]" />
+            <span>{isHindi ? 'उपयोगकर्ता गाइड' : 'Manual Guide'}</span>
           </button>
           <button
             type="button"
             onClick={() => setQuery('privacy')}
-            className="px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] font-semibold border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-medium border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
           >
-            🛡️ Privacy
+            <ShieldCheck className="w-3.5 h-3.5 text-[#38BDF8]" />
+            <span>{isHindi ? 'गोपनीयता नीति' : 'Privacy'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setQuery('settings')}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] font-medium border border-[var(--theme-border,#213E61)] shrink-0 cursor-pointer transition-colors"
+          >
+            <Settings className="w-3.5 h-3.5 text-[#94A3B8]" />
+            <span>{isHindi ? 'सेटिंग्स' : 'Settings'}</span>
           </button>
         </div>
 
@@ -486,7 +480,7 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
                   {isHindi ? 'कोई पेज या टूल नहीं मिला' : 'No matching page or tool found'}
                 </p>
                 <p className="text-[12px] text-[var(--theme-text-dim,#94A3B8)] mt-1">
-                  {isHindi ? 'कृपया "developer", "khata", "goals" या "reports" लिखकर देखें।' : 'Try searching for "developer", "calculator", "reports" or "privacy".'}
+                  {isHindi ? 'कृपया "khata", "goals", "calculator" या "reports" लिखकर देखें।' : 'Try searching for "calculator", "reports", "goals" or "privacy".'}
                 </p>
               </div>
               <button
@@ -501,7 +495,6 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
             filteredItems.map((item, index) => {
               const isSelected = index === selectedIndex;
               const IconComp = item.icon;
-              const isDeveloperItem = item.category === 'developer';
 
               return (
                 <button
@@ -511,20 +504,14 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
                   onMouseEnter={() => setSelectedIndex(index)}
                   className={`w-full flex items-center justify-between gap-3 p-3 rounded-xl sm:rounded-2xl transition-all cursor-pointer text-left ${
                     isSelected
-                      ? isDeveloperItem
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/20 border-2 border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text,#F8FAFC)] shadow-sm'
-                        : 'bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/60 text-[var(--theme-text,#F8FAFC)]'
-                      : isDeveloperItem
-                      ? 'bg-[var(--theme-primary,#38BDF8)]/10 border border-[var(--theme-primary,#38BDF8)]/30 text-[var(--theme-text,#F8FAFC)]'
+                      ? 'bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/70 text-[var(--theme-text,#F8FAFC)] shadow-sm'
                       : 'bg-[var(--theme-card,#132438)]/50 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)]/60 text-[var(--theme-text-muted,#CBD5E1)]'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
                       className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 border ${
-                        isDeveloperItem
-                          ? 'bg-[var(--theme-primary,#38BDF8)]/25 border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)]'
-                          : isSelected
+                        isSelected
                           ? 'bg-[var(--theme-primary,#38BDF8)]/20 border-[var(--theme-primary,#38BDF8)]/40 text-[var(--theme-primary,#38BDF8)]'
                           : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)]'
                       }`}

@@ -8,7 +8,7 @@ import {
   AppLanguage,
   KhataSettings
 } from '../types';
-import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS } from '../data/defaults';
+import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import {
   X,
@@ -135,16 +135,8 @@ export const MasterEditModal: React.FC<MasterEditModalProps> = ({
   };
 
   const handleResetPctDefault = () => {
-    const def = {
-      personal: 55,
-      saving: 10,
-      investment: 10,
-      buffer: 10,
-      emergency: 10,
-      family: 5
-    };
-    setLocalPercentages(def);
-    onSavePercentages(def);
+    setLocalPercentages(DEFAULT_PERCENTAGES);
+    onSavePercentages(DEFAULT_PERCENTAGES);
     triggerHapticSound('click');
   };
 

@@ -305,7 +305,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onOpenPageSearch}
               className="w-full flex items-center justify-between gap-2 bg-[var(--theme-bg,#070E18)] hover:bg-[var(--theme-card,#132438)] focus:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-dim,#64748B)] hover:text-[var(--theme-text,#F8FAFC)] text-[12px] rounded-xl pl-3 pr-2.5 py-1.5 transition-all outline-none shadow-xs cursor-pointer group"
-              title={language === 'hi' ? 'पेज, टूल व डेवलपर खोजें (Ctrl+K)' : 'Search pages, tools & developer (Ctrl+K)'}
+              title={language === 'hi' ? 'पेज व टूल खोजें (Ctrl+K)' : 'Search pages & tools (Ctrl+K)'}
               id="header-desktop-page-search"
             >
               <div className="flex items-center gap-2 truncate">
@@ -557,27 +557,6 @@ export const Header: React.FC<HeaderProps> = ({
                                 </div>
                                 <span className="text-[9px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-surface,#0E1A29)] px-1.5 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/40">
                                   Ctrl+K
-                                </span>
-                              </button>
-                            )}
-
-                            {/* Developer Profile & Creator */}
-                            {onOpenDeveloper && (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  onOpenDeveloper();
-                                  closeAllMenus();
-                                }}
-                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
-                                id="header-drawer-developer-btn"
-                              >
-                                <div className="flex items-center gap-2.5">
-                                  <Code2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                                  <span>{language === 'hi' ? 'डेवलपर प्रोफाइल (एमडी ज़फीर हसन)' : 'Developer Profile (MD Zafeer Hasan)'}</span>
-                                </div>
-                                <span className="text-[9px] font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded">
-                                  Creator
                                 </span>
                               </button>
                             )}
@@ -1064,27 +1043,6 @@ export const Header: React.FC<HeaderProps> = ({
                         </div>
                         <span className="text-[9px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-surface,#0E1A29)] px-1.5 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/40">
                           Ctrl+K
-                        </span>
-                      </button>
-                    )}
-
-                    {/* Developer Profile & Creator */}
-                    {onOpenDeveloper && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onOpenDeveloper();
-                          closeAllMenus();
-                        }}
-                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
-                        id="header-desktop-drawer-developer-btn"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <Code2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                          <span>{language === 'hi' ? 'डेवलपर प्रोफाइल (एमडी ज़फीर हसन)' : 'Developer Profile (MD Zafeer Hasan)'}</span>
-                        </div>
-                        <span className="text-[9px] font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded">
-                          Creator
                         </span>
                       </button>
                     )}

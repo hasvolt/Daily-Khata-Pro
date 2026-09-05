@@ -172,7 +172,7 @@ export const SimulatorModal: React.FC<SimulatorModalProps> = ({
                 const pct = customPct[fund] || 0;
                 const allocated = calculatedSplits[fund] || 0;
                 const fundLabel = t.funds?.[fund]?.name ? t.funds[fund].name.split(' (')[0] : cfg.label;
-                const fundDesc = t.funds?.[fund]?.description || cfg.description;
+                const fundDesc = t.funds?.[fund]?.desc || cfg.description;
 
                 return (
                   <div

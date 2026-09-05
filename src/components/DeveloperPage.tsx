@@ -189,14 +189,14 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         : ['Client-Side PWA', '100% Offline-First', 'Open Source MIT']
     },
     {
-      name: 'Hasvolt : Electrical Services',
+      name: 'HASVOLT : Professional Electrical Solutions',
       domain: 'hasvolt.com',
       url: 'https://hasvolt.com',
       badge: isHindi ? 'संस्थापक एवं ऑपरेटर' : 'Founder & Operator',
       badgeColor: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30',
       desc: isHindi
-        ? 'व्यावसायिक व औद्योगिक इलेक्ट्रिकल इंस्टॉलेशन, इमरजेंसी रिपेयर और प्रोजेक्ट वर्क्स। दिल्ली NCR व बिहार में संपूर्ण फील्ड सेवाएं तथा अखिल भारतीय (Pan-India) स्तर पर प्रोजेक्ट्स।'
-        : 'Professional electrical installations, emergency repairs, and commercial project works. Comprehensive field services in Delhi NCR & Bihar with Pan-India capability for turnkey project works.',
+        ? 'व्यावसायिक व औद्योगिक इलेक्ट्रिकल सॉल्यूशंस, इंस्टॉलेशन, इमरजेंसी रिपेयर और प्रोजेक्ट वर्क्स। दिल्ली NCR व बिहार में संपूर्ण फील्ड सेवाएं तथा अखिल भारतीय (Pan-India) स्तर पर प्रोजेक्ट्स।'
+        : 'Professional electrical solutions, industrial installations, emergency repairs, and turnkey project works. Comprehensive field services in Delhi NCR & Bihar with Pan-India capability for turnkey project works.',
       specs: isHindi
         ? ['स्थापना 2012', 'एमएसएमई पंजीकृत', 'दिल्ली NCR, बिहार व पैन-इंडिया']
         : ['Est. 2012', 'MSME Registered', 'Delhi NCR, Bihar & Pan-India']

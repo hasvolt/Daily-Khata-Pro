@@ -97,6 +97,7 @@ interface SettingsModalProps {
   onViewModeChange?: (mode: AppViewMode) => void;
   appLayout?: AppLayout;
   onLayoutChange?: (layout: AppLayout) => void;
+  onOpenDeveloper?: () => void;
 }
 
 type TabType = 'preferences' | 'custom' | 'rules' | 'backup' | 'privacy' | 'legal';
@@ -134,7 +135,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   viewMode = 'auto',
   appLayout = 'dashboard',
   onLayoutChange,
-  onViewModeChange
+  onViewModeChange,
+  onOpenDeveloper
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('preferences');
@@ -707,6 +709,36 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   >
                     <Share2 className="w-3.5 h-3.5" />
                     <span>{tStr('शेयर करें', 'Share Karein', 'Share')}</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Developer & Creator Profile */}
+              {onOpenDeveloper && (
+                <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3">
+                  <div className="space-y-0.5 min-w-0">
+                    <div className="flex items-center gap-2 font-bold text-[13.5px] text-[#F8FAFC]">
+                      <Code2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                      <span className="truncate">{tStr('डेवलपर एवं क्रिएटर प्रोफाइल', 'Developer & Creator Profile', 'Developer & Creator Profile')}</span>
+                      <span className="hidden sm:inline-block text-[9px] font-mono font-extrabold uppercase px-1.5 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
+                        Creator
+                      </span>
+                    </div>
+                    <p className="text-[11.5px] text-[#94A3B8] truncate">
+                      MD Zafeer Hasan (YAZDAAN) • Founder HASVOLT • MIT Open Source
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenDeveloper();
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 font-bold text-[12px] flex items-center gap-1.5 shrink-0 transition-all cursor-pointer"
+                  >
+                    <span>{tStr('देखें', 'Dekhein', 'View Profile')}</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </button>
                 </div>
               )}
@@ -1361,6 +1393,43 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </a>
                 </p>
               </div>
+
+              {/* Developer & Creator Profile Section */}
+              {onOpenDeveloper && (
+                <div className="p-4 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Code2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                      <span className="text-[13px] font-bold text-[#F8FAFC]">
+                        {tStr('डेवलपर एवं क्रिएटर प्रोफाइल', 'Developer & Creator Profile', 'Developer & Creator Profile')}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30 font-bold">
+                      Verified Creator
+                    </span>
+                  </div>
+
+                  <p className="text-[12px] text-[#94A3B8] leading-relaxed">
+                    {tStr(
+                      'एमडी ज़फीर हसन (YAZDAAN) — पूर्ण-स्टैक आर्किटेक्ट, ओपन सोर्स सॉफ्टवेयर क्रिएटर और HASVOLT (स्थापना 2012) के संस्थापक।',
+                      'MD Zafeer Hasan (YAZDAAN) — Full-stack architect, open-source software creator and founder of HASVOLT (Est. 2012).',
+                      'MD Zafeer Hasan (YAZDAAN) — Full-stack architect, open-source software creator and founder of HASVOLT (Est. 2012).'
+                    )}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenDeveloper();
+                    }}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[#040D17] hover:brightness-110 font-bold text-[12.5px] transition-all cursor-pointer shadow-xs active:scale-98"
+                  >
+                    <Code2 className="w-4 h-4" />
+                    <span>{tStr('डेवलपर प्रोफाइल पेज खोलें', 'Developer Profile Page Kholein', 'Open Developer Profile')}</span>
+                  </button>
+                </div>
+              )}
 
               <div className="pt-2 text-[11.5px] text-[#94A3B8] border-t border-[var(--theme-border,#213E61)]">
                 {APP_VERSION_FOOTER}

@@ -470,9 +470,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
       {/* Confirm Delete Modal */}
       <ConfirmModal
         isOpen={Boolean(deletingId)}
-        title={t.history.deleteTitle}
-        message={t.history.deleteConfirm}
-        confirmLabel={t.history.deleteBtn}
+        title={t.history.deleteConfirmTitle}
+        message={t.history.deleteConfirmDesc}
+        confirmLabel={t.goals.deleteBtn}
         cancelLabel={t.add.cancel}
         confirmVariant="danger"
         onConfirm={handleConfirmDelete}

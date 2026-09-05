@@ -305,9 +305,9 @@ export const ReportView: React.FC<ReportViewProps> = ({
               {activeFunds.map((f) => {
                 const val = fundTotals[f.id] ?? 0;
                 const config = getFundConfig(f.id, activeFunds);
-                const fundLabel = (language === 'hi' && f.labelHi)
-                  ? f.labelHi
-                  : (t.funds?.[f.id]?.name ? t.funds[f.id].name.split(' (')[0] : getFundLabel(f.id, activeFunds));
+                const fundLabel = t.funds?.[f.id]?.name
+                  ? t.funds[f.id].name.split(' (')[0]
+                  : getFundLabel(f.id, activeFunds);
                 return (
                   <div
                     key={f.id}
@@ -365,9 +365,9 @@ export const ReportView: React.FC<ReportViewProps> = ({
                 {activeFunds.map((f) => {
                   const config = getFundConfig(f.id, activeFunds);
                   const pct = localPct[f.id] ?? config.defaultPct;
-                  const fundLabel = (language === 'hi' && f.labelHi)
-                    ? f.labelHi
-                    : (t.funds?.[f.id]?.name ? t.funds[f.id].name.split(' (')[0] : getFundLabel(f.id, activeFunds));
+                  const fundLabel = t.funds?.[f.id]?.name
+                    ? t.funds[f.id].name.split(' (')[0]
+                    : getFundLabel(f.id, activeFunds);
                   if (pct <= 0) return null;
                   return (
                     <div
@@ -394,9 +394,9 @@ export const ReportView: React.FC<ReportViewProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 w-full min-w-0">
               {activeFunds.map((f) => {
                 const config = getFundConfig(f.id, activeFunds);
-                const fundLabel = (language === 'hi' && f.labelHi)
-                  ? f.labelHi
-                  : (t.funds?.[f.id]?.name ? t.funds[f.id].name.split(' (')[0] : getFundLabel(f.id, activeFunds));
+                const fundLabel = t.funds?.[f.id]?.name
+                  ? t.funds[f.id].name.split(' (')[0]
+                  : getFundLabel(f.id, activeFunds);
                 const currentPct = localPct[f.id] ?? config.defaultPct;
 
                 return (

@@ -2299,6 +2299,10 @@ export default function App() {
         onViewModeChange={handleViewModeChange}
         appLayout={appLayout}
         onLayoutChange={handleAppLayoutChange}
+        onOpenDeveloper={() => {
+          setIsSettingsOpen(false);
+          setCurrentTab('developer');
+        }}
       />
 
       {/* Work Log Create / Edit Modal */}
