@@ -382,7 +382,7 @@ export const DeveloperModal: React.FC<DeveloperModalProps> = ({
                   <div className="flex items-center gap-1.5">
                     <Zap className="w-3.5 h-3.5 text-[#38BDF8]" />
                     <span className="text-[12px] font-bold text-[#F8FAFC]">Hasvolt.com</span>
-                    <span className="text-[11px] text-[#CBD5E1]">| HASVOLT : Professional Electrical Solutions</span>
+                    <span className="text-[11px] text-[#CBD5E1]">| Hasvolt : Professional Electrical Services</span>
                   </div>
                   <a
                     href="https://hasvolt.com"

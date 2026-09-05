@@ -177,6 +177,7 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
   const projects = [
     {
       name: 'Daily Khata Pro',
+      tagline: isHindi ? 'निजी वित्तीय बहीखाता' : 'Personal Financial Ledger',
       domain: 'rozfiber.com',
       url: 'https://rozfiber.com',
       badge: isHindi ? 'प्रमुख डिजिटल प्रोजेक्ट' : 'Flagship Application',
@@ -189,20 +190,22 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         : ['Client-Side PWA', '100% Offline-First', 'Open Source MIT']
     },
     {
-      name: 'HASVOLT : Professional Electrical Solutions',
+      name: 'Hasvolt',
+      tagline: 'Professional Electrical Services',
       domain: 'hasvolt.com',
       url: 'https://hasvolt.com',
       badge: isHindi ? 'संस्थापक एवं ऑपरेटर' : 'Founder & Operator',
       badgeColor: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30',
       desc: isHindi
-        ? 'व्यावसायिक व औद्योगिक इलेक्ट्रिकल सॉल्यूशंस, इंस्टॉलेशन, इमरजेंसी रिपेयर और प्रोजेक्ट वर्क्स। दिल्ली NCR व बिहार में संपूर्ण फील्ड सेवाएं तथा अखिल भारतीय (Pan-India) स्तर पर प्रोजेक्ट्स।'
-        : 'Professional electrical solutions, industrial installations, emergency repairs, and turnkey project works. Comprehensive field services in Delhi NCR & Bihar with Pan-India capability for turnkey project works.',
+        ? 'व्यावसायिक व औद्योगिक इलेक्ट्रिकल सर्विसेज, इंस्टॉलेशन, इमरजेंसी रिपेयर और प्रोजेक्ट वर्क्स। दिल्ली NCR व बिहार में संपूर्ण फील्ड सेवाएं तथा अखिल भारतीय (Pan-India) स्तर पर प्रोजेक्ट्स।'
+        : 'Professional electrical services, industrial installations, emergency repairs, and turnkey project works. Comprehensive field services in Delhi NCR & Bihar with Pan-India capability for turnkey project works.',
       specs: isHindi
         ? ['स्थापना 2012', 'एमएसएमई पंजीकृत', 'दिल्ली NCR, बिहार व पैन-इंडिया']
         : ['Est. 2012', 'MSME Registered', 'Delhi NCR, Bihar & Pan-India']
     },
     {
       name: 'HSES CONNECT',
+      tagline: isHindi ? '24x7 इलेक्ट्रिकल सपोर्ट' : '24x7 Electrical Support',
       domain: 'hses247help.com',
       url: 'https://hses247help.com',
       badge: isHindi ? '2012 से सेवारत' : 'Since 2012',
@@ -483,9 +486,16 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
                   </span>
                 </div>
 
-                <h3 className="text-[15px] font-bold text-[var(--theme-text,#F8FAFC)]">
-                  {proj.name}
-                </h3>
+                <div>
+                  <h3 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)]">
+                    {proj.name}
+                  </h3>
+                  {proj.tagline && (
+                    <p className="text-[12px] font-semibold text-[var(--theme-primary,#38BDF8)] mt-0.5 tracking-tight">
+                      {proj.tagline}
+                    </p>
+                  )}
+                </div>
 
                 <p className="text-[12px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
                   {proj.desc}
