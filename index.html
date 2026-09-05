@@ -140,7 +140,7 @@
   </head>
   <body class="bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] font-sans antialiased min-h-screen selection:bg-[var(--theme-primary,#38BDF8)] selection:text-[#040D17]">
     <div id="root">
-      <div id="app-preloader" style="position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; user-select: none;">
+      <div id="app-preloader" style="position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; user-select: none; transition: opacity 0.5s ease-out;">
         <div style="position: relative; margin-bottom: 16px;">
           <div style="width: 58px; height: 58px; border-radius: 14px; background: #000000; border: 1px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 20px -5px rgba(245, 158, 11, 0.3); display: flex; align-items: center; justify-content: center; padding: 4px; box-sizing: border-box; overflow: hidden;">
             <img src="/daily-khata-pro-v4.png" alt="Daily Khata Pro" width="50" height="50" style="width: 100%; height: 100%; object-fit: contain; display: block;" />
@@ -156,14 +156,52 @@
         <div style="width: 100px; height: 3px; background: rgba(0, 210, 106, 0.15); border-radius: 99px; margin-top: 18px; overflow: hidden; position: relative;">
           <div style="position: absolute; top: 0; bottom: 0; width: 35%; background: linear-gradient(90deg, #00D26A, #38BDF8); border-radius: 99px; animation: preloaderShimmer 1.2s infinite ease-in-out;"></div>
         </div>
+        
+        <!-- Failsafe Repair Button: Appears only if loading takes > 10s -->
+        <button id="preloader-repair" onclick="window.__DAILY_KHATA_FORCE_REFRESH__?.()" style="display: none; margin-top: 32px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #F87171; font-size: 11px; padding: 6px 12px; border-radius: 6px; cursor: pointer; animation: fadeIn 0.5s ease-out;">
+          Repair & Force Reload
+        </button>
+
         <style>
           @keyframes preloaderShimmer {
             0% { left: -35%; }
             100% { left: 100%; }
           }
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
         </style>
+
+        <script>
+          // Failsafe: If the app hasn't loaded in 10 seconds, show the repair button
+          setTimeout(function() {
+            var repairBtn = document.getElementById('preloader-repair');
+            if (repairBtn) repairBtn.style.display = 'block';
+          }, 10000);
+
+          // Failsafe: Force hide preloader after 25 seconds no matter what to prevent total black screen
+          setTimeout(function() {
+            var preloader = document.getElementById('app-preloader');
+            if (preloader && preloader.style.display !== 'none') {
+              console.warn('Failsafe: Force hiding preloader after timeout.');
+              preloader.style.opacity = '0';
+              setTimeout(function() { preloader.style.display = 'none'; }, 500);
+            }
+          }, 25000);
+
+          // Global error listener to help debug boot failures
+          window.addEventListener('error', function(e) {
+            console.error('Boot Error Captured:', e.message, e.filename, e.lineno);
+            // If it's a module loading error, the repair button might be the only way
+            if (e.message && (e.message.indexOf('import') !== -1 || e.message.indexOf('loading') !== -1)) {
+              var repairBtn = document.getElementById('preloader-repair');
+              if (repairBtn) repairBtn.style.display = 'block';
+            }
+          });
+        </script>
       </div>
-    </div>
+      <div id="root"></div>
     <!-- Early PWA Install Prompt Capture: Ensures 1-Click Install is ready immediately on first load -->
     <script>
       window.__DAILY_KHATA_PWA_PROMPT__ = null;

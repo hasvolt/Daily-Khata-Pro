@@ -4,7 +4,7 @@
  * Comprehensive PWA Offline Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v3.2.0';
+const CACHE_NAME = 'daily-khata-pro-v3.2.1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -78,8 +78,21 @@ self.addEventListener('fetch', (event) => {
 
   // Navigation requests (HTML pages / routes) -> Network first with rock-solid offline & SPA fallback
   if (event.request.mode === 'navigate') {
+    // Add a 3-second timeout to the fetch to prevent hanging connections from blocking the app
+    const fetchWithTimeout = (request, timeout = 3000) => {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      return fetch(request, { 
+        cache: 'no-cache',
+        signal: controller.signal 
+      }).then(res => {
+        clearTimeout(id);
+        return res;
+      });
+    };
+
     event.respondWith(
-      fetch(event.request, { cache: 'no-cache' })
+      fetchWithTimeout(event.request)
         .then(async (response) => {
           if (response && response.status === 200) {
             const responseClone = response.clone();
