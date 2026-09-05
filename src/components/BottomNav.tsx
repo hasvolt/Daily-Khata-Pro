@@ -4,7 +4,7 @@ import { AppLanguage } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 import { triggerHaptic } from '../utils/haptics';
 
-export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'developer' | 'about' | 'privacy' | 'disclaimer' | 'terms' | 'support' | 'safety' | 'guide' | 'calculator' | 'attendance';
+export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'developer' | 'about' | 'privacy' | 'disclaimer' | 'terms' | 'support' | 'safety' | 'guide' | 'calculator' | 'attendance' | 'cookies';
 
 interface BottomNavProps {
   currentTab: string;

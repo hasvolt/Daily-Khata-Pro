@@ -39,6 +39,11 @@ export const ROUTE_SEO_MAP: Record<string, PageSEOMeta> = {
     description: 'Daily Khata Pro Privacy Policy. Your financial ledger data is stored 100% locally on your device in IndexedDB/localStorage with zero cloud tracking and zero data collection.',
     canonicalPath: '/privacy'
   },
+  '/cookies': {
+    title: 'Cookies & Storage Policy — Transparency & User Consent | Daily Khata Pro',
+    description: 'Daily Khata Pro Cookies and Storage Policy. Learn how we use local storage and essential cookies to keep your accounting data private on your device.',
+    canonicalPath: '/cookies'
+  },
   '/terms': {
     title: 'Terms of Service — MIT Open Source | Daily Khata Pro',
     description: 'Terms of Service and legal license agreements for Daily Khata Pro universal financial ledger application.',

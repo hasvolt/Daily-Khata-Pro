@@ -52,7 +52,8 @@ import {
   Bug,
   Lightbulb,
   Pencil,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Cookie
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { getFundIcon } from '../utils/iconMap';
@@ -98,6 +99,8 @@ interface SettingsModalProps {
   appLayout?: AppLayout;
   onLayoutChange?: (layout: AppLayout) => void;
   onOpenDeveloper?: () => void;
+  onOpenCookiesPolicy?: () => void;
+  onOpenCookieSettings?: () => void;
 }
 
 type TabType = 'preferences' | 'custom' | 'rules' | 'backup' | 'privacy' | 'legal';
@@ -136,7 +139,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   appLayout = 'dashboard',
   onLayoutChange,
   onViewModeChange,
-  onOpenDeveloper
+  onOpenDeveloper,
+  onOpenCookiesPolicy,
+  onOpenCookieSettings
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('preferences');
@@ -1332,6 +1337,50 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="p-2.5 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[#94A3B8] flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <span>Local JSON Portability</span>
+                  </div>
+                </div>
+
+                {/* Cookie & Storage Preferences Card */}
+                <div className="p-3.5 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0">
+                      <Cookie className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-[12.5px] font-bold text-[#F8FAFC]">
+                        {tStr('कुकीज़ व लोकल स्टोरेज सेटिंग्स', 'Cookies & Local Storage Preferences', 'Cookies & Storage Permissions')}
+                      </div>
+                      <div className="text-[11px] text-[#94A3B8]">
+                        {tStr('अपनी स्टोरेज सहमति व कुकीज़ प्राथमिकताओं को बदलें', 'Manage device storage consent and cookie preferences', 'Manage device storage consent and cookie preferences')}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {onOpenCookieSettings && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onClose();
+                          onOpenCookieSettings();
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[var(--theme-btn-text,#040D17)] text-[11.5px] font-extrabold flex items-center gap-1.5 transition-all cursor-pointer"
+                      >
+                        <Sliders className="w-3.5 h-3.5" />
+                        <span>{tStr('प्राथमिकताएं बदलें', 'Manage Preferences', 'Manage Preferences')}</span>
+                      </button>
+                    )}
+                    {onOpenCookiesPolicy && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onClose();
+                          onOpenCookiesPolicy();
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] text-[#F8FAFC] text-[11.5px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                      >
+                        <span>{tStr('नीति पढ़ें', 'Read Policy', 'Read Policy')}</span>
+                      </button>
+                    )}
                   </div>
                 </div>
 

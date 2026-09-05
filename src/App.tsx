@@ -54,6 +54,8 @@ import { SafetyPage } from './components/SafetyPage';
 import { SupportPage } from './components/SupportPage';
 import { CalculatorPage } from './components/CalculatorPage';
 import { AttendancePage } from './components/AttendancePage';
+import { CookiesPage } from './components/CookiesPage';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { RemindersModal } from './components/RemindersModal';
 import { PageSearchModal } from './components/PageSearchModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -137,6 +139,7 @@ export default function App() {
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
   const [isTrashOpen, setIsTrashOpen] = useState<boolean>(false);
   const [isMasterEditOpen, setIsMasterEditOpen] = useState<boolean>(false);
+  const [isCookieBannerForceOpen, setIsCookieBannerForceOpen] = useState<boolean>(false);
   const [trashItems, setTrashItems] = useState<TrashItem[]>([]);
   const [attendanceLogs, setAttendanceLogs] = useState<AttendanceLog[]>([]);
   const [reminders, setReminders] = useState<AppReminder[]>([]);
@@ -1981,6 +1984,14 @@ export default function App() {
             />
           } />
 
+          <Route path="/cookies" element={
+            <CookiesPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
+
           <Route path="/disclaimer" element={
             <DisclaimerPage
               onBack={() => setCurrentTab('home')}
@@ -2183,6 +2194,14 @@ export default function App() {
         <BottomNav currentTab={currentTab} onSelectTab={setCurrentTab} language={language} />
       </div>
 
+      {/* Global Cookie & Storage Consent Banner */}
+      <CookieConsentBanner
+        language={language}
+        onOpenPolicy={() => setCurrentTab('cookies')}
+        forceOpen={isCookieBannerForceOpen}
+        onCloseForceOpen={() => setIsCookieBannerForceOpen(false)}
+      />
+
       {/* Goal Create / Edit Modal */}
       <GoalModal
         isOpen={isGoalModalOpen}
@@ -2256,6 +2275,14 @@ export default function App() {
         onOpenDeveloper={() => {
           setIsSettingsOpen(false);
           setCurrentTab('developer');
+        }}
+        onOpenCookiesPolicy={() => {
+          setIsSettingsOpen(false);
+          setCurrentTab('cookies');
+        }}
+        onOpenCookieSettings={() => {
+          setIsSettingsOpen(false);
+          setIsCookieBannerForceOpen(true);
         }}
       />
 

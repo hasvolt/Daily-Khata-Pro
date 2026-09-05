@@ -30,7 +30,8 @@ import {
   KeyRound,
   ShieldCheck,
   Database,
-  RefreshCw
+  RefreshCw,
+  Cookie
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { HasVoltLogo } from './HasVoltLogo';
@@ -824,6 +825,31 @@ export const Header: React.FC<HeaderProps> = ({
                           </span>
                           <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
                             {isHindi ? '100% ऑफ़लाइन डेटा, शून्य बाहरी ट्रैकिंग' : '100% local device storage, zero cloud tracking'}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0" />
+                    </button>
+                  )}
+
+                  {/* Cookies & Storage Policy */}
+                  {onSelectTab && (
+                    <button
+                      type="button"
+                      onClick={() => handleMenuAction(() => onSelectTab('cookies'))}
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-card,#132438)]/50 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)]/50 hover:border-[var(--theme-primary,#38BDF8)]/40 transition-all cursor-pointer text-left"
+                      id="menu-cookies-btn"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-amber-400 shrink-0">
+                          <Cookie className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'कुकीज़ व स्टोरेज नीति (Cookies)' : 'Cookies & Storage Policy'}
+                          </span>
+                          <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                            {isHindi ? 'ब्राउज़र स्टोरेज उपयोग व सहमति प्रबंधन' : 'Device storage usage & consent preferences'}
                           </span>
                         </div>
                       </div>
