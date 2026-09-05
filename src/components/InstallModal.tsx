@@ -767,15 +767,17 @@ export const InstallModal: React.FC<InstallModalProps> = ({
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] shrink-0 mt-0.5">
-                <Zap className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="font-bold text-[12.5px] text-[#F8FAFC]">
-                  {isHindi ? 'सुपरफास्ट स्पीड' : 'Instant Launch'}
+              <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-start gap-2.5">
+                <div className="p-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] shrink-0 mt-0.5">
+                  <Zap className="w-4 h-4" />
                 </div>
-                <div className="text-[11px] text-[#94A3B8]">
-                  {isHindi ? 'सीधे फुलस्क्रीन ऐप की तरह खुलता है' : 'Opens immediately from home screen in fullscreen'}
+                <div>
+                  <div className="font-bold text-[12.5px] text-[#F8FAFC]">
+                    {isHindi ? 'सुपरफास्ट स्पीड' : 'Instant Launch'}
+                  </div>
+                  <div className="text-[11px] text-[#94A3B8]">
+                    {isHindi ? 'सीधे फुलस्क्रीन ऐप की तरह खुलता है' : 'Opens immediately from home screen in fullscreen'}
+                  </div>
                 </div>
               </div>
 

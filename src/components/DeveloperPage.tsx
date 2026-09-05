@@ -109,8 +109,8 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         {
           id: 'entrepreneur',
           title: 'उद्यमी व संस्थापक (Founder & Entrepreneur)',
-          desc: 'HASVOLT (स्थापना 2012) के संस्थापक। औद्योगिक एवं आधुनिक डिजिटल पहलों का नेतृत्व।',
-          proof: 'Powered by HASVOLT • MSME Regd. Since 2012',
+          desc: 'HASAN SMART ELECTRICAL SOLUTIONS (स्थापना 2012) के संस्थापक। औद्योगिक एवं आधुनिक डिजिटल पहलों का नेतृत्व।',
+          proof: 'Powered by HASAN SMART ELECTRICAL SOLUTIONS • MSME Regd. Since 2012',
           icon: Building2,
           accent: '#A855F7'
         },
@@ -159,8 +159,8 @@ export const DeveloperPage: React.FC<DeveloperPageProps> = ({
         {
           id: 'entrepreneur',
           title: 'Founder & Entrepreneur',
-          desc: 'Founder of HASVOLT (Est. 2012). Driving professional electrical infrastructure and modern digital solutions.',
-          proof: 'Powered by HASVOLT • MSME Regd. Since 2012',
+          desc: 'Founder of HASAN SMART ELECTRICAL SOLUTIONS (Est. 2012). Driving professional electrical infrastructure and modern digital solutions.',
+          proof: 'Powered by HASAN SMART ELECTRICAL SOLUTIONS • MSME Regd. Since 2012',
           icon: Building2,
           accent: '#A855F7'
         },
