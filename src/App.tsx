@@ -56,6 +56,7 @@ import { CalculatorPage } from './components/CalculatorPage';
 import { AttendancePage } from './components/AttendancePage';
 import { RemindersModal } from './components/RemindersModal';
 import { TRANSLATIONS } from './utils/translations';
+import { updatePageSEO } from './utils/seo';
 import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu } from 'lucide-react';
 
 const STORAGE_KEY = 'daily-khata-pro-v3';
@@ -160,47 +161,104 @@ export default function App() {
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
 
-  // Listen for PWA Install event
+  // Listen for PWA Install event with early capture fallback
   useEffect(() => {
+    // Check if early capture in index.html already received the prompt
+    if (typeof window !== 'undefined') {
+      const earlyPrompt = (window as any).deferredPrompt || (window as any).__DAILY_KHATA_PWA_PROMPT__;
+      if (earlyPrompt) {
+        setInstallPrompt(earlyPrompt);
+      }
+    }
+
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       (window as any).deferredPrompt = e;
+      (window as any).__DAILY_KHATA_PWA_PROMPT__ = e;
       setInstallPrompt(e);
     };
+
+    const handleCustomInstallReady = (e: any) => {
+      if (e?.detail) {
+        setInstallPrompt(e.detail);
+      }
+    };
+
     const handleAppInstalled = () => {
       (window as any).deferredPrompt = null;
+      (window as any).__DAILY_KHATA_PWA_PROMPT__ = null;
       setInstallPrompt(null);
       setToastMessage(language === 'hi' ? 'ऐप सफलतापूर्वक इंस्टॉल हो गया!' : 'Daily Khata App Installed Successfully!');
     };
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('pwa-install-ready', handleCustomInstallReady);
     window.addEventListener('appinstalled', handleAppInstalled);
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('pwa-install-ready', handleCustomInstallReady);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, [language]);
 
-  // Deep Link URL Sync: Read query params on mount for backwards compatibility
+  // Dynamic SEO Synchronization: Updates document.title, canonical tag, and meta description per route for Google Search Console
+  useEffect(() => {
+    updatePageSEO(location.pathname);
+  }, [location.pathname]);
+
+  // Deep Link URL Sync: Read hashes and query params on mount & navigation for universal deep linking
   useEffect(() => {
     const handleUrlSync = () => {
       try {
         if (typeof window === 'undefined') return;
+
+        // 1. Check window.location.hash (e.g. #/developer or #developer)
+        if (window.location.hash) {
+          const cleanHash = window.location.hash.replace(/^#\/?/, '').toLowerCase().trim();
+          if (cleanHash === 'developer' || cleanHash === 'dev' || cleanHash === 'creator' || cleanHash === 'founder') {
+            navigate('/developer');
+            return;
+          }
+          if (['about', 'privacy', 'terms', 'disclaimer', 'safety', 'guide', 'calculator', 'support', 'history', 'report', 'goals', 'tracker', 'notes'].includes(cleanHash)) {
+            navigate(`/${cleanHash}`);
+            return;
+          }
+        }
+
+        // 2. Check query params (e.g. ?p=developer from 404.html or ?tab=developer)
         const searchParams = new URLSearchParams(window.location.search);
+        const pParam = searchParams.get('p');
+        if (pParam) {
+          const cleanP = pParam.replace(/^\/+/, '').toLowerCase().trim();
+          if (cleanP === 'developer' || cleanP === 'dev' || cleanP === 'creator' || cleanP === 'founder') {
+            navigate('/developer');
+            return;
+          }
+          if (cleanP) {
+            navigate(`/${cleanP}`);
+            return;
+          }
+        }
+
         const tabParam = searchParams.get('tab');
+        const pageParam = searchParams.get('page') || searchParams.get('view');
+        const targetRoute = (tabParam || pageParam || '').toLowerCase().trim();
+
+        if (targetRoute) {
+          if (targetRoute === 'dev' || targetRoute === 'creator' || targetRoute === 'founder' || targetRoute === 'developer') {
+            navigate('/developer');
+            return;
+          }
+          if (targetRoute === 'reports') setCurrentTab('report');
+          else if (targetRoute === 'about-us' || targetRoute === 'about') navigate('/about');
+          else if (targetRoute === 'privacy-policy' || targetRoute === 'privacy') navigate('/privacy');
+          else if (targetRoute === 'terms-of-service' || targetRoute === 'terms') navigate('/terms');
+          else setCurrentTab(targetRoute);
+        }
+
         const fundParam = searchParams.get('fund');
         const actionParam = searchParams.get('action');
-
-        if (tabParam && location.pathname === '/') {
-          const normalized = tabParam.toLowerCase();
-          if (normalized === 'reports') setCurrentTab('report');
-          else if (normalized === 'dev' || normalized === 'creator' || normalized === 'founder' || normalized === 'developer') {
-            navigate('/developer');
-          }
-          else if (normalized === 'about-us') setCurrentTab('about');
-          else if (normalized === 'privacy-policy') setCurrentTab('privacy');
-          else if (normalized === 'terms-of-service') setCurrentTab('terms');
-          else setCurrentTab(normalized);
-        }
 
         if (fundParam && ['personal', 'family', 'buffer', 'emergency', 'saving', 'investment'].includes(fundParam.toLowerCase())) {
           setHistoryFilter(fundParam.toLowerCase());
@@ -1568,7 +1626,12 @@ export default function App() {
   const fundTotals = calculateFundTotals(entries, funds.map((f) => f.id));
 
 
-  const isLockedState = isAppLocked && securityLock.isEnabled && securityLock.pin;
+  // Allow public informational pages to be accessed directly via URL without private PIN lockout
+  const isPublicPage = ['/developer', '/dev', '/creator', '/founder', '/about', '/privacy', '/terms', '/disclaimer', '/safety', '/guide'].some(
+    (p) => location.pathname.toLowerCase() === p || location.pathname.toLowerCase().startsWith(p + '/')
+  );
+
+  const isLockedState = isAppLocked && securityLock.isEnabled && securityLock.pin && !isPublicPage;
 
   if (isLockedState) {
     return (
@@ -1821,8 +1884,13 @@ export default function App() {
             />
           } />
           <Route path="/developer/" element={<Navigate to="/developer" replace />} />
+          <Route path="/Developer" element={<Navigate to="/developer" replace />} />
+          <Route path="/DEVELOPER" element={<Navigate to="/developer" replace />} />
           <Route path="/dev" element={<Navigate to="/developer" replace />} />
           <Route path="/creator" element={<Navigate to="/developer" replace />} />
+          <Route path="/founder" element={<Navigate to="/developer" replace />} />
+          <Route path="/developer.html" element={<Navigate to="/developer" replace />} />
+          <Route path="/dev.html" element={<Navigate to="/developer" replace />} />
 
           <Route path="/about" element={
             <AboutPage

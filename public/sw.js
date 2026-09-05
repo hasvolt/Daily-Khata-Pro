@@ -4,11 +4,12 @@
  * Comprehensive PWA Offline Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.6.0';
+const CACHE_NAME = 'daily-khata-pro-v2.7.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/daily-khata-pro-v4.png',
   '/daily-Khata-Pro.png',
   '/daily-Khata-Pro-aap-icon.png',
   '/icon-192.png',
@@ -29,18 +30,27 @@ const STATIC_ASSETS = [
   '/sitemap.xml'
 ];
 
-// 1. Install Event: Pre-cache Essential App Shell
+// 1. Install Event: Resilient Pre-cache Essential App Shell
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS).catch((err) => {
-        console.warn('Some assets could not be pre-cached on install:', err);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      // Use individual fetches with error tolerance so missing optional files never break installation
+      const promises = STATIC_ASSETS.map(async (url) => {
+        try {
+          const response = await fetch(url, { cache: 'reload' });
+          if (response && response.ok) {
+            await cache.put(url, response);
+          }
+        } catch (err) {
+          console.warn('[SW] Non-blocking asset fetch warning:', url, err);
+        }
       });
+      await Promise.all(promises);
     }).then(() => self.skipWaiting())
   );
 });
 
-// 2. Activate Event: Clean up Old Caches & Claim Clients
+// 2. Activate Event: Clean up Old Caches & Claim Clients Immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -60,12 +70,12 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Skip cross-origin or chrome-extension requests
+  // Skip cross-origin non-CDN requests (Google AdSense, external APIs)
   if (!url.origin.includes(self.location.hostname) && !url.origin.includes('fonts.googleapis.com') && !url.origin.includes('fonts.gstatic.com')) {
     return;
   }
 
-  // Navigation requests (HTML pages) -> Network first with cache fallback
+  // Navigation requests (HTML pages / routes) -> Network first with rock-solid offline cache fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -74,24 +84,31 @@ self.addEventListener('fetch', (event) => {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, responseClone);
+              // Also keep /index.html updated with latest shell
+              cache.put('/index.html', responseClone.clone());
             });
           }
           return response;
         })
         .catch(async () => {
+          // Offline fallback for any route navigation
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) return cachedResponse;
-          return caches.match('/index.html');
+
+          const shellResponse = await caches.match('/index.html');
+          if (shellResponse) return shellResponse;
+
+          return caches.match('/');
         })
     );
     return;
   }
 
-  // Static Assets & Media -> Cache first with network fallback
+  // Static Assets, Scripts, Styles & Media -> Cache first with network background update
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Asynchronously update cache in background
+        // Asynchronously update cache in background when online
         fetch(event.request)
           .then((networkResponse) => {
             if (networkResponse && networkResponse.status === 200) {
@@ -117,7 +134,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           // Fallback for image requests if offline
           if (event.request.destination === 'image') {
-            return caches.match('/daily-Khata-Pro.png');
+            return caches.match('/daily-khata-pro-v4.png');
           }
         });
     })

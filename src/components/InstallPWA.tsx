@@ -39,7 +39,10 @@ export const InstallPWA: React.FC<InstallPWAProps> = ({
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
-    const promptEvent = installPrompt || (typeof window !== 'undefined' && (window as any).deferredPrompt);
+    const promptEvent =
+      installPrompt ||
+      (typeof window !== 'undefined' && (window as any).deferredPrompt) ||
+      (typeof window !== 'undefined' && (window as any).__DAILY_KHATA_PWA_PROMPT__);
     if (promptEvent && typeof promptEvent.prompt === 'function') {
       try {
         await promptEvent.prompt();

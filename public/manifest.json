@@ -4,43 +4,16 @@
   "description": "Daily Khata Pro — Universal professional daily income & expense tracker with automated 6-fund money allocation, financial goals, work deliverables, and ledger statements.",
   "start_url": "/",
   "scope": "/",
-  "id": "com.rozfiber.dailykhatapro",
+  "id": "/",
   "display": "standalone",
-  "display_override": ["tabbed", "standalone", "window-controls-overlay", "minimal-ui", "browser"],
-  "tab_strip": {
-    "home_tab": {
-      "scope": "/"
-    },
-    "new_tab_button": {
-      "url": "/add"
-    }
-  },
-  "note_taking": {
-    "new_note_url": "/add"
-  },
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#070E18",
+  "theme_color": "#070E18",
   "orientation": "portrait-primary",
   "dir": "ltr",
   "lang": "en-IN",
   "prefer_related_applications": false,
-  "related_applications": [
-    {
-      "platform": "play",
-      "url": "https://play.google.com/store/apps/details?id=com.rozfiber.dailykhatapro",
-      "id": "com.rozfiber.dailykhatapro"
-    },
-    {
-      "platform": "windows",
-      "url": "https://www.rozfiber.com",
-      "id": "com.rozfiber.dailykhatapro"
-    },
-    {
-      "platform": "webapp",
-      "url": "https://www.rozfiber.com/manifest.json",
-      "id": "com.rozfiber.dailykhatapro"
-    }
-  ],
+  "related_applications": [],
   "scope_extensions": [
     { "origin": "https://www.rozfiber.com" },
     { "origin": "https://rozfiber.com" },

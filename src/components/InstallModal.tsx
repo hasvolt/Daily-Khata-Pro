@@ -92,7 +92,10 @@ export const InstallModal: React.FC<InstallModalProps> = ({
 
   const handleInstallClick = async () => {
     // Check available prompt (passed prop or global window fallback)
-    const promptEvent = installPrompt || (window as unknown as { deferredPrompt?: BeforeInstallPromptEvent }).deferredPrompt;
+    const promptEvent =
+      installPrompt ||
+      (typeof window !== 'undefined' && (window as any).deferredPrompt) ||
+      (typeof window !== 'undefined' && (window as any).__DAILY_KHATA_PWA_PROMPT__);
 
     if (promptEvent && typeof promptEvent.prompt === 'function') {
       try {

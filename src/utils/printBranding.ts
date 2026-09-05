@@ -174,16 +174,13 @@ export function getWatermarkAndHeaderHTML(docTitle: string, subtitle?: string): 
 
   const footerHTML = `
     <div class="brand-footer-box" style="page-break-inside: avoid; break-inside: avoid; border-top: 1px dashed #CBD5E1; padding-top: 8px; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: #64748B;">
-      <div style="display: flex; align-items: center; gap: 7px;">
-        <img src="/md-zafeer-hasan-yazdaan.jpg" onerror="this.src='https://avatars.githubusercontent.com/mdzafeerhasan'" alt="${BRAND_WATERMARK_CONFIG.developer}" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1px solid #94A3B8; opacity: 0.85;" />
-        <span style="letter-spacing: 0.2px;">
-          <span style="font-weight: 700; color: #334155;">${BRAND_WATERMARK_CONFIG.developer}</span>
-          <span style="color: #94A3B8; margin: 0 4px;">·</span>
-          <span style="color: #64748B;">Developer &amp; Creator · Daily Khata Pro</span>
-        </span>
+      <div>
+        <span style="font-weight: 700; color: #334155;">Daily Khata Pro</span>
+        <span style="color: #94A3B8; margin: 0 4px;">·</span>
+        <span>www.rozfiber.com • 100% Offline &amp; Private</span>
       </div>
       <div style="text-align: right; font-family: monospace; font-size: 9px; color: #94A3B8;">
-        <span>Authentic Signature · <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong></span>
+        <span>Official Verification · <strong>${BRAND_WATERMARK_CONFIG.companyName}</strong></span>
       </div>
     </div>
   `;
