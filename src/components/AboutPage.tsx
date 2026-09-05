@@ -113,13 +113,21 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] col-span-2 sm:col-span-1">
-            <div className="text-[11px] text-[#94A3B8] font-medium">{t.creatorLabel}</div>
+          <button
+            type="button"
+            onClick={() => onNavigateTab?.('developer')}
+            className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-amber-400/60 col-span-2 sm:col-span-1 text-left transition-colors cursor-pointer group"
+            title="View Developer Profile"
+          >
+            <div className="text-[11px] text-[#94A3B8] font-medium flex items-center justify-between">
+              <span>{t.creatorLabel}</span>
+              <span className="text-[9px] font-mono text-amber-400 group-hover:underline">Profile →</span>
+            </div>
             <div className="text-[12px] sm:text-[14px] font-bold text-amber-300 mt-0.5 flex items-start gap-1 leading-snug">
               <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
-              <span className="break-words">MD Zafeer Hasan (YAZDAAN)</span>
+              <span className="break-words group-hover:text-amber-200">MD Zafeer Hasan (YAZDAAN)</span>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 

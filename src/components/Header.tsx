@@ -88,6 +88,8 @@ interface HeaderProps {
   onViewModeChange?: (mode: AppViewMode) => void;
   appLayout?: AppLayout;
   onLayoutChange?: (layout: AppLayout) => void;
+  onOpenPageSearch?: () => void;
+  onOpenDeveloper?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -120,7 +122,9 @@ export const Header: React.FC<HeaderProps> = ({
   viewMode = 'auto',
   onViewModeChange,
   appLayout = 'dashboard',
-  onLayoutChange
+  onLayoutChange,
+  onOpenPageSearch,
+  onOpenDeveloper
 }) => {
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -294,8 +298,28 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
         )}
 
-        {/* Desktop Mode Search Bar */}
-        {onSearchChange && (
+        {/* Desktop Mode Search Bar / Page Search Command Bar */}
+        {onOpenPageSearch ? (
+          <div className="hidden lg:flex items-center flex-1 max-w-xs mx-3">
+            <button
+              type="button"
+              onClick={onOpenPageSearch}
+              className="w-full flex items-center justify-between gap-2 bg-[var(--theme-bg,#070E18)] hover:bg-[var(--theme-card,#132438)] focus:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-dim,#64748B)] hover:text-[var(--theme-text,#F8FAFC)] text-[12px] rounded-xl pl-3 pr-2.5 py-1.5 transition-all outline-none shadow-xs cursor-pointer group"
+              title={language === 'hi' ? 'पेज, टूल व डेवलपर खोजें (Ctrl+K)' : 'Search pages, tools & developer (Ctrl+K)'}
+              id="header-desktop-page-search"
+            >
+              <div className="flex items-center gap-2 truncate">
+                <Search className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                <span className="truncate">
+                  {language === 'hi' ? 'पेज या टूल खोजें...' : 'Search pages & tools...'}
+                </span>
+              </div>
+              <kbd className="hidden xl:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] group-hover:border-[var(--theme-primary,#38BDF8)]/50">
+                ⌘K
+              </kbd>
+            </button>
+          </div>
+        ) : onSearchChange ? (
           <div className="hidden lg:flex items-center flex-1 max-w-xs mx-3">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] pointer-events-none" />
@@ -334,10 +358,36 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Right Action Buttons (Compact, Refined & Touch-Friendly) */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* Header Search Icon for Page Search (Mobile, Tablet & Desktop) */}
+          {onOpenPageSearch ? (
+            <button
+              type="button"
+              onClick={onOpenPageSearch}
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
+              title={language === 'hi' ? 'पेज खोजें (Page Search / Ctrl+K)' : 'Page Search (Ctrl+K)'}
+              id="header-page-search-btn"
+              aria-label="Search pages and tools"
+            >
+              <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
+              <span className="hidden sm:inline text-[11px] font-bold">
+                {language === 'hi' ? 'खोजें' : 'Search'}
+              </span>
+            </button>
+          ) : onSelectTab ? (
+            <button
+              type="button"
+              onClick={() => onSelectTab('history')}
+              className="lg:hidden p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+              title={tr.menu.searchPlaceholder || "Search"}
+            >
+              <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </button>
+          ) : null}
+
           {/* Privacy Eye Toggle */}
           {onTogglePrivacyMask && (
             <button
@@ -489,6 +539,48 @@ export const Header: React.FC<HeaderProps> = ({
                             <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
                               {tr.menu.featuresAndTools}
                             </div>
+
+                            {/* Page Search / Navigator */}
+                            {onOpenPageSearch && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenPageSearch();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 hover:bg-[var(--theme-primary,#38BDF8)]/20 border border-[var(--theme-primary,#38BDF8)]/30 transition-colors cursor-pointer text-left"
+                                id="header-drawer-page-search-btn"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Search className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                  <span>{language === 'hi' ? 'पेज खोजें (Page Search)' : 'Page Search / Quick Navigator'}</span>
+                                </div>
+                                <span className="text-[9px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-surface,#0E1A29)] px-1.5 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/40">
+                                  Ctrl+K
+                                </span>
+                              </button>
+                            )}
+
+                            {/* Developer Profile & Creator */}
+                            {onOpenDeveloper && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onOpenDeveloper();
+                                  closeAllMenus();
+                                }}
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                                id="header-drawer-developer-btn"
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <Code2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                                  <span>{language === 'hi' ? 'डेवलपर प्रोफाइल (एमडी ज़फीर हसन)' : 'Developer Profile (MD Zafeer Hasan)'}</span>
+                                </div>
+                                <span className="text-[9px] font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded">
+                                  Creator
+                                </span>
+                              </button>
+                            )}
 
                             {/* Settings */}
                             {onOpenSettings && (
@@ -954,6 +1046,48 @@ export const Header: React.FC<HeaderProps> = ({
                     <div className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)] px-2 mb-1">
                       {tr.menu.featuresAndTools}
                     </div>
+
+                    {/* Page Search / Command Palette */}
+                    {onOpenPageSearch && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenPageSearch();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/10 hover:bg-[var(--theme-primary,#38BDF8)]/20 border border-[var(--theme-primary,#38BDF8)]/30 transition-colors cursor-pointer text-left"
+                        id="header-desktop-drawer-page-search-btn"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Search className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                          <span>{language === 'hi' ? 'पेज खोजें (Page Search)' : 'Page Search / Quick Navigator'}</span>
+                        </div>
+                        <span className="text-[9px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-surface,#0E1A29)] px-1.5 py-0.5 rounded border border-[var(--theme-primary,#38BDF8)]/40">
+                          Ctrl+K
+                        </span>
+                      </button>
+                    )}
+
+                    {/* Developer Profile & Creator */}
+                    {onOpenDeveloper && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onOpenDeveloper();
+                          closeAllMenus();
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card,#132438)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)]/40 transition-colors cursor-pointer text-left"
+                        id="header-desktop-drawer-developer-btn"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Code2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+                          <span>{language === 'hi' ? 'डेवलपर प्रोफाइल (एमडी ज़फीर हसन)' : 'Developer Profile (MD Zafeer Hasan)'}</span>
+                        </div>
+                        <span className="text-[9px] font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] px-1.5 py-0.5 rounded">
+                          Creator
+                        </span>
+                      </button>
+                    )}
 
                     {/* Settings */}
                     {onOpenSettings && (

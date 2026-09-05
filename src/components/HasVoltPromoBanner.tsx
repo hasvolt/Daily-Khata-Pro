@@ -379,7 +379,7 @@ export const HasVoltPromoBanner: React.FC<HasVoltPromoBannerProps> = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-[8.5px] uppercase px-1.5 py-0.5 rounded bg-[var(--theme-primary-dim,rgba(2,132,199,0.1))] text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary-border,rgba(2,132,199,0.25))]">
-                      PARTNER
+                      SPONSORED PARTNER
                     </span>
                     <h4 className="text-[15px] sm:text-[17px] font-black text-[var(--theme-text,#0F172A)]">
                       {brand}

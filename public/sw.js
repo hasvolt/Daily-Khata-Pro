@@ -1,29 +1,13 @@
 /**
  * Daily Khata Pro — Service Worker
- * Version: 2.1.0
+ * Version: 3.2.0
  * Comprehensive PWA Offline Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.9.1';
+const CACHE_NAME = 'daily-khata-pro-v3.2.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/developer',
-  '/devloper',
-  '/dev',
-  '/about',
-  '/privacy',
-  '/terms',
-  '/disclaimer',
-  '/guide',
-  '/safety',
-  '/calculator',
-  '/support',
-  '/history',
-  '/report',
-  '/goals',
-  '/tracker',
-  '/notes',
   '/manifest.json',
   '/daily-khata-pro-v4.png',
   '/daily-Khata-Pro.png',
@@ -92,11 +76,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Navigation requests (HTML pages / routes) -> Network first with rock-solid offline cache fallback
+  // Navigation requests (HTML pages / routes) -> Network first with rock-solid offline & SPA fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request, { cache: 'no-cache' })
-        .then((response) => {
+        .then(async (response) => {
           if (response && response.status === 200) {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
@@ -104,15 +88,21 @@ self.addEventListener('fetch', (event) => {
               // Also keep /index.html updated with latest shell
               cache.put('/index.html', responseClone.clone());
             });
+            return response;
           }
-          return response;
+
+          // If static host returns 404 for client route (/developer, /about, etc.), return index.html shell
+          const shellResponse = (await caches.match('/index.html')) || (await caches.match('/'));
+          if (shellResponse) return shellResponse;
+
+          return fetch('/index.html');
         })
         .catch(async () => {
           // Offline fallback for any route navigation
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) return cachedResponse;
 
-          const shellResponse = await caches.match('/index.html');
+          const shellResponse = (await caches.match('/index.html')) || (await caches.match('/'));
           if (shellResponse) return shellResponse;
 
           return caches.match('/');

@@ -55,6 +55,8 @@ import { SupportPage } from './components/SupportPage';
 import { CalculatorPage } from './components/CalculatorPage';
 import { AttendancePage } from './components/AttendancePage';
 import { RemindersModal } from './components/RemindersModal';
+import { PageSearchModal } from './components/PageSearchModal';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { TRANSLATIONS } from './utils/translations';
 import { updatePageSEO } from './utils/seo';
 import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu } from 'lucide-react';
@@ -112,9 +114,9 @@ export default function App() {
   
   // Re-add currentTab and normalize it based on pathname
   const rawPath = location.pathname.substring(1);
-  const currentTab = rawPath === '' ? 'home' : rawPath;
+  const currentTab = (rawPath === '' ? 'home' : rawPath) as NavTab;
 
-  const setCurrentTab = (tab: string) => {
+  const setCurrentTab = (tab: NavTab | string) => {
     if (tab === 'home') navigate('/');
     else navigate(`/${tab}`);
   };
@@ -124,6 +126,7 @@ export default function App() {
   const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
   const [historyFilter, setHistoryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isPageSearchOpen, setIsPageSearchOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isSecurityModalOpen, setIsSecurityModalOpen] = useState<boolean>(false);
   const [isManualOpen, setIsManualOpen] = useState<boolean>(false);
@@ -447,6 +450,19 @@ export default function App() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [securityLock]);
+
+  // Global keyboard shortcut for Page Search (Ctrl+K or Cmd+K)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsPageSearchOpen(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
 
   const saveToLocalStorage = (
     arg1?: {
@@ -1125,7 +1141,7 @@ export default function App() {
         originalId: lifeToDelete.id,
         type: 'daily_log',
         title: lifeToDelete.title,
-        subtitle: `${lifeToDelete.date} · ${lifeToDelete.tag || 'Daily Life'}`,
+        subtitle: `${lifeToDelete.date} · ${lifeToDelete.title || 'Daily Life'}`,
         dateDeleted: new Date().toISOString(),
         data: lifeToDelete
       });
@@ -1693,14 +1709,20 @@ export default function App() {
           viewMode={viewMode}
           appLayout={appLayout}
           onViewModeChange={handleViewModeChange}
-        onLayoutChange={handleAppLayoutChange}
+          onLayoutChange={handleAppLayoutChange}
+          onOpenPageSearch={() => setIsPageSearchOpen(true)}
+          onOpenDeveloper={() => {
+            setCurrentTab('developer');
+            navigate('/developer');
+          }}
         />
       </div>
 
       {/* Main Content Area */}
       <main className="no-print flex-1 w-full max-w-6xl mx-auto px-2.5 sm:px-6 lg:px-8 pt-2.5 sm:pt-6 pb-20 sm:pb-8">
         <div className="w-full">
-          <Routes>
+          <ErrorBoundary fallbackTitle="Unable to load page content" fallbackMessage="An error occurred while displaying this page. Your data is safe.">
+            <Routes>
           <Route path="/" element={
             <HomeView
               appLayout={appLayout}
@@ -1811,7 +1833,7 @@ export default function App() {
               }}
               onDeleteWorkLog={handleDeleteWorkLog}
               onDeleteDailyLifeLog={handleDeleteDailyLifeLog}
-              onRecordWorkIncomeToKhata={handleRecordWorkIncomeToKhata}
+              onRecordWorkAsIncome={handleRecordWorkIncomeToKhata}
               language={language}
             />
           } />
@@ -1893,18 +1915,50 @@ export default function App() {
               onOpenShare={() => setIsShareOpen(true)}
             />
           } />
-          <Route path="/developer/" element={<Navigate to="/developer" replace />} />
-          <Route path="/Developer" element={<Navigate to="/developer" replace />} />
-          <Route path="/DEVELOPER" element={<Navigate to="/developer" replace />} />
-          <Route path="/devloper" element={<Navigate to="/developer" replace />} />
-          <Route path="/devloper/*" element={<Navigate to="/developer" replace />} />
-          <Route path="/dev" element={<Navigate to="/developer" replace />} />
+          <Route path="/dev" element={
+            <DeveloperPage
+              onBack={() => {
+                navigate('/');
+                setCurrentTab('home');
+              }}
+              language={language}
+              onOpenShare={() => setIsShareOpen(true)}
+            />
+          } />
+          <Route path="/creator" element={
+            <DeveloperPage
+              onBack={() => {
+                navigate('/');
+                setCurrentTab('home');
+              }}
+              language={language}
+              onOpenShare={() => setIsShareOpen(true)}
+            />
+          } />
+          <Route path="/founder" element={
+            <DeveloperPage
+              onBack={() => {
+                navigate('/');
+                setCurrentTab('home');
+              }}
+              language={language}
+              onOpenShare={() => setIsShareOpen(true)}
+            />
+          } />
+          <Route path="/devloper" element={
+            <DeveloperPage
+              onBack={() => {
+                navigate('/');
+                setCurrentTab('home');
+              }}
+              language={language}
+              onOpenShare={() => setIsShareOpen(true)}
+            />
+          } />
           <Route path="/dev/*" element={<Navigate to="/developer" replace />} />
-          <Route path="/Dev" element={<Navigate to="/developer" replace />} />
-          <Route path="/creator" element={<Navigate to="/developer" replace />} />
           <Route path="/creator/*" element={<Navigate to="/developer" replace />} />
-          <Route path="/founder" element={<Navigate to="/developer" replace />} />
           <Route path="/founder/*" element={<Navigate to="/developer" replace />} />
+          <Route path="/devloper/*" element={<Navigate to="/developer" replace />} />
           <Route path="/developer.html" element={<Navigate to="/developer" replace />} />
           <Route path="/dev.html" element={<Navigate to="/developer" replace />} />
 
@@ -1953,8 +2007,6 @@ export default function App() {
             <SafetyPage
               onBack={() => setCurrentTab('home')}
               language={language}
-              entriesCount={entries.length}
-              goalsCount={goals.length}
             />
           } />
 
@@ -2038,6 +2090,7 @@ export default function App() {
               privacyMask={privacyMask}
             />} />
           </Routes>
+          </ErrorBoundary>
         </div>
       </main>
 
@@ -2377,7 +2430,7 @@ export default function App() {
         language={language}
         hasTransactionsToday={hasTransactionsToday}
         hasAttendanceToday={hasAttendanceToday}
-        pendingPaymentCount={attendanceLogs.filter((l) => l.paymentStatus === 'unpaid').length}
+        pendingPaymentCount={attendanceLogs.filter((l) => l.paymentStatus === 'pending' || l.paymentStatus === 'partial').length}
         onNavigateAdd={() => {
           setIsRemindersOpen(false);
           setCurrentTab('add');
@@ -2452,9 +2505,9 @@ export default function App() {
       <ShareModal
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
-        currentTab={currentTab}
+        currentTab={currentTab as NavTab}
         language={language}
-        onSelectTab={(tab) => {
+        onSelectTab={(tab: NavTab) => {
           setCurrentTab(tab);
           setIsShareOpen(false);
         }}
@@ -2482,6 +2535,22 @@ export default function App() {
         securityConfig={securityLock}
         onSaveSecurityConfig={handleSaveSecurityConfig}
         onInstantLock={handleInstantLock}
+        language={language}
+      />
+
+      {/* Global Page & Tool Search Modal (Ctrl+K) */}
+      <PageSearchModal
+        isOpen={isPageSearchOpen}
+        onClose={() => setIsPageSearchOpen(false)}
+        onNavigate={(tab, route) => {
+          if (route) {
+            navigate(route);
+            setCurrentTab(tab as any);
+          } else {
+            setCurrentTab(tab as any);
+            navigate(`/${tab === 'home' ? '' : tab}`);
+          }
+        }}
         language={language}
       />
     </div>
