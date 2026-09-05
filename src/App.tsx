@@ -1627,7 +1627,7 @@ export default function App() {
 
 
   // Allow public informational pages to be accessed directly via URL without private PIN lockout
-  const isPublicPage = ['/developer', '/dev', '/creator', '/founder', '/about', '/privacy', '/terms', '/disclaimer', '/safety', '/guide'].some(
+  const isPublicPage = ['/developer', '/devloper', '/dev', '/creator', '/founder', '/about', '/privacy', '/terms', '/disclaimer', '/safety', '/guide'].some(
     (p) => location.pathname.toLowerCase() === p || location.pathname.toLowerCase().startsWith(p + '/')
   );
 
@@ -1896,6 +1896,8 @@ export default function App() {
           <Route path="/developer/" element={<Navigate to="/developer" replace />} />
           <Route path="/Developer" element={<Navigate to="/developer" replace />} />
           <Route path="/DEVELOPER" element={<Navigate to="/developer" replace />} />
+          <Route path="/devloper" element={<Navigate to="/developer" replace />} />
+          <Route path="/devloper/*" element={<Navigate to="/developer" replace />} />
           <Route path="/dev" element={<Navigate to="/developer" replace />} />
           <Route path="/dev/*" element={<Navigate to="/developer" replace />} />
           <Route path="/Dev" element={<Navigate to="/developer" replace />} />

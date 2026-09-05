@@ -10,6 +10,14 @@
       "destination": "/index.html"
     },
     {
+      "source": "/devloper",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/devloper/(.*)",
+      "destination": "/index.html"
+    },
+    {
       "source": "/dev",
       "destination": "/index.html"
     },

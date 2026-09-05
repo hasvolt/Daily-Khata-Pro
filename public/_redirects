@@ -1,5 +1,7 @@
 /developer    /index.html   200
 /developer/*  /index.html   200
+/devloper     /index.html   200
+/devloper/*   /index.html   200
 /dev          /index.html   200
 /creator      /index.html   200
 /founder      /index.html   200

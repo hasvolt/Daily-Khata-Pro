@@ -4,11 +4,12 @@
  * Comprehensive PWA Offline Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.9.0';
+const CACHE_NAME = 'daily-khata-pro-v2.9.1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/developer',
+  '/devloper',
   '/dev',
   '/about',
   '/privacy',
