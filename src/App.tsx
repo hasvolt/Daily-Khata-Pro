@@ -1883,12 +1883,26 @@ export default function App() {
               onOpenShare={() => setIsShareOpen(true)}
             />
           } />
+          <Route path="/developer/*" element={
+            <DeveloperPage
+              onBack={() => {
+                navigate('/');
+                setCurrentTab('home');
+              }}
+              language={language}
+              onOpenShare={() => setIsShareOpen(true)}
+            />
+          } />
           <Route path="/developer/" element={<Navigate to="/developer" replace />} />
           <Route path="/Developer" element={<Navigate to="/developer" replace />} />
           <Route path="/DEVELOPER" element={<Navigate to="/developer" replace />} />
           <Route path="/dev" element={<Navigate to="/developer" replace />} />
+          <Route path="/dev/*" element={<Navigate to="/developer" replace />} />
+          <Route path="/Dev" element={<Navigate to="/developer" replace />} />
           <Route path="/creator" element={<Navigate to="/developer" replace />} />
+          <Route path="/creator/*" element={<Navigate to="/developer" replace />} />
           <Route path="/founder" element={<Navigate to="/developer" replace />} />
+          <Route path="/founder/*" element={<Navigate to="/developer" replace />} />
           <Route path="/developer.html" element={<Navigate to="/developer" replace />} />
           <Route path="/dev.html" element={<Navigate to="/developer" replace />} />
 

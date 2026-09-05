@@ -105,7 +105,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
+          <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] col-span-2 sm:col-span-1">
             <div className="text-[11px] text-[#94A3B8] font-medium">{t.licenseLabel}</div>
             <div className="text-[14px] font-bold text-[#38BDF8] mt-0.5 flex items-center gap-1">
               <Code2 className="w-3.5 h-3.5 text-[#38BDF8]" />
@@ -113,9 +113,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
+          <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] col-span-2 sm:col-span-1">
             <div className="text-[11px] text-[#94A3B8] font-medium">{t.creatorLabel}</div>
-            <div className="text-[12.5px] sm:text-[14px] font-bold text-amber-300 mt-0.5 flex items-start gap-1 leading-snug">
+            <div className="text-[12px] sm:text-[14px] font-bold text-amber-300 mt-0.5 flex items-start gap-1 leading-snug">
               <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
               <span className="break-words">MD Zafeer Hasan (YAZDAAN)</span>
             </div>

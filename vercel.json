@@ -2,6 +2,58 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/developer",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/developer/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dev",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/creator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/founder",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/disclaimer",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/guide",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/safety",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/calculator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/support",
+      "destination": "/index.html"
+    },
+    {
       "source": "/((?!ads\\.txt|robots\\.txt|sitemap\\.xml|manifest\\.json|.*\\..*).*)",
       "destination": "/index.html"
     }

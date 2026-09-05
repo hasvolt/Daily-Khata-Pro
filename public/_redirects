@@ -1,1 +1,15 @@
-/*    /index.html   200
+/developer    /index.html   200
+/developer/*  /index.html   200
+/dev          /index.html   200
+/creator      /index.html   200
+/founder      /index.html   200
+/about        /index.html   200
+/privacy      /index.html   200
+/terms        /index.html   200
+/disclaimer   /index.html   200
+/guide        /index.html   200
+/safety       /index.html   200
+/calculator   /index.html   200
+/support      /index.html   200
+/*            /index.html   200
+

@@ -4,14 +4,30 @@
  * Comprehensive PWA Offline Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.7.0';
+const CACHE_NAME = 'daily-khata-pro-v2.9.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/developer',
+  '/dev',
+  '/about',
+  '/privacy',
+  '/terms',
+  '/disclaimer',
+  '/guide',
+  '/safety',
+  '/calculator',
+  '/support',
+  '/history',
+  '/report',
+  '/goals',
+  '/tracker',
+  '/notes',
   '/manifest.json',
   '/daily-khata-pro-v4.png',
   '/daily-Khata-Pro.png',
   '/daily-Khata-Pro-aap-icon.png',
+  '/md-zafeer-hasan-yazdaan.jpg',
   '/icon-192.png',
   '/icon-512.png',
   '/icons/icon-192x192.png',
@@ -78,7 +94,7 @@ self.addEventListener('fetch', (event) => {
   // Navigation requests (HTML pages / routes) -> Network first with rock-solid offline cache fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: 'no-cache' })
         .then((response) => {
           if (response && response.status === 200) {
             const responseClone = response.clone();
