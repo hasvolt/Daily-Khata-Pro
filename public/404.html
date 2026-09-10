@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Daily Khata Pro — Redirecting...</title>
+  <script>
+    // GitHub Pages / Static Hosting SPA Redirect Helper
+    // Preserves query strings, hashes, and sub-paths for /developer, /about, etc.
+    var path = window.location.pathname;
+    var search = window.location.search;
+    var hash = window.location.hash;
+    window.location.replace('/' + (path.length > 1 ? '?p=' + encodeURIComponent(path.slice(1)) : '') + (search ? '&' + search.slice(1) : '') + hash);
+  </script>
+</head>
+<body style="background:#070E18; color:#F8FAFC; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0;">
+  <p>Loading Daily Khata Pro...</p>
+</body>
+</html>

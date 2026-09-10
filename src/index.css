@@ -1,0 +1,883 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Default: Electric Navy & Sky Blue Theme */
+    --theme-primary: #38BDF8;
+    --theme-primary-hover: #0EA5E9;
+    --theme-primary-dim: rgba(56, 189, 248, 0.16);
+    --theme-primary-border: rgba(56, 189, 248, 0.38);
+    --theme-glow: rgba(56, 189, 248, 0.25);
+    --theme-bg: #020816;
+    --theme-surface: #020A1A;
+    --theme-card: #040E24;
+    --theme-card-hover: #07173B;
+    --theme-border: #0D2654;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #8BA4D0;
+    --theme-text-dim: #5572A1;
+    --theme-badge-text: #38BDF8;
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0EA5E9;
+    --theme-btn-text: #FFFFFF;
+  }
+
+  [data-theme="blue"] {
+    --theme-primary: #38BDF8;
+    --theme-primary-hover: #0EA5E9;
+    --theme-primary-dim: rgba(56, 189, 248, 0.16);
+    --theme-primary-border: rgba(56, 189, 248, 0.38);
+    --theme-glow: rgba(56, 189, 248, 0.25);
+    --theme-bg: #020816;
+    --theme-surface: #020A1A;
+    --theme-card: #040E24;
+    --theme-card-hover: #07173B;
+    --theme-border: #0D2654;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #8BA4D0;
+    --theme-text-dim: #5572A1;
+    --theme-badge-text: #38BDF8;
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0EA5E9;
+    --theme-btn-text: #FFFFFF;
+  }
+
+  [data-theme="yellow"] {
+    --theme-primary: #FFC700;
+    --theme-primary-hover: #FFD233;
+    --theme-primary-dim: rgba(255, 199, 0, 0.16);
+    --theme-primary-border: rgba(255, 199, 0, 0.38);
+    --theme-glow: rgba(255, 199, 0, 0.22);
+    --theme-bg: #100E07;
+    --theme-surface: #1C190D;
+    --theme-card: #292413;
+    --theme-card-hover: #373019;
+    --theme-border: #4D431B;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
+    --theme-badge-text: #FFC700;
+    --theme-btn-bg: #FFC700;
+    --theme-btn-hover: #FFD233;
+    --theme-btn-text: #120E02;
+  }
+
+  [data-theme="orange"] {
+    --theme-primary: #F97316;
+    --theme-primary-hover: #FB923C;
+    --theme-primary-dim: rgba(249, 115, 22, 0.16);
+    --theme-primary-border: rgba(249, 115, 22, 0.38);
+    --theme-glow: rgba(249, 115, 22, 0.25);
+    --theme-bg: #120905;
+    --theme-surface: #1E1009;
+    --theme-card: #2B180E;
+    --theme-card-hover: #3B2113;
+    --theme-border: #522D19;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
+    --theme-badge-text: #FB923C;
+    --theme-btn-bg: #F97316;
+    --theme-btn-hover: #FB923C;
+    --theme-btn-text: #140501;
+  }
+
+  [data-theme="emerald"] {
+    --theme-primary: #10B981;
+    --theme-primary-hover: #34D399;
+    --theme-primary-dim: rgba(16, 185, 129, 0.16);
+    --theme-primary-border: rgba(16, 185, 129, 0.38);
+    --theme-glow: rgba(16, 185, 129, 0.25);
+    --theme-bg: #05120B;
+    --theme-surface: #0B1E13;
+    --theme-card: #112A1B;
+    --theme-card-hover: #183B26;
+    --theme-border: #215235;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
+    --theme-badge-text: #34D399;
+    --theme-btn-bg: #10B981;
+    --theme-btn-hover: #34D399;
+    --theme-btn-text: #02140A;
+  }
+
+  [data-theme="purple"] {
+    --theme-primary: #A855F7;
+    --theme-primary-hover: #C084FC;
+    --theme-primary-dim: rgba(168, 85, 247, 0.16);
+    --theme-primary-border: rgba(168, 85, 247, 0.38);
+    --theme-glow: rgba(168, 85, 247, 0.25);
+    --theme-bg: #0E0717;
+    --theme-surface: #190E26;
+    --theme-card: #251538;
+    --theme-card-hover: #331D4D;
+    --theme-border: #4A2A70;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
+    --theme-badge-text: #C084FC;
+    --theme-btn-bg: #A855F7;
+    --theme-btn-hover: #C084FC;
+    --theme-btn-text: #10041C;
+  }
+
+  [data-theme="cyan"] {
+    --theme-primary: #06B6D4;
+    --theme-primary-hover: #22D3EE;
+    --theme-primary-dim: rgba(6, 182, 212, 0.16);
+    --theme-primary-border: rgba(6, 182, 212, 0.38);
+    --theme-glow: rgba(6, 182, 212, 0.25);
+    --theme-bg: #041017;
+    --theme-surface: #091A24;
+    --theme-card: #0E2636;
+    --theme-card-hover: #14354A;
+    --theme-border: #1C4B69;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
+    --theme-badge-text: #22D3EE;
+    --theme-btn-bg: #06B6D4;
+    --theme-btn-hover: #22D3EE;
+    --theme-btn-text: #021117;
+  }
+
+  [data-theme="light"] {
+    --theme-primary: #0284C7;
+    --theme-primary-hover: #0369A1;
+    --theme-primary-dim: rgba(2, 132, 199, 0.12);
+    --theme-primary-border: rgba(2, 132, 199, 0.35);
+    --theme-glow: rgba(2, 132, 199, 0.12);
+    --theme-bg: #F1F5F9;
+    --theme-surface: #FFFFFF;
+    --theme-card: #FFFFFF;
+    --theme-card-hover: #F8FAFC;
+    --theme-border: #CBD5E1;
+    --theme-text: #0F172A;
+    --theme-text-muted: #475569;
+    --theme-text-dim: #64748B;
+    --theme-badge-text: #0284C7;
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0369A1;
+    --theme-btn-text: #FFFFFF;
+  }
+
+  [data-theme="white"] {
+    --theme-primary: #2563EB;
+    --theme-primary-hover: #1D4ED8;
+    --theme-primary-dim: rgba(37, 99, 235, 0.10);
+    --theme-primary-border: rgba(37, 99, 235, 0.30);
+    --theme-glow: rgba(37, 99, 235, 0.08);
+    --theme-bg: #FFFFFF;
+    --theme-surface: #F8FAFC;
+    --theme-card: #FFFFFF;
+    --theme-card-hover: #F1F5F9;
+    --theme-border: #CBD5E1;
+    --theme-text: #0F172A;
+    --theme-text-muted: #475569;
+    --theme-text-dim: #64748B;
+    --theme-badge-text: #1D4ED8;
+    --theme-btn-bg: #2563EB;
+    --theme-btn-hover: #1D4ED8;
+    --theme-btn-text: #FFFFFF;
+  }
+
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 640px) {
+    html {
+      font-size: 95%; /* 5% reduction in mobile mode for optimal visual density */
+    }
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--theme-bg, #070E18);
+    background-image: radial-gradient(ellipse at 50% 0%, var(--theme-glow, rgba(56, 189, 248, 0.15)) 0%, var(--theme-bg, #070E18) 75%);
+    color: var(--theme-text, #F8FAFC);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+.font-serif-display {
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.font-devnag {
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Subtle Daily Khata grid micro-pattern */
+.record-texture {
+  background-image: radial-gradient(var(--theme-primary, #38BDF8) 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--theme-bg, #070E18);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border, #213E61);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-primary, #38BDF8);
+}
+
+/* Theme utility classes */
+.theme-btn-primary {
+  background-color: var(--theme-btn-bg, #38BDF8);
+  color: var(--theme-btn-text, #040D17);
+}
+.theme-btn-primary:hover {
+  background-color: var(--theme-btn-hover, #0EA5E9);
+}
+
+.theme-text-primary {
+  color: var(--theme-primary, #38BDF8);
+}
+
+.theme-border-primary {
+  border-color: var(--theme-primary, #38BDF8);
+}
+
+.theme-bg-dim {
+  background-color: var(--theme-primary-dim, rgba(56, 189, 248, 0.15));
+}
+
+.theme-border-dim {
+  border-color: var(--theme-primary-border, rgba(56, 189, 248, 0.35));
+}
+
+/* Code Inspector & Code Blocks High-Contrast Styling */
+.code-inspector-container {
+  background-color: var(--theme-bg, #070E18);
+}
+
+.code-inspector-pre {
+  color: #E2E8F0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  tab-size: 2;
+  line-height: 1.65;
+}
+
+[data-theme="light"] .code-inspector-container,
+[data-theme="white"] .code-inspector-container {
+  background-color: #F8FAFC !important;
+}
+
+[data-theme="light"] .code-inspector-pre,
+[data-theme="white"] .code-inspector-pre {
+  color: #0F172A !important;
+}
+
+/* =========================================================================
+   LIGHT / WHITE MODE OUTDOOR DAYLIGHT HIGH-CONTRAST STYLES
+   ========================================================================= */
+[data-theme="light"],
+[data-theme="white"] {
+  color-scheme: light;
+}
+
+[data-theme="light"] body,
+[data-theme="white"] body {
+  background-color: var(--theme-bg, #F1F5F9);
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, var(--theme-glow, rgba(2, 132, 199, 0.06)) 0%, var(--theme-bg, #F1F5F9) 80%),
+    linear-gradient(to bottom, #FFFFFF 0%, #E2E8F0 100%);
+  color: #0F172A;
+}
+
+/* Base text color overrides in Light mode for outdoor daylight visibility */
+[data-theme="light"] .text-\[\#FFFFFF\],
+[data-theme="white"] .text-\[\#FFFFFF\],
+[data-theme="light"] .text-\[\#ffffff\],
+[data-theme="white"] .text-\[\#ffffff\],
+[data-theme="light"] .text-\[\#F8FAFC\],
+[data-theme="white"] .text-\[\#F8FAFC\],
+[data-theme="light"] .text-\[\#F1F5F9\],
+[data-theme="white"] .text-\[\#F1F5F9\],
+[data-theme="light"] .text-\[\#E2E8F0\],
+[data-theme="white"] .text-\[\#E2E8F0\],
+[data-theme="light"] .text-slate-100,
+[data-theme="white"] .text-slate-100,
+[data-theme="light"] .text-slate-200,
+[data-theme="white"] .text-slate-200 {
+  color: #0F172A;
+}
+
+[data-theme="light"] .text-\[\#CBD5E1\],
+[data-theme="white"] .text-\[\#CBD5E1\],
+[data-theme="light"] .text-slate-300,
+[data-theme="white"] .text-slate-300 {
+  color: #334155;
+}
+
+[data-theme="light"] .text-\[\#94A3B8\],
+[data-theme="white"] .text-\[\#94A3B8\],
+[data-theme="light"] .text-slate-400,
+[data-theme="white"] .text-slate-400 {
+  color: #475569;
+}
+
+[data-theme="light"] .text-\[\#64748B\],
+[data-theme="white"] .text-\[\#64748B\],
+[data-theme="light"] .text-slate-500,
+[data-theme="white"] .text-slate-500 {
+  color: #475569;
+}
+
+/* Light mode text-white handling: convert to high-contrast dark text inside cards and content */
+[data-theme="light"] h1.text-white,
+[data-theme="light"] h2.text-white,
+[data-theme="light"] h3.text-white,
+[data-theme="light"] h4.text-white,
+[data-theme="light"] p.text-white,
+[data-theme="light"] div.text-white,
+[data-theme="light"] span.text-white:not([class*="bg-"]):not([class*="badge"]),
+[data-theme="white"] h1.text-white,
+[data-theme="white"] h2.text-white,
+[data-theme="white"] h3.text-white,
+[data-theme="white"] h4.text-white,
+[data-theme="white"] p.text-white,
+[data-theme="white"] div.text-white,
+[data-theme="white"] span.text-white:not([class*="bg-"]):not([class*="badge"]) {
+  color: #0F172A;
+}
+
+/* Keep white text inside solid filled colored action buttons */
+[data-theme="light"] button.bg-\[\#EF4444\],
+[data-theme="white"] button.bg-\[\#EF4444\],
+[data-theme="light"] button.bg-\[\#10B981\],
+[data-theme="white"] button.bg-\[\#10B981\],
+[data-theme="light"] button.bg-\[\#0284C7\],
+[data-theme="white"] button.bg-\[\#0284C7\],
+[data-theme="light"] button.bg-\[\#2563EB\],
+[data-theme="white"] button.bg-\[\#2563EB\],
+[data-theme="light"] button.theme-btn-primary,
+[data-theme="white"] button.theme-btn-primary,
+[data-theme="light"] .theme-btn-primary,
+[data-theme="white"] .theme-btn-primary {
+  color: #FFFFFF !important;
+}
+
+/* High contrast accent color adjustments for Daylight */
+[data-theme="light"] .text-\[\#38BDF8\],
+[data-theme="white"] .text-\[\#38BDF8\] {
+  color: #0284C7;
+}
+
+[data-theme="light"] .text-\[\#10B981\],
+[data-theme="white"] .text-\[\#10B981\] {
+  color: #059669;
+}
+
+[data-theme="light"] .text-\[\#FFC700\],
+[data-theme="white"] .text-\[\#FFC700\],
+[data-theme="light"] .text-\[\#F59E0B\],
+[data-theme="white"] .text-\[\#F59E0B\] {
+  color: #D97706;
+}
+
+[data-theme="light"] .text-\[\#F97316\],
+[data-theme="white"] .text-\[\#F97316\],
+[data-theme="light"] .text-\[\#FB923C\],
+[data-theme="white"] .text-\[\#FB923C\] {
+  color: #C2410C;
+}
+
+[data-theme="light"] .text-\[\#A855F7\],
+[data-theme="white"] .text-\[\#A855F7\] {
+  color: #7E22CE;
+}
+
+/* Background card overrides in Light mode */
+[data-theme="light"] [class*="bg-\[\#070E18\]"],
+[data-theme="white"] [class*="bg-\[\#070E18\]"],
+[data-theme="light"] [class*="bg-\[\#040D17\]"],
+[data-theme="white"] [class*="bg-\[\#040D17\]"],
+[data-theme="light"] [class*="bg-\[\#0B1017\]"],
+[data-theme="white"] [class*="bg-\[\#0B1017\]"],
+[data-theme="light"] [class*="bg-\[\#060B12\]"],
+[data-theme="white"] [class*="bg-\[\#060B12\]"],
+[data-theme="light"] [class*="bg-\[\#060B11\]"],
+[data-theme="white"] [class*="bg-\[\#060B11\]"],
+[data-theme="light"] [class*="bg-\[\#020A1A\]"],
+[data-theme="white"] [class*="bg-\[\#020A1A\]"],
+[data-theme="light"] [class*="bg-\[\#040E24\]"],
+[data-theme="white"] [class*="bg-\[\#040E24\]"],
+[data-theme="light"] [class*="bg-\[\#020816\]"],
+[data-theme="white"] [class*="bg-\[\#020816\]"],
+[data-theme="light"] [class*="bg-\[\#0A245C\]"],
+[data-theme="white"] [class*="bg-\[\#0A245C\]"],
+[data-theme="light"] [class*="bg-\[\#0B2A6B\]"],
+[data-theme="white"] [class*="bg-\[\#0B2A6B\]"],
+[data-theme="light"] [class*="bg-\[\#022A20\]"],
+[data-theme="white"] [class*="bg-\[\#022A20\]"] {
+  background-color: #F8FAFC;
+}
+
+/* Banking Card 3D Multi-Theme Adaptation */
+[data-theme="yellow"] .banking-card-3d {
+  background: linear-gradient(135deg, #1C1502 0%, #3D2F05 55%, #140E01 100%) !important;
+  border-color: #665008 !important;
+  box-shadow: 0 20px 50px rgba(50, 40, 4, 0.5) !important;
+}
+[data-theme="yellow"] .banking-card-3d .banking-card-icon-box,
+[data-theme="yellow"] .banking-card-3d .banking-card-date-box {
+  background-color: #3D2F05 !important;
+  border-color: #665008 !important;
+  color: #FFC700 !important;
+}
+[data-theme="yellow"] .banking-card-3d .banking-card-label {
+  color: #FCD34D !important;
+}
+[data-theme="yellow"] .banking-card-3d .banking-card-subtitle {
+  color: #F59E0B !important;
+}
+
+[data-theme="orange"] .banking-card-3d {
+  background: linear-gradient(135deg, #1C0B02 0%, #421B07 55%, #140701 100%) !important;
+  border-color: #742E0B !important;
+  box-shadow: 0 20px 50px rgba(66, 27, 7, 0.5) !important;
+}
+[data-theme="orange"] .banking-card-3d .banking-card-icon-box,
+[data-theme="orange"] .banking-card-3d .banking-card-date-box {
+  background-color: #421B07 !important;
+  border-color: #742E0B !important;
+  color: #FB923C !important;
+}
+[data-theme="orange"] .banking-card-3d .banking-card-label {
+  color: #FDBA74 !important;
+}
+[data-theme="orange"] .banking-card-3d .banking-card-subtitle {
+  color: #FB923C !important;
+}
+
+[data-theme="emerald"] .banking-card-3d {
+  background: linear-gradient(135deg, #02170D 0%, #063920 55%, #011209 100%) !important;
+  border-color: #0E5E36 !important;
+  box-shadow: 0 20px 50px rgba(6, 57, 32, 0.5) !important;
+}
+[data-theme="emerald"] .banking-card-3d .banking-card-icon-box,
+[data-theme="emerald"] .banking-card-3d .banking-card-date-box {
+  background-color: #063920 !important;
+  border-color: #0E5E36 !important;
+  color: #34D399 !important;
+}
+[data-theme="emerald"] .banking-card-3d .banking-card-label {
+  color: #6EE7B7 !important;
+}
+[data-theme="emerald"] .banking-card-3d .banking-card-subtitle {
+  color: #34D399 !important;
+}
+
+[data-theme="purple"] .banking-card-3d {
+  background: linear-gradient(135deg, #140521 0%, #351052 55%, #0F031A 100%) !important;
+  border-color: #591D8C !important;
+  box-shadow: 0 20px 50px rgba(53, 16, 82, 0.5) !important;
+}
+[data-theme="purple"] .banking-card-3d .banking-card-icon-box,
+[data-theme="purple"] .banking-card-3d .banking-card-date-box {
+  background-color: #351052 !important;
+  border-color: #591D8C !important;
+  color: #C084FC !important;
+}
+[data-theme="purple"] .banking-card-3d .banking-card-label {
+  color: #D8B4FE !important;
+}
+[data-theme="purple"] .banking-card-3d .banking-card-subtitle {
+  color: #C084FC !important;
+}
+
+[data-theme="cyan"] .banking-card-3d {
+  background: linear-gradient(135deg, #02161E 0%, #063749 55%, #011117 100%) !important;
+  border-color: #0E5874 !important;
+  box-shadow: 0 20px 50px rgba(6, 55, 73, 0.5) !important;
+}
+[data-theme="cyan"] .banking-card-3d .banking-card-icon-box,
+[data-theme="cyan"] .banking-card-3d .banking-card-date-box {
+  background-color: #063749 !important;
+  border-color: #0E5874 !important;
+  color: #22D3EE !important;
+}
+[data-theme="cyan"] .banking-card-3d .banking-card-label {
+  color: #67E8F9 !important;
+}
+[data-theme="cyan"] .banking-card-3d .banking-card-subtitle {
+  color: #22D3EE !important;
+}
+
+/* Banking Card 3D Light & White Mode Adaptation */
+[data-theme="light"] .banking-card-3d,
+[data-theme="white"] .banking-card-3d {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 55%, #F0F7FF 100%) !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-title,
+[data-theme="white"] .banking-card-3d .banking-card-title {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-subtitle,
+[data-theme="white"] .banking-card-3d .banking-card-subtitle {
+  color: #64748B !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-label,
+[data-theme="white"] .banking-card-3d .banking-card-label {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-amount,
+[data-theme="white"] .banking-card-3d .banking-card-amount {
+  color: #0F172A !important;
+  text-shadow: none !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-icon-box,
+[data-theme="white"] .banking-card-3d .banking-card-icon-box,
+[data-theme="light"] .banking-card-3d .banking-card-date-box,
+[data-theme="white"] .banking-card-3d .banking-card-date-box {
+  background-color: #E0F2FE !important;
+  border-color: #BAE6FD !important;
+  color: #0284C7 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-date,
+[data-theme="white"] .banking-card-3d .banking-card-date {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-waves,
+[data-theme="white"] .banking-card-3d .banking-card-waves {
+  opacity: 0.35 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-glare,
+[data-theme="white"] .banking-card-3d .banking-card-glare {
+  background: radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, transparent 60%) !important;
+}
+
+[data-theme="light"] [class*="bg-\[\#0E1A29\]"],
+[data-theme="white"] [class*="bg-\[\#0E1A29\]"],
+[data-theme="light"] [class*="bg-\[\#132438\]"],
+[data-theme="white"] [class*="bg-\[\#132438\]"],
+[data-theme="light"] [class*="bg-\[\#141E2B\]"],
+[data-theme="white"] [class*="bg-\[\#141E2B\]"] {
+  background-color: #FFFFFF;
+}
+
+[data-theme="light"] [class*="bg-\[\#1E3A5F\]"],
+[data-theme="white"] [class*="bg-\[\#1E3A5F\]"],
+[data-theme="light"] [class*="bg-\[\#19304A\]"],
+[data-theme="white"] [class*="bg-\[\#19304A\]"],
+[data-theme="light"] [class*="bg-\[\#1C2B3E\]"],
+[data-theme="white"] [class*="bg-\[\#1C2B3E\]"] {
+  background-color: #F1F5F9;
+}
+
+/* Border overrides in Light mode */
+[data-theme="light"] [class*="border-\[\#213E61\]"],
+[data-theme="white"] [class*="border-\[\#213E61\]"],
+[data-theme="light"] [class*="border-\[\#1E2C3D\]"],
+[data-theme="white"] [class*="border-\[\#1E2C3D\]"],
+[data-theme="light"] [class*="border-\[\#19304A\]"],
+[data-theme="white"] [class*="border-\[\#19304A\]"],
+[data-theme="light"] [class*="border-\[\#2B3D54\]"],
+[data-theme="white"] [class*="border-\[\#2B3D54\]"],
+[data-theme="light"] [class*="border-\[\#0D2654\]"],
+[data-theme="white"] [class*="border-\[\#0D2654\]"],
+[data-theme="light"] [class*="border-\[\#0A2249\]"],
+[data-theme="white"] [class*="border-\[\#0A2249\]"],
+[data-theme="light"] [class*="border-\[\#0D2B5E\]"],
+[data-theme="white"] [class*="border-\[\#0D2B5E\]"],
+[data-theme="light"] [class*="border-\[\#0A1E42\]"],
+[data-theme="white"] [class*="border-\[\#0A1E42\]"],
+[data-theme="light"] [class*="border-\[\#0E3680\]"],
+[data-theme="white"] [class*="border-\[\#0E3680\]"],
+[data-theme="light"] [class*="border-\[\#123680\]"],
+[data-theme="white"] [class*="border-\[\#123680\]"],
+[data-theme="light"] [class*="border-\[\#17459E\]"],
+[data-theme="white"] [class*="border-\[\#17459E\]"] {
+  border-color: #CBD5E1;
+}
+
+/* Shadow enhancements for cards in light mode */
+[data-theme="light"] [class*="bg-\[\#0E1A29\]"],
+[data-theme="white"] [class*="bg-\[\#0E1A29\]"],
+[data-theme="light"] [class*="bg-\[\#132438\]"],
+[data-theme="white"] [class*="bg-\[\#132438\]"] {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* Form input styling in Light mode */
+[data-theme="light"] input,
+[data-theme="white"] input,
+[data-theme="light"] select,
+[data-theme="white"] select,
+[data-theme="light"] textarea,
+[data-theme="white"] textarea {
+  color: #0F172A !important;
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1;
+}
+
+[data-theme="light"] input:focus,
+[data-theme="white"] input:focus,
+[data-theme="light"] select:focus,
+[data-theme="white"] select:focus,
+[data-theme="light"] textarea:focus,
+[data-theme="white"] textarea:focus {
+  border-color: var(--theme-primary, #0284C7);
+  box-shadow: 0 0 0 2px var(--theme-primary-dim, rgba(2, 132, 199, 0.15));
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="white"] input::placeholder,
+[data-theme="light"] textarea::placeholder,
+[data-theme="white"] textarea::placeholder {
+  color: #94A3B8;
+}
+
+/* Modal overlay in light mode */
+[data-theme="light"] .fixed.inset-0.bg-black\/80,
+[data-theme="white"] .fixed.inset-0.bg-black\/80,
+[data-theme="light"] .fixed.inset-0.bg-black\/70,
+[data-theme="white"] .fixed.inset-0.bg-black\/70 {
+  background-color: rgba(15, 23, 42, 0.55);
+}
+
+/* Scrollbar in Light mode */
+[data-theme="light"] ::-webkit-scrollbar-track,
+[data-theme="white"] ::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb,
+[data-theme="white"] ::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+}
+
+/* Native Mobile App, APK & Play Store UX Standards */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Disallow accidental text highlight on app chrome (buttons, navbars, tabs, icons) */
+button,
+nav,
+header,
+.no-select,
+[role="button"],
+[role="tab"] {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection specifically for data fields, transaction amounts, note bodies */
+input, textarea, code, pre {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
+/* Smooth momentum scrolling for iOS WebViews & Android Chrome */
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Hardware-accelerated transitions for native-feeling 60fps animations */
+.gpu-accel {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Safe Area Inset Support for Notches, Dynamic Islands & Gesture Bars */
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+}
+
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+.safe-left {
+  padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+}
+
+.safe-right {
+  padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+}
+
+/* Professional Desktop Workstation & Native Mobile Layout */
+#app-root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+#app-root,
+main {
+  width: 100%;
+  max-width: 80rem; /* 1280px */
+  margin: 0 auto;
+}
+
+#bottom-nav-bar {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  transform: none !important;
+  padding-bottom: max(0.65rem, env(safe-area-inset-bottom, 0px)) !important;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Completely hide all interactive UI elements during printing */
+  .no-print,
+  #app-root > div.no-print,
+  #app-root > main,
+  header,
+  nav,
+  button,
+  #toast-notification {
+    display: none !important;
+  }
+
+  /* Force print area container to show clearly in full width A4 */
+  #printArea,
+  .print-only {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+.custom-responsive-ad {
+  width: 100%;
+}
+/* Mobile Devices */
+@media (max-width: 639px) {
+  .custom-responsive-ad {
+    height: 60px;
+    min-height: 60px;
+  }
+}
+/* Tablets */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .custom-responsive-ad {
+    height: 90px;
+    min-height: 90px;
+  }
+}
+/* Desktop Devices */
+@media (min-width: 1024px) {
+  .custom-responsive-ad {
+    height: 90px;
+    min-height: 90px;
+  }
+}
+
+/* =========================================================================
+   SENSITIVE DATA PROTECTION (Amounts, Dates, Notes, PINs, Internal System)
+   Prevents text-selection, long-press copy menu, and touch callouts
+   ========================================================================= */
+body,
+#root,
+#app-root,
+.select-none,
+.secure-sensitive,
+.secure-sensitive *,
+.sensitive-amount,
+.sensitive-date,
+.sensitive-note,
+.sensitive-pin,
+[data-sensitive="true"],
+[data-sensitive="true"] * {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* Ensure user input fields and textareas remain fully editable */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
+}
