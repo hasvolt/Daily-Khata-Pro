@@ -24,12 +24,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
   const isHindi = language === 'hi';
 
   const tabs: TabItem[] = [
-    { id: 'home', label: t.nav.home, icon: Home },
-    { id: 'history', label: t.nav.history, icon: History },
-    { id: 'add', label: t.nav.add || (isHindi ? 'नया' : 'Add'), icon: Plus, isAction: true },
-    { id: 'goals', label: t.nav.goals, icon: Target },
-    { id: 'calculator', label: isHindi ? 'कैलकुलेटर' : (t.nav.calculator || 'Calculator'), icon: Calculator },
-    { id: 'report', label: t.nav.reports, icon: BarChart3 }
+    { id: 'home', label: isHindi ? 'होम' : 'Home', icon: Home },
+    { id: 'history', label: isHindi ? 'रिकॉर्ड्स' : 'Records', icon: History },
+    { id: 'add', label: isHindi ? '+ जोड़ें' : '+ Add', icon: Plus, isAction: true },
+    { id: 'goals', label: isHindi ? 'लक्ष्य' : 'Goals', icon: Target },
+    { id: 'calculator', label: isHindi ? 'कैलकुलेटर' : 'Calculator', icon: Calculator },
+    { id: 'report', label: isHindi ? 'रिपोर्ट्स' : 'Reports', icon: BarChart3 }
   ];
 
   const handleTabClick = (tab: TabItem) => {
@@ -105,7 +105,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
               >
                 <Icon className="w-4 h-4 sm:w-6 sm:h-6 stroke-[2.2]" />
               </div>
-              <span className="text-[9.5px] sm:text-[13px] font-bold leading-tight truncate mt-0.5 max-w-full text-center">
+              <span className="text-[9.5px] sm:text-[13px] font-bold leading-tight truncate mt-0.5 max-w-full text-center whitespace-nowrap">
                 {tab.label}
               </span>
             </button>

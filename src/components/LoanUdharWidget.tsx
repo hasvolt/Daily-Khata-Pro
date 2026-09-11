@@ -81,13 +81,13 @@ export const LoanUdharWidget: React.FC<LoanUdharWidgetProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-1.5">
-              <span>Loans, EMIs & Debt Ledger</span>
+              <span>Loans, EMIs & Debt Records</span>
               <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">
-                LEDGER
+                RECORDS
               </span>
             </h3>
             <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
-              Receivables, personal debt & bank amortization
+              Money to receive, personal debt & bank EMIs
             </span>
           </div>
         </div>
@@ -97,7 +97,7 @@ export const LoanUdharWidget: React.FC<LoanUdharWidgetProps> = ({
           onClick={onOpenLedger}
           className="text-xs font-bold text-[var(--theme-primary,#38BDF8)] hover:underline flex items-center gap-0.5 cursor-pointer"
         >
-          <span>Open Ledger</span>
+          <span>Open Records</span>
           <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>

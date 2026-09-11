@@ -138,8 +138,8 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
     },
     {
       id: 'loans-udhar',
-      title: isHindi ? 'ऋण, किश्त व उधार खाता' : 'Loans, EMIs & Udhar Ledger',
-      subtitle: isHindi ? 'उधार लेना/देना, बैंक लोन EMI व किश्तों का एडवांस लेजर' : 'Track money lent, borrowed, debt repayments & monthly loan EMIs',
+      title: isHindi ? 'ऋण, किश्त व उधार रिकॉर्ड्स' : 'Loans, EMIs & Udhar Records',
+      subtitle: isHindi ? 'उधार लेना/देना, बैंक लोन EMI व किश्तों का रिकॉर्ड' : 'Track money lent, borrowed, debt repayments & monthly loan EMIs',
       category: 'finance',
       categoryLabel: isHindi ? 'वित्तीय रिकॉर्ड' : 'Financial Records',
       icon: Landmark,

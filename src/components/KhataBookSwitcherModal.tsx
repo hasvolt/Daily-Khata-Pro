@@ -79,7 +79,7 @@ export const KhataBookSwitcherModal: React.FC<KhataBookSwitcherModalProps> = ({
                 {isHindi ? 'खाता बही स्विचर (Khata Books)' : 'Multi-Khata Book Switcher'}
               </h3>
               <p className="text-xs text-[var(--theme-text-dim,#94A3B8)]">
-                {isHindi ? 'पर्सनल और बिज़नेस लेन-देन अलग-अलग रखें' : 'Separate ledgers for Personal, Business & Custom'}
+                {isHindi ? 'पर्सनल और बिज़नेस लेन-देन अलग-अलग रखें' : 'Separate records for Personal, Business & Custom'}
               </p>
             </div>
           </div>

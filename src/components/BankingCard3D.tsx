@@ -109,10 +109,10 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="banking-card-title text-[10.5px] sm:text-[14px] font-extrabold tracking-wider text-white uppercase truncate transition-colors">
-                  {isHindi ? 'कुल नेट बैलेंस' : 'TOTAL NET BALANCE'}
+                  {isHindi ? 'कुल बैलेंस (Total Balance)' : 'TOTAL BALANCE'}
                 </span>
                 <span className="banking-card-subtitle text-[9px] sm:text-[11.5px] text-[#8BA4D0] truncate transition-colors">
-                  {isHindi ? 'आपका संपूर्ण वित्तीय विवरण' : 'Your overall financial summary'}
+                  {isHindi ? 'सभी खातों का कुल बैलेंस' : 'Total cash & account balance'}
                 </span>
               </div>
             </div>
@@ -127,7 +127,7 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
               </div>
               <div className="banking-card-date-box flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0B2A6B)] border border-[var(--theme-border,#17459E)] text-[var(--theme-primary,#38BDF8)] shadow-sm shrink-0">
                 <Calendar className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                <span className="banking-card-date text-[8.5px] sm:text-[11.5px] font-bold tracking-wide text-[#E2E8F0] uppercase whitespace-nowrap transition-colors">
+                <span className="banking-card-date text-[8.5px] sm:text-[11.5px] font-bold tracking-wide text-[#E2E8F0] uppercase whitespace-nowrap transition-colors notranslate" translate="no">
                   {dateFormatted}
                 </span>
               </div>
@@ -137,10 +137,11 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
           {/* Available Balance Amount */}
           <div className="space-y-0.5 sm:space-y-1.5">
             <p className="banking-card-label text-[9px] sm:text-[12px] text-[#7E9BC9] tracking-widest uppercase font-semibold transition-colors">
-              {isHindi ? 'उपलब्ध बैलेंस' : 'AVAILABLE BALANCE'}
+              {isHindi ? 'उपलब्ध बैलेंस (Available Balance)' : 'AVAILABLE BALANCE'}
             </p>
             <div 
-              className="banking-card-amount font-mono text-[22px] xs:text-[25px] sm:text-[50px] md:text-[56px] font-extrabold text-white tracking-tight leading-none drop-shadow-md truncate max-w-full transition-colors" 
+              className="banking-card-amount font-mono text-[22px] xs:text-[25px] sm:text-[50px] md:text-[56px] font-extrabold text-white tracking-tight leading-none drop-shadow-md truncate max-w-full transition-colors notranslate" 
+              translate="no"
               title={formatCurrency(totalWealth, privacyMask)}
             >
               {formatCurrency(totalWealth, privacyMask)}
@@ -157,8 +158,8 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
                 id="hero-add-income-btn"
               >
                 <Plus className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[3] !text-white shrink-0" />
-                <span className="truncate !text-white tracking-wide">
-                  {t.home?.addIncome || 'Add Income'}
+                <span className="truncate !text-white tracking-wide font-bold">
+                  {isHindi ? '+ कमाई (Income)' : '+ Income'}
                 </span>
               </button>
               <button
@@ -168,8 +169,8 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
                 id="hero-add-expense-btn"
               >
                 <Minus className="w-3.5 h-3.5 sm:w-5 sm:h-5 stroke-[3] !text-white shrink-0" />
-                <span className="truncate !text-white tracking-wide">
-                  {t.home?.addExpense || 'Add Expense'}
+                <span className="truncate !text-white tracking-wide font-bold">
+                  {isHindi ? '- खर्च (Expense)' : '- Expense'}
                 </span>
               </button>
             </div>

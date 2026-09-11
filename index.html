@@ -88,8 +88,104 @@
       }
     ]
     </script>
+    
+    <!-- Google Translate Script Setup -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        try {
+          if (window.google && window.google.translate) {
+            new window.google.translate.TranslateElement({
+              pageLanguage: 'en',
+              autoDisplay: false
+            }, 'google_translate_element');
+          }
+        } catch (e) {
+          console.warn('Google Translate Init Warning:', e);
+        }
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+    
+    <style>
+      /* Permanent Google Translate Banner & Tooltip Annihilation */
+      .skiptranslate > iframe,
+      iframe.skiptranslate,
+      iframe.goog-te-banner-frame,
+      .goog-te-banner-frame,
+      .goog-te-banner,
+      #goog-gt-tt,
+      .goog-te-balloon-frame,
+      .VIpgJd-ZVi9od-OR9Qgd,
+      .VIpgJd-ZVi9od-OR9Qgd-ibnC6b,
+      .VIpgJd-ZVi9od-l4eHX-hSRGPd,
+      .VIpgJd-ZVi9od-vH1Gmf {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0px !important;
+        max-height: 0px !important;
+        width: 0px !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        z-index: -9999 !important;
+      }
+      html, body {
+        top: 0px !important;
+        position: static !important;
+        margin-top: 0px !important;
+        padding-top: 0px !important;
+      }
+      body.goog-te-banner-frame {
+        top: 0px !important;
+      }
+      .goog-text-highlight { background: transparent !important; box-shadow: none !important; }
+      .goog-logo-link { display: none !important; }
+      .goog-te-gadget { color: transparent !important; font-size: 0px !important; }
+      .goog-te-gadget .goog-te-combo {
+        padding: 6px 10px !important;
+        border-radius: 8px !important;
+        border: 1px solid var(--theme-border, #213E61) !important;
+        background: var(--theme-surface, #0E1A29) !important;
+        color: var(--theme-text, #F8FAFC) !important;
+        font-size: 13px !important;
+      }
+    </style>
+    <script type="text/javascript">
+      // Active watchdog to prevent Google Translate from displacing body or covering header
+      (function keepHeaderVisible() {
+        function resetTranslateDisplacement() {
+          if (document.body) {
+            if (document.body.style.top && document.body.style.top !== '0px') {
+              document.body.style.setProperty('top', '0px', 'important');
+            }
+            if (document.body.style.position && document.body.style.position !== 'static') {
+              document.body.style.setProperty('position', 'static', 'important');
+            }
+          }
+          var banners = document.querySelectorAll('iframe.skiptranslate, .goog-te-banner-frame, .VIpgJd-ZVi9od-OR9Qgd-ibnC6b, #goog-gt-tt');
+          banners.forEach(function(el) {
+            el.style.setProperty('display', 'none', 'important');
+            el.style.setProperty('visibility', 'hidden', 'important');
+            el.style.setProperty('height', '0px', 'important');
+            el.style.setProperty('max-height', '0px', 'important');
+            el.style.setProperty('pointer-events', 'none', 'important');
+          });
+        }
+        setInterval(resetTranslateDisplacement, 250);
+        if (typeof MutationObserver !== 'undefined') {
+          var observer = new MutationObserver(resetTranslateDisplacement);
+          document.addEventListener('DOMContentLoaded', function() {
+            observer.observe(document.documentElement, { attributes: true, subtree: true, childList: true });
+          });
+        }
+      })();
+    </script>
   </head>
   <body class="bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] font-sans antialiased min-h-screen selection:bg-[var(--theme-primary,#38BDF8)] selection:text-[#040D17]">
+    <!-- Permanent anchor for Google Translate Engine -->
+    <div id="google_translate_element" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></div>
     <div id="app-preloader" style="position: fixed; inset: 0; background: #070E18; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; user-select: none; transition: opacity 0.4s ease-out; padding: 20px; box-sizing: border-box;">
       <div style="position: relative; margin-bottom: 16px;">
         <div style="width: 58px; height: 58px; border-radius: 14px; background: #0B1524; border: 1px solid rgba(245, 158, 11, 0.4); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 20px -5px rgba(245, 158, 11, 0.3); display: flex; align-items: center; justify-content: center; padding: 4px; box-sizing: border-box; overflow: hidden;">

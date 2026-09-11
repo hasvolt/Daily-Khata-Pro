@@ -41,7 +41,9 @@ import {
   User,
   Split,
   Sliders,
-  Landmark
+  Landmark,
+  Globe,
+  Palette
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -55,6 +57,7 @@ interface HeaderProps {
   currentTab?: NavTab;
   onSelectTab?: (tab: NavTab) => void;
   onOpenSettings: () => void;
+  onOpenGoogleTranslate?: () => void;
   onOpenManual?: () => void;
   onOpenSupport?: (tab?: 'help' | 'bug' | 'suggestion') => void;
   onOpenNotes?: () => void;
@@ -93,6 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
   currentTab = 'home',
   onSelectTab,
   onOpenSettings,
+  onOpenGoogleTranslate,
   onOpenMasterEdit,
   onOpenManual,
   onOpenSupport,
@@ -219,7 +223,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-md sticky top-0 z-30 shadow-md transition-colors duration-300">
+    <header className="border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-md sticky top-0 z-40 shadow-md transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-1.5 sm:gap-3">
         {/* Brand Icon & Name */}
         <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 shrink-0">
@@ -399,6 +403,7 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+
           {/* Quick Reminders Bell Button (Desktop/Tablet only to avoid mobile header overload) */}
           {onOpenReminders && (
             <button
@@ -488,25 +493,147 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Menu List Sections - System & Settings is placed at the very top as requested */}
+            {/* Menu List Sections - Reorganized as per request */}
             <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-5">
               
-              {/* Category 1: System & Settings (SABSE UPAR - AT THE VERY TOP) */}
+              {/* Category 1: Core Preferences & Guide (SABSE UPAR) */}
               <div className="rounded-2xl border border-[var(--theme-primary,#38BDF8)]/30 bg-[var(--theme-card,#132438)]/60 p-2.5 sm:p-3 shadow-xs space-y-2">
                 <div className="flex items-center justify-between gap-2 px-1">
                   <div className="flex items-center gap-1.5">
                     <Settings className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                     <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                      {isHindi ? 'सिस्टम व सेटिंग्स' : 'System & Settings'}
+                      {isHindi ? 'कोर सेटिंग्स व गाइड' : 'Core Preferences & Guide'}
                     </span>
                   </div>
                   <span className="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/25">
-                    CONFIG
+                    PRIMARY
                   </span>
                 </div>
-                <p className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] px-1 leading-tight">
-                  {isHindi ? 'कन्फ़िगरेशन, सुरक्षा लॉक, श्रेणियां व डेटा बैकअप' : 'Configuration, PIN security, categories & backup'}
-                </p>
+
+                <div className="space-y-1 pt-1">
+                  {/* 1. App Settings */}
+                  <button
+                    type="button"
+                    onClick={() => handleMenuAction(onOpenSettings)}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
+                    id="menu-settings-btn"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
+                        <Settings className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                          {tr.menu.appSettings || (isHindi ? 'ऐप सेटिंग्स' : 'App Settings')}
+                        </span>
+                        <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? '6-फंड अनुपात, मुद्रा, बैकअप व रीस्टोर' : '6-fund split %, currency, backup & storage'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
+                  </button>
+
+                  {/* 2. Language */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onOpenGoogleTranslate) {
+                        handleMenuAction(onOpenGoogleTranslate);
+                      } else {
+                        handleMenuAction(onOpenSettings);
+                      }
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-indigo-500/50 transition-all cursor-pointer text-left group"
+                    id="menu-language-btn"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <Globe className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'भाषा बदलें (Language)' : 'Change Language'}
+                          </span>
+                          <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            100+
+                          </span>
+                        </div>
+                        <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? 'Google Translate द्वारा हर भाषा में इस्तेमाल करें' : 'English, Hindi, Google Translate (All Languages)...'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-indigo-400 transition-colors" />
+                  </button>
+
+                  {/* 3. Colour Theme */}
+                  <button
+                    type="button"
+                    onClick={() => handleMenuAction(onOpenSettings)}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-rose-500/50 transition-all cursor-pointer text-left group"
+                    id="menu-colour-theme-btn"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <Palette className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                          {isHindi ? 'कलर थीम (Colour Theme)' : 'Colour Theme'}
+                        </span>
+                        <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? 'पसंदीदा रंग और डिज़ाइन चुनें' : 'Yellow, Blue, Pink, Black, Dark/Light modes'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-rose-400 transition-colors" />
+                  </button>
+
+                  {/* 4. User Manual & Guide */}
+                  {(onOpenManual || onSelectTab) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onOpenManual) {
+                          handleMenuAction(onOpenManual);
+                        } else if (onSelectTab) {
+                          handleMenuAction(() => onSelectTab('guide'));
+                        }
+                      }}
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/50 transition-all cursor-pointer text-left group"
+                      id="menu-guide-btn"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <FileText className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {tr.menu.userManualGuide || (isHindi ? 'यूजर मैनुअल व गाइड' : 'User Manual & Guide')}
+                          </span>
+                          <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                            {isHindi ? 'हर फीचर की सम्पूर्ण जानकारी' : 'Feature walkthrough & documentation'}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-emerald-400 transition-colors" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Category 2: Financial & Record Tools */}
+              <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/40 p-2.5 sm:p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2 px-1">
+                  <div className="flex items-center gap-1.5">
+                    <Sliders className="w-3.5 h-3.5 text-[var(--theme-text-muted,#8BA4D0)]" />
+                    <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-[var(--theme-text-muted,#8BA4D0)]">
+                      {isHindi ? 'वित्तीय व लेन-देन टूल्स' : 'Financial & Record Tools'}
+                    </span>
+                  </div>
+                </div>
 
                 <div className="space-y-1 pt-1">
                   {/* Category Budgets */}
@@ -588,29 +715,6 @@ export const Header: React.FC<HeaderProps> = ({
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-sky-400 transition-colors" />
-                  </button>
-
-                  {/* App Settings */}
-                  <button
-                    type="button"
-                    onClick={() => handleMenuAction(onOpenSettings)}
-                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                    id="menu-settings-btn"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Settings className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {tr.menu.appSettings || (isHindi ? 'ऐप सेटिंग्स' : 'App Settings')}
-                        </span>
-                        <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? '6-फंड अनुपात, मुद्रा, भाषा, बैकअप व रीस्टोर' : '6-fund split %, currency, backup & cloud-free storage'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
                   </button>
 
                   {/* Security PIN Lock */}
@@ -837,14 +941,14 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
 
-              {/* Category 2: Core Financial Ledger (मुख्य खाता व वित्तीय रिकॉर्ड्स) */}
+              {/* Category 2: Core Financial Records (मुख्य खाता व वित्तीय रिकॉर्ड्स) */}
               <div>
                 <div className="flex items-center justify-between gap-2 px-1 mb-1.5">
                   <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--theme-text-dim,#64748B)]">
                     {isHindi ? 'मुख्य खाता व वित्तीय रिकॉर्ड्स' : 'Core Financial Khata'}
                   </p>
                   <span className="text-[9px] font-mono font-semibold text-[var(--theme-text-dim,#64748B)]">
-                    LEDGER
+                    RECORDS
                   </span>
                 </div>
                 <div className="space-y-1">
@@ -854,7 +958,7 @@ export const Header: React.FC<HeaderProps> = ({
                     { id: 'add', label: isHindi ? 'नया लेन-देन जोड़ें' : 'Add New Transaction', desc: isHindi ? 'आय या खर्च की नई प्रविष्टि दर्ज करें' : 'Record new income or expense entry', icon: PlusCircle, color: 'text-emerald-400' },
                     { id: 'report', label: tr.menu.analytics || (isHindi ? 'मासिक वित्तीय रिपोर्ट' : 'Monthly Analytics'), desc: isHindi ? 'खर्च पाई-चार्ट, फंड रुझान व पीडीएफ रिपोर्ट' : 'Expense charts, fund analytics & PDF', icon: BarChart3, color: 'text-sky-400' },
                     { id: 'goals', label: tr.menu.goals || (isHindi ? 'बचत लक्ष्य व टारगेट्स' : 'Savings Goals'), desc: isHindi ? 'आपातकालीन फंड, जमा प्रगति व स्टेटस' : 'Savings targets, progress & deposits', icon: Target, color: 'text-emerald-400' },
-                    { id: 'loans', label: 'Loans, EMIs & Debt Ledger', desc: 'Money lent, personal borrowings & bank EMIs', icon: Landmark, color: 'text-amber-400' }
+                    { id: 'loans', label: isHindi ? 'ऋण, किश्त व उधार रिकॉर्ड्स' : 'Loans, EMIs & Debt Records', desc: isHindi ? 'उधार दिया, उधार लिया व मासिक ईएमआई' : 'Money lent, personal borrowings & bank EMIs', icon: Landmark, color: 'text-amber-400' }
                   ].map((item) => {
                     const isActive = currentTab === item.id;
                     const ItemIcon = item.icon;
@@ -1034,41 +1138,6 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                 </div>
                 <div className="space-y-1">
-                  {/* User Manual & Guide */}
-                  {(onOpenManual || onSelectTab) && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onOpenManual) {
-                          handleMenuAction(onOpenManual);
-                        } else if (onSelectTab) {
-                          handleMenuAction(() => onSelectTab('guide'));
-                        }
-                      }}
-                      className={`w-full flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer text-left group ${
-                        currentTab === 'guide'
-                          ? 'bg-[var(--theme-primary,#38BDF8)]/10 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                          : 'bg-[var(--theme-card,#132438)]/50 hover:bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)]/50 hover:border-[var(--theme-primary,#38BDF8)]/40'
-                      }`}
-                      id="menu-guide-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-center text-sky-400 shrink-0 group-hover:scale-105 transition-transform">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {tr.menu.userManualGuide || (isHindi ? 'यूजर मैनुअल व गाइड' : 'User Manual & Step-by-Step Guide')}
-                          </span>
-                          <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'हर फीचर व 6-फंड सिद्धांत की सम्पूर्ण जानकारी' : 'Feature walkthrough, shortcuts & documentation'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-sky-400 transition-colors" />
-                    </button>
-                  )}
-
                   {/* Help Center & Support */}
                   {(onOpenSupport || onSelectTab) && (
                     <button
@@ -1439,7 +1508,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>{isHindi ? '1-क्लिक में तुरंत वर्शन अपडेट करें' : 'One-Click Direct Update & Refresh'}</span>
               </button>
               <p className="text-center text-[10px] text-[var(--theme-text-dim,#94A3B8)] mt-1.5">
-                {isHindi ? 'यह आपके मौजूदा खातों, लेजर व सेटिंग्स को बिना छुए केवल कोड और कैश अपडेट करता है।' : 'Refreshes app assets & service worker. Your local ledger data is 100% preserved.'}
+                {isHindi ? 'यह आपके मौजूदा खातों, रिकॉर्ड्स व सेटिंग्स को सुरक्षित रखते हुए केवल कोड अपडेट करता है।' : 'Refreshes app assets & service worker. Your local records are 100% preserved.'}
               </p>
             </div>
           </div>

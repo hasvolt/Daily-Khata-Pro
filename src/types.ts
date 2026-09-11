@@ -1,10 +1,17 @@
 export type FundType = 'personal' | 'family' | 'business' | 'buffer' | 'emergency' | 'saving' | 'investment' | (string & {});
 
+declare global {
+  interface Window {
+    google: any;
+    googleTranslateElementInit: () => void;
+  }
+}
+
 export type TransactionType = 'income' | 'expense';
 
 export type PaymentMode = 'cash' | 'upi' | 'bank' | 'card' | 'cheque' | 'wallet' | 'other';
 
-export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cyan' | 'light' | 'white';
+export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cyan' | 'light' | 'white' | 'pink' | 'black';
 
 export type AppLanguage = 
   | 'en' // English (Global)

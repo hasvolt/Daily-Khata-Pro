@@ -318,15 +318,15 @@ const MANUAL_EN: UserManualTranslation = {
           desc: 'Divide by exact amounts, percentages, or equal shares among group members.'
         },
         {
-          title: 'Instant Add to Ledger',
-          desc: 'With one click, add your calculated share directly into your expense ledger under the appropriate fund.'
+          title: 'Instant Add to Records',
+          desc: 'With one click, add your calculated share directly into your expense records under the appropriate fund.'
         }
       ],
       proTip: 'Use this for monthly shared utility bills to avoid manual math and arguments.'
     },
     {
       id: 'loans',
-      title: '10. Loans, EMIs & Udhar Ledger',
+      title: '10. Loans, EMIs & Udhar Records',
       subtitle: 'Track money lent, borrowed, and bank EMIs',
       overviewHeading: 'Complete Debt & Receivable Tracking',
       overviewText: 'Manage your entire debt portfolio in one place. Keep records of money you have lent to friends (Udhar), personal loans you have taken, and upcoming bank EMIs.',

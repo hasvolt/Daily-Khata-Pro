@@ -142,6 +142,46 @@
     --theme-btn-text: #021117;
   }
 
+  [data-theme="pink"] {
+    --theme-primary: #F472B6;
+    --theme-primary-hover: #F9A8D4;
+    --theme-primary-dim: rgba(244, 114, 182, 0.16);
+    --theme-primary-border: rgba(244, 114, 182, 0.38);
+    --theme-glow: rgba(244, 114, 182, 0.25);
+    --theme-bg: #14050B;
+    --theme-surface: #200812;
+    --theme-card: #2D0B1A;
+    --theme-card-hover: #3E0F23;
+    --theme-border: #591632;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #9CA3AF;
+    --theme-badge-text: #F9A8D4;
+    --theme-btn-bg: #F472B6;
+    --theme-btn-hover: #F9A8D4;
+    --theme-btn-text: #17030A;
+  }
+
+  [data-theme="black"] {
+    --theme-primary: #E5E5E5;
+    --theme-primary-hover: #FFFFFF;
+    --theme-primary-dim: rgba(229, 229, 229, 0.16);
+    --theme-primary-border: rgba(229, 229, 229, 0.38);
+    --theme-glow: rgba(229, 229, 229, 0.15);
+    --theme-bg: #000000;
+    --theme-surface: #0A0A0A;
+    --theme-card: #121212;
+    --theme-card-hover: #1C1C1C;
+    --theme-border: #262626;
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #D1D5DB;
+    --theme-text-dim: #A3A3A3;
+    --theme-badge-text: #FFFFFF;
+    --theme-btn-bg: #D4D4D4;
+    --theme-btn-hover: #FFFFFF;
+    --theme-btn-text: #000000;
+  }
+
   [data-theme="light"] {
     --theme-primary: #0284C7;
     --theme-primary-hover: #0369A1;
@@ -536,6 +576,42 @@
   color: #22D3EE !important;
 }
 
+[data-theme="pink"] .banking-card-3d {
+  background: linear-gradient(135deg, #1C0510 0%, #450B27 55%, #15020B 100%) !important;
+  border-color: #721340 !important;
+  box-shadow: 0 20px 50px rgba(50, 4, 25, 0.5) !important;
+}
+[data-theme="pink"] .banking-card-3d .banking-card-icon-box,
+[data-theme="pink"] .banking-card-3d .banking-card-date-box {
+  background-color: #450B27 !important;
+  border-color: #721340 !important;
+  color: #F472B6 !important;
+}
+[data-theme="pink"] .banking-card-3d .banking-card-label {
+  color: #F9A8D4 !important;
+}
+[data-theme="pink"] .banking-card-3d .banking-card-subtitle {
+  color: #DB2777 !important;
+}
+
+[data-theme="black"] .banking-card-3d {
+  background: linear-gradient(135deg, #111111 0%, #262626 55%, #0A0A0A 100%) !important;
+  border-color: #404040 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+[data-theme="black"] .banking-card-3d .banking-card-icon-box,
+[data-theme="black"] .banking-card-3d .banking-card-date-box {
+  background-color: #262626 !important;
+  border-color: #404040 !important;
+  color: #FFFFFF !important;
+}
+[data-theme="black"] .banking-card-3d .banking-card-label {
+  color: #A3A3A3 !important;
+}
+[data-theme="black"] .banking-card-3d .banking-card-subtitle {
+  color: #737373 !important;
+}
+
 /* Banking Card 3D Light & White Mode Adaptation */
 [data-theme="light"] .banking-card-3d,
 [data-theme="white"] .banking-card-3d {
@@ -880,4 +956,37 @@ textarea,
   -ms-user-select: text !important;
   user-select: text !important;
   -webkit-touch-callout: default !important;
+}
+
+/* =========================================================================
+   GOOGLE TRANSLATE BANNER SUPPRESSION
+   Ensures the Google Translate top banner never covers the app header
+   ========================================================================= */
+.skiptranslate > iframe,
+iframe.skiptranslate,
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+.goog-te-banner,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.VIpgJd-ZVi9od-OR9Qgd,
+.VIpgJd-ZVi9od-OR9Qgd-ibnC6b,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-ZVi9od-vH1Gmf {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0px !important;
+  max-height: 0px !important;
+  width: 0px !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  z-index: -9999 !important;
+}
+
+html, body {
+  top: 0px !important;
+  position: static !important;
 }

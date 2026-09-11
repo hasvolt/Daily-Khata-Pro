@@ -105,7 +105,7 @@ export function SummaryCard3D({
             </div>
           </div>
 
-          <span className="text-[9.5px] sm:text-[11px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] shrink-0 shadow-xs">
+          <span className="text-[9.5px] sm:text-[11px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] shrink-0 shadow-xs notranslate" translate="no">
             {periodBadge}
           </span>
         </div>
@@ -129,7 +129,8 @@ export function SummaryCard3D({
               </span>
             </div>
             <div
-              className="font-mono font-extrabold text-[13.5px] sm:text-[17px] text-emerald-400 tracking-tight truncate w-full block sensitive-amount"
+              className="font-mono font-extrabold text-[13.5px] sm:text-[17px] text-emerald-400 tracking-tight truncate w-full block sensitive-amount notranslate"
+              translate="no"
               title={formatCurrency(incomeValue, privacyMask)}
             >
               +{formatCurrency(incomeValue, privacyMask)}
@@ -150,7 +151,8 @@ export function SummaryCard3D({
               </span>
             </div>
             <div
-              className="font-mono font-extrabold text-[13.5px] sm:text-[17px] text-rose-400 tracking-tight truncate w-full block sensitive-amount"
+              className="font-mono font-extrabold text-[13.5px] sm:text-[17px] text-rose-400 tracking-tight truncate w-full block sensitive-amount notranslate"
+              translate="no"
               title={formatCurrency(expenseValue, privacyMask)}
             >
               -{formatCurrency(expenseValue, privacyMask)}
@@ -176,9 +178,10 @@ export function SummaryCard3D({
           </div>
 
           <span
-            className={`font-mono font-extrabold text-[13px] sm:text-[15.5px] truncate max-w-[55%] text-right sensitive-amount ${
+            className={`font-mono font-extrabold text-[13px] sm:text-[15.5px] truncate max-w-[55%] text-right sensitive-amount notranslate ${
               isNetPositive ? 'text-emerald-400' : 'text-rose-400'
             }`}
+            translate="no"
             title={formatCurrency(netValue, privacyMask)}
           >
             {isNetPositive ? '+' : ''}

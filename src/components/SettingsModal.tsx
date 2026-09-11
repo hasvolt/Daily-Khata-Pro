@@ -72,6 +72,7 @@ import { AppLogo } from './AppLogo';
 import { TRANSLATIONS, isPureHindi, isHinglish, isHindiOrHinglish, pickTranslation } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
 import { APP_VERSION_FULL, APP_VERSION_FOOTER } from '../utils/version';
+import { applyGoogleTranslateLanguage, resetGoogleTranslate } from '../utils/googleTranslate';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -101,6 +102,7 @@ interface SettingsModalProps {
   onThemeChange?: (theme: AppTheme) => void;
   language?: AppLanguage;
   onLanguageChange?: (lang: AppLanguage) => void;
+  onOpenGoogleTranslate?: () => void;
   privacyMask?: boolean;
   onTogglePrivacyMask?: () => void;
   viewMode?: AppViewMode;
@@ -142,6 +144,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onThemeChange,
   language = 'en',
   onLanguageChange,
+  onOpenGoogleTranslate,
   privacyMask = false,
   onTogglePrivacyMask,
   viewMode = 'auto',
@@ -474,6 +477,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     { id: 'emerald', label: 'Emerald Green', dot: '#10B981' },
     { id: 'purple', label: 'Royal Violet', dot: '#A855F7' },
     { id: 'cyan', label: 'Ocean Teal', dot: '#06B6D4' },
+    { id: 'pink', label: 'Crimson Pink', dot: '#F472B6' },
+    { id: 'black', label: 'Obsidian Black', dot: '#171717' },
     { id: 'light', label: tStr('दिन / वाइट मोड (Daylight)', 'Day / White Mode (Daylight)', 'Daylight White'), dot: '#0284C7', isLight: true },
     { id: 'white', label: tStr('आउटडोर प्योर वाइट', 'Outdoor Pure White', 'Outdoor Pure White'), dot: '#2563EB', isLight: true }
   ];
@@ -599,6 +604,74 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="text-[10px] opacity-75 truncate">{l.sub}</div>
                     </button>
                   ))}
+                </div>
+                <div className="mt-4 pt-4 border-t border-[var(--theme-border,#213E61)] flex flex-col gap-3">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-indigo-400" />
+                      <label className="font-bold text-[13px] text-[var(--theme-text,#F8FAFC)]">
+                        {tStr('गूगल ट्रांसलेट (Google Translate - 100+ भाषाएं)', 'Google Translate (100+ Languages)', 'Google Translate (100+ Languages)')}
+                      </label>
+                    </div>
+                    {onOpenGoogleTranslate && (
+                      <button
+                        type="button"
+                        onClick={onOpenGoogleTranslate}
+                        className="px-3 py-1.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold transition-all cursor-pointer shadow-xs flex items-center gap-1.5"
+                        id="settings-open-translate-modal-btn"
+                      >
+                        <Languages className="w-3.5 h-3.5" />
+                        <span>{tStr('सभी भाषाएं ब्राउज़ करें', 'Browse All Languages', 'Browse All Languages')}</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <p className="text-[11.5px] text-[var(--theme-text-dim,#94A3B8)]">
+                    {tStr(
+                      'Google Translate द्वारा तुरंत पूरे ऐप को अपनी पसंदीदा भाषा में अनुवाद करें:',
+                      'Instantly translate the entire app into your preferred language with Google Translate:',
+                      'Instantly translate the entire app into your preferred language with Google Translate:'
+                    )}
+                  </p>
+
+                  {/* Quick popular Indian and Global language buttons */}
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1.5">
+                    {[
+                      { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
+                      { code: 'bn', label: 'বাংলা', flag: '🇮🇳' },
+                      { code: 'mr', label: 'मराठी', flag: '🇮🇳' },
+                      { code: 'te', label: 'తెలుగు', flag: '🇮🇳' },
+                      { code: 'ta', label: 'தமிழ்', flag: '🇮🇳' },
+                      { code: 'gu', label: 'ગુજરાતી', flag: '🇮🇳' },
+                      { code: 'ur', label: 'اردو', flag: '🇮🇳' },
+                      { code: 'kn', label: 'ಕನ್ನಡ', flag: '🇮🇳' },
+                      { code: 'ml', label: 'മലയാളം', flag: '🇮🇳' },
+                      { code: 'pa', label: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+                      { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+                      { code: 'es', label: 'Español', flag: '🇪🇸' }
+                    ].map((item) => (
+                      <button
+                        key={item.code}
+                        type="button"
+                        onClick={() => applyGoogleTranslateLanguage(item.code)}
+                        className="p-1.5 rounded-lg bg-[var(--theme-bg,#070E18)] hover:bg-indigo-500/20 border border-[var(--theme-border,#213E61)] hover:border-indigo-500/50 text-[var(--theme-text,#F8FAFC)] text-center text-xs font-semibold transition-all cursor-pointer truncate"
+                      >
+                        <span className="mr-1">{item.flag}</span>
+                        <span>{item.label}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 pt-1 text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                    <span>{tStr('गूगल रीयल-टाइम अनुवाद इंजन', 'Google Real-time Translation Engine', 'Google Real-time Translation Engine')}</span>
+                    <button
+                      type="button"
+                      onClick={() => resetGoogleTranslate()}
+                      className="text-amber-400 hover:text-amber-300 underline font-semibold cursor-pointer"
+                    >
+                      {tStr('मूल भाषा (Reset)', 'Reset Language', 'Reset Language')}
+                    </button>
+                  </div>
                 </div>
               </div>
 

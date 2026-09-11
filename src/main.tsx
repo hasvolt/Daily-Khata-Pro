@@ -33,7 +33,7 @@ if (rootElement) {
     <StrictMode>
       <ErrorBoundary 
         fallbackTitle="Application Boot Issue" 
-        fallbackMessage="A display error occurred during app startup. Your ledger records in device storage are 100% safe."
+        fallbackMessage="A display error occurred during app startup. Your saved records in device storage are 100% safe."
       >
         <BrowserRouter>
           <App />

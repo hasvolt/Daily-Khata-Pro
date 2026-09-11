@@ -183,14 +183,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
         {/* Today 3D Summary Card */}
         <SummaryCard3D
           type="daily"
-          title={isHindi ? 'आज का सारांश' : 'Today Summary'}
-          subtitle={isHindi ? 'आज की आय, खर्च व नेट कैशफ्लो का विवरण' : 'Income, expense & net cashflow for today'}
+          title={isHindi ? 'आज का हिसाब' : "Today's Summary"}
+          subtitle={isHindi ? 'आज की कमाई, खर्च व बचत' : 'Income, expense & savings for today'}
           periodBadge={pageT.common.today}
           incomeLabel={t.home.todayIncome}
           incomeValue={todayStats.income}
           expenseLabel={t.home.todayExpense}
           expenseValue={todayStats.expense}
-          netLabel={isHindi ? 'आज का नेट बैलेंस:' : 'Today Net Balance:'}
+          netLabel={isHindi ? 'आज की बचत:' : "Today's Savings:"}
           netValue={todayStats.net}
           formatCurrency={formatCurrency}
           privacyMask={privacyMask}
@@ -200,14 +200,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
         {/* Monthly 3D Summary Card */}
         <SummaryCard3D
           type="monthly"
-          title={isHindi ? 'महीने का सारांश' : 'Monthly Summary'}
-          subtitle={isHindi ? 'मासिक वित्तीय प्रदर्शन व संचयी बैलेंस' : 'Monthly performance & cumulative balance'}
+          title={isHindi ? 'इस महीने का हिसाब' : "Monthly Summary"}
+          subtitle={isHindi ? 'महीने की कुल कमाई, खर्च व बचत' : 'Monthly income, expense & savings'}
           periodBadge={monthFormatted}
           incomeLabel={t.home.thisMonthIncome}
           incomeValue={monthStats.income}
           expenseLabel={t.home.thisMonthExpense}
           expenseValue={monthStats.expense}
-          netLabel={t.home.thisMonthNet}
+          netLabel={isHindi ? 'महीने की बचत:' : 'Monthly Savings:'}
           netValue={monthStats.net}
           formatCurrency={formatCurrency}
           privacyMask={privacyMask}

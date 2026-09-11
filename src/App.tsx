@@ -46,6 +46,7 @@ import { InstallPWA } from './components/InstallPWA';
 import { InstallModal } from './components/InstallModal';
 import { ShareModal } from './components/ShareModal';
 import { SupportFeedbackModal, SupportTab } from './components/SupportFeedbackModal';
+import { GoogleTranslateModal } from './components/GoogleTranslateModal';
 import { AboutPage } from './components/AboutPage';
 import { DeveloperProfilePage } from './components/DeveloperProfilePage';
 import { PrivacyPage } from './components/PrivacyPage';
@@ -156,6 +157,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isPageSearchOpen, setIsPageSearchOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isTranslateModalOpen, setIsTranslateModalOpen] = useState<boolean>(false);
   const [isSecurityModalOpen, setIsSecurityModalOpen] = useState<boolean>(false);
   const [isManualOpen, setIsManualOpen] = useState<boolean>(false);
   const [isSourceCodeOpen, setIsSourceCodeOpen] = useState<boolean>(false);
@@ -2126,6 +2128,7 @@ export default function App() {
           currentTab={currentTab}
           onSelectTab={setCurrentTab}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          onOpenGoogleTranslate={() => setIsTranslateModalOpen(true)}
           onOpenManual={() => setCurrentTab('guide')}
           onOpenSupport={(tab) => {
             setCurrentTab('support');
@@ -2754,6 +2757,10 @@ export default function App() {
         onThemeChange={handleThemeChange}
         language={language}
         onLanguageChange={handleLanguageChange}
+        onOpenGoogleTranslate={() => {
+          setIsSettingsOpen(false);
+          setIsTranslateModalOpen(true);
+        }}
         privacyMask={privacyMask}
         onTogglePrivacyMask={handleTogglePrivacyMask}
         viewMode={viewMode}
@@ -2972,6 +2979,13 @@ export default function App() {
             installPrompt.prompt();
           }
         }}
+      />
+
+      {/* Google Translate Modal (100+ Languages) */}
+      <GoogleTranslateModal
+        isOpen={isTranslateModalOpen}
+        onClose={() => setIsTranslateModalOpen(false)}
+        isHindi={language === 'hi' || language === 'hinglish'}
       />
 
       {/* Share Page & Deep Link Modal */}

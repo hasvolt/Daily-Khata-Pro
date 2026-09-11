@@ -195,7 +195,7 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
               className="w-full sm:flex-1 py-2.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-40"
             >
               {addedToLedger ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-              <span>{addedToLedger ? 'Added to Ledger!' : 'Add My Share (₹' + perPersonShare + ')'}</span>
+              <span>{addedToLedger ? 'Added to Records!' : 'Add My Share (₹' + perPersonShare + ')'}</span>
             </button>
           )}
         </div>

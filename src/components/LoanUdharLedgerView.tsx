@@ -198,7 +198,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
     const amtStr = formatCurrency(item.remainingAmount, false);
     const dateStr = item.dueDate ? new Date(item.dueDate).toLocaleDateString() : '';
 
-    return `Hello ${name},\nThis is a polite reminder regarding the outstanding balance of ${amtStr} recorded in our ledger.${item.note ? `\nReference: ${item.note}` : ''}${dateStr ? `\nTarget Due Date: ${dateStr}` : ''}\n\nKindly arrange for the settlement at your earliest convenience. Thank you!`;
+    return `Hello ${name},\nThis is a polite reminder regarding the outstanding balance of ${amtStr} recorded in our records.${item.note ? `\nReference: ${item.note}` : ''}${dateStr ? `\nTarget Due Date: ${dateStr}` : ''}\n\nKindly arrange for the settlement at your earliest convenience. Thank you!`;
   };
 
   const handleOpenWhatsApp = (item: DebtItem) => {
@@ -245,7 +245,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             </div>
             <div>
               <h1 className="text-lg sm:text-xl font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
-                <span>Loans & Debt Ledger</span>
+                <span>Loans & Debt Records</span>
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-400 border border-sky-500/30">
                   ADVANCED
                 </span>
@@ -538,7 +538,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
               No Loans or Debt Records Yet
             </h3>
             <p className="text-xs sm:text-sm text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
-              Your debt ledger is clean and ready. Add money lent to others, personal debts you owe, or active bank loans and EMIs to track repayments and schedules.
+              Your debt records are clean and ready. Add money lent to others, personal debts you owe, or active bank loans and EMIs to track repayments and schedules.
             </p>
           </div>
 
