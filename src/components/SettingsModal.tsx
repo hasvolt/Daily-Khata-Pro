@@ -65,8 +65,18 @@ import {
   Shield,
   Volume2,
   VolumeX,
-  Volume1
+  Volume1,
+  Cloud,
+  CloudUpload,
+  CloudCheck
 } from 'lucide-react';
+import {
+  auth,
+  googleSignIn,
+  uploadBackupToDrive,
+  getAccessToken,
+  BACKUP_FILE_NAME
+} from '../services/googleDriveService';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import {
   isAudioEnabled,
@@ -128,6 +138,11 @@ interface SettingsModalProps {
   onOpenCookiesPolicy?: () => void;
   onOpenCookieSettings?: () => void;
   onNavigate?: (tab: string) => void;
+  onOpenGoogleDrive?: () => void;
+  autoSyncEnabled?: boolean;
+  onToggleAutoSync?: (enabled: boolean) => void;
+  lastSyncTime?: string | null;
+  isAutoSyncing?: boolean;
 }
 
 type TabType = 'preferences' | 'custom' | 'rules' | 'backup' | 'privacy' | 'legal';
@@ -169,7 +184,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onViewModeChange,
   onOpenCookiesPolicy,
   onOpenCookieSettings,
-  onNavigate
+  onNavigate,
+  onOpenGoogleDrive,
+  autoSyncEnabled = false,
+  onToggleAutoSync,
+  lastSyncTime = null,
+  isAutoSyncing = false
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('preferences');
@@ -210,6 +230,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [customWorkCategoryInput, setCustomWorkCategoryInput] = useState('');
   const [customLifeTagInput, setCustomLifeTagInput] = useState('');
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
+  const [isQuickBackingUp, setIsQuickBackingUp] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => isAudioEnabled());
   const [soundVol, setSoundVol] = useState<number>(() => getAudioVolume());
 
@@ -260,6 +281,38 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   if (!isOpen) return null;
+
+  const handleQuickDriveBackup = async () => {
+    triggerHapticSound('save');
+    setIsQuickBackingUp(true);
+    try {
+      if (!getAccessToken()) {
+        await googleSignIn();
+      }
+      await uploadBackupToDrive(data, BACKUP_FILE_NAME, false);
+      showFeedback(
+        'success',
+        tStr(
+          '1-क्लिक बैकअप गूगल ड्राइव पर सफलतापूर्वक सहेज लिया गया!',
+          '1-Click backup Google Drive par safalta se save ho gaya!',
+          '1-Click backup successfully saved to Google Drive!'
+        )
+      );
+    } catch (err: any) {
+      console.error('Drive backup failed:', err);
+      showFeedback(
+        'error',
+        err?.message ||
+          tStr(
+            'गूगल ड्राइव बैकअप में समस्या आई। कृपया पुनः प्रयास करें।',
+            'Google Drive backup mein dikkat aayi. Kripya dobara try karein.',
+            'Failed to backup to Google Drive. Please try again.'
+          )
+      );
+    } finally {
+      setIsQuickBackingUp(false);
+    }
+  };
 
   const handleExportJSON = () => {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2));
@@ -1350,6 +1403,146 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* TAB 4: BACKUP & LOCAL DATA */}
           {activeTab === 'backup' && (
             <div className="space-y-4">
+              {/* GOOGLE DRIVE 1-CLICK BACKUP & AUTO-SYNC CARD */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-blue-950/40 via-[var(--theme-surface,#0E1A29)] to-sky-950/30 border border-blue-500/35 space-y-3.5 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-500/35 flex items-center justify-center text-blue-400 shrink-0">
+                      <Cloud className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-bold text-[14px] text-[var(--theme-text,#F8FAFC)]">
+                          {tStr('गूगल ड्राइव 1-क्लिक बैकअप व ऑटो सिंक', 'Google Drive 1-Click Backup Aur Auto Sync', 'Google Drive 1-Click Backup & Auto-Sync')}
+                        </h4>
+                        <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                          CLOUD SAFE
+                        </span>
+                      </div>
+                      <p className="text-[11.5px] text-[var(--theme-text-dim,#94A3B8)]">
+                        {tStr(
+                          'डेटा सुरक्षित रखने के लिए अपने गूगल ड्राइव में सहेजें। वन-क्लिक बैकअप व ऑटोमैटिक अपडेट उपलब्ध है।',
+                          'Data safe rakhne ke liye Google Drive mein backup lein. 1-click aur auto-sync available hai.',
+                          'Safeguard your accounts by saving to your Google Drive with 1-click and automatic sync.'
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Account Status Badge */}
+                  {auth.currentUser ? (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold shrink-0 self-start sm:self-auto">
+                      <CloudCheck className="w-3.5 h-3.5" />
+                      <span className="truncate max-w-[140px]">{auth.currentUser.displayName || auth.currentUser.email || 'Connected'}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-500/15 border border-slate-500/30 text-slate-400 text-[11px] font-medium shrink-0 self-start sm:self-auto">
+                      <span>{tStr('अनकनेक्टेड', 'Not Linked', 'Not Connected')}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Primary Action Buttons */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                  {/* 1-Click Backup Now */}
+                  <button
+                    type="button"
+                    onClick={handleQuickDriveBackup}
+                    disabled={isQuickBackingUp}
+                    className="p-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold flex items-center justify-between gap-3 shadow-md shadow-blue-950/50 transition-all cursor-pointer disabled:opacity-70 active:scale-[0.98]"
+                    id="settings-gdrive-1click-btn"
+                  >
+                    <div className="flex items-center gap-2.5 text-left min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                        {isQuickBackingUp ? (
+                          <RefreshCw className="w-4 h-4 text-white animate-spin" />
+                        ) : (
+                          <CloudUpload className="w-4 h-4 text-white" />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-[13px] font-bold truncate">
+                          {isQuickBackingUp
+                            ? tStr('अपलोड हो रहा है...', 'Uploading to Drive...', 'Uploading to Drive...')
+                            : tStr('1-क्लिक बैकअप लें', '1-Click Backup Lein', '1-Click Backup Now')}
+                        </div>
+                        <div className="text-[10.5px] text-blue-100/80 font-normal truncate">
+                          {tStr('गूगल ड्राइव में तुरंत सहेजें', 'Google Drive par turant save karein', 'Instant upload to Google Drive')}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Manage Drive Backups & Restore Modal Button */}
+                  {onOpenGoogleDrive && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        triggerHapticSound('click');
+                        onOpenGoogleDrive();
+                      }}
+                      className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-blue-500/30 hover:border-blue-400/70 text-left flex items-center justify-between gap-3 transition-colors cursor-pointer group"
+                      id="settings-gdrive-manage-btn"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <RotateCcw className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
+                            {tStr('बैकअप लिस्ट व रिस्टोर हब', 'Backup List Aur Restore Hub', 'View Backups & Restore')}
+                          </div>
+                          <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                            {tStr('फ़ाइलें देखें, रिस्टोर व प्रबंधित करें', 'Files dekhein, restore aur manage karein', 'List drive files & 1-click restore')}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  )}
+                </div>
+
+                {/* Auto Sync Toggle Strip */}
+                {onToggleAutoSync && (
+                  <div className="p-2.5 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className={`w-2 h-2 rounded-full shrink-0 ${autoSyncEnabled ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
+                      <div className="min-w-0">
+                        <span className="text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                          {tStr('ऑटोमैटिक अपडेट (Auto-Sync)', 'Automatic Update (Auto-Sync)', 'Automatic Update (Auto-Sync)')}
+                        </span>
+                        <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] block truncate">
+                          {autoSyncEnabled
+                            ? lastSyncTime
+                              ? tStr(`सक्रिय: अंतिम अपडेट ${lastSyncTime} पर`, `Active: Last synced at ${lastSyncTime}`, `Active: Last synced at ${lastSyncTime}`)
+                              : tStr('सक्रिय: बदलाव होने पर स्वचालित अपडेट होगा', 'Active: Automatically updates on changes', 'Active: Automatically syncs when data changes')
+                            : tStr('बंद: केवल 1-क्लिक करने पर ही बैकअप होगा', 'Off: Only saves when you click backup', 'Off: Only saves on manual click')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        triggerHapticSound('click');
+                        onToggleAutoSync(!autoSyncEnabled);
+                      }}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        autoSyncEnabled ? 'bg-emerald-500' : 'bg-slate-700'
+                      }`}
+                      id="settings-auto-sync-toggle"
+                      role="switch"
+                      aria-checked={autoSyncEnabled}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                          autoSyncEnabled ? 'translate-x-5' : 'translate-x-0'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <div>
                   <h4 className="font-bold text-[14px] text-[var(--theme-text,#F8FAFC)]">

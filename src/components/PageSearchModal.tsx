@@ -38,6 +38,7 @@ import {
   DollarSign,
   Heart,
   User,
+  Cloud,
   Landmark
 } from 'lucide-react';
 import { AppLanguage } from '../types';
@@ -318,6 +319,17 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
       icon: Settings,
       targetTab: 'settings',
       keywords: ['settings', 'preferences', 'percentages', 'theme', 'currency', 'language', 'backup', 'restore', 'export', 'json', 'सेटिंग्स', 'थीम', 'भाषा', 'बैकअप']
+    },
+    {
+      id: 'google-drive',
+      title: isHindi ? 'गूगल ड्राइव 1-क्लिक बैकअप व ऑटो अपडेट' : 'Google Drive 1-Click Backup & Auto-Sync',
+      subtitle: isHindi ? 'गूगल ड्राइव पर 1-क्लिक सुरक्षित क्लाउड बैकअप व ऑटोमैटिक अपडेट' : '1-Click secure cloud backup & real-time auto-sync to Google Drive',
+      category: 'settings',
+      categoryLabel: isHindi ? 'सेटिंग्स एवं सुरक्षा' : 'Settings & Security',
+      icon: Cloud,
+      targetTab: 'drive',
+      badge: 'CLOUD',
+      keywords: ['google drive', 'drive', 'cloud', 'backup', 'sync', 'auto-sync', 'restore', 'गूगल ड्राइव', 'ड्राइव', 'बैकअप', 'क्लाउड', 'सिंक']
     },
     {
       id: 'security-pin',

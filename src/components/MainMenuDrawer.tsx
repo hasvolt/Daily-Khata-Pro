@@ -39,7 +39,8 @@ import {
   Landmark,
   Wrench,
   Sparkles,
-  Heart
+  Heart,
+  Cloud
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -80,6 +81,9 @@ export interface MainMenuDrawerProps {
   onOpenLoans?: () => void;
   handleDirectUpdateApp: (e?: React.MouseEvent) => void;
   isUpdatingApp: boolean;
+  onOpenGoogleDrive?: () => void;
+  isDriveConnected?: boolean;
+  autoSyncEnabled?: boolean;
 }
 
 export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
@@ -112,9 +116,12 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   onOpenBudgetManager,
   onOpenLoans,
   handleDirectUpdateApp,
-  isUpdatingApp
+  isUpdatingApp,
+  onOpenGoogleDrive,
+  isDriveConnected = false,
+  autoSyncEnabled = false
 }) => {
-  const [menuFilter, setMenuFilter] = useState<'all' | 'nav' | 'tools' | 'settings' | 'info'>('all');
+  const [menuFilter, setMenuFilter] = useState<'all' | 'ledger' | 'finance' | 'work' | 'tools' | 'settings' | 'info'>('all');
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
   const tr = getAppTranslation((language as AppLanguage) || 'en');
@@ -282,10 +289,12 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
               {[
                 { id: 'all', label: isHindi ? 'सभी' : 'All', count: null },
-                { id: 'nav', label: isHindi ? 'नेविगेशन' : 'Navigation', count: 6 },
-                { id: 'tools', label: isHindi ? 'टूल्स' : 'Tools', count: 7 },
-                { id: 'settings', label: isHindi ? 'सेटिंग्स' : 'Settings', count: 4 },
-                { id: 'info', label: isHindi ? 'गाइड व मदद' : 'Guide & Info', count: 4 }
+                { id: 'ledger', label: isHindi ? 'लेजर' : 'Ledger', count: 4 },
+                { id: 'finance', label: isHindi ? 'ऋण व लक्ष्य' : 'Debts & Goals', count: 3 },
+                { id: 'work', label: isHindi ? 'कार्य व रूटीन' : 'Work & Habits', count: 4 },
+                { id: 'tools', label: isHindi ? 'कैलकुलेटर' : 'Calculators', count: 2 },
+                { id: 'settings', label: isHindi ? 'सेटिंग्स' : 'Settings', count: 5 },
+                { id: 'info', label: isHindi ? 'गाइड' : 'Guides', count: 3 }
               ].map((cat) => {
                 const isSelected = menuFilter === cat.id;
                 return (
@@ -316,38 +325,36 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             </div>
           </div>
 
-          {/* 1. Category 1: मुख्य नेविगेशन (Core Navigation - 6 items) */}
-          {(menuFilter === 'all' || menuFilter === 'nav') && (
+          {/* 1. Category 1: मुख्य लेजर व खाते (Core Ledger & Passbook - 4 items) */}
+          {(menuFilter === 'all' || menuFilter === 'ledger') && (
             <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/40 p-2.5 sm:p-3 space-y-2">
               <div
-                onClick={() => menuFilter === 'all' && toggleSection('nav')}
+                onClick={() => menuFilter === 'all' && toggleSection('ledger')}
                 className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
               >
                 <div className="flex items-center gap-1.5">
                   <Home className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                    {isHindi ? '1. मुख्य नेविगेशन' : '1. Core Navigation'}
+                    {isHindi ? '1. मुख्य लेजर व खाते' : '1. Core Ledger & Passbook'}
                   </span>
                   <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/25">
-                    6 PAGES
+                    4 ITEMS
                   </span>
                 </div>
                 {menuFilter === 'all' && (
                   <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-white">
-                    {collapsedSections['nav'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    {collapsedSections['ledger'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </button>
                 )}
               </div>
 
-              {!collapsedSections['nav'] && (
+              {!collapsedSections['ledger'] && (
                 <div className="space-y-1 pt-0.5">
                   {[
                     { id: 'home', label: tr.menu.khata || (isHindi ? 'दैनिक खाता (Dashboard)' : 'Daily Khata Dashboard'), desc: isHindi ? 'डैशबोर्ड, 6-फंड सारांश व बैलेंस' : 'Dashboard & 6-Fund Rule Split', icon: Home, color: 'text-[var(--theme-primary,#38BDF8)]' },
                     { id: 'history', label: tr.menu.record || (isHindi ? 'लेन-देन पासबुक' : 'Passbook & Records'), desc: isHindi ? 'सभी प्रविष्टियां, फ़िल्टर व खोज' : 'All transaction records, search & print', icon: History, color: 'text-indigo-400' },
                     { id: 'add', label: isHindi ? 'नया लेन-देन जोड़ें' : 'Add New Transaction', desc: isHindi ? 'आय या खर्च की नई प्रविष्टि दर्ज करें' : 'Record new income or expense entry', icon: PlusCircle, color: 'text-emerald-400' },
-                    { id: 'report', label: tr.menu.analytics || (isHindi ? 'मासिक रिपोर्ट व विश्लेषण' : 'Monthly Analytics'), desc: isHindi ? 'खर्च पाई-चार्ट, रुझान व पीडीएफ रिपोर्ट' : 'Expense charts, fund analytics & PDF', icon: BarChart3, color: 'text-sky-400' },
-                    { id: 'goals', label: tr.menu.goals || (isHindi ? 'बचत लक्ष्य व टारगेट्स' : 'Savings Goals'), desc: isHindi ? 'आपातकालीन फंड व जमा प्रगति' : 'Savings targets, progress & deposits', icon: Target, color: 'text-emerald-400' },
-                    { id: 'loans', label: isHindi ? 'ऋण, किश्त व उधार खाता' : 'Loans, EMIs & Udhar', desc: isHindi ? 'उधार लेना/देना व बैंक किश्त' : 'Track money lent, borrowed & monthly EMIs', icon: Landmark, color: 'text-amber-400' }
+                    { id: 'report', label: tr.menu.analytics || (isHindi ? 'मासिक रिपोर्ट व विश्लेषण' : 'Monthly Analytics'), desc: isHindi ? 'खर्च पाई-चार्ट, रुझान व पीडीएफ रिपोर्ट' : 'Expense charts, fund analytics & PDF', icon: BarChart3, color: 'text-sky-400' }
                   ].map((item) => {
                     const isActive = currentTab === item.id;
                     const ItemIcon = item.icon;
@@ -356,9 +363,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                         key={item.id}
                         type="button"
                         onClick={() => {
-                          if (item.id === 'loans' && onOpenLoans) {
-                            handleMenuAction(onOpenLoans);
-                          } else if (onSelectTab) {
+                          if (onSelectTab) {
                             handleMenuAction(() => onSelectTab(item.id as NavTab));
                           }
                         }}
@@ -388,87 +393,95 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             </div>
           )}
 
-          {/* 2. Category 2: वित्तीय व उत्पादकता टूल्स (Productivity & Tools - 7 items) */}
-          {(menuFilter === 'all' || menuFilter === 'tools') && (
+          {/* 2. Category 2: ऋण, लक्ष्य व बजट (Loans, Goals & Budgets - 3 items) */}
+          {(menuFilter === 'all' || menuFilter === 'finance') && (
             <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/40 p-2.5 sm:p-3 space-y-2">
               <div
-                onClick={() => menuFilter === 'all' && toggleSection('tools')}
+                onClick={() => menuFilter === 'all' && toggleSection('finance')}
                 className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
               >
                 <div className="flex items-center gap-1.5">
-                  <Wrench className="w-3.5 h-3.5 text-amber-400" />
+                  <Landmark className="w-3.5 h-3.5 text-amber-400" />
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400">
-                    {isHindi ? '2. वित्तीय व उत्पादकता टूल्स' : '2. Smart & Financial Tools'}
+                    {isHindi ? '2. ऋण, लक्ष्य व बजट' : '2. Loans, Goals & Budgets'}
                   </span>
                   <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-400 border border-amber-500/25">
-                    7 TOOLS
+                    3 ITEMS
                   </span>
                 </div>
                 {menuFilter === 'all' && (
                   <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-white">
-                    {collapsedSections['tools'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    {collapsedSections['finance'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </button>
                 )}
               </div>
 
-              {!collapsedSections['tools'] && (
+              {!collapsedSections['finance'] && (
                 <div className="space-y-1 pt-0.5">
-                  {/* Financial Calculators */}
+                  {/* Loans, EMIs & Udhar */}
                   <button
                     type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('calculator'))}
+                    onClick={() => {
+                      if (onOpenLoans) {
+                        handleMenuAction(onOpenLoans);
+                      } else if (onSelectTab) {
+                        handleMenuAction(() => onSelectTab('loans'));
+                      }
+                    }}
                     className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'calculator'
+                      currentTab === 'loans'
                         ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
                         : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-amber-500/40'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
-                        <Calculator className="w-3.5 h-3.5" />
+                        <Landmark className="w-3.5 h-3.5" />
                       </div>
                       <div className="min-w-0">
                         <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {tr.menu.calculator || (isHindi ? 'वित्तीय कैलकुलेटर सूट' : 'Financial Calculators')}
+                          {isHindi ? 'ऋण, किश्त व उधार खाता' : 'Loans, EMIs & Udhar'}
                         </span>
                         <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'SIP, EMI, GST, FD, RD व मुद्रास्फीति' : 'SIP, EMI, GST, FD, RD & inflation tools'}
+                          {isHindi ? 'उधार लेना/देना व बैंक किश्त' : 'Track money lent, borrowed & monthly EMIs'}
                         </span>
                       </div>
                     </div>
                     <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-amber-400 transition-colors" />
                   </button>
 
-                  {/* Split Bill */}
-                  {onOpenSplitBill && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(onOpenSplitBill)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-purple-500/40 transition-all cursor-pointer text-left group"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-105 transition-transform">
-                          <Split className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'बिल विभाजन / स्प्लिट' : 'Split Bill & Group Share'}
-                          </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'दोस्तों व परिवार के साथ बराबर खर्च बांटें' : 'Divide dinners, room & trip expenses'}
-                          </span>
-                        </div>
+                  {/* Savings Goals */}
+                  <button
+                    type="button"
+                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('goals'))}
+                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
+                      currentTab === 'goals'
+                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
+                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/40'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <Target className="w-3.5 h-3.5" />
                       </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-purple-400 transition-colors" />
-                    </button>
-                  )}
+                      <div className="min-w-0">
+                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                          {tr.menu.goals || (isHindi ? 'बचत लक्ष्य व टारगेट्स' : 'Savings Goals')}
+                        </span>
+                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? 'आपातकालीन फंड व जमा प्रगति' : 'Savings targets, progress & deposits'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-emerald-400 transition-colors" />
+                  </button>
 
-                  {/* Category Budgets */}
+                  {/* Category Budgets & Limits */}
                   {onOpenBudgetManager && (
                     <button
                       type="button"
                       onClick={() => handleMenuAction(onOpenBudgetManager)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/40 transition-all cursor-pointer text-left group"
+                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-sky-500/40 transition-all cursor-pointer text-left group"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-7 h-7 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0 group-hover:scale-105 transition-transform">
@@ -476,17 +489,46 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                         </div>
                         <div className="min-w-0">
                           <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'मासिक बजट व अलर्ट' : 'Category Budgets & Limits'}
+                            {isHindi ? 'मासिक बजट व खर्च सीमा' : 'Category Budgets & Limits'}
                           </span>
                           <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'खर्च सीमा तय करें और ओवर-स्पेंडिंग रोकें' : 'Set limits & prevent over-spending'}
+                            {isHindi ? 'खर्च सीमा तय करें और ओवर-स्पेंडिंग रोकें' : 'Set category limits & prevent over-spending'}
                           </span>
                         </div>
                       </div>
                       <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-sky-400 transition-colors" />
                     </button>
                   )}
+                </div>
+              )}
+            </div>
+          )}
 
+          {/* 3. Category 3: कार्य व दैनिक आदतें (Productivity & Work - 4 items) */}
+          {(menuFilter === 'all' || menuFilter === 'work') && (
+            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/40 p-2.5 sm:p-3 space-y-2">
+              <div
+                onClick={() => menuFilter === 'all' && toggleSection('work')}
+                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <CalendarCheck className="w-3.5 h-3.5 text-teal-400" />
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-teal-400">
+                    {isHindi ? '3. कार्य व दैनिक आदतें' : '3. Work & Daily Habits'}
+                  </span>
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-teal-500/15 text-teal-400 border border-teal-500/25">
+                    4 ITEMS
+                  </span>
+                </div>
+                {menuFilter === 'all' && (
+                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-white">
+                    {collapsedSections['work'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </button>
+                )}
+              </div>
+
+              {!collapsedSections['work'] && (
+                <div className="space-y-1 pt-0.5">
                   {/* Attendance Register */}
                   <button
                     type="button"
@@ -600,7 +642,86 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             </div>
           )}
 
-          {/* 3. Category 3: सेटिंग्स व डेटा नियंत्रण (Settings & Security - 4 items) */}
+          {/* 4. Category 4: वित्तीय कैलकुलेटर सूट (Financial Calculators - 2 items) */}
+          {(menuFilter === 'all' || menuFilter === 'tools') && (
+            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/40 p-2.5 sm:p-3 space-y-2">
+              <div
+                onClick={() => menuFilter === 'all' && toggleSection('tools')}
+                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Calculator className="w-3.5 h-3.5 text-purple-400" />
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-purple-400">
+                    {isHindi ? '4. वित्तीय कैलकुलेटर' : '4. Financial Calculators'}
+                  </span>
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-500/15 text-purple-400 border border-purple-500/25">
+                    2 TOOLS
+                  </span>
+                </div>
+                {menuFilter === 'all' && (
+                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-white">
+                    {collapsedSections['tools'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </button>
+                )}
+              </div>
+
+              {!collapsedSections['tools'] && (
+                <div className="space-y-1 pt-0.5">
+                  {/* Financial Calculators */}
+                  <button
+                    type="button"
+                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('calculator'))}
+                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
+                      currentTab === 'calculator'
+                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
+                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-purple-500/40'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <Calculator className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                          {tr.menu.calculator || (isHindi ? 'वित्तीय कैलकुलेटर सूट' : 'Financial Calculators Suite')}
+                        </span>
+                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? 'SIP, EMI, GST, FD, RD व मुद्रास्फीति' : 'SIP, EMI, GST, FD, RD & inflation calculators'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-purple-400 transition-colors" />
+                  </button>
+
+                  {/* Split Bill */}
+                  {onOpenSplitBill && (
+                    <button
+                      type="button"
+                      onClick={() => handleMenuAction(onOpenSplitBill)}
+                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-purple-500/40 transition-all cursor-pointer text-left group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <Split className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'बिल विभाजन / स्प्लिट' : 'Split Bill & Group Share'}
+                          </span>
+                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                            {isHindi ? 'दोस्तों व परिवार के साथ बराबर खर्च बांटें' : 'Divide dinners, room & trip expenses'}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-purple-400 transition-colors" />
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* 5. Category 5: सेटिंग्स व क्लाउड बैकअप (Settings & Cloud - 5 items) */}
           {(menuFilter === 'all' || menuFilter === 'settings') && (
             <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/40 p-2.5 sm:p-3 space-y-2">
               <div
@@ -610,10 +731,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 <div className="flex items-center gap-1.5">
                   <Settings className="w-3.5 h-3.5 text-emerald-400" />
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400">
-                    {isHindi ? '3. सेटिंग्स व डेटा नियंत्रण' : '3. Settings & Security'}
+                    {isHindi ? '5. सेटिंग्स व क्लाउड बैकअप' : '5. Settings & Cloud Backup'}
                   </span>
                   <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
-                    4 ITEMS
+                    5 ITEMS
                   </span>
                 </div>
                 {menuFilter === 'all' && (
@@ -625,6 +746,42 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 
               {!collapsedSections['settings'] && (
                 <div className="space-y-1 pt-0.5">
+                  {/* Google Drive 1-Click Backup & Auto-Sync */}
+                  {onOpenGoogleDrive && (
+                    <button
+                      type="button"
+                      onClick={() => handleMenuAction(onOpenGoogleDrive)}
+                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-blue-500/30 hover:border-blue-400/60 transition-all cursor-pointer text-left group"
+                      id="menu-google-drive-btn"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <Cloud className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                              {isHindi ? 'गूगल ड्राइव बैकअप व ऑटो सिंक' : 'Google Drive Backup & Auto-Sync'}
+                            </span>
+                            {autoSyncEnabled ? (
+                              <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                                {isHindi ? 'ऑटो ON' : 'AUTO ON'}
+                              </span>
+                            ) : isDriveConnected ? (
+                              <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                {isHindi ? 'कनेक्टेड' : 'LINKED'}
+                              </span>
+                            ) : null}
+                          </div>
+                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                            {isHindi ? '1-क्लिक बैकअप व ऑटोमैटिक क्लाउड अपडेट' : '1-click backup & automatic cloud updates'}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-blue-400 transition-colors" />
+                    </button>
+                  )}
+
                   {/* App Settings */}
                   <button
                     type="button"
@@ -745,7 +902,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             </div>
           )}
 
-          {/* 4. Category 4: गाइड, अकादमी व सहायता (Guides, Academy & Policies - 4 items) */}
+          {/* 6. Category 6: गाइड, अकादमी व सहायता (Guides, Academy & Policies - 4 items) */}
           {(menuFilter === 'all' || menuFilter === 'info') && (
             <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/40 p-2.5 sm:p-3 space-y-2">
               <div
@@ -755,7 +912,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 <div className="flex items-center gap-1.5">
                   <GraduationCap className="w-3.5 h-3.5 text-pink-400" />
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-pink-400">
-                    {isHindi ? '4. गाइड, अकादमी व सहायता' : '4. Wealth Academy & Help'}
+                    {isHindi ? '6. गाइड, अकादमी व सहायता' : '6. Wealth Academy & Help'}
                   </span>
                   <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-pink-500/15 text-pink-400 border border-pink-500/25">
                     4 ITEMS

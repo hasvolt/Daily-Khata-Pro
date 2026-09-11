@@ -46,7 +46,8 @@ import {
   Palette,
   ChevronDown,
   Wrench,
-  Layers
+  Layers,
+  Cloud
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -94,6 +95,10 @@ interface HeaderProps {
   onOpenSplitBill?: () => void;
   onOpenBudgetManager?: () => void;
   onOpenLoans?: () => void;
+  onOpenGoogleDrive?: () => void;
+  isDriveConnected?: boolean;
+  isAutoSyncing?: boolean;
+  autoSyncEnabled?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -127,7 +132,11 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAbout,
   onOpenSplitBill,
   onOpenBudgetManager,
-  onOpenLoans
+  onOpenLoans,
+  onOpenGoogleDrive,
+  isDriveConnected = false,
+  isAutoSyncing = false,
+  autoSyncEnabled = false
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
@@ -423,6 +432,33 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* Google Drive 1-Click Cloud Sync Quick Button (Desktop/Tablet only; on mobile accessible via Main Menu and Settings) */}
+          {onOpenGoogleDrive && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onOpenGoogleDrive();
+              }}
+              className={`relative hidden sm:flex p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold items-center gap-1 shrink-0 ${
+                isAutoSyncing
+                  ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 animate-pulse'
+                  : isDriveConnected
+                  ? 'bg-blue-500/15 border-blue-500/40 text-blue-400 hover:bg-blue-500/25'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+              }`}
+              title={isHindi ? 'गूगल ड्राइव 1-क्लिक बैकअप व ऑटो अपडेट' : 'Google Drive 1-Click Backup & Auto-Sync'}
+              id="header-gdrive-sync-btn"
+              aria-label={isHindi ? 'गूगल ड्राइव बैकअप खोलें' : 'Open Google Drive Backup'}
+            >
+              <Cloud className="w-3.5 h-3.5" />
+              <span className="hidden xl:inline">Drive</span>
+              {isDriveConnected && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 absolute top-1 right-1"></span>
+              )}
+            </button>
+          )}
+
           {/* Main Menu 3-Dot Button */}
           <button
             type="button"
@@ -473,6 +509,9 @@ export const Header: React.FC<HeaderProps> = ({
         onOpenLoans={onOpenLoans}
         handleDirectUpdateApp={handleDirectUpdateApp}
         isUpdatingApp={isUpdatingApp}
+        onOpenGoogleDrive={onOpenGoogleDrive}
+        isDriveConnected={isDriveConnected}
+        autoSyncEnabled={autoSyncEnabled}
       />
 
       {/* 1-Click Update Loading Overlay */}

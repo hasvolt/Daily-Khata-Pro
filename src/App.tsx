@@ -1,5 +1,5 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
 import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode, CategoryBudget, BillSplitExpense, DebtItem, DebtPayment } from './types';
 import {
@@ -13,7 +13,7 @@ import {
   INITIAL_SAMPLE_PERSONAL_NOTES,
   DEFAULT_SECURITY_LOCK
 } from './data/defaults';
-import { calculateFundTotals, formatCurrency, triggerCelebration } from './utils/khataCalculations';
+import { calculateFundTotals, formatCurrency, triggerCelebration, triggerHapticSound } from './utils/khataCalculations';
 import { playDeleteSound, playIncomeSound, playExpenseSound } from './utils/audioService';
 import { setCurrentLanguage } from './utils/currencyConfig';
 import { Header } from './components/Header';
@@ -76,6 +76,13 @@ import {
   getReminderTimestamp
 } from './utils/reminderService';
 import { PageSearchModal } from './components/PageSearchModal';
+import { GoogleDriveSyncModal } from './components/GoogleDriveSyncModal';
+import {
+  initAuth,
+  uploadBackupToDrive,
+  getAccessToken,
+  AUTO_SYNC_FILE_NAME
+} from './services/googleDriveService';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { TRANSLATIONS } from './utils/translations';
 import { updatePageSEO } from './utils/seo';
@@ -210,6 +217,38 @@ export default function App() {
 
   // Split Bill Modal State
   const [isSplitBillOpen, setIsSplitBillOpen] = useState<boolean>(false);
+
+  // Google Drive Cloud Backup & Auto-Sync State
+  const [isGoogleDriveModalOpen, setIsGoogleDriveModalOpen] = useState<boolean>(false);
+  const [autoSyncEnabled, setAutoSyncEnabled] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('khata_auto_sync_gdrive') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [lastDriveSyncTime, setLastDriveSyncTime] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem('khata_last_gdrive_sync') || null;
+    } catch {
+      return null;
+    }
+  });
+  const [isAutoSyncing, setIsAutoSyncing] = useState<boolean>(false);
+  const [isDriveConnected, setIsDriveConnected] = useState<boolean>(false);
+  const autoSyncDebounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const unsub = initAuth(
+      (_user, token) => {
+        setIsDriveConnected(Boolean(token));
+      },
+      () => {
+        setIsDriveConnected(Boolean(getAccessToken()));
+      }
+    );
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     try {
@@ -640,8 +679,85 @@ export default function App() {
       }
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      triggerDriveAutoSync(data);
     } catch (err) {
       console.error('Failed to save to localStorage', err);
+    }
+  };
+
+  const triggerDriveAutoSync = (dataToSync: KhataData) => {
+    if (!autoSyncEnabled) return;
+    if (!getAccessToken()) return;
+
+    if (autoSyncDebounceRef.current) {
+      clearTimeout(autoSyncDebounceRef.current);
+    }
+
+    autoSyncDebounceRef.current = setTimeout(async () => {
+      try {
+        setIsAutoSyncing(true);
+        await uploadBackupToDrive(dataToSync, AUTO_SYNC_FILE_NAME, true);
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setLastDriveSyncTime(timeStr);
+        localStorage.setItem('khata_last_gdrive_sync', timeStr);
+      } catch (err) {
+        console.warn('Background auto-sync to Drive failed:', err);
+      } finally {
+        setIsAutoSyncing(false);
+      }
+    }, 4000);
+  };
+
+  const handleToggleAutoSync = async (enabled: boolean) => {
+    setAutoSyncEnabled(enabled);
+    try {
+      localStorage.setItem('khata_auto_sync_gdrive', String(enabled));
+    } catch (e) {}
+
+    if (enabled) {
+      triggerHapticSound('save');
+      if (getAccessToken()) {
+        try {
+          setIsAutoSyncing(true);
+          const currentData: KhataData = {
+            entries,
+            funds,
+            homepageFundIds,
+            categories,
+            incomeSources,
+            workCategories,
+            lifeTags,
+            goals,
+            workLogs,
+            dailyLifeLogs,
+            personalNotes,
+            settings: {
+              percentages,
+              funds,
+              homepageFundIds,
+              theme,
+              language,
+              privacyMask,
+              viewMode,
+              appLayout,
+              securityLock
+            }
+          };
+          await uploadBackupToDrive(currentData, AUTO_SYNC_FILE_NAME, true);
+          const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          setLastDriveSyncTime(timeStr);
+          localStorage.setItem('khata_last_gdrive_sync', timeStr);
+          showToast(language === 'hi' ? 'गूगल ड्राइव ऑटो सिंक सक्रिय व बैकअप सहेजा गया' : 'Google Drive Auto-Sync enabled & initial backup saved');
+        } catch (err) {
+          console.warn('Initial auto-sync failed:', err);
+        } finally {
+          setIsAutoSyncing(false);
+        }
+      } else {
+        setIsGoogleDriveModalOpen(true);
+      }
+    } else {
+      showToast(language === 'hi' ? 'गूगल ड्राइव ऑटो सिंक बंद किया गया' : 'Google Drive Auto-Sync paused');
     }
   };
 
@@ -2181,6 +2297,10 @@ export default function App() {
           onOpenBudgetManager={() => setIsBudgetManagerOpen(true)}
           onOpenSplitBill={() => setIsSplitBillOpen(true)}
           onOpenLoans={() => setCurrentTab('loans')}
+          onOpenGoogleDrive={() => setIsGoogleDriveModalOpen(true)}
+          isDriveConnected={isDriveConnected}
+          isAutoSyncing={isAutoSyncing}
+          autoSyncEnabled={autoSyncEnabled}
         />
       </div>
 
@@ -2794,6 +2914,14 @@ export default function App() {
           setIsSettingsOpen(false);
           setIsCookieBannerForceOpen(true);
         }}
+        onOpenGoogleDrive={() => {
+          setIsSettingsOpen(false);
+          setIsGoogleDriveModalOpen(true);
+        }}
+        autoSyncEnabled={autoSyncEnabled}
+        onToggleAutoSync={handleToggleAutoSync}
+        lastSyncTime={lastDriveSyncTime}
+        isAutoSyncing={isAutoSyncing}
       />
 
       {/* Work Log Create / Edit Modal */}
@@ -3081,6 +3209,10 @@ export default function App() {
             handleInstantLock();
             return;
           }
+          if (tab === 'drive' || tab === 'google-drive') {
+            setIsGoogleDriveModalOpen(true);
+            return;
+          }
           if (route) {
             navigate(route);
             setCurrentTab(tab as any);
@@ -3111,6 +3243,42 @@ export default function App() {
         isOpen={isSplitBillOpen}
         onClose={() => setIsSplitBillOpen(false)}
         onAddLedgerExpense={handleSaveSplitBill}
+      />
+
+      {/* Google Drive 1-Click Cloud Sync & Backup Modal */}
+      <GoogleDriveSyncModal
+        isOpen={isGoogleDriveModalOpen}
+        onClose={() => setIsGoogleDriveModalOpen(false)}
+        currentData={{
+          entries,
+          funds,
+          homepageFundIds,
+          categories,
+          incomeSources,
+          workCategories,
+          lifeTags,
+          goals,
+          workLogs,
+          dailyLifeLogs,
+          personalNotes,
+          settings: {
+            percentages,
+            funds,
+            homepageFundIds,
+            theme,
+            language,
+            privacyMask,
+            viewMode,
+            appLayout,
+            securityLock
+          }
+        }}
+        onRestoreData={handleRestoreData}
+        language={language}
+        autoSyncEnabled={autoSyncEnabled}
+        onToggleAutoSync={handleToggleAutoSync}
+        lastSyncTime={lastDriveSyncTime}
+        isAutoSyncing={isAutoSyncing}
       />
     </div>
   );
