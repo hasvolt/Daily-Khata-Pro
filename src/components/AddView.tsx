@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Entry, FundType, FundConfig, PaymentMode, AppLanguage } from '../types';
 import { DEFAULT_FUNDS, FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_INCOME_SOURCES, DEFAULT_CATEGORIES } from '../data/defaults';
 import { formatCurrency, calculateFundSplits, triggerHapticSound } from '../utils/khataCalculations';
+import { playIncomeSound, playExpenseSound, playClickSound } from '../utils/audioService';
 import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
 import {
@@ -224,7 +225,11 @@ export const AddView: React.FC<AddViewProps> = ({
               fund: activeFunds[0]?.id || 'personal'
             })
       };
-      triggerHapticSound('save');
+      if (expressPreview.type === 'income') {
+        playIncomeSound();
+      } else {
+        playExpenseSound();
+      }
       onSaveEntry(entry);
       setExpressInput('');
       setExpressPreview(null);
@@ -242,7 +247,7 @@ export const AddView: React.FC<AddViewProps> = ({
     setNote(expressPreview.note);
     setExpressInput('');
     setExpressPreview(null);
-    triggerHapticSound('click');
+    playClickSound();
   };
 
   // Income Allocation Choice: Split across all funds VS single specific fund
@@ -330,7 +335,11 @@ export const AddView: React.FC<AddViewProps> = ({
         : { category, fund: selectedFund })
     };
 
-    triggerHapticSound('save');
+    if (type === 'income') {
+      playIncomeSound();
+    } else {
+      playExpenseSound();
+    }
     onSaveEntry(newEntry, editingEntry?.id);
   };
 

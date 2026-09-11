@@ -29,6 +29,7 @@ import {
 import { FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
+import { playKeypadSound, playIncomeSound, playDeleteSound } from '../utils/audioService';
 import { printCalculatorSlip, downloadCalculatorSlipHTML, CalcPrintParams } from '../utils/calculatorPrint';
 
 export type CalculatorViewType = 'standard' | 'funds' | 'sip' | 'emi' | 'gst' | 'discount' | 'inflation';
@@ -177,9 +178,8 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
   // --- Calculator Keypad Handlers ---
   const handleKeypadPress = useCallback((val: string) => {
-    triggerHapticSound('click');
-
     if (val === 'C') {
+      playDeleteSound();
       setStdExpr('');
       setStdLiveResult('0');
       justEvaluatedRef.current = false;
@@ -187,6 +187,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     }
 
     if (val === '⌫') {
+      playDeleteSound();
       justEvaluatedRef.current = false;
       setStdExpr((prev) => {
         if (!prev || prev.length <= 1) {
@@ -208,6 +209,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     }
 
     if (val === '=') {
+      playIncomeSound();
       setStdExpr((prev) => {
         if (!prev.trim()) return prev;
         const evalRes = evaluateMath(prev);
@@ -225,6 +227,8 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
       });
       return;
     }
+
+    playKeypadSound(val);
 
     const isDigitOrDot = /^[0-9.]|00$/.test(val);
     const operators = ['+', '−', '-', '×', '*', '÷', '/', '%'];

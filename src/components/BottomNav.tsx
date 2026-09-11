@@ -3,6 +3,7 @@ import { Home, Plus, Calculator, Target, History, BarChart3, LucideIcon } from '
 import { AppLanguage } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 import { triggerHaptic } from '../utils/haptics';
+import { playClickSound } from '../utils/audioService';
 
 export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'about' | 'developer' | 'privacy' | 'disclaimer' | 'terms' | 'support' | 'safety' | 'guide' | 'calculator' | 'attendance' | 'loans' | 'cookies' | 'academy' | 'article' | 'support-project';
 
@@ -34,6 +35,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
 
   const handleTabClick = (tab: TabItem) => {
     triggerHaptic(tab.isAction ? 'medium' : 'light');
+    playClickSound();
     onSelectTab(tab.id);
   };
 

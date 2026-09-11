@@ -13,7 +13,8 @@ import {
   INITIAL_SAMPLE_PERSONAL_NOTES,
   DEFAULT_SECURITY_LOCK
 } from './data/defaults';
-import { calculateFundTotals, formatCurrency } from './utils/khataCalculations';
+import { calculateFundTotals, formatCurrency, triggerCelebration } from './utils/khataCalculations';
+import { playDeleteSound, playIncomeSound, playExpenseSound } from './utils/audioService';
 import { setCurrentLanguage } from './utils/currencyConfig';
 import { Header } from './components/Header';
 import { BottomNav, NavTab } from './components/BottomNav';
@@ -768,6 +769,11 @@ export default function App() {
     }
 
     setEntries(updatedEntries);
+    if (entryData.type === 'income') {
+      playIncomeSound();
+    } else {
+      playExpenseSound();
+    }
     saveToLocalStorage(updatedEntries, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
     setEditingEntry(null);
     setCurrentTab('home');
@@ -890,6 +896,7 @@ export default function App() {
     const itemToDelete = entries.find((e) => e.id === id);
     const updated = entries.filter((e) => e.id !== id);
     setEntries(updated);
+    playDeleteSound();
     saveToLocalStorage(updated, goals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
 
     if (itemToDelete) {
@@ -1052,6 +1059,7 @@ export default function App() {
     const goalToDelete = goals.find((g) => g.id === goalId);
     const updated = goals.filter((g) => g.id !== goalId);
     setGoals(updated);
+    playDeleteSound();
     saveToLocalStorage(entries, updated, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
     if (goalToDelete) {
       pushToTrash({
@@ -1071,9 +1079,11 @@ export default function App() {
   };
 
   const handleToggleCompleteGoal = (goalId: string) => {
+    let becameCompleted = false;
     const updated = goals.map((g) => {
       if (g.id === goalId) {
         const nextDone = !g.isCompleted;
+        if (nextDone) becameCompleted = true;
         return {
           ...g,
           isCompleted: nextDone,
@@ -1083,6 +1093,9 @@ export default function App() {
       return g;
     });
     setGoals(updated);
+    if (becameCompleted) {
+      triggerCelebration();
+    }
     saveToLocalStorage(entries, updated, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
     showToast('Goal status updated');
   };
@@ -1133,8 +1146,10 @@ export default function App() {
     saveToLocalStorage(updatedEntries, updatedGoals, categories, incomeSources, workCategories, lifeTags, percentages, theme, language, privacyMask, workLogs, dailyLifeLogs);
 
     if (isNowComplete) {
+      triggerCelebration();
       showToast(`Target achieved: ${targetGoalTitle}`);
     } else {
+      playIncomeSound();
       showToast(`${getCurrencyConfig(getCurrentLanguage()).symbol}${amount} deposited to goal`);
     }
   };

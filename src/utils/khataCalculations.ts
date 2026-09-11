@@ -116,117 +116,11 @@ export const calculatePeriodStats = (
   };
 };
 
-let sharedAudioCtx: AudioContext | null = null;
-let lastClickFeedbackTime = 0;
+import { playSound, playCelebrationSound } from './audioService';
 
-function getSharedAudioContext(): AudioContext | null {
+export const triggerHapticSound = (type: 'save' | 'delete' | 'click' | 'error' | 'bell' | 'income' | 'expense' = 'click') => {
   try {
-    if (!sharedAudioCtx) {
-      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (AudioContextClass) {
-        sharedAudioCtx = new AudioContextClass();
-      }
-    }
-    if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
-      sharedAudioCtx.resume().catch(() => {});
-    }
-    return sharedAudioCtx;
-  } catch {
-    return null;
-  }
-}
-
-export const triggerHapticSound = (type: 'save' | 'delete' | 'click' | 'error' | 'bell' = 'click') => {
-  try {
-    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
-    if (type === 'click') {
-      if (now - lastClickFeedbackTime < 30) {
-        return; // Throttle rapid successive clicks to prevent event thread bottleneck
-      }
-      lastClickFeedbackTime = now;
-    }
-
-    // Gentle vibration for mobile devices if supported
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      try {
-        if (type === 'click') {
-          navigator.vibrate(5);
-        } else if (type === 'save') {
-          navigator.vibrate([15, 30, 20]);
-        } else if (type === 'bell') {
-          navigator.vibrate([100, 60, 140]);
-        } else if (type === 'error' || type === 'delete') {
-          navigator.vibrate(30);
-        }
-      } catch {
-        // Ignore vibration permission or hardware rejection
-      }
-    }
-
-    // Audio feedback via lightweight shared AudioContext
-    const ctx = getSharedAudioContext();
-    if (!ctx || ctx.state !== 'running') return;
-
-    if (type === 'click') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(440, ctx.currentTime);
-      gain.gain.setValueAtTime(0.03, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.035);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.035);
-    } else if (type === 'save') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(520, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.18);
-    } else if (type === 'bell') {
-      // Pleasant two-tone reminder notification chime
-      const t = ctx.currentTime;
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(587.33, t); // D5
-      gain1.gain.setValueAtTime(0.12, t);
-      gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-      osc1.start(t);
-      osc1.stop(t + 0.22);
-
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(880, t + 0.12); // A5
-      gain2.gain.setValueAtTime(0.16, t + 0.12);
-      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
-      osc2.start(t + 0.12);
-      osc2.stop(t + 0.45);
-    } else if (type === 'delete' || type === 'error') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(320, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.12);
-    }
+    playSound(type as any);
   } catch {
     // ignore audio/haptic failures
   }
@@ -234,6 +128,7 @@ export const triggerHapticSound = (type: 'save' | 'delete' | 'click' | 'error' |
 
 export const triggerCelebration = () => {
   try {
+    playCelebrationSound();
     confetti({
       particleCount: 50,
       spread: 60,

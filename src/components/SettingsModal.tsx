@@ -62,9 +62,25 @@ import {
   Info,
   BookOpen,
   Calculator,
-  Shield
+  Shield,
+  Volume2,
+  VolumeX,
+  Volume1
 } from 'lucide-react';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import {
+  isAudioEnabled,
+  setAudioEnabled,
+  getAudioVolume,
+  setAudioVolume,
+  subscribeAudioChange,
+  playIncomeSound,
+  playExpenseSound,
+  playCelebrationSound,
+  playBellSound,
+  playKeypadSound,
+  playDeleteSound
+} from '../utils/audioService';
 import { getFundIcon } from '../utils/iconMap';
 import { ConfirmModal } from './ConfirmModal';
 import { FundEditorModal } from './FundEditorModal';
@@ -194,6 +210,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [customWorkCategoryInput, setCustomWorkCategoryInput] = useState('');
   const [customLifeTagInput, setCustomLifeTagInput] = useState('');
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => isAudioEnabled());
+  const [soundVol, setSoundVol] = useState<number>(() => getAudioVolume());
+
+  useEffect(() => {
+    const unsub = subscribeAudioChange((enabled) => {
+      setSoundEnabled(enabled);
+    });
+    return unsub;
+  }, []);
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isPure = isPureHindi(language);
@@ -733,6 +758,155 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 >
                   {privacyMask ? tStr('सक्रिय (Masked)', 'Active (Masked)', 'Enabled') : tStr('निष्क्रिय', 'Band (Off)', 'Disabled')}
                 </button>
+              </div>
+
+              {/* Sound & Audio Effects Settings */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2 font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
+                      {soundEnabled ? (
+                        <Volume2 className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                      ) : (
+                        <VolumeX className="w-4 h-4 text-rose-400" />
+                      )}
+                      <span>{tStr('ऑडियो साउंड इफेक्ट्स (Audio Sound Effects)', 'Audio Sound Effects', 'Audio Sound Effects')}</span>
+                    </div>
+                    <p className="text-[11.5px] text-[var(--theme-text-dim,#94A3B8)]">
+                      {tStr(
+                        'आय, खर्च जोड़ने, डिलीट करने, लक्ष्य पूरा होने और कीपैड पर वास्तविक ऑडियो टोन सुनें।',
+                        'Income, expense jodne, delete karne, goal complete hone par sound effect sunein.',
+                        'Play realistic audio synthesized tones on transaction entry, goal achievement, and keypad taps.'
+                      )}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const next = !soundEnabled;
+                      setSoundEnabled(next);
+                      setAudioEnabled(next);
+                      if (next) {
+                        playIncomeSound();
+                      }
+                    }}
+                    className={`px-3.5 py-2 rounded-xl font-bold text-[12.5px] border transition-all cursor-pointer ${
+                      soundEnabled
+                        ? 'bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)]/40'
+                        : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                    }`}
+                  >
+                    {soundEnabled ? tStr('चालू (Sound ON)', 'Chalu (Sound ON)', 'Sound ON') : tStr('म्यूट (Sound OFF)', 'Band (Sound OFF)', 'Sound OFF')}
+                  </button>
+                </div>
+
+                {/* Volume slider & presets */}
+                {soundEnabled && (
+                  <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/70 space-y-2.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[var(--theme-text-dim,#94A3B8)] font-medium flex items-center gap-1.5">
+                        <Volume1 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                        {tStr('आवाज़ का स्तर (Volume)', 'Awaaz Volume', 'Sound Volume')}: {Math.round(soundVol * 100)}%
+                      </span>
+                      <div className="flex items-center gap-1">
+                        {[
+                          { label: '30%', val: 0.3 },
+                          { label: '60%', val: 0.6 },
+                          { label: '100%', val: 1.0 }
+                        ].map((v) => (
+                          <button
+                            key={v.label}
+                            type="button"
+                            onClick={() => {
+                              setSoundVol(v.val);
+                              setAudioVolume(v.val);
+                              playKeypadSound('5');
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-all cursor-pointer ${
+                              Math.abs(soundVol - v.val) < 0.05
+                                ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 border-[var(--theme-primary,#38BDF8)]'
+                                : 'bg-[var(--theme-bg,#070E18)] text-[var(--theme-text-dim,#94A3B8)] border-[var(--theme-border,#213E61)] hover:text-white'
+                            }`}
+                          >
+                            {v.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <input
+                      type="range"
+                      min="0.05"
+                      max="1"
+                      step="0.05"
+                      value={soundVol}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value);
+                        setSoundVol(val);
+                        setAudioVolume(val);
+                      }}
+                      className="w-full h-1.5 bg-[var(--theme-border,#213E61)] rounded-lg appearance-none cursor-pointer accent-[var(--theme-primary,#38BDF8)]"
+                    />
+
+                    {/* Interactive Sound Preview Test Buttons */}
+                    <div className="pt-2">
+                      <div className="text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)] mb-1.5">
+                        {tStr('साउंड टेस्ट करके देखें (Click to Test Sounds):', 'Sound test karein:', 'Test Sound Effects:')}
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs">
+                        <button
+                          type="button"
+                          onClick={() => playIncomeSound()}
+                          className="p-2 rounded-lg bg-[var(--theme-bg,#070E18)] border border-emerald-500/30 text-emerald-400 font-semibold hover:bg-emerald-500/10 flex items-center justify-center gap-1.5 transition-all text-[11px] cursor-pointer active:scale-95"
+                        >
+                          <span>💰</span>
+                          <span>{tStr('+ आय (Income)', '+ Income Sound', '+ Income')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => playExpenseSound()}
+                          className="p-2 rounded-lg bg-[var(--theme-bg,#070E18)] border border-rose-500/30 text-rose-400 font-semibold hover:bg-rose-500/10 flex items-center justify-center gap-1.5 transition-all text-[11px] cursor-pointer active:scale-95"
+                        >
+                          <span>🛒</span>
+                          <span>{tStr('- खर्च (Expense)', '- Expense Sound', '- Expense')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => playCelebrationSound()}
+                          className="p-2 rounded-lg bg-[var(--theme-bg,#070E18)] border border-amber-500/30 text-amber-400 font-semibold hover:bg-amber-500/10 flex items-center justify-center gap-1.5 transition-all text-[11px] cursor-pointer active:scale-95"
+                        >
+                          <span>🎉</span>
+                          <span>{tStr('लक्ष्य पूरा (Goal)', 'Goal Complete', 'Celebration')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => playBellSound()}
+                          className="p-2 rounded-lg bg-[var(--theme-bg,#070E18)] border border-blue-500/30 text-blue-400 font-semibold hover:bg-blue-500/10 flex items-center justify-center gap-1.5 transition-all text-[11px] cursor-pointer active:scale-95"
+                        >
+                          <span>🔔</span>
+                          <span>{tStr('घंटी (Bell)', 'Reminder Bell', 'Reminder Bell')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => playKeypadSound('9')}
+                          className="p-2 rounded-lg bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] font-semibold hover:bg-white/5 flex items-center justify-center gap-1.5 transition-all text-[11px] cursor-pointer active:scale-95"
+                        >
+                          <span>👆</span>
+                          <span>{tStr('कीपैड टैप', 'Keypad Click', 'Keypad Click')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => playDeleteSound()}
+                          className="p-2 rounded-lg bg-[var(--theme-bg,#070E18)] border border-red-500/30 text-red-400 font-semibold hover:bg-red-500/10 flex items-center justify-center gap-1.5 transition-all text-[11px] cursor-pointer active:scale-95"
+                        >
+                          <span>🗑️</span>
+                          <span>{tStr('डिलीट / ट्रैश', 'Delete Sound', 'Delete Sound')}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Install & Download Offline App */}
