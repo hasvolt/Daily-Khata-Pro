@@ -38,7 +38,10 @@ import {
   AlertCircle,
   ArrowUpCircle,
   CheckCircle2,
-  User
+  User,
+  Split,
+  Sliders,
+  Landmark
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -81,6 +84,9 @@ interface HeaderProps {
   onLayoutChange?: (layout: AppLayout) => void;
   onOpenPageSearch?: () => void;
   onOpenAbout?: () => void;
+  onOpenSplitBill?: () => void;
+  onOpenBudgetManager?: () => void;
+  onOpenLoans?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -110,7 +116,10 @@ export const Header: React.FC<HeaderProps> = ({
   privacyMask = false,
   onTogglePrivacyMask,
   onOpenPageSearch,
-  onOpenAbout
+  onOpenAbout,
+  onOpenSplitBill,
+  onOpenBudgetManager,
+  onOpenLoans
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
@@ -500,6 +509,87 @@ export const Header: React.FC<HeaderProps> = ({
                 </p>
 
                 <div className="space-y-1 pt-1">
+                  {/* Category Budgets */}
+                  {onOpenBudgetManager && (
+                    <button
+                      type="button"
+                      onClick={() => handleMenuAction(onOpenBudgetManager)}
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
+                      id="menu-budgets-btn"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <Sliders className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'मासिक बजट व अलर्ट' : 'Monthly Category Budgets'}
+                          </span>
+                          <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                            {isHindi ? 'खर्च सीमा तय करें और ओवर-स्पेंडिंग रोकें' : 'Set category limits & prevent over-spending'}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-amber-400 transition-colors" />
+                    </button>
+                  )}
+
+                  {/* Split Bill Calculator */}
+                  {onOpenSplitBill && (
+                    <button
+                      type="button"
+                      onClick={() => handleMenuAction(onOpenSplitBill)}
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
+                      id="menu-split-bill-btn"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <Split className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'बिल विभाजन / स्प्लिट' : 'Split Bill & Group Share'}
+                          </span>
+                          <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                            {isHindi ? 'दोस्तों व परिवार के साथ बराबर खर्च बांटें' : 'Divide group dinners & trip expenses'}
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-purple-400 transition-colors" />
+                    </button>
+                  )}
+
+                  {/* Loan, EMI & Udhar Ledger */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onOpenLoans) handleMenuAction(onOpenLoans);
+                      else if (onSelectTab) handleMenuAction(() => onSelectTab('loans'));
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-sky-500/50 transition-all cursor-pointer text-left group"
+                    id="menu-loans-udhar-btn"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <Landmark className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'ऋण, किश्त व उधार खाता' : 'Loans, EMIs & Udhar'}
+                          </span>
+                          <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                            PRO
+                          </span>
+                        </div>
+                        <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? 'उधार लेना/देना व बैंक लोन EMI का एडवांस हिसाब' : 'Track money lent, borrowed & monthly EMIs'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-sky-400 transition-colors" />
+                  </button>
+
                   {/* App Settings */}
                   <button
                     type="button"
@@ -763,7 +853,8 @@ export const Header: React.FC<HeaderProps> = ({
                     { id: 'history', label: tr.menu.record || (isHindi ? 'लेन-देन पासबुक' : 'Passbook & Records'), desc: isHindi ? 'सभी आय-व्यय प्रविष्टियां, फ़िल्टर व खोज' : 'All transaction records, search & print', icon: History, color: 'text-indigo-400' },
                     { id: 'add', label: isHindi ? 'नया लेन-देन जोड़ें' : 'Add New Transaction', desc: isHindi ? 'आय या खर्च की नई प्रविष्टि दर्ज करें' : 'Record new income or expense entry', icon: PlusCircle, color: 'text-emerald-400' },
                     { id: 'report', label: tr.menu.analytics || (isHindi ? 'मासिक वित्तीय रिपोर्ट' : 'Monthly Analytics'), desc: isHindi ? 'खर्च पाई-चार्ट, फंड रुझान व पीडीएफ रिपोर्ट' : 'Expense charts, fund analytics & PDF', icon: BarChart3, color: 'text-sky-400' },
-                    { id: 'goals', label: tr.menu.goals || (isHindi ? 'बचत लक्ष्य व टारगेट्स' : 'Savings Goals'), desc: isHindi ? 'आपातकालीन फंड, जमा प्रगति व स्टेटस' : 'Savings targets, progress & deposits', icon: Target, color: 'text-amber-400' }
+                    { id: 'goals', label: tr.menu.goals || (isHindi ? 'बचत लक्ष्य व टारगेट्स' : 'Savings Goals'), desc: isHindi ? 'आपातकालीन फंड, जमा प्रगति व स्टेटस' : 'Savings targets, progress & deposits', icon: Target, color: 'text-emerald-400' },
+                    { id: 'loans', label: 'Loans, EMIs & Debt Ledger', desc: 'Money lent, personal borrowings & bank EMIs', icon: Landmark, color: 'text-amber-400' }
                   ].map((item) => {
                     const isActive = currentTab === item.id;
                     const ItemIcon = item.icon;

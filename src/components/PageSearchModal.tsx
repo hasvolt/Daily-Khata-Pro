@@ -37,7 +37,8 @@ import {
   Sliders,
   DollarSign,
   Heart,
-  User
+  User,
+  Landmark
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { triggerHapticSound } from '../utils/khataCalculations';
@@ -134,6 +135,18 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
       targetTab: 'goals',
       routePath: '/goals',
       keywords: ['goals', 'targets', 'milestones', 'savings', 'future', 'dream', 'लक्ष्य', 'बचत', 'टारगेट', 'सपना']
+    },
+    {
+      id: 'loans-udhar',
+      title: isHindi ? 'ऋण, किश्त व उधार खाता' : 'Loans, EMIs & Udhar Ledger',
+      subtitle: isHindi ? 'उधार लेना/देना, बैंक लोन EMI व किश्तों का एडवांस लेजर' : 'Track money lent, borrowed, debt repayments & monthly loan EMIs',
+      category: 'finance',
+      categoryLabel: isHindi ? 'वित्तीय रिकॉर्ड' : 'Financial Records',
+      icon: Landmark,
+      targetTab: 'loans',
+      routePath: '/loans',
+      badge: 'PRO',
+      keywords: ['loan', 'emi', 'udhar', 'debt', 'borrow', 'lent', 'credit', 'bank loan', 'car loan', 'home loan', 'उधार', 'लोन', 'किश्त', 'ऋण', 'कर्ज']
     },
 
     // --- 2. Financial Calculators Suite ---

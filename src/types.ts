@@ -74,6 +74,7 @@ export interface FundConfig {
 
 export interface Entry {
   id: string;
+  bookId?: string; // ID of KhataBook (e.g. 'book-default' for Personal, 'book-business' for Business)
   type: TransactionType;
   amount: number;
   date: string; // YYYY-MM-DD
@@ -174,7 +175,7 @@ export interface AppReminder {
   createdAt: number;
 }
 
-export type TrashItemType = 'entry' | 'goal' | 'note' | 'work_log' | 'daily_log' | 'calc_history' | 'attendance_log' | 'reminder';
+export type TrashItemType = 'entry' | 'goal' | 'note' | 'work_log' | 'daily_log' | 'calc_history' | 'attendance_log' | 'reminder' | 'debt';
 
 export interface TrashItem {
   id: string;
@@ -247,5 +248,82 @@ export interface KhataData {
     currencySymbol?: string;
     securityLock?: SecurityLockConfig;
   };
+}
+
+export interface CategoryBudget {
+  category: string;
+  monthlyLimit: number;
+}
+
+export interface KhataBook {
+  id: string;
+  name: string;
+  type: 'personal' | 'business' | 'family' | 'custom';
+  color?: string;
+  icon?: string;
+  isDefault?: boolean;
+}
+
+export interface BillSplitParticipant {
+  id: string;
+  name: string;
+  paidAmount: number;
+}
+
+export interface BillSplitExpense {
+  id: string;
+  title: string;
+  totalAmount: number;
+  date: string;
+  participants: BillSplitParticipant[];
+  payerId: string;
+  settled: boolean;
+}
+
+export type DebtType = 'lent' | 'borrowed' | 'loan_emi';
+
+export interface DebtPayment {
+  id: string;
+  debtId?: string;
+  amount: number;
+  date: string;
+  paymentMode?: PaymentMode;
+  paymentMethod?: string;
+  note?: string;
+  recordedInKhata?: boolean;
+  khataFund?: FundType;
+  createdAt: number;
+}
+
+export interface DebtItem {
+  id: string;
+  type: DebtType; // 'lent' = उधार दिया, 'borrowed' = उधार लिया, 'loan_emi' = बैंक/फाइनेंस लोन
+  title: string; // Person Name or Bank/Institution (e.g. Ramesh Kumar, HDFC Bank, SBI Car Loan)
+  personName?: string;
+  personPhone?: string;
+  phone?: string;
+  lenderOrBorrower?: string;
+  principalAmount: number; // Initial total loan / udhar amount
+  initialAmount?: number; // Initial total loan / udhar amount
+  remainingAmount: number; // Remaining balance
+  startDate: string; // YYYY-MM-DD
+  dueDate?: string; // Repayment target date or next EMI due date
+  
+  // Bank Loan / EMI specifics
+  isEmi?: boolean;
+  emiAmount?: number; // Monthly EMI
+  emiDayOfMonth?: number; // e.g. 5 for 5th of each month
+  emiFrequency?: string;
+  totalEmis?: number;
+  paidEmis?: number;
+  interestRate?: number; // Annual %
+  loanAccountNumber?: string;
+  
+  status: 'active' | 'settled' | 'overdue';
+  payments: DebtPayment[];
+  category?: string; // 'Personal', 'Business', 'Friends & Family', 'Home Loan', 'Vehicle Loan', 'Education Loan', 'Other'
+  note?: string;
+  createdAt: number;
+  updatedAt: number;
 }
 

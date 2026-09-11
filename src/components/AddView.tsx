@@ -21,7 +21,8 @@ import {
   Sparkles,
   Sliders,
   Target,
-  Briefcase
+  Briefcase,
+  Zap
 } from 'lucide-react';
 
 interface AddViewProps {
@@ -130,6 +131,120 @@ export const AddView: React.FC<AddViewProps> = ({
     }
   };
 
+  // Smart Express Parser State
+  const [expressInput, setExpressInput] = useState<string>('');
+  const [expressPreview, setExpressPreview] = useState<{
+    amount: number;
+    type: 'income' | 'expense';
+    categoryOrSource: string;
+    mode: PaymentMode;
+    note: string;
+  } | null>(null);
+
+  const handleExpressInputChange = (val: string) => {
+    setExpressInput(val);
+    if (!val.trim()) {
+      setExpressPreview(null);
+      return;
+    }
+
+    const lower = val.toLowerCase();
+    const numMatch = val.match(/\b(\d+(?:\.\d+)?)\b/);
+    if (!numMatch) {
+      setExpressPreview(null);
+      return;
+    }
+
+    const amt = parseFloat(numMatch[1]);
+    if (isNaN(amt) || amt <= 0) {
+      setExpressPreview(null);
+      return;
+    }
+
+    const isIncome = Object.values(INCOME_KEYWORDS).some(arr => arr.some(w => lower.includes(w))) ||
+      lower.includes('salary') || lower.includes('income') || lower.includes('credited') || lower.includes('received') || lower.includes('freelance');
+    const detectedType = isIncome ? 'income' : 'expense';
+
+    let detectedCatOrSource = detectedType === 'income' ? (incomeSources[0] || 'Salary & Wages') : (categories[0] || 'Food & Groceries');
+    if (detectedType === 'expense') {
+      for (const [cat, words] of Object.entries(EXPENSE_KEYWORDS)) {
+        if (words.some(w => lower.includes(w))) {
+          if (categories.includes(cat)) {
+            detectedCatOrSource = cat;
+            break;
+          }
+        }
+      }
+    } else {
+      for (const [src, words] of Object.entries(INCOME_KEYWORDS)) {
+        if (words.some(w => lower.includes(w))) {
+          if (incomeSources.includes(src)) {
+            detectedCatOrSource = src;
+            break;
+          }
+        }
+      }
+    }
+
+    let mode: PaymentMode = 'upi';
+    if (lower.includes('cash')) mode = 'cash';
+    else if (lower.includes('bank') || lower.includes('neft') || lower.includes('transfer')) mode = 'bank';
+    else if (lower.includes('card') || lower.includes('credit') || lower.includes('debit')) mode = 'card';
+    else if (lower.includes('upi') || lower.includes('gpay') || lower.includes('phonepe') || lower.includes('paytm')) mode = 'upi';
+
+    const cleanNote = val.replace(numMatch[0], '').trim();
+
+    setExpressPreview({
+      amount: amt,
+      type: detectedType,
+      categoryOrSource: detectedCatOrSource,
+      mode,
+      note: cleanNote || val.trim()
+    });
+  };
+
+  const handleApplyExpress = (quickSave: boolean = false) => {
+    if (!expressPreview) return;
+    
+    if (quickSave) {
+      const entry: Omit<Entry, 'id' | 'createdAt'> = {
+        type: expressPreview.type,
+        amount: expressPreview.amount,
+        date: new Date().toISOString().split('T')[0],
+        paymentMode: expressPreview.mode,
+        note: expressPreview.note,
+        ...(expressPreview.type === 'income'
+          ? {
+              source: expressPreview.categoryOrSource,
+              allocationMode: 'all' as const,
+              splits: calculateFundSplits(expressPreview.amount, percentages, fundKeys)
+            }
+          : {
+              category: expressPreview.categoryOrSource,
+              fund: activeFunds[0]?.id || 'personal'
+            })
+      };
+      triggerHapticSound('save');
+      onSaveEntry(entry);
+      setExpressInput('');
+      setExpressPreview(null);
+      return;
+    }
+
+    setType(expressPreview.type);
+    setAmountStr(String(expressPreview.amount));
+    if (expressPreview.type === 'income') {
+      setSource(expressPreview.categoryOrSource);
+    } else {
+      setCategory(expressPreview.categoryOrSource);
+    }
+    setPaymentMode(expressPreview.mode);
+    setNote(expressPreview.note);
+    setExpressInput('');
+    setExpressPreview(null);
+    triggerHapticSound('click');
+  };
+
   // Income Allocation Choice: Split across all funds VS single specific fund
   const [incomeAllocationMode, setIncomeAllocationMode] = useState<'all' | 'single'>(
     editingEntry?.allocationMode || (editingEntry?.targetFund || (editingEntry?.type === 'income' && editingEntry?.fund) ? 'single' : 'all')
@@ -231,6 +346,90 @@ export const AddView: React.FC<AddViewProps> = ({
 
   return (
     <div className="w-full max-w-3xl mx-auto space-y-5 animate-in fade-in duration-200 text-left pb-12">
+      {/* ⚡ Smart Express Entry Bar */}
+      {!editingEntry && (
+        <div className="bg-gradient-to-r from-[var(--theme-card,#132438)] via-[var(--theme-surface,#0E1A29)] to-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/40 rounded-2xl p-3.5 sm:p-4 shadow-lg space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-[var(--theme-primary,#38BDF8)] flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5 fill-current" />
+              <span>Smart Express Entry (Quick Add)</span>
+            </span>
+            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
+              Auto-detects amount, category &amp; type
+            </span>
+          </div>
+
+          <div className="relative">
+            <input
+              type="text"
+              value={expressInput}
+              onChange={(e) => handleExpressInputChange(e.target.value)}
+              placeholder="e.g. 500 petrol scooty OR 1200 swiggy dinner upi OR 25000 salary client"
+              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2.5 px-3.5 text-xs sm:text-sm text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)]/60 focus:outline-none focus:border-[var(--theme-primary,#38BDF8)] shadow-inner"
+            />
+            {expressInput && (
+              <button
+                type="button"
+                onClick={() => {
+                  setExpressInput('');
+                  setExpressPreview(null);
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Live Parser Preview Pill */}
+          {expressPreview && (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-2 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)] text-xs animate-in fade-in duration-150">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${expressPreview.type === 'income' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>
+                  {expressPreview.type === 'income' ? '+ Income' : '- Expense'}
+                </span>
+                <span className="font-bold text-[var(--theme-text,#F8FAFC)] font-mono text-sm">
+                  {formatCurrency(expressPreview.amount, privacyMask)}
+                </span>
+                <span className="text-[var(--theme-text-dim,#94A3B8)] text-[11px]">
+                  • {expressPreview.categoryOrSource}
+                </span>
+                <span className="text-[var(--theme-text-dim,#94A3B8)] text-[11px] uppercase">
+                  • {expressPreview.mode}
+                </span>
+                {expressPreview.note && (
+                  <span className="text-[var(--theme-text,#F8FAFC)]/80 italic text-[11px]">
+                    "{expressPreview.note}"
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-1.5 w-full sm:w-auto shrink-0 justify-end">
+                <button
+                  type="button"
+                  onClick={() => handleApplyExpress(false)}
+                  className="px-2.5 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] text-[11px] font-semibold cursor-pointer"
+                >
+                  Fill Form
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleApplyExpress(true)}
+                  className="px-3 py-1 rounded-lg text-[11px] font-bold shadow-xs cursor-pointer flex items-center gap-1"
+                  style={{
+                    backgroundColor: 'var(--theme-primary, #38BDF8)',
+                    color: 'var(--theme-btn-text, #040D17)'
+                  }}
+                >
+                  <Zap className="w-3 h-3 fill-current" />
+                  <span>1-Tap Add</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* 1. Transaction Type Toggle */}
       <div className="flex gap-2 p-1.5 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl shadow-md transition-colors">
         <button

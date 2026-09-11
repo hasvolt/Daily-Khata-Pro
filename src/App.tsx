@@ -1,7 +1,7 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
-import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode } from './types';
+import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode, CategoryBudget, BillSplitExpense, DebtItem, DebtPayment } from './types';
 import {
   DEFAULT_FUNDS,
   DEFAULT_PERCENTAGES,
@@ -36,6 +36,9 @@ import { UserManualModal } from './components/UserManualModal';
 import { MultiCalculatorModal } from './components/MultiCalculatorModal';
 import { TrashModal } from './components/TrashModal';
 import { MasterEditModal } from './components/MasterEditModal';
+import { BudgetManagerModal } from './components/BudgetManagerModal';
+import { SplitBillModal } from './components/SplitBillModal';
+import { LoanUdharLedgerView } from './components/LoanUdharLedgerView';
 // Removed HasVoltPromoBanner and GoogleAdBanner imports as requested to be 100% free and ad-free
 import { PrintModal } from './components/PrintModal';
 import { SourceCodeModal } from './components/SourceCodeModal';
@@ -111,7 +114,7 @@ export default function App() {
   );
 
   const [percentages, setPercentages] = useState<Record<FundType, number>>(DEFAULT_PERCENTAGES);
-  const [theme, setTheme] = useState<AppTheme>('blue');
+  const [theme, setTheme] = useState<AppTheme>('yellow');
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<AppViewMode>('auto');
@@ -191,6 +194,51 @@ export default function App() {
   const [isPersonalNoteModalOpen, setIsPersonalNoteModalOpen] = useState<boolean>(false);
   const [editingPersonalNote, setEditingPersonalNote] = useState<PersonalNote | null>(null);
 
+  // Category Budgets & Spending Limits State
+  const [budgets, setBudgets] = useState<CategoryBudget[]>(() => {
+    try {
+      const saved = localStorage.getItem('daily_khata_category_budgets');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [isBudgetManagerOpen, setIsBudgetManagerOpen] = useState<boolean>(false);
+
+  // Split Bill Modal State
+  const [isSplitBillOpen, setIsSplitBillOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('daily_khata_category_budgets', JSON.stringify(budgets));
+    } catch (e) {}
+  }, [budgets]);
+
+  // Advance Loan, EMI & Udhar State - start pristine empty with no history as requested
+  const [debtItems, setDebtItems] = useState<DebtItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('daily_khata_debt_items_v1');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          // Filter out any prior sample records so user starts completely fresh
+          return parsed.filter((item: DebtItem) => !item.id?.startsWith('sample-loan-'));
+        }
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('daily_khata_debt_items_v1', JSON.stringify(debtItems));
+    } catch (e) {
+      console.error('Failed to save debt items', e);
+    }
+  }, [debtItems]);
+
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
 
   // Listen for PWA Install event with early capture fallback
@@ -248,7 +296,7 @@ export default function App() {
         // 1. Check window.location.hash
         if (window.location.hash) {
           const cleanHash = window.location.hash.replace(/^#\/?/, '').toLowerCase().trim();
-          if (['about', 'developer', 'privacy', 'terms', 'disclaimer', 'safety', 'guide', 'calculator', 'support', 'support-project', 'history', 'report', 'goals', 'tracker', 'notes', 'attendance', 'academy'].includes(cleanHash)) {
+          if (['about', 'developer', 'privacy', 'terms', 'disclaimer', 'safety', 'guide', 'calculator', 'support', 'support-project', 'history', 'report', 'goals', 'tracker', 'notes', 'attendance', 'academy', 'loans'].includes(cleanHash)) {
             navigate(`/${cleanHash}`);
             return;
           }
@@ -390,7 +438,7 @@ export default function App() {
         setLifeTags(DEFAULT_LIFE_TAGS);
         setFunds(DEFAULT_FUNDS);
         setHomepageFundIds(DEFAULT_FUNDS.slice(0, 6).map((f) => f.id));
-        setTheme('blue');
+        setTheme('yellow');
         setLanguage('en');
         setViewMode('auto');
         setAppLayout('dashboard');
@@ -406,7 +454,7 @@ export default function App() {
           funds: DEFAULT_FUNDS,
           homepageFundIds: DEFAULT_FUNDS.slice(0, 6).map((f) => f.id),
           percentages: DEFAULT_PERCENTAGES,
-          theme: 'blue',
+          theme: 'yellow',
           language: 'en',
           privacyMask: false,
           workLogs: [],
@@ -723,6 +771,20 @@ export default function App() {
     setCurrentTab('home');
   };
 
+  const handleSaveSplitBill = (amount: number, note: string, category: string) => {
+    const newEntry: Omit<Entry, 'id' | 'createdAt'> = {
+      type: 'expense',
+      amount,
+      category: category || 'Food & Groceries',
+      fund: funds[0]?.id || 'personal',
+      date: new Date().toISOString().split('T')[0],
+      paymentMode: 'upi',
+      note
+    };
+    handleSaveEntry(newEntry);
+    showToast(language === 'hi' ? 'स्प्लिट बिल का आपका हिस्सा दर्ज किया गया' : 'Split bill expense added to Khata');
+  };
+
   // Trash / Recycle Bin Helper to record deleted items
   const pushToTrash = (item: TrashItem) => {
     setTrashItems((prev) => {
@@ -781,6 +843,9 @@ export default function App() {
       const restored = [item.data as AppReminder, ...reminders];
       setReminders(restored);
       saveReminders(restored);
+    } else if (item.type === 'debt' && item.data) {
+      const restored = [item.data as DebtItem, ...debtItems];
+      setDebtItems(restored);
     }
 
     setTrashItems((prev) => {
@@ -1626,6 +1691,207 @@ export default function App() {
     showToast(language === 'hi' ? 'रिमाइंडर रीसायकल बिन में भेजा गया' : 'Reminder moved to Trash');
   };
 
+  // Advance Loan, EMI & Udhar Handlers
+  const handleSaveDebtItem = (debtData: Partial<DebtItem>, editingId?: string) => {
+    if (editingId) {
+      setDebtItems((prev) =>
+        prev.map((item) =>
+          item.id === editingId
+            ? {
+                ...item,
+                ...debtData,
+                updatedAt: Date.now()
+              }
+            : item
+        )
+      );
+      showToast(language === 'hi' ? 'उधार / ऋण रिकॉर्ड अपडेट हुआ' : 'Debt / Loan record updated');
+    } else {
+      const initialAmt = debtData.principalAmount || debtData.initialAmount || 0;
+      const newItem: DebtItem = {
+        id: 'debt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+        type: debtData.type || 'lent',
+        title: debtData.title || (language === 'hi' ? 'नया उधार रिकॉर्ड' : 'New Loan Record'),
+        personName: debtData.personName,
+        personPhone: debtData.personPhone,
+        phone: debtData.phone || debtData.personPhone,
+        lenderOrBorrower: debtData.lenderOrBorrower,
+        principalAmount: initialAmt,
+        initialAmount: initialAmt,
+        remainingAmount: initialAmt,
+        isEmi: !!debtData.isEmi,
+        emiAmount: debtData.emiAmount,
+        totalEmis: debtData.totalEmis,
+        paidEmis: 0,
+        emiFrequency: debtData.emiFrequency || 'monthly',
+        interestRate: debtData.interestRate,
+        startDate: debtData.startDate || new Date().toISOString().split('T')[0],
+        dueDate: debtData.dueDate,
+        status: 'active',
+        note: debtData.note,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        payments: []
+      };
+      setDebtItems((prev) => [newItem, ...prev]);
+      showToast(language === 'hi' ? 'नया ऋण / उधार खाता जोड़ा गया' : 'New Debt / Loan recorded');
+    }
+  };
+
+  const handleDeleteDebtItem = (id: string) => {
+    const item = debtItems.find((d) => d.id === id);
+    if (!item) return;
+
+    pushToTrash({
+      id: 'trash_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      originalId: item.id,
+      type: 'debt',
+      title: item.title,
+      subtitle: `${item.type.toUpperCase()}: ₹${item.remainingAmount}`,
+      amount: item.remainingAmount,
+      dateDeleted: new Date().toISOString(),
+      data: item
+    });
+
+    setDebtItems((prev) => prev.filter((d) => d.id !== id));
+    showToast(language === 'hi' ? 'उधार/लोन रीसायकल बिन में भेजा गया' : 'Loan/Debt moved to Trash');
+  };
+
+  const handleRecordDebtPayment = (
+    debtId: string,
+    paymentData: Omit<DebtPayment, 'id' | 'createdAt'>,
+    recordInKhata?: boolean,
+    khataFund?: FundType
+  ) => {
+    const debt = debtItems.find((d) => d.id === debtId);
+    if (!debt) return;
+
+    const newPayment: DebtPayment = {
+      ...paymentData,
+      id: 'pay_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+      debtId,
+      createdAt: Date.now()
+    };
+
+    const newRemaining = Math.max(0, debt.remainingAmount - newPayment.amount);
+    const newPaidEmis = debt.isEmi ? (debt.paidEmis || 0) + 1 : debt.paidEmis;
+    const newStatus = newRemaining <= 0 ? 'settled' : debt.status;
+
+    // Optional cross-sync into main Daily Khata ledger
+    if (recordInKhata) {
+      const pMode: PaymentMode = (newPayment.paymentMode === 'cash' ? 'cash' : (newPayment.paymentMode === 'bank' ? 'bank' : 'upi'));
+      if (debt.type === 'lent') {
+        // Receiving money that was lent out = Income
+        const newEntry: Omit<Entry, 'id' | 'createdAt'> = {
+          type: 'income',
+          amount: newPayment.amount,
+          category: 'Debt Repayment Received',
+          fund: khataFund || 'emergency',
+          date: newPayment.date,
+          paymentMode: pMode,
+          note: `उधार वसूली / Repayment from ${debt.title} (${newPayment.note || 'Instalment'})`
+        };
+        handleSaveEntry(newEntry);
+      } else {
+        // Paying money back for a borrowed debt or bank EMI = Expense
+        const newEntry: Omit<Entry, 'id' | 'createdAt'> = {
+          type: 'expense',
+          amount: newPayment.amount,
+          category: debt.type === 'loan_emi' ? 'EMI Payment' : 'Loans & Debts',
+          fund: khataFund || 'personal',
+          date: newPayment.date,
+          paymentMode: pMode,
+          note: `${debt.type === 'loan_emi' ? 'EMI किश्त' : 'उधार वापसी'} - ${debt.title} (${newPayment.note || ''})`
+        };
+        handleSaveEntry(newEntry);
+      }
+    }
+
+    setDebtItems((prev) =>
+      prev.map((item) =>
+        item.id === debtId
+          ? {
+              ...item,
+              remainingAmount: newRemaining,
+              paidEmis: newPaidEmis,
+              status: newStatus,
+              updatedAt: Date.now(),
+              payments: [newPayment, ...(item.payments || [])]
+            }
+          : item
+      )
+    );
+
+    showToast(
+      language === 'hi'
+        ? `₹${newPayment.amount.toLocaleString('en-IN')} का भुगतान दर्ज हुआ`
+        : `Payment of ₹${newPayment.amount.toLocaleString('en-IN')} recorded`
+    );
+  };
+
+  const handleDeleteDebtPayment = (debtId: string, paymentId: string) => {
+    const debt = debtItems.find((d) => d.id === debtId);
+    if (!debt) return;
+    const payment = debt.payments.find((p) => p.id === paymentId);
+    if (!payment) return;
+
+    const restoredRemaining = debt.remainingAmount + payment.amount;
+    const restoredPaidEmis = debt.isEmi ? Math.max(0, (debt.paidEmis || 1) - 1) : debt.paidEmis;
+    const restoredStatus = restoredRemaining > 0 && debt.status === 'settled' ? 'active' : debt.status;
+
+    setDebtItems((prev) =>
+      prev.map((item) =>
+        item.id === debtId
+          ? {
+              ...item,
+              remainingAmount: restoredRemaining,
+              paidEmis: restoredPaidEmis,
+              status: restoredStatus,
+              updatedAt: Date.now(),
+              payments: item.payments.filter((p) => p.id !== paymentId)
+            }
+          : item
+      )
+    );
+
+    showToast(language === 'hi' ? 'भुगतान रिकॉर्ड हटाया गया और बैलेंस रीस्टोर हुआ' : 'Payment removed and balance restored');
+  };
+
+  const handleToggleSettleDebt = (debtId: string) => {
+    const debt = debtItems.find((d) => d.id === debtId);
+    if (!debt) return;
+
+    const isNowSettled = debt.status !== 'settled';
+    let newRemaining = debt.remainingAmount;
+
+    if (isNowSettled) {
+      newRemaining = 0;
+    } else {
+      const totalPaid = (debt.payments || []).reduce((acc, p) => acc + p.amount, 0);
+      const originalPrincipal = debt.principalAmount || debt.initialAmount || 0;
+      newRemaining = Math.max(0, originalPrincipal - totalPaid);
+    }
+
+    setDebtItems((prev) =>
+      prev.map((item) =>
+        item.id === debtId
+          ? {
+              ...item,
+              status: isNowSettled ? 'settled' : 'active',
+              remainingAmount: newRemaining,
+              updatedAt: Date.now()
+            }
+          : item
+      )
+    );
+
+    showToast(
+      isNowSettled
+        ? language === 'hi' ? 'ऋण खाता पूर्णतः चुकता (Settled) चिह्नित हुआ' : 'Marked as settled'
+        : language === 'hi' ? 'ऋण खाता पुनः सक्रिय (Active) हुआ' : 'Reopened as active'
+    );
+  };
+
   // Daily Checks for Smart Reminders
   const todayDateStr = new Date().toISOString().slice(0, 10);
   const hasTransactionsToday = entries.some((e) => e.date === todayDateStr);
@@ -1894,6 +2160,9 @@ export default function App() {
           onOpenAbout={() => {
             navigate('/about');
           }}
+          onOpenBudgetManager={() => setIsBudgetManagerOpen(true)}
+          onOpenSplitBill={() => setIsSplitBillOpen(true)}
+          onOpenLoans={() => setCurrentTab('loans')}
         />
       </div>
 
@@ -1928,6 +2197,8 @@ export default function App() {
               homepageFundIds={homepageFundIds}
               onUpdateHomepageFundIds={handleUpdateHomepageFundIds}
               onOpenFundSettings={() => setIsSettingsOpen(true)}
+              budgets={budgets}
+              onOpenBudgetManager={() => setIsBudgetManagerOpen(true)}
               onAddClick={handleAddClick}
               onFilterFund={handleFilterFund}
               onViewHistory={() => {
@@ -1935,8 +2206,18 @@ export default function App() {
                 setCurrentTab('history');
               }}
               onNavigateGoals={() => setCurrentTab('goals')}
+              onOpenCreateGoal={() => {
+                setEditingGoal(null);
+                setIsGoalModalOpen(true);
+              }}
+              onOpenDepositGoal={(goal: Goal) => {
+                setDepositGoal(goal);
+              }}
               onNavigateTracker={() => setCurrentTab('tracker')}
               onNavigateNotes={() => setCurrentTab('notes')}
+              debtItems={debtItems}
+              onNavigateLoans={() => setCurrentTab('loans')}
+              onOpenAddDebtModal={() => setCurrentTab('loans')}
               onOpenNoteModal={() => {
                 setEditingPersonalNote(null);
                 setIsPersonalNoteModalOpen(true);
@@ -2222,6 +2503,21 @@ export default function App() {
             />
           } />
           
+          <Route path="/loans" element={
+            <LoanUdharLedgerView
+              debtItems={debtItems}
+              funds={funds}
+              onSaveDebtItem={handleSaveDebtItem}
+              onDeleteDebtItem={handleDeleteDebtItem}
+              onRecordPayment={handleRecordDebtPayment}
+              onDeletePayment={handleDeleteDebtPayment}
+              onToggleSettle={handleToggleSettleDebt}
+              onBack={() => setCurrentTab('home')}
+              language={language}
+              privacyMask={privacyMask}
+            />
+          } />
+
           <Route path="*" element={<HomeView
               appLayout={appLayout}
               onLayoutChange={handleAppLayoutChange}
@@ -2235,6 +2531,8 @@ export default function App() {
               homepageFundIds={homepageFundIds}
               onUpdateHomepageFundIds={handleUpdateHomepageFundIds}
               onOpenFundSettings={() => setIsSettingsOpen(true)}
+              budgets={budgets}
+              onOpenBudgetManager={() => setIsBudgetManagerOpen(true)}
               onAddClick={handleAddClick}
               onFilterFund={handleFilterFund}
               onViewHistory={() => {
@@ -2242,8 +2540,18 @@ export default function App() {
                 setCurrentTab('history');
               }}
               onNavigateGoals={() => setCurrentTab('goals')}
+              onOpenCreateGoal={() => {
+                setEditingGoal(null);
+                setIsGoalModalOpen(true);
+              }}
+              onOpenDepositGoal={(goal: Goal) => {
+                setDepositGoal(goal);
+              }}
               onNavigateTracker={() => setCurrentTab('tracker')}
               onNavigateNotes={() => setCurrentTab('notes')}
+              debtItems={debtItems}
+              onNavigateLoans={() => setCurrentTab('loans')}
+              onOpenAddDebtModal={() => setCurrentTab('loans')}
               onOpenNoteModal={() => {
                 setEditingPersonalNote(null);
                 setIsPersonalNoteModalOpen(true);
@@ -2753,6 +3061,27 @@ export default function App() {
           }
         }}
         language={language}
+      />
+
+      {/* Category Monthly Spending Budgets Modal */}
+      <BudgetManagerModal
+        isOpen={isBudgetManagerOpen}
+        onClose={() => setIsBudgetManagerOpen(false)}
+        categories={categories}
+        budgets={budgets}
+        onSaveBudgets={(updated) => {
+          setBudgets(updated);
+          showToast(language === 'hi' ? 'श्रेणी बजट अपडेट किए गए' : 'Category budgets updated');
+        }}
+        currentMonthEntries={entries}
+        language={language}
+      />
+
+      {/* Bill Splitting & Group Expense Calculator Modal */}
+      <SplitBillModal
+        isOpen={isSplitBillOpen}
+        onClose={() => setIsSplitBillOpen(false)}
+        onAddLedgerExpense={handleSaveSplitBill}
       />
     </div>
   );

@@ -5,6 +5,8 @@ import { formatCurrency, calculateFundTotals, calculatePeriodStats, downloadCSVR
 import { getCategoryIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
 import { GenericCard3D } from './GenericCard3D';
+import { InteractiveAnalytics } from './InteractiveAnalytics';
+import { CashRunwayWidget } from './CashRunwayWidget';
 import { ChevronLeft, ChevronRight, Printer, Download, Save, Plus, Minus, Trash2, PieChart, Sparkles, Check, AlertCircle, TrendingUp, BarChart3, Wallet, Sliders, Tags, RotateCcw } from 'lucide-react';
 
 interface ReportViewProps {
@@ -175,6 +177,21 @@ export const ReportView: React.FC<ReportViewProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Interactive Fintech Visual Charts & Analytics */}
+      <InteractiveAnalytics
+        entries={entries}
+        funds={activeFunds}
+        language={language}
+        privacyMask={privacyMask}
+      />
+
+      {/* Cash Runway & Burn Rate Intelligence */}
+      <CashRunwayWidget
+        entries={entries}
+        funds={activeFunds}
+        privacyMask={privacyMask}
+      />
 
       {/* Responsive 2-Column Grid on Desktop */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start w-full min-w-0">

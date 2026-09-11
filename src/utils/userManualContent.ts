@@ -306,8 +306,72 @@ const MANUAL_EN: UserManualTranslation = {
       proTip: 'Break large annual goals (like ${getCurrencyConfig(getCurrentLanguage()).symbol}1,20,000 for insurance) into smaller monthly milestones of ${getCurrencyConfig(getCurrentLanguage()).symbol}10,000.'
     },
     {
+      id: 'split_bills',
+      title: '9. Split Bill & Group Share',
+      subtitle: 'Divide expenses with friends & family seamlessly',
+      overviewHeading: 'Fair Expense Division',
+      overviewText: 'Easily split dinner bills, travel expenses, and shared household costs. Calculate exact per-person shares including optional taxes or tips.',
+      featuresHeading: 'Split Bill Features',
+      features: [
+        {
+          title: 'Dynamic Splitting',
+          desc: 'Divide by exact amounts, percentages, or equal shares among group members.'
+        },
+        {
+          title: 'Instant Add to Ledger',
+          desc: 'With one click, add your calculated share directly into your expense ledger under the appropriate fund.'
+        }
+      ],
+      proTip: 'Use this for monthly shared utility bills to avoid manual math and arguments.'
+    },
+    {
+      id: 'loans',
+      title: '10. Loans, EMIs & Udhar Ledger',
+      subtitle: 'Track money lent, borrowed, and bank EMIs',
+      overviewHeading: 'Complete Debt & Receivable Tracking',
+      overviewText: 'Manage your entire debt portfolio in one place. Keep records of money you have lent to friends (Udhar), personal loans you have taken, and upcoming bank EMIs.',
+      stepsHeading: 'Managing Debt:',
+      steps: [
+        {
+          step: 'Step 1',
+          title: 'Add Debt Entry',
+          desc: 'Select whether it is money lent, money borrowed, or a bank EMI.'
+        },
+        {
+          step: 'Step 2',
+          title: 'Track Repayments',
+          desc: 'Log partial or full repayments against each debt entry to keep the balance accurate.'
+        },
+        {
+          step: 'Step 3',
+          title: 'Monitor Schedule',
+          desc: 'Keep an eye on due dates to maintain your credit score and relationships.'
+        }
+      ],
+      proTip: 'Always log EMIs with their exact due dates so you never miss a payment and incur late fees.'
+    },
+    {
+      id: 'budget',
+      title: '11. Category Budgets & Spending Limits',
+      subtitle: 'Set strict monthly limits to prevent over-spending',
+      overviewHeading: 'Proactive Expense Control',
+      overviewText: 'Assign maximum spending limits for specific expense categories (like Dining or Entertainment) to receive alerts when you are nearing your boundary.',
+      featuresHeading: 'Budgeting Tools',
+      features: [
+        {
+          title: 'Visual Progress Bars',
+          desc: 'See exactly how much of your category budget you have consumed at a glance.'
+        },
+        {
+          title: 'Auto-Calculated Remaining',
+          desc: 'Instantly view your safe-to-spend balance for the rest of the month.'
+        }
+      ],
+      proTip: 'Set your budget limit 10% lower than your actual target to create a built-in safety buffer.'
+    },
+    {
       id: 'reports',
-      title: '9. Reports, Charts & PDF Statements',
+      title: '12. Reports, Charts & PDF Statements',
       subtitle: 'Visual analytics, CSV spreadsheets, and high-resolution PDF statements',
       overviewHeading: 'Comprehensive Financial Audit Engine',
       overviewText: 'View visual breakdowns of your monthly cash flow, category-wise expenditure bar charts, fund distribution pies, and daily burn rates. Generate print-ready official PDF statements with a single click.',
@@ -334,7 +398,7 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'settings',
-      title: '10. Custom Settings & Rules Engine',
+      title: '13. Custom Settings & Rules Engine',
       subtitle: 'Theme customization, custom categories, and 6-fund percentage rule editor',
       overviewHeading: 'Tailor the Record to Your Needs',
       overviewText: 'Customize color themes, switch between 14 international languages, add custom income sources and expense categories, adjust the 6-fund allocation percentages, and manage your offline data backup files.',
@@ -361,7 +425,7 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'backup',
-      title: '11. Backup, Restore & Data Sovereignty',
+      title: '14. Backup, Restore & Data Sovereignty',
       subtitle: 'JSON archives, client-side restore, and zero-cloud privacy architecture',
       overviewHeading: 'Full Custody Over Your Data',
       overviewText: 'Because Daily Khata does not rely on any remote database, your data is 100% under your ownership. Export a JSON backup file whenever you want to transfer data to another phone, computer, or browser.',
@@ -387,7 +451,7 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'source_code',
-      title: '12. Source Code & Safety Audit',
+      title: '15. Source Code & Safety Audit',
       subtitle: 'MIT open-source transparency, GitHub repository, and DIY verification guide',
       overviewHeading: 'Open Transparency Guarantee',
       overviewText: 'We believe you should never have to take a developer\'s word for privacy. Daily Khata Pro is 100% open source under the MIT License. Anyone can inspect, build, audit, and run the code independently.',
@@ -414,7 +478,7 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'faq',
-      title: '13. Frequently Asked Questions (FAQ)',
+      title: '16. Frequently Asked Questions (FAQ)',
       subtitle: 'Answers to common questions regarding offline data, PIN recovery, and calculations',
       overviewHeading: 'Frequently Asked Questions',
       overviewText: 'Here are answers to the most frequent inquiries from our community of users:',
@@ -702,8 +766,72 @@ const MANUAL_HI: UserManualTranslation = {
       proTip: 'बड़े वार्षिक लक्ष्यों (जैसे ${getCurrencyConfig(getCurrentLanguage()).symbol}1,20,000 इंश्योरेंस) को ${getCurrencyConfig(getCurrentLanguage()).symbol}10,000 के छोटे मासिक लक्ष्यों में बांटें।'
     },
     {
+      id: 'split_bills',
+      title: '9. बिल स्प्लिट व समूह खर्च (Split Bills)',
+      subtitle: 'दोस्तों और परिवार के साथ खर्चों को आसानी से बांटें',
+      overviewHeading: 'खर्चों का समान विभाजन',
+      overviewText: 'डिनर बिल, यात्रा खर्च या घर के साझा खर्चों को आसानी से विभाजित करें। कर (tax) या टिप जोड़कर प्रति व्यक्ति सटीक हिस्सा निकालें।',
+      featuresHeading: 'स्प्लिट बिल की विशेषताएं',
+      features: [
+        {
+          title: 'डायनामिक स्प्लिटिंग',
+          desc: 'प्रतिशत, सटीक राशि या बराबर हिस्सों में खर्चों को बांटें।'
+        },
+        {
+          title: 'लेजर में त्वरित प्रविष्टि',
+          desc: 'केवल एक क्लिक से अपने हिस्से के खर्च को सीधे सही फंड में दर्ज करें।'
+        }
+      ],
+      proTip: 'मासिक रूम रेंट या उपयोगिता बिलों की गणना के लिए इसका इस्तेमाल करें, जिससे पैसे को लेकर कोई विवाद न हो।'
+    },
+    {
+      id: 'loans',
+      title: '10. ऋण, ईएमआई व उधार खाता (Loans & Udhar)',
+      subtitle: 'उधार दिए गए पैसे, कर्ज और बैंक EMI पर नज़र रखें',
+      overviewHeading: 'कर्ज और उधारी का संपूर्ण प्रबंधन',
+      overviewText: 'अपने सभी कर्ज और उधारी को एक जगह ट्रैक करें। दोस्तों को दिया गया उधार, आपके द्वारा लिए गए कर्ज, और आने वाली बैंक EMI का रिकॉर्ड बनाए रखें।',
+      stepsHeading: 'कर्ज प्रबंधन के चरण:',
+      steps: [
+        {
+          step: 'चरण 1',
+          title: 'ऋण प्रविष्टि जोड़ें',
+          desc: 'चुनें कि क्या आपने पैसा उधार दिया है, कर्ज लिया है, या यह बैंक की EMI है।'
+        },
+        {
+          step: 'चरण 2',
+          title: 'भुगतान ट्रैक करें',
+          desc: 'प्रत्येक प्रविष्टि के विरुद्ध आंशिक या पूर्ण पुनर्भुगतान दर्ज करें।'
+        },
+        {
+          step: 'चरण 3',
+          title: 'शेड्यूल मॉनिटर करें',
+          desc: 'देय तिथियों (Due Dates) पर नज़र रखें ताकि कोई विलंब शुल्क न लगे।'
+        }
+      ],
+      proTip: 'अपनी EMI की देय तिथियां सटीकता से दर्ज करें ताकि आप कभी चूक न जाएं और आपका सिबिल स्कोर सुरक्षित रहे।'
+    },
+    {
+      id: 'budget',
+      title: '11. श्रेणी बजट व खर्च सीमा (Category Budgets)',
+      subtitle: 'अधिक खर्च को रोकने के लिए सख्त मासिक सीमाएं तय करें',
+      overviewHeading: 'सक्रिय खर्च नियंत्रण (Proactive Control)',
+      overviewText: 'किसी विशेष श्रेणी (जैसे डाइनिंग, यात्रा, मनोरंजन) के लिए अधिकतम खर्च सीमा निर्धारित करें। जब आप सीमा के करीब पहुंचें तो अलर्ट प्राप्त करें।',
+      featuresHeading: 'बजटिंग टूल्स',
+      features: [
+        {
+          title: 'विजुअल प्रोग्रेस बार',
+          desc: 'एक नज़र में देखें कि आपने अपनी श्रेणी के बजट का कितना हिस्सा इस्तेमाल कर लिया है।'
+        },
+        {
+          title: 'स्वतः शेष गणना',
+          desc: 'महीने के शेष दिनों के लिए अपना सुरक्षित खर्च (Safe-to-spend) बैलेंस तुरंत देखें।'
+        }
+      ],
+      proTip: 'सुरक्षा मार्जिन बनाए रखने के लिए, अपने बजट की सीमा को अपनी वास्तविक योजना से 10% कम सेट करें।'
+    },
+    {
       id: 'reports',
-      title: '9. रिपोर्ट, ग्राफ़ एवं PDF स्टेटमेंट',
+      title: '12. रिपोर्ट, ग्राफ़ एवं PDF स्टेटमेंट',
       subtitle: 'विजुअल चार्ट्स, CSV स्प्रेडशीट और हाई-रिज़ॉल्यूशन प्रिंट स्टेटमेंट',
       overviewHeading: 'संपूर्ण वित्तीय ऑडिट व विश्लेषण इंजन',
       overviewText: 'अपने मासिक कैशफ्लो का विजुअल विश्लेषण, श्रेणी-वार खर्च बार चार्ट्स, फंड वितरण पाई चार्ट्स और दैनिक खर्च दर देखें। एक क्लिक में आधिकारिक प्रिंट-रेडी PDF स्टेटमेंट तैयार करें।',
@@ -730,7 +858,7 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'settings',
-      title: '10. कस्टम सेटिंग्स व रूल्स इंजन',
+      title: '13. कस्टम सेटिंग्स व रूल्स इंजन',
       subtitle: 'थीम कस्टमाइज़ेशन, कस्टम श्रेणियां व स्मार्ट फंड प्रतिशत अनुकूलक',
       overviewHeading: 'अपनी ज़रूरतों के अनुसार खाता ढालें',
       overviewText: 'रंग थीम बदलें, 14 अंतरराष्ट्रीय भाषाओं में स्विच करें, अपनी कस्टम श्रेणियां व आय स्रोत जोड़ें, स्मार्ट फंड प्रतिशत नियम को अनुकूलित करें और बैकअप प्रबंधित करें।',
@@ -757,7 +885,7 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'backup',
-      title: '11. बैकअप, रिस्टोर एवं डेटा संप्रभुता',
+      title: '14. बैकअप, रिस्टोर एवं डेटा संप्रभुता',
       subtitle: 'JSON बैकअप फ़ाइलें, ऑफलाइन रिस्टोर व शून्य क्लाउड निर्भरता',
       overviewHeading: 'अपने डेटा पर 100% आपका अधिकार',
       overviewText: 'चूंकि Daily Khata किसी भी रिमोट सर्वर पर निर्भर नहीं है, इसलिए आपका डेटा पूरी तरह आपके नियंत्रण में है। जब भी आप फोन या कंप्यूटर बदलना चाहें, बस JSON बैकअप डाउनलोड करें और नए डिवाइस पर रिस्टोर कर लें।',
@@ -783,7 +911,7 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'source_code',
-      title: '12. सोर्स कोड, गिटहब एवं सुरक्षा ऑडिट',
+      title: '15. सोर्स कोड, गिटहब एवं सुरक्षा ऑडिट',
       subtitle: 'MIT ओपन-सोर्स पारदर्शिता, गिटहब रिपॉजिटरी व स्वयं सत्यापन गाइड',
       overviewHeading: 'खुली पारदर्शिता का वचन',
       overviewText: 'हमारा मानना है कि प्राइवेसी के लिए किसी के वादे पर निर्भर नहीं रहना चाहिए। Daily Khata Pro MIT लाइसेंस के तहत 100% ओपन सोर्स है। कोई भी व्यक्ति कोड की स्वतंत्र रूप से समीक्षा, ऑडिट और संचालन कर सकता है।',
@@ -810,7 +938,7 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'faq',
-      title: '13. अक्सर पूछे जाने वाले प्रश्न (FAQ)',
+      title: '16. अक्सर पूछे जाने वाले प्रश्न (FAQ)',
       subtitle: 'ऑफ़लाइन डेटा, पिन रिकवरी और गणितीय गणनाओं से जुड़े महत्वपूर्ण उत्तर',
       overviewHeading: 'अक्सर पूछे जाने वाले सवाल और उनके जवाब',
       overviewText: 'यहाँ हमारे उपयोगकर्ताओं द्वारा सबसे ज़्यादा पूछे जाने वाले सवालों के विस्तृत जवाब दिए गए हैं:',

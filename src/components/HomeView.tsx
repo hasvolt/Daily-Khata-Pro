@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Entry, FundType, FundConfig, AppLanguage } from '../types';
+import { Entry, FundType, FundConfig, AppLanguage, CategoryBudget, DebtItem, Goal } from '../types';
 import { DEFAULT_FUNDS, FUND_LABELS, FUND_CONFIGS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats } from '../utils/khataCalculations';
 import { getFundIcon } from '../utils/iconMap';
@@ -9,6 +9,8 @@ import { HomepageFundSelectorModal } from './HomepageFundSelectorModal';
 import { BankingCard3D } from './BankingCard3D';
 import { FundCard3D } from './FundCard3D';
 import { SummaryCard3D } from './SummaryCard3D';
+import { LoanUdharWidget } from './LoanUdharWidget';
+import { ActiveGoalsWidget } from './ActiveGoalsWidget';
 import { motion } from 'motion/react';
 import {
   Plus,
@@ -48,6 +50,14 @@ interface HomeViewProps {
   onNavigateGoals?: () => void;
   language?: AppLanguage;
   privacyMask?: boolean;
+  budgets?: CategoryBudget[];
+  onOpenBudgetManager?: () => void;
+  debtItems?: DebtItem[];
+  onNavigateLoans?: () => void;
+  onOpenAddDebtModal?: () => void;
+  goals?: Goal[];
+  onOpenCreateGoal?: () => void;
+  onOpenDepositGoal?: (goal: Goal) => void;
   [key: string]: any;
 }
 
@@ -61,8 +71,17 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onAddClick,
   onFilterFund,
   onViewHistory,
+  onNavigateGoals,
   language = 'en',
-  privacyMask = false
+  privacyMask = false,
+  budgets = [],
+  onOpenBudgetManager,
+  debtItems = [],
+  onNavigateLoans,
+  onOpenAddDebtModal,
+  goals = [],
+  onOpenCreateGoal,
+  onOpenDepositGoal
 }) => {
   const isHindi = language === 'hi' || language === 'hinglish';
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
@@ -193,6 +212,39 @@ export const HomeView: React.FC<HomeViewProps> = ({
           formatCurrency={formatCurrency}
           privacyMask={privacyMask}
           isHindi={isHindi}
+        />
+      </motion.div>
+
+      {/* 2.6 Advance Loans, EMIs & Udhar Ledger Overview Widget */}
+      {onNavigateLoans && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.18 }}
+        >
+          <LoanUdharWidget
+            debtItems={debtItems}
+            onOpenLedger={onNavigateLoans}
+            onOpenAddModal={onOpenAddDebtModal || onNavigateLoans}
+            language={language}
+            privacyMask={privacyMask}
+          />
+        </motion.div>
+      )}
+
+      {/* 2.7 Active Financial Goals & Savings Milestones Widget */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
+        <ActiveGoalsWidget
+          goals={goals}
+          onOpenCreateGoal={onOpenCreateGoal}
+          onOpenDepositGoal={onOpenDepositGoal}
+          onNavigateGoals={onNavigateGoals}
+          language={language}
+          privacyMask={privacyMask}
         />
       </motion.div>
 
