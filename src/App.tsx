@@ -78,6 +78,7 @@ import {
 } from './utils/reminderService';
 import { PageSearchModal } from './components/PageSearchModal';
 import { GoogleDriveSyncModal } from './components/GoogleDriveSyncModal';
+import { OfflineIndicator } from './components/OfflineIndicator';
 import {
   initAuth,
   uploadBackupToDrive,
@@ -705,6 +706,7 @@ export default function App() {
   const triggerDriveAutoSync = (dataToSync: KhataData) => {
     if (!autoSyncEnabled) return;
     if (!getAccessToken()) return;
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
 
     if (autoSyncDebounceRef.current) {
       clearTimeout(autoSyncDebounceRef.current);
@@ -712,6 +714,7 @@ export default function App() {
 
     autoSyncDebounceRef.current = setTimeout(async () => {
       try {
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
         setIsAutoSyncing(true);
         await uploadBackupToDrive(dataToSync, AUTO_SYNC_FILE_NAME, true);
         const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -3315,6 +3318,9 @@ export default function App() {
         lastSyncTime={lastDriveSyncTime}
         isAutoSyncing={isAutoSyncing}
       />
+
+      {/* 100% PWA Offline Mode Status Indicator */}
+      <OfflineIndicator language={language} />
     </div>
   );
 }

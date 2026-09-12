@@ -300,9 +300,14 @@
 
           function handleBootError(reason) {
             console.warn('[Daily Khata Boot Guard] Captured boot error:', reason);
+            // If the user is currently offline, NEVER wipe caches or force network reloads
+            if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+              console.log('[Daily Khata] Offline mode active — skipping cache clear');
+              return;
+            }
             var attempted = sessionStorage.getItem(RECOVERY_KEY);
             if (!attempted) {
-              // Auto-recovery: Silently clear cache and reload once with cache-buster
+              // Auto-recovery: Silently reload once with cache-buster
               sessionStorage.setItem(RECOVERY_KEY, Date.now().toString());
               if (typeof window.__DAILY_KHATA_FORCE_REFRESH__ === 'function') {
                 window.__DAILY_KHATA_FORCE_REFRESH__();
@@ -310,17 +315,24 @@
                 window.location.replace(window.location.origin + window.location.pathname + '?_fix=' + Date.now());
               }
             } else {
-              // If already auto-recovered once and still failing, present the clean recovery card
               showRecoveryUI(reason);
             }
           }
 
-          // 1. Intercept resource errors (e.g. script/chunk 404 on new deployment)
+          // 1. Intercept resource errors (ignore non-critical LINK tag errors like Google Fonts offline)
           window.addEventListener('error', function(e) {
             var target = e.target;
-            if (target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK')) {
-              var src = target.src || target.href || 'module';
-              handleBootError('Update chunk mismatch: ' + src.split('/').pop());
+            if (target && target.tagName === 'LINK') {
+              // External stylesheets (e.g. Google Fonts) failing offline is expected and harmless
+              return;
+            }
+            if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+              // Ignore offline fetch errors
+              return;
+            }
+            if (target && target.tagName === 'SCRIPT') {
+              var src = target.src || 'module';
+              handleBootError('Script loading mismatch: ' + src.split('/').pop());
               return;
             }
             var msg = (e.message || '').toLowerCase();
@@ -329,8 +341,9 @@
             }
           }, true);
 
-          // 2. Intercept unhandled promise rejections (e.g. dynamic import() fetch errors)
+          // 2. Intercept unhandled promise rejections
           window.addEventListener('unhandledrejection', function(e) {
+            if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
             var reason = e.reason ? (e.reason.message || String(e.reason)) : '';
             var lower = reason.toLowerCase();
             if (lower.indexOf('import') !== -1 || lower.indexOf('chunk') !== -1 || lower.indexOf('fetch') !== -1 || lower.indexOf('dynamically') !== -1) {
@@ -350,12 +363,16 @@
             }
           }, 4500);
 
-          // 4. Stuck protection after 10s: Show recovery card if React still hasn't mounted
+          // 4. Stuck protection after 10s: Show recovery card only if not mounted and not offline
           setTimeout(function() {
             var root = document.getElementById('root');
             var preloader = document.getElementById('app-preloader');
             if (preloader && preloader.style.display !== 'none') {
               if (!root || root.children.length === 0) {
+                if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+                  // If offline, let it continue rendering cached shell
+                  return;
+                }
                 showRecoveryUI('Network or module load timed out');
               }
             }
@@ -383,6 +400,10 @@
       // Global helpers for user-triggered update, cache refresh, and hard reset
       window.__DAILY_KHATA_FORCE_REFRESH__ = async function() {
         try {
+          if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+            window.location.reload();
+            return;
+          }
           if (window.__dailyKhataSwReg && window.__dailyKhataSwReg.active) {
             window.__dailyKhataSwReg.active.postMessage({ type: 'PURGE_CACHE' });
           }
@@ -403,6 +424,10 @@
 
       window.__DAILY_KHATA_HARD_RESET__ = async function() {
         try {
+          if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+            window.location.reload();
+            return;
+          }
           if ('caches' in window) {
             const keys = await caches.keys();
             await Promise.all(keys.map(function(k) { return caches.delete(k); }));
@@ -418,18 +443,33 @@
         }
       };
 
-      const isDevHost = window.location.hostname === 'localhost' || 
-                        window.location.hostname === '127.0.0.1' || 
-                        window.location.hostname.includes('ais-dev');
-      if ('serviceWorker' in navigator && !isDevHost) {
+      // Register Service Worker across all environments for 100% offline capability
+      if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          // updateViaCache: 'none' ensures the browser never caches sw.js itself
           navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' })
             .then((registration) => {
               window.__dailyKhataSwReg = registration;
 
-              // Immediately check for updates from server
-              registration.update().catch(() => {});
+              // Immediately precache all currently loaded script and style tags into SW
+              setTimeout(() => {
+                try {
+                  const assets = [];
+                  document.querySelectorAll('script[src], link[rel="stylesheet"]').forEach((el) => {
+                    const src = el.getAttribute('src') || el.getAttribute('href');
+                    if (src && !src.startsWith('http') && !src.startsWith('//') && !src.includes('hot-update')) {
+                      assets.push(src.startsWith('/') ? src : '/' + src);
+                    }
+                  });
+                  if (assets.length > 0 && registration.active) {
+                    registration.active.postMessage({ type: 'CACHE_URLS', urls: assets });
+                  }
+                } catch (e) {}
+              }, 1500);
+
+              // Immediately check for updates from server if online
+              if (navigator.onLine) {
+                registration.update().catch(() => {});
+              }
 
               // When a new service worker version is detected
               registration.addEventListener('updatefound', () => {

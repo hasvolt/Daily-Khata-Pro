@@ -7,7 +7,12 @@ import './index.css';
 
 // Auto-recover from dynamic import chunk failures (standard when a new version is deployed)
 window.addEventListener('vite:preloadError', (event) => {
-  console.warn('[Daily Khata] Vite chunk preload error detected, auto-healing...', event);
+  console.warn('[Daily Khata] Vite chunk preload error detected:', event);
+  // CRITICAL: When the user is offline, DO NOT clear caches or trigger forced network reloads
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    console.log('[Daily Khata] Offline mode active — preserving cached bundle');
+    return;
+  }
   const reloadKey = 'khata_chunk_reload_attempt';
   const lastReload = parseInt(sessionStorage.getItem(reloadKey) || '0', 10);
   const now = Date.now();

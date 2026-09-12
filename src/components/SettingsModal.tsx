@@ -261,6 +261,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const handleForceUpdateApp = async () => {
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      showFeedback(
+        'error',
+        tStr(
+          'आप अभी ऑफ़लाइन हैं। ऐप अपडेट करने के लिए इंटरनेट आवश्यक है।',
+          'Aap abhi offline hain. App update karne ke liye internet zaroori hai.',
+          'You are currently offline. Internet is required to update app and refresh cache.'
+        )
+      );
+      return;
+    }
     setIsUpdatingApp(true);
     showFeedback('success', tStr('कैश रिफ्रेश किया जा रहा है व नया वर्शन लोड हो रहा है...', 'Cache refresh ho raha hai aur fresh build load ho raha hai...', 'Refreshing cache and loading latest build...'));
     setTimeout(async () => {

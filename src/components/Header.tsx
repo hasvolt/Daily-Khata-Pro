@@ -149,6 +149,14 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleDirectUpdateApp = async (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      alert(
+        isHindi
+          ? 'आप अभी ऑफ़लाइन हैं। ऐप अपडेट व कैश रिफ्रेश करने के लिए इंटरनेट की आवश्यकता है। आपका स्थानीय डेटा सुरक्षित है।'
+          : 'You are currently offline. An internet connection is required to refresh cache and check for updates. Your local data is completely safe.'
+      );
+      return;
+    }
     triggerHapticSound('save');
     setIsUpdatingApp(true);
     setUpdateStatus(
