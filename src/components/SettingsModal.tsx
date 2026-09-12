@@ -193,7 +193,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('preferences');
-  const [confirmAction, setConfirmAction] = useState<'reset' | 'sample' | null>(null);
+  const [confirmAction, setConfirmAction] = useState<'reset' | 'sample' | 'reset_settings' | null>(null);
   const [modalFeedback, setModalFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Dynamic Funds & Allocation Rules State
@@ -1601,23 +1601,34 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {tStr('नमूना डेटा व रीसेट', 'Sample Data Aur Reset Control', 'Sample Data & Reset Control')}
                 </h4>
 
-                <div className="flex flex-col sm:flex-row gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setConfirmAction('sample')}
-                    className="flex-1 py-2.5 px-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#CBD5E1)] text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
-                  >
-                    <RefreshCw className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-                    <span>{tStr('नमूना डेटा लोड करें', 'Sample Demo Data Load Karein', 'Load Demo Sample Data')}</span>
-                  </button>
+                <div className="flex flex-col gap-2.5">
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setConfirmAction('sample')}
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#CBD5E1)] text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    >
+                      <RefreshCw className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                      <span>{tStr('नमूना डेटा लोड करें', 'Sample Demo Data Load Karein', 'Load Demo Sample Data')}</span>
+                    </button>
 
+                    <button
+                      type="button"
+                      onClick={() => setConfirmAction('reset')}
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#EF4444]/15 border border-[#EF4444]/30 hover:bg-[#EF4444]/25 text-[#EF4444] text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      <span>{tStr('सभी डेटा मिटाएं व रीसेट करें', 'Sabhi Data Wipe Aur Reset Karein', 'Wipe & Reset All Khata Data')}</span>
+                    </button>
+                  </div>
+                  
                   <button
                     type="button"
-                    onClick={() => setConfirmAction('reset')}
-                    className="flex-1 py-2.5 px-3 rounded-xl bg-[#EF4444]/15 border border-[#EF4444]/30 hover:bg-[#EF4444]/25 text-[#EF4444] text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    onClick={() => setConfirmAction('reset_settings')}
+                    className="w-full py-2.5 px-3 rounded-xl bg-orange-500/15 border border-orange-500/30 hover:bg-orange-500/25 text-orange-400 text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
-                    <Trash2 className="w-4 h-4" />
-                    <span>{tStr('सभी डेटा मिटाएं व रीसेट करें', 'Sabhi Data Wipe Aur Reset Karein', 'Wipe & Reset All Khata Data')}</span>
+                    <Sliders className="w-4 h-4" />
+                    <span>{tStr('सिर्फ सेटिंग्स डिफ़ॉल्ट पर रीसेट करें', 'Sirf Settings Default Par Reset Karein', 'Reset Settings to Default (Keep Data)')}</span>
                   </button>
                 </div>
               </div>
@@ -1991,6 +2002,36 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onLoadSampleData();
             setConfirmAction(null);
             showFeedback('success', tStr('नमूना डेटा लोड हो गया!', 'Sample demo data load ho gaya!', 'Sample demo data loaded!'));
+          }}
+          onCancel={() => setConfirmAction(null)}
+        />
+      )}
+
+      {confirmAction === 'reset_settings' && (
+        <ConfirmModal
+          isOpen={true}
+          title={tStr('सेटिंग्स डिफ़ॉल्ट पर रीसेट करें?', 'Settings Default Par Reset Karein?', 'Reset Settings to Defaults?')}
+          description={
+            tStr(
+              'यह आपके द्वारा कस्टमाइज़ की गई सेटिंग्स (जैसे थीम, लेआउट, श्रेणियां) को डिफ़ॉल्ट पर सेट कर देगा। आपका रिकॉर्डेड डेटा सुरक्षित रहेगा।',
+              'Yeh aapki custom settings (theme, categories) ko default par set kar dega. Aapka main data safe rahega.',
+              'This will restore UI settings, themes, categories, and percentages to their defaults. Your financial records will remain safe.'
+            )
+          }
+          confirmLabel={tStr('हां, रीसेट करें', 'Haan, Reset Karein', 'Yes, Reset Settings')}
+          cancelLabel={tStr('रद्द करें', 'Cancel Karein', 'Cancel')}
+          isDanger={true}
+          onConfirm={() => {
+            if (onUpdateFunds) onUpdateFunds(DEFAULT_FUNDS, DEFAULT_PERCENTAGES);
+            if (onUpdateCategories) onUpdateCategories(DEFAULT_CATEGORIES);
+            if (onUpdateIncomeSources) onUpdateIncomeSources(DEFAULT_INCOME_SOURCES);
+            if (onUpdateWorkCategories) onUpdateWorkCategories(DEFAULT_WORK_CATEGORIES);
+            if (onUpdateLifeTags) onUpdateLifeTags(DEFAULT_LIFE_TAGS);
+            if (onLayoutChange) onLayoutChange('dashboard');
+            if (onViewModeChange) onViewModeChange('auto');
+            if (onThemeChange) onThemeChange('blue');
+            setConfirmAction(null);
+            showFeedback('success', tStr('सभी सेटिंग्स डिफ़ॉल्ट पर रीसेट हो गईं!', 'Sabhi settings default par reset ho gayin!', 'All settings restored to defaults!'));
           }}
           onCancel={() => setConfirmAction(null)}
         />

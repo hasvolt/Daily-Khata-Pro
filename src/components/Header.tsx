@@ -126,6 +126,7 @@ export const Header: React.FC<HeaderProps> = ({
   theme = 'blue',
   onThemeChange,
   language = 'en',
+  onLanguageChange,
   privacyMask = false,
   onTogglePrivacyMask,
   onOpenPageSearch,
@@ -500,6 +501,8 @@ export const Header: React.FC<HeaderProps> = ({
         theme={theme}
         onThemeChange={onThemeChange}
         language={language}
+        onLanguageChange={onLanguageChange}
+        onOpenGoogleTranslate={onOpenGoogleTranslate}
         privacyMask={privacyMask}
         onTogglePrivacyMask={onTogglePrivacyMask}
         onOpenPageSearch={onOpenPageSearch}

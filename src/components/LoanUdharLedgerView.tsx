@@ -221,7 +221,165 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
 
   const handlePrintStatement = () => {
     triggerHapticSound('click');
-    window.print();
+    
+    // Generate an optimized A4 HTML view for printing
+    const escapeHtml = (str: string) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    
+    const activeDebtCount = debtItems.filter(d => d.status === 'active').length;
+    
+    let tableRows = filteredItems.map(item => {
+      const isLent = item.type === 'lent';
+      const isBank = item.type === 'loan';
+      const badgeClass = isLent ? 'badge-inc' : isBank ? 'badge-net' : 'badge-exp';
+      const badgeText = isLent ? 'Receivable' : isBank ? 'Bank Loan' : 'Payable';
+      const amountColor = isLent ? 'color: #16a34a;' : 'color: #dc2626;';
+      
+      const progressPercent = item.amount > 0 ? ((item.amount - item.remainingAmount) / item.amount) * 100 : 0;
+      
+      return `
+        <tr>
+          <td>
+            <div style="font-weight: 700; color: #0f172a;">${escapeHtml(item.title)}</div>
+            ${item.phone ? `<div style="font-size: 10px; color: #64748b;">${escapeHtml(item.phone)}</div>` : ''}
+          </td>
+          <td>
+            <span class="badge ${badgeClass}">${badgeText}</span>
+            <div style="margin-top: 4px; font-size: 10px; color: #64748b;">
+              Start: ${new Date(item.createdAt).toLocaleDateString()}
+              ${item.dueDate ? `<br/>Due: ${new Date(item.dueDate).toLocaleDateString()}` : ''}
+            </div>
+          </td>
+          <td>
+            <div style="font-weight: bold; ${amountColor}">Principal: ${formatCurrency(item.amount, privacyMask)}</div>
+            <div style="font-size: 10px; color: #475569;">
+              Remaining: ${formatCurrency(item.remainingAmount, privacyMask)}
+            </div>
+          </td>
+          <td>
+            <div style="font-size: 11px; font-weight: 600; color: ${item.status === 'settled' ? '#16a34a' : '#ea580c'};">
+              ${item.status === 'settled' ? 'SETTLED' : 'ACTIVE'}
+            </div>
+            ${item.status === 'active' ? `
+              <div style="width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px; margin-top: 4px;">
+                <div style="height: 4px; border-radius: 2px; background: ${isLent ? '#22c55e' : '#f97316'}; width: ${Math.min(100, Math.max(0, progressPercent))}%;"></div>
+              </div>
+              <div style="font-size: 9px; margin-top: 2px; color: #64748b;">${progressPercent.toFixed(0)}% Repaid</div>
+            ` : ''}
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Daily Khata Pro — Debt & Loan Statement</title>
+  <style>
+    @page { size: A4 portrait; margin: 12mm 14mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 24px; color: #0f172a; max-width: 820px; margin: 0 auto; line-height: 1.45; background: #fff; }
+    .brand-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #0284c7; padding-bottom: 12px; margin-bottom: 16px; }
+    .brand-title { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
+    .brand-sub { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #0f172a; color: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+    .summary-label { font-size: 10.5px; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
+    .summary-val { font-size: 16px; font-weight: bold; margin-top: 4px; font-family: -apple-system, monospace; }
+    table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 16px; }
+    th { text-align: left; padding: 7px 8px; border-bottom: 2px solid #cbd5e1; color: #475569; font-weight: 700; background: #f1f5f9; }
+    td { padding: 7px 8px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+    .badge { display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: 700; border-radius: 4px; text-transform: uppercase; }
+    .badge-inc { background: #dcfce7; color: #166534; }
+    .badge-exp { background: #fee2e2; color: #991b1b; }
+    .badge-net { background: #e0f2fe; color: #075985; }
+    .doc-end-divider { margin-top: 28px; padding-top: 10px; border-top: 1.5px solid #e2e8f0; font-size: 10.5px; color: #64748b; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="brand-header">
+    <div>
+      <div class="brand-title">Daily Khata Pro — Debt &amp; Loan Ledger</div>
+      <div class="brand-sub">Active Obligations &amp; Outstanding Receivables</div>
+    </div>
+    <div style="text-align: right; font-size: 11px; color: #475569;">
+      <div style="font-weight: 700; color: #0f172a;">Generated: ${new Date().toLocaleDateString('en-IN')}</div>
+      <div>Total Records: ${debtItems.length} (${activeDebtCount} Active)</div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div>
+      <div class="summary-label">Receivables</div>
+      <div class="summary-val" style="color: #34d399;">${formatCurrency(stats.totalLent, privacyMask)}</div>
+    </div>
+    <div>
+      <div class="summary-label">Payables</div>
+      <div class="summary-val" style="color: #f87171;">${formatCurrency(stats.totalBorrowed, privacyMask)}</div>
+    </div>
+    <div>
+      <div class="summary-label">Bank Loans</div>
+      <div class="summary-val" style="color: #7dd3fc;">${formatCurrency(stats.totalLoanPrincipal, privacyMask)}</div>
+    </div>
+    <div>
+      <div class="summary-label">Net Standing</div>
+      <div class="summary-val" style="color: ${stats.netPosition >= 0 ? '#34d399' : '#fbbf24'};">${stats.netPosition >= 0 ? '+' : ''}${formatCurrency(stats.netPosition, privacyMask)}</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%">Entity Name</th>
+        <th style="width: 25%">Type &amp; Dates</th>
+        <th style="width: 25%">Amount</th>
+        <th style="width: 20%">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${tableRows.length > 0 ? tableRows : '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #64748b;">No debt records found matching criteria.</td></tr>'}
+    </tbody>
+  </table>
+
+  <div class="doc-end-divider">
+    System Generated Report by Daily Khata Pro
+  </div>
+</body>
+</html>`;
+
+    try {
+      const existingFrame = document.getElementById('khata-print-frame');
+      if (existingFrame) existingFrame.remove();
+
+      const printFrame = document.createElement('iframe');
+      printFrame.id = 'khata-print-frame';
+      printFrame.style.position = 'fixed';
+      printFrame.style.right = '0';
+      printFrame.style.bottom = '0';
+      printFrame.style.width = '0';
+      printFrame.style.height = '0';
+      printFrame.style.border = '0';
+      document.body.appendChild(printFrame);
+
+      const frameDoc = printFrame.contentWindow?.document || printFrame.contentDocument;
+      if (frameDoc) {
+        frameDoc.open();
+        frameDoc.write(htmlContent);
+        frameDoc.close();
+
+        setTimeout(() => {
+          try {
+            printFrame.contentWindow?.focus();
+            printFrame.contentWindow?.print();
+          } catch {
+            window.print();
+          }
+        }, 400);
+      } else {
+        window.print();
+      }
+    } catch {
+      window.print();
+    }
   };
 
   return (
@@ -245,13 +403,13 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             </div>
             <div>
               <h1 className="text-lg sm:text-xl font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
-                <span>Loans & Debt Records</span>
+                <span>{_language === 'hi' ? 'उधार एवं लोन रजिस्टर (Udhar & Loans)' : 'Loans & Udhar Records'}</span>
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-400 border border-sky-500/30">
                   ADVANCED
                 </span>
               </h1>
               <p className="text-xs text-[var(--theme-text-dim,#94A3B8)]">
-                Track personal loans, receivables, borrowings, and bank loan amortization schedules
+                {_language === 'hi' ? 'अपना दिया हुआ उधार, लिया हुआ उधार और बैंक EMI ट्रैक करें' : 'Track money you lent (Udhar), money you borrowed, and bank EMIs'}
               </p>
             </div>
           </div>
@@ -266,7 +424,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             id="print-loan-ledger-btn"
           >
             <Printer className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)]" />
-            <span className="hidden sm:inline">Print Statement</span>
+            <span className="hidden sm:inline">{_language === 'hi' ? 'प्रिंट स्टेटमेंट' : 'Print Statement'}</span>
           </button>
 
           <button
@@ -280,7 +438,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             id="add-new-debt-btn"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
-            <span>+ Record Loan or Debt</span>
+            <span>{_language === 'hi' ? '+ नया उधार / लोन लिखें' : '+ Record Udhar / Loan'}</span>
           </button>
         </div>
       </div>
@@ -292,7 +450,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
               <ArrowUpRight className="w-4 h-4" />
-              <span>Receivables</span>
+              <span>{_language === 'hi' ? 'उधार दिया (Lent)' : 'Lent (Udhar Diya)'}</span>
             </span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
               {stats.activeLentCount} active
@@ -303,7 +461,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
               {formatCurrency(stats.totalLent, privacyMask)}
             </span>
             <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mt-0.5">
-              Total money to collect
+              {_language === 'hi' ? 'कुल पैसा जो आपको वापस लेना है' : 'Total money to collect back'}
             </span>
           </div>
         </div>

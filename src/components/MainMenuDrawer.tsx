@@ -41,7 +41,8 @@ import {
   Sparkles,
   Heart,
   Cloud,
-  Newspaper
+  Newspaper,
+  Globe
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -73,6 +74,8 @@ export interface MainMenuDrawerProps {
   theme?: AppTheme;
   onThemeChange?: (theme: AppTheme) => void;
   language?: AppLanguage;
+  onLanguageChange?: (lang: AppLanguage) => void;
+  onOpenGoogleTranslate?: () => void;
   privacyMask?: boolean;
   onTogglePrivacyMask?: () => void;
   onOpenPageSearch?: () => void;
@@ -109,6 +112,8 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   theme = 'blue',
   onThemeChange,
   language = 'en',
+  onLanguageChange,
+  onOpenGoogleTranslate,
   privacyMask = false,
   onTogglePrivacyMask,
   onOpenPageSearch,
@@ -385,6 +390,48 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       </div>
                       <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-blue-400 transition-colors" />
                     </button>
+                  )}
+
+                  {/* Language & Translation */}
+                  {onLanguageChange && (
+                    <div className="w-full flex flex-col p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 border border-[var(--theme-border,#213E61)] gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 shrink-0">
+                          <Globe className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'भाषा और अनुवाद' : 'Language & Translation'}
+                          </span>
+                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-snug truncate">
+                            {isHindi ? 'पसंदीदा भाषा चुनें या अंग्रेजी पर रीसेट करें' : 'Change app language or reset to English'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 mt-1">
+                        {onOpenGoogleTranslate && (
+                          <button
+                            type="button"
+                            onClick={() => handleMenuAction(onOpenGoogleTranslate)}
+                            className="flex-1 px-3 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[11px] font-semibold hover:border-orange-500/50 hover:bg-orange-500/10 transition-all cursor-pointer text-center"
+                          >
+                            {isHindi ? 'भाषा चुनें' : 'Choose Language'}
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            triggerHapticSound('click');
+                            onLanguageChange('en');
+                            onClose();
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-semibold hover:bg-blue-500/20 transition-all cursor-pointer whitespace-nowrap"
+                        >
+                          Reset to English
+                        </button>
+                      </div>
+                    </div>
                   )}
 
                   {/* App Settings */}
