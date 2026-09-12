@@ -1,0 +1,1 @@
+// Thinking: Instead of adding 'gold' and 'currency' tabs, let's see if the user meant 'MultiCalculatorModal' or 'CalculatorView'. The user said "Calculator page upgrade ker do calculator ke under option ho ki user kya calculation karna chahta hai crunchy gold silver USD more" (crunchy means currency). I will add new tabs for Gold/Silver and Currency.

@@ -54,13 +54,17 @@ export interface CommercialArticle {
 }
 
 export const LIVE_MARKET_INDICES: MarketIndex[] = [
+  { symbol: 'GOLD 24K', name: 'MCX Gold 10g', value: '₹75,850', change: '+430 (+0.57%)', isPositive: true, type: 'commodity' },
+  { symbol: 'GOLD 22K', name: 'Jewelry 10g', value: '₹69,530', change: '+390 (+0.56%)', isPositive: true, type: 'commodity' },
+  { symbol: 'SILVER 1KG', name: 'MCX Silver 1kg', value: '₹91,200', change: '+650 (+0.72%)', isPositive: true, type: 'commodity' },
+  { symbol: 'USD/INR', name: 'US Dollar Spot', value: '₹83.92', change: '-0.03 (-0.04%)', isPositive: true, type: 'currency' },
+  { symbol: 'EUR/INR', name: 'Euro Spot', value: '₹91.45', change: '+0.18 (+0.20%)', isPositive: true, type: 'currency' },
+  { symbol: 'GBP/INR', name: 'British Pound', value: '₹108.60', change: '+0.25 (+0.23%)', isPositive: true, type: 'currency' },
+  { symbol: 'AED/INR', name: 'UAE Dirham', value: '₹22.85', change: '-0.01 (-0.04%)', isPositive: true, type: 'currency' },
+  { symbol: 'BRENT OIL', name: 'Crude Barrel', value: '$74.15', change: '-1.12 (-1.49%)', isPositive: false, type: 'commodity' },
+  { symbol: 'BITCOIN', name: 'BTC Spot (USD)', value: '$64,280', change: '+1,450 (+2.31%)', isPositive: true, type: 'currency' },
   { symbol: 'NIFTY 50', name: 'NSE Nifty', value: '25,418.60', change: '+142.30 (+0.56%)', isPositive: true, type: 'equity' },
   { symbol: 'SENSEX', name: 'BSE Sensex', value: '83,275.90', change: '+415.80 (+0.50%)', isPositive: true, type: 'equity' },
-  { symbol: 'USD/INR', name: 'Rupee Spot', value: '₹83.88', change: '-0.04 (-0.05%)', isPositive: true, type: 'currency' },
-  { symbol: 'GOLD 24K', name: 'MCX Gold 10g', value: '₹75,420', change: '+320 (+0.43%)', isPositive: true, type: 'commodity' },
-  { symbol: 'BRENT OIL', name: 'Crude Barrel', value: '$74.15', change: '-1.12 (-1.49%)', isPositive: false, type: 'commodity' },
-  { symbol: 'REPO RATE', name: 'RBI Benchmark', value: '6.50%', change: 'Neutral Stance', isPositive: true, type: 'macro' },
-  { symbol: 'CPI INFLATION', name: 'Retail Index', value: '3.65%', change: 'Target Band', isPositive: true, type: 'macro' },
   { symbol: '10Y G-SEC', name: 'Sovereign Yield', value: '6.84%', change: '-3 bps', isPositive: true, type: 'macro' }
 ];
 

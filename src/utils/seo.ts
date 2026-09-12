@@ -159,7 +159,7 @@ export function updatePageSEO(pathname: string): void {
     if (newsItem) {
       seo = {
         title: `${newsItem.title} — Commercial News & Research | Daily Khata Pro`,
-        description: newsItem.description,
+        description: newsItem.subtitle || newsItem.hindiSubtitle || 'Commercial and market research whitepaper.',
         canonicalPath: cleanPath
       };
     }

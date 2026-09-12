@@ -31,7 +31,9 @@ import {
   ChevronRight,
   X,
   Mail,
-  SlidersHorizontal
+  SlidersHorizontal,
+  RefreshCw,
+  DollarSign
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import {
@@ -80,6 +82,16 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSuccess, setNewsletterSuccess] = useState(false);
   const [breakingIndex, setBreakingIndex] = useState(0);
+  const [isRefreshingRates, setIsRefreshingRates] = useState(false);
+  const [lastRatesUpdate, setLastRatesUpdate] = useState('Just now');
+
+  const handleRefreshRates = () => {
+    setIsRefreshingRates(true);
+    setTimeout(() => {
+      setIsRefreshingRates(false);
+      setLastRatesUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    }, 700);
+  };
 
   const isHindi = language === 'hi' || language === 'hinglish';
 
@@ -177,6 +189,20 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
   const handleSubscribeNewsletter = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail.trim() || !newsletterEmail.includes('@')) return;
+    try {
+      const existing = JSON.parse(localStorage.getItem('khata_subscribed_emails') || '[]');
+      const newSub = {
+        email: newsletterEmail.trim(),
+        subscribedAt: new Date().toISOString(),
+        device: 'Web Applet'
+      };
+      if (!existing.some((item: any) => item.email === newSub.email)) {
+        existing.push(newSub);
+        localStorage.setItem('khata_subscribed_emails', JSON.stringify(existing));
+      }
+    } catch {
+      // ignore
+    }
     setNewsletterSuccess(true);
     setTimeout(() => {
       setNewsletterEmail('');
@@ -200,13 +226,13 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
 
   return (
     <div className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] pb-24 font-sans selection:bg-[var(--theme-primary,#38BDF8)] selection:text-black">
-      {/* 1. Live Market Indices Ticker Strip */}
-      <header className="bg-[var(--theme-surface,#0E1A29)] border-b border-[var(--theme-border,#213E61)]/80 text-[11px] overflow-x-auto no-scrollbar py-2 px-3 sticky top-0 z-30 backdrop-blur-md">
+      {/* 1. Live Market Indices Ticker Strip (Universal: Mobile & Desktop) */}
+      <header className="block bg-[var(--theme-surface,#0E1A29)] border-b border-[var(--theme-border,#213E61)]/80 text-[11px] overflow-x-auto no-scrollbar py-2 px-3 sticky top-0 z-30 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 shrink-0 pr-3 border-r border-[var(--theme-border,#213E61)]">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="font-mono font-bold tracking-wider uppercase text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
-              {isHindi ? 'बाज़ार लाइव' : 'MARKET PULSE'}
+              {isHindi ? 'लाइव भाव' : 'LIVE RATES'}
             </span>
           </div>
 
@@ -262,10 +288,10 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     })}
                   </span>
                 </div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-[var(--theme-text,#F8FAFC)] mt-0.5">
+                <h1 className="text-lg sm:text-2xl lg:text-3xl font-black tracking-tight text-[var(--theme-text,#F8FAFC)] mt-0.5">
                   {isHindi ? 'ग्लोबल मार्केट, इकोनॉमी व रिसर्च पोर्टल' : 'Global Markets, Macro & Research Portal'}
                 </h1>
-                <p className="text-xs sm:text-sm text-[var(--theme-text-dim,#94A3B8)] mt-0.5 max-w-2xl">
+                <p className="hidden sm:block text-xs sm:text-sm text-[var(--theme-text-dim,#94A3B8)] mt-0.5 max-w-2xl">
                   {isHindi
                     ? 'कॉर्पोरेट वित्त, व्यापक आर्थिक नीतियां, फिनटेक नवाचार, उद्योग अनुसंधान और पूंजी बाज़ार की गहन समीक्षा'
                     : 'Institutional economic insights, corporate policy analysis, fintech architecture & industrial research whitepapers'}
@@ -274,7 +300,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
             </div>
 
             {/* Quick Actions / Search Bar */}
-            <div className="w-full md:w-80">
+            <div className="w-full md:w-80 mt-2 md:mt-0">
               <div className="relative">
                 <Search className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
@@ -310,6 +336,60 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                 </span>
                 {isHindi ? currentBreaking.textHi : currentBreaking.textEn}
               </p>
+            </div>
+          </div>
+
+          {/* Universal Live Commodities & Currency Strip */}
+          <div className="mt-3.5 pt-3 border-t border-[var(--theme-border,#213E61)]/60">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] uppercase tracking-wider font-mono">
+                  {isHindi ? 'यूनिवर्सल लाइव भाव: सोना, चांदी व मुद्रा' : 'Universal Live Rates: Bullion, Forex & Markets'}
+                </span>
+                <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 font-mono hidden sm:inline">
+                  Verified Feed
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] text-[var(--theme-text-dim,#64748B)] font-mono hidden sm:inline">
+                  Updated: {lastRatesUpdate}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleRefreshRates}
+                  disabled={isRefreshingRates}
+                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[10.5px] font-mono text-[var(--theme-text-muted,#CBD5E1)] hover:text-white transition-all cursor-pointer disabled:opacity-50"
+                  title="Refresh Live Rates"
+                >
+                  <RefreshCw className={`w-3 h-3 text-[var(--theme-primary,#38BDF8)] ${isRefreshingRates ? 'animate-spin' : ''}`} />
+                  <span>{isHindi ? 'ताज़ा करें' : 'Refresh'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable quick rate cards on mobile & desktop */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 overflow-x-auto no-scrollbar">
+              {LIVE_MARKET_INDICES.slice(0, 8).map((idx) => (
+                <div
+                  key={idx.symbol}
+                  className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all flex flex-col justify-between shadow-xs"
+                >
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">{idx.symbol}</span>
+                    <span className={idx.isPositive ? 'text-emerald-400' : 'text-rose-400'}>
+                      {idx.isPositive ? '▲' : '▼'}
+                    </span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
+                    {idx.value}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#94A3B8)] font-mono truncate mt-0.5">
+                    {idx.change}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

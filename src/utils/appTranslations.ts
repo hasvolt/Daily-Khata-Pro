@@ -156,6 +156,8 @@ export interface AppTranslationBundle {
     tabGst: string;
     tabDiscount: string;
     tabInflation: string;
+    tabGold: string;
+    tabForex: string;
     backToHome: string;
     enterIncome: string;
     presets: string;
@@ -392,6 +394,8 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       tabGst: 'GST Tax',
       tabDiscount: 'Discount & Sale',
       tabInflation: 'Inflation Cost',
+      tabGold: 'Gold/Silver Calc',
+      tabForex: 'Currency (Forex)',
       backToHome: 'Back to Khata',
       get enterIncome() { return `Enter Income Amount (${getCurrencyConfig(getCurrentLanguage()).symbol})`; },
       presets: 'Quick Presets',
@@ -626,6 +630,8 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       tabGst: 'GST टैक्स कैलकुलेटर',
       tabDiscount: 'डिस्काउंट व छूट',
       tabInflation: 'महंगाई दर व भविष्य मूल्य',
+      tabGold: 'गोल्ड/सिल्वर गणना',
+      tabForex: 'विदेशी मुद्रा (फॉरेक्स)',
       backToHome: 'वापस खाता पर जाएं',
       get enterIncome() { return `कमाई की राशि दर्ज करें (${getCurrencyConfig(getCurrentLanguage()).symbol})`; },
       presets: 'त्वरित प्रीसेट',
@@ -860,6 +866,8 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       tabGst: 'GST Tax',
       tabDiscount: 'Discount & Sale',
       tabInflation: 'Inflation Cost',
+      tabGold: 'Gold/Silver Calc',
+      tabForex: 'Currency (Forex)',
       backToHome: 'Back to Khata',
       get enterIncome() { return `Income Amount Enter Karein (${getCurrencyConfig(getCurrentLanguage()).symbol})`; },
       presets: 'Quick Presets',

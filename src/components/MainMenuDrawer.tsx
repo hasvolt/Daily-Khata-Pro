@@ -42,7 +42,9 @@ import {
   Heart,
   Cloud,
   Newspaper,
-  Globe
+  Globe,
+  Palette,
+  Check
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -433,6 +435,103 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       </div>
                     </div>
                   )}
+
+                  {/* Theme & Appearance (Professional Redesign) */}
+                  {onThemeChange && (() => {
+                    const THEME_OPTIONS: {
+                      id: AppTheme;
+                      name: string;
+                      hindiName: string;
+                      mode: 'Dark' | 'Light' | 'OLED';
+                      primaryHex: string;
+                      bgHex: string;
+                    }[] = [
+                      { id: 'blue', name: 'Sapphire Navy', hindiName: 'नीला नेवी', mode: 'Dark', primaryHex: '#38BDF8', bgHex: '#0F172A' },
+                      { id: 'emerald', name: 'Emerald Forest', hindiName: 'पन्ना हरा', mode: 'Dark', primaryHex: '#34D399', bgHex: '#022C22' },
+                      { id: 'cyan', name: 'Cyber Ocean', hindiName: 'साइबर स्यान', mode: 'Dark', primaryHex: '#22D3EE', bgHex: '#083344' },
+                      { id: 'purple', name: 'Royal Violet', hindiName: 'शाही बैंगनी', mode: 'Dark', primaryHex: '#C084FC', bgHex: '#3B0764' },
+                      { id: 'yellow', name: 'Amber Gold', hindiName: 'अंबर स्वर्ण', mode: 'Dark', primaryHex: '#FACC15', bgHex: '#422006' },
+                      { id: 'orange', name: 'Sunset Copper', hindiName: 'सनसेट संतरी', mode: 'Dark', primaryHex: '#FB923C', bgHex: '#431407' },
+                      { id: 'pink', name: 'Ruby Pink', hindiName: 'रूबी गुलाबी', mode: 'Dark', primaryHex: '#F472B6', bgHex: '#500724' },
+                      { id: 'black', name: 'Pitch OLED', hindiName: 'ओलेड ब्लैक', mode: 'OLED', primaryHex: '#38BDF8', bgHex: '#000000' },
+                      { id: 'light', name: 'Modern Studio', hindiName: 'मॉडर्न लाइट', mode: 'Light', primaryHex: '#0284C7', bgHex: '#F1F5F9' },
+                      { id: 'white', name: 'Clean Paper', hindiName: 'सफेद मिनिमल', mode: 'Light', primaryHex: '#2563EB', bgHex: '#FFFFFF' }
+                    ];
+
+                    const activeThemeObj = THEME_OPTIONS.find(t => t.id === theme) || THEME_OPTIONS[0];
+
+                    return (
+                      <div className="w-full flex flex-col p-3 rounded-2xl bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] gap-2.5 shadow-sm">
+                        <div className="flex items-center justify-between min-w-0">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="w-7 h-7 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
+                              <Palette className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="min-w-0">
+                              <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                                {isHindi ? 'ऐप थीम व स्टाइल' : 'Color Theme & Style'}
+                              </span>
+                              <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-tight truncate">
+                                {isHindi ? '10 प्रीमियम रंग संयोजन' : '10 institutional workspace palettes'}
+                              </span>
+                            </div>
+                          </div>
+                          <span className="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full border border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)] text-[var(--theme-primary,#38BDF8)] shrink-0 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--theme-primary,#38BDF8)]"></span>
+                            {isHindi ? activeThemeObj.hindiName : activeThemeObj.name}
+                          </span>
+                        </div>
+
+                        {/* Elegant 2-column list of theme choices */}
+                        <div className="grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto pr-0.5 custom-scrollbar">
+                          {THEME_OPTIONS.map((t) => {
+                            const isSelected = theme === t.id;
+                            return (
+                              <button
+                                key={t.id}
+                                type="button"
+                                onClick={() => {
+                                  triggerHapticSound('click');
+                                  onThemeChange(t.id);
+                                }}
+                                className={`flex items-center gap-2 p-1.5 rounded-xl border text-left transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[var(--theme-card,#132438)] border-[var(--theme-primary,#38BDF8)] shadow-xs ring-1 ring-[var(--theme-primary,#38BDF8)]/40'
+                                    : 'bg-[var(--theme-bg,#070E18)]/70 border-[var(--theme-border,#213E61)]/70 hover:border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-card,#132438)]/50'
+                                }`}
+                              >
+                                {/* Dual-tone swatch dot */}
+                                <div
+                                  className="w-5 h-5 rounded-lg shrink-0 flex items-center justify-center border shadow-xs"
+                                  style={{ backgroundColor: t.bgHex, borderColor: t.primaryHex }}
+                                >
+                                  <div
+                                    className="w-2 h-2 rounded-full"
+                                    style={{ backgroundColor: t.primaryHex }}
+                                  />
+                                </div>
+
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate leading-tight">
+                                    {isHindi ? t.hindiName : t.name}
+                                  </div>
+                                  <div className="text-[9px] text-[var(--theme-text-dim,#94A3B8)] uppercase font-mono">
+                                    {t.mode}
+                                  </div>
+                                </div>
+
+                                {isSelected && (
+                                  <div className="w-4 h-4 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0">
+                                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                                  </div>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {/* App Settings */}
                   <button

@@ -229,12 +229,12 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
     
     let tableRows = filteredItems.map(item => {
       const isLent = item.type === 'lent';
-      const isBank = item.type === 'loan';
+      const isBank = item.type === 'loan_emi';
       const badgeClass = isLent ? 'badge-inc' : isBank ? 'badge-net' : 'badge-exp';
       const badgeText = isLent ? 'Receivable' : isBank ? 'Bank Loan' : 'Payable';
       const amountColor = isLent ? 'color: #16a34a;' : 'color: #dc2626;';
       
-      const progressPercent = item.amount > 0 ? ((item.amount - item.remainingAmount) / item.amount) * 100 : 0;
+      const progressPercent = item.principalAmount > 0 ? ((item.principalAmount - item.remainingAmount) / item.principalAmount) * 100 : 0;
       
       return `
         <tr>
@@ -250,7 +250,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             </div>
           </td>
           <td>
-            <div style="font-weight: bold; ${amountColor}">Principal: ${formatCurrency(item.amount, privacyMask)}</div>
+            <div style="font-weight: bold; ${amountColor}">Principal: ${formatCurrency(item.principalAmount, privacyMask)}</div>
             <div style="font-size: 10px; color: #475569;">
               Remaining: ${formatCurrency(item.remainingAmount, privacyMask)}
             </div>
@@ -450,7 +450,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
               <ArrowUpRight className="w-4 h-4" />
-              <span>{_language === 'hi' ? 'उधार दिया (Lent)' : 'Lent (Udhar Diya)'}</span>
+              <span>{_language === 'hi' ? 'उधार दिया (Lent)' : 'Money Lent (Receivable)'}</span>
             </span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
               {stats.activeLentCount} active
@@ -461,7 +461,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
               {formatCurrency(stats.totalLent, privacyMask)}
             </span>
             <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mt-0.5">
-              {_language === 'hi' ? 'कुल पैसा जो आपको वापस लेना है' : 'Total money to collect back'}
+              {_language === 'hi' ? 'कुल पैसा जो आपको वापस लेना है' : 'Total amount to collect back'}
             </span>
           </div>
         </div>
@@ -471,7 +471,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
               <ArrowDownLeft className="w-4 h-4" />
-              <span>Payables</span>
+              <span>{_language === 'hi' ? 'उधार लिया (Borrowed)' : 'Money Borrowed (Payable)'}</span>
             </span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono">
               {stats.activeBorrowedCount} active
@@ -482,7 +482,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
               {formatCurrency(stats.totalBorrowed, privacyMask)}
             </span>
             <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mt-0.5">
-              Personal borrowings to return
+              {_language === 'hi' ? 'कुल पैसा जो आपको चुकाना है' : 'Personal borrowings to return'}
             </span>
           </div>
         </div>
@@ -843,9 +843,9 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                           }`}
                         >
                           {item.type === 'lent'
-                            ? 'Lent (Receivable)'
+                            ? 'You Lent (They owe you)'
                             : item.type === 'borrowed'
-                            ? 'Borrowed (Payable)'
+                            ? 'You Borrowed (You owe)'
                             : 'Bank Loan / EMI'}
                         </span>
                       </div>
