@@ -35,6 +35,13 @@ import {
   RefreshCw,
   DollarSign
 } from 'lucide-react';
+import {
+  subscribeMarketRates,
+  fetchLiveMarketRates,
+  getCachedMarketRates,
+  getIndianMarketStatus,
+  LiveMarketRates
+} from '../services/liveMarketApiService';
 import { AppLanguage } from '../types';
 import {
   LIVE_MARKET_INDICES,
@@ -83,14 +90,50 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
   const [newsletterSuccess, setNewsletterSuccess] = useState(false);
   const [breakingIndex, setBreakingIndex] = useState(0);
   const [isRefreshingRates, setIsRefreshingRates] = useState(false);
+  const [liveRates, setLiveRates] = useState<LiveMarketRates>(getCachedMarketRates());
+  const [marketStatus, setMarketStatus] = useState(getIndianMarketStatus());
+
+  useEffect(() => {
+    // Initial fetch on mount
+    fetchLiveMarketRates().then((rates) => {
+      setLiveRates(rates);
+      setMarketStatus(getIndianMarketStatus());
+    });
+
+    // Subscribe to rate updates
+    const unsubscribe = subscribeMarketRates((newRates) => {
+      setLiveRates(newRates);
+      setMarketStatus(getIndianMarketStatus());
+    });
+
+    // Auto-refresh interval every 60s
+    const interval = setInterval(() => {
+      fetchLiveMarketRates().then((rates) => {
+        setLiveRates(rates);
+        setMarketStatus(getIndianMarketStatus());
+      });
+    }, 60000);
+
+    return () => {
+      unsubscribe();
+      clearInterval(interval);
+    };
+  }, []);
+
   const [lastRatesUpdate, setLastRatesUpdate] = useState('Just now');
 
-  const handleRefreshRates = () => {
+  const handleRefreshRates = async () => {
     setIsRefreshingRates(true);
-    setTimeout(() => {
-      setIsRefreshingRates(false);
+    try {
+      const updated = await fetchLiveMarketRates();
+      setLiveRates(updated);
+      setMarketStatus(getIndianMarketStatus());
       setLastRatesUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    }, 700);
+    } catch (err) {
+      console.error('Refresh rates failed', err);
+    } finally {
+      setIsRefreshingRates(false);
+    }
   };
 
   const isHindi = language === 'hi' || language === 'hinglish';
@@ -339,57 +382,267 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
             </div>
           </div>
 
-          {/* Universal Live Commodities & Currency Strip */}
-          <div className="mt-3.5 pt-3 border-t border-[var(--theme-border,#213E61)]/60">
-            <div className="flex items-center justify-between gap-2 mb-2">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span className="text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] uppercase tracking-wider font-mono">
-                  {isHindi ? 'यूनिवर्सल लाइव भाव: सोना, चांदी व मुद्रा' : 'Universal Live Rates: Bullion, Forex & Markets'}
+          {/* Live Market & Equity Indices (Sensex & Nifty 50) Command Center */}
+          <div className="mt-4 pt-3.5 border-t border-[var(--theme-border,#213E61)]/70 space-y-3">
+            {/* Live API Feed Header & Status Bar */}
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10.5px] font-bold font-mono text-emerald-400">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>{isHindi ? 'लाइव API कनेक्टेड' : 'Live API Connected'}</span>
                 </span>
-                <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 font-mono hidden sm:inline">
-                  Verified Feed
+                <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono hidden sm:inline">
+                  Feed: {liveRates.apiSource} ({liveRates.latencyMs}ms)
+                </span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md font-mono ${
+                  marketStatus.isOpen ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                }`}>
+                  {isHindi ? marketStatus.textHi : marketStatus.label}
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-[var(--theme-text-dim,#64748B)] font-mono hidden sm:inline">
-                  Updated: {lastRatesUpdate}
+                <span className="text-[10px] text-[var(--theme-text-dim,#64748B)] font-mono">
+                  Synced: {lastRatesUpdate}
                 </span>
                 <button
                   type="button"
                   onClick={handleRefreshRates}
                   disabled={isRefreshingRates}
-                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[10.5px] font-mono text-[var(--theme-text-muted,#CBD5E1)] hover:text-white transition-all cursor-pointer disabled:opacity-50"
-                  title="Refresh Live Rates"
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[11px] font-mono text-[var(--theme-text,#F8FAFC)] hover:text-white transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+                  title="Refresh Live API Feeds"
                 >
-                  <RefreshCw className={`w-3 h-3 text-[var(--theme-primary,#38BDF8)] ${isRefreshingRates ? 'animate-spin' : ''}`} />
-                  <span>{isHindi ? 'ताज़ा करें' : 'Refresh'}</span>
+                  <RefreshCw className={`w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] ${isRefreshingRates ? 'animate-spin' : ''}`} />
+                  <span>{isHindi ? 'रिफ्रेश करें' : 'Refresh Feed'}</span>
                 </button>
               </div>
             </div>
 
-            {/* Scrollable quick rate cards on mobile & desktop */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 overflow-x-auto no-scrollbar">
-              {LIVE_MARKET_INDICES.slice(0, 8).map((idx) => (
-                <div
-                  key={idx.symbol}
-                  className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all flex flex-col justify-between shadow-xs"
-                >
-                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
-                    <span className="truncate">{idx.symbol}</span>
-                    <span className={idx.isPositive ? 'text-emerald-400' : 'text-rose-400'}>
-                      {idx.isPositive ? '▲' : '▼'}
+            {/* Indian Benchmark Indices: NSE NIFTY 50 & BSE SENSEX Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* NIFTY 50 Card */}
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[var(--theme-card,#132438)] to-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/40 transition-all shadow-md">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                    <span className="text-xs sm:text-sm font-black font-mono tracking-wider text-[var(--theme-text,#F8FAFC)]">
+                      NSE NIFTY 50
+                    </span>
+                    <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-sky-500/15 text-sky-300 font-mono">
+                      Benchmark Index
                     </span>
                   </div>
-                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
-                    {idx.value}
+                  <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded-lg flex items-center gap-0.5 ${
+                    liveRates.nifty50.change >= 0 ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+                  }`}>
+                    {liveRates.nifty50.change >= 0 ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+                    <span>{liveRates.nifty50.change >= 0 ? '+' : ''}{liveRates.nifty50.change} ({liveRates.nifty50.changePercent}%)</span>
+                  </span>
+                </div>
+
+                <div className="mt-2 flex items-baseline justify-between">
+                  <div className="text-2xl sm:text-3xl font-black font-mono text-[var(--theme-text,#F8FAFC)] tracking-tight">
+                    {liveRates.nifty50.value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[9.5px] text-[var(--theme-text-muted,#94A3B8)] font-mono truncate mt-0.5">
-                    {idx.change}
+                  <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    Prev Close: {liveRates.nifty50.prevClose.toLocaleString('en-IN')}
                   </div>
                 </div>
-              ))}
+
+                {/* Day Range Bar */}
+                <div className="mt-2.5 space-y-1">
+                  <div className="flex items-center justify-between text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span>Day Low: {liveRates.nifty50.low.toLocaleString('en-IN')}</span>
+                    <span>Day High: {liveRates.nifty50.high.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-[var(--theme-bg,#070E18)] overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 via-sky-400 to-emerald-400 rounded-full"
+                      style={{
+                        width: `${Math.min(100, Math.max(10, ((liveRates.nifty50.value - liveRates.nifty50.low) / Math.max(1, liveRates.nifty50.high - liveRates.nifty50.low)) * 100))}%`
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-[9.5px] text-[var(--theme-text-dim,#64748B)] font-mono pt-0.5">
+                    <span>52W Low: {liveRates.nifty50.week52Low.toLocaleString('en-IN')}</span>
+                    <span>P/E: {liveRates.nifty50.peRatio}</span>
+                    <span>52W High: {liveRates.nifty50.week52High.toLocaleString('en-IN')}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* SENSEX Card */}
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[var(--theme-card,#132438)] to-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/40 transition-all shadow-md">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                    <span className="text-xs sm:text-sm font-black font-mono tracking-wider text-[var(--theme-text,#F8FAFC)]">
+                      BSE SENSEX
+                    </span>
+                    <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 font-mono">
+                      30 Bluechips
+                    </span>
+                  </div>
+                  <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded-lg flex items-center gap-0.5 ${
+                    liveRates.sensex.change >= 0 ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+                  }`}>
+                    {liveRates.sensex.change >= 0 ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+                    <span>{liveRates.sensex.change >= 0 ? '+' : ''}{liveRates.sensex.change} ({liveRates.sensex.changePercent}%)</span>
+                  </span>
+                </div>
+
+                <div className="mt-2 flex items-baseline justify-between">
+                  <div className="text-2xl sm:text-3xl font-black font-mono text-[var(--theme-text,#F8FAFC)] tracking-tight">
+                    {liveRates.sensex.value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </div>
+                  <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    Prev Close: {liveRates.sensex.prevClose.toLocaleString('en-IN')}
+                  </div>
+                </div>
+
+                {/* Day Range Bar */}
+                <div className="mt-2.5 space-y-1">
+                  <div className="flex items-center justify-between text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span>Day Low: {liveRates.sensex.low.toLocaleString('en-IN')}</span>
+                    <span>Day High: {liveRates.sensex.high.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-[var(--theme-bg,#070E18)] overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 via-amber-400 to-emerald-400 rounded-full"
+                      style={{
+                        width: `${Math.min(100, Math.max(10, ((liveRates.sensex.value - liveRates.sensex.low) / Math.max(1, liveRates.sensex.high - liveRates.sensex.low)) * 100))}%`
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-[9.5px] text-[var(--theme-text-dim,#64748B)] font-mono pt-0.5">
+                    <span>52W Low: {liveRates.sensex.week52Low.toLocaleString('en-IN')}</span>
+                    <span>Advances: {liveRates.sensex.advances}</span>
+                    <span>52W High: {liveRates.sensex.week52High.toLocaleString('en-IN')}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Strip: Bank Nifty, India VIX, Bullion (Gold/Silver), Global Forex */}
+            <div className="space-y-1.5">
+              <div className="text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)] uppercase tracking-wider font-mono flex items-center justify-between">
+                <span>{isHindi ? 'कमोडिटी, बुलियन व लाइव फॉरेक्स भाव' : 'Live Bullion, Forex & Macro Feeds'}</span>
+                <span className="text-[10px] text-emerald-400 font-mono">Continuous Stream</span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 overflow-x-auto no-scrollbar">
+                {/* Gold 24K */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-amber-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">GOLD 24K</span>
+                    <span className="text-amber-400">🪙</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
+                    ₹{liveRates.gold24k.per10g.toLocaleString('en-IN')}
+                  </div>
+                  <div className="text-[9.5px] text-emerald-400 font-mono truncate mt-0.5">
+                    +{liveRates.gold24k.change} ({liveRates.gold24k.changePercent}%)
+                  </div>
+                </div>
+
+                {/* Gold 22K */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-amber-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">GOLD 22K (916)</span>
+                    <span className="text-amber-300">💍</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
+                    ₹{liveRates.gold22k.per10g.toLocaleString('en-IN')}
+                  </div>
+                  <div className="text-[9.5px] text-emerald-400 font-mono truncate mt-0.5">
+                    +{liveRates.gold22k.change} ({liveRates.gold22k.changePercent}%)
+                  </div>
+                </div>
+
+                {/* Silver 1KG */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-sky-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">SILVER 1KG</span>
+                    <span className="text-slate-300">🥈</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
+                    ₹{liveRates.silver.perKg.toLocaleString('en-IN')}
+                  </div>
+                  <div className="text-[9.5px] text-emerald-400 font-mono truncate mt-0.5">
+                    +{liveRates.silver.change} ({liveRates.silver.changePercent}%)
+                  </div>
+                </div>
+
+                {/* USD / INR */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-emerald-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">USD / INR</span>
+                    <span>🇺🇸</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-emerald-400 mt-0.5 tracking-tight">
+                    ₹{liveRates.forex.USD?.inrRate || 83.92}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] font-mono truncate mt-0.5">
+                    Live Open Feed
+                  </div>
+                </div>
+
+                {/* EUR / INR */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-emerald-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">EUR / INR</span>
+                    <span>🇪🇺</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
+                    ₹{liveRates.forex.EUR?.inrRate || 91.45}
+                  </div>
+                  <div className="text-[9.5px] text-emerald-400 font-mono truncate mt-0.5">
+                    +0.20% Spot
+                  </div>
+                </div>
+
+                {/* AED / INR */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-emerald-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">AED / INR</span>
+                    <span>🇦🇪</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
+                    ₹{liveRates.forex.AED?.inrRate || 22.85}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] font-mono truncate mt-0.5">
+                    Dirham Spot
+                  </div>
+                </div>
+
+                {/* Bank Nifty */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-sky-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">BANK NIFTY</span>
+                    <span className="text-sky-400">🏦</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-[var(--theme-text,#F8FAFC)] mt-0.5 tracking-tight">
+                    {liveRates.bankNifty.value.toLocaleString('en-IN')}
+                  </div>
+                  <div className="text-[9.5px] text-emerald-400 font-mono truncate mt-0.5">
+                    +{liveRates.bankNifty.change}
+                  </div>
+                </div>
+
+                {/* India VIX */}
+                <div className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)] hover:border-purple-400/60 transition-all flex flex-col justify-between shadow-xs">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <span className="truncate">INDIA VIX</span>
+                    <span className="text-purple-400">📊</span>
+                  </div>
+                  <div className="text-[13px] font-black font-mono text-purple-300 mt-0.5 tracking-tight">
+                    {liveRates.indiaVix.value}
+                  </div>
+                  <div className="text-[9.5px] text-emerald-400 font-mono truncate mt-0.5">
+                    {liveRates.indiaVix.changePercent}% (Calm)
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,3 +1,8 @@
+import {
+  getCachedMarketRates,
+  fetchLiveMarketRates,
+  subscribeMarketRates
+} from '../services/liveMarketApiService';
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "../utils/currencyConfig";
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import {
@@ -24,7 +29,13 @@ import {
   Info,
   DollarSign,
   Printer,
-  FileDown
+  FileDown,
+  RefreshCw,
+  SlidersHorizontal,
+  ArrowRightLeft,
+  Globe,
+  Search,
+  X
 } from 'lucide-react';
 import { FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
@@ -166,30 +177,145 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const [inflationRateInput, setInflationRateInput] = useState<string>('6.5');
   const [goalYearsInput, setGoalYearsInput] = useState<string>('7');
   const [goalExpectedReturnInput, setGoalExpectedReturnInput] = useState<string>('12');
-  // --- 8. Currency (Forex) Converter State ---
+  // --- 8. Universal Any-to-Any Multi-Country Currency / "Crunchy" Converter ---
+  const [fromCurrency, setFromCurrency] = useState<string>('USD');
+  const [toCurrency, setToCurrency] = useState<string>('SAR');
   const [currencyAmountInput, setCurrencyAmountInput] = useState<string>('100');
-  const [selectedCurrency, setSelectedCurrency] = useState<'USD' | 'EUR' | 'GBP' | 'AED' | 'SAR' | 'CAD' | 'AUD'>('USD');
-  const [currencyCustomRate, setCurrencyCustomRate] = useState<string>('83.92');
-  const [currencyDirection, setCurrencyDirection] = useState<'foreign_to_inr' | 'inr_to_foreign'>('foreign_to_inr');
+  const [currencyCustomRate, setCurrencyCustomRate] = useState<string>('');
+  const [isLiveRateSynced, setIsLiveRateSynced] = useState<boolean>(true);
 
-  const CURRENCY_CONFIGS: Record<string, { symbol: string; name: string; defaultRate: number; flag: string }> = {
-    USD: { symbol: '$', name: 'US Dollar', defaultRate: 83.92, flag: '🇺🇸' },
-    EUR: { symbol: '€', name: 'Euro', defaultRate: 91.45, flag: '🇪🇺' },
-    GBP: { symbol: '£', name: 'British Pound', defaultRate: 108.60, flag: '🇬🇧' },
-    AED: { symbol: 'AED', name: 'UAE Dirham', defaultRate: 22.85, flag: '🇦🇪' },
-    SAR: { symbol: 'SAR', name: 'Saudi Riyal', defaultRate: 22.38, flag: '🇸🇦' },
-    CAD: { symbol: 'CA$', name: 'Canadian Dollar', defaultRate: 61.80, flag: '🇨🇦' },
-    AUD: { symbol: 'AU$', name: 'Australian Dollar', defaultRate: 56.40, flag: '🇦🇺' },
+  // Currency Picker Drawer / Modal State
+  const [currencyActiveSelector, setCurrencyActiveSelector] = useState<'from' | 'to' | null>(null);
+  const [currencySearchQuery, setCurrencySearchQuery] = useState<string>('');
+  const [currencyCategoryFilter, setCurrencyCategoryFilter] = useState<'all' | 'popular' | 'gulf' | 'asia' | 'west'>('all');
+
+  // Remittance & Bank Markup Options
+  const [showRemittanceBreakdown, setShowRemittanceBreakdown] = useState<boolean>(false);
+  const [bankSpreadPct, setBankSpreadPct] = useState<string>('1.5');
+  const [wireTransferFeeInr, setWireTransferFeeInr] = useState<string>('0');
+  const [tcsPercent, setTcsPercent] = useState<string>('0');
+
+  const [liveForexRates, setLiveForexRates] = useState<Record<string, any>>(() => {
+    return getCachedMarketRates()?.forex || {};
+  });
+
+  const CURRENCY_CONFIGS: Record<string, { symbol: string; name: string; defaultRate: number; flag: string; country: string; region: 'gulf' | 'popular' | 'asia' | 'west' | 'other' }> = {
+    INR: { symbol: '₹', name: 'Indian Rupee', defaultRate: 1.0, flag: '🇮🇳', country: 'India', region: 'popular' },
+    USD: { symbol: '$', name: 'US Dollar', defaultRate: 83.92, flag: '🇺🇸', country: 'United States', region: 'popular' },
+    EUR: { symbol: '€', name: 'Euro', defaultRate: 91.45, flag: '🇪🇺', country: 'European Union', region: 'popular' },
+    GBP: { symbol: '£', name: 'British Pound', defaultRate: 108.60, flag: '🇬🇧', country: 'United Kingdom', region: 'popular' },
+    SAR: { symbol: 'SAR', name: 'Saudi Riyal', defaultRate: 22.38, flag: '🇸🇦', country: 'Saudi Arabia', region: 'gulf' },
+    AED: { symbol: 'AED', name: 'UAE Dirham', defaultRate: 22.85, flag: '🇦🇪', country: 'United Arab Emirates', region: 'gulf' },
+    KWD: { symbol: 'KD', name: 'Kuwaiti Dinar', defaultRate: 274.20, flag: '🇰🇼', country: 'Kuwait', region: 'gulf' },
+    QAR: { symbol: 'QR', name: 'Qatari Riyal', defaultRate: 23.05, flag: '🇶🇦', country: 'Qatar', region: 'gulf' },
+    OMR: { symbol: 'OMR', name: 'Omani Rial', defaultRate: 217.95, flag: '🇴🇲', country: 'Oman', region: 'gulf' },
+    BHD: { symbol: 'BD', name: 'Bahraini Dinar', defaultRate: 222.60, flag: '🇧🇭', country: 'Bahrain', region: 'gulf' },
+    CAD: { symbol: 'CA$', name: 'Canadian Dollar', defaultRate: 61.80, flag: '🇨🇦', country: 'Canada', region: 'west' },
+    AUD: { symbol: 'AU$', name: 'Australian Dollar', defaultRate: 56.40, flag: '🇦🇺', country: 'Australia', region: 'west' },
+    SGD: { symbol: 'S$', name: 'Singapore Dollar', defaultRate: 64.75, flag: '🇸🇬', country: 'Singapore', region: 'asia' },
+    JPY: { symbol: '¥', name: 'Japanese Yen', defaultRate: 0.585, flag: '🇯🇵', country: 'Japan', region: 'asia' },
+    CNY: { symbol: 'CN¥', name: 'Chinese Yuan', defaultRate: 11.82, flag: '🇨🇳', country: 'China', region: 'asia' },
+    CHF: { symbol: 'CHF', name: 'Swiss Franc', defaultRate: 98.40, flag: '🇨🇭', country: 'Switzerland', region: 'west' },
+    MYR: { symbol: 'RM', name: 'Malaysian Ringgit', defaultRate: 19.45, flag: '🇲🇾', country: 'Malaysia', region: 'asia' },
+    THB: { symbol: '฿', name: 'Thai Baht', defaultRate: 2.48, flag: '🇹🇭', country: 'Thailand', region: 'asia' },
+    NZD: { symbol: 'NZ$', name: 'New Zealand Dollar', defaultRate: 51.85, flag: '🇳🇿', country: 'New Zealand', region: 'west' },
+    BDT: { symbol: '৳', name: 'Bangladeshi Taka', defaultRate: 0.71, flag: '🇧🇩', country: 'Bangladesh', region: 'asia' },
+    PKR: { symbol: 'PKR', name: 'Pakistani Rupee', defaultRate: 0.302, flag: '🇵🇰', country: 'Pakistan', region: 'asia' },
+    NPR: { symbol: 'NPR', name: 'Nepalese Rupee', defaultRate: 0.625, flag: '🇳🇵', country: 'Nepal', region: 'asia' },
+    TRY: { symbol: '₺', name: 'Turkish Lira', defaultRate: 2.47, flag: '🇹🇷', country: 'Turkey', region: 'other' },
+    ZAR: { symbol: 'R', name: 'South African Rand', defaultRate: 4.72, flag: '🇿🇦', country: 'South Africa', region: 'other' },
+    RUB: { symbol: '₽', name: 'Russian Ruble', defaultRate: 0.92, flag: '🇷🇺', country: 'Russia', region: 'other' }
   };
 
-  const handleSelectCurrency = (curr: 'USD' | 'EUR' | 'GBP' | 'AED' | 'SAR' | 'CAD' | 'AUD') => {
-    setSelectedCurrency(curr);
-    setCurrencyCustomRate(CURRENCY_CONFIGS[curr].defaultRate.toString());
+  const POPULAR_PAIRS = [
+    { from: 'USD', to: 'SAR', label: 'USD ➔ SAR' },
+    { from: 'SAR', to: 'AED', label: 'SAR ➔ AED' },
+    { from: 'USD', to: 'EUR', label: 'USD ➔ EUR' },
+    { from: 'USD', to: 'INR', label: 'USD ➔ INR' },
+    { from: 'SAR', to: 'INR', label: 'SAR ➔ INR' },
+    { from: 'AED', to: 'INR', label: 'AED ➔ INR' },
+    { from: 'KWD', to: 'SAR', label: 'KWD ➔ SAR' },
+    { from: 'KWD', to: 'INR', label: 'KWD ➔ INR' },
+    { from: 'EUR', to: 'GBP', label: 'EUR ➔ GBP' },
+    { from: 'GBP', to: 'USD', label: 'GBP ➔ USD' },
+    { from: 'USD', to: 'CAD', label: 'USD ➔ CAD' },
+    { from: 'INR', to: 'SAR', label: 'INR ➔ SAR' },
+    { from: 'INR', to: 'AED', label: 'INR ➔ AED' },
+    { from: 'INR', to: 'USD', label: 'INR ➔ USD' }
+  ];
+
+  // Subscribe to live market rates
+  useEffect(() => {
+    const unsub = subscribeMarketRates((updatedRates) => {
+      if (updatedRates?.forex) {
+        setLiveForexRates(updatedRates.forex);
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  const getCurrencyInrRate = (currCode: string): number => {
+    if (currCode === 'INR') return 1.0;
+    return liveForexRates?.[currCode]?.inrRate || CURRENCY_CONFIGS[currCode]?.defaultRate || 1.0;
+  };
+
+  const fromInrRate = getCurrencyInrRate(fromCurrency);
+  const toInrRate = getCurrencyInrRate(toCurrency);
+  const autoCrossRate = toInrRate > 0 ? (fromInrRate / toInrRate) : 1.0;
+
+  const effectiveRate = (!isLiveRateSynced && currencyCustomRate)
+    ? Math.max(0.000001, parseFloat(currencyCustomRate) || autoCrossRate)
+    : autoCrossRate;
+
+  const inverseRate = effectiveRate > 0 ? (1 / effectiveRate) : 0;
+
+  const handleSwapCurrencies = () => {
+    triggerHapticSound('click');
+    const prevFrom = fromCurrency;
+    const prevTo = toCurrency;
+    setFromCurrency(prevTo);
+    setToCurrency(prevFrom);
+    setIsLiveRateSynced(true);
+    setCurrencyCustomRate('');
+  };
+
+  const handleSelectPair = (pairFrom: string, pairTo: string) => {
+    triggerHapticSound('click');
+    setFromCurrency(pairFrom);
+    setToCurrency(pairTo);
+    setIsLiveRateSynced(true);
+    setCurrencyCustomRate('');
+  };
+
+  const handleSyncLiveRate = async () => {
+    triggerHapticSound('click');
+    try {
+      const fresh = await fetchLiveMarketRates();
+      if (fresh?.forex) {
+        setLiveForexRates(fresh.forex);
+      }
+      setIsLiveRateSynced(true);
+      setCurrencyCustomRate('');
+    } catch {
+      // Fallback
+    }
   };
 
   const currAmtNum = Math.max(0, parseFloat(currencyAmountInput) || 0);
-  const currRateNum = Math.max(0.0001, parseFloat(currencyCustomRate) || 83.92);
-  const convertedInr = currencyDirection === 'foreign_to_inr' ? currAmtNum * currRateNum : currAmtNum / currRateNum;
+  const grossConverted = currAmtNum * effectiveRate;
+
+  // Remittance Calculations in Target Currency
+  const bankSpreadPctNum = Math.max(0, parseFloat(bankSpreadPct) || 0);
+  const bankSpreadDeduction = (grossConverted * bankSpreadPctNum) / 100;
+  const wireFeeNum = Math.max(0, parseFloat(wireTransferFeeInr) || 0);
+  const tcsPctNum = Math.max(0, parseFloat(tcsPercent) || 0);
+  const tcsDeduction = (grossConverted * tcsPctNum) / 100;
+  const netInHandAmount = Math.max(0, grossConverted - bankSpreadDeduction - wireFeeNum - tcsDeduction);
+
+  // INR equivalent for applying to Khata income
+  const netInHandInrEquivalent = toCurrency === 'INR'
+    ? (showRemittanceBreakdown ? netInHandAmount : grossConverted)
+    : (showRemittanceBreakdown ? netInHandAmount : grossConverted) * toInrRate;
 
   // --- 9. Gold & Silver Bullion State ---
   const [metalType, setMetalType] = useState<'gold24' | 'gold22' | 'gold18' | 'silver'>('gold24');
@@ -611,18 +737,26 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     }
 
         if (activeTab === 'currency') {
+      const fromConf = CURRENCY_CONFIGS[fromCurrency] || { name: fromCurrency, symbol: fromCurrency };
+      const toConf = CURRENCY_CONFIGS[toCurrency] || { name: toCurrency, symbol: toCurrency };
       return {
-        title: isHindi ? 'विदेशी मुद्रा विनिमय गणना' : 'Foreign Currency Exchange Slip',
-        type: 'Currency Forex Conversion',
-        mainResult: currencyDirection === 'foreign_to_inr' ? formatCurrency(convertedInr) : (CURRENCY_CONFIGS[selectedCurrency]?.symbol || '') + ' ' + convertedInr.toFixed(2),
-        resultLabel: currencyDirection === 'foreign_to_inr' ? 'Converted Total in INR' : ('Converted in ' + selectedCurrency),
+        title: isHindi ? 'वैश्विक बहु-मुद्रा विनिमय स्लिप' : 'Universal Cross-Country Currency Exchange Slip',
+        type: 'Multi-Country Currency Forex Conversion',
+        mainResult: `${toConf.symbol} ${grossConverted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        resultLabel: `Converted Total in ${toCurrency} (${toConf.name})`,
         items: [
-          { label: 'Conversion Direction', value: currencyDirection === 'foreign_to_inr' ? (selectedCurrency + ' to INR') : ('INR to ' + selectedCurrency), isBold: true },
-          { label: 'Amount Entered', value: currencyDirection === 'foreign_to_inr' ? ((CURRENCY_CONFIGS[selectedCurrency]?.symbol || '') + ' ' + currAmtNum) : formatCurrency(currAmtNum) },
-          { label: 'Exchange Rate Applied', value: '1 ' + selectedCurrency + ' = ₹' + currRateNum.toFixed(2) },
-          { label: 'Final Converted Value', value: currencyDirection === 'foreign_to_inr' ? formatCurrency(convertedInr) : ((CURRENCY_CONFIGS[selectedCurrency]?.symbol || '') + ' ' + convertedInr.toFixed(2)), isBold: true, isHighlight: true }
+          { label: 'Conversion Pair', value: `${fromCurrency} (${fromConf.name}) ➔ ${toCurrency} (${toConf.name})`, isBold: true },
+          { label: 'Amount Entered', value: `${fromConf.symbol} ${currAmtNum.toLocaleString('en-US')}` },
+          { label: 'Applied Exchange Rate', value: `1 ${fromCurrency} = ${effectiveRate.toFixed(4)} ${toCurrency}` },
+          { label: 'Inverse Exchange Rate', value: `1 ${toCurrency} = ${inverseRate.toFixed(4)} ${fromCurrency}` },
+          { label: 'Gross Converted Value', value: `${toConf.symbol} ${grossConverted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, isBold: true, isHighlight: true },
+          ...(bankSpreadPctNum > 0 ? [{ label: `Bank Markup / Spread (${bankSpreadPctNum}%)`, value: `-${toConf.symbol} ${bankSpreadDeduction.toFixed(2)}` }] : []),
+          ...(wireFeeNum > 0 ? [{ label: 'Wire / SWIFT Transfer Fee', value: `-${toConf.symbol} ${wireFeeNum.toFixed(2)}` }] : []),
+          ...(tcsPctNum > 0 ? [{ label: `LRS TCS Deduction (${tcsPctNum}%)`, value: `-${toConf.symbol} ${tcsDeduction.toFixed(2)}` }] : []),
+          ...(showRemittanceBreakdown ? [{ label: 'Net Credited in Bank Account', value: `${toConf.symbol} ${netInHandAmount.toFixed(2)}`, isBold: true, isHighlight: true }] : []),
+          { label: 'INR Equivalent', value: formatCurrency(netInHandInrEquivalent) }
         ],
-        notes: 'Calculated via Daily Khata Pro Universal Currency Converter'
+        notes: `Calculated via Daily Khata Pro Universal Multi-Country Forex Engine. Cross Rate: 1 ${fromCurrency} = ${effectiveRate.toFixed(4)} ${toCurrency}`
       };
     }
 
@@ -2369,27 +2503,44 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
 
       {/* ========================================================================= */}
-      {/* 2. CURRENCY (FOREX) CONVERTER */}
-      {/* ========================================================================= */}
+      {/* 2. UNIVERSAL ANY-TO-ANY MULTI-COUNTRY CURRENCY ("CRUNCHY") CALCULATOR */}
       {activeTab === 'currency' && (
-        <div className="mx-auto max-w-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl p-4 sm:p-6 shadow-2xl space-y-5 animate-in fade-in duration-150 text-left">
-          {/* Header */}
+        <div className="mx-auto max-w-3xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl p-4 sm:p-6 shadow-2xl space-y-5 animate-in fade-in duration-150 text-left">
+          {/* Header & Live API Sync Status */}
           <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)]/70 pb-3 flex-wrap gap-2">
             <div>
-              <h2 className="text-base sm:text-lg font-black text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-emerald-400" />
-                <span>{isHindi ? 'विदेशी मुद्रा विनिमय (Forex Calculator)' : 'Universal Currency & Forex Converter'}</span>
-              </h2>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-base sm:text-lg font-black text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-emerald-400" />
+                  <span>{isHindi ? 'यूनिवर्सल बहु-देशीय मुद्रा कैलकुलेटर (Any Country to Any Country)' : 'Universal Multi-Country Currency Calculator'}</span>
+                </h2>
+                <span className="flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Live Feed Connected</span>
+                </span>
+              </div>
               <p className="text-xs text-[var(--theme-text-dim,#94A3B8)] mt-0.5">
-                {isHindi ? 'USD, EUR, GBP, AED, SAR का भारतीय रुपये (INR) में तत्काल सटीक रूपांतरण' : 'Instant 2-way conversion between Global Currencies and Indian Rupee (INR)'}
+                {isHindi
+                  ? 'दुनिया के किसी भी देश की करेंसी को आपस में तुरंत कन्वर्ट करें (USD, SAR, AED, KWD, EUR, INR, GBP आदि)'
+                  : 'Convert any country’s currency into any other country’s currency with real-time exchange rates'}
               </p>
             </div>
+
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleSyncLiveRate}
+                className="px-2.5 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs font-mono font-bold text-emerald-400 hover:bg-emerald-500/25 transition-all cursor-pointer flex items-center gap-1.5"
+                title="Sync Live Exchange Rate from API"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Sync Live</span>
+              </button>
               <button
                 type="button"
                 onClick={handlePrintCurrent}
                 className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text-muted,#CBD5E1)] hover:text-emerald-400 hover:border-emerald-400 transition-all cursor-pointer flex items-center gap-1.5"
-                title="Print Currency Slip"
+                title="Print Forex Slip"
               >
                 <Printer className="w-3.5 h-3.5 text-emerald-400" />
                 <span className="hidden sm:inline">Print Slip</span>
@@ -2397,72 +2548,306 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             </div>
           </div>
 
-          {/* Currency Selection Grid */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)] block">
-              {isHindi ? 'मुद्रा चुनें (Select Currency)' : 'Select Target Currency'}
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {(Object.keys(CURRENCY_CONFIGS) as Array<keyof typeof CURRENCY_CONFIGS>).map((currKey) => {
-                const item = CURRENCY_CONFIGS[currKey];
-                const isChosen = selectedCurrency === currKey;
+          {/* Quick Popular Currency Pairs */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)]">
+              <span>{isHindi ? 'लोकप्रिय मुद्रा जोड़ियां (Quick Pairs):' : 'Popular Currency Pairs:'}</span>
+              <span className="text-[10px] text-emerald-400 font-mono">1-Tap Select</span>
+            </div>
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+              {POPULAR_PAIRS.map((pair) => {
+                const isActive = fromCurrency === pair.from && toCurrency === pair.to;
+                const fromFlag = CURRENCY_CONFIGS[pair.from]?.flag || '';
+                const toFlag = CURRENCY_CONFIGS[pair.to]?.flag || '';
                 return (
                   <button
-                    key={currKey}
+                    key={`${pair.from}-${pair.to}`}
                     type="button"
-                    onClick={() => {
-                      handleSelectCurrency(currKey as any);
-                      triggerHapticSound('click');
-                    }}
-                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                      isChosen
-                        ? 'bg-emerald-500/15 border-emerald-500 text-emerald-300 shadow-sm ring-1 ring-emerald-400/40'
+                    onClick={() => handleSelectPair(pair.from, pair.to)}
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold border transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
+                      isActive
+                        ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300 ring-1 ring-emerald-400/40 shadow-xs'
                         : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:border-emerald-500/40'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-base">{item.flag}</span>
-                      <span className="text-[11px] font-mono font-bold">{currKey}</span>
-                    </div>
-                    <div className="text-xs font-black text-[var(--theme-text,#F8FAFC)] mt-1 truncate">
-                      {item.name}
-                    </div>
-                    <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono mt-0.5">
-                      1 {currKey} ≈ ₹{item.defaultRate}
-                    </div>
+                    <span>{fromFlag}</span>
+                    <span>{pair.from}</span>
+                    <span className="text-[var(--theme-text-dim,#64748B)]">➔</span>
+                    <span>{toFlag}</span>
+                    <span>{pair.to}</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Conversion Direction Toggle */}
-          <div className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-[var(--theme-text,#F8FAFC)]">
-                {currencyDirection === 'foreign_to_inr'
-                  ? (selectedCurrency + ' ' + (CURRENCY_CONFIGS[selectedCurrency]?.flag || '') + '  ➜  INR ₹ (Indian Rupee)')
-                  : ('INR ₹ (Indian Rupee)  ➜  ' + selectedCurrency + ' ' + (CURRENCY_CONFIGS[selectedCurrency]?.flag || ''))}
-              </span>
+          {/* Dual Currency Selection Command Center (From ➔ Swap ➔ To) */}
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-3 p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
+            {/* FROM CURRENCY TILE */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
+                  {isHindi ? 'स्रोत मुद्रा (From)' : 'Convert From'}
+                </span>
+                <span className="text-[10px] text-emerald-400 font-mono">
+                  {CURRENCY_CONFIGS[fromCurrency]?.symbol}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrencyActiveSelector('from');
+                  setCurrencySearchQuery('');
+                  triggerHapticSound('click');
+                }}
+                className="w-full p-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] hover:border-emerald-500 text-left transition-all cursor-pointer flex items-center justify-between group shadow-sm"
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="text-2xl shrink-0">{CURRENCY_CONFIGS[fromCurrency]?.flag || '🌐'}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-sm font-black text-[var(--theme-text,#F8FAFC)]">
+                        {fromCurrency}
+                      </span>
+                      <span className="text-[11px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 font-mono font-bold">
+                        {CURRENCY_CONFIGS[fromCurrency]?.symbol}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                      {CURRENCY_CONFIGS[fromCurrency]?.name} ({CURRENCY_CONFIGS[fromCurrency]?.country})
+                    </div>
+                  </div>
+                </div>
+                <span className="text-xs text-[var(--theme-primary,#38BDF8)] font-mono font-bold group-hover:translate-x-0.5 transition-transform shrink-0 ml-2">
+                  Change ▾
+                </span>
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setCurrencyDirection(prev => prev === 'foreign_to_inr' ? 'inr_to_foreign' : 'foreign_to_inr');
-                triggerHapticSound('click');
-              }}
-              className="px-3 py-1.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)] transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>{isHindi ? 'दिशा बदलें' : 'Reverse'}</span>
-            </button>
+
+            {/* SWAP / REVERSE BUTTON */}
+            <div className="flex items-center justify-center py-1 sm:py-0">
+              <button
+                type="button"
+                onClick={handleSwapCurrencies}
+                className="p-3 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] hover:text-white hover:bg-emerald-500 hover:border-emerald-400 hover:text-slate-950 transition-all cursor-pointer shadow-md active:scale-95 group"
+                title="Swap From and To Currencies (उल्टा करें)"
+              >
+                <ArrowRightLeft className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
+              </button>
+            </div>
+
+            {/* TO CURRENCY TILE */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
+                  {isHindi ? 'लक्ष्य मुद्रा (To)' : 'Convert To'}
+                </span>
+                <span className="text-[10px] text-emerald-400 font-mono">
+                  {CURRENCY_CONFIGS[toCurrency]?.symbol}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrencyActiveSelector('to');
+                  setCurrencySearchQuery('');
+                  triggerHapticSound('click');
+                }}
+                className="w-full p-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] hover:border-emerald-500 text-left transition-all cursor-pointer flex items-center justify-between group shadow-sm"
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="text-2xl shrink-0">{CURRENCY_CONFIGS[toCurrency]?.flag || '🌐'}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-sm font-black text-[var(--theme-text,#F8FAFC)]">
+                        {toCurrency}
+                      </span>
+                      <span className="text-[11px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 font-mono font-bold">
+                        {CURRENCY_CONFIGS[toCurrency]?.symbol}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                      {CURRENCY_CONFIGS[toCurrency]?.name} ({CURRENCY_CONFIGS[toCurrency]?.country})
+                    </div>
+                  </div>
+                </div>
+                <span className="text-xs text-[var(--theme-primary,#38BDF8)] font-mono font-bold group-hover:translate-x-0.5 transition-transform shrink-0 ml-2">
+                  Change ▾
+                </span>
+              </button>
+            </div>
           </div>
 
-          {/* Inputs Grid: Amount & Custom Rate */}
+          {/* Currency Selection Modal / In-place Picker (when selecting From or To) */}
+          {currencyActiveSelector && (
+            <div className="p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border-2 border-emerald-500/60 shadow-xl space-y-3 animate-in fade-in zoom-in-95 duration-150">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-black text-[var(--theme-text,#F8FAFC)]">
+                    {currencyActiveSelector === 'from'
+                      ? (isHindi ? 'स्रोत मुद्रा चुनें (Choose Source Currency)' : 'Select Source Currency (From)')
+                      : (isHindi ? 'लक्ष्य मुद्रा चुनें (Choose Target Currency)' : 'Select Target Currency (To)')}
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold">
+                    {Object.keys(CURRENCY_CONFIGS).length} Countries
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setCurrencyActiveSelector(null)}
+                  className="p-1 rounded-lg text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#132438)] cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Search & Category Filter */}
+              <div className="space-y-2">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-3 text-[var(--theme-text-dim,#94A3B8)]" />
+                  <input
+                    type="text"
+                    value={currencySearchQuery}
+                    onChange={(e) => setCurrencySearchQuery(e.target.value)}
+                    placeholder={isHindi ? "मुद्रा या देश खोजें (उदा. Dubai, Dollar, Riyal, AED, USD, Europe)..." : "Search by currency code, country or name (e.g. Dollar, Riyal, SAR, AED, JPY)..."}
+                    className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl pl-9 pr-8 py-2 text-xs font-mono text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-emerald-500"
+                    autoFocus
+                  />
+                  {currencySearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setCurrencySearchQuery('')}
+                      className="absolute right-2.5 top-2.5 text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Region Filter Chips */}
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+                  {[
+                    { id: 'all', label: isHindi ? 'सभी (All 25)' : 'All (25)' },
+                    { id: 'popular', label: isHindi ? 'प्रमुख (Popular)' : 'Popular (4)' },
+                    { id: 'gulf', label: isHindi ? 'खाड़ी देश (Gulf/Middle East)' : 'Gulf / Middle East (6)' },
+                    { id: 'west', label: isHindi ? 'अमेरिका व यूरोप' : 'Americas & Europe (5)' },
+                    { id: 'asia', label: isHindi ? 'एशिया पैसिफिक' : 'Asia-Pacific (8)' }
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setCurrencyCategoryFilter(tab.id as any)}
+                      className={`px-2.5 py-1 rounded-lg text-[10.5px] font-mono font-bold border transition-all cursor-pointer shrink-0 ${
+                        currencyCategoryFilter === tab.id
+                          ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-xs'
+                          : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:border-emerald-500/40'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Grid of Currencies */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-56 overflow-y-auto custom-scrollbar p-1">
+                {Object.keys(CURRENCY_CONFIGS)
+                  .filter((code) => {
+                    const c = CURRENCY_CONFIGS[code];
+                    const query = currencySearchQuery.toLowerCase().trim();
+                    const matchesQuery = !query ||
+                      code.toLowerCase().includes(query) ||
+                      c.name.toLowerCase().includes(query) ||
+                      c.country.toLowerCase().includes(query) ||
+                      c.symbol.toLowerCase().includes(query);
+
+                    const matchesCat = currencyCategoryFilter === 'all' ||
+                      (currencyCategoryFilter === 'popular' && c.region === 'popular') ||
+                      (currencyCategoryFilter === 'gulf' && c.region === 'gulf') ||
+                      (currencyCategoryFilter === 'west' && c.region === 'west') ||
+                      (currencyCategoryFilter === 'asia' && c.region === 'asia');
+
+                    return matchesQuery && matchesCat;
+                  })
+                  .map((code) => {
+                    const item = CURRENCY_CONFIGS[code];
+                    const isCurrent = (currencyActiveSelector === 'from' ? fromCurrency : toCurrency) === code;
+                    return (
+                      <button
+                        key={code}
+                        type="button"
+                        onClick={() => {
+                          if (currencyActiveSelector === 'from') {
+                            setFromCurrency(code);
+                          } else {
+                            setToCurrency(code);
+                          }
+                          setCurrencyActiveSelector(null);
+                          setIsLiveRateSynced(true);
+                          setCurrencyCustomRate('');
+                          triggerHapticSound('click');
+                        }}
+                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                          isCurrent
+                            ? 'bg-emerald-500/25 border-emerald-400 text-emerald-300 ring-1 ring-emerald-400 shadow-sm'
+                            : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] hover:border-emerald-500/50 hover:bg-[var(--theme-card,#132438)]/80'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl">{item.flag}</span>
+                          <span className="font-mono text-xs font-black">{code}</span>
+                        </div>
+                        <div className="mt-1">
+                          <div className="text-[11px] font-bold truncate text-[var(--theme-text,#F8FAFC)]">
+                            {item.symbol} {item.name}
+                          </div>
+                          <div className="text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] font-mono truncate">
+                            {item.country}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Denomination Preset Chips for Source Currency */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-bold">
+              <span>
+                {isHindi ? `${fromCurrency} के लिए त्वरित राशि चुनें:` : `Quick Amount Presets in ${fromCurrency}:`}
+              </span>
+              <span className="font-mono text-emerald-400">{CURRENCY_CONFIGS[fromCurrency]?.symbol}</span>
+            </div>
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+              {[10, 50, 100, 250, 500, 1000, 5000, 10000].map((amt) => (
+                <button
+                  key={amt}
+                  type="button"
+                  onClick={() => {
+                    setCurrencyAmountInput(amt.toString());
+                    triggerHapticSound('click');
+                  }}
+                  className={`px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold border transition-all cursor-pointer shrink-0 ${
+                    parseFloat(currencyAmountInput) === amt
+                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-sm'
+                      : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:border-emerald-500'
+                  }`}
+                >
+                  {CURRENCY_CONFIGS[fromCurrency]?.symbol}{amt >= 1000 ? `${amt / 1000}k` : amt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Inputs Grid: Amount & Custom Exchange Rate */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)] block mb-1.5">
-                {currencyDirection === 'foreign_to_inr' ? ('Amount in ' + selectedCurrency + ' (' + CURRENCY_CONFIGS[selectedCurrency]?.symbol + ')') : 'Amount in INR (₹)'}
+                {`Amount in ${fromCurrency} (${CURRENCY_CONFIGS[fromCurrency]?.symbol})`}
               </label>
               <div className="relative">
                 <input
@@ -2478,22 +2863,25 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
-                  {'Exchange Rate (1 ' + selectedCurrency + ' = ₹ INR)'}
+                  {`Exchange Rate (1 ${fromCurrency} = ${toCurrency})`}
                 </label>
                 <button
                   type="button"
-                  onClick={() => setCurrencyCustomRate(CURRENCY_CONFIGS[selectedCurrency]?.defaultRate.toString() || '83.92')}
-                  className="text-[10px] text-emerald-400 hover:underline font-mono"
+                  onClick={handleSyncLiveRate}
+                  className="text-[10.5px] text-emerald-400 hover:underline font-mono"
                 >
-                  Reset Default
+                  Reset Live Rate
                 </button>
               </div>
               <input
                 type="number"
-                step="0.01"
-                value={currencyCustomRate}
-                onChange={(e) => setCurrencyCustomRate(e.target.value)}
-                placeholder="83.92"
+                step="0.0001"
+                value={isLiveRateSynced ? (effectiveRate >= 1 ? effectiveRate.toFixed(4) : effectiveRate.toFixed(6)) : currencyCustomRate}
+                onChange={(e) => {
+                  setCurrencyCustomRate(e.target.value);
+                  setIsLiveRateSynced(false);
+                }}
+                placeholder={effectiveRate.toFixed(4)}
                 className="w-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2.5 font-mono text-base font-bold text-emerald-400 focus:outline-none focus:border-emerald-500 transition-all"
               />
             </div>
@@ -2501,16 +2889,188 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
           {/* Big Converted Result Display Card */}
           <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-500/15 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-emerald-500/40 text-center space-y-1.5 shadow-lg">
-            <div className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-              {currencyDirection === 'foreign_to_inr' ? 'Total Converted Value in Indian Rupee (INR)' : ('Total Converted in ' + selectedCurrency)}
+            <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center justify-center gap-1.5">
+              <span>{CURRENCY_CONFIGS[toCurrency]?.flag}</span>
+              <span>{`Total Converted in ${toCurrency} (${CURRENCY_CONFIGS[toCurrency]?.name})`}</span>
             </div>
             <div className="text-2xl sm:text-4xl font-black font-mono text-[var(--theme-text,#F8FAFC)] tracking-tight">
-              {currencyDirection === 'foreign_to_inr' ? formatCurrency(convertedInr) : (CURRENCY_CONFIGS[selectedCurrency]?.symbol + ' ' + convertedInr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+              {CURRENCY_CONFIGS[toCurrency]?.symbol} {grossConverted.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 4
+              })}
             </div>
-            <div className="text-xs text-[var(--theme-text-dim,#94A3B8)] font-mono">
-              {currencyDirection === 'foreign_to_inr'
-                ? (CURRENCY_CONFIGS[selectedCurrency]?.symbol + ' ' + currAmtNum + ' × ₹' + currRateNum.toFixed(2) + ' per ' + selectedCurrency)
-                : ('₹ ' + currAmtNum + ' ÷ ₹' + currRateNum.toFixed(2) + ' per ' + selectedCurrency)}
+            <div className="text-xs text-[var(--theme-text-dim,#94A3B8)] font-mono flex items-center justify-center gap-2 flex-wrap">
+              <span>
+                {CURRENCY_CONFIGS[fromCurrency]?.symbol}{currAmtNum.toLocaleString('en-US')} {fromCurrency} × {effectiveRate >= 1 ? effectiveRate.toFixed(4) : effectiveRate.toFixed(6)}
+              </span>
+              <span className="text-[var(--theme-border,#213E61)]">•</span>
+              <span className="text-emerald-400/90">
+                (Inverse: 1 {toCurrency} = {CURRENCY_CONFIGS[fromCurrency]?.symbol}{inverseRate >= 1 ? inverseRate.toFixed(4) : inverseRate.toFixed(6)} {fromCurrency})
+              </span>
+            </div>
+          </div>
+
+          {/* Remittance & Bank Transfer Fee Calculator Toggle */}
+          <div className="p-3.5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-bold text-[var(--theme-text,#F8FAFC)]">
+                  {isHindi ? 'बैंक ट्रांसफर स्प्रेड, वायर फीस एवं टीसीएस ब्रेकडाउन' : 'Bank Markup Spread, Wire Fee & Remittance Breakdown'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowRemittanceBreakdown((prev) => !prev)}
+                className="px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] text-xs font-mono font-bold text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
+              >
+                {showRemittanceBreakdown ? 'Hide Options' : 'Show Options'}
+              </button>
+            </div>
+
+            {showRemittanceBreakdown && (
+              <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/70 space-y-3 animate-in fade-in duration-150">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
+                      Bank Spread Markup (%)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={bankSpreadPct}
+                      onChange={(e) => setBankSpreadPct(e.target.value)}
+                      placeholder="1.5"
+                      className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-3 py-1.5 text-xs font-mono text-[var(--theme-text,#F8FAFC)]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
+                      {`Wire / Transfer Fee (${CURRENCY_CONFIGS[toCurrency]?.symbol})`}
+                    </label>
+                    <input
+                      type="number"
+                      value={wireTransferFeeInr}
+                      onChange={(e) => setWireTransferFeeInr(e.target.value)}
+                      placeholder="0"
+                      className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-3 py-1.5 text-xs font-mono text-[var(--theme-text,#F8FAFC)]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
+                      LRS Remittance TCS (%)
+                    </label>
+                    <div className="flex items-center gap-1">
+                      {[0, 5, 20].map((tcs) => (
+                        <button
+                          key={tcs}
+                          type="button"
+                          onClick={() => setTcsPercent(tcs.toString())}
+                          className={`flex-1 py-1 rounded-lg text-[10.5px] font-mono font-bold border transition-all cursor-pointer ${
+                            parseFloat(tcsPercent) === tcs
+                              ? 'bg-emerald-500 text-slate-950 border-emerald-400'
+                              : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)]'
+                          }`}
+                        >
+                          {tcs}%
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Net Remittance In-Hand Summary */}
+                <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5 text-xs font-mono">
+                  <div className="flex items-center justify-between text-[var(--theme-text-muted,#CBD5E1)]">
+                    <span>Gross Converted:</span>
+                    <span>{CURRENCY_CONFIGS[toCurrency]?.symbol} {grossConverted.toFixed(2)}</span>
+                  </div>
+                  {bankSpreadPctNum > 0 && (
+                    <div className="flex items-center justify-between text-rose-400">
+                      <span>Less Bank Markup ({bankSpreadPctNum}%):</span>
+                      <span>-{CURRENCY_CONFIGS[toCurrency]?.symbol} {bankSpreadDeduction.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {wireFeeNum > 0 && (
+                    <div className="flex items-center justify-between text-rose-400">
+                      <span>Less Wire Fee:</span>
+                      <span>-{CURRENCY_CONFIGS[toCurrency]?.symbol} {wireFeeNum.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {tcsPctNum > 0 && (
+                    <div className="flex items-center justify-between text-amber-400">
+                      <span>Less TCS ({tcsPctNum}%):</span>
+                      <span>-{CURRENCY_CONFIGS[toCurrency]?.symbol} {tcsDeduction.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <div className="pt-1.5 border-t border-[var(--theme-border,#213E61)] flex items-center justify-between font-bold text-[var(--theme-text,#F8FAFC)]">
+                    <span className="text-emerald-400">Net Credited in Bank Account:</span>
+                    <span className="text-base text-emerald-400">{CURRENCY_CONFIGS[toCurrency]?.symbol} {netInHandAmount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                    <span>INR Equivalent Value:</span>
+                    <span>{formatCurrency(netInHandInrEquivalent)}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Instant Cross-Currency Matrix Board (Amount converted into 8 major world currencies) */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
+                {isHindi ? 'वैश्विक तुलना तालिका (Instant Cross-Currency Board)' : 'Instant Cross-Currency Equivalent Board'}
+              </label>
+              <span className="text-[10px] text-[var(--theme-text-dim,#64748B)] font-mono">
+                Based on {currAmtNum.toLocaleString('en-US')} {fromCurrency}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {['USD', 'EUR', 'GBP', 'SAR', 'AED', 'KWD', 'INR', 'CAD'].map((cKey) => {
+                const targetConfig = CURRENCY_CONFIGS[cKey];
+                if (!targetConfig) return null;
+                const targetInr = getCurrencyInrRate(cKey);
+                // Value in this currency = (currAmtNum * fromInrRate) / targetInr
+                const valueInTarget = targetInr > 0 ? ((currAmtNum * fromInrRate) / targetInr) : 0;
+                const isCurrentTo = toCurrency === cKey;
+                return (
+                  <button
+                    key={cKey}
+                    type="button"
+                    onClick={() => {
+                      setToCurrency(cKey);
+                      setIsLiveRateSynced(true);
+                      setCurrencyCustomRate('');
+                      triggerHapticSound('click');
+                    }}
+                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                      isCurrentTo
+                        ? 'bg-emerald-500/20 border-emerald-500 ring-1 ring-emerald-400/40 shadow-xs'
+                        : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] hover:border-emerald-500/40'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-1">
+                        <span>{targetConfig.flag}</span>
+                        <span className="text-xs font-bold text-[var(--theme-text,#F8FAFC)] font-mono">{cKey}</span>
+                      </div>
+                      <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono mt-0.5 truncate">
+                        {targetConfig.name}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs font-black font-mono text-emerald-400">
+                        {targetConfig.symbol} {valueInTarget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </div>
+                      <div className="text-[9.5px] text-[var(--theme-text-dim,#64748B)] font-mono">
+                        {isCurrentTo ? 'Selected' : 'Click to Set'}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -2519,25 +3079,25 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             <button
               type="button"
               onClick={() => {
-                const text = currencyDirection === 'foreign_to_inr'
-                  ? (CURRENCY_CONFIGS[selectedCurrency]?.symbol + ' ' + currAmtNum + ' = ' + formatCurrency(convertedInr))
-                  : ('₹ ' + currAmtNum + ' = ' + (CURRENCY_CONFIGS[selectedCurrency]?.symbol || '') + ' ' + convertedInr.toFixed(2));
+                const text = `${CURRENCY_CONFIGS[fromCurrency]?.symbol} ${currAmtNum} ${fromCurrency} = ${CURRENCY_CONFIGS[toCurrency]?.symbol} ${grossConverted.toFixed(2)} ${toCurrency} (Exchange Rate: 1 ${fromCurrency} = ${effectiveRate.toFixed(4)} ${toCurrency})`;
                 handleCopy(text, 'curr-copy');
               }}
-              className="flex-1 py-2.5 px-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)]/40 border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text,#F8FAFC)] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)]/40 border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text,#F8FAFC)] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
             >
               {copiedKey === 'curr-copy' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
               <span>{copiedKey === 'curr-copy' ? 'Copied to Clipboard!' : 'Copy Summary'}</span>
             </button>
 
-            {onApplyToIncome && currencyDirection === 'foreign_to_inr' && (
+            {onApplyToIncome && (
               <button
                 type="button"
-                onClick={() => onApplyToIncome(Math.round(convertedInr))}
+                onClick={() => onApplyToIncome(Math.round(netInHandInrEquivalent))}
                 className="py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span>Apply as Income (₹{Math.round(convertedInr).toLocaleString('en-IN')})</span>
+                <span>
+                  Apply as Income (₹{Math.round(netInHandInrEquivalent).toLocaleString('en-IN')})
+                </span>
               </button>
             )}
           </div>
