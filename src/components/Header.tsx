@@ -293,8 +293,8 @@ export const Header: React.FC<HeaderProps> = ({
                 Pro
               </span>
             </div>
-            <div className="mt-0.5 min-w-0 hidden min-[360px]:block">
-              <span className="text-[8px] xs:text-[8.5px] sm:text-[11px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block">
+            <div className="mt-0.5 min-w-0 block">
+              <span className="text-[8.5px] xs:text-[9.5px] sm:text-[11px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block leading-tight">
                 {isHindi ? 'दैनिक आय-व्यय ट्रैकर' : 'Daily Income & Expense Tracker'}
               </span>
             </div>

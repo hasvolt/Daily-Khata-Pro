@@ -205,7 +205,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   // Currency Picker Drawer / Modal State
   const [currencyActiveSelector, setCurrencyActiveSelector] = useState<'from' | 'to' | null>(null);
   const [currencySearchQuery, setCurrencySearchQuery] = useState<string>('');
-  const [currencyCategoryFilter, setCurrencyCategoryFilter] = useState<'all' | 'popular' | 'gulf' | 'asia' | 'west'>('all');
+  const [currencyCategoryFilter, setCurrencyCategoryFilter] = useState<'all' | 'popular' | 'gulf' | 'asia' | 'west' | 'other'>('all');
 
   // Remittance & Bank Markup Options
   const [showRemittanceBreakdown, setShowRemittanceBreakdown] = useState<boolean>(false);
@@ -240,6 +240,19 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     BDT: { symbol: '৳', name: 'Bangladeshi Taka', defaultRate: 0.71, flag: '🇧🇩', country: 'Bangladesh', region: 'asia' },
     PKR: { symbol: 'PKR', name: 'Pakistani Rupee', defaultRate: 0.302, flag: '🇵🇰', country: 'Pakistan', region: 'asia' },
     NPR: { symbol: 'NPR', name: 'Nepalese Rupee', defaultRate: 0.625, flag: '🇳🇵', country: 'Nepal', region: 'asia' },
+    LKR: { symbol: 'Rs', name: 'Sri Lankan Rupee', defaultRate: 0.28, flag: '🇱🇰', country: 'Sri Lanka', region: 'asia' },
+    AFN: { symbol: '؋', name: 'Afghan Afghani', defaultRate: 1.20, flag: '🇦🇫', country: 'Afghanistan', region: 'asia' },
+    IRR: { symbol: 'IRR', name: 'Iranian Rial', defaultRate: 0.0020, flag: '🇮🇷', country: 'Iran', region: 'gulf' },
+    IQD: { symbol: 'IQD', name: 'Iraqi Dinar', defaultRate: 0.064, flag: '🇮🇶', country: 'Iraq', region: 'gulf' },
+    JOD: { symbol: 'JD', name: 'Jordanian Dinar', defaultRate: 118.35, flag: '🇯🇴', country: 'Jordan', region: 'gulf' },
+    EGP: { symbol: 'E£', name: 'Egyptian Pound', defaultRate: 1.73, flag: '🇪🇬', country: 'Egypt', region: 'other' },
+    KRW: { symbol: '₩', name: 'South Korean Won', defaultRate: 0.063, flag: '🇰🇷', country: 'South Korea', region: 'asia' },
+    HKD: { symbol: 'HK$', name: 'Hong Kong Dollar', defaultRate: 10.76, flag: '🇭🇰', country: 'Hong Kong', region: 'asia' },
+    IDR: { symbol: 'Rp', name: 'Indonesian Rupiah', defaultRate: 0.0054, flag: '🇮🇩', country: 'Indonesia', region: 'asia' },
+    PHP: { symbol: '₱', name: 'Philippine Peso', defaultRate: 1.50, flag: '🇵🇭', country: 'Philippines', region: 'asia' },
+    VND: { symbol: '₫', name: 'Vietnamese Dong', defaultRate: 0.0034, flag: '🇻🇳', country: 'Vietnam', region: 'asia' },
+    BRL: { symbol: 'R$', name: 'Brazilian Real', defaultRate: 15.20, flag: '🇧🇷', country: 'Brazil', region: 'west' },
+    MXN: { symbol: 'Mex$', name: 'Mexican Peso', defaultRate: 4.25, flag: '🇲🇽', country: 'Mexico', region: 'west' },
     TRY: { symbol: '₺', name: 'Turkish Lira', defaultRate: 2.47, flag: '🇹🇷', country: 'Turkey', region: 'other' },
     ZAR: { symbol: 'R', name: 'South African Rand', defaultRate: 4.72, flag: '🇿🇦', country: 'South Africa', region: 'other' },
     RUB: { symbol: '₽', name: 'Russian Ruble', defaultRate: 0.92, flag: '🇷🇺', country: 'Russia', region: 'other' }
@@ -252,6 +265,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     { from: 'USD', to: 'INR', label: 'USD ➔ INR' },
     { from: 'SAR', to: 'INR', label: 'SAR ➔ INR' },
     { from: 'AED', to: 'INR', label: 'AED ➔ INR' },
+    { from: 'USD', to: 'IRR', label: 'USD ➔ IRR' },
+    { from: 'INR', to: 'IRR', label: 'INR ➔ IRR' },
+    { from: 'AED', to: 'IRR', label: 'AED ➔ IRR' },
+    { from: 'SAR', to: 'IRR', label: 'SAR ➔ IRR' },
+    { from: 'USD', to: 'IQD', label: 'USD ➔ IQD' },
     { from: 'KWD', to: 'SAR', label: 'KWD ➔ SAR' },
     { from: 'KWD', to: 'INR', label: 'KWD ➔ INR' },
     { from: 'EUR', to: 'GBP', label: 'EUR ➔ GBP' },
@@ -2796,11 +2814,12 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 {/* Region Filter Chips */}
                 <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar overscroll-x-contain pb-1 max-w-full">
                   {[
-                    { id: 'all', label: isHindi ? 'सभी (All 25)' : 'All (25)' },
+                    { id: 'all', label: isHindi ? `सभी (All ${Object.keys(CURRENCY_CONFIGS).length})` : `All (${Object.keys(CURRENCY_CONFIGS).length})` },
+                    { id: 'gulf', label: isHindi ? 'खाड़ी व ईरान (Middle East)' : 'Gulf & Middle East (9)' },
                     { id: 'popular', label: isHindi ? 'प्रमुख (Popular)' : 'Popular (4)' },
-                    { id: 'gulf', label: isHindi ? 'खाड़ी देश (Gulf)' : 'Gulf / Middle East (6)' },
-                    { id: 'west', label: isHindi ? 'अमेरिका व यूरोप' : 'Americas & Europe (5)' },
-                    { id: 'asia', label: isHindi ? 'एशिया पैसिफिक' : 'Asia-Pacific (8)' }
+                    { id: 'asia', label: isHindi ? 'एशिया पैसिफिक' : 'Asia-Pacific (15)' },
+                    { id: 'west', label: isHindi ? 'अमेरिका व यूरोप' : 'Americas & Europe (6)' },
+                    { id: 'other', label: isHindi ? 'अन्य देश (Other)' : 'Other (4)' }
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -2834,7 +2853,8 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                       (currencyCategoryFilter === 'popular' && c.region === 'popular') ||
                       (currencyCategoryFilter === 'gulf' && c.region === 'gulf') ||
                       (currencyCategoryFilter === 'west' && c.region === 'west') ||
-                      (currencyCategoryFilter === 'asia' && c.region === 'asia');
+                      (currencyCategoryFilter === 'asia' && c.region === 'asia') ||
+                      (currencyCategoryFilter === 'other' && c.region === 'other');
 
                     return matchesQuery && matchesCat;
                   })
