@@ -265,16 +265,16 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-md sticky top-0 z-40 shadow-md transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-1.5 sm:gap-3">
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-1 sm:gap-3">
         {/* Brand Icon & Name */}
-        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-shrink">
           <div
             onClick={() => onSelectTab && onSelectTab('home')}
             className="cursor-pointer active:scale-95 transition-transform shrink-0"
             title="Daily Khata Pro"
           >
             <div className="sm:hidden">
-              <AppLogo size={34} />
+              <AppLogo size={32} />
             </div>
             <div className="hidden sm:block">
               <AppLogo size={38} />
@@ -286,15 +286,15 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => onSelectTab && onSelectTab('home')}
               className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group"
             >
-              <span className="font-bold text-[15px] sm:text-[18px] tracking-tight text-[var(--theme-text,#F8FAFC)] group-hover:opacity-95 transition-opacity truncate">
+              <span className="font-bold text-[14px] xs:text-[15px] sm:text-[18px] tracking-tight text-[var(--theme-text,#F8FAFC)] group-hover:opacity-95 transition-opacity truncate">
                 Daily Khata
               </span>
-              <span className="font-black text-[14px] sm:text-[17px] tracking-tight transition-colors drop-shadow-xs text-[var(--theme-primary,#38BDF8)]">
+              <span className="font-black text-[13px] xs:text-[14px] sm:text-[17px] tracking-tight transition-colors drop-shadow-xs text-[var(--theme-primary,#38BDF8)]">
                 Pro
               </span>
             </div>
-            <div className="mt-0.5 min-w-0">
-              <span className="text-[8.5px] sm:text-[11px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block">
+            <div className="mt-0.5 min-w-0 hidden min-[360px]:block">
+              <span className="text-[8px] xs:text-[8.5px] sm:text-[11px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block">
                 {isHindi ? 'दैनिक आय-व्यय ट्रैकर' : 'Daily Income & Expense Tracker'}
               </span>
             </div>
@@ -389,15 +389,15 @@ export const Header: React.FC<HeaderProps> = ({
         ) : null}
 
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {/* Subtle Non-Intrusive Offline Status Chip */}
           {!isOnline && (
             <div
-              className="h-9 px-2 sm:px-2.5 rounded-xl border border-amber-500/40 bg-amber-500/15 text-amber-300 flex items-center justify-center gap-1.5 shrink-0 select-none shadow-xs"
+              className="h-8 sm:h-9 px-1.5 sm:px-2.5 rounded-lg sm:rounded-xl border border-amber-500/40 bg-amber-500/15 text-amber-300 flex items-center justify-center gap-1 sm:gap-1.5 shrink-0 select-none shadow-xs"
               title={isHindi ? '100% ऑफ़लाइन मोड सक्रिय है — डेटा डिवाइस में सुरक्षित है' : '100% Offline Mode Active — Data safely stored locally'}
             >
-              <WifiOff className="w-4 h-4 text-amber-400 shrink-0" />
-              <span className="text-[11px] font-bold hidden xs:inline">
+              <WifiOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 shrink-0" />
+              <span className="text-[10px] sm:text-[11px] font-bold hidden sm:inline">
                 {isHindi ? 'ऑफ़लाइन' : 'Offline'}
               </span>
             </div>
@@ -408,7 +408,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onTogglePrivacyMask}
-              className={`h-9 min-w-[36px] px-2 sm:px-2.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
+              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
                 privacyMask
                   ? 'bg-[#F59E0B]/20 border-[#F59E0B]/50 text-[#F59E0B]'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
@@ -438,7 +438,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onThemeChange('light');
                 }
               }}
-              className={`h-9 min-w-[36px] px-2 sm:px-2.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
+              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
                 isLightMode
                   ? 'bg-[#0284C7]/15 border-[#0284C7]/40 text-[#0284C7] hover:bg-[#0284C7]/25'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
@@ -513,7 +513,7 @@ export const Header: React.FC<HeaderProps> = ({
               triggerHapticSound('click');
               setIsMenuOpen(true);
             }}
-            className="h-9 w-9 min-w-[36px] min-h-[36px] rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 p-0"
+            className="h-8 w-8 sm:h-9 sm:w-9 min-w-[32px] sm:min-w-[36px] rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 p-0"
             title={isHindi ? 'मुख्य मेनू व टूल्स' : 'Main Menu & Tools'}
             id="header-main-menu-btn"
             aria-label={isHindi ? 'मुख्य मेनू खोलें' : 'Open Main Menu'}
