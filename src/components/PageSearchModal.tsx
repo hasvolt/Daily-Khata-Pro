@@ -39,7 +39,8 @@ import {
   Heart,
   User,
   Cloud,
-  Landmark
+  Landmark,
+  Newspaper
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { triggerHapticSound } from '../utils/khataCalculations';
@@ -356,13 +357,25 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
     {
       id: 'support-project',
       title: isHindi ? 'प्रोजेक्ट को सपोर्ट करें' : 'Support the Project',
-      subtitle: isHindi ? 'बिना विज्ञापनों और सब्सक्रिप्शन के ऐप को चलाने में मदद करें' : 'Help keep the app free from ads and subscriptions',
+      subtitle: isHindi ? 'प्रोजेक्ट के विकास, ओपन-सोर्स कोड व संवर्द्धन में मदद करें' : 'Help support ongoing development and open-source updates',
       category: 'docs',
       categoryLabel: isHindi ? 'दस्तावेज़ और गाइड' : 'Docs & Guides',
       icon: Heart,
       targetTab: 'support-project',
       routePath: '/support-project',
-      keywords: ['support', 'help', 'donate', 'free', 'ads free', 'contribution', 'सपोर्ट', 'मदद', 'फ्री', 'विज्ञापन मुक्त']
+      keywords: ['support', 'help', 'contribute', 'open source', 'feedback', 'github', 'सपोर्ट', 'मदद', 'योगदान']
+    },
+    {
+      id: 'news-portal',
+      title: isHindi ? 'वाणिज्यिक समाचार व रिसर्च पोर्टल' : 'Commercial News & Research Intelligence',
+      subtitle: isHindi ? 'वैश्विक बाज़ार, मैक्रोइकॉनॉमिक्स, फिनटेक, टैक्स और उद्योग अनुसंधान रिपोर्ट' : 'Global markets, macroeconomics, fintech, tax policy and research whitepapers',
+      category: 'docs',
+      categoryLabel: isHindi ? 'समाचार व रिसर्च' : 'News & Research',
+      icon: Newspaper,
+      targetTab: 'news',
+      routePath: '/news',
+      keywords: ['news', 'research', 'articles', 'market', 'economy', 'fintech', 'tax', 'whitepaper', 'samachar', 'portal', 'nifty', 'sensex', 'gdp', 'समाचार', 'रिसर्च', 'बाजार', 'अर्थव्यवस्था', 'व्यापार'],
+      badge: 'LIVE PORTAL'
     },
     {
       id: 'about',

@@ -73,6 +73,8 @@ export interface PageTranslations {
       disclaimerDesc: string;
       backupTitle: string;
       backupDesc: string;
+      commercialTitle?: string;
+      commercialDesc?: string;
     };
   };
   disclaimer: {
@@ -173,8 +175,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       licenseLabel: 'License',
       creatorLabel: 'Creator',
       missionTitle: 'Our Mission & Purpose',
-      missionP1: 'Daily Khata Pro was created with a single uncompromising mission: to give individuals, freelancers, shopkeepers, and families an honest, lightning-fast financial record that is 100% free forever, respects their complete privacy, and contains no ads or hidden subscriptions.',
-      missionP2: 'Most modern finance apps sell your data, show intrusive ads, or lock essential features behind paywalls. Daily Khata Pro flips this model entirely — it is a pure public utility. No tracking, no ads, no subscriptions, and all premium features are open to everyone for a lifetime.',
+      missionP1: 'Daily Khata Pro was created with a clear purpose: to give individuals, freelancers, shopkeepers, and families an honest, lightning-fast financial record with complete local privacy, offline reliability, and free core ledger functionality without mandatory paywalls.',
+      missionP2: 'Traditional financial applications often capture your private ledger data on remote servers. Daily Khata Pro keeps your data strictly inside your local device memory. Standard core bookkeeping features are provided free under the permissive MIT Open Source License.',
       capabilitiesTitle: 'Core Capabilities & Architecture',
       pillars: {
         fundsTitle: 'Automated Smart Fund Allocation Rule',
@@ -233,7 +235,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '3. No Financial Warranty',
         disclaimerDesc: 'This software is an organizational calculation tool, not a certified legal accountant or tax consultant.',
         backupTitle: '4. Backup Responsibility',
-        backupDesc: 'Because data is stored only on your client device, maintaining regular JSON backup copies is the user responsibility.'
+        backupDesc: 'Because data is stored only on your client device, maintaining regular JSON backup copies is the user responsibility.',
+        commercialTitle: '5. Free Standard Edition & Commercial Disclosures',
+        commercialDesc: 'Daily Khata Pro core features are provided free under the MIT License. In order to sustain long-term infrastructure, community support, and future engineering, the platform reserves the right to introduce optional pro subscription tiers, curated sponsor partnerships, or contextual advertisements in future releases, without compromising core offline bookkeeping accessibility.'
       }
     },
     disclaimer: {
@@ -427,7 +431,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '3. कोई वित्तीय वारंटी नहीं',
         disclaimerDesc: 'यह सॉफ़्टवेयर एक संगठनात्मक कैलकुलेटर टूल है, कोई प्रमाणित टैक्स या कानूनी सलाहकार नहीं।',
         backupTitle: '4. बैकअप की जिम्मेदारी',
-        backupDesc: 'क्योंकि डेटा केवल आपके डिवाइस में रहता है, इसलिए नियमित बैकअप लेना उपयोगकर्ता की ज़िम्मेदारी है।'
+        backupDesc: 'क्योंकि डेटा केवल आपके डिवाइस में रहता है, इसलिए नियमित बैकअप लेना उपयोगकर्ता की ज़िम्मेदारी है।',
+        commercialTitle: '5. निःशुल्क मानक संस्करण व व्यवसायिक शर्तें',
+        commercialDesc: 'डेली खाता प्रो के मुख्य फीचर्स MIT लाइसेंस के तहत मुफ़्त उपलब्ध हैं। भविष्य के विकास, क्लाउड संवर्द्धन और सर्वर इन्फ्रास्ट्रक्चर को बनाए रखने के लिए, प्लेटफॉर्म भविष्य के संस्करणों में वैकल्पिक प्रीमियम सदस्यता (Subscriptions), स्पॉन्सर्ड पार्टनर टूल्स, या विज्ञापन (Ads) प्रस्तुत करने का अधिकार सुरक्षित रखता है।'
       }
     },
     disclaimer: {
@@ -561,8 +567,8 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       licenseLabel: 'License',
       creatorLabel: 'Creator & Developer',
       missionTitle: 'Hamara Mission aur Vision',
-      missionP1: 'Daily Khata Pro ko ek simple mission ke saath banaya gaya hai: har individual, freelancer, shopkeeper aur family ko ek honest, super-fast aur private record dena jo hamesha ke liye 100% free hai, bina kisi ads ya hidden subscriptions ke.',
-      missionP2: 'Baaki apps aapka data bechte hain ya paise mangte hain. Daily Khata Pro me aapka data kabhi bhi bahar nahi jata, koi tracking nahi, koi ads nahi, aur saare premium features lifetime free hain.',
+      missionP1: 'Daily Khata Pro ko ek clear mission ke saath banaya gaya hai: har individual, freelancer, shopkeeper aur family ko ek honest, super-fast aur private record dena jo offline data ownership aur free standard core features provide karta hai bina mandatory paywalls ke.',
+      missionP2: 'Traditional apps aapka personal data remote servers par upload karte hain. Daily Khata Pro me aapka financial data aapke device me rehta hai aur standard core ledger tools hamesha accessible hain.',
       capabilitiesTitle: 'Core Capabilities aur Features',
       pillars: {
         fundsTitle: 'Automatic Smart Fund Allocation Rule',
@@ -621,7 +627,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '3. No Financial Warranty',
         disclaimerDesc: 'Ye app ek smart financial calculator hai, certified CA ya tax consultant nahi.',
         backupTitle: '4. Backup Responsibility',
-        backupDesc: 'Data local hone ki wajah se regular JSON backup lena user ki zimmedari hai.'
+        backupDesc: 'Data local hone ki wajah se regular JSON backup lena user ki zimmedari hai.',
+        commercialTitle: '5. Free Standard Edition & Commercial Terms',
+        commercialDesc: 'Daily Khata Pro ke core features free aur open source hain. Future me app development aur cloud updates ko maintain karne ke liye optional pro subscriptions, curated sponsor partnerships ya contextual ads laye ja sakte hain.'
       }
     },
     disclaimer: {
@@ -756,7 +764,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       creatorLabel: 'تخلیق کار اور ڈویلپر',
       missionTitle: 'ہمارا مشن اور مقصد',
       missionP1: 'ڈیلی کھاتہ پرو ایک اہم مقصد کے ساتھ بنایا گیا ہے: ہر فرد، فری لانسر، دکاندار اور خاندان کو ایک تیز رفتار، دیانت دار اور نجی لیجر فراہم کرنا جو ان کی رازداری کا مکمل احترام کرے۔',
-      missionP2: 'عام ایپس آپ کا ڈیٹا سرور پر اپ لوڈ کرتی ہیں۔ ڈیلی کھاتہ پرو میں آپ کا ڈیٹا کبھی بھی آپ کے فون یا لیپ ٹاپ سے باہر نہیں جاتا اور یہ ہمیشہ 100% مفت اور اوپن سورس ہے۔',
+      missionP2: 'عام ایپس آپ کا ڈیٹا سرور پر اپ لوڈ کرتی ہیں۔ ڈیلی کھاتہ پرو میں آپ کا ڈیٹا آپ کے فون یا کمپیوٹر میں محفوظ رہتا ہے اور اس کے بنیادی فیچرز بلا معاوضہ اور اوپن سورس دستیاب ہیں۔',
       capabilitiesTitle: 'اہم خصوصیات اور فن تعمیر',
       pillars: {
         fundsTitle: 'خودکار 6-فنڈ تقسیم کا اصول',
@@ -815,7 +823,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '3. کوئی مالیاتی ضمانت نہیں',
         disclaimerDesc: 'یہ ایپ ایک تنظیمی ٹول ہے، کوئی سند یافتہ ٹیکس مشیر نہیں۔',
         backupTitle: '4. بیک اپ کی ذمہ داری',
-        backupDesc: 'ڈیٹا لوکل ہونے کی وجہ سے باقاعدہ بیک اپ لینا صارف کی ذمہ داری ہے۔'
+        backupDesc: 'ڈیٹا لوکل ہونے کی وجہ سے باقاعدہ بیک اپ لینا صارف کی ذمہ داری ہے۔',
+        commercialTitle: '5. تجارتی شرائط اور مستقبل کی سروسز',
+        commercialDesc: 'ڈیلی کھاتہ پرو کے بنیادی فیچرز اوپن سورس اور مفت ہیں۔ مستقبل میں ایپ کے ارتقا اور سرور سروسز کو سپورٹ کرنے کے لیے اختیاری پرو سبسکرپشن، سپانسرز یا غیر دخل اندازی والے اشتہارات پیش کیے جا سکتے ہیں۔'
       }
     },
     disclaimer: {
@@ -949,7 +959,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
       creatorLabel: 'নির্মাতা ও ডেভেলপার',
       missionTitle: 'আমাদের লক্ষ্য ও উদ্দেশ্য',
       missionP1: 'ডেইলি খাতা প্রো একটি অনন্য লক্ষ্যে তৈরি: প্রতিটি ব্যক্তি, শিক্ষার্থী, ফ্রিল্যান্সার ও ব্যবসায়ীকে একটি দ্রুত, সৎ এবং সম্পূর্ণ ব্যক্তিগত আর্থিক লেজার প্রদান করা।',
-      missionP2: 'অন্যান্য অ্যাপের মতো আপনার ডেটা কোনো রিমোট সার্ভারে যায় না। আপনার সব তথ্য শুধুই আপনার ডিভাইসে থাকে এবং এটি এমআইটি ওপেন সোর্স লাইসেন্সের আওতায় আজীবন বিনামূল্যে ব্যবহারযোগ্য।',
+      missionP2: 'অন্যান্য অ্যাপের মতো আপনার ডেটা কোনো রিমোট সার্ভারে যায় না। আপনার সব তথ্য শুধুই আপনার ডিভাইসে থাকে এবং এর মূল হিসাবরক্ষণ ফিচারগুলো এমআইটি ওপেন সোর্স লাইসেন্সের আওতায় উন্মুক্ত।',
       capabilitiesTitle: 'মূল বৈশিষ্ট্যসমূহ',
       pillars: {
         fundsTitle: 'স্বয়ংক্রিয় ৬-তহবিল নিয়ম',
@@ -1008,7 +1018,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '৩. কোনো আর্থিক ওয়ারেন্টি নেই',
         disclaimerDesc: 'এই সফটওয়্যারটি হিসাবের সহযোগী টুল, কোনো প্রত্যয়িত কর পরামর্শদাতা নয়।',
         backupTitle: '৪. ব্যাকআপের দায়িত্ব',
-        backupDesc: 'তথ্য লোকাল থাকায় নিয়মিত JSON ব্যাকআপ সংরক্ষণ করা ব্যবহারকারীর দায়িত্ব।'
+        backupDesc: 'তথ্য লোকাল থাকায় নিয়মিত JSON ব্যাকআপ সংরক্ষণ করা ব্যবহারকারীর দায়িত্ব।',
+        commercialTitle: '৫. বাণিজ্যিক শর্তাবলী ও ভবিষ্যৎ সেবা',
+        commercialDesc: 'ডেইলি খাতা প্রো-এর মৌলিক ফিচারগুলো ওপেন সোর্স ও বিনামূল্যে উন্মুক্ত। ভবিষ্যতে অ্যাপ উন্নয়ন ও সার্ভার পরিকাঠামো পরিচালনার জন্য ঐচ্ছিক প্রো সাবস্ক্রিপশন, স্পনসর বা প্রাসঙ্গিক বিজ্ঞাপন অন্তর্ভুক্ত হতে পারে।'
       }
     },
     disclaimer: {
@@ -1201,7 +1213,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '3. Sin Garantía Financiera',
         disclaimerDesc: 'El software es una calculadora organizativa, no un asesor legal o fiscal certificado.',
         backupTitle: '4. Responsabilidad de Copias',
-        backupDesc: 'Dado que los datos son locales, recomendamos exportar copias de seguridad en JSON periódicamente.'
+        backupDesc: 'Dado que los datos son locales, recomendamos exportar copias de seguridad en JSON periódicamente.',
+        commercialTitle: '5. Edición Estándar Gratuita y Términos Comerciales',
+        commercialDesc: 'Las funciones principales de Daily Khata Pro se proporcionan bajo la licencia libre MIT. Para respaldar el mantenimiento continuo y la infraestructura técnica, el proyecto se reserva la posibilidad de ofrecer suscripciones pro opcionales, patrocinios asociados o anuncios contextuales no invasivos en versiones futuras.'
       }
     },
     disclaimer: {
@@ -1394,7 +1408,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '3. إخلاء المسؤولية المالية',
         disclaimerDesc: 'هذا التطبيق أداة حسابية تنظيمية وليس مستشاراً ضريبياً أو قانونياً معتمداً.',
         backupTitle: '4. مسؤولية النسخ الاحتياطي',
-        backupDesc: 'تقع مسؤولية الاحتفاظ بنسخ احتياطية دورية على عاتق المستخدم نظراً لتخزين البيانات محلياً.'
+        backupDesc: 'تقع مسؤولية الاحتفاظ بنسخ احتياطية دورية على عاتق المستخدم نظراً لتخزين البيانات محلياً.',
+        commercialTitle: '5. الشروط التجارية والخدمات المستقبلية',
+        commercialDesc: 'الميزات الأساسية للتطبيق مجانية ومفتوحة المصدر بموجب ترخيص MIT. ولدعم التطوير المستمر وخدمات التشغيل، يحتفظ المشروع بالحق مستقبلاً في تقديم اشتراكات مميزة اختيارية أو رعاية شركاء أو إعلانات غير مزعجة مع الحفاظ على مجانية الدفتر الأساسي.'
       }
     },
     disclaimer: {
@@ -1588,7 +1604,9 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
         disclaimerTitle: '3. Pas de Conseil Fiscal',
         disclaimerDesc: 'Outil organisationnel, non assimilable à un expert-comptable agréé.',
         backupTitle: '4. Responsabilité des Sauvegardes',
-        backupDesc: 'La sauvegarde régulière incombe à l’utilisateur.'
+        backupDesc: 'La sauvegarde régulière incombe à l’utilisateur.',
+        commercialTitle: '5. Édition Standard Gratuite et Conditions Commerciales',
+        commercialDesc: 'Les fonctionnalités de base de Daily Khata Pro sont distribuées gratuitement sous licence MIT. Afin de pérenniser le projet et l’infrastructure technique, la plateforme se réserve le droit de proposer à l’avenir des abonnements pro optionnels, des partenariats de sponsors ou des annonces non intrusives, tout en garantissant un accès pérenne aux fonctionnalités hors ligne essentielles.'
       }
     },
     disclaimer: {

@@ -40,7 +40,7 @@ import { MasterEditModal } from './components/MasterEditModal';
 import { BudgetManagerModal } from './components/BudgetManagerModal';
 import { SplitBillModal } from './components/SplitBillModal';
 import { LoanUdharLedgerView } from './components/LoanUdharLedgerView';
-// Removed HasVoltPromoBanner and GoogleAdBanner imports as requested to be 100% free and ad-free
+// Commercial banners configurable for future partner integrations
 import { PrintModal } from './components/PrintModal';
 import { SourceCodeModal } from './components/SourceCodeModal';
 import { InstallPWA } from './components/InstallPWA';
@@ -61,6 +61,7 @@ import { CalculatorPage } from './components/CalculatorPage';
 import { AttendancePage } from './components/AttendancePage';
 import { WealthAcademyPage } from './components/WealthAcademyPage';
 import { WealthArticlePage } from './components/WealthArticlePage';
+import { CommercialNewsPortalPage } from './components/CommercialNewsPortalPage';
 import { CookiesPage } from './components/CookiesPage';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { RemindersModal } from './components/RemindersModal';
@@ -98,6 +99,22 @@ const ArticleWrapper: React.FC<{ language: AppLanguage; onBack: () => void; onNa
 }) => {
   const { id } = useParams<{ id: string }>();
   return <WealthArticlePage articleId={id || ''} language={language} onBack={onBack} onNavigateArticle={onNavigateArticle} onNavigateTab={onNavigateTab} />;
+};
+
+const NewsArticleWrapper: React.FC<{ language: AppLanguage; onBack: () => void; onNavigateTab: (tab: string) => void }> = ({
+  language,
+  onBack,
+  onNavigateTab
+}) => {
+  const { id } = useParams<{ id: string }>();
+  return (
+    <CommercialNewsPortalPage
+      language={language}
+      onBack={onBack}
+      initialArticleId={id || null}
+      onNavigateTab={onNavigateTab}
+    />
+  );
 };
 
 export default function App() {
@@ -2452,6 +2469,22 @@ export default function App() {
             />
           } />
 
+          <Route path="/news" element={
+            <CommercialNewsPortalPage
+              onBack={() => setCurrentTab('home')}
+              language={language}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+            />
+          } />
+
+          <Route path="/news/:id" element={
+            <NewsArticleWrapper
+              language={language}
+              onBack={() => setCurrentTab('news')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+            />
+          } />
+
           <Route path="/tracker" element={
             <WorkLifeTrackerView
               workLogs={workLogs}
@@ -2736,8 +2769,8 @@ export default function App() {
             <div className="max-w-md w-full px-4 text-center mt-2">
               <p className="text-[11.5px] font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-[var(--theme-primary,#38BDF8)] to-indigo-400 leading-relaxed mb-3">
                 {language === 'hi' 
-                  ? '100% विज्ञापन मुक्त • कोई स्पॉन्सरशिप नहीं • कोई सब्सक्रिप्शन नहीं • हमेशा के लिए फ्री' 
-                  : "100% Ad-Free • No Sponsorships • Zero Subscriptions • Free Forever"}
+                  ? 'निःशुल्क मानक संस्करण • नो मैंडेटरी सब्सक्रिप्शन • प्राइवेसी-फर्स्ट खाता • पारदर्शी नियम' 
+                  : "Free Standard Edition • No Mandatory Subscription • Privacy-First Ledger • Transparent Terms"}
               </p>
               
               <div className="flex flex-wrap items-center justify-center gap-3">
@@ -2795,6 +2828,8 @@ export default function App() {
 
           {/* Legal Links */}
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-[var(--theme-text-dim,#94A3B8)] pb-2 pt-1 font-medium">
+            <button onClick={() => setCurrentTab('news')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors text-[var(--theme-primary,#38BDF8)] font-bold">{language === 'hi' ? 'समाचार व रिसर्च' : 'News & Research'}</button>
+            <span className="opacity-40">•</span>
             <button onClick={() => setCurrentTab('privacy')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Privacy Policy</button>
             <span className="opacity-40">•</span>
             <button onClick={() => setCurrentTab('terms')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Terms</button>

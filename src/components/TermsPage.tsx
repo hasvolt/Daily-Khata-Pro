@@ -6,7 +6,8 @@ import {
   ShieldCheck,
   CheckCircle2,
   Mail,
-  FolderGit2
+  FolderGit2,
+  Layers
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { getPageTranslation } from '../utils/pageTranslations';
@@ -113,6 +114,19 @@ export const TermsPage: React.FC<TermsPageProps> = ({
             {t.termsList.backupDesc}
           </p>
         </div>
+
+        {/* 5. Commercial Terms & Future Services */}
+        {t.termsList.commercialTitle && (
+          <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
+            <div className="flex items-center gap-2 text-cyan-400 font-bold text-[15px]">
+              <Layers className="w-4.5 h-4.5" />
+              <h2>{t.termsList.commercialTitle}</h2>
+            </div>
+            <p className="leading-relaxed">
+              {t.termsList.commercialDesc}
+            </p>
+          </div>
+        )}
 
         {/* Contact */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">

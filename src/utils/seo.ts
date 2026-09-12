@@ -6,6 +6,7 @@
  */
 
 import { ACADEMY_ARTICLES } from '../data/wealthAcademy';
+import { COMMERCIAL_ARTICLES } from '../data/newsPortalData';
 
 export interface PageSEOMeta {
   title: string;
@@ -96,9 +97,34 @@ export const ROUTE_SEO_MAP: Record<string, PageSEOMeta> = {
     description: 'Secure, offline personal notes, financial ideas, bill reminders, and encrypted scratchpad.',
     canonicalPath: '/notes'
   },
+  '/loans': {
+    title: 'Loan & Udhar Ledger — Credit, Debt & Customer Balances | Daily Khata Pro',
+    description: 'Track money given (Udhar/Receivable) and money borrowed (Payable) with automatic net balance, due dates, and settlement logs. 100% private.',
+    canonicalPath: '/loans'
+  },
+  '/news': {
+    title: 'Commercial News & Market Research Intelligence — Daily Khata Pro',
+    description: 'Global macroeconomics, fintech analysis, taxation updates, and financial research reports for smart business decisions.',
+    canonicalPath: '/news'
+  },
+  '/developer': {
+    title: 'Developer Profile & Creator — MD Zafeer Hasan (YAZDAAN) | Daily Khata Pro',
+    description: 'Meet the independent creator and developer behind Daily Khata Pro. Engineering philosophy, open-source architecture, and transparency.',
+    canonicalPath: '/developer'
+  },
+  '/attendance': {
+    title: 'Work Attendance & Shift Tracker — Daily Khata Pro',
+    description: 'Track daily work shifts, present/absent logs, overtime hours, and monthly attendance records directly inside your financial ledger.',
+    canonicalPath: '/attendance'
+  },
+  '/add': {
+    title: 'Add Income or Expense Entry — Daily Khata Pro',
+    description: 'Log daily earnings and expenses with automatic 6-fund disciplined allocation or custom category deduction.',
+    canonicalPath: '/add'
+  },
   '/support-project': {
     title: 'Support Daily Khata Pro — Star, Share & Contribute',
-    description: 'Support the 100% free, offline-first personal financial manager Daily Khata Pro. Star on GitHub, share with friends, or send feature feedback.',
+    description: 'Support the offline-first personal financial manager Daily Khata Pro. Star on GitHub, share with friends, or send feature feedback.',
     canonicalPath: '/support-project'
   }
 };
@@ -121,6 +147,19 @@ export function updatePageSEO(pathname: string): void {
       seo = {
         title: `${article.title} — Wealth Academy | Daily Khata Pro`,
         description: article.description,
+        canonicalPath: cleanPath
+      };
+    }
+  }
+
+  // Dynamic News & Research Article SEO
+  if (!seo && cleanPath.startsWith('/news/')) {
+    const newsId = cleanPath.split('/').pop();
+    const newsItem = COMMERCIAL_ARTICLES.find(a => a.id === newsId);
+    if (newsItem) {
+      seo = {
+        title: `${newsItem.title} — Commercial News & Research | Daily Khata Pro`,
+        description: newsItem.description,
         canonicalPath: cleanPath
       };
     }

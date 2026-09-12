@@ -1829,6 +1829,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* TAB 6: ENTITY & LEGAL */}
           {activeTab === 'legal' && (
             <div className="space-y-6">
+              {/* Commercial Terms & Standard Edition Policy */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-2.5 shadow-md">
+                <div className="flex items-center gap-2 text-cyan-400">
+                  <ShieldCheck className="w-5 h-5 text-cyan-400" />
+                  <h4 className="font-bold text-[14.5px] text-[var(--theme-text,#F8FAFC)]">
+                    {tStr('मुफ़्त मानक संस्करण व व्यवसायिक शर्तें', 'Free Standard Edition & Commercial Terms', 'Free Standard Edition & Commercial Terms')}
+                  </h4>
+                </div>
+                <p className="text-[12px] text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
+                  {tStr(
+                    'डेली खाता प्रो के मुख्य फीचर्स MIT लाइसेंस के तहत मुफ़्त उपलब्ध हैं। भविष्य के विकास, क्लाउड संवर्द्धन और सर्वर इन्फ्रास्ट्रक्चर को बनाए रखने के लिए, प्लेटफॉर्म भविष्य के संस्करणों में वैकल्पिक प्रीमियम सदस्यता (Subscriptions), स्पॉन्सर्ड पार्टनर टूल्स, या विज्ञापन (Ads) प्रस्तुत करने का अधिकार सुरक्षित रखता है। मुख्य ऑफलाइन लेजर कार्यक्षमता हमेशा बिना किसी अनिवार्य शुल्क के उपलब्ध रहेगी।',
+                    'Daily Khata Pro standard core features are provided free under MIT Open Source License. To support ongoing maintenance, server operations and ecosystem enhancements, the platform reserves the flexibility in future releases to introduce optional pro subscriptions, curated sponsor partnerships, or non-intrusive contextual ads while keeping core offline ledger tools accessible without mandatory paywalls.',
+                    'Daily Khata Pro standard core features are provided free under MIT Open Source License. To support ongoing maintenance, server operations and ecosystem enhancements, the platform reserves the flexibility in future releases to introduce optional pro subscriptions, curated sponsor partnerships, or non-intrusive contextual ads while keeping core offline ledger tools accessible without mandatory paywalls.'
+                  )}
+                </p>
+                <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-[var(--theme-text-dim,#94A3B8)]">
+                  <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10">License: MIT Open Source</span>
+                  <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10">Core Ledger: Free Access</span>
+                  <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10">Terms: Flexible Policy</span>
+                </div>
+              </div>
+
               {/* App Links & Navigation Section */}
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-4 shadow-md">
                 <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] border-b border-[var(--theme-border,#213E61)] pb-2.5">

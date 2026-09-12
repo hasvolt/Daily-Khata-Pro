@@ -1,10 +1,10 @@
 # 📊 Daily Khata Pro
 
-> **100% Free, Ad-Free & Open Source (MIT) Universal Professional Daily Income & Expense Ledger with 6-Fund Rule Allocation, Work Deliverables, Daily Life Timeline Tracker, Calculator Suite & Offline Privacy Vault.**
+> **Free Standard Edition, Privacy-First & Open Source (MIT) Universal Professional Daily Income & Expense Ledger with 6-Fund Rule Allocation, Work Deliverables, Daily Life Timeline Tracker, Calculator Suite & Offline Privacy Vault.**
 
 [![Live Web App](https://img.shields.io/badge/Live_App-rozfiber.com-38BDF8?style=for-the-badge&logo=google-chrome&logoColor=white)](https://rozfiber.com/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-hasvolt%2FDaily--Khata--Pro-10B981?style=for-the-badge&logo=github)](https://github.com/hasvolt/Daily-Khata-Pro)
-[![100% Free](https://img.shields.io/badge/100%25_Free-Zero_Ads-FFB020?style=for-the-badge&logo=adblock&logoColor=black)](#-100-free--ad-free-guarantee)
+[![Free Standard Edition](https://img.shields.io/badge/Standard_Edition-Free-FFB020?style=for-the-badge&logo=sparkles&logoColor=black)](#-free-standard-edition--commercial-policy)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
@@ -17,8 +17,10 @@
 
 It implements the proven **6-Fund Money Allocation Rule** (Needs, Emergency, Investment, Growth, Entertainment, Giving) to automatically distribute income streams into disciplined financial buckets while keeping track of project deliverables, daily work logs, and life habits in one seamless dashboard.
 
-### 💖 100% Free & Ad-Free Guarantee
-Daily Khata Pro is entirely open source under the MIT License. It is **100% ad-sponsored free** (meaning NO ads will ever be shown to users), completely devoid of any premium subscriptions, paywalls, or hidden charges. The project is sustained purely for community benefit.
+### 💖 Free Standard Edition & Commercial Policy
+Daily Khata Pro is open source under the permissive MIT License. The core standard edition provides comprehensive offline bookkeeping, smart fund allocations, passbooks, and financial calculator tools without any mandatory subscription fees.
+
+To support ongoing development, cloud syncing enhancements, and sustainable infrastructure, the platform reserves the flexibility in future releases to offer optional pro subscription tiers, curated partner sponsorships, or non-intrusive contextual advertising, while keeping essential offline ledger functions accessible.
 
 ---
 

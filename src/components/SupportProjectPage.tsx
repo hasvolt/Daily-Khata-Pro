@@ -110,13 +110,13 @@ export const SupportProjectPage: React.FC<SupportProjectPageProps> = ({ language
         </h1>
         <p className="text-base sm:text-lg text-[var(--theme-text-dim,#94A3B8)] max-w-2xl mx-auto leading-relaxed">
           {tStr(
-            'आपका वित्तीय अनुशासन और प्राइवेसी हमारी प्राथमिकता है। इस प्रोजेक्ट को विज्ञापनों, सब्सक्रिप्शन और वाटरमार्क से मुक्त रखने में स्टार, शेयर या फीडबैक देकर मदद करें।',
-            'Your financial discipline and privacy are our top priorities. Help keep this project free from ads, subscriptions, and watermarks forever with a star, share, or valuable feedback.'
+            'आपका वित्तीय अनुशासन और प्राइवेसी हमारी प्राथमिकता है। इस प्रोजेक्ट के विकास और संवर्द्धन में स्टार, शेयर या फीडबैक देकर मदद करें।',
+            'Your financial discipline and privacy are our top priorities. Help sustain and grow this project with a GitHub star, sharing with friends, or valuable feedback.'
           )}
         </p>
       </div>
 
-      {/* The "Free Forever" Promise Card */}
+      {/* The Standard Edition & Transparency Card */}
       <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[var(--theme-surface,#0E1A29)] to-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-5">
           <ShieldCheck className="w-32 h-32" />
@@ -126,27 +126,27 @@ export const SupportProjectPage: React.FC<SupportProjectPageProps> = ({ language
           <div className="flex items-center gap-3">
             <Zap className="w-6 h-6 text-[var(--theme-primary,#38BDF8)]" />
             <h2 className="text-xl font-bold text-[var(--theme-text,#F8FAFC)]">
-              {tStr('हमारा "100% फ्री" वादा', 'Our "100% Free" Promise')}
+              {tStr('मुफ़्त मानक संस्करण व हमारे सिद्धांत', 'Free Standard Edition & Core Principles')}
             </h2>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               { 
-                title: tStr('कोई विज्ञापन नहीं', 'Zero Advertisements'), 
-                desc: tStr('बिना किसी रुकावट या स्पैम के साफ इंटरफेस।', 'Clean interface without any interruptions.') 
+                title: tStr('मुफ़्त मुख्य लेजर', 'Free Core Ledger'), 
+                desc: tStr('मुख्य ऑफलाइन लेजर व फंड नियम बिना किसी अनिवार्य शुल्क के उपलब्ध हैं।', 'Core offline bookkeeping and fund allocation tools without mandatory paywalls.') 
               },
               { 
-                title: tStr('कोई सब्सक्रिप्शन नहीं', 'No Subscriptions'), 
-                desc: tStr('सभी फीचर्स हमेशा सभी के लिए फ्री।', 'All features are 100% free for everyone.') 
+                title: tStr('पारदर्शी नीतियां', 'Transparent Terms'), 
+                desc: tStr('भविष्य के सर्वर इन्फ्रास्ट्रक्चर व प्रो टूल्स के लिए वैकल्पिक सब्सक्रिप्शन या स्पॉन्सरशिप का विकल्प।', 'Open flexibility for optional pro upgrades, curated sponsorships, and clear licensing.') 
               },
               { 
-                title: tStr('कोई वाटरमार्क नहीं', 'No Watermarks'), 
-                desc: tStr('प्रोफेशनल रिपोर्ट्स बिना किसी थर्ड-पार्टी ब्रांडिंग के।', 'Professional reports without our branding.') 
+                title: tStr('कोई अनिवार्य वाटरमार्क नहीं', 'Clean Professional Reports'), 
+                desc: tStr('प्रोफेशनल रिपोर्ट्स व स्टेटमेंट साफ और सुव्यवस्थित लेआउट में।', 'Export clean, professional financial statements and invoices anytime.') 
               },
               { 
                 title: tStr('100% प्राइवेसी व ऑफलाइन', '100% Privacy & Offline'), 
-                desc: tStr('डेटा केवल आपके डिवाइस के सैंडबॉक्स में सुरक्षित।', 'Your data stays strictly on your local device.') 
+                desc: tStr('डेटा केवल आपके डिवाइस के सैंडबॉक्स में सुरक्षित रहता है।', 'Your personal data stays strictly in your local device storage.') 
               }
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5">
@@ -330,8 +330,8 @@ export const SupportProjectPage: React.FC<SupportProjectPageProps> = ({ language
         <AlertCircle className="w-6 h-6 text-blue-400 shrink-0" />
         <p className="text-[12.5px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
           {tStr(
-            'Daily Khata Pro हमेशा के लिए 100% फ्री और स्वतंत्र ओपन-सोर्स टूल है। हम कभी भी आपका वित्तीय डेटा सर्वर पर नहीं भेजते और न ही कोई विज्ञापन दिखाते हैं।',
-            'Daily Khata Pro is a forever 100% free and open-source utility. We never transmit your financial records to any remote server, and no ads will ever be shown.'
+            'Daily Khata Pro का मुख्य ऑफलाइन लेजर बिना किसी अनिवार्य शुल्क के उपलब्ध है। हम कभी भी आपका वित्तीय डेटा किसी रिमोट सर्वर पर बिना आपकी अनुमति के अपलोड नहीं करते हैं।',
+            'Daily Khata Pro provides its standard offline core ledger without mandatory paywalls. Your personal financial records remain self-custodied directly on your local device.'
           )}
         </p>
       </div>
