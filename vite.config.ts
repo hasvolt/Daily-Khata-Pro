@@ -35,10 +35,15 @@ export default defineConfig(() => {
     build: {
       chunkSizeWarningLimit: 1000,
       rollupOptions: {
+        external: ['puppeteer', 'express', 'path', 'fs'],
         output: {
           manualChunks: {
             vendor: ['react', 'react-dom', 'react-router-dom'],
-            icons: ['lucide-react']
+            icons: ['lucide-react'],
+            firebase: ['firebase/app', 'firebase/auth'],
+            charts: ['recharts'],
+            animation: ['motion/react', 'canvas-confetti'],
+            google: ['@google/genai']
           }
         }
       }

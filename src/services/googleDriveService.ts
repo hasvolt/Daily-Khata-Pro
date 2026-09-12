@@ -23,8 +23,45 @@ provider.setCustomParameters({
   prompt: 'select_account'
 });
 
-// Cache the access token STRICTLY in memory (Do NOT persist to localStorage/sessionStorage)
-let cachedAccessToken: string | null = null;
+// Local Storage keys for token persistence
+const TOKEN_KEY = 'dkp_drive_token';
+const TOKEN_EXPIRY_KEY = 'dkp_drive_token_expiry';
+
+const getStoredToken = (): string | null => {
+  try {
+    const token = localStorage.getItem(TOKEN_KEY);
+    const expiry = localStorage.getItem(TOKEN_EXPIRY_KEY);
+    if (token && expiry) {
+      if (Date.now() < parseInt(expiry, 10)) {
+        return token;
+      } else {
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(TOKEN_EXPIRY_KEY);
+      }
+    }
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+  return null;
+};
+
+const setStoredToken = (token: string | null) => {
+  try {
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      // OAuth tokens usually last 1 hour. Store for 55 minutes to be safe.
+      localStorage.setItem(TOKEN_EXPIRY_KEY, (Date.now() + 55 * 60 * 1000).toString());
+    } else {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(TOKEN_EXPIRY_KEY);
+    }
+  } catch (e) {
+    // Ignore localStorage errors
+  }
+};
+
+// Cache the access token in memory, initialized from localStorage if available
+let cachedAccessToken: string | null = getStoredToken();
 let isSigningIn = false;
 
 export interface DriveFileInfo {
@@ -50,10 +87,12 @@ export const initAuth = (
       } else if (!isSigningIn) {
         // Token not yet acquired in memory for this session, user must click Sign in to grant access token
         cachedAccessToken = null;
+        setStoredToken(null);
         if (onAuthFailure) onAuthFailure();
       }
     } else {
       cachedAccessToken = null;
+      setStoredToken(null);
       if (onAuthFailure) onAuthFailure();
     }
   });
@@ -72,6 +111,7 @@ export const googleSignIn = async (): Promise<{ user: User; accessToken: string 
     }
 
     cachedAccessToken = credential.accessToken;
+    setStoredToken(cachedAccessToken);
     return { user: result.user, accessToken: cachedAccessToken };
   } catch (error: any) {
     console.error('Google Sign In Error:', error);
@@ -94,6 +134,7 @@ export const getAccessToken = (): string | null => {
 export const googleSignOut = async (): Promise<void> => {
   await signOut(auth);
   cachedAccessToken = null;
+  setStoredToken(null);
 };
 
 /**

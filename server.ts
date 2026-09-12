@@ -24,7 +24,7 @@ async function startServer() {
     app.use(express.static(servePath));
     
     // SPA Fallback
-    app.get('*', (req, res) => {
+    app.get('*all', (req, res) => {
       res.sendFile(path.join(servePath, 'index.html'));
     });
   }
