@@ -223,7 +223,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'Terms of Service',
       title: 'Terms of Service & Open Source License',
-      subtitle: 'Standard MIT Open Source License Terms • Official Domain: rozfiber.com',
+      subtitle: 'Standard MIT Open Source License Terms • Official Domain: ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'Back to Home',
       openSourceTitle: 'MIT Open Source License Agreement',
       openSourceDesc: 'Daily Khata Pro is provided as open-source under the terms of the MIT License.',
@@ -419,7 +419,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'नियम एवं शर्तें',
       title: 'नियम, शर्तें एवं ओपन सोर्स लाइसेंस',
-      subtitle: 'मानक MIT ओपन सोर्स शर्तें • आधिकारिक डोमेन: rozfiber.com',
+      subtitle: 'मानक MIT ओपन सोर्स शर्तें • आधिकारिक डोमेन: ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'होम पर वापस जाएं',
       openSourceTitle: 'MIT ओपन सोर्स लाइसेंस समझौता',
       openSourceDesc: 'डेली खाता: प्रो MIT लाइसेंस के तहत ओपन सोर्स उपलब्ध है।',
@@ -615,7 +615,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'Terms of Service',
       title: 'Terms of Service & Open Source License',
-      subtitle: 'Standard MIT Open Source License • Official Domain: rozfiber.com',
+      subtitle: 'Standard MIT Open Source License • Official Domain: ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'Home Par Wapas Jayein',
       openSourceTitle: 'MIT Open Source License Agreement',
       openSourceDesc: 'Daily Khata Pro MIT License ke tehat bilkul open-source available hai.',
@@ -811,7 +811,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'شرائط و ضوابط',
       title: 'شرائط و ضوابط اور اوپن سورس لائسنس',
-      subtitle: 'معیاری MIT لائسنس • آفیشل ڈومین: rozfiber.com',
+      subtitle: 'معیاری MIT لائسنس • آفیشل ڈومین: ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'ہوم پر واپس جائیں',
       openSourceTitle: 'MIT اوپن سورس معاہدہ',
       openSourceDesc: 'یہ سافٹ ویئر MIT لائسنس کے تحت مکمل مفت دستیاب ہے۔',
@@ -1006,7 +1006,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'শর্তাবলী',
       title: 'ব্যবহারের শর্তাবলী ও লাইসেন্স',
-      subtitle: 'স্ট্যান্ডার্ড MIT ওপেন সোর্স শর্তাবলী • অফিসিয়াল ডোমেইন: rozfiber.com',
+      subtitle: 'স্ট্যান্ডার্ড MIT ওপেন সোর্স শর্তাবলী • অফিসিয়াল ডোমেইন: ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'হোমে ফিরে যান',
       openSourceTitle: 'MIT ওপেন সোর্স লাইসেন্স চুক্তি',
       openSourceDesc: 'ডেইলি খাতা প্রো এমআইটি লাইসেন্সের অধীনে সম্পূর্ণ বিনামূল্যে ব্যবহারের জন্য উন্মুক্ত।',
@@ -1201,7 +1201,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'Términos de Servicio',
       title: 'Términos de Servicio y Licencia Abierta',
-      subtitle: 'Términos estándar MIT de Código Abierto • Dominio oficial: rozfiber.com',
+      subtitle: 'Términos estándar MIT de Código Abierto • Dominio oficial: ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'Volver al Inicio',
       openSourceTitle: 'Acuerdo de Licencia de Código Abierto MIT',
       openSourceDesc: 'Daily Khata Pro se distribuye de forma gratuita y abierta bajo la licencia MIT.',
@@ -1396,7 +1396,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'شروط الخدمة',
       title: 'شروط الاستخدام والترخيص المفتوح',
-      subtitle: 'شروط ترخيص MIT القياسية • النطاق الرسمي: rozfiber.com',
+      subtitle: 'شروط ترخيص MIT القياسية • النطاق الرسمي: ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'العودة إلى الصفحة الرئيسية',
       openSourceTitle: 'اتفاقية ترخيص MIT مفتوح المصدر',
       openSourceDesc: 'البرنامج متاح مجاناً للجميع بموجب ترخيص MIT.',
@@ -1592,7 +1592,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     terms: {
       badge: 'Conditions d’Utilisation',
       title: 'Conditions & Licence Open Source',
-      subtitle: 'Licence standard MIT • Domaine officiel : rozfiber.com',
+      subtitle: 'Licence standard MIT • Domaine officiel : ' + (typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com') + '',
       backToHome: 'Retour à l’accueil',
       openSourceTitle: 'Accord de Licence MIT',
       openSourceDesc: 'Logiciel gratuit et open source distribué sous licence MIT.',

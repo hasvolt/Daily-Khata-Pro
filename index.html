@@ -16,6 +16,16 @@
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <link rel="canonical" id="canonical-url" href="https://rozfiber.com/" />
+    <script>
+      // Dynamically set canonical and og:urls to the current host
+      (function() {
+        if (typeof window !== 'undefined' && window.location) {
+          const origin = window.location.origin;
+          const canonical = document.getElementById('canonical-url');
+          if (canonical) canonical.href = origin + window.location.pathname;
+        }
+      })();
+    </script>
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />

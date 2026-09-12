@@ -18,12 +18,7 @@ const PRIMARY_DOMAIN = 'https://rozfiber.com';
 
 function getBaseUrl(): string {
   if (typeof window !== 'undefined' && window.location && window.location.origin) {
-    const origin = window.location.origin;
-    // If running on rozfiber.com or preview run.app domain, preserve canonical domain appropriately
-    if (origin.includes('rozfiber.com')) {
-      return PRIMARY_DOMAIN;
-    }
-    return origin;
+    return window.location.origin;
   }
   return PRIMARY_DOMAIN;
 }

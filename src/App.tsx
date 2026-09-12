@@ -2761,7 +2761,7 @@ function AppContent() {
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[10px] font-bold text-green-400 shadow-xs hover:border-green-500/50 transition-colors">
                 <Globe className="w-3.5 h-3.5" />
-                <span>rozfiber.com</span>
+                <span>{typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com'}</span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[10px] font-bold text-[var(--theme-primary,#38BDF8)] shadow-xs hover:border-[var(--theme-primary,#38BDF8)]/50 transition-colors">
                 <Code2 className="w-3.5 h-3.5" />

@@ -285,7 +285,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <a
-              href="https://rozfiber.com"
+              href={typeof window !== 'undefined' ? window.location.origin : "https://rozfiber.com"}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-white/5 border border-[var(--theme-border,#213E61)] transition-colors group cursor-pointer"
@@ -297,7 +297,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 <div className="min-w-0">
                   <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-medium">Website</div>
                   <div className="text-[13px] font-bold text-white font-mono group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors truncate">
-                    rozfiber.com
+                    {typeof window !== 'undefined' ? window.location.hostname : 'rozfiber.com'}
                   </div>
                 </div>
               </div>
