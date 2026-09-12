@@ -14,7 +14,19 @@ export interface PageSEOMeta {
   canonicalPath: string;
 }
 
-const BASE_URL = 'https://rozfiber.com';
+const PRIMARY_DOMAIN = 'https://rozfiber.com';
+
+function getBaseUrl(): string {
+  if (typeof window !== 'undefined' && window.location && window.location.origin) {
+    const origin = window.location.origin;
+    // If running on rozfiber.com or preview run.app domain, preserve canonical domain appropriately
+    if (origin.includes('rozfiber.com')) {
+      return PRIMARY_DOMAIN;
+    }
+    return origin;
+  }
+  return PRIMARY_DOMAIN;
+}
 
 export const ROUTE_SEO_MAP: Record<string, PageSEOMeta> = {
   '/': {
@@ -186,7 +198,8 @@ export function updatePageSEO(pathname: string): void {
   metaDesc.setAttribute('content', seo.description);
 
   // 3. Update Canonical Tag (Crucial for Google Search Console)
-  const canonicalUrl = `${BASE_URL}${seo.canonicalPath === '/' ? '/' : seo.canonicalPath}`;
+  const baseUrl = getBaseUrl();
+  const canonicalUrl = `${baseUrl}${seo.canonicalPath === '/' ? '/' : seo.canonicalPath}`;
   let linkCanonical = document.querySelector('link[rel="canonical"]');
   if (!linkCanonical) {
     linkCanonical = document.createElement('link');

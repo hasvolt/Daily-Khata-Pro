@@ -35,7 +35,9 @@ import {
   ArrowRightLeft,
   Globe,
   Search,
-  X
+  X,
+  Minimize2,
+  Maximize2
 } from 'lucide-react';
 import { FundType, AppLanguage } from '../types';
 import { FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_PERCENTAGES } from '../data/defaults';
@@ -183,6 +185,22 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const [currencyAmountInput, setCurrencyAmountInput] = useState<string>('100');
   const [currencyCustomRate, setCurrencyCustomRate] = useState<string>('');
   const [isLiveRateSynced, setIsLiveRateSynced] = useState<boolean>(true);
+  const [currencyScale, setCurrencyScale] = useState<'compact' | 'normal'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('daily_khata_currency_scale');
+      if (saved === 'compact' || saved === 'normal') return saved;
+      return window.innerWidth < 640 ? 'compact' : 'normal';
+    }
+    return 'compact';
+  });
+
+  const handleSetCurrencyScale = (scale: 'compact' | 'normal') => {
+    setCurrencyScale(scale);
+    try {
+      localStorage.setItem('daily_khata_currency_scale', scale);
+    } catch {}
+    triggerHapticSound('click');
+  };
 
   // Currency Picker Drawer / Modal State
   const [currencyActiveSelector, setCurrencyActiveSelector] = useState<'from' | 'to' | null>(null);
@@ -704,7 +722,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   // Clean, focused tool tabs
   const navTabs: { id: CalculatorViewType; label: string; hindi: string; icon: any }[] = [
     { id: 'standard', label: 'Standard Calc', hindi: 'साधारण कैलकुलेटर', icon: Calculator },
-    { id: 'currency', label: 'Currency / Forex', hindi: 'मुद्रा विनिमय (USD/EUR)', icon: DollarSign },
+    { id: 'currency', label: 'Currency / Forex', hindi: 'मुद्रा विनिमय (Currency)', icon: DollarSign },
     { id: 'gold', label: 'Gold & Silver', hindi: 'सोना व चांदी (24K/22K)', icon: Sparkles },
     { id: 'emi', label: 'Loan EMI', hindi: 'लोन EMI', icon: Landmark },
     { id: 'sip', label: 'SIP & Wealth', hindi: 'SIP वेल्थ', icon: TrendingUp },
@@ -2504,57 +2522,96 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
       {/* ========================================================================= */}
       {/* 2. UNIVERSAL ANY-TO-ANY MULTI-COUNTRY CURRENCY ("CRUNCHY") CALCULATOR */}
+      {/* ========================================================================= */}
       {activeTab === 'currency' && (
-        <div className="mx-auto max-w-3xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl p-4 sm:p-6 shadow-2xl space-y-5 animate-in fade-in duration-150 text-left">
-          {/* Header & Live API Sync Status */}
-          <div className="flex items-center justify-between border-b border-[var(--theme-border,#213E61)]/70 pb-3 flex-wrap gap-2">
-            <div>
+        <div className={`mx-auto w-full max-w-full overflow-hidden bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-2xl animate-in fade-in duration-150 text-left transition-all ${
+          currencyScale === 'compact'
+            ? 'max-w-2xl rounded-2xl p-3 sm:p-5 space-y-3 sm:space-y-4'
+            : 'max-w-3xl rounded-3xl p-4 sm:p-6 space-y-5'
+        }`}>
+          {/* Header & Live API Sync Status & Size Switcher */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--theme-border,#213E61)]/70 pb-3 gap-2.5">
+            <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-base sm:text-lg font-black text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-emerald-400" />
-                  <span>{isHindi ? 'यूनिवर्सल बहु-देशीय मुद्रा कैलकुलेटर (Any Country to Any Country)' : 'Universal Multi-Country Currency Calculator'}</span>
+                <h2 className={`font-black text-[var(--theme-text,#F8FAFC)] flex items-center gap-1.5 sm:gap-2 ${
+                  currencyScale === 'compact' ? 'text-[15px] sm:text-base' : 'text-base sm:text-lg'
+                }`}>
+                  <Globe className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
+                  <span className="truncate">{isHindi ? 'यूनिवर्सल बहु-देशीय मुद्रा कैलकुलेटर' : 'Universal Cross-Currency Calculator'}</span>
                 </h2>
-                <span className="flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="flex items-center gap-1 text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>Live Feed Connected</span>
+                  <span>Live Feed</span>
                 </span>
               </div>
-              <p className="text-xs text-[var(--theme-text-dim,#94A3B8)] mt-0.5">
+              <p className="text-[11px] sm:text-xs text-[var(--theme-text-dim,#94A3B8)] mt-0.5 line-clamp-1 sm:line-clamp-none">
                 {isHindi
-                  ? 'दुनिया के किसी भी देश की करेंसी को आपस में तुरंत कन्वर्ट करें (USD, SAR, AED, KWD, EUR, INR, GBP आदि)'
-                  : 'Convert any country’s currency into any other country’s currency with real-time exchange rates'}
+                  ? 'दुनिया के किसी भी देश की करेंसी को आपस में तुरंत कन्वर्ट करें'
+                  : 'Convert any global currency into another with real-time exchange rates'}
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleSyncLiveRate}
-                className="px-2.5 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs font-mono font-bold text-emerald-400 hover:bg-emerald-500/25 transition-all cursor-pointer flex items-center gap-1.5"
-                title="Sync Live Exchange Rate from API"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Sync Live</span>
-              </button>
-              <button
-                type="button"
-                onClick={handlePrintCurrent}
-                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text-muted,#CBD5E1)] hover:text-emerald-400 hover:border-emerald-400 transition-all cursor-pointer flex items-center gap-1.5"
-                title="Print Forex Slip"
-              >
-                <Printer className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="hidden sm:inline">Print Slip</span>
-              </button>
+            <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 flex-wrap pt-0.5 sm:pt-0">
+              {/* Size Switcher for Mobile: Compact / Small vs Normal */}
+              <div className="flex items-center gap-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] p-0.5 rounded-xl shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleSetCurrencyScale('compact')}
+                  className={`px-2 py-1 rounded-lg text-[10.5px] font-bold font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                    currencyScale === 'compact'
+                      ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                      : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  }`}
+                  title={isHindi ? 'मोबाइल के लिए कॉम्पैक्ट/छोटा दृश्य' : 'Compact small view for mobile'}
+                >
+                  <Minimize2 className="w-3 h-3" />
+                  <span>{isHindi ? 'छोटा' : 'Small'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSetCurrencyScale('normal')}
+                  className={`px-2 py-1 rounded-lg text-[10.5px] font-bold font-mono transition-all cursor-pointer flex items-center gap-1 ${
+                    currencyScale === 'normal'
+                      ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                      : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  }`}
+                  title={isHindi ? 'सामान्य दृश्य' : 'Normal view'}
+                >
+                  <Maximize2 className="w-3 h-3" />
+                  <span>{isHindi ? 'सामान्य' : 'Normal'}</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleSyncLiveRate}
+                  className="px-2.5 py-1 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-[11px] sm:text-xs font-mono font-bold text-emerald-400 hover:bg-emerald-500/25 transition-all cursor-pointer flex items-center gap-1"
+                  title="Sync Live Exchange Rate from API"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  <span>Sync</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePrintCurrent}
+                  className="px-2.5 py-1 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[11px] sm:text-xs font-mono text-[var(--theme-text-muted,#CBD5E1)] hover:text-emerald-400 hover:border-emerald-400 transition-all cursor-pointer flex items-center gap-1"
+                  title="Print Forex Slip"
+                >
+                  <Printer className="w-3 h-3 text-emerald-400" />
+                  <span className="hidden xs:inline">Slip</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Quick Popular Currency Pairs */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)]">
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-[10.5px] sm:text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)]">
               <span>{isHindi ? 'लोकप्रिय मुद्रा जोड़ियां (Quick Pairs):' : 'Popular Currency Pairs:'}</span>
               <span className="text-[10px] text-emerald-400 font-mono">1-Tap Select</span>
             </div>
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar overscroll-x-contain pb-1 max-w-full">
               {POPULAR_PAIRS.map((pair) => {
                 const isActive = fromCurrency === pair.from && toCurrency === pair.to;
                 const fromFlag = CURRENCY_CONFIGS[pair.from]?.flag || '';
@@ -2564,7 +2621,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     key={`${pair.from}-${pair.to}`}
                     type="button"
                     onClick={() => handleSelectPair(pair.from, pair.to)}
-                    className={`px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold border transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
+                    className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl text-[10.5px] sm:text-[11px] font-mono font-bold border transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
                       isActive
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300 ring-1 ring-emerald-400/40 shadow-xs'
                         : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:border-emerald-500/40'
@@ -2582,11 +2639,13 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           </div>
 
           {/* Dual Currency Selection Command Center (From ➔ Swap ➔ To) */}
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-3 p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
+          <div className={`grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] ${
+            currencyScale === 'compact' ? 'gap-2 p-2.5 sm:p-3 rounded-xl' : 'gap-3 p-3.5 sm:p-4 rounded-2xl'
+          }`}>
             {/* FROM CURRENCY TILE */}
-            <div className="space-y-1.5">
+            <div className="space-y-1 min-w-0">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
                   {isHindi ? 'स्रोत मुद्रा (From)' : 'Convert From'}
                 </span>
                 <span className="text-[10px] text-emerald-400 font-mono">
@@ -2601,46 +2660,50 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   setCurrencySearchQuery('');
                   triggerHapticSound('click');
                 }}
-                className="w-full p-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] hover:border-emerald-500 text-left transition-all cursor-pointer flex items-center justify-between group shadow-sm"
+                className={`w-full rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] hover:border-emerald-500 text-left transition-all cursor-pointer flex items-center justify-between group shadow-sm ${
+                  currencyScale === 'compact' ? 'p-2 sm:p-2.5' : 'p-2.5 sm:p-3'
+                }`}
               >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="text-2xl shrink-0">{CURRENCY_CONFIGS[fromCurrency]?.flag || '🌐'}</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`shrink-0 ${currencyScale === 'compact' ? 'text-xl' : 'text-2xl'}`}>{CURRENCY_CONFIGS[fromCurrency]?.flag || '🌐'}</span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-sm font-black text-[var(--theme-text,#F8FAFC)]">
+                      <span className={`font-mono font-black text-[var(--theme-text,#F8FAFC)] ${
+                        currencyScale === 'compact' ? 'text-xs sm:text-sm' : 'text-sm'
+                      }`}>
                         {fromCurrency}
                       </span>
-                      <span className="text-[11px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 font-mono font-bold">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 font-mono font-bold">
                         {CURRENCY_CONFIGS[fromCurrency]?.symbol}
                       </span>
                     </div>
-                    <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                    <div className="text-[10px] sm:text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
                       {CURRENCY_CONFIGS[fromCurrency]?.name} ({CURRENCY_CONFIGS[fromCurrency]?.country})
                     </div>
                   </div>
                 </div>
-                <span className="text-xs text-[var(--theme-primary,#38BDF8)] font-mono font-bold group-hover:translate-x-0.5 transition-transform shrink-0 ml-2">
+                <span className="text-[11px] text-[var(--theme-primary,#38BDF8)] font-mono font-bold group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5">
                   Change ▾
                 </span>
               </button>
             </div>
 
             {/* SWAP / REVERSE BUTTON */}
-            <div className="flex items-center justify-center py-1 sm:py-0">
+            <div className="flex items-center justify-center py-0.5 sm:py-0">
               <button
                 type="button"
                 onClick={handleSwapCurrencies}
-                className="p-3 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] hover:text-white hover:bg-emerald-500 hover:border-emerald-400 hover:text-slate-950 transition-all cursor-pointer shadow-md active:scale-95 group"
+                className="p-2 sm:p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] hover:text-white hover:bg-emerald-500 hover:border-emerald-400 hover:text-slate-950 transition-all cursor-pointer shadow-md active:scale-95 group shrink-0"
                 title="Swap From and To Currencies (उल्टा करें)"
               >
-                <ArrowRightLeft className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
+                <ArrowRightLeft className="w-4 h-4 sm:w-4.5 sm:h-4.5 group-hover:rotate-180 transition-transform duration-300" />
               </button>
             </div>
 
             {/* TO CURRENCY TILE */}
-            <div className="space-y-1.5">
+            <div className="space-y-1 min-w-0">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
                   {isHindi ? 'लक्ष्य मुद्रा (To)' : 'Convert To'}
                 </span>
                 <span className="text-[10px] text-emerald-400 font-mono">
@@ -2655,25 +2718,29 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   setCurrencySearchQuery('');
                   triggerHapticSound('click');
                 }}
-                className="w-full p-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] hover:border-emerald-500 text-left transition-all cursor-pointer flex items-center justify-between group shadow-sm"
+                className={`w-full rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] hover:border-emerald-500 text-left transition-all cursor-pointer flex items-center justify-between group shadow-sm ${
+                  currencyScale === 'compact' ? 'p-2 sm:p-2.5' : 'p-2.5 sm:p-3'
+                }`}
               >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="text-2xl shrink-0">{CURRENCY_CONFIGS[toCurrency]?.flag || '🌐'}</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`shrink-0 ${currencyScale === 'compact' ? 'text-xl' : 'text-2xl'}`}>{CURRENCY_CONFIGS[toCurrency]?.flag || '🌐'}</span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-sm font-black text-[var(--theme-text,#F8FAFC)]">
+                      <span className={`font-mono font-black text-[var(--theme-text,#F8FAFC)] ${
+                        currencyScale === 'compact' ? 'text-xs sm:text-sm' : 'text-sm'
+                      }`}>
                         {toCurrency}
                       </span>
-                      <span className="text-[11px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 font-mono font-bold">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 font-mono font-bold">
                         {CURRENCY_CONFIGS[toCurrency]?.symbol}
                       </span>
                     </div>
-                    <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                    <div className="text-[10px] sm:text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
                       {CURRENCY_CONFIGS[toCurrency]?.name} ({CURRENCY_CONFIGS[toCurrency]?.country})
                     </div>
                   </div>
                 </div>
-                <span className="text-xs text-[var(--theme-primary,#38BDF8)] font-mono font-bold group-hover:translate-x-0.5 transition-transform shrink-0 ml-2">
+                <span className="text-[11px] text-[var(--theme-primary,#38BDF8)] font-mono font-bold group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5">
                   Change ▾
                 </span>
               </button>
@@ -2682,22 +2749,22 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
           {/* Currency Selection Modal / In-place Picker (when selecting From or To) */}
           {currencyActiveSelector && (
-            <div className="p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border-2 border-emerald-500/60 shadow-xl space-y-3 animate-in fade-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-black text-[var(--theme-text,#F8FAFC)]">
+            <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#0E1A29)] border-2 border-emerald-500/60 shadow-xl space-y-3 animate-in fade-in zoom-in-95 duration-150 max-w-full overflow-hidden">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-xs sm:text-sm font-black text-[var(--theme-text,#F8FAFC)] truncate">
                     {currencyActiveSelector === 'from'
-                      ? (isHindi ? 'स्रोत मुद्रा चुनें (Choose Source Currency)' : 'Select Source Currency (From)')
-                      : (isHindi ? 'लक्ष्य मुद्रा चुनें (Choose Target Currency)' : 'Select Target Currency (To)')}
+                      ? (isHindi ? 'स्रोत मुद्रा चुनें' : 'Select Source Currency (From)')
+                      : (isHindi ? 'लक्ष्य मुद्रा चुनें' : 'Select Target Currency (To)')}
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold">
+                  <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold shrink-0">
                     {Object.keys(CURRENCY_CONFIGS).length} Countries
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setCurrencyActiveSelector(null)}
-                  className="p-1 rounded-lg text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#132438)] cursor-pointer"
+                  className="p-1 rounded-lg text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#132438)] cursor-pointer shrink-0"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -2706,12 +2773,12 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               {/* Search & Category Filter */}
               <div className="space-y-2">
                 <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-3 text-[var(--theme-text-dim,#94A3B8)]" />
+                  <Search className="w-4 h-4 absolute left-3 top-2.5 text-[var(--theme-text-dim,#94A3B8)]" />
                   <input
                     type="text"
                     value={currencySearchQuery}
                     onChange={(e) => setCurrencySearchQuery(e.target.value)}
-                    placeholder={isHindi ? "मुद्रा या देश खोजें (उदा. Dubai, Dollar, Riyal, AED, USD, Europe)..." : "Search by currency code, country or name (e.g. Dollar, Riyal, SAR, AED, JPY)..."}
+                    placeholder={isHindi ? "मुद्रा या देश खोजें (उदा. Dollar, Riyal, AED, USD, INR)..." : "Search currency or country (e.g. Dollar, Riyal, SAR, AED)..."}
                     className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl pl-9 pr-8 py-2 text-xs font-mono text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-emerald-500"
                     autoFocus
                   />
@@ -2719,7 +2786,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     <button
                       type="button"
                       onClick={() => setCurrencySearchQuery('')}
-                      className="absolute right-2.5 top-2.5 text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
+                      className="absolute right-2.5 top-2 text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -2727,11 +2794,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 </div>
 
                 {/* Region Filter Chips */}
-                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+                <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar overscroll-x-contain pb-1 max-w-full">
                   {[
                     { id: 'all', label: isHindi ? 'सभी (All 25)' : 'All (25)' },
                     { id: 'popular', label: isHindi ? 'प्रमुख (Popular)' : 'Popular (4)' },
-                    { id: 'gulf', label: isHindi ? 'खाड़ी देश (Gulf/Middle East)' : 'Gulf / Middle East (6)' },
+                    { id: 'gulf', label: isHindi ? 'खाड़ी देश (Gulf)' : 'Gulf / Middle East (6)' },
                     { id: 'west', label: isHindi ? 'अमेरिका व यूरोप' : 'Americas & Europe (5)' },
                     { id: 'asia', label: isHindi ? 'एशिया पैसिफिक' : 'Asia-Pacific (8)' }
                   ].map((tab) => (
@@ -2739,7 +2806,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                       key={tab.id}
                       type="button"
                       onClick={() => setCurrencyCategoryFilter(tab.id as any)}
-                      className={`px-2.5 py-1 rounded-lg text-[10.5px] font-mono font-bold border transition-all cursor-pointer shrink-0 ${
+                      className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-[10.5px] font-mono font-bold border transition-all cursor-pointer shrink-0 ${
                         currencyCategoryFilter === tab.id
                           ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-xs'
                           : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:border-emerald-500/40'
@@ -2752,7 +2819,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               </div>
 
               {/* Grid of Currencies */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-56 overflow-y-auto custom-scrollbar p-1">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2 max-h-56 overflow-y-auto custom-scrollbar p-0.5">
                 {Object.keys(CURRENCY_CONFIGS)
                   .filter((code) => {
                     const c = CURRENCY_CONFIGS[code];
@@ -2789,21 +2856,21 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                           setCurrencyCustomRate('');
                           triggerHapticSound('click');
                         }}
-                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                        className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between overflow-hidden min-w-0 ${
                           isCurrent
                             ? 'bg-emerald-500/25 border-emerald-400 text-emerald-300 ring-1 ring-emerald-400 shadow-sm'
                             : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] hover:border-emerald-500/50 hover:bg-[var(--theme-card,#132438)]/80'
                         }`}
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xl">{item.flag}</span>
-                          <span className="font-mono text-xs font-black">{code}</span>
+                        <div className="flex items-center justify-between gap-1 w-full">
+                          <span className="text-lg sm:text-xl shrink-0">{item.flag}</span>
+                          <span className="font-mono text-[11px] sm:text-xs font-black">{code}</span>
                         </div>
-                        <div className="mt-1">
-                          <div className="text-[11px] font-bold truncate text-[var(--theme-text,#F8FAFC)]">
+                        <div className="mt-1 w-full min-w-0">
+                          <div className="text-[10.5px] sm:text-[11px] font-bold truncate text-[var(--theme-text,#F8FAFC)]">
                             {item.symbol} {item.name}
                           </div>
-                          <div className="text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] font-mono truncate">
+                          <div className="text-[9px] sm:text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] font-mono truncate">
                             {item.country}
                           </div>
                         </div>
@@ -2815,14 +2882,14 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           )}
 
           {/* Quick Denomination Preset Chips for Source Currency */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-bold">
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-[10.5px] sm:text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-bold">
               <span>
-                {isHindi ? `${fromCurrency} के लिए त्वरित राशि चुनें:` : `Quick Amount Presets in ${fromCurrency}:`}
+                {isHindi ? `${fromCurrency} के लिए त्वरित राशि चुनें:` : `Quick Presets in ${fromCurrency}:`}
               </span>
               <span className="font-mono text-emerald-400">{CURRENCY_CONFIGS[fromCurrency]?.symbol}</span>
             </div>
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar overscroll-x-contain pb-1 max-w-full">
               {[10, 50, 100, 250, 500, 1000, 5000, 10000].map((amt) => (
                 <button
                   key={amt}
@@ -2831,7 +2898,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     setCurrencyAmountInput(amt.toString());
                     triggerHapticSound('click');
                   }}
-                  className={`px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold border transition-all cursor-pointer shrink-0 ${
+                  className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl text-[10.5px] sm:text-[11px] font-mono font-bold border transition-all cursor-pointer shrink-0 ${
                     parseFloat(currencyAmountInput) === amt
                       ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-sm'
                       : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:border-emerald-500'
@@ -2844,33 +2911,33 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           </div>
 
           {/* Inputs Grid: Amount & Custom Exchange Rate */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)] block mb-1.5">
+          <div className={`grid grid-cols-1 sm:grid-cols-2 ${currencyScale === 'compact' ? 'gap-2 sm:gap-2.5' : 'gap-3 sm:gap-4'}`}>
+            <div className="min-w-0">
+              <label className="text-[10.5px] sm:text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)] block mb-1">
                 {`Amount in ${fromCurrency} (${CURRENCY_CONFIGS[fromCurrency]?.symbol})`}
               </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={currencyAmountInput}
-                  onChange={(e) => setCurrencyAmountInput(e.target.value)}
-                  placeholder="100"
-                  className="w-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2.5 font-mono text-base font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-emerald-500 transition-all"
-                />
-              </div>
+              <input
+                type="number"
+                value={currencyAmountInput}
+                onChange={(e) => setCurrencyAmountInput(e.target.value)}
+                placeholder="100"
+                className={`w-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl font-mono font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-emerald-500 transition-all ${
+                  currencyScale === 'compact' ? 'px-3 py-1.5 sm:py-2 text-sm sm:text-base' : 'px-3.5 py-2.5 text-base'
+                }`}
+              />
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
+            <div className="min-w-0">
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-[10.5px] sm:text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)] truncate">
                   {`Exchange Rate (1 ${fromCurrency} = ${toCurrency})`}
                 </label>
                 <button
                   type="button"
                   onClick={handleSyncLiveRate}
-                  className="text-[10.5px] text-emerald-400 hover:underline font-mono"
+                  className="text-[10px] sm:text-[10.5px] text-emerald-400 hover:underline font-mono shrink-0 ml-1"
                 >
-                  Reset Live Rate
+                  Reset Live
                 </button>
               </div>
               <input
@@ -2882,57 +2949,70 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   setIsLiveRateSynced(false);
                 }}
                 placeholder={effectiveRate.toFixed(4)}
-                className="w-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl px-3.5 py-2.5 font-mono text-base font-bold text-emerald-400 focus:outline-none focus:border-emerald-500 transition-all"
+                className={`w-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-xl font-mono font-bold text-emerald-400 focus:outline-none focus:border-emerald-500 transition-all ${
+                  currencyScale === 'compact' ? 'px-3 py-1.5 sm:py-2 text-sm sm:text-base' : 'px-3.5 py-2.5 text-base'
+                }`}
               />
             </div>
           </div>
 
           {/* Big Converted Result Display Card */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-500/15 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-emerald-500/40 text-center space-y-1.5 shadow-lg">
-            <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center justify-center gap-1.5">
+          <div className={`rounded-2xl bg-gradient-to-br from-emerald-500/15 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-emerald-500/40 text-center shadow-lg overflow-hidden ${
+            currencyScale === 'compact' ? 'p-3 sm:p-4 space-y-1' : 'p-4 sm:p-5 space-y-1.5'
+          }`}>
+            <div className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center justify-center gap-1.5 max-w-full px-1">
               <span>{CURRENCY_CONFIGS[toCurrency]?.flag}</span>
-              <span>{`Total Converted in ${toCurrency} (${CURRENCY_CONFIGS[toCurrency]?.name})`}</span>
+              <span className="truncate">{`Total Converted in ${toCurrency} (${CURRENCY_CONFIGS[toCurrency]?.name})`}</span>
             </div>
-            <div className="text-2xl sm:text-4xl font-black font-mono text-[var(--theme-text,#F8FAFC)] tracking-tight">
+            <div className={`font-black font-mono text-[var(--theme-text,#F8FAFC)] tracking-tight break-all ${
+              currencyScale === 'compact' ? 'text-2xl sm:text-3xl' : 'text-2xl sm:text-4xl'
+            }`}>
               {CURRENCY_CONFIGS[toCurrency]?.symbol} {grossConverted.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 4
               })}
             </div>
-            <div className="text-xs text-[var(--theme-text-dim,#94A3B8)] font-mono flex items-center justify-center gap-2 flex-wrap">
-              <span>
+            <div className="text-[10px] sm:text-xs text-[var(--theme-text-dim,#94A3B8)] font-mono flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap px-1">
+              <span className="truncate">
                 {CURRENCY_CONFIGS[fromCurrency]?.symbol}{currAmtNum.toLocaleString('en-US')} {fromCurrency} × {effectiveRate >= 1 ? effectiveRate.toFixed(4) : effectiveRate.toFixed(6)}
               </span>
-              <span className="text-[var(--theme-border,#213E61)]">•</span>
-              <span className="text-emerald-400/90">
-                (Inverse: 1 {toCurrency} = {CURRENCY_CONFIGS[fromCurrency]?.symbol}{inverseRate >= 1 ? inverseRate.toFixed(4) : inverseRate.toFixed(6)} {fromCurrency})
+              <span className="text-[var(--theme-border,#213E61)] hidden xs:inline">•</span>
+              <span className="text-emerald-400/90 truncate">
+                (1 {toCurrency} = {CURRENCY_CONFIGS[fromCurrency]?.symbol}{inverseRate >= 1 ? inverseRate.toFixed(4) : inverseRate.toFixed(6)} {fromCurrency})
               </span>
             </div>
           </div>
 
           {/* Remittance & Bank Transfer Fee Calculator Toggle */}
-          <div className="p-3.5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs font-bold text-[var(--theme-text,#F8FAFC)]">
-                  {isHindi ? 'बैंक ट्रांसफर स्प्रेड, वायर फीस एवं टीसीएस ब्रेकडाउन' : 'Bank Markup Spread, Wire Fee & Remittance Breakdown'}
-                </span>
+          <div className={`rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] ${
+            currencyScale === 'compact' ? 'p-2.5 sm:p-3 space-y-2' : 'p-3.5 space-y-3'
+          }`}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                <SlidersHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-[11.5px] sm:text-xs font-bold text-[var(--theme-text,#F8FAFC)] truncate">
+                    {isHindi ? 'बैंक ट्रांसफर स्प्रेड व रेमिटेंस' : 'Bank Spread & Remittance Fees'}
+                  </div>
+                  <div className="text-[9.5px] sm:text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                    {isHindi ? 'वायर फीस, बैंक स्प्रेड एवं TCS कटौती' : 'Spread markup, wire fee & TCS breakdown'}
+                  </div>
+                </div>
               </div>
               <button
                 type="button"
                 onClick={() => setShowRemittanceBreakdown((prev) => !prev)}
-                className="px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] text-xs font-mono font-bold text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] cursor-pointer"
+                className="shrink-0 px-2.5 py-1 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-emerald-500/20 text-[10.5px] sm:text-xs font-mono font-bold text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500 transition-all cursor-pointer shadow-xs"
               >
-                {showRemittanceBreakdown ? 'Hide Options' : 'Show Options'}
+                {showRemittanceBreakdown ? (isHindi ? 'छुपाएं ▴' : 'Hide ▴') : (isHindi ? 'विकल्प ▾' : 'Options ▾')}
               </button>
             </div>
 
             {showRemittanceBreakdown && (
-              <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/70 space-y-3 animate-in fade-in duration-150">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/70 space-y-2.5 animate-in fade-in duration-150">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                   <div>
-                    <label className="text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
+                    <label className="text-[10px] sm:text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
                       Bank Spread Markup (%)
                     </label>
                     <input
@@ -2941,23 +3021,23 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                       value={bankSpreadPct}
                       onChange={(e) => setBankSpreadPct(e.target.value)}
                       placeholder="1.5"
-                      className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-3 py-1.5 text-xs font-mono text-[var(--theme-text,#F8FAFC)]"
+                      className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-2.5 py-1 text-xs font-mono text-[var(--theme-text,#F8FAFC)]"
                     />
                   </div>
                   <div>
-                    <label className="text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
-                      {`Wire / Transfer Fee (${CURRENCY_CONFIGS[toCurrency]?.symbol})`}
+                    <label className="text-[10px] sm:text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1 truncate">
+                      {`Wire Fee (${CURRENCY_CONFIGS[toCurrency]?.symbol})`}
                     </label>
                     <input
                       type="number"
                       value={wireTransferFeeInr}
                       onChange={(e) => setWireTransferFeeInr(e.target.value)}
                       placeholder="0"
-                      className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-3 py-1.5 text-xs font-mono text-[var(--theme-text,#F8FAFC)]"
+                      className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl px-2.5 py-1 text-xs font-mono text-[var(--theme-text,#F8FAFC)]"
                     />
                   </div>
                   <div>
-                    <label className="text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
+                    <label className="text-[10px] sm:text-[10.5px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
                       LRS Remittance TCS (%)
                     </label>
                     <div className="flex items-center gap-1">
@@ -2966,7 +3046,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                           key={tcs}
                           type="button"
                           onClick={() => setTcsPercent(tcs.toString())}
-                          className={`flex-1 py-1 rounded-lg text-[10.5px] font-mono font-bold border transition-all cursor-pointer ${
+                          className={`flex-1 py-1 rounded-lg text-[10px] sm:text-[10.5px] font-mono font-bold border transition-all cursor-pointer ${
                             parseFloat(tcsPercent) === tcs
                               ? 'bg-emerald-500 text-slate-950 border-emerald-400'
                               : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)]'
@@ -2980,7 +3060,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 </div>
 
                 {/* Net Remittance In-Hand Summary */}
-                <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5 text-xs font-mono">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-1.5 text-xs font-mono">
                   <div className="flex items-center justify-between text-[var(--theme-text-muted,#CBD5E1)]">
                     <span>Gross Converted:</span>
                     <span>{CURRENCY_CONFIGS[toCurrency]?.symbol} {grossConverted.toFixed(2)}</span>
@@ -3004,11 +3084,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     </div>
                   )}
                   <div className="pt-1.5 border-t border-[var(--theme-border,#213E61)] flex items-center justify-between font-bold text-[var(--theme-text,#F8FAFC)]">
-                    <span className="text-emerald-400">Net Credited in Bank Account:</span>
-                    <span className="text-base text-emerald-400">{CURRENCY_CONFIGS[toCurrency]?.symbol} {netInHandAmount.toFixed(2)}</span>
+                    <span className="text-emerald-400">Net Credited in Bank:</span>
+                    <span className="text-sm sm:text-base text-emerald-400">{CURRENCY_CONFIGS[toCurrency]?.symbol} {netInHandAmount.toFixed(2)}</span>
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
-                    <span>INR Equivalent Value:</span>
+                    <span>INR Equivalent:</span>
                     <span>{formatCurrency(netInHandInrEquivalent)}</span>
                   </div>
                 </div>
@@ -3017,17 +3097,17 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           </div>
 
           {/* Instant Cross-Currency Matrix Board (Amount converted into 8 major world currencies) */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
-                {isHindi ? 'वैश्विक तुलना तालिका (Instant Cross-Currency Board)' : 'Instant Cross-Currency Equivalent Board'}
+          <div className="space-y-1.5 sm:space-y-2">
+            <div className="flex items-center justify-between gap-1 flex-wrap">
+              <label className="text-[10.5px] sm:text-xs font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)] truncate">
+                {isHindi ? 'वैश्विक तुलना तालिका (Cross-Currency Board)' : 'Cross-Currency Equivalent Board'}
               </label>
-              <span className="text-[10px] text-[var(--theme-text-dim,#64748B)] font-mono">
+              <span className="text-[9.5px] sm:text-[10px] text-[var(--theme-text-dim,#64748B)] font-mono shrink-0">
                 Based on {currAmtNum.toLocaleString('en-US')} {fromCurrency}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
               {['USD', 'EUR', 'GBP', 'SAR', 'AED', 'KWD', 'INR', 'CAD'].map((cKey) => {
                 const targetConfig = CURRENCY_CONFIGS[cKey];
                 if (!targetConfig) return null;
@@ -3045,27 +3125,47 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                       setCurrencyCustomRate('');
                       triggerHapticSound('click');
                     }}
-                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                    className={`rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between overflow-hidden min-w-0 ${
+                      currencyScale === 'compact' ? 'p-2 space-y-1' : 'p-2.5 space-y-1.5'
+                    } ${
                       isCurrentTo
                         ? 'bg-emerald-500/20 border-emerald-500 ring-1 ring-emerald-400/40 shadow-xs'
                         : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] hover:border-emerald-500/40'
                     }`}
                   >
-                    <div>
-                      <div className="flex items-center gap-1">
-                        <span>{targetConfig.flag}</span>
-                        <span className="text-xs font-bold text-[var(--theme-text,#F8FAFC)] font-mono">{cKey}</span>
+                    {/* Row 1: Flag + Code on Left, Status Badge on Right */}
+                    <div className="flex items-center justify-between gap-1 w-full">
+                      <div className="flex items-center gap-1 min-w-0">
+                        <span className="text-sm shrink-0">{targetConfig.flag}</span>
+                        <span className="text-xs font-bold text-[var(--theme-text,#F8FAFC)] font-mono">
+                          {cKey}
+                        </span>
                       </div>
-                      <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono mt-0.5 truncate">
-                        {targetConfig.name}
+                      {isCurrentTo ? (
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-emerald-500 text-slate-950 font-bold font-mono shrink-0">
+                          Active
+                        </span>
+                      ) : (
+                        <span className="text-[9px] text-[var(--theme-text-dim,#64748B)] font-mono shrink-0">
+                          Tap
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Row 2: Converted Amount with Symbol (Dedicated Line - ZERO COLLISION) */}
+                    <div className="w-full min-w-0">
+                      <div className={`font-black font-mono text-emerald-400 tracking-tight truncate leading-tight ${
+                        currencyScale === 'compact' ? 'text-[12.5px]' : 'text-[13.5px]'
+                      }`}>
+                        <span className="text-[10.5px] font-bold mr-0.5 opacity-90">{targetConfig.symbol}</span>
+                        {valueInTarget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs font-black font-mono text-emerald-400">
-                        {targetConfig.symbol} {valueInTarget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                      </div>
-                      <div className="text-[9.5px] text-[var(--theme-text-dim,#64748B)] font-mono">
-                        {isCurrentTo ? 'Selected' : 'Click to Set'}
+
+                    {/* Row 3: Currency Name (Single Line Truncate) */}
+                    <div className="w-full min-w-0">
+                      <div className="text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] font-mono truncate leading-none">
+                        {targetConfig.name}
                       </div>
                     </div>
                   </button>
@@ -3075,28 +3175,32 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           </div>
 
           {/* Action Row */}
-          <div className="flex items-center gap-2 pt-1 flex-wrap">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
             <button
               type="button"
               onClick={() => {
                 const text = `${CURRENCY_CONFIGS[fromCurrency]?.symbol} ${currAmtNum} ${fromCurrency} = ${CURRENCY_CONFIGS[toCurrency]?.symbol} ${grossConverted.toFixed(2)} ${toCurrency} (Exchange Rate: 1 ${fromCurrency} = ${effectiveRate.toFixed(4)} ${toCurrency})`;
                 handleCopy(text, 'curr-copy');
               }}
-              className="flex-1 py-2.5 px-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)]/40 border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text,#F8FAFC)] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
+              className={`w-full rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)]/40 border border-[var(--theme-border,#213E61)] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs ${
+                currencyScale === 'compact' ? 'py-2 px-3 text-[11.5px]' : 'py-2.5 px-4 text-xs'
+              }`}
             >
               {copiedKey === 'curr-copy' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-              <span>{copiedKey === 'curr-copy' ? 'Copied to Clipboard!' : 'Copy Summary'}</span>
+              <span>{copiedKey === 'curr-copy' ? (isHindi ? 'कॉपी हो गया!' : 'Copied to Clipboard!') : (isHindi ? 'सारांश कॉपी करें' : 'Copy Summary')}</span>
             </button>
 
             {onApplyToIncome && (
               <button
                 type="button"
                 onClick={() => onApplyToIncome(Math.round(netInHandInrEquivalent))}
-                className="py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                className={`w-full rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm ${
+                  currencyScale === 'compact' ? 'py-2 px-3 text-[11.5px]' : 'py-2.5 px-4 text-xs'
+                }`}
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>
-                  Apply as Income (₹{Math.round(netInHandInrEquivalent).toLocaleString('en-IN')})
+                  {isHindi ? `आय में जोड़ें (₹${Math.round(netInHandInrEquivalent).toLocaleString('en-IN')})` : `Apply as Income (₹${Math.round(netInHandInrEquivalent).toLocaleString('en-IN')})`}
                 </span>
               </button>
             )}

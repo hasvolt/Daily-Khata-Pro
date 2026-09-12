@@ -477,8 +477,103 @@ const MANUAL_EN: UserManualTranslation = {
       proTip: 'You can verify offline capability anytime by turning on Airplane mode; the app continues working seamlessly.'
     },
     {
+      id: 'forex_calculator',
+      title: '17. Universal Multi-Country Cross-Currency Calculator',
+      subtitle: '25+ global currencies, any-to-any cross rates, remittance fees, and printable calculation slips',
+      overviewHeading: 'Universal Foreign Exchange Engine',
+      overviewText: 'Convert between any two world currencies with instant bid/ask rates, reverse multipliers, real-time comparison tables across major currencies, bank remittance spread fees, and formal printable calculation slips.',
+      cardsHeading: 'Forex Calculator Features',
+      cards: [
+        {
+          title: 'Any-to-Any Pair Conversion',
+          desc: 'Select any source currency (USD, INR, EUR, AED, SAR, GBP, JPY, CAD, etc.) and convert directly to any target currency.'
+        },
+        {
+          title: 'Bank Spread & Remittance Slip',
+          desc: 'Simulate true bank markup percentages, SWIFT wire transfer fees, and LRS TCS tax with a print-ready breakdown slip.'
+        },
+        {
+          title: 'Cross-Currency Matrix',
+          desc: 'View simultaneous conversion against all primary global currencies in a responsive comparison table.'
+        }
+      ],
+      proTip: 'When transferring money internationally, add a 1.5% bank spread buffer in the calculator to account for hidden foreign exchange markups.'
+    },
+    {
+      id: 'market_news',
+      title: '18. Live Sensex, Nifty 50 & Commercial Research',
+      subtitle: 'Real-time Indian market indices, macro news portal, and institutional whitepapers',
+      overviewHeading: 'Commercial Market Intelligence',
+      overviewText: 'Stay informed with live benchmark quotes for BSE Sensex, NSE Nifty 50, and Bank Nifty, along with commercial business headlines, macro-economic insights, and wealth-building strategies.',
+      featuresHeading: 'Market Hub Capabilities',
+      features: [
+        {
+          title: 'Live Indian Indices',
+          desc: 'Track live index levels, daily net points change, percentage swings, and market advance/decline status.'
+        },
+        {
+          title: 'Commercial News Feed',
+          desc: 'Read curated macroeconomic, corporate finance, and taxation updates directly inside your financial workspace.'
+        },
+        {
+          title: 'Wealth Whitepapers',
+          desc: 'Access foundational deep-dive guides on compound interest, debt freedom, and disciplined asset allocation.'
+        }
+      ],
+      proTip: 'Never panic-sell when indices experience intraday volatility; follow your 6-fund disciplined allocation rules.'
+    },
+    {
+      id: 'attendance',
+      title: '19. Work Attendance & Shift Wage Register',
+      subtitle: 'Daily check-in, overtime hours, per-shift payout calculator, and monthly wage summaries',
+      overviewHeading: 'Worker & Contractor Shift Ledger',
+      overviewText: 'Maintain an accurate attendance roll for yourself, employees, or household staff. Track Present, Half-Day, Absent, and Paid Leave days with automatic wage and overtime rate calculations.',
+      stepsHeading: 'Managing Attendance & Payouts:',
+      steps: [
+        {
+          step: 'Step 1',
+          title: 'Log Daily Status',
+          desc: 'Mark daily attendance with a single click: Present (Full day), Half Day, Absent, or Paid Leave.'
+        },
+        {
+          step: 'Step 2',
+          title: 'Set Shift Wage Rate',
+          desc: 'Define standard daily shift wage, regular working hours, and overtime rate multipliers.'
+        },
+        {
+          step: 'Step 3',
+          title: 'Generate Monthly Wage',
+          desc: 'View cumulative monthly working days, overtime hours, total gross pay, and download printable salary slips.'
+        }
+      ],
+      proTip: 'Log daily overtime hours immediately at the end of every shift to ensure monthly payouts match reality.'
+    },
+    {
+      id: 'google_drive',
+      title: '20. Google Drive Client-Side Sync & Backup',
+      subtitle: 'Private cloud sync directly from your browser to your personal Google Drive account',
+      overviewHeading: 'Zero-Intermediary Cloud Backup',
+      overviewText: 'Securely sync your encrypted financial records directly with your personal Google Drive account without passing through any intermediary servers, preserving 100% privacy and multi-device synchronization.',
+      cardsHeading: 'Cloud Sync Capabilities',
+      cards: [
+        {
+          title: 'Client-Side Google OAuth',
+          desc: 'Authorize directly with Google; tokens remain strictly inside your browser memory.'
+        },
+        {
+          title: 'Direct AppData Storage',
+          desc: 'Backups are stored inside your private Google Drive AppData folder or file directory, inaccessible to any external party.'
+        },
+        {
+          title: 'Multi-Device Restore',
+          desc: 'Open Daily Khata on your laptop or tablet, authenticate with Google, and restore your latest ledger in seconds.'
+        }
+      ],
+      proTip: 'Pair monthly JSON file downloads with Google Drive sync for dual-layer data protection.'
+    },
+    {
       id: 'faq',
-      title: '16. Frequently Asked Questions (FAQ)',
+      title: '21. Frequently Asked Questions (FAQ)',
       subtitle: 'Answers to common questions regarding offline data, PIN recovery, and calculations',
       overviewHeading: 'Frequently Asked Questions',
       overviewText: 'Here are answers to the most frequent inquiries from our community of users:',
@@ -493,7 +588,7 @@ const MANUAL_EN: UserManualTranslation = {
         },
         {
           q: 'Can I use Daily Khata Pro on multiple devices?',
-          a: 'Yes. Simply export a JSON backup from your primary device (Settings > Data & Backup > Export JSON) and import it into Daily Khata on your other device.'
+          a: 'Yes. Simply export a JSON backup from your primary device (Settings > Data & Backup > Export JSON) and import it into Daily Khata on your other device, or use Google Drive client-side sync.'
         },
         {
           q: 'Can I customize the Smart Fund percentage allocation?',
@@ -937,8 +1032,103 @@ const MANUAL_HI: UserManualTranslation = {
       proTip: 'हवाई जहाज़ मोड (Airplane Mode) चालू करके ऐप चलाएं; ऐप बिना इंटरनेट के 100% सुचारू रूप से चलता है।'
     },
     {
+      id: 'forex_calculator',
+      title: '17. यूनिवर्सल मल्टी-करेंसी व विदेशी मुद्रा कैलकुलेटर',
+      subtitle: '25+ वैश्विक मुद्राएं, परस्पर विनिमय दरें, बैंक शुल्क व प्रिंट-रेडी स्लिप',
+      overviewHeading: 'यूनिवर्सल फॉरेन एक्सचेंज इंजन',
+      overviewText: 'दुनिया की किसी भी दो मुद्राओं (उदा. USD, INR, EUR, AED, SAR, GBP, JPY, CAD) के बीच सटीक क्रॉस-रेट कन्वर्जन करें। बैंक स्प्रेड चार्ज, रेमिटेंस वायर फीस और LRS TCS टैक्स की गणना के साथ तुरंत औपचारिक स्लिप प्रिंट करें।',
+      cardsHeading: 'फॉरेक्स कैलकुलेटर की विशेषताएं',
+      cards: [
+        {
+          title: 'किसी भी देश से किसी भी देश में विनिमय',
+          desc: 'स्रोत मुद्रा और लक्ष्य मुद्रा चुनें और तुरंत वास्तविक बाजार दर व रिवर्स मल्टीप्लायर देखें।'
+        },
+        {
+          title: 'बैंक स्प्रेड व रेमिटेंस स्लिप',
+          desc: 'बैंक के छिपे हुए मार्कअप व विदेशी शुल्क को जोड़कर कुल कटौती की प्रिंट-योग्य रसीद बनाएं।'
+        },
+        {
+          title: 'मल्टी-करेंसी तुलना तालिका',
+          desc: 'एक ही नज़र में अपनी राशि का दुनिया की सभी प्रमुख मुद्राओं में समकालीन मूल्य देखें।'
+        }
+      ],
+      proTip: 'विदेश में पैसे भेजते समय बैंक अक्सर 1.5% से 2% अतिरिक्त चार्ज लगाते हैं; कैलकुलेटर में बैंक स्प्रेड जोड़कर वास्तविक लागत जानें।'
+    },
+    {
+      id: 'market_news',
+      title: '18. लाइव सेंसेक्स, निफ्टी 50 व वित्तीय समाचार',
+      subtitle: 'भारतीय बाजार के मुख्य सूचकांक, कॉर्पोरेट खबरें और वेल्थ व्हाइटपेपर्स',
+      overviewHeading: 'लाइव मार्केट इंटेलिजेंस व ज्ञान पोर्टल',
+      overviewText: 'BSE Sensex, NSE Nifty 50 और Bank Nifty के लाइव इंडेक्स आंकड़े, दैनिक उतार-चढ़ाव, कॉर्पोरेट वित्तीय नीतियां और धन संचय से जुड़े गहन शोध लेख सीधे अपने वर्कस्पेस में पढ़ें।',
+      featuresHeading: 'मार्केट हब की मुख्य क्षमताएं',
+      features: [
+        {
+          title: 'लाइव भारतीय सूचकांक',
+          desc: 'सेंसेक्स, निफ्टी 50 और बैंक निफ्टी के लाइव स्तर, नेट पॉइंट और प्रतिशत बदलाव ट्रैक करें।'
+        },
+        {
+          title: 'वाणिज्यिक समाचार धारा',
+          desc: 'मुद्रास्फीति, रेपो रेट, कर सुधार और व्यापार जगत की ताज़ा खबरें सीधे पढ़ें।'
+        },
+        {
+          title: 'वित्तीय व्हाइटपेपर्स',
+          desc: 'कंपाउंडिंग की शक्ति, ऋण मुक्ति और 6-फंड पूंजी आवंटन पर प्रमाणित गाइड।'
+        }
+      ],
+      proTip: 'बाजार के दैनिक उतार-चढ़ाव में घबराकर पैसे न निकालें; 6-फंड नियम के अनुसार आपातकालीन और निवेश फंड को अलग रखें।'
+    },
+    {
+      id: 'attendance',
+      title: '19. कार्य उपस्थिति एवं दैनिक मज़दूरी रजिस्टर',
+      subtitle: 'दैनिक हाज़िरी, ओवरटाइम घंटे, प्रति शिफ्ट दर व मासिक वेतन विवरण',
+      overviewHeading: 'कर्मचारी व पेशेवर उपस्थिति लेज़र',
+      overviewText: 'स्वयं के प्रोजेक्ट्स, कर्मचारियों या सहायक कर्मचारियों की उपस्थिति दर्ज करें। पूरे दिन की हाज़िरी (Present), आधा दिन (Half-Day), अनुपस्थित (Absent) या सवेतन अवकाश (Paid Leave) मार्क करें और वेतन का स्वचालित हिसाब रखें।',
+      stepsHeading: 'उपस्थिति व वेतन प्रबंधन चरण:',
+      steps: [
+        {
+          step: 'चरण 1',
+          title: 'दैनिक हाज़िरी लगाएं',
+          desc: 'एक क्लिक में आज की स्थिति (पूरा दिन, आधा दिन, छुट्टी) दर्ज करें।'
+        },
+        {
+          step: 'चरण 2',
+          title: 'शिफ्ट दर व ओवरटाइम तय करें',
+          desc: 'दैनिक मजदूरी दर, कार्य घंटे और प्रति घंटा ओवरटाइम दर निर्धारित करें।'
+        },
+        {
+          step: 'चरण 3',
+          title: 'मासिक वेतन स्लिप निकालें',
+          desc: 'महीने के कुल कार्य दिवस, ओवरटाइम राशि और कुल देय वेतन की प्रिंट-रेडी स्लिप तैयार करें।'
+        }
+      ],
+      proTip: 'शिफ्ट समाप्त होते ही ओवरटाइम घंटे तुरंत दर्ज करें ताकि महीने के अंत में किसी विवाद की गुंजाइश न रहे।'
+    },
+    {
+      id: 'google_drive',
+      title: '20. गूगल ड्राइव क्लाइंट-साइड बैकअप व सिंक',
+      subtitle: 'अपने निजी गूगल ड्राइव खाते में 100% एन्क्रिप्टेड और सुरक्षित क्लाउड बैकअप',
+      overviewHeading: 'शून्य-बिचौलिया क्लाउड बैकअप',
+      overviewText: 'बिना किसी बाहरी सर्वर के, सीधे अपने ब्राउज़र से अपने निजी गूगल ड्राइव में खाता का बैकअप सुरक्षित करें। इससे आपका डेटा हमेशा सुरक्षित रहता है और अन्य फोन या कंप्यूटर पर आसानी से रिस्टोर किया जा सकता है।',
+      cardsHeading: 'क्लाउड सिंक के मुख्य लाभ',
+      cards: [
+        {
+          title: 'क्लाइंट-साइड गूगल OAuth',
+          desc: 'प्रमाणीकरण सीधे गूगल के साथ होता है; टोकन केवल आपके डिवाइस की मेमोरी में रहता है।'
+        },
+        {
+          title: 'निजी ऐप डेटा फ़ोल्डर',
+          desc: 'बैकअप फ़ाइलें आपके गूगल ड्राइव के निजी हिस्से में रहती हैं, जहाँ कोई तीसरा नहीं पहुँच सकता।'
+        },
+        {
+          title: 'मल्टी-डिवाइस रिस्टोर',
+          desc: 'नया फ़ोन या लैपटॉप लेते ही गूगल साइन-इन करें और एक क्लिक में अपना पूरा बहीखाता प्राप्त करें।'
+        }
+      ],
+      proTip: 'महीने में एक बार JSON फ़ाइल डाउनलोड करने के साथ-साथ गूगल ड्राइव सिंक का भी उपयोग करें ताकि दोहरा सुरक्षा चक्र बना रहे।'
+    },
+    {
       id: 'faq',
-      title: '16. अक्सर पूछे जाने वाले प्रश्न (FAQ)',
+      title: '21. अक्सर पूछे जाने वाले प्रश्न (FAQ)',
       subtitle: 'ऑफ़लाइन डेटा, पिन रिकवरी और गणितीय गणनाओं से जुड़े महत्वपूर्ण उत्तर',
       overviewHeading: 'अक्सर पूछे जाने वाले सवाल और उनके जवाब',
       overviewText: 'यहाँ हमारे उपयोगकर्ताओं द्वारा सबसे ज़्यादा पूछे जाने वाले सवालों के विस्तृत जवाब दिए गए हैं:',
@@ -953,7 +1143,7 @@ const MANUAL_HI: UserManualTranslation = {
         },
         {
           q: 'क्या मैं Daily Khata को एक से ज़्यादा फ़ोन या लैपटॉप पर चला सकता हूँ?',
-          a: 'हाँ। बस अपने पहले फ़ोन से JSON बैकअप डाउनलोड करें (Settings > डेटा बैकअप > Export JSON) और दूसरे फ़ोन में Daily Khata खोलकर उसे रिस्टोर (Import JSON) कर लें।'
+          a: 'हाँ। बस अपने पहले फ़ोन से JSON बैकअप डाउनलोड करें (Settings > डेटा बैकअप > Export JSON) और दूसरे फ़ोन में Daily Khata खोलकर उसे रिस्टोर (Import JSON) कर लें, या Google Drive क्लाइंट-साइड सिंक का उपयोग करें।'
         },
         {
           q: 'क्या मैं स्मार्ट फंड के प्रतिशत को बदल सकता हूँ?',

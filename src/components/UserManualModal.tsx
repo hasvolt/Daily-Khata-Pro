@@ -24,7 +24,14 @@ import {
   Lightbulb,
   CheckSquare,
   List,
-  ArrowUp
+  ArrowUp,
+  Calculator,
+  TrendingUp,
+  CalendarCheck,
+  Cloud,
+  CreditCard,
+  Users,
+  PieChart
 } from 'lucide-react';
 import { AppLogo } from './AppLogo';
 import { FUND_LABELS, FUND_ORDER, DEFAULT_PERCENTAGES, FUND_CONFIGS } from '../data/defaults';
@@ -65,10 +72,17 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
     add_expense: Receipt,
     work_life: Briefcase,
     goals: Target,
+    split_bills: Users,
+    loans: CreditCard,
+    budget: PieChart,
     reports: FileText,
     settings: Settings,
     backup: ShieldCheck,
     source_code: Code2,
+    forex_calculator: Calculator,
+    market_news: TrendingUp,
+    attendance: CalendarCheck,
+    google_drive: Cloud,
     faq: HelpCircle
   };
 

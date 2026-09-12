@@ -29,6 +29,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
   const pageT = getPageTranslation(language);
   const t = pageT.privacy;
   const email = 'daily-Khata-Pro@gmail.com';
+  const devEmail = 'mdzafeerhasan.official@gmail.com';
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200 text-left">
@@ -145,18 +146,52 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
           </p>
         </div>
 
-        {/* Section 5: Contact */}
+        {/* Section 5: Voice Dictation & Camera Hardware Access */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <h2 className="text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
             <span className="text-[var(--theme-primary,#38BDF8)] font-mono">5.</span>
-            <span>Support &amp; Contact</span>
+            <span>Voice Input &amp; Camera Hardware Privacy</span>
           </h2>
           <p className="leading-relaxed">
-            If you have any questions or suggestions regarding this Privacy Policy, please contact the developer directly:
+            When you use voice transaction dictation, speech recognition is processed locally through your browser's native Web Speech API. Daily Khata Pro never records, saves, or transmits your voice clips or audio transcripts to any remote server. When scanning receipts or bill barcodes, camera video frames are processed instantaneously on your device via HTML5 canvas/BarcodeDetector and discarded immediately.
           </p>
-          <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2">
-            <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <span className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold">{email}</span>
+        </div>
+
+        {/* Section 6: DPDP Act 2023 & GDPR Compliance */}
+        <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
+          <h2 className="text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
+            <span className="text-[var(--theme-primary,#38BDF8)] font-mono">6.</span>
+            <span>Compliance with India's DPDP Act 2023 &amp; GDPR</span>
+          </h2>
+          <p className="leading-relaxed">
+            Daily Khata Pro adheres strictly to the principles of data minimization and privacy by design outlined in the <strong>Digital Personal Data Protection (DPDP) Act 2023</strong> and the <strong>EU General Data Protection Regulation (GDPR)</strong>. Since all personal, financial, and employment records remain exclusively in your local custody, you hold 100% rights of access, portability (via JSON &amp; Excel CSV export), and complete erasure (via 1-click Reset in Settings).
+          </p>
+        </div>
+
+        {/* Section 7: Grievance Officer & Official Contact */}
+        <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
+          <h2 className="text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
+            <span className="text-[var(--theme-primary,#38BDF8)] font-mono">7.</span>
+            <span>Grievance Officer &amp; Support Contact</span>
+          </h2>
+          <p className="leading-relaxed">
+            For privacy inquiries, technical audits, or security questions, you may contact the creator and developer directly:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">Official Support</div>
+                <div className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold text-[12.5px] truncate">{email}</div>
+              </div>
+            </div>
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-[#10B981] shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">Developer Direct</div>
+                <div className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold text-[12.5px] truncate">{devEmail}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

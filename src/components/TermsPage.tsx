@@ -26,6 +26,7 @@ export const TermsPage: React.FC<TermsPageProps> = ({
   const pageT = getPageTranslation(language);
   const t = pageT.terms;
   const email = 'daily-Khata-Pro@gmail.com';
+  const devEmail = 'mdzafeerhasan.official@gmail.com';
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200 text-left">
@@ -137,9 +138,21 @@ export const TermsPage: React.FC<TermsPageProps> = ({
           <p className="leading-relaxed">
             For licensing inquiries or terms clarification, reach out to the project maintainer:
           </p>
-          <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2">
-            <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <span className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold">{email}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">Official Support</div>
+                <div className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold text-[12.5px] truncate">{email}</div>
+              </div>
+            </div>
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-[#10B981] shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">Developer Direct</div>
+                <div className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold text-[12.5px] truncate">{devEmail}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -160,13 +173,6 @@ export const TermsPage: React.FC<TermsPageProps> = ({
               className="hover:text-white underline cursor-pointer"
             >
               Privacy Policy
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => onNavigateTab('privacy')}
-              className="hover:text-white underline cursor-pointer"
-            >
-              Privacy
             </button>
             <span>•</span>
             <button

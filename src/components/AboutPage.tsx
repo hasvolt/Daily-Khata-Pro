@@ -203,32 +203,74 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-white/5 space-y-1">
               <div className="flex items-center gap-1.5 text-[var(--theme-primary,#38BDF8)] font-bold text-[12.5px]">
                 <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
-                <span>Statements & PDF</span>
+                <span>Statements &amp; PDF</span>
               </div>
               <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
-                Export monthly, daily and annual financial statements directly to PDF & Excel.
+                Export monthly, daily and annual financial statements directly to PDF &amp; Excel.
               </p>
             </div>
 
             <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-white/5 space-y-1">
               <div className="flex items-center gap-1.5 text-[var(--theme-primary,#38BDF8)] font-bold text-[12.5px]">
                 <Calculator className="w-4 h-4 text-amber-400" />
-                <span>Financial Calculators</span>
+                <span>Any-to-Any Calculators</span>
               </div>
               <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
-                Built-in Loan, SIP, Currency & Compound Interest calculation slips with instant print.
+                Universal 25+ country cross-currency converter, SIP, Loan EMI, and GST slips with instant print.
               </p>
             </div>
 
             <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-white/5 space-y-1">
               <div className="flex items-center gap-1.5 text-[var(--theme-primary,#38BDF8)] font-bold text-[12.5px]">
                 <CalendarCheck className="w-4 h-4 text-blue-400" />
-                <span>Attendance & Work</span>
+                <span>Attendance &amp; Work</span>
               </div>
               <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
                 Dedicated daily attendance registry, shift wage calculations, and timeline tracking.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Official Contact & Developer Inquiries */}
+        <div className="p-5 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl space-y-3">
+          <div className="flex items-center gap-2">
+            <User className="w-4.5 h-4.5 text-[var(--theme-primary,#38BDF8)]" />
+            <h3 className="text-[15.5px] font-bold text-white">
+              {isHindi ? 'संपर्क व डेवलपर सहयोग' : 'Official Support & Developer Contact'}
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <a
+              href="mailto:daily-Khata-Pro@gmail.com"
+              className="flex items-center gap-2.5 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-white/5 border border-[var(--theme-border,#213E61)] transition-colors group cursor-pointer"
+            >
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0">
+                <Globe className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-medium">App Support</div>
+                <div className="text-[12.5px] font-bold text-white font-mono group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors truncate">
+                  daily-Khata-Pro@gmail.com
+                </div>
+              </div>
+            </a>
+
+            <a
+              href="mailto:mdzafeerhasan.official@gmail.com"
+              className="flex items-center gap-2.5 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-white/5 border border-[var(--theme-border,#213E61)] transition-colors group cursor-pointer"
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                <User className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-medium">Developer Direct</div>
+                <div className="text-[12.5px] font-bold text-white font-mono group-hover:text-emerald-400 transition-colors truncate">
+                  mdzafeerhasan.official@gmail.com
+                </div>
+              </div>
+            </a>
           </div>
         </div>
 

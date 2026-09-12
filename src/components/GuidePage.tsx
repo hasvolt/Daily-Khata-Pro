@@ -27,7 +27,14 @@ import {
   List,
   ArrowUp,
   Share2,
-  Check
+  Check,
+  Calculator,
+  TrendingUp,
+  CalendarCheck,
+  Cloud,
+  CreditCard,
+  Users,
+  PieChart
 } from 'lucide-react';
 import { FUND_LABELS, FUND_ORDER, DEFAULT_PERCENTAGES, FUND_CONFIGS } from '../data/defaults';
 import { AppLanguage } from '../types';
@@ -66,10 +73,17 @@ export const GuidePage: React.FC<GuidePageProps> = ({
     add_expense: Receipt,
     work_life: Briefcase,
     goals: Target,
+    split_bills: Users,
+    loans: CreditCard,
+    budget: PieChart,
     reports: FileText,
     settings: Settings,
     backup: ShieldCheck,
     source_code: Code2,
+    forex_calculator: Calculator,
+    market_news: TrendingUp,
+    attendance: CalendarCheck,
+    google_drive: Cloud,
     faq: HelpCircle
   };
 

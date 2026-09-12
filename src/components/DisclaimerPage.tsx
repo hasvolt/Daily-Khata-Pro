@@ -26,6 +26,7 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
   const pageT = getPageTranslation(language);
   const t = pageT.disclaimer;
   const email = 'daily-Khata-Pro@gmail.com';
+  const devEmail = 'mdzafeerhasan.official@gmail.com';
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200 text-left">
@@ -99,12 +100,14 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
           </div>
         </div>
 
-        {/* Ads and Free Version Disclaimer */}
+        {/* Free Standard Edition & Third-Party References */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[#F59E0B] font-bold text-[15px]">
             <AlertTriangle className="w-4.5 h-4.5" />
+            <h2>Free Standard Edition &amp; Market Data Disclaimer</h2>
           </div>
           <p className="leading-relaxed">
+            Daily Khata Pro is offered as a free standard edition under the open-source MIT license. Market index rates (Sensex, Nifty 50) and forex exchange values are gathered from public educational financial feeds and may experience transmission delays. They are provided solely for indicative reference and personal bookkeeping, not for executing securities trading or commercial forex transactions.
           </p>
         </div>
 
@@ -126,11 +129,23 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
             <h2>Legal &amp; Policy Inquiries</h2>
           </div>
           <p className="leading-relaxed">
-            For questions regarding our legal disclaimer and calculation methodology:
+            For questions regarding our legal disclaimer, computational formulas, or compliance:
           </p>
-          <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2">
-            <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <span className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold">{email}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">Official Support</div>
+                <div className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold text-[12.5px] truncate">{email}</div>
+              </div>
+            </div>
+            <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-[#10B981] shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">Developer Direct</div>
+                <div className="font-mono text-[var(--theme-text,#F8FAFC)] font-bold text-[12.5px] truncate">{devEmail}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

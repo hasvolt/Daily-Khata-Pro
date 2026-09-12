@@ -56,25 +56,45 @@ To support ongoing development, cloud syncing enhancements, and sustainable infr
 - Set short-term and long-term financial targets (e.g., Equipment purchase, Vehicle fund, Higher studies).
 - Visual progress bars, milestone calculations, target deadlines, and one-tap goal deposits.
 
-### 🧮 6. Calculators & Financial Suite (`/calculator`)
+### 🧮 6. Calculators & Universal Cross-Forex Suite (`/calculator`)
+- **Universal Multi-Country Cross-Currency Calculator**: Any-to-any conversion across 25+ currencies (USD, INR, EUR, AED, SAR, GBP, JPY, CAD, etc.) with reverse rates, global comparison matrix, bank spread markup, SWIFT wire fees, and printable slips.
 - **SIP & Mutual Funds Calculator**: Calculate future corpus with compounding interest and inflation adjustment.
 - **Loan EMI Calculator**: Monthly breakdown of principal vs interest with amortization schedules.
 - **Fixed Deposit (FD) & RD Calculator**: Maturity return calculator.
 - **GST & Tax Tool**: Add or extract GST percentages instantly.
 - **Rule of 72 & CAGR Calculator**: Calculate investment doubling time and compounded annual growth.
 
-### 🛟 7. Help & Support Centre with Bug Reporter (`/support`)
+### 🤝 7. Loan & Udhar Bahi Khata (`/loans`)
+- Track money lent (Udhar Diya) and money borrowed (Karz Liya) with customer/contact names.
+- Record partial repayments with timestamps and balance tracking.
+- Generate settlement receipts and promissory slips with 1-tap WhatsApp reminder share.
+
+### 📈 8. Live Market Watch & Commercial News (`/news` & `/academy`)
+- Live quotes and daily net changes for **BSE Sensex**, **NSE Nifty 50**, and **Bank Nifty**.
+- Curated commercial business news and economic updates.
+- 40+ structured financial masterclass articles in the **Wealth Academy** covering asset allocation, budgeting, and debt freedom.
+
+### 📅 9. Work Attendance & Shift Wage Register (`/attendance`)
+- Daily attendance registry (Present, Half-Day, Absent, Paid Leave).
+- Per-shift wage calculation with regular and overtime hours.
+- Printable monthly salary statements for workers, contractors, and household staff.
+
+### ☁️ 10. Google Drive Client-Side Cloud Sync & Backup
+- Client-side Google Drive OAuth sync directly from browser without intermediate servers.
+- JSON data export and import for seamless multi-device ledger transfer.
+
+### 🛟 11. Help & Support Centre with Bug Reporter (`/support`)
 - **Diagnostic Bug Reporter**: Form with automated environment/device detection to send diagnostic reports directly to `daily-Khata-Pro@gmail.com`.
 - **Feature Suggestion Hub**: Submit ideas and feature requests directly.
 - **Interactive FAQ Accordion**: Instant answers to common questions about offline security, backups, PIN recovery, and PWA setup.
 
-### 📊 8. Analytics, Search & PDF Statements (`/report`)
+### 📊 12. Analytics, Search & PDF Statements (`/report`)
 - Real-time balance calculations, cash flow visual charts, category breakdowns, and month-over-month summaries.
 - One-click **JSON Backup & Restore** for full device portability.
 - Direct **A4 PDF Statement Export** and printable transaction receipts/invoices.
 
-### 🎨 9. Theming & Multilingual Support
-- **7 Built-in Themes**: Modern Blue, Emerald Green, Royal Violet, Amber Sunset, Rose Gold, Midnight Onyx, and Pure Day/Light mode.
+### 🎨 13. Theming & Multilingual Support
+- **8 Built-in Themes**: Modern Blue, Emerald Green, Royal Violet, Amber Sunset, Rose Gold, Midnight Onyx, Cyber Yellow, and Pure Day/Light mode.
 - **Bilingual Interface**: Seamless instant toggle between **English** and **हिन्दी (Hindi)** across all UI elements, modals, and charts.
 - **PWA Ready**: Installable on Android, iOS, Windows, and macOS with standalone native app appearance.
 
@@ -97,17 +117,22 @@ When installed, the app displays with the standalone name **Daily Khata Pro**:
 | `/` | **Dashboard** | Overview of balance, 6-fund cards, and quick actions |
 | `/history` | **Passbook Ledger** | Full chronological transaction audit & filters |
 | `/add` | **Add Transaction** | Income/expense logger with category & fund tag |
+| `/loans` | **Loan & Udhar Bahi Khata** | Money lent/borrowed ledger, partial repayments & slips |
 | `/tracker` | **Work Deliverables** | Client projects, tasks, and payment status |
+| `/attendance` | **Attendance Register** | Work shift check-in, overtime and wage calculations |
 | `/goals` | **Savings Goals** | Financial target milestones & visual progress |
 | `/notes` | **Daily Timeline** | Notes, daily habit checkpoints, and reflections |
+| `/calculator` | **Calculators & Forex** | 25+ Currency converter, SIP, EMI, FD, RD, GST |
+| `/news` | **Live Market & News** | Sensex, Nifty 50, Bank Nifty, and commercial headlines |
+| `/academy` | **Wealth Academy** | 40+ Financial masterclass guides & strategies |
 | `/report` | **Financial Reports** | Monthly analytics & printable A4 PDF statements |
-| `/calculator` | **Calculators Suite** | SIP, EMI, FD, RD, GST, and CAGR calculators |
 | `/support` | **Help & Support** | FAQs, diagnostic bug reports & feature suggestions |
 | `/guide` | **User Manual** | Comprehensive interactive usage documentation |
 | `/safety` | **Security Audit** | Verify 100% local storage privacy & safety |
 | `/developer` | **Developer Profile** | Creator bio, vision, and contact details |
 | `/about` | **About Daily Khata Pro** | Application background, rules, and mission |
-| `/privacy` | **Privacy Policy** | 100% client-side privacy commitments |
+| `/privacy` | **Privacy Policy** | 100% client-side privacy & DPDP Act compliance |
+| `/cookies` | **Cookie Policy** | Zero third-party cookies & local storage disclosure |
 | `/disclaimer` | **Disclaimer** | Financial guidance & utility disclaimers |
 | `/terms` | **Terms of Service** | Usage terms and open-source license info |
 
@@ -172,6 +197,7 @@ The compiled static assets will be in the `dist/` directory, ready to deploy to 
 ## 📬 Support & Developer Contact
 
 - **Official Support & Feedback**: [daily-Khata-Pro@gmail.com](mailto:daily-Khata-Pro@gmail.com)
+- **Developer Direct Email**: [mdzafeerhasan.official@gmail.com](mailto:mdzafeerhasan.official@gmail.com)
 - **Creator & Developer**: [Md Zafeer Hasan (Yazdaan)](https://github.com/hasvolt)
 - **Brand**: [Hasvolt](https://github.com/hasvolt)
 - **Repository**: [https://github.com/hasvolt/Daily-Khata-Pro](https://github.com/hasvolt/Daily-Khata-Pro)
