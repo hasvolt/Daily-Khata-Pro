@@ -73,8 +73,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const [copiedSpecific, setCopiedSpecific] = useState<string | null>(null);
   const [showQrCode, setShowQrCode] = useState(false);
 
-  if (!isOpen) return null;
-
   const isHindi = language === 'hi' || language === 'hinglish';
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://dailykhatapro.com';
 
@@ -379,6 +377,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     }
     onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-150 no-print">
