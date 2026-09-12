@@ -4,7 +4,7 @@
  * 100% Offline-First Architecture, Resilient Asset Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.8.1';
+const CACHE_NAME = 'daily-khata-pro-v2.8.2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -231,8 +231,10 @@ self.addEventListener('fetch', (event) => {
           if ((event.request.destination === 'script' || event.request.destination === 'style' || url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) && contentType.includes('text/html')) {
             return new Response('Asset not found', { status: 404, statusText: 'Not Found', headers: { 'Content-Type': 'text/plain' } });
           }
-          const cache = await caches.open(CACHE_NAME);
-          await putInCacheSafe(cache, event.request, networkResponse);
+          // Do not await cache operations so that network response is returned immediately
+          caches.open(CACHE_NAME).then((cache) => {
+            putInCacheSafe(cache, event.request, networkResponse.clone());
+          }).catch(() => {});
         }
         return networkResponse;
       } catch (netErr) {

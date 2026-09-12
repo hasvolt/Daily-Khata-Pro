@@ -373,7 +373,7 @@
             }
           }, 4500);
 
-          // 4. Stuck protection after 10s: Show recovery card only if not mounted and not offline
+          // 4. Stuck protection after 30s: Show recovery card only if not mounted and not offline
           setTimeout(function() {
             var root = document.getElementById('root');
             var preloader = document.getElementById('app-preloader');
@@ -383,10 +383,19 @@
                   // If offline, let it continue rendering cached shell
                   return;
                 }
-                showRecoveryUI('Network or module load timed out');
+                showRecoveryUI('Network or module load timed out (30s)');
               }
             }
-          }, 10000);
+          }, 30000);
+
+          // 5. Catch ALL unhandled errors for debugging top-level module failures
+          window.addEventListener('error', function(e) {
+            if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+            var root = document.getElementById('root');
+            if (!root || root.children.length === 0) {
+              handleBootError('Runtime Error: ' + (e.message || String(e.error)));
+            }
+          });
         })();
       </script>
     </div>
