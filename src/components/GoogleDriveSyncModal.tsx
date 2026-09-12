@@ -551,15 +551,15 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
                     return (
                       <div
                         key={file.id}
-                        className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3 hover:border-[var(--theme-primary,#38BDF8)]/50 transition-colors"
+                        className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 hover:border-[var(--theme-primary,#38BDF8)]/50 transition-colors"
                       >
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
+                        <div className="min-w-0 w-full sm:flex-1">
+                          <div className="flex items-center justify-between sm:justify-start gap-2 min-w-0">
                             <span className="font-bold text-[13px] text-[var(--theme-text,#F8FAFC)] truncate">
                               {file.name}
                             </span>
                             <span
-                              className={`px-1.5 py-0.2 rounded text-[9px] font-bold ${
+                              className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
                                 isAuto
                                   ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                                   : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
@@ -568,18 +568,17 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
                               {isAuto ? 'Auto-Sync' : '1-Click'}
                             </span>
                           </div>
-
-                          <div className="flex items-center gap-2 text-[11px] text-[var(--theme-text-dim,#94A3B8)] pt-0.5 truncate">
+                          <div className="flex items-center gap-1.5 text-[11px] text-[var(--theme-text-dim,#94A3B8)] pt-1 min-w-0">
                             <Clock className="w-3 h-3 shrink-0" />
-                            <span>{modified}</span>
+                            <span className="truncate">{modified}</span>
                             {file.description && (
-                              <span className="truncate hidden sm:inline">• {file.description}</span>
+                              <span className="truncate hidden sm:inline shrink-0">• {file.description}</span>
                             )}
                           </div>
                         </div>
 
                         {/* Action buttons */}
-                        <div className="flex items-center gap-1.5 shrink-0">
+                        <div className="flex items-center justify-end gap-1.5 shrink-0 w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t border-[var(--theme-border,#213E61)] sm:border-0">
                           {/* Restore Button with safe confirmation */}
                           <button
                             type="button"
