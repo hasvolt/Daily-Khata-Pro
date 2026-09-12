@@ -404,30 +404,40 @@
             window.location.reload();
             return;
           }
-          if (window.__dailyKhataSwReg && window.__dailyKhataSwReg.active) {
-            window.__dailyKhataSwReg.active.postMessage({ type: 'PURGE_CACHE' });
-          }
-          if ('caches' in window) {
-            const keys = await caches.keys();
-            await Promise.all(keys.map(function(k) { return caches.delete(k); }));
-          }
-          if (navigator.serviceWorker) {
+          if ('serviceWorker' in navigator) {
             const regs = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(regs.map(function(r) { return r.update(); }));
+            for (const reg of regs) {
+              await reg.update();
+              if (reg.waiting) {
+                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+              } else if (reg.installing) {
+                reg.installing.postMessage({ type: 'SKIP_WAITING' });
+              }
+              if (reg.active) {
+                reg.active.postMessage({ type: 'REFRESH_CACHE' });
+              }
+            }
           }
+          try {
+            const freshIndex = await fetch('/index.html', { cache: 'reload' });
+            if (freshIndex && freshIndex.ok && 'caches' in window) {
+              const keys = await caches.keys();
+              for (const k of keys) {
+                const c = await caches.open(k);
+                await c.put('/index.html', freshIndex.clone());
+                await c.put('/', freshIndex);
+              }
+            }
+          } catch (e) {}
           sessionStorage.clear();
-          window.location.replace(window.location.origin + window.location.pathname + '?_v=' + Date.now());
+          window.location.reload();
         } catch (e) {
-          window.location.replace(window.location.origin + window.location.pathname + '?_v=' + Date.now());
+          window.location.reload();
         }
       };
 
       window.__DAILY_KHATA_HARD_RESET__ = async function() {
         try {
-          if (typeof navigator !== 'undefined' && navigator.onLine === false) {
-            window.location.reload();
-            return;
-          }
           if ('caches' in window) {
             const keys = await caches.keys();
             await Promise.all(keys.map(function(k) { return caches.delete(k); }));
@@ -437,7 +447,7 @@
             await Promise.all(regs.map(function(r) { return r.unregister(); }));
           }
           sessionStorage.clear();
-          window.location.replace(window.location.origin + window.location.pathname + '?_reset=' + Date.now());
+          window.location.reload();
         } catch (e) {
           window.location.reload();
         }
@@ -454,9 +464,9 @@
               setTimeout(() => {
                 try {
                   const assets = [];
-                  document.querySelectorAll('script[src], link[rel="stylesheet"]').forEach((el) => {
+                  document.querySelectorAll('script[src], link[rel="stylesheet"], link[rel="modulepreload"]').forEach((el) => {
                     const src = el.getAttribute('src') || el.getAttribute('href');
-                    if (src && !src.startsWith('http') && !src.startsWith('//') && !src.includes('hot-update') && !src.includes('/src/') && !src.includes('/node_modules/') && !src.includes('@vite')) {
+                    if (src && !src.startsWith('http') && !src.startsWith('//') && !src.includes('hot-update')) {
                       assets.push(src.startsWith('/') ? src : '/' + src);
                     }
                   });
@@ -464,7 +474,7 @@
                     registration.active.postMessage({ type: 'CACHE_URLS', urls: assets });
                   }
                 } catch (e) {}
-              }, 1500);
+              }, 1000);
 
               // Immediately check for updates from server if online
               if (navigator.onLine) {
@@ -486,7 +496,7 @@
 
               // Check for updates when user returns to this browser tab
               document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
+                if (document.visibilityState === 'visible' && navigator.onLine) {
                   registration.update().catch(() => {});
                 }
               });
@@ -495,16 +505,13 @@
               console.warn('Service Worker registration error:', error);
             });
 
-          // Reload smoothly ONLY if the app has already successfully booted and mounted
+          // Reload smoothly when new service worker takes over
           let refreshing = false;
           navigator.serviceWorker.addEventListener('controllerchange', () => {
             if (refreshing) return;
-            // Only auto-reload if app has been running stably for at least 4 seconds
-            if (window.__APP_MOUNTED__ && (Date.now() - (window.__APP_START_TIME__ || 0) > 4000)) {
-              refreshing = true;
-              console.log('[PWA] Service worker updated. Reloading with fresh assets...');
-              window.location.reload();
-            }
+            refreshing = true;
+            console.log('[PWA] Service worker updated. Reloading with fresh assets...');
+            window.location.reload();
           });
         });
       }

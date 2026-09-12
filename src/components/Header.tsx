@@ -176,19 +176,24 @@ export const Header: React.FC<HeaderProps> = ({
     setIsUpdatingApp(true);
     setUpdateStatus(
       isHindi
-        ? `कैश साफ़ कर v${APP_VERSION} नवीनतम वर्शन लोड किया जा रहा है...`
-        : `Clearing cache & loading latest v${APP_VERSION} build...`
+        ? `v${APP_VERSION} नवीनतम वर्शन जाँचा जा रहा है...`
+        : `Checking & loading latest v${APP_VERSION} build...`
     );
 
     try {
-      // 1. Service Worker update check & cache purge
+      // 1. Service Worker update check & activate waiting worker
       if ('serviceWorker' in navigator) {
         try {
           const registrations = await navigator.serviceWorker.getRegistrations();
           for (const reg of registrations) {
             await reg.update();
+            if (reg.waiting) {
+              reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            } else if (reg.installing) {
+              reg.installing.postMessage({ type: 'SKIP_WAITING' });
+            }
             if (reg.active) {
-              reg.active.postMessage({ type: 'PURGE_CACHE' });
+              reg.active.postMessage({ type: 'REFRESH_CACHE' });
             }
           }
         } catch (err) {
@@ -196,14 +201,19 @@ export const Header: React.FC<HeaderProps> = ({
         }
       }
 
-      // 2. Cache storage cleanup
-      if ('caches' in window) {
-        try {
+      // 2. Fetch fresh index.html into cache
+      try {
+        const freshIndex = await fetch('/index.html', { cache: 'reload' });
+        if (freshIndex && freshIndex.ok && 'caches' in window) {
           const keys = await caches.keys();
-          await Promise.all(keys.map((k) => caches.delete(k)));
-        } catch (err) {
-          console.warn('Cache keys delete error:', err);
+          for (const k of keys) {
+            const c = await caches.open(k);
+            await c.put('/index.html', freshIndex.clone());
+            await c.put('/', freshIndex);
+          }
         }
+      } catch (err) {
+        console.warn('Pre-fetch error:', err);
       }
 
       // 3. Set update metadata
@@ -222,7 +232,7 @@ export const Header: React.FC<HeaderProps> = ({
         } else {
           window.location.reload();
         }
-      }, 700);
+      }, 600);
     } catch {
       window.location.reload();
     }
@@ -618,7 +628,7 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
 
-            {/* What's New in v2.7.0 */}
+            {/* What's New in v2.8.0 */}
             <div className="space-y-2">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
                 {isHindi ? `v${APP_VERSION} में नया क्या है?` : `What's New in v${APP_VERSION}`}
@@ -626,15 +636,15 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="space-y-1.5 text-[12px] text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-card,#132438)]/50 p-3 rounded-xl border border-[var(--theme-border,#213E61)]/60">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>{isHindi ? 'मज़बूत ऑफ़लाइन सपोर्ट: बिना इंटरनेट के 100% ऐप और सभी रूट्स सुचारू रूप से कार्यशील।' : 'Rock-solid offline mode: 100% functional app shell & all routes without internet.'}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>{isHindi ? '1-क्लिक सीधा ऐप वर्शन अपडेट (बिना किसी एरर या स्टक स्क्रीन के)।' : '1-Click seamless app version update (no stuck screens or cache issues).'}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                   <span>{isHindi ? 'सिस्टम व सेटिंग्स मेन्यू को सर्वोच्च प्राथमिकता पर व्यवस्थित किया गया।' : 'Main Menu organized with System & Settings at top.'}</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>{isHindi ? '1-क्लिक डायरेक्ट ऐप वर्शन अपडेट व ऑटोमैटिक कैश पर्ज इंजन।' : '1-Click direct app version update & automatic cache purge.'}</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>{isHindi ? 'त्वरित स्क्रीन लॉक, प्राइवेसी आई टॉगल और 6-फंड एक्यूरेसी।' : 'Instant screen lock, privacy eye toggle & 6-Fund split accuracy.'}</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />

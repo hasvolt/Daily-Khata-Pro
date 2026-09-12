@@ -1,10 +1,10 @@
 /**
  * Daily Khata Pro — Service Worker
- * Version: 2.7.6
+ * Version: 2.8.0
  * 100% Offline-First Architecture, Resilient Asset Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.7.6';
+const CACHE_NAME = 'daily-khata-pro-v2.8.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -13,8 +13,6 @@ const STATIC_ASSETS = [
   '/daily-Khata-Pro.png',
   '/daily-Khata-Pro-aap-icon.png',
   '/md-zafeer-hasan-yazdaan.jpg',
-  '/icon-192.png',
-  '/icon-512.png',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/icon-maskable-192x192.png',
@@ -30,6 +28,28 @@ const STATIC_ASSETS = [
   '/sitemap.xml'
 ];
 
+// Helper: Cache a response under multiple URL representations (full & pathname)
+async function putInCacheSafe(cache, requestOrUrl, response) {
+  try {
+    if (!response || !response.ok) return;
+    const clone1 = response.clone();
+    const clone2 = response.clone();
+    await cache.put(requestOrUrl, clone1);
+    if (typeof requestOrUrl === 'string' && requestOrUrl.startsWith('/')) {
+      try {
+        await cache.put(new Request(requestOrUrl, { mode: 'cors' }), clone2);
+      } catch (e) {}
+    } else if (requestOrUrl instanceof Request) {
+      try {
+        const u = new URL(requestOrUrl.url);
+        await cache.put(u.pathname, clone2);
+      } catch (e) {}
+    }
+  } catch (err) {
+    // Non-blocking
+  }
+}
+
 // 1. Install Event: Resilient Pre-cache Essential App Shell & Dynamic Assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -40,7 +60,7 @@ self.addEventListener('install', (event) => {
           try {
             const response = await fetch(url, { cache: 'reload' });
             if (response && response.ok) {
-              await cache.put(url, response);
+              await putInCacheSafe(cache, url, response);
             }
           } catch (err) {
             console.warn('[SW] Non-blocking asset fetch warning:', url);
@@ -48,27 +68,24 @@ self.addEventListener('install', (event) => {
         })
       );
 
-      // 2. Dynamically extract and precache scripts and styles referenced in index.html (production build only)
+      // 2. Dynamically extract and precache scripts and styles referenced in index.html
       try {
         const htmlRes = await fetch('/index.html', { cache: 'reload' });
         if (htmlRes && htmlRes.ok) {
           const htmlClone = htmlRes.clone();
           await cache.put('/index.html', htmlRes);
           await cache.put('/', htmlClone);
-          
+
           const htmlText = await htmlClone.text();
-          const assetRegex = /(?:src|href)=["']([^"']+\.(?:js|css|woff2?|svg|png))["']/gi;
+          const assetRegex = /(?:src|href)=["']([^"']+\.(?:js|css|woff2?|svg|png|jpg))["']/gi;
           let match;
           const foundUrls = new Set();
           while ((match = assetRegex.exec(htmlText)) !== null) {
             const assetUrl = match[1];
-            // Only cache built assets (not dev /src/ or node_modules)
-            if (assetUrl && 
-                !assetUrl.startsWith('http') && 
+            if (assetUrl &&
+                !assetUrl.startsWith('http') &&
                 !assetUrl.startsWith('//') &&
-                !assetUrl.includes('/src/') &&
-                !assetUrl.includes('/node_modules/') &&
-                !assetUrl.includes('@vite')) {
+                !assetUrl.includes('hot-update')) {
               foundUrls.add(assetUrl.startsWith('/') ? assetUrl : `/${assetUrl}`);
             }
           }
@@ -78,7 +95,7 @@ self.addEventListener('install', (event) => {
               try {
                 const aRes = await fetch(u, { cache: 'reload' });
                 if (aRes && aRes.ok) {
-                  await cache.put(u, aRes);
+                  await putInCacheSafe(cache, u, aRes);
                 }
               } catch (e) {
                 // Non-blocking
@@ -113,45 +130,31 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Bypass dev-server mechanisms, unbundled source files, and node_modules dependencies
-  if (url.pathname.startsWith('/@') || 
-      url.pathname.includes('/@vite/') || 
-      url.pathname.includes('/@fs/') || 
-      url.pathname.includes('hot-update') || 
-      url.pathname.startsWith('/src/') ||
-      url.pathname.includes('/node_modules/') ||
-      url.pathname.includes('.vite/') ||
-      url.search.includes('?v=') ||
-      url.search.includes('&v=') ||
-      url.search.includes('?t=') ||
-      url.search.includes('&t=')) {
+  // Bypass ONLY browser extensions and dev hot updates
+  if (url.protocol.startsWith('chrome-extension') ||
+      url.pathname.includes('hot-update') ||
+      url.pathname.includes('/@vite/client') ||
+      url.pathname.includes('socket.io')) {
     return;
   }
 
-  // Skip cross-origin requests except Google Fonts
-  if (!url.origin.includes(self.location.hostname) && 
-      !url.origin.includes('fonts.googleapis.com') && 
-      !url.origin.includes('fonts.gstatic.com')) {
-    return;
-  }
-
-  // Navigation requests (HTML pages / routes) -> Immediate offline fallback
+  // Navigation requests (HTML pages / SPA routes like /history, /goals, /add, etc.)
   if (event.request.mode === 'navigate') {
     event.respondWith(
       (async () => {
-        // If device is offline, serve cached index.html immediately without waiting
+        // If device is offline, immediately return cached index.html shell
         if (!self.navigator.onLine) {
-          const cachedShell = (await caches.match(event.request)) || 
-                              (await caches.match('/index.html')) || 
-                              (await caches.match('/'));
+          const cachedShell = (await caches.match('/index.html', { ignoreSearch: true, ignoreVary: true })) ||
+                              (await caches.match('/', { ignoreSearch: true, ignoreVary: true })) ||
+                              (await caches.match(event.request, { ignoreSearch: true, ignoreVary: true }));
           if (cachedShell) return cachedShell;
         }
 
         try {
-          // Fast network fetch with 2s timeout
+          // Attempt network fetch with 3s timeout
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 2000);
-          
+          const timeoutId = setTimeout(() => controller.abort(), 3000);
+
           const networkResponse = await fetch(event.request, { signal: controller.signal });
           clearTimeout(timeoutId);
 
@@ -160,24 +163,26 @@ self.addEventListener('fetch', (event) => {
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, clone);
               cache.put('/index.html', clone.clone());
+              cache.put('/', clone.clone());
             });
             return networkResponse;
           }
 
-          // Fallback to cache if server returned non-200 for client route
-          const shell = (await caches.match('/index.html')) || (await caches.match('/'));
+          // Fallback to cached index.html if network returns non-200
+          const shell = (await caches.match('/index.html', { ignoreSearch: true, ignoreVary: true })) ||
+                        (await caches.match('/', { ignoreSearch: true, ignoreVary: true }));
           if (shell) return shell;
           return networkResponse;
         } catch (fetchErr) {
-          // Offline navigation fallback: serve cached index.html for ANY route (/calculator, /about, etc.)
-          const cachedResponse = (await caches.match(event.request)) || 
-                                 (await caches.match('/index.html')) || 
-                                 (await caches.match('/'));
+          // Offline navigation fallback: serve cached index.html for ANY route (/history, /goals, etc.)
+          const cachedResponse = (await caches.match('/index.html', { ignoreSearch: true, ignoreVary: true })) ||
+                                 (await caches.match('/', { ignoreSearch: true, ignoreVary: true })) ||
+                                 (await caches.match(event.request, { ignoreSearch: true, ignoreVary: true }));
           if (cachedResponse) return cachedResponse;
-          
-          return new Response('Daily Khata Pro is working offline. Please reload or open the home screen.', {
+
+          return new Response('Daily Khata Pro is offline. Please reconnect to the internet to load.', {
             status: 200,
-            headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+            headers: { 'Content-Type': 'text/html; charset=utf-8' }
           });
         }
       })()
@@ -185,23 +190,27 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static Assets, Scripts, Styles, Images & Media -> Cache First with Background Update (Stale-While-Revalidate)
+  // Static Assets, Scripts, Styles, Images, Fonts -> Cache-First with Stale-While-Revalidate
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+    (async () => {
+      // 1. Try cache first (both request & pathname, ignoring query string and vary)
+      const cachedResponse = (await caches.match(event.request, { ignoreSearch: true, ignoreVary: true })) ||
+                             (await caches.match(url.pathname, { ignoreSearch: true, ignoreVary: true }));
+
       if (cachedResponse) {
-        // Asynchronously update cache in background when online
+        // Revalidate in background when online
         if (self.navigator.onLine) {
           fetch(event.request)
-            .then((networkResponse) => {
+            .then(async (networkResponse) => {
               if (networkResponse && networkResponse.status === 200) {
                 const contentType = networkResponse.headers.get('content-type') || '';
-                // Avoid caching HTML responses for script chunks (e.g. 404 SPA fallback)
-                if ((event.request.destination === 'script' || url.pathname.endsWith('.js')) && contentType.includes('text/html')) {
+                // Avoid caching HTML 404 responses for script/css chunks
+                if ((event.request.destination === 'script' || url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) &&
+                    contentType.includes('text/html')) {
                   return;
                 }
-                caches.open(CACHE_NAME).then((cache) => {
-                  cache.put(event.request, networkResponse);
-                });
+                const cache = await caches.open(CACHE_NAME);
+                await putInCacheSafe(cache, event.request, networkResponse);
               }
             })
             .catch(() => {});
@@ -209,34 +218,31 @@ self.addEventListener('fetch', (event) => {
         return cachedResponse;
       }
 
-      // Not in cache: fetch from network and store in cache
-      return fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200 && (event.request.url.startsWith('http') || event.request.url.startsWith('https'))) {
-            const contentType = networkResponse.headers.get('content-type') || '';
-            if ((event.request.destination === 'script' || url.pathname.endsWith('.js')) && contentType.includes('text/html')) {
-              return new Response('Asset not found', { status: 404, statusText: 'Not Found', headers: { 'Content-Type': 'text/plain' } });
-            }
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
+      // 2. Not in cache: fetch from network and store in cache
+      try {
+        const networkResponse = await fetch(event.request);
+        if (networkResponse && networkResponse.status === 200) {
+          const contentType = networkResponse.headers.get('content-type') || '';
+          if ((event.request.destination === 'script' || url.pathname.endsWith('.js')) && contentType.includes('text/html')) {
+            return new Response('Asset not found', { status: 404, statusText: 'Not Found', headers: { 'Content-Type': 'text/plain' } });
           }
-          return networkResponse;
-        })
-        .catch(async () => {
-          // Offline fallback for images
-          if (event.request.destination === 'image') {
-            const fallbackImg = await caches.match('/daily-khata-pro-v4.png');
-            if (fallbackImg) return fallbackImg;
-          }
-          // Offline fallback for fonts
-          if (event.request.destination === 'font') {
-            return new Response('', { status: 200, headers: { 'Content-Type': 'font/woff2' } });
-          }
-          return new Response('Offline asset unavailable', { status: 503, statusText: 'Service Unavailable' });
-        });
-    })
+          const cache = await caches.open(CACHE_NAME);
+          await putInCacheSafe(cache, event.request, networkResponse);
+        }
+        return networkResponse;
+      } catch (netErr) {
+        // 3. Network failed & not in cache: offline fallback
+        if (event.request.destination === 'image') {
+          const fallbackImg = (await caches.match('/daily-khata-pro-v4.png', { ignoreSearch: true, ignoreVary: true })) ||
+                              (await caches.match('/icons/icon-192x192.png', { ignoreSearch: true, ignoreVary: true }));
+          if (fallbackImg) return fallbackImg;
+        }
+        if (event.request.destination === 'font') {
+          return new Response('', { status: 200, headers: { 'Content-Type': 'font/woff2' } });
+        }
+        return new Response('', { status: 408, statusText: 'Offline asset unavailable' });
+      }
+    })()
   );
 });
 
@@ -505,11 +511,11 @@ self.addEventListener('message', (event) => {
         return Promise.all(
           event.data.urls.map(async (url) => {
             try {
-              const matched = await cache.match(url);
+              const matched = await cache.match(url, { ignoreSearch: true, ignoreVary: true });
               if (!matched) {
                 const res = await fetch(url);
                 if (res && res.ok) {
-                  await cache.put(url, res);
+                  await putInCacheSafe(cache, url, res);
                 }
               }
             } catch (err) {
@@ -521,16 +527,33 @@ self.addEventListener('message', (event) => {
     );
   }
 
-  // Force wipe all existing caches (called from Settings > App Update)
-  if (event.data.type === 'PURGE_CACHE') {
+  // Safe cache refresh & update handler
+  if (event.data.type === 'PURGE_CACHE' || event.data.type === 'REFRESH_CACHE') {
     event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(cacheNames.map((name) => caches.delete(name)));
-      }).then(() => {
-        if (event.source && event.source.postMessage) {
-          event.source.postMessage({ type: 'CACHE_PURGED_SUCCESS' });
+      (async () => {
+        try {
+          const cache = await caches.open(CACHE_NAME);
+          // Re-fetch fresh index.html into active cache
+          const htmlRes = await fetch('/index.html', { cache: 'reload' });
+          if (htmlRes && htmlRes.ok) {
+            await cache.put('/index.html', htmlRes.clone());
+            await cache.put('/', htmlRes);
+          }
+          // Clean up any legacy caches
+          const names = await caches.keys();
+          await Promise.all(
+            names.filter((n) => n !== CACHE_NAME).map((n) => caches.delete(n))
+          );
+          self.skipWaiting();
+          if (event.source && event.source.postMessage) {
+            event.source.postMessage({ type: 'CACHE_PURGED_SUCCESS', version: CACHE_NAME });
+          }
+        } catch (e) {
+          if (event.source && event.source.postMessage) {
+            event.source.postMessage({ type: 'CACHE_PURGED_SUCCESS', version: CACHE_NAME });
+          }
         }
-      })
+      })()
     );
   }
 });

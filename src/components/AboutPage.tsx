@@ -88,7 +88,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-2 mt-4 pt-3 border-t border-white/10 text-[11.5px] font-mono text-[var(--theme-text-dim,#94A3B8)]">
-            <span className="bg-white/5 px-2.5 py-1 rounded-md border border-white/10">Version: {APP_RELEASE_LABEL || 'v2.7.0'}</span>
+            <span className="bg-white/5 px-2.5 py-1 rounded-md border border-white/10">Version: {APP_RELEASE_LABEL || 'v2.8.0'}</span>
             <span className="bg-white/5 px-2.5 py-1 rounded-md border border-white/10">License: MIT</span>
             <span className="bg-white/5 px-2.5 py-1 rounded-md border border-white/10">Architecture: 100% Offline-First</span>
           </div>
