@@ -1,6 +1,6 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect, useRef } from 'react';
-import { Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
 import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode, CategoryBudget, BillSplitExpense, DebtItem, DebtPayment } from './types';
 import {
   DEFAULT_FUNDS,
@@ -118,7 +118,7 @@ const NewsArticleWrapper: React.FC<{ language: AppLanguage; onBack: () => void; 
   );
 };
 
-export default function App() {
+function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -3322,5 +3322,13 @@ export default function App() {
       {/* 100% PWA Offline Mode Status Indicator */}
       <OfflineIndicator language={language} />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }

@@ -1,10 +1,10 @@
 /**
  * Daily Khata Pro — Service Worker
- * Version: 2.7.5
+ * Version: 2.7.6
  * 100% Offline-First Architecture, Resilient Asset Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.7.5';
+const CACHE_NAME = 'daily-khata-pro-v2.7.6';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -48,7 +48,7 @@ self.addEventListener('install', (event) => {
         })
       );
 
-      // 2. Dynamically extract and precache scripts and styles referenced in index.html
+      // 2. Dynamically extract and precache scripts and styles referenced in index.html (production build only)
       try {
         const htmlRes = await fetch('/index.html', { cache: 'reload' });
         if (htmlRes && htmlRes.ok) {
@@ -62,7 +62,13 @@ self.addEventListener('install', (event) => {
           const foundUrls = new Set();
           while ((match = assetRegex.exec(htmlText)) !== null) {
             const assetUrl = match[1];
-            if (assetUrl && !assetUrl.startsWith('http') && !assetUrl.startsWith('//')) {
+            // Only cache built assets (not dev /src/ or node_modules)
+            if (assetUrl && 
+                !assetUrl.startsWith('http') && 
+                !assetUrl.startsWith('//') &&
+                !assetUrl.includes('/src/') &&
+                !assetUrl.includes('/node_modules/') &&
+                !assetUrl.includes('@vite')) {
               foundUrls.add(assetUrl.startsWith('/') ? assetUrl : `/${assetUrl}`);
             }
           }
@@ -107,12 +113,18 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Bypass ONLY internal Vite dev-server HMR mechanisms
+  // Bypass dev-server mechanisms, unbundled source files, and node_modules dependencies
   if (url.pathname.startsWith('/@') || 
       url.pathname.includes('/@vite/') || 
       url.pathname.includes('/@fs/') || 
       url.pathname.includes('hot-update') || 
-      url.pathname.includes('/node_modules/.vite/')) {
+      url.pathname.startsWith('/src/') ||
+      url.pathname.includes('/node_modules/') ||
+      url.pathname.includes('.vite/') ||
+      url.search.includes('?v=') ||
+      url.search.includes('&v=') ||
+      url.search.includes('?t=') ||
+      url.search.includes('&t=')) {
     return;
   }
 

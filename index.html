@@ -456,7 +456,7 @@
                   const assets = [];
                   document.querySelectorAll('script[src], link[rel="stylesheet"]').forEach((el) => {
                     const src = el.getAttribute('src') || el.getAttribute('href');
-                    if (src && !src.startsWith('http') && !src.startsWith('//') && !src.includes('hot-update')) {
+                    if (src && !src.startsWith('http') && !src.startsWith('//') && !src.includes('hot-update') && !src.includes('/src/') && !src.includes('/node_modules/') && !src.includes('@vite')) {
                       assets.push(src.startsWith('/') ? src : '/' + src);
                     }
                   });

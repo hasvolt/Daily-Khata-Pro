@@ -47,7 +47,8 @@ import {
   ChevronDown,
   Wrench,
   Layers,
-  Cloud
+  Cloud,
+  WifiOff
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -143,9 +144,23 @@ export const Header: React.FC<HeaderProps> = ({
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<string | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [isOnline, setIsOnline] = useState<boolean>(() => {
+    return typeof navigator !== 'undefined' ? navigator.onLine : true;
+  });
   const tr = getAppTranslation((language as AppLanguage) || 'en');
   const isHindi = language === 'hi';
   const isLightMode = theme === 'light' || theme === 'white';
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const handleDirectUpdateApp = async (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -301,7 +316,7 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)]'
                   }`}
                 >
-                  <TabIcon className="w-3.5 h-3.5" />
+                  <TabIcon className="w-4 h-4 shrink-0" />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -320,7 +335,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-desktop-page-search"
             >
               <div className="flex items-center gap-2 truncate">
-                <Search className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-110 transition-transform" />
+                <Search className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-110 transition-transform" />
                 <span className="truncate text-[12px] font-medium text-[var(--theme-text-muted,#94A3B8)] group-hover:text-[var(--theme-text,#F8FAFC)]">
                   {isHindi ? 'पेज, टूल्स, कैलकुलेटर खोजें...' : 'Search pages, tools, calculators...'}
                 </span>
@@ -335,7 +350,7 @@ export const Header: React.FC<HeaderProps> = ({
         ) : onSearchChange ? (
           <div className="hidden md:flex items-center flex-1 max-w-xs mx-2">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] pointer-events-none" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-dim,#64748B)] pointer-events-none" />
               <input
                 id="header-desktop-search"
                 type="text"
@@ -356,7 +371,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)] transition-colors cursor-pointer"
                   title="Clear search"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
@@ -364,24 +379,37 @@ export const Header: React.FC<HeaderProps> = ({
         ) : null}
 
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Subtle Non-Intrusive Offline Status Chip */}
+          {!isOnline && (
+            <div
+              className="h-9 px-2 sm:px-2.5 rounded-xl border border-amber-500/40 bg-amber-500/15 text-amber-300 flex items-center justify-center gap-1.5 shrink-0 select-none shadow-xs"
+              title={isHindi ? '100% ऑफ़लाइन मोड सक्रिय है — डेटा डिवाइस में सुरक्षित है' : '100% Offline Mode Active — Data safely stored locally'}
+            >
+              <WifiOff className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="text-[11px] font-bold hidden xs:inline">
+                {isHindi ? 'ऑफ़लाइन' : 'Offline'}
+              </span>
+            </div>
+          )}
+
           {/* Privacy Eye Toggle */}
           {onTogglePrivacyMask && (
             <button
               type="button"
               onClick={onTogglePrivacyMask}
-              className={`p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0 ${
+              className={`h-9 min-w-[36px] px-2 sm:px-2.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
                 privacyMask
                   ? 'bg-[#F59E0B]/20 border-[#F59E0B]/50 text-[#F59E0B]'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
               }`}
               title={privacyMask ? 'Amounts Hidden (Click to show)' : 'Mask Rupee Amounts'}
               id="header-privacy-mask-btn"
             >
               {privacyMask ? (
-                <EyeOff className="w-3.5 h-3.5" />
+                <EyeOff className="w-4 h-4 shrink-0" />
               ) : (
-                <Eye className="w-3.5 h-3.5" />
+                <Eye className="w-4 h-4 shrink-0" />
               )}
               <span className="hidden xl:inline">
                 {privacyMask ? tr.menu.hidden : tr.menu.mask}
@@ -400,18 +428,18 @@ export const Header: React.FC<HeaderProps> = ({
                   onThemeChange('light');
                 }
               }}
-              className={`flex p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold items-center gap-1 shrink-0 ${
+              className={`h-9 min-w-[36px] px-2 sm:px-2.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
                 isLightMode
                   ? 'bg-[#0284C7]/15 border-[#0284C7]/40 text-[#0284C7] hover:bg-[#0284C7]/25'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
               }`}
               title={isLightMode ? 'Switch to Night Mode' : 'Switch to Day Mode'}
               id="header-theme-toggle-btn"
             >
               {isLightMode ? (
-                <Moon className="w-3.5 h-3.5" />
+                <Moon className="w-4 h-4 shrink-0" />
               ) : (
-                <Sun className="w-3.5 h-3.5" />
+                <Sun className="w-4 h-4 shrink-0" />
               )}
               <span className="hidden sm:inline">
                 {isLightMode ? tr.menu.night : tr.menu.day}
@@ -427,12 +455,12 @@ export const Header: React.FC<HeaderProps> = ({
                 triggerHapticSound('click');
                 onOpenReminders();
               }}
-              className="relative hidden sm:flex p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-amber-400/50 text-[var(--theme-text-muted,#94A3B8)] hover:text-amber-400 transition-all cursor-pointer shadow-xs active:scale-95 items-center justify-center shrink-0 min-w-[34px] min-h-[34px]"
+              className="relative hidden sm:flex h-9 w-9 min-w-[36px] min-h-[36px] rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-amber-400/50 text-[var(--theme-text-muted,#94A3B8)] hover:text-amber-400 transition-all cursor-pointer shadow-xs active:scale-95 items-center justify-center shrink-0 p-0"
               title={isHindi ? 'रिमाइंडर और अलर्ट्स' : 'Reminders & Scheduled Alerts'}
               id="header-reminders-bell-btn"
               aria-label={isHindi ? 'रिमाइंडर खोलें' : 'Open Reminders'}
             >
-              <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <Bell className="w-4 h-4 shrink-0" />
               {remindersCount > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 rounded-full bg-amber-500 text-slate-950 text-[9.5px] font-mono font-black flex items-center justify-center shadow-xs animate-pulse">
                   {remindersCount > 9 ? '9+' : remindersCount}
@@ -449,21 +477,21 @@ export const Header: React.FC<HeaderProps> = ({
                 triggerHapticSound('click');
                 onOpenGoogleDrive();
               }}
-              className={`relative hidden sm:flex p-1.5 sm:px-2 sm:py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[10px] sm:text-[11px] font-bold items-center gap-1 shrink-0 ${
+              className={`relative hidden sm:flex h-9 min-w-[36px] px-2 sm:px-2.5 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold items-center justify-center gap-1.5 shrink-0 ${
                 isAutoSyncing
                   ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 animate-pulse'
                   : isDriveConnected
                   ? 'bg-blue-500/15 border-blue-500/40 text-blue-400 hover:bg-blue-500/25'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
               }`}
               title={isHindi ? 'गूगल ड्राइव 1-क्लिक बैकअप व ऑटो अपडेट' : 'Google Drive 1-Click Backup & Auto-Sync'}
               id="header-gdrive-sync-btn"
               aria-label={isHindi ? 'गूगल ड्राइव बैकअप खोलें' : 'Open Google Drive Backup'}
             >
-              <Cloud className="w-3.5 h-3.5" />
+              <Cloud className="w-4 h-4 shrink-0" />
               <span className="hidden xl:inline">Drive</span>
               {isDriveConnected && (
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 absolute top-1 right-1"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 absolute top-1.5 right-1.5"></span>
               )}
             </button>
           )}
@@ -475,12 +503,12 @@ export const Header: React.FC<HeaderProps> = ({
               triggerHapticSound('click');
               setIsMenuOpen(true);
             }}
-            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 min-w-[34px] min-h-[34px]"
+            className="h-9 w-9 min-w-[36px] min-h-[36px] rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 p-0"
             title={isHindi ? 'मुख्य मेनू व टूल्स' : 'Main Menu & Tools'}
             id="header-main-menu-btn"
             aria-label={isHindi ? 'मुख्य मेनू खोलें' : 'Open Main Menu'}
           >
-            <MoreVertical className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[var(--theme-text,#F8FAFC)]" />
+            <MoreVertical className="w-4 h-4 shrink-0 text-[var(--theme-text,#F8FAFC)]" />
           </button>
         </div>
       </div>
