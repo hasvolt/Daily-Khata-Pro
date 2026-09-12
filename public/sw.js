@@ -4,7 +4,7 @@
  * 100% Offline-First Architecture, Resilient Asset Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.8.0';
+const CACHE_NAME = 'daily-khata-pro-v2.8.1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -95,7 +95,12 @@ self.addEventListener('install', (event) => {
               try {
                 const aRes = await fetch(u, { cache: 'reload' });
                 if (aRes && aRes.ok) {
-                  await putInCacheSafe(cache, u, aRes);
+                  const contentType = aRes.headers.get('content-type') || '';
+                  if (u.match(/\.(js|css)$/i) && contentType.includes('text/html')) {
+                    // Do not cache HTML responses for script/css files
+                  } else {
+                    await putInCacheSafe(cache, u, aRes);
+                  }
                 }
               } catch (e) {
                 // Non-blocking
@@ -205,7 +210,7 @@ self.addEventListener('fetch', (event) => {
               if (networkResponse && networkResponse.status === 200) {
                 const contentType = networkResponse.headers.get('content-type') || '';
                 // Avoid caching HTML 404 responses for script/css chunks
-                if ((event.request.destination === 'script' || url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) &&
+                if ((event.request.destination === 'script' || event.request.destination === 'style' || url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) &&
                     contentType.includes('text/html')) {
                   return;
                 }
@@ -223,7 +228,7 @@ self.addEventListener('fetch', (event) => {
         const networkResponse = await fetch(event.request);
         if (networkResponse && networkResponse.status === 200) {
           const contentType = networkResponse.headers.get('content-type') || '';
-          if ((event.request.destination === 'script' || url.pathname.endsWith('.js')) && contentType.includes('text/html')) {
+          if ((event.request.destination === 'script' || event.request.destination === 'style' || url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) && contentType.includes('text/html')) {
             return new Response('Asset not found', { status: 404, statusText: 'Not Found', headers: { 'Content-Type': 'text/plain' } });
           }
           const cache = await caches.open(CACHE_NAME);
