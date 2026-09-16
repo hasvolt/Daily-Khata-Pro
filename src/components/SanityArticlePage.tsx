@@ -1,0 +1,799 @@
+import React, { useState, useEffect } from 'react';
+import {
+  ArrowLeft,
+  Share2,
+  Bookmark,
+  BookmarkCheck,
+  Volume2,
+  VolumeX,
+  Clock,
+  Calendar,
+  User,
+  ShieldCheck,
+  Check,
+  Copy,
+  ExternalLink,
+  BookOpen,
+  ChevronRight,
+  Info
+} from 'lucide-react';
+import { PortableText, PortableTextComponents } from '@portabletext/react';
+import { AppLanguage } from '../types';
+import { getSanityPostBySlug, urlFor, SanityBlogPost } from '../utils/sanityClient';
+import { COMMERCIAL_ARTICLES, CommercialArticle } from '../data/newsPortalData';
+
+interface SanityArticlePageProps {
+  slugOrId: string;
+  language: AppLanguage;
+  onBack: () => void;
+  onNavigateTab?: (tab: string) => void;
+}
+
+export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
+  slugOrId,
+  language,
+  onBack,
+  onNavigateTab
+}) => {
+  const [post, setPost] = useState<SanityBlogPost | null>(null);
+  const [fallbackArticle, setFallbackArticle] = useState<CommercialArticle | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [fontSize, setFontSize] = useState<'sm' | 'base' | 'lg'>('base');
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+
+  const isHindi = language === 'hi' || language === 'hinglish';
+
+  // Load article from Sanity by slug or id, with seamless fallback
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    getSanityPostBySlug(slugOrId).then(sanityData => {
+      if (!isMounted) return;
+      if (sanityData) {
+        setPost(sanityData);
+        setLoading(false);
+        // Update document title for SEO
+        document.title = `${sanityData.title} | Daily Khata Pro Finance Blog`;
+      } else {
+        // Look up in fallback local articles
+        const match = COMMERCIAL_ARTICLES.find(
+          a => a.id === slugOrId || (a as any).slug === slugOrId
+        );
+        if (match) {
+          setFallbackArticle(match);
+          document.title = `${match.title} | Daily Khata Pro Finance Blog`;
+        }
+        setLoading(false);
+      }
+    }).catch(err => {
+      console.warn('Failed to fetch post by slug:', err);
+      if (isMounted) {
+        const match = COMMERCIAL_ARTICLES.find(
+          a => a.id === slugOrId || (a as any).slug === slugOrId
+        );
+        if (match) {
+          setFallbackArticle(match);
+          document.title = `${match.title} | Daily Khata Pro Finance Blog`;
+        }
+        setLoading(false);
+      }
+    });
+
+    // Check bookmark state
+    try {
+      const stored = localStorage.getItem('khata_bookmarked_sanity');
+      if (stored) {
+        const ids: string[] = JSON.parse(stored);
+        setIsBookmarked(ids.includes(slugOrId));
+      }
+    } catch {
+      // ignore storage error
+    }
+
+    return () => {
+      isMounted = false;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [slugOrId]);
+
+  // Comprehensive SEO Metadata & Structured Data (JSON-LD)
+  useEffect(() => {
+    const activeTitle = post?.title || fallbackArticle?.title;
+    if (!activeTitle) return;
+
+    const CANONICAL_DOMAIN = 'https://www.rozfiber.com';
+    const slug = post?.slug?.current || fallbackArticle?.slug || slugOrId;
+    const canonicalUrl = `${CANONICAL_DOMAIN}/blog/${slug}`;
+
+    const description =
+      post?.summary ||
+      fallbackArticle?.subtitle ||
+      (post?.body && Array.isArray(post.body)
+        ? post.body
+            .map(b => (b.children ? b.children.map((c: any) => c.text).join('') : ''))
+            .join(' ')
+            .slice(0, 160)
+        : '') ||
+      'Rozfiber Finance editorial dispatch and research.';
+
+    const authorName = post?.authorName || fallbackArticle?.author?.name || 'MD Zafeer Hasan (YAZDAAN)';
+    const authorRole = post?.authorRole || fallbackArticle?.author?.role || 'Author & Independent Researcher';
+    const publishedDate = post?.publishedAt || fallbackArticle?.publishedAt || new Date().toISOString();
+    const modifiedDate = post?.updatedAt || publishedDate;
+    const imageUrl = post?.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : `${CANONICAL_DOMAIN}/daily-khata-pro-v4.png`;
+
+    const prevTitle = document.title;
+    document.title = `${activeTitle} | Rozfiber Finance`;
+
+    // Canonical link management
+    let canonicalLink = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
+    const prevCanonical = canonicalLink ? canonicalLink.href : null;
+    if (canonicalLink) {
+      canonicalLink.href = canonicalUrl;
+    } else {
+      canonicalLink = document.createElement('link');
+      canonicalLink.rel = 'canonical';
+      canonicalLink.href = canonicalUrl;
+      document.head.appendChild(canonicalLink);
+    }
+
+    // Helper to safely set meta tags
+    const setMetaTag = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement('meta');
+        const parts = selector.replace(/[\[\]]/g, '').split('=');
+        el.setAttribute(parts[0], parts[1].replace(/["']/g, ''));
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    };
+
+    setMetaTag('meta[name="description"]', 'content', description);
+    setMetaTag('meta[property="og:title"]', 'content', activeTitle);
+    setMetaTag('meta[property="og:description"]', 'content', description);
+    setMetaTag('meta[property="og:url"]', 'content', canonicalUrl);
+    setMetaTag('meta[property="og:type"]', 'content', 'article');
+    setMetaTag('meta[property="og:image"]', 'content', imageUrl);
+    setMetaTag('meta[property="article:published_time"]', 'content', publishedDate);
+    setMetaTag('meta[property="article:modified_time"]', 'content', modifiedDate);
+    setMetaTag('meta[property="article:author"]', 'content', authorName);
+
+    setMetaTag('meta[name="twitter:card"]', 'content', 'summary_large_image');
+    setMetaTag('meta[name="twitter:title"]', 'content', activeTitle);
+    setMetaTag('meta[name="twitter:description"]', 'content', description);
+    setMetaTag('meta[name="twitter:image"]', 'content', imageUrl);
+
+    // JSON-LD Structured Data: BlogPosting & strictly real BreadcrumbList (Home -> Blog -> Article)
+    const jsonLdData = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "@id": `${canonicalUrl}#article`,
+          "isPartOf": {
+            "@type": "Blog",
+            "@id": `${CANONICAL_DOMAIN}/blog#blog`,
+            "name": "Rozfiber Finance Blog",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Rozfiber Finance",
+              "url": CANONICAL_DOMAIN,
+              "logo": {
+                "@type": "ImageObject",
+                "url": `${CANONICAL_DOMAIN}/daily-khata-pro-v4.png`
+              }
+            }
+          },
+          "headline": activeTitle,
+          "description": description,
+          "mainEntityOfPage": canonicalUrl,
+          "url": canonicalUrl,
+          "datePublished": publishedDate,
+          "dateModified": modifiedDate,
+          "image": imageUrl,
+          "author": {
+            "@type": "Person",
+            "name": authorName,
+            "jobTitle": authorRole,
+            "url": CANONICAL_DOMAIN
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Rozfiber Finance",
+            "url": CANONICAL_DOMAIN
+          },
+          "articleSection": "Finance"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": `${canonicalUrl}#breadcrumb`,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": `${CANONICAL_DOMAIN}/`
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Blog",
+              "item": `${CANONICAL_DOMAIN}/blog`
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": activeTitle,
+              "item": canonicalUrl
+            }
+          ]
+        }
+      ]
+    };
+
+    let scriptTag = document.getElementById('sanity-article-jsonld') as HTMLScriptElement | null;
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = 'sanity-article-jsonld';
+      scriptTag.type = 'application/ld+json';
+      document.head.appendChild(scriptTag);
+    }
+    scriptTag.textContent = JSON.stringify(jsonLdData);
+
+    return () => {
+      document.title = prevTitle;
+      if (canonicalLink && prevCanonical) {
+        canonicalLink.href = prevCanonical;
+      }
+      const tagToRemove = document.getElementById('sanity-article-jsonld');
+      if (tagToRemove) {
+        tagToRemove.remove();
+      }
+    };
+  }, [post, fallbackArticle, slugOrId]);
+
+  const toggleBookmark = () => {
+    try {
+      const stored = localStorage.getItem('khata_bookmarked_sanity');
+      let ids: string[] = stored ? JSON.parse(stored) : [];
+      if (ids.includes(slugOrId)) {
+        ids = ids.filter(i => i !== slugOrId);
+        setIsBookmarked(false);
+      } else {
+        ids.push(slugOrId);
+        setIsBookmarked(true);
+      }
+      localStorage.setItem('khata_bookmarked_sanity', JSON.stringify(ids));
+    } catch (e) {
+      console.error('Bookmark error:', e);
+    }
+  };
+
+  const handleShare = async () => {
+    const title = post?.title || fallbackArticle?.title || 'Daily Khata Pro Blog Post';
+    const text = post?.summary || fallbackArticle?.subtitle || title;
+    const url = window.location.href;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+        return;
+      } catch {
+        // Fallback to clipboard
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopyFeedback(isHindi ? 'लिंक कॉपी हो गया!' : 'Link copied to clipboard!');
+      setTimeout(() => setCopyFeedback(null), 2500);
+    } catch {
+      setCopyFeedback('URL: ' + url);
+      setTimeout(() => setCopyFeedback(null), 3000);
+    }
+  };
+
+  const handleToggleAudio = () => {
+    if (!('speechSynthesis' in window)) {
+      alert(isHindi ? 'आपका ब्राउज़र टेक्स्ट-टू-स्पीच का समर्थन नहीं करता।' : 'Text-to-speech is not supported on this browser.');
+      return;
+    }
+
+    if (isPlayingAudio) {
+      window.speechSynthesis.cancel();
+      setIsPlayingAudio(false);
+    } else {
+      const title = post?.title || fallbackArticle?.title || '';
+      const summary = post?.summary || fallbackArticle?.subtitle || '';
+      const bodyPreview = post?.bodyText || '';
+      const textToRead = `${title}. ${summary}. ${bodyPreview}`.slice(0, 1500);
+
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.rate = 0.95;
+      utterance.onend = () => setIsPlayingAudio(false);
+      utterance.onerror = () => setIsPlayingAudio(false);
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+      setIsPlayingAudio(true);
+    }
+  };
+
+  // PortableText components customized for high contrast & theme support
+  const portableTextComponents: PortableTextComponents = {
+    block: {
+      h1: ({ children }) => (
+        <h1 className="text-2xl sm:text-3xl font-black text-[var(--theme-text,#F8FAFC)] mt-8 mb-4 leading-tight">
+          {children}
+        </h1>
+      ),
+      h2: ({ children }) => (
+        <h2 className="text-xl sm:text-2xl font-bold text-[var(--theme-text,#F8FAFC)] mt-8 mb-4 border-l-3 border-[var(--theme-primary,#0284C7)] pl-3 leading-snug">
+          {children}
+        </h2>
+      ),
+      h3: ({ children }) => (
+        <h3 className="text-lg sm:text-xl font-bold text-[var(--theme-text,#F8FAFC)] mt-6 mb-3 leading-snug">
+          {children}
+        </h3>
+      ),
+      h4: ({ children }) => (
+        <h4 className="text-base sm:text-lg font-bold text-[var(--theme-text,#F8FAFC)] mt-5 mb-2">
+          {children}
+        </h4>
+      ),
+      normal: ({ children }) => (
+        <p className="text-[var(--theme-text-muted,#334155)] mb-4 leading-relaxed font-normal">
+          {children}
+        </p>
+      ),
+      blockquote: ({ children }) => (
+        <blockquote className="my-6 p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border-l-4 border-[var(--theme-primary,#0284C7)] text-[var(--theme-text,#F8FAFC)] italic">
+          {children}
+        </blockquote>
+      ),
+    },
+    list: {
+      bullet: ({ children }) => (
+        <ul className="list-disc pl-5 mb-5 space-y-1.5 text-[var(--theme-text-muted,#334155)]">
+          {children}
+        </ul>
+      ),
+      number: ({ children }) => (
+        <ol className="list-decimal pl-5 mb-5 space-y-1.5 text-[var(--theme-text-muted,#334155)]">
+          {children}
+        </ol>
+      ),
+    },
+    marks: {
+      strong: ({ children }) => (
+        <strong className="font-bold text-[var(--theme-text,#F8FAFC)]">
+          {children}
+        </strong>
+      ),
+      em: ({ children }) => <em className="italic">{children}</em>,
+      link: ({ value, children }) => (
+        <a
+          href={value?.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[var(--theme-primary,#0284C7)] underline hover:opacity-80 transition-opacity"
+        >
+          {children}
+        </a>
+      ),
+    },
+    types: {
+      image: ({ value }) => {
+        if (!value?.asset) return null;
+        return (
+          <figure className="my-6 rounded-2xl overflow-hidden border border-[var(--theme-border,#213E61)]">
+            <img
+              src={urlFor(value).width(1200).url()}
+              alt={value.alt || 'Article illustration'}
+              className="w-full h-auto object-cover max-h-[500px]"
+              loading="lazy"
+            />
+            {value.caption && (
+              <figcaption className="p-2.5 text-xs text-center text-[var(--theme-text-dim,#64748B)] bg-[var(--theme-surface,#0E1A29)]">
+                {value.caption}
+              </figcaption>
+            )}
+          </figure>
+        );
+      },
+    },
+  };
+
+  const fontSizeClass =
+    fontSize === 'sm'
+      ? 'text-sm'
+      : fontSize === 'lg'
+      ? 'text-lg sm:text-xl'
+      : 'text-base sm:text-lg';
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex items-center justify-center p-6">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-[var(--theme-primary,#0284C7)] border-t-transparent animate-spin" />
+          <span className="text-sm font-mono text-[var(--theme-text-dim,#94A3B8)]">
+            {isHindi ? 'लेख लोड हो रहा है...' : 'Loading article...'}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!post && !fallbackArticle) {
+    return (
+      <div className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex flex-col items-center justify-center p-6 text-center">
+        <div className="p-4 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] max-w-md space-y-4">
+          <Info className="w-10 h-10 text-amber-400 mx-auto" />
+          <h2 className="text-xl font-bold text-[var(--theme-text,#F8FAFC)]">
+            {isHindi ? 'लेख नहीं मिला' : 'Article Not Found'}
+          </h2>
+          <p className="text-xs text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
+            {isHindi
+              ? 'यह लेख अभी उपलब्ध नहीं है या यूआरएल सही नहीं है।'
+              : 'The requested article could not be found or has not yet been published.'}
+          </p>
+          <button
+            type="button"
+            onClick={onBack}
+            className="w-full py-2.5 rounded-xl bg-[var(--theme-primary,#0284C7)] text-white font-bold text-xs hover:opacity-90 transition-all cursor-pointer"
+          >
+            {isHindi ? 'ब्लॉग सूची पर वापस जाएं' : 'Return to Blog List'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Active article data
+  const title = post?.title || fallbackArticle?.title || '';
+  const summary = post?.summary || (isHindi ? fallbackArticle?.hindiSubtitle : fallbackArticle?.subtitle) || '';
+  const category = post?.category || fallbackArticle?.categoryLabel?.en || 'Finance';
+  const readTime = post?.readTime || fallbackArticle?.readTime || '5 min read';
+  const authorName = post?.authorName || fallbackArticle?.author?.name || 'MD Zafeer Hasan (YAZDAAN)';
+  const authorRole = post?.authorRole || fallbackArticle?.author?.role || 'Author & Independent Researcher';
+  const publishedDate = post?.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+    : fallbackArticle?.publishedAt || '14 September 2026';
+  const updatedDate = post?.updatedAt
+    ? new Date(post.updatedAt).toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+    : null;
+
+  return (
+    <div className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex flex-col transition-colors duration-200">
+      {/* 1. Sticky Navigation Top Bar */}
+      <header className="sticky top-0 z-30 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-md px-4 py-3">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
+          {/* Back to Blog */}
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-primary,#0284C7)] transition-colors cursor-pointer py-1 px-2 -ml-2 rounded-lg hover:bg-[var(--theme-card-hover,#1C2B3E)]"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>{isHindi ? 'ब्लॉग पर वापस' : 'Back to Blog'}</span>
+          </button>
+
+          {/* Action Bar Controls */}
+          <div className="flex items-center gap-2">
+            {/* Audio Summary Toggle */}
+            <button
+              type="button"
+              onClick={handleToggleAudio}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                isPlayingAudio
+                  ? 'bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse'
+                  : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+              }`}
+              title={isPlayingAudio ? 'Stop Audio' : 'Listen to Audio Summary'}
+            >
+              {isPlayingAudio ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+              <span className="hidden sm:inline">
+                {isPlayingAudio ? (isHindi ? 'रोकें' : 'Stop') : (isHindi ? 'सुनें' : 'Listen')}
+              </span>
+            </button>
+
+            {/* Font Size Adjuster */}
+            <div className="hidden sm:flex items-center rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] p-0.5 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => setFontSize('sm')}
+                className={`px-2 py-0.5 rounded ${
+                  fontSize === 'sm'
+                    ? 'bg-[var(--theme-primary,#0284C7)] text-white'
+                    : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                }`}
+                title="Small text"
+              >
+                A-
+              </button>
+              <button
+                type="button"
+                onClick={() => setFontSize('base')}
+                className={`px-2 py-0.5 rounded ${
+                  fontSize === 'base'
+                    ? 'bg-[var(--theme-primary,#0284C7)] text-white'
+                    : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                }`}
+                title="Default text"
+              >
+                A
+              </button>
+              <button
+                type="button"
+                onClick={() => setFontSize('lg')}
+                className={`px-2 py-0.5 rounded ${
+                  fontSize === 'lg'
+                    ? 'bg-[var(--theme-primary,#0284C7)] text-white'
+                    : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                }`}
+                title="Large text"
+              >
+                A+
+              </button>
+            </div>
+
+            {/* Bookmark Toggle */}
+            <button
+              type="button"
+              onClick={toggleBookmark}
+              className="p-2 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-primary,#0284C7)] transition-colors cursor-pointer"
+              title={isBookmarked ? 'Bookmarked' : 'Save bookmark'}
+            >
+              {isBookmarked ? (
+                <BookmarkCheck className="w-4 h-4 text-[var(--theme-primary,#0284C7)]" />
+              ) : (
+                <Bookmark className="w-4 h-4" />
+              )}
+            </button>
+
+            {/* Share Button */}
+            <button
+              type="button"
+              onClick={handleShare}
+              className="p-2 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-primary,#0284C7)] transition-colors cursor-pointer"
+              title="Share article"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Copy Feedback Alert */}
+      {copyFeedback && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-lg flex items-center gap-2">
+          <Check className="w-4 h-4" />
+          <span>{copyFeedback}</span>
+        </div>
+      )}
+
+      {/* 2. Main Article Content Container */}
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-12 space-y-8">
+        {/* Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[var(--theme-text-dim,#94A3B8)]">
+          <button
+            type="button"
+            onClick={() => onNavigateTab?.('home')}
+            className="hover:text-[var(--theme-primary,#0284C7)] transition-colors"
+          >
+            Home
+          </button>
+          <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60" />
+          <button
+            type="button"
+            onClick={onBack}
+            className="hover:text-[var(--theme-primary,#0284C7)] transition-colors"
+          >
+            Blog
+          </button>
+          <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60" />
+          <span className="text-[var(--theme-primary,#0284C7)] font-medium">Finance</span>
+        </nav>
+
+        {/* Article Meta Header */}
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-mono font-bold uppercase px-2.5 py-0.5 rounded-full bg-[var(--theme-primary,#0284C7)]/15 text-[var(--theme-primary,#0284C7)] border border-[var(--theme-primary,#0284C7)]/30">
+              {category}
+            </span>
+            {post?.articleType && (
+              <span className="text-xs font-mono font-medium px-2 py-0.5 rounded bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] border border-[var(--theme-border,#213E61)]">
+                {post.articleType}
+              </span>
+            )}
+            <span className="text-xs text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1 font-mono">
+              <Clock className="w-3.5 h-3.5" />
+              {readTime}
+            </span>
+          </div>
+
+          {/* Article Main Title */}
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[var(--theme-text,#F8FAFC)] leading-tight tracking-tight">
+            {title}
+          </h1>
+
+          {/* Short Excerpt / Subtitle */}
+          {summary && (
+            <p className="text-base sm:text-xl text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed font-normal">
+              {summary}
+            </p>
+          )}
+
+          {/* Author Byline & Publication Dates */}
+          <div className="pt-4 border-t border-[var(--theme-border,#213E61)] flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-sm font-bold text-white shadow-sm shrink-0">
+                {authorName.slice(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <div className="text-sm font-bold text-[var(--theme-text,#F8FAFC)]">
+                  By {authorName}
+                </div>
+                <div className="text-xs text-[var(--theme-text-dim,#94A3B8)]">
+                  {authorRole} • Rozfiber Finance
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs text-[var(--theme-text-dim,#94A3B8)] font-mono">
+              <div className="flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Published: {publishedDate}</span>
+              </div>
+              {updatedDate && (
+                <span className="text-[var(--theme-primary,#0284C7)] font-medium">
+                  • Updated: {updatedDate}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Featured Image (if available) */}
+        {post?.mainImage && (
+          <div className="rounded-3xl overflow-hidden border border-[var(--theme-border,#213E61)] shadow-md">
+            <img
+              src={urlFor(post.mainImage).width(1200).url()}
+              alt={post.title}
+              className="w-full h-auto object-cover max-h-[500px]"
+            />
+          </div>
+        )}
+
+        {/* Topics Chips */}
+        {post?.topics && post.topics.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-1">
+            {post.topics.map((t, idx) => (
+              <span
+                key={idx}
+                className="text-xs px-2.5 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)]"
+              >
+                #{t}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Article Body */}
+        <article className={`space-y-6 ${fontSizeClass}`}>
+          {post?.body && post.body.length > 0 ? (
+            <div className="portable-text-wrapper space-y-4">
+              <PortableText value={post.body} components={portableTextComponents} />
+            </div>
+          ) : fallbackArticle?.contentSections ? (
+            <div className="space-y-6">
+              {fallbackArticle.contentSections.map((sec, sIdx) => (
+                <div key={sIdx} className="space-y-3">
+                  <h3 className="text-xl sm:text-2xl font-bold text-[var(--theme-text,#F8FAFC)] border-l-3 border-[var(--theme-primary,#0284C7)] pl-3">
+                    {isHindi ? sec.hindiHeading : sec.heading}
+                  </h3>
+                  <div className="space-y-3 text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
+                    {sec.paragraphs.map((p, pIdx) => (
+                      <p key={pIdx}>{isHindi ? p.hi : p.en}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
+              {post?.bodyText || summary}
+            </p>
+          )}
+        </article>
+
+        {/* Sources & References Section */}
+        {post?.sources && post.sources.length > 0 && (
+          <section className="mt-12 p-6 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-3">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-[var(--theme-primary,#0284C7)]" />
+              <span>{isHindi ? 'स्रोत व संदर्भ' : 'Sources & References'}</span>
+            </h4>
+            <ul className="space-y-2 text-xs">
+              {post.sources.map((s, idx) => (
+                <li key={idx} className="flex items-start gap-2 text-[var(--theme-text-muted,#CBD5E1)]">
+                  <span className="font-mono text-[var(--theme-text-dim,#94A3B8)]">•</span>
+                  <div>
+                    {s.url ? (
+                      <a
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[var(--theme-primary,#0284C7)] underline hover:opacity-80 inline-flex items-center gap-1"
+                      >
+                        <span>{s.title}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    ) : (
+                      <span className="font-medium text-[var(--theme-text,#F8FAFC)]">{s.title}</span>
+                    )}
+                    {s.notes && (
+                      <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] mt-0.5">{s.notes}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* Financial & Editorial Disclaimer */}
+        <section className="mt-8 p-5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text-dim,#94A3B8)] leading-relaxed space-y-2">
+          <div className="flex items-center gap-2 font-bold text-[var(--theme-text,#F8FAFC)] text-xs">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>{isHindi ? 'संपादकीय व वित्तीय प्रकटीकरण' : 'Editorial & Finance Disclosure'}</span>
+          </div>
+          <p>
+            {post?.disclaimer ||
+              (isHindi
+                ? 'यह लेख केवल वित्तीय शिक्षा, अनुसंधान और जागरूकता के उद्देश्य से प्रकाशित किया गया है। यह किसी भी प्रकार की वित्तीय, कर या कानूनी सलाह नहीं है। कोई भी वित्तीय निर्णय लेने से पहले अधिकृत पेशेवर से परामर्श लें।'
+                : 'This article is published for educational, research, and general financial awareness purposes only. It does not constitute certified financial, investment, or legal advisory. Always conduct independent due diligence before making financial commitments.')}
+          </p>
+        </section>
+
+        {/* Bottom Navigation & Share Bar */}
+        <div className="pt-8 border-t border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={onBack}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#1C2B3E)] text-[var(--theme-text,#F8FAFC)] text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>{isHindi ? 'सभी ब्लॉग लेख देखें' : 'View All Blog Articles'}</span>
+          </button>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[var(--theme-primary,#0284C7)] text-white text-xs font-bold hover:opacity-90 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>{isHindi ? 'लेख साझा करें' : 'Share Article'}</span>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
