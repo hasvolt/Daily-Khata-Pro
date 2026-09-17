@@ -66,7 +66,7 @@
       "screenshots": [
         {
           "src": "/screenshots/screenshot-mobile.png",
-          "sizes": "720x1280",
+          "sizes": "864x1536",
           "label": "Daily Balance Widget Preview"
         }
       ]
