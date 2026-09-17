@@ -447,12 +447,12 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Card 1: To Receive (Money Lent) */}
         <div className="bg-gradient-to-br from-emerald-500/10 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-emerald-500/30 rounded-2xl p-4 shadow-sm relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-              <ArrowUpRight className="w-4 h-4" />
-              <span>{_language === 'hi' ? 'उधार दिया (Lent)' : 'Money Lent (Receivable)'}</span>
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+            <span className="min-w-0 text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-start gap-1.5 leading-tight">
+              <ArrowUpRight className="w-4 h-4 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">{_language === 'hi' ? 'उधार दिया (Lent)' : 'Money Lent (Receivable)'}</span>
             </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
+            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
               {stats.activeLentCount} active
             </span>
           </div>
@@ -468,12 +468,12 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
 
         {/* Card 2: To Pay (Money Borrowed) */}
         <div className="bg-gradient-to-br from-rose-500/10 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-rose-500/30 rounded-2xl p-4 shadow-sm relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
-              <ArrowDownLeft className="w-4 h-4" />
-              <span>{_language === 'hi' ? 'उधार लिया (Borrowed)' : 'Money Borrowed (Payable)'}</span>
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+            <span className="min-w-0 text-xs font-bold text-rose-400 uppercase tracking-wider flex items-start gap-1.5 leading-tight">
+              <ArrowDownLeft className="w-4 h-4 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">{_language === 'hi' ? 'उधार लिया (Borrowed)' : 'Money Borrowed (Payable)'}</span>
             </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono">
+            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono">
               {stats.activeBorrowedCount} active
             </span>
           </div>
@@ -489,12 +489,12 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
 
         {/* Card 3: Bank Loan & Monthly EMI */}
         <div className="bg-gradient-to-br from-sky-500/10 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-sky-500/30 rounded-2xl p-4 shadow-sm relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Landmark className="w-4 h-4" />
-              <span>Bank Loans & EMIs</span>
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+            <span className="min-w-0 text-xs font-bold text-sky-400 uppercase tracking-wider flex items-start gap-1.5 leading-tight">
+              <Landmark className="w-4 h-4 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">Bank Loans & EMIs</span>
             </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">
+            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">
               {stats.activeLoanCount} active
             </span>
           </div>
@@ -502,21 +502,21 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             <span className="text-lg sm:text-2xl font-black font-mono text-[var(--theme-text,#F8FAFC)] block tracking-tight">
               {formatCurrency(stats.totalLoanPrincipal, privacyMask)}
             </span>
-            <div className="flex items-center justify-between text-[11px] text-sky-300/90 font-medium mt-0.5">
+            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 text-[11px] text-sky-300/90 font-medium mt-0.5">
               <span>Commitment:</span>
-              <span className="font-mono font-bold">{formatCurrency(stats.monthlyEmiTotal, privacyMask)}/mo</span>
+              <span className="font-mono font-bold break-all">{formatCurrency(stats.monthlyEmiTotal, privacyMask)}/mo</span>
             </div>
           </div>
         </div>
 
         {/* Card 4: Net Position */}
         <div className={`bg-gradient-to-br ${stats.netPosition >= 0 ? 'from-emerald-500/10' : 'from-amber-500/10'} via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border ${stats.netPosition >= 0 ? 'border-emerald-500/30' : 'border-amber-500/30'} rounded-2xl p-4 shadow-sm relative overflow-hidden`}>
-          <div className="flex items-center justify-between">
-            <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${stats.netPosition >= 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
-              <Wallet className="w-4 h-4" />
-              <span>Net Debt Standing</span>
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+            <span className={`min-w-0 text-xs font-bold uppercase tracking-wider flex items-start gap-1.5 leading-tight ${stats.netPosition >= 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
+              <Wallet className="w-4 h-4 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">Net Debt Standing</span>
             </span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${stats.netPosition >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
+            <span className={`shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded font-bold ${stats.netPosition >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
               {stats.netPosition >= 0 ? 'Net Creditor' : 'Net Debtor'}
             </span>
           </div>
