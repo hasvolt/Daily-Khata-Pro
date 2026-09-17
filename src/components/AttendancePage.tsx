@@ -576,8 +576,8 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     <div className="w-full max-w-6xl mx-auto px-3 sm:px-6 py-5 sm:py-7 space-y-5 animate-in fade-in duration-200">
       
       {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-xl">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3.5 sm:p-5 shadow-xl">
+        <div className="flex items-start gap-2.5 sm:items-center sm:gap-3 min-w-0">
           <button
             type="button"
             onClick={onBack}
@@ -587,8 +587,8 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-[18px] sm:text-[22px] font-extrabold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
-              <CalendarCheck className="w-6 h-6 text-[var(--theme-primary,#38BDF8)]" />
+            <h1 className="text-[18px] sm:text-[22px] font-extrabold text-[var(--theme-text,#F8FAFC)] flex items-start gap-2 leading-tight">
+              <CalendarCheck className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--theme-primary,#38BDF8)] shrink-0 mt-0.5" />
               <span>{isHindi ? 'दैनिक उपस्थिति एवं कार्य रजिस्टर' : 'Attendance & Work Tracker'}</span>
             </h1>
             <p className="text-[12px] sm:text-[13px] text-[var(--theme-text-muted,#94A3B8)]">
@@ -599,12 +599,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex w-full sm:w-auto items-stretch sm:items-center gap-2 flex-wrap">
           {/* Quick Bulk Settlement Button */}
           <button
             type="button"
             onClick={() => handleOpenBulkSettlement('all')}
-            className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[12px] sm:text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 transition-all"
+            className="flex-1 sm:flex-none justify-center px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[12px] sm:text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 transition-all"
             title="Settle Lump-sum / Pending Dues in One Click"
           >
             <Coins className="w-4 h-4" />
@@ -624,7 +624,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           <button
             type="button"
             onClick={() => handleOpenNewModal()}
-            className="px-3.5 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] sm:text-[13px] flex items-center gap-1.5 cursor-pointer hover:opacity-95 shadow-md active:scale-95"
+            className="flex-1 sm:flex-none justify-center px-3 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] sm:text-[13px] flex items-center gap-1.5 cursor-pointer hover:opacity-95 shadow-md active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>{isHindi ? 'नया रिकॉर्ड' : 'Log Attendance'}</span>
@@ -633,14 +633,14 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
       </div>
 
       {/* Main Navigation Tabs: Register | Employer Accounts | Analytics */}
-      <div className="flex items-center gap-2 p-1.5 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl">
+      <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl min-w-0">
         <button
           type="button"
           onClick={() => {
             setActiveTab('register');
             triggerHapticSound('click');
           }}
-          className={`flex-1 py-2.5 px-3 rounded-xl text-[12.5px] sm:text-[13px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
+          className={`min-w-0 py-2.5 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
             activeTab === 'register'
               ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 shadow-md font-extrabold'
               : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-surface,#0E1A29)]'
@@ -656,7 +656,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             setActiveTab('employers');
             triggerHapticSound('click');
           }}
-          className={`flex-1 py-2.5 px-3 rounded-xl text-[12.5px] sm:text-[13px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
+          className={`min-w-0 py-2.5 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
             activeTab === 'employers'
               ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 shadow-md font-extrabold'
               : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-surface,#0E1A29)]'
@@ -677,7 +677,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             setActiveTab('summary');
             triggerHapticSound('click');
           }}
-          className={`flex-1 py-2.5 px-3 rounded-xl text-[12.5px] sm:text-[13px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
+          className={`min-w-0 py-2.5 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
             activeTab === 'summary'
               ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 shadow-md font-extrabold'
               : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-surface,#0E1A29)]'
@@ -694,13 +694,13 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           
           {/* Quick Mark Today Banner */}
           <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3">
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
                 <span className="text-[13.5px] font-bold text-[var(--theme-text,#F8FAFC)]">
                   {isHindi ? 'आज की उपस्थिति दर्ज करें (Today):' : "Today's Attendance Status:"}
                 </span>
-                <span className="text-[12px] font-mono text-[var(--theme-primary,#38BDF8)] font-bold">
+                <span className="shrink-0 whitespace-nowrap text-[12px] font-mono text-[var(--theme-primary,#38BDF8)] font-bold">
                   {todayStr}
                 </span>
               </div>
@@ -724,60 +724,60 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
               <button
                 type="button"
                 onClick={() => handleQuickMarkToday('present')}
-                className={`py-2.5 px-3 rounded-xl border text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 ${
+                className={`min-w-0 py-2.5 px-2 sm:px-3 rounded-xl border text-[12px] sm:text-[12.5px] font-bold flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer transition-all active:scale-95 ${
                   todayLog?.status === 'present'
                     ? 'bg-[#10B981] text-[#04140D] border-[#10B981] shadow-md'
                     : 'bg-[#10B981]/10 text-[#10B981] border-[#10B981]/30 hover:bg-[#10B981]/20'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span>{isHindi ? 'उपस्थित (Full Day)' : 'Present (Full Day)'}</span>
+                <span className="min-w-0 text-center leading-tight">{isHindi ? 'उपस्थित (Full Day)' : 'Present (Full Day)'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickMarkToday('half_day')}
-                className={`py-2.5 px-3 rounded-xl border text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 ${
+                className={`min-w-0 py-2.5 px-2 sm:px-3 rounded-xl border text-[12px] sm:text-[12.5px] font-bold flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer transition-all active:scale-95 ${
                   todayLog?.status === 'half_day'
                     ? 'bg-[#F59E0B] text-[#070E18] border-[#F59E0B] shadow-md'
                     : 'bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/30 hover:bg-[#F59E0B]/20'
                 }`}
               >
                 <Clock3 className="w-4 h-4 shrink-0" />
-                <span>{isHindi ? 'हाफ डे (Half Day)' : 'Half Day'}</span>
+                <span className="min-w-0 text-center leading-tight">{isHindi ? 'हाफ डे (Half Day)' : 'Half Day'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickMarkToday('overtime')}
-                className={`py-2.5 px-3 rounded-xl border text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 ${
+                className={`min-w-0 py-2.5 px-2 sm:px-3 rounded-xl border text-[12px] sm:text-[12.5px] font-bold flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer transition-all active:scale-95 ${
                   todayLog?.status === 'overtime'
                     ? 'bg-[#A855F7] text-white border-[#A855F7] shadow-md'
                     : 'bg-[#A855F7]/10 text-[#A855F7] border-[#A855F7]/30 hover:bg-[#A855F7]/20'
                 }`}
               >
                 <Sparkles className="w-4 h-4 shrink-0" />
-                <span>{isHindi ? 'ओवरटाइम (OT)' : 'Overtime'}</span>
+                <span className="min-w-0 text-center leading-tight">{isHindi ? 'ओवरटाइम (OT)' : 'Overtime'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickMarkToday('absent')}
-                className={`py-2.5 px-3 rounded-xl border text-[12.5px] font-bold flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 ${
+                className={`min-w-0 py-2.5 px-2 sm:px-3 rounded-xl border text-[12px] sm:text-[12.5px] font-bold flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer transition-all active:scale-95 ${
                   todayLog?.status === 'absent'
                     ? 'bg-[#EF4444] text-white border-[#EF4444] shadow-md'
                     : 'bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/30 hover:bg-[#EF4444]/20'
                 }`}
               >
                 <XCircle className="w-4 h-4 shrink-0" />
-                <span>{isHindi ? 'अनुपस्थित (Absent)' : 'Absent / Off'}</span>
+                <span className="min-w-0 text-center leading-tight">{isHindi ? 'अनुपस्थित (Absent)' : 'Absent / Off'}</span>
               </button>
             </div>
           </div>
 
           {/* Month Navigator & KPI Cards */}
           <div className="space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3 sm:p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-3 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3 sm:p-4">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -787,7 +787,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <div className="text-[15px] sm:text-[17px] font-bold text-[var(--theme-text,#F8FAFC)] px-2">
+                <div className="min-w-0 text-[14px] sm:text-[17px] font-bold text-[var(--theme-text,#F8FAFC)] px-1 sm:px-2 text-center truncate">
                   {formatMonthTitle(selectedMonth)}
                 </div>
                 <button
@@ -879,7 +879,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-3 sm:p-4">
             
             {/* Search */}
-            <div className="relative flex-1 min-w-[180px] max-w-xs">
+            <div className="relative w-full sm:flex-1 min-w-0 sm:min-w-[180px] max-w-none sm:max-w-xs">
               <Search className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
@@ -891,7 +891,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             </div>
 
             {/* Filter Dropdowns */}
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
               
               {/* Category Filter */}
               <select
@@ -1019,7 +1019,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                       </div>
 
                       {/* Timings and Employer Details */}
-                      <div className="flex items-center gap-3 text-[12px] text-[var(--theme-text-muted,#94A3B8)] flex-wrap">
+                      <div className="flex items-center gap-3 text-[12px] text-[var(--theme-text-muted,#94A3B8)] flex-wrap min-w-0">
                         {log.startTime && log.endTime ? (
                           <div className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
@@ -1030,13 +1030,13 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                         {log.employerName ? (
                           <div className="flex items-center gap-1 text-[var(--theme-text,#F8FAFC)] font-semibold">
                             <Building className="w-3.5 h-3.5 text-[#F59E0B]" />
-                            <span>{log.employerName}</span>
+                            <span className="min-w-0 break-words">{log.employerName}</span>
                           </div>
                         ) : null}
                       </div>
 
                       {log.jobDescription || log.notes ? (
-                        <div className="text-[11.5px] text-[var(--theme-text-muted,#94A3B8)] bg-[var(--theme-surface,#0E1A29)]/60 px-3 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)]/40 max-w-xl">
+                        <div className="text-[11.5px] text-[var(--theme-text-muted,#94A3B8)] bg-[var(--theme-surface,#0E1A29)]/60 px-3 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)]/40 max-w-xl break-words overflow-hidden">
                           {log.jobDescription || log.notes}
                         </div>
                       ) : null}
@@ -1417,18 +1417,18 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
               </div>
 
               {/* Modal Footer */}
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[var(--theme-border,#213E61)]">
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-3 border-t border-[var(--theme-border,#213E61)]">
                 <button
                   type="button"
                   onClick={() => setIsLogModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-white border border-[var(--theme-border,#213E61)] text-[12.5px] font-bold cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-white border border-[var(--theme-border,#213E61)] text-[12.5px] font-bold cursor-pointer"
                 >
                   {isHindi ? 'रद्द करें' : 'Cancel'}
                 </button>
 
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[13px] flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95"
+                  className="w-full sm:w-auto justify-center px-5 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[13px] flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95"
                 >
                   <Check className="w-4 h-4" />
                   <span>{editingLog ? (isHindi ? 'अपडेट करें' : 'Save Changes') : (isHindi ? 'रिकॉर्ड सहेजें' : 'Save Record')}</span>
