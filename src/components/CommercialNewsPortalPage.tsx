@@ -302,7 +302,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -488,7 +488,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 border ${
                   isSelected
                     ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 border-[var(--theme-primary,#38BDF8)] shadow-sm'
-                    : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] border-[var(--theme-border,#213E61)] hover:text-white hover:border-[var(--theme-primary,#38BDF8)]/40'
+                    : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] border-[var(--theme-border,#213E61)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/40'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -505,7 +505,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
         {activeCategory === 'all' && !searchQuery.trim() && featuredArticle && (
           <article
             onClick={() => setSelectedArticle(featuredArticle)}
-            className="group relative rounded-3xl overflow-hidden border border-[var(--theme-border,#213E61)] bg-gradient-to-br from-slate-900 via-[#0a1626] to-[#040911] cursor-pointer hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all shadow-xl"
+            className="group relative rounded-3xl overflow-hidden border border-[var(--theme-border,#213E61)] bg-gradient-to-br from-[var(--theme-card,#132438)] via-[var(--theme-surface,#0E1A29)] to-[var(--theme-bg,#070E18)] cursor-pointer hover:border-[var(--theme-primary,#38BDF8)]/60 transition-all shadow-xl"
           >
             <div className="p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row gap-8 lg:items-center justify-between relative z-10">
               <div className="space-y-4 max-w-3xl">
@@ -526,11 +526,11 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                   </span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--theme-text,#F8FAFC)] leading-tight group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
                   {isHindi ? featuredArticle.hindiTitle : featuredArticle.title}
                 </h2>
 
-                <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+                <p className="text-sm sm:text-base text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
                   {isHindi ? featuredArticle.hindiSubtitle : featuredArticle.subtitle}
                 </p>
 
@@ -540,12 +540,12 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     {featuredArticle.keyStats.map((stat, idx) => (
                       <div
                         key={idx}
-                        className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800"
+                        className="p-2.5 rounded-xl bg-[var(--theme-bg,#070E18)]/60 border border-[var(--theme-border,#213E61)]"
                       >
                         <div className="text-base sm:text-lg font-mono font-black text-[var(--theme-primary,#38BDF8)]">
                           {stat.value}
                         </div>
-                        <div className="text-[10.5px] text-slate-400 truncate">
+                        <div className="text-[10.5px] text-[var(--theme-text-muted,#CBD5E1)] truncate">
                           {isHindi ? stat.hindiLabel : stat.label}
                         </div>
                         {stat.change && (
@@ -559,16 +559,16 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                 )}
 
                 {/* Author Credentials */}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                <div className="flex items-center justify-between pt-2 border-t border-[var(--theme-border,#213E61)]">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-md">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-xs font-bold text-[var(--theme-text,#F8FAFC)] shadow-md">
                       {featuredArticle.author.avatarInitials}
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-white">
+                      <div className="text-xs font-bold text-[var(--theme-text,#F8FAFC)]">
                         {featuredArticle.author.name}
                       </div>
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-[var(--theme-text-muted,#CBD5E1)]">
                         {featuredArticle.author.role} • {featuredArticle.author.organization}
                       </div>
                     </div>
@@ -578,7 +578,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     <button
                       type="button"
                       onClick={e => toggleBookmark(featuredArticle.id, e)}
-                      className="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                      className="p-2 rounded-xl bg-[var(--theme-card,#132438)]/60 hover:bg-[var(--theme-card-hover,#1A3048)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors"
                       title={isHindi ? 'सहेजें' : 'Bookmark'}
                     >
                       {bookmarkedIds.includes(featuredArticle.id) ? (
@@ -596,12 +596,12 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
               </div>
 
               {/* Decorative Side Highlights */}
-              <div className="hidden lg:flex flex-col justify-between w-72 shrink-0 p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4">
+              <div className="hidden lg:flex flex-col justify-between w-72 shrink-0 p-5 rounded-2xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)] space-y-4">
                 <div className="space-y-2">
                   <span className="text-[10.5px] font-mono uppercase font-bold text-amber-400 tracking-wider">
                     {isHindi ? 'मुख्य कार्यकारी निष्कर्ष' : 'EXECUTIVE SUMMARY'}
                   </span>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul className="space-y-2 text-xs text-[var(--theme-text-dim,#94A3B8)]">
                     {featuredArticle.keyTakeaways.slice(0, 2).map((takeaway, i) => (
                       <li key={i} className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
@@ -612,7 +612,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     ))}
                   </ul>
                 </div>
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                <div className="pt-3 border-t border-[var(--theme-border,#213E61)] flex items-center justify-between text-[11px] text-[var(--theme-text-muted,#CBD5E1)] font-mono">
                   <span>{isHindi ? 'मार्केट प्रभाव:' : 'Market Impact:'}</span>
                   <span className="font-bold text-emerald-400">
                     {featuredArticle.marketImpact.status}
@@ -816,7 +816,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
       {/* 6. Full Article Reader Modal (Institutional Reading Experience) */}
       <AnimatePresence>
         {selectedArticle && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[var(--theme-bg,#070E18)]/80 backdrop-blur-md overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -842,7 +842,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
                       isPlayingAudio
                         ? 'bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse'
-                        : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                        : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                     }`}
                     title={
                       isPlayingAudio
@@ -880,7 +880,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                         className={`px-2 py-0.5 rounded ${
                           fontSizeLevel === lvl
                             ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 font-bold'
-                            : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                            : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                         }`}
                       >
                         {lvl === 'sm' ? 'A-' : lvl === 'base' ? 'A' : 'A+'}
@@ -892,7 +892,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                   <button
                     type="button"
                     onClick={() => toggleBookmark(selectedArticle.id)}
-                    className="p-1.5 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer"
                     title={isHindi ? 'सहेजें' : 'Bookmark'}
                   >
                     {bookmarkedIds.includes(selectedArticle.id) ? (
@@ -906,7 +906,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                   <button
                     type="button"
                     onClick={() => handleShare(selectedArticle)}
-                    className="p-1.5 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer"
                     title={isHindi ? 'लिंक साझा करें' : 'Share Article'}
                   >
                     <Share2 className="w-4 h-4" />
@@ -916,7 +916,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                   <button
                     type="button"
                     onClick={handleCloseArticle}
-                    className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-slate-800 text-[var(--theme-text-dim,#94A3B8)] hover:text-white transition-colors cursor-pointer ml-1"
+                    className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer ml-1"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -945,24 +945,24 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     </span>
                   </div>
 
-                  <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight">
+                  <h1 className="text-2xl sm:text-3xl font-black text-[var(--theme-text,#F8FAFC)] leading-tight">
                     {isHindi ? selectedArticle.hindiTitle : selectedArticle.title}
                   </h1>
 
-                  <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-serif">
+                  <p className="text-sm sm:text-base text-[var(--theme-text-dim,#94A3B8)] leading-relaxed font-serif">
                     {isHindi ? selectedArticle.hindiSubtitle : selectedArticle.subtitle}
                   </p>
 
                   {/* Author Byline Card */}
                   <div className="flex items-center gap-3 pt-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-sm font-bold text-[var(--theme-text,#F8FAFC)] shadow-md">
                       {selectedArticle.author.avatarInitials}
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-white">
+                      <div className="text-xs font-bold text-[var(--theme-text,#F8FAFC)]">
                         {selectedArticle.author.name}
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-[var(--theme-text-muted,#CBD5E1)]">
                         {selectedArticle.author.role} • {selectedArticle.author.organization}
                       </div>
                     </div>
@@ -976,7 +976,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                   </span>
                   <ul className="space-y-2">
                     {selectedArticle.keyTakeaways.map((takeaway, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-200 leading-relaxed">
+                      <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
                         <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                         <span>{isHindi ? takeaway.hi : takeaway.en}</span>
                       </li>
@@ -995,7 +995,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                         <div className="text-lg font-mono font-black text-[var(--theme-primary,#38BDF8)]">
                           {stat.value}
                         </div>
-                        <div className="text-[11px] text-slate-400 truncate">
+                        <div className="text-[11px] text-[var(--theme-text-muted,#CBD5E1)] truncate">
                           {isHindi ? stat.hindiLabel : stat.label}
                         </div>
                         {stat.change && (
@@ -1010,7 +1010,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
 
                 {/* Content Sections */}
                 <div
-                  className={`space-y-6 text-slate-200 leading-relaxed ${
+                  className={`space-y-6 text-[var(--theme-text-dim,#94A3B8)] leading-relaxed ${
                     fontSizeLevel === 'sm'
                       ? 'text-xs'
                       : fontSizeLevel === 'lg'
@@ -1020,7 +1020,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                 >
                   {selectedArticle.contentSections.map((section, idx) => (
                     <div key={idx} className="space-y-3">
-                      <h3 className="text-lg sm:text-xl font-bold text-white border-l-3 border-[var(--theme-primary,#38BDF8)] pl-3">
+                      <h3 className="text-lg sm:text-xl font-bold text-[var(--theme-text,#F8FAFC)] border-l-3 border-[var(--theme-primary,#38BDF8)] pl-3">
                         {isHindi ? section.hindiHeading : section.heading}
                       </h3>
 
@@ -1032,14 +1032,14 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
 
                       {/* Pull Quote */}
                       {section.quote && (
-                        <div className="p-4 rounded-xl bg-slate-900/80 border-l-4 border-amber-400 my-4 space-y-2">
+                        <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 border-l-4 border-amber-400 my-4 space-y-2">
                           <Quote className="w-5 h-5 text-amber-400/60" />
-                          <p className="italic text-slate-200 font-serif text-sm sm:text-base">
+                          <p className="italic text-[var(--theme-text-dim,#94A3B8)] font-serif text-sm sm:text-base">
                             "{isHindi ? section.quote.hindiText : section.quote.text}"
                           </p>
                           <div className="text-xs font-bold text-amber-400">
                             — {section.quote.speaker},{' '}
-                            <span className="text-slate-400 font-normal">
+                            <span className="text-[var(--theme-text-muted,#CBD5E1)] font-normal">
                               {section.quote.speakerRole}
                             </span>
                           </div>
@@ -1050,9 +1050,9 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                 </div>
 
                 {/* Tags & Regulatory Disclaimer */}
-                <div className="pt-6 border-t border-[var(--theme-border,#213E61)] space-y-4 text-xs text-slate-400">
+                <div className="pt-6 border-t border-[var(--theme-border,#213E61)] space-y-4 text-xs text-[var(--theme-text-muted,#CBD5E1)]">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-bold text-slate-300 mr-1">
+                    <span className="font-bold text-[var(--theme-text-dim,#94A3B8)] mr-1">
                       {isHindi ? 'विषय:' : 'Filed Under:'}
                     </span>
                     {selectedArticle.tags.map(tag => (
@@ -1065,7 +1065,7 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     ))}
                   </div>
 
-                  <p className="text-[11px] text-slate-500 italic leading-relaxed">
+                  <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] italic leading-relaxed">
                     {isHindi
                       ? 'अस्वीकरण: यह सामग्री केवल वाणिज्यिक अनुसंधान, शैक्षणिक एवं सूचनात्मक उद्देश्यों के लिए प्रकाशित की गई है। इसे वित्तीय निवेश सलाह के रूप में न लिया जाए।'
                       : 'Commercial Disclosure: Published strictly for institutional research and general educational intelligence. Does not constitute personal investment or fiduciary advice.'}
