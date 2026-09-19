@@ -198,7 +198,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   ];
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto pb-10 sm:pb-14 space-y-3.5 sm:space-y-4 animate-in fade-in duration-200">
+    <div className="relative w-full max-w-5xl mx-auto pb-10 sm:pb-14 space-y-4 sm:space-y-5 animate-in fade-in duration-200">
       {/* Subtle deep navy ambient glow */}
       <div
         aria-hidden="true"
@@ -225,7 +225,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 2. TODAY + THIS MONTH SUMMARY CARDS (Side by Side) */}
       <motion.section
-        className="grid grid-cols-2 gap-2.5 sm:gap-3.5"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.04 }}
@@ -290,7 +290,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-6 gap-1 sm:gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5">
           {quickAccess.map((item) => {
             const Icon = item.icon;
             return (
@@ -298,12 +298,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 key={item.label}
                 type="button"
                 onClick={item.action}
-                className="min-w-0 rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-0.5 sm:px-1.5 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/40 hover:bg-[var(--theme-card-hover,#19304A)] transition-all active:scale-[.96] cursor-pointer"
+                className="min-w-0 rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-2 py-2.5 sm:px-1.5 sm:py-2.5 flex flex-col items-center justify-center gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/40 hover:bg-[var(--theme-card-hover,#19304A)] transition-all active:scale-[.96] cursor-pointer"
               >
                 <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl border flex items-center justify-center ${item.tone}`}>
                   <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 </div>
-                <span className="text-[7.5px] xs:text-[8.5px] sm:text-[10px] md:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate max-w-full text-center px-0.5">
+                <span className="text-[9px] sm:text-[10px] md:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate max-w-full text-center px-0.5">
                   {item.label}
                 </span>
               </button>
@@ -312,7 +312,23 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </motion.section>
 
-      {/* 4. FINANCIAL GOALS + LOANS & EMIs (Responsive 2-column bento) */}
+      {/* 4. FINANCIAL SNAPSHOT */}
+      <motion.div
+        className="flex items-center justify-between gap-3 px-1"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.07 }}
+      >
+        <div className="min-w-0">
+          <h3 className="text-[14px] sm:text-[16px] font-bold text-[var(--theme-text,#F8FAFC)]">
+            {isHindi ? 'वित्तीय स्थिति' : 'Financial Snapshot'}
+          </h3>
+          <p className="text-[9px] sm:text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
+            {isHindi ? 'लक्ष्य और उधार एक नज़र में' : 'Goals and loans at a glance'}
+          </p>
+        </div>
+      </motion.div>
+
       <motion.section
         className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5"
         initial={{ opacity: 0, y: 8 }}
@@ -340,7 +356,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 5. TOP CATEGORIES */}
       <motion.section
-        className="space-y-2.5 sm:space-y-3"
+        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] p-3.5 sm:p-4 md:p-5 space-y-3 sm:space-y-3.5 shadow-[0_12px_30px_-15px_rgba(0,0,0,.7)]"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -486,7 +502,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3.5">
           {entries
             .slice()
             .sort((a, b) => b.createdAt - a.createdAt)
