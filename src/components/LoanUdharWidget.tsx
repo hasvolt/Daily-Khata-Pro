@@ -1,15 +1,7 @@
 import React, { useMemo } from 'react';
 import { DebtItem, AppLanguage } from '../types';
 import { formatCurrency } from '../utils/khataCalculations';
-import {
-  Landmark,
-  ArrowUpRight,
-  ArrowDownLeft,
-  Calendar,
-  ChevronRight,
-  Plus,
-  AlertCircle
-} from 'lucide-react';
+import { Landmark, ArrowUpRight, ArrowDownLeft, ChevronRight, Plus, AlertCircle } from 'lucide-react';
 
 interface LoanUdharWidgetProps {
   debtItems?: DebtItem[];
@@ -20,17 +12,10 @@ interface LoanUdharWidgetProps {
 }
 
 export const LoanUdharWidget: React.FC<LoanUdharWidgetProps> = ({
-  debtItems = [],
-  onOpenLedger,
-  onOpenAddModal,
-  language: _language = 'en',
-  privacyMask = false
+  debtItems = [], onOpenLedger, onOpenAddModal, language: _language = 'en', privacyMask = false
 }) => {
   const summary = useMemo(() => {
-    let totalLent = 0;
-    let totalBorrowed = 0;
-    let monthlyEmiTotal = 0;
-
+    let totalLent = 0, totalBorrowed = 0, monthlyEmiTotal = 0;
     let nearestUpcoming: { item: DebtItem; diffDays: number } | null = null;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -38,133 +23,72 @@ export const LoanUdharWidget: React.FC<LoanUdharWidgetProps> = ({
     debtItems.forEach((item) => {
       const isSettled = item.status === 'settled' || item.remainingAmount <= 0;
       if (!isSettled) {
-        if (item.type === 'lent') {
-          totalLent += item.remainingAmount;
-        } else if (item.type === 'borrowed') {
+        if (item.type === 'lent') totalLent += item.remainingAmount;
+        else if (item.type === 'borrowed') totalBorrowed += item.remainingAmount;
+        else if (item.type === 'loan_emi') {
           totalBorrowed += item.remainingAmount;
-        } else if (item.type === 'loan_emi') {
-          totalBorrowed += item.remainingAmount;
-          if (item.emiAmount && item.emiAmount > 0) {
-            monthlyEmiTotal += item.emiAmount;
-          }
+          if (item.emiAmount && item.emiAmount > 0) monthlyEmiTotal += item.emiAmount;
         }
 
         if (item.dueDate) {
           const due = new Date(item.dueDate);
           due.setHours(0, 0, 0, 0);
-          const diff = Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-          if (diff >= 0 && diff <= 7) {
-            if (!nearestUpcoming || diff < nearestUpcoming.diffDays) {
-              nearestUpcoming = { item, diffDays: diff };
-            }
+          const diff = Math.ceil((due.getTime() - today.getTime()) / 86400000);
+          if (diff >= 0 && diff <= 7 && (!nearestUpcoming || diff < nearestUpcoming.diffDays)) {
+            nearestUpcoming = { item, diffDays: diff };
           }
         }
       }
     });
 
-    return {
-      totalLent,
-      totalBorrowed,
-      monthlyEmiTotal,
-      nearestUpcoming,
-      hasRecords: debtItems.length > 0
-    };
+    return { totalLent, totalBorrowed, monthlyEmiTotal, nearestUpcoming };
   }, [debtItems]);
 
   return (
-    <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-4 sm:p-5 shadow-sm space-y-3.5 text-left transition-all hover:border-[var(--theme-primary,#38BDF8)]/40">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400">
+    <div className="rounded-2xl sm:rounded-3xl border border-[var(--theme-border,#213E61)] bg-[linear-gradient(145deg,#0e1c2d,#0b1422)] p-3 sm:p-4 shadow-sm">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="h-8 w-8 rounded-xl bg-sky-400/10 border border-sky-400/20 text-sky-300 flex items-center justify-center shrink-0">
             <Landmark className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-1.5">
-              <span>Loans, EMIs & Debt Records</span>
-              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold">
-                RECORDS
-              </span>
-            </h3>
-            <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
-              Money to receive, personal debt & bank EMIs
-            </span>
+          <div className="min-w-0">
+            <h3 className="text-[12px] sm:text-sm font-bold text-white truncate">Loans & EMIs</h3>
+            <p className="text-[8px] sm:text-[10px] text-slate-400 truncate">Personal debt, money to receive & bank EMIs</p>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onOpenLedger}
-          className="text-xs font-bold text-[var(--theme-primary,#38BDF8)] hover:underline flex items-center gap-0.5 cursor-pointer"
-        >
-          <span>Open Records</span>
-          <ChevronRight className="w-3.5 h-3.5" />
+        <button type="button" onClick={onOpenLedger} className="shrink-0 text-[9px] sm:text-[10px] font-bold text-sky-300 flex items-center gap-0.5 cursor-pointer">
+          View All <ChevronRight className="w-3 h-3" />
         </button>
       </div>
 
-      {/* 3 Stats Grid */}
-      <div className="grid grid-cols-3 gap-2 pt-1">
-        {/* Lent / To Receive */}
-        <div className="p-2.5 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)] space-y-0.5">
-          <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-            <ArrowUpRight className="w-3 h-3" />
-            <span>To Receive</span>
-          </span>
-          <span className="text-xs sm:text-sm font-bold font-mono text-emerald-400 block truncate">
-            {formatCurrency(summary.totalLent, privacyMask)}
-          </span>
+      <div className="grid grid-cols-2 gap-2 mt-2.5">
+        <div className="rounded-xl bg-[#09111e] border border-white/[.06] p-2.5">
+          <span className="text-[8px] sm:text-[9px] text-rose-400 font-semibold flex items-center gap-1"><ArrowDownLeft className="w-3 h-3" />To Pay</span>
+          <div className="mt-1 font-mono text-[12px] sm:text-sm font-extrabold text-rose-400 truncate">{formatCurrency(summary.totalBorrowed, privacyMask)}</div>
         </div>
-
-        {/* Borrowed / To Pay */}
-        <div className="p-2.5 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)] space-y-0.5">
-          <span className="text-[10px] text-rose-400 font-semibold flex items-center gap-1">
-            <ArrowDownLeft className="w-3 h-3" />
-            <span>To Pay</span>
-          </span>
-          <span className="text-xs sm:text-sm font-bold font-mono text-rose-400 block truncate">
-            {formatCurrency(summary.totalBorrowed, privacyMask)}
-          </span>
-        </div>
-
-        {/* Monthly EMI */}
-        <div className="p-2.5 rounded-xl bg-[var(--theme-bg,#070E18)]/80 border border-[var(--theme-border,#213E61)] space-y-0.5">
-          <span className="text-[10px] text-sky-400 font-semibold flex items-center gap-1">
-            <Landmark className="w-3 h-3" />
-            <span>Monthly EMI</span>
-          </span>
-          <span className="text-xs sm:text-sm font-bold font-mono text-sky-400 block truncate">
-            {formatCurrency(summary.monthlyEmiTotal, privacyMask)}
-          </span>
+        <div className="rounded-xl bg-[#09111e] border border-white/[.06] p-2.5">
+          <span className="text-[8px] sm:text-[9px] text-sky-400 font-semibold flex items-center gap-1"><Landmark className="w-3 h-3" />Monthly EMI</span>
+          <div className="mt-1 font-mono text-[12px] sm:text-sm font-extrabold text-sky-400 truncate">{formatCurrency(summary.monthlyEmiTotal, privacyMask)}</div>
         </div>
       </div>
 
-      {/* Upcoming due alert if any */}
-      {summary.nearestUpcoming && (
-        <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-amber-300">
-          <div className="flex items-center gap-1.5 min-w-0">
-            <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-            <span className="truncate">
-              {summary.nearestUpcoming.item.title}: {formatCurrency(summary.nearestUpcoming.item.isEmi && summary.nearestUpcoming.item.emiAmount ? summary.nearestUpcoming.item.emiAmount : summary.nearestUpcoming.item.remainingAmount, privacyMask)}
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <div className="rounded-xl bg-emerald-500/[.05] border border-emerald-500/10 px-2.5 py-2">
+          <span className="text-[8px] sm:text-[9px] text-emerald-400 font-semibold flex items-center gap-1"><ArrowUpRight className="w-3 h-3" />To Receive</span>
+          <div className="font-mono text-[11px] sm:text-xs font-bold text-emerald-400 truncate">{formatCurrency(summary.totalLent, privacyMask)}</div>
+        </div>
+        {summary.nearestUpcoming ? (
+          <div className="rounded-xl bg-amber-500/[.06] border border-amber-500/15 px-2.5 py-2 flex items-center gap-1.5 min-w-0">
+            <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span className="text-[8px] sm:text-[9px] text-amber-300 truncate">
+              {summary.nearestUpcoming.diffDays === 0 ? 'Due today' : `Due in ${summary.nearestUpcoming.diffDays}d`}
             </span>
           </div>
-          <span className="text-[10px] font-mono shrink-0 font-bold px-1.5 py-0.5 rounded bg-amber-500/20">
-            {summary.nearestUpcoming.diffDays === 0
-              ? 'Due Today'
-              : `Due in ${summary.nearestUpcoming.diffDays}d`}
-          </span>
-        </div>
-      )}
-
-      {/* Quick Add Action */}
-      <div className="pt-1 flex items-center justify-between text-xs">
-        <button
-          type="button"
-          onClick={onOpenAddModal}
-          className="w-full py-2 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-        >
-          <Plus className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-          <span>+ Record Loan, Debt or EMI</span>
-        </button>
+        ) : (
+          <button type="button" onClick={onOpenAddModal} className="rounded-xl bg-sky-400/[.06] border border-sky-400/15 px-2.5 py-2 text-[8px] sm:text-[9px] font-bold text-sky-300 flex items-center justify-center gap-1 cursor-pointer">
+            <Plus className="w-3 h-3" /> Record Loan / EMI
+          </button>
+        )}
       </div>
     </div>
   );

@@ -19,163 +19,88 @@ interface SummaryCard3DProps {
 }
 
 export function SummaryCard3D({
-  type,
-  title,
-  subtitle,
-  periodBadge,
-  incomeLabel,
-  incomeValue,
-  expenseLabel,
-  expenseValue,
-  netLabel,
-  netValue,
-  formatCurrency,
-  privacyMask,
-  isHindi,
+  type, title, subtitle, periodBadge, incomeLabel, incomeValue,
+  expenseLabel, expenseValue, netLabel, netValue, formatCurrency,
+  privacyMask, isHindi,
 }: SummaryCard3DProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-
   const mouseXSpring = useSpring(x, { stiffness: 280, damping: 28 });
   const mouseYSpring = useSpring(y, { stiffness: 280, damping: 28 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5.5deg", "-5.5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5.5deg", "5.5deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['4deg', '-4deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-4deg', '4deg']);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    x.set(mouseX / rect.width - 0.5);
-    y.set(mouseY / rect.height - 0.5);
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
+  const handleMouseLeave = () => { x.set(0); y.set(0); };
   const isNetPositive = netValue >= 0;
   const IconComponent = type === 'daily' ? Calendar : CalendarDays;
 
   return (
-    <div style={{ perspective: 1100 }} className="w-full relative group">
+    <div style={{ perspective: 1100 }} className="w-full">
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        className="relative bg-[var(--theme-card,#141B28)] border border-[var(--theme-border,rgba(255,255,255,0.08))] hover:border-[var(--theme-primary-border,rgba(56,189,248,0.4))] rounded-2xl sm:rounded-3xl p-3 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 space-y-2.5 sm:space-y-3 min-w-0 overflow-hidden"
+        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+        className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-border,rgba(255,255,255,.08))] bg-[linear-gradient(145deg,#101c2d,#0b1422)] p-3 sm:p-4 shadow-[0_12px_30px_-20px_rgba(0,0,0,.8)]"
       >
-        {/* Luminous Top Accent Line */}
-        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)] to-transparent opacity-75" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-400/70 to-transparent" />
 
-        {/* Header Layer (Z-25) */}
-        <div
-          className="relative z-10 flex items-center justify-between gap-2 pb-2 sm:pb-2.5 border-b border-[var(--theme-border,rgba(255,255,255,0.08))]"
-          style={{ transform: "translateZ(25px)" }}
-        >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] border border-[var(--theme-primary-border,rgba(56,189,248,0.28))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-105">
-              <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
+        <div className="relative z-10 flex items-center justify-between gap-2 pb-2.5 border-b border-white/[.06]">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-sky-400/10 border border-sky-400/20 text-sky-300 flex items-center justify-center shrink-0">
+              <IconComponent className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </div>
             <div className="min-w-0">
-              <span className="text-[12.5px] sm:text-[14.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                {title}
-              </span>
-              <span className="text-[9.5px] sm:text-[11.5px] text-[var(--theme-text-muted,#94A3B8)] block truncate">
-                {subtitle}
-              </span>
+              <div className="text-[11.5px] sm:text-sm font-bold text-slate-100 truncate">{title}</div>
+              <div className="text-[8.5px] sm:text-[10px] text-slate-400 truncate">{subtitle}</div>
             </div>
           </div>
-
-          <span className="text-[9.5px] sm:text-[11px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg border border-[var(--theme-primary-border,rgba(56,189,248,0.28))] shrink-0 shadow-xs notranslate" translate="no">
+          <span className="shrink-0 text-[8px] sm:text-[10px] font-bold text-sky-300 bg-sky-400/10 border border-sky-400/20 px-2 py-1 rounded-lg notranslate" translate="no">
             {periodBadge}
           </span>
         </div>
 
-        {/* Middle Stats Grid (Z-18) */}
-        <div
-          className="relative z-10 grid grid-cols-2 gap-2 sm:gap-3 min-w-0"
-          style={{ transform: "translateZ(18px)" }}
-        >
-          {/* Income Box */}
-          <div
-            className="p-2 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#0F1420)] border border-[var(--theme-border,rgba(255,255,255,0.08))] space-y-0.5 sm:space-y-1 min-w-0 overflow-hidden flex flex-col justify-center select-none shadow-xs group-hover:border-emerald-500/30 transition-colors"
-            data-sensitive="true"
-          >
+        <div className="grid grid-cols-2 gap-2 mt-2.5">
+          <div className="rounded-xl bg-[#0b1220] border border-white/[.06] p-2.5 sm:p-3">
             <div className="flex items-center gap-1.5">
-              <div className="w-4.5 h-4.5 sm:w-6 sm:h-6 rounded-md bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
-                <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
+              <div className="h-5 w-5 rounded-md bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </div>
-              <span className="text-[10px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-bold truncate">
-                {incomeLabel}
-              </span>
+              <span className="text-[8.5px] sm:text-[10px] text-slate-400 font-semibold truncate">{incomeLabel}</span>
             </div>
-            <div
-              className="font-mono font-extrabold text-[13.5px] sm:text-[17px] text-emerald-400 tracking-tight truncate w-full block sensitive-amount notranslate"
-              translate="no"
-              title={formatCurrency(incomeValue, privacyMask)}
-            >
+            <div className="mt-1 font-mono text-[12px] sm:text-sm font-extrabold text-emerald-400 truncate notranslate" translate="no">
               +{formatCurrency(incomeValue, privacyMask)}
             </div>
           </div>
 
-          {/* Expense Box */}
-          <div
-            className="p-2 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#0F1420)] border border-[var(--theme-border,rgba(255,255,255,0.08))] space-y-0.5 sm:space-y-1 min-w-0 overflow-hidden flex flex-col justify-center select-none shadow-xs group-hover:border-rose-500/30 transition-colors"
-            data-sensitive="true"
-          >
+          <div className="rounded-xl bg-[#0b1220] border border-white/[.06] p-2.5 sm:p-3">
             <div className="flex items-center gap-1.5">
-              <div className="w-4.5 h-4.5 sm:w-6 sm:h-6 rounded-md bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
-                <ArrowDownRight className="w-3.5 h-3.5 stroke-[2.5]" />
+              <div className="h-5 w-5 rounded-md bg-rose-500/10 text-rose-400 flex items-center justify-center">
+                <ArrowDownRight className="w-3.5 h-3.5" />
               </div>
-              <span className="text-[10px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] font-bold truncate">
-                {expenseLabel}
-              </span>
+              <span className="text-[8.5px] sm:text-[10px] text-slate-400 font-semibold truncate">{expenseLabel}</span>
             </div>
-            <div
-              className="font-mono font-extrabold text-[13.5px] sm:text-[17px] text-rose-400 tracking-tight truncate w-full block sensitive-amount notranslate"
-              translate="no"
-              title={formatCurrency(expenseValue, privacyMask)}
-            >
+            <div className="mt-1 font-mono text-[12px] sm:text-sm font-extrabold text-rose-400 truncate notranslate" translate="no">
               -{formatCurrency(expenseValue, privacyMask)}
             </div>
           </div>
         </div>
 
-        {/* Bottom Net Balance Strip (Z-14) */}
-        <div
-          className="relative z-10 flex items-center justify-between px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-xl sm:rounded-2xl bg-[var(--theme-surface,#0F1420)] border border-[var(--theme-border,rgba(255,255,255,0.08))] text-[10.5px] sm:text-[12.5px] min-w-0 overflow-hidden shadow-xs"
-          style={{ transform: "translateZ(14px)" }}
-          data-sensitive="true"
-        >
-          <div className="flex items-center gap-1.5 min-w-0 mr-1.5">
-            {isNetPositive ? (
-              <TrendingUp className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-            ) : (
-              <TrendingDown className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-            )}
-            <span className="text-[var(--theme-text-muted,#94A3B8)] font-bold truncate">
-              {netLabel}
-            </span>
+        <div className="mt-2 rounded-xl bg-[#0b1220] border border-white/[.06] px-2.5 py-2 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            {isNetPositive ? <TrendingUp className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> : <TrendingDown className="w-3.5 h-3.5 text-rose-400 shrink-0" />}
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-semibold truncate">{netLabel}</span>
           </div>
-
-          <span
-            className={`font-mono font-extrabold text-[13px] sm:text-[15.5px] truncate max-w-[55%] text-right sensitive-amount notranslate ${
-              isNetPositive ? 'text-emerald-400' : 'text-rose-400'
-            }`}
-            translate="no"
-            title={formatCurrency(netValue, privacyMask)}
-          >
-            {isNetPositive ? '+' : ''}
-            {formatCurrency(netValue, privacyMask)}
+          <span className={`font-mono text-[11px] sm:text-xs font-extrabold truncate ${isNetPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
+            {isNetPositive ? '+' : ''}{formatCurrency(netValue, privacyMask)}
           </span>
         </div>
       </motion.div>

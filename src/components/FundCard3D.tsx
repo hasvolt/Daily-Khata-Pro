@@ -16,117 +16,69 @@ interface FundCard3DProps {
   isPrimary?: boolean;
 }
 
-export function FundCard3D({ config, val, pct, fundTranslatedName, subtitle, FundIcon, formatCurrency, privacyMask, onClick, isPrimary = true }: FundCard3DProps) {
+export function FundCard3D({
+  config, val, pct, fundTranslatedName, subtitle, FundIcon, formatCurrency, privacyMask, onClick
+}: FundCard3DProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-
   const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
   const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["6deg", "-6deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-6deg", "6deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['4deg', '-4deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-4deg', '4deg']);
+  const clampedPct = Math.min(100, Math.max(0, pct || 0));
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  const clampedPct = Math.min(100, Math.max(0, pct || 0));
+  const handleMouseLeave = () => { x.set(0); y.set(0); };
 
   return (
-    <div style={{ perspective: 1000 }} className="w-full relative group">
+    <div style={{ perspective: 1000 }} className="w-full">
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onClick={onClick}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        className="relative p-3.5 sm:p-4 bg-[var(--theme-card,#141B28)] border border-[var(--theme-border,rgba(255,255,255,0.08))] hover:border-[var(--theme-primary-border,rgba(56,189,248,0.35))] rounded-2xl cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md text-left flex flex-col justify-between min-w-0 w-full overflow-hidden group/card"
+        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+        className="relative min-w-0 w-full cursor-pointer overflow-hidden rounded-2xl border border-white/[.07] bg-[linear-gradient(145deg,#111f31,#0d1828)] p-2.5 sm:p-3 shadow-sm transition-all duration-300 hover:border-sky-400/25 hover:shadow-[0_10px_25px_-18px_rgba(56,189,248,.8)]"
       >
-        {/* Top row: Icon + Name & Amount + Circular Progress Ring */}
-        <div className="flex items-center justify-between gap-2.5 relative z-10" style={{ transform: "translateZ(20px)" }}>
-          {/* Left: Category Icon */}
-          <div 
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 border shadow-xs transition-transform group-hover/card:scale-105"
-            style={{ 
-              backgroundColor: `${config.color}18`,
-              borderColor: `${config.color}35`,
-              color: config.color
-            }}
+        <div className="flex items-center gap-2 min-w-0" style={{ transform: 'translateZ(14px)' }}>
+          <div
+            className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl flex items-center justify-center shrink-0 border"
+            style={{ backgroundColor: `${config.color}18`, borderColor: `${config.color}35`, color: config.color }}
           >
-            <FundIcon className="w-5 h-5 sm:w-5.5 sm:h-5.5" strokeWidth={2.2} />
+            <FundIcon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" strokeWidth={2.2} />
           </div>
 
-          {/* Center: Title & Value */}
-          <div className="flex-1 min-w-0">
-            <span className="text-[12px] sm:text-[13.5px] font-semibold text-[var(--theme-text-muted,#CBD5E1)] group-hover/card:text-[var(--theme-text,#F8FAFC)] transition-colors block truncate">
-              {fundTranslatedName}
-            </span>
-            <span 
-              className={`font-mono font-extrabold text-[15px] sm:text-[18px] tracking-tight truncate max-w-full block leading-snug sensitive-amount ${val < 0 ? 'text-[#EF4444]' : 'text-[var(--theme-text,#F8FAFC)]'}`} 
-              title={formatCurrency(val, privacyMask)}
-            >
+          <div className="min-w-0 flex-1">
+            <div className="text-[9px] sm:text-[11px] font-semibold text-slate-300 truncate">{fundTranslatedName}</div>
+            <div className={`mt-0.5 font-mono text-[12px] sm:text-sm font-extrabold truncate ${val < 0 ? 'text-rose-400' : 'text-white'}`}>
               {val < 0 ? '-' : ''}{formatCurrency(Math.abs(val), privacyMask)}
-            </span>
+            </div>
           </div>
 
-          {/* Right: Circular Progress Ring */}
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center shrink-0">
-            <svg className="w-full h-full transform -rotate-90 drop-shadow-xs" viewBox="0 0 36 36">
-              <circle cx="18" cy="18" r="14.5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="3" />
-              <circle 
-                cx="18" 
-                cy="18" 
-                r="14.5" 
-                fill="none" 
-                stroke={config.color} 
-                strokeWidth="3" 
-                strokeDasharray="91.1" 
-                strokeDashoffset={91.1 - (91.1 * clampedPct) / 100} 
-                strokeLinecap="round" 
-                className="transition-all duration-1000 ease-out" 
-              />
+          <div className="relative h-8 w-8 sm:h-9 sm:w-9 shrink-0">
+            <svg className="h-full w-full -rotate-90" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="14.5" fill="none" stroke="rgba(255,255,255,.08)" strokeWidth="3" />
+              <circle cx="18" cy="18" r="14.5" fill="none" stroke={config.color} strokeWidth="3" strokeDasharray="91.1" strokeDashoffset={91.1 - (91.1 * clampedPct) / 100} strokeLinecap="round" />
             </svg>
-            <span className="absolute text-[9px] sm:text-[10.5px] font-mono font-bold text-[var(--theme-text,#F8FAFC)] tracking-tighter">
-              {Number(clampedPct).toFixed(0)}%
-            </span>
+            <span className="absolute inset-0 flex items-center justify-center text-[7px] sm:text-[8px] font-bold text-white">{Math.round(clampedPct)}%</span>
           </div>
         </div>
 
-        {/* Bottom row: Subtitle Description + Micro Progress Bar */}
-        <div className="mt-2.5 pt-2 border-t border-[var(--theme-border,rgba(255,255,255,0.08))] relative z-10 space-y-1.5" style={{ transform: "translateZ(10px)" }}>
-          {subtitle && (
-            <p className="text-[11px] sm:text-[12px] text-[var(--theme-text-muted,#94A3B8)] leading-snug line-clamp-1">
-              {subtitle}
-            </p>
-          )}
-          {/* Subtle micro progress line */}
-          <div className="w-full h-1 bg-[var(--theme-surface,#0F1420)] rounded-full overflow-hidden">
-            <div 
-              className="h-full rounded-full transition-all duration-700" 
-              style={{ 
-                width: `${Math.min(100, Math.max(4, clampedPct))}%`,
-                backgroundColor: config.color 
-              }} 
-            />
+        {subtitle && (
+          <div className="mt-2 pt-1.5 border-t border-white/[.06]" style={{ transform: 'translateZ(8px)' }}>
+            <p className="text-[8px] sm:text-[9px] text-slate-400 truncate">{subtitle}</p>
           </div>
+        )}
+
+        <div className="mt-2 h-1 rounded-full bg-[#09111e] overflow-hidden">
+          <div className="h-full rounded-full transition-all duration-700" style={{ width: `${Math.min(100, Math.max(4, clampedPct))}%`, backgroundColor: config.color }} />
         </div>
       </motion.div>
     </div>

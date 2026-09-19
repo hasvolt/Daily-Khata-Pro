@@ -12,33 +12,29 @@ interface BankingCard3DProps {
   onAddClick: (type: 'income' | 'expense') => void;
 }
 
-export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFormatted, t, pageT, onAddClick }: BankingCard3DProps) {
+export function BankingCard3D({
+  totalWealth,
+  formatCurrency,
+  privacyMask,
+  dateFormatted,
+  t,
+  pageT,
+  onAddClick,
+}: BankingCard3DProps) {
   const ref = useRef<HTMLDivElement>(null);
-
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
   const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
   const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["8deg", "-8deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-8deg", "8deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['6deg', '-6deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-6deg', '6deg']);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    
-    const width = rect.width;
-    const height = rect.height;
-    
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    
-    x.set(xPct);
-    y.set(yPct);
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
   const handleMouseLeave = () => {
@@ -49,117 +45,84 @@ export function BankingCard3D({ totalWealth, formatCurrency, privacyMask, dateFo
   const isHindi = t?.language === 'hi' || /मंग|बुध|गुरु|शुक्र|शनि|रवि|सोम/.test(dateFormatted);
 
   return (
-    <div style={{ perspective: 1200 }} className="w-full relative z-10 group">
+    <div style={{ perspective: 1200 }} className="w-full relative z-10">
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        className="banking-card-3d relative bg-gradient-to-r from-[#0B101B] via-[#131A29] to-[#090E17] border border-white/10 rounded-2xl sm:rounded-3xl p-3 sm:p-7 md:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.4)] overflow-hidden"
+        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+        className="relative overflow-hidden rounded-[24px] sm:rounded-[30px] border border-[var(--theme-primary-border,rgba(56,189,248,.35))] bg-[radial-gradient(circle_at_78%_15%,rgba(14,165,233,.20),transparent_32%),linear-gradient(135deg,#071426_0%,#0c1a2e_48%,#08111f_100%)] p-3.5 sm:p-6 md:p-7 shadow-[0_18px_45px_-18px_rgba(0,0,0,.75),inset_0_1px_0_rgba(255,255,255,.08)]"
       >
-        {/* Luminous Glowing Waves & Dot Matrix Pattern on the Right */}
-        <div className="banking-card-waves absolute right-0 top-0 bottom-0 w-3/5 sm:w-1/2 pointer-events-none overflow-hidden select-none opacity-80">
-          <svg className="w-full h-full" viewBox="0 0 500 240" fill="none" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="waveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0" />
-                <stop offset="30%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.8" />
-                <stop offset="70%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.2" />
-              </linearGradient>
-              <linearGradient id="waveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0" />
-                <stop offset="40%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.75" />
-                <stop offset="80%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.85" />
-                <stop offset="100%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.15" />
-              </linearGradient>
-              <pattern id="dotGrid" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1.1" fill="var(--theme-primary, #38BDF8)" fillOpacity="0.25" />
-              </pattern>
-            </defs>
-            <rect x="80" y="0" width="420" height="240" fill="url(#dotGrid)" />
-            {/* Smooth luminous stream curves */}
-            <path d="M 0 160 C 140 160, 220 100, 350 78 C 410 68, 470 82, 500 92" stroke="url(#waveGrad1)" strokeWidth="2.8" />
-            <path d="M 40 178 C 170 170, 250 115, 370 88 C 420 78, 470 90, 500 98" stroke="url(#waveGrad2)" strokeWidth="2" />
-            <path d="M 80 195 C 200 185, 280 130, 390 100 C 440 90, 480 102, 500 110" stroke="url(#waveGrad1)" strokeWidth="1.2" opacity="0.6" />
-            <path d="M 0 145 C 130 145, 210 90, 330 70 C 390 60, 460 72, 500 80" stroke="var(--theme-primary, #38BDF8)" strokeWidth="1" opacity="0.35" />
+        <div className="absolute inset-0 pointer-events-none opacity-70">
+          <div className="absolute -right-12 -top-10 h-44 w-72 rounded-full bg-sky-500/10 blur-3xl" />
+          <svg className="absolute right-0 top-0 h-full w-[58%] opacity-75" viewBox="0 0 500 240" fill="none" preserveAspectRatio="none">
+            <path d="M0 166C130 166 220 105 350 78C415 65 468 80 500 92" stroke="var(--theme-primary,#38BDF8)" strokeWidth="2.5" strokeOpacity=".75" />
+            <path d="M35 182C165 174 255 116 372 89C430 76 475 90 500 99" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.8" strokeOpacity=".6" />
+            <path d="M70 198C195 188 280 130 392 101C442 89 482 103 500 112" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.2" strokeOpacity=".45" />
+            <path d="M0 145C125 145 210 94 330 70C400 57 465 72 500 82" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1" strokeOpacity=".28" />
           </svg>
         </div>
 
-        <div className="relative z-20 flex flex-col justify-between h-full space-y-2.5 sm:space-y-8" style={{ transform: "translateZ(30px)" }}>
-          {/* Header Row: Total Net Balance & Date */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-              <div className="banking-card-icon-box p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] border border-[var(--theme-primary-border,rgba(56,189,248,0.28))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-sm transition-colors">
-                <Wallet className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+        <div className="relative z-10 space-y-4 sm:space-y-6" style={{ transform: 'translateZ(28px)' }}>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-xl bg-sky-400/10 border border-sky-400/25 text-sky-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(56,189,248,.12)]">
+                <Wallet className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5" />
               </div>
-              <div className="flex flex-col min-w-0">
-                <span className="banking-card-title text-[10.5px] sm:text-[14px] font-extrabold tracking-wider text-white uppercase truncate transition-colors">
+              <div className="min-w-0">
+                <div className="text-[11px] sm:text-sm font-extrabold tracking-wide text-white uppercase truncate">
                   {isHindi ? 'कुल बैलेंस (Total Balance)' : 'TOTAL BALANCE'}
-                </span>
-                <span className="banking-card-subtitle text-[9px] sm:text-[11.5px] text-[#94A3B8] truncate transition-colors">
+                </div>
+                <div className="text-[9px] sm:text-[11px] text-slate-400 truncate">
                   {isHindi ? 'सभी खातों का कुल बैलेंस' : 'Total cash & account balance'}
-                </span>
+                </div>
               </div>
             </div>
 
-            {/* Header Right: Secured Status & Date */}
-            <div className="flex flex-col items-end gap-1 shrink-0">
-              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xs">
-                <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                <span className="text-[7.5px] sm:text-[8.5px] font-bold text-white tracking-[0.12em] uppercase">
-                  {isHindi ? 'सुरक्षित' : 'SECURED'}
-                </span>
+            <div className="flex flex-col items-end gap-1.5 shrink-0">
+              <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-400/10 border border-sky-400/20 text-sky-300">
+                <ShieldCheck className="w-2.5 h-2.5" />
+                <span className="text-[7px] sm:text-[8px] font-bold tracking-widest">SECURED</span>
               </div>
-              <div className="banking-card-date-box flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg sm:rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] border border-[var(--theme-primary-border,rgba(56,189,248,0.28))] text-[var(--theme-primary,#38BDF8)] shadow-sm shrink-0">
-                <Calendar className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                <span className="banking-card-date text-[8.5px] sm:text-[11.5px] font-bold tracking-wide text-[#E2E8F0] uppercase whitespace-nowrap transition-colors notranslate" translate="no">
+              <div className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg bg-sky-400/10 border border-sky-400/20">
+                <Calendar className="w-3 h-3 text-sky-300" />
+                <span className="text-[8px] sm:text-[10px] font-bold text-slate-200 whitespace-nowrap notranslate" translate="no">
                   {dateFormatted}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Available Balance Amount */}
-          <div className="space-y-0.5 sm:space-y-1.5">
-            <p className="banking-card-label text-[9px] sm:text-[12px] text-[#94A3B8] tracking-widest uppercase font-semibold transition-colors">
-              {isHindi ? 'उपलब्ध बैलेंस (Available Balance)' : 'AVAILABLE BALANCE'}
-            </p>
-            <div 
-              className="banking-card-amount font-mono text-[22px] xs:text-[25px] sm:text-[50px] md:text-[56px] font-extrabold text-white tracking-tight leading-none drop-shadow-md truncate max-w-full transition-colors notranslate" 
+          <div>
+            <div className="text-[8px] sm:text-[11px] text-slate-400 font-semibold tracking-[.18em] uppercase">
+              {isHindi ? 'उपलब्ध बैलेंस' : 'AVAILABLE BALANCE'}
+            </div>
+            <div
+              className="mt-1 font-mono text-[30px] sm:text-[48px] md:text-[54px] leading-none font-extrabold text-white tracking-tight truncate notranslate"
               translate="no"
               title={formatCurrency(totalWealth, privacyMask)}
             >
               {formatCurrency(totalWealth, privacyMask)}
             </div>
           </div>
-          
-          {/* Action Buttons: Add Income & Add Expense - Clean, Solid, High-Contrast & Sharp */}
-          <div className="pt-2 sm:pt-4.5 mt-0.5 sm:mt-1 border-t border-white/10 w-full">
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-4 w-full">
+
+          <div className="border-t border-white/10 pt-3 sm:pt-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
               <button
                 type="button"
                 onClick={() => onAddClick('income')}
-                className="py-2 sm:py-3.5 px-3 sm:px-4 rounded-lg sm:rounded-2xl bg-[#059669] hover:bg-[#047857] active:bg-[#065F46] !text-white font-bold text-[13px] sm:text-[15.5px] flex items-center justify-center gap-1.5 transition-all shadow-md shadow-black/25 hover:shadow-lg active:scale-95 cursor-pointer border border-[#047857]"
                 id="hero-add-income-btn"
+                className="min-h-10 sm:min-h-12 rounded-xl sm:rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-white font-extrabold text-[12px] sm:text-base flex items-center justify-center gap-2 transition-all shadow-[0_8px_20px_-8px_rgba(16,185,129,.7)] active:scale-[.98] cursor-pointer"
               >
-                <span className="truncate !text-white tracking-wide font-bold">
-                  {isHindi ? '+ कमाई (Income)' : '+ Income'}
-                </span>
+                + Income
               </button>
               <button
                 type="button"
                 onClick={() => onAddClick('expense')}
-                className="py-2 sm:py-3.5 px-3 sm:px-4 rounded-lg sm:rounded-2xl bg-[#DC2626] hover:bg-[#B91C1C] active:bg-[#991B1B] !text-white font-bold text-[13px] sm:text-[15.5px] flex items-center justify-center gap-1.5 transition-all shadow-md shadow-black/25 hover:shadow-lg active:scale-95 cursor-pointer border border-[#B91C1C]"
                 id="hero-add-expense-btn"
+                className="min-h-10 sm:min-h-12 rounded-xl sm:rounded-2xl bg-rose-500 hover:bg-rose-400 active:bg-rose-600 text-white font-extrabold text-[12px] sm:text-base flex items-center justify-center gap-2 transition-all shadow-[0_8px_20px_-8px_rgba(244,63,94,.7)] active:scale-[.98] cursor-pointer"
               >
-                <span className="truncate !text-white tracking-wide font-bold">
-                  {isHindi ? '− खर्च (Expense)' : '− Expense'}
-                </span>
+                − Expense
               </button>
             </div>
           </div>
