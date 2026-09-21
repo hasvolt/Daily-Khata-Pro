@@ -1,9 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, Share2, BookOpen, Clock, Tag, ChevronRight, ChevronLeft } from 'lucide-react';
+import {
+  ArrowLeft, Share2, BookOpen, Clock, Tag, ChevronRight, ChevronLeft,
+  Home, Target, Shield, Sparkles, Smile, Heart, History, ShoppingBag, TrendingUp,
+  Briefcase, Download, Percent, User, HelpCircle, BarChart3, Plus, Smartphone, AlertCircle, FileText
+} from 'lucide-react';
 import { AppLanguage } from '../types';
 import { ACADEMY_ARTICLES, AcademyArticle } from '../data/wealthAcademy';
-import * as LucideIcons from 'lucide-react';
+
+const ACADEMY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Home, Target, Shield, Sparkles, BookOpen, Smile, Heart, History, ShoppingBag, TrendingUp,
+  Briefcase, Download, Percent, User, HelpCircle, BarChart3, Plus, Smartphone, AlertCircle, FileText
+};
 
 interface WealthArticlePageProps {
   articleId: string;
@@ -29,7 +37,7 @@ export const WealthArticlePage: React.FC<WealthArticlePageProps> = ({
   if (!article) return null;
 
   const tStr = (hi: string, en: string) => (language === 'hi' ? hi : en);
-  const Icon = (LucideIcons as any)[article.icon] || BookOpen;
+  const Icon = ACADEMY_ICONS[article.icon] || BookOpen;
 
   const handleShare = async () => {
     const shareData = {

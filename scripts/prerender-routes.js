@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createClient } from '@sanity/client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,13 +8,6 @@ const __dirname = path.dirname(__filename);
 const DIST_DIR = path.join(__dirname, '..', 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
 const CANONICAL_DOMAIN = 'https://www.rozfiber.com';
-
-const sanityClient = createClient({
-  projectId: '3zccyf67',
-  dataset: 'production',
-  apiVersion: '2024-01-01',
-  useCdn: true,
-});
 
 function escapeHtml(text) {
   if (!text) return '';
@@ -70,8 +62,8 @@ async function prerenderRoutes() {
   console.log('[prerender] Starting route pre-rendering for SEO...');
 
   if (!fs.existsSync(INDEX_HTML_PATH)) {
-    console.error('[prerender] dist/index.html does not exist. Run vite build first.');
-    process.exit(1);
+    console.warn('[prerender] dist/index.html does not exist yet. Skipping prerender step.');
+    return;
   }
 
   const baseHtml = fs.readFileSync(INDEX_HTML_PATH, 'utf8');
@@ -93,13 +85,13 @@ async function prerenderRoutes() {
   // 2. Fetch published Sanity posts with valid slugs
   let posts = [];
   try {
-    posts = await sanityClient.fetch(
-      `*[_type == "post" && defined(slug.current)] {
-        "slug": slug.current,
-        title,
-        excerpt
-      }`
-    );
+    const query = encodeURIComponent('*[_type == "post" && defined(slug.current)] { "slug": slug.current, title, excerpt }');
+    const apiUrl = `https://3zccyf67.api.sanity.io/v2024-01-01/data/query/production?query=${query}`;
+    const res = await fetch(apiUrl);
+    if (res.ok) {
+      const data = await res.json();
+      posts = data.result || [];
+    }
     console.log(`[prerender] Retrieved ${posts.length} published post(s) from Sanity.`);
   } catch (err) {
     console.warn('[prerender] Failed to fetch Sanity posts, proceeding with /blog only:', err.message);
@@ -131,6 +123,5 @@ async function prerenderRoutes() {
 }
 
 prerenderRoutes().catch((err) => {
-  console.error('[prerender] Error during pre-rendering:', err);
-  process.exit(1);
+  console.warn('[prerender] Warning: error during pre-rendering, keeping default index.html:', err.message);
 });

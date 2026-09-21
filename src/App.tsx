@@ -28,7 +28,7 @@ import { PersonalNotesView } from './components/PersonalNotesView';
 import { WorkModal } from './components/WorkModal';
 import { DailyLifeModal } from './components/DailyLifeModal';
 import { PersonalNoteModal } from './components/PersonalNoteModal';
-import { StudioPage } from './pages/StudioPage';
+const StudioPage = React.lazy(() => import('./pages/StudioPage').then(m => ({ default: m.StudioPage })));
 import { SettingsModal } from './components/SettingsModal';
 import { GoalModal } from './components/GoalModal';
 import { DepositGoalModal } from './components/DepositGoalModal';
@@ -2384,6 +2384,9 @@ function AppContent() {
                 setCurrentTab('history');
               }}
               onNavigateGoals={() => setCurrentTab('goals')}
+              onNavigateCalculator={() => setCurrentTab('calculator')}
+              onNavigateReports={() => setCurrentTab('report')}
+              onTogglePrivacyMask={handleTogglePrivacyMask}
               onOpenCreateGoal={() => {
                 setEditingGoal(null);
                 setIsGoalModalOpen(true);
@@ -2779,7 +2782,18 @@ function AppContent() {
               language={language}
               privacyMask={privacyMask}
             />} />
-            <Route path="/studio/*" element={<StudioPage />} />
+            <Route path="/studio/*" element={
+              <React.Suspense fallback={
+                <div className="min-h-screen flex items-center justify-center bg-[#070E18] text-white">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-sm text-slate-400">Loading Sanity Studio...</p>
+                  </div>
+                </div>
+              }>
+                <StudioPage />
+              </React.Suspense>
+            } />
           </Routes>
           </ErrorBoundary>
         </div>

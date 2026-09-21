@@ -347,11 +347,18 @@
               return;
             }
             if (target && target.tagName === 'SCRIPT') {
-              var src = target.src || 'module';
+              var src = target.src || '';
+              // Ignore third-party and non-critical scripts (AdSense, Google Translate, CDN, extensions)
+              if (!src || src.indexOf('googlesyndication') !== -1 || src.indexOf('pagead2') !== -1 || src.indexOf('translate.google') !== -1 || src.indexOf('google.com') !== -1 || src.indexOf('doubleclick') !== -1 || src.indexOf('chrome-extension') !== -1) {
+                return;
+              }
               handleBootError('Script loading mismatch: ' + src.split('/').pop());
               return;
             }
             var msg = (e.message || '').toLowerCase();
+            if (msg.indexOf('adsbygoogle') !== -1 || msg.indexOf('translate') !== -1 || msg.indexOf('resizeobserver') !== -1 || msg.indexOf('script error') !== -1) {
+              return;
+            }
             if (msg.indexOf('import') !== -1 || msg.indexOf('chunk') !== -1 || msg.indexOf('loading') !== -1 || msg.indexOf('syntaxerror') !== -1) {
               handleBootError('Module loading failure: ' + e.message);
             }
@@ -362,6 +369,7 @@
             if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
             var reason = e.reason ? (e.reason.message || String(e.reason)) : '';
             var lower = reason.toLowerCase();
+            if (lower.indexOf('adsbygoogle') !== -1 || lower.indexOf('translate') !== -1 || lower.indexOf('resizeobserver') !== -1) return;
             if (lower.indexOf('import') !== -1 || lower.indexOf('chunk') !== -1 || lower.indexOf('fetch') !== -1 || lower.indexOf('dynamically') !== -1) {
               handleBootError('Chunk import rejected: ' + reason);
             }
@@ -397,6 +405,8 @@
           // 5. Catch ALL unhandled errors for debugging top-level module failures
           window.addEventListener('error', function(e) {
             if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+            var msg = (e.message || '').toLowerCase();
+            if (!msg || msg.indexOf('adsbygoogle') !== -1 || msg.indexOf('translate') !== -1 || msg.indexOf('resizeobserver') !== -1 || msg.indexOf('script error') !== -1) return;
             var root = document.getElementById('root');
             if (!root || root.children.length === 0) {
               handleBootError('Runtime Error: ' + (e.message || String(e.error)));
@@ -481,6 +491,7 @@
       // Register Service Worker across all environments for 100% offline capability
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
+          const hadController = Boolean(navigator.serviceWorker.controller);
           navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' })
             .then((registration) => {
               window.__dailyKhataSwReg = registration;
@@ -530,10 +541,10 @@
               console.warn('Service Worker registration error:', error);
             });
 
-          // Reload smoothly when new service worker takes over
+          // Reload smoothly when new service worker takes over (only if updating an existing controller)
           let refreshing = false;
           navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (refreshing) return;
+            if (!hadController || refreshing) return;
             refreshing = true;
             console.log('[PWA] Service worker updated. Reloading with fresh assets...');
             window.location.reload();

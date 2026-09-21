@@ -227,7 +227,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                   if (isLightMode) {
                     onThemeChange('yellow');
                   } else {
-                    onThemeChange('light');
+                    onThemeChange('white');
                   }
                 }}
                 className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] text-[11px] font-bold transition-all cursor-pointer active:scale-95"

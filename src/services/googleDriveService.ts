@@ -223,6 +223,14 @@ export const googleSignIn = async (
 
     return { user: result.user, accessToken: cachedAccessToken };
   } catch (error: any) {
+    if (error?.code === 'auth/unauthorized-domain' || error?.message?.includes('unauthorized-domain')) {
+      const host = typeof window !== 'undefined' ? window.location.hostname : 'Current Domain';
+      console.warn(`[Google Auth] Domain "${host}" is not authorized in Firebase Console -> Authentication -> Settings -> Authorized Domains.`);
+      const authErr = new Error(`Domain authorization required: "${host}" is not in Firebase authorized domains.`);
+      (authErr as any).code = 'auth/unauthorized-domain';
+      (authErr as any).unauthorizedDomain = host;
+      throw authErr;
+    }
     console.error('Google Sign In Error:', error);
     throw error;
   } finally {

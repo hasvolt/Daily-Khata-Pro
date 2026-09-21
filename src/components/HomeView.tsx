@@ -162,51 +162,55 @@ export const HomeView: React.FC<HomeViewProps> = ({
     {
       label: isHindi ? 'लक्ष्य' : 'Goals',
       icon: Target,
-      tone: 'text-[#EC4899] bg-[#EC4899]/15 border-[#EC4899]/30',
+      tone: 'text-sky-500 bg-sky-500/10 border-sky-500/25',
       action: onNavigateGoals,
     },
     {
       label: isHindi ? 'लोन' : 'Loans',
       icon: Landmark,
-      tone: 'text-[#10B981] bg-[#10B981]/15 border-[#10B981]/30',
+      tone: 'text-indigo-500 bg-indigo-500/10 border-indigo-500/25',
       action: onNavigateLoans,
     },
     {
       label: isHindi ? 'कैलकुलेटर' : 'Calculator',
       icon: Calculator,
-      tone: 'text-[#06B6D4] bg-[#06B6D4]/15 border-[#06B6D4]/30',
+      tone: 'text-cyan-500 bg-cyan-500/10 border-cyan-500/25',
       action: onNavigateCalculator,
     },
     {
       label: isHindi ? 'रिपोर्ट्स' : 'Reports',
       icon: BarChart3,
-      tone: 'text-[#8B5CF6] bg-[#8B5CF6]/15 border-[#8B5CF6]/30',
+      tone: 'text-blue-500 bg-blue-500/10 border-blue-500/25',
       action: onNavigateReports,
     },
     {
       label: isHindi ? 'इतिहास' : 'History',
       icon: History,
-      tone: 'text-[#F59E0B] bg-[#F59E0B]/15 border-[#F59E0B]/30',
+      tone: 'text-teal-500 bg-teal-500/10 border-teal-500/25',
       action: onViewHistory,
     },
     {
       label: isHindi ? 'कैटेगरी' : 'Categories',
       icon: Grid2X2,
-      tone: 'text-[#0284C7] bg-[#0284C7]/15 border-[#0284C7]/30',
+      tone: 'text-slate-600 dark:text-slate-300 bg-slate-500/10 border-slate-500/25',
       action: () => setIsSelectorOpen(true),
     },
   ];
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto pb-10 sm:pb-14 space-y-4 sm:space-y-5 animate-in fade-in duration-200">
-      {/* Subtle deep navy ambient glow */}
+    <div className="relative w-full max-w-6xl mx-auto pb-10 sm:pb-14 space-y-3.5 sm:space-y-4 animate-in fade-in duration-200">
+      {/* Premium Frosted Glass Luminous Backdrops */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 w-[92vw] max-w-4xl h-[360px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(25,191,255,0.06)_0%,rgba(14,165,233,0.02)_45%,transparent_72%)] blur-3xl -z-10"
+        className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[96vw] max-w-5xl h-[420px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.12)_0%,rgba(14,165,233,0.05)_45%,transparent_72%)] blur-3xl -z-10"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[90vw] max-w-3xl h-[400px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(14,165,233,0.035)_0%,transparent_70%)] blur-3xl -z-10"
+        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[92vw] max-w-4xl h-[450px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08)_0%,rgba(56,189,248,0.04)_40%,transparent_70%)] blur-3xl -z-10"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-12 left-1/2 -translate-x-1/2 w-[88vw] max-w-3xl h-[360px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.06)_0%,transparent_65%)] blur-3xl -z-10"
       />
 
       {/* 1. HERO BALANCE CARD */}
@@ -225,7 +229,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 2. TODAY + THIS MONTH SUMMARY CARDS (Side by Side) */}
       <motion.section
-        className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
+        className="grid grid-cols-2 gap-2.5 sm:gap-3.5"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.04 }}
@@ -260,7 +264,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 3. QUICK ACCESS */}
       <motion.section
-        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] p-3.5 sm:p-4 md:p-5 shadow-[0_12px_30px_-15px_rgba(0,0,0,.7)]"
+        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.06 }}
@@ -290,7 +294,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5">
+        <div className="grid grid-cols-6 gap-1 sm:gap-2">
           {quickAccess.map((item) => {
             const Icon = item.icon;
             return (
@@ -298,12 +302,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 key={item.label}
                 type="button"
                 onClick={item.action}
-                className="min-w-0 rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-2 py-2.5 sm:px-1.5 sm:py-2.5 flex flex-col items-center justify-center gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/40 hover:bg-[var(--theme-card-hover,#19304A)] transition-all active:scale-[.96] cursor-pointer"
+                className="min-w-0 rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-0.5 sm:px-1.5 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/40 hover:bg-[var(--theme-card-hover,#19304A)] transition-all active:scale-[.96] cursor-pointer"
               >
                 <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl border flex items-center justify-center ${item.tone}`}>
                   <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 </div>
-                <span className="text-[9px] sm:text-[10px] md:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate max-w-full text-center px-0.5">
+                <span className="text-[7.5px] xs:text-[8.5px] sm:text-[10px] md:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate max-w-full text-center px-0.5">
                   {item.label}
                 </span>
               </button>
@@ -312,23 +316,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </motion.section>
 
-      {/* 4. FINANCIAL SNAPSHOT */}
-      <motion.div
-        className="flex items-center justify-between gap-3 px-1"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.07 }}
-      >
-        <div className="min-w-0">
-          <h3 className="text-[14px] sm:text-[16px] font-bold text-[var(--theme-text,#F8FAFC)]">
-            {isHindi ? 'वित्तीय स्थिति' : 'Financial Snapshot'}
-          </h3>
-          <p className="text-[9px] sm:text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
-            {isHindi ? 'लक्ष्य और उधार एक नज़र में' : 'Goals and loans at a glance'}
-          </p>
-        </div>
-      </motion.div>
-
+      {/* 4. FINANCIAL GOALS + LOANS & EMIs (Responsive 2-column bento) */}
       <motion.section
         className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5"
         initial={{ opacity: 0, y: 8 }}
@@ -356,7 +344,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 5. TOP CATEGORIES */}
       <motion.section
-        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] p-3.5 sm:p-4 md:p-5 space-y-3 sm:space-y-3.5 shadow-[0_12px_30px_-15px_rgba(0,0,0,.7)]"
+        className="space-y-2.5 sm:space-y-3"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -472,7 +460,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 6. RECENT TRANSACTIONS */}
       <motion.section
-        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] p-3.5 sm:p-4 md:p-5 shadow-[0_12px_30px_-15px_rgba(0,0,0,.7)]"
+        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -502,7 +490,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
           {entries
             .slice()
             .sort((a, b) => b.createdAt - a.createdAt)
@@ -553,24 +541,24 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </motion.section>
 
-      {/* 7. MOTIVATIONAL / FINANCIAL HINT (Matching reference) */}
+      {/* 7. MOTIVATIONAL / FINANCIAL HINT (Theme-aware frosted glass card) */}
       <motion.div
         onClick={handleNextTip}
-        className="rounded-[20px] sm:rounded-2xl border border-amber-400/25 bg-[radial-gradient(ellipse_at_10%_50%,rgba(245,158,11,0.12),transparent_60%),linear-gradient(135deg,#0e1a2b,#081322)] p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-sm cursor-pointer hover:border-amber-400/40 transition-all select-none"
+        className="rounded-[20px] sm:rounded-2xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-xs cursor-pointer hover:border-[var(--theme-primary,#38BDF8)]/40 transition-all select-none"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.3, delay: 0.14 }}
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="h-8 w-8 rounded-xl bg-amber-400/15 border border-amber-400/30 text-amber-400 flex items-center justify-center shrink-0">
+          <div className="h-8 w-8 rounded-xl bg-sky-500/10 border border-sky-500/25 text-sky-500 dark:text-sky-400 flex items-center justify-center shrink-0">
             <Lightbulb className="w-4 h-4" />
           </div>
-          <p className="text-[11px] sm:text-xs font-semibold text-slate-200 truncate">
+          <p className="text-[11px] sm:text-xs font-semibold text-[var(--theme-text,#F8FAFC)] truncate">
             {FINANCIAL_TIPS[currentTipIndex]}
           </p>
         </div>
-        <ChevronRight className="w-4 h-4 text-amber-400 shrink-0" />
+        <ChevronRight className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)] shrink-0" />
       </motion.div>
 
       {/* 8. SECURITY & PRIVACY TRUST BADGE */}

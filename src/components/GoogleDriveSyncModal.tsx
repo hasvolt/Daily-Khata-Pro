@@ -16,7 +16,8 @@ import {
   Database,
   ArrowDownToLine,
   RefreshCw,
-  LogOut
+  LogOut,
+  Copy
 } from 'lucide-react';
 import { AppLanguage, KhataData } from '../types';
 import {
@@ -70,6 +71,7 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
   const [isManualBackingUp, setIsManualBackingUp] = useState<boolean>(false);
   const [isFetchingBackups, setIsFetchingBackups] = useState<boolean>(false);
   const [driveFiles, setDriveFiles] = useState<DriveFileInfo[]>([]);
+  const [unauthorizedDomain, setUnauthorizedDomain] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
 
   // Restore & Delete Confirmation States (MANDATORY User Confirmation)
@@ -141,12 +143,25 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
       loadDriveBackups();
     } catch (err: any) {
       triggerHapticSound('error');
-      showToast(
-        'error',
-        err.message?.includes('popup-closed')
-          ? t('लॉगिन विंडो बंद कर दी गई।', 'Sign in popup closed.')
-          : t(`लॉगिन विफल: ${err.message || 'Error'}`, `Login failed: ${err.message || 'Error'}`)
-      );
+      const isUnauthorized = err?.code === 'auth/unauthorized-domain' || err?.message?.includes('unauthorized-domain');
+      if (isUnauthorized) {
+        const host = err?.unauthorizedDomain || (typeof window !== 'undefined' ? window.location.hostname : 'Current Domain');
+        setUnauthorizedDomain(host);
+        showToast(
+          'error',
+          t(
+            `डोमेन अनुमति आवश्यक: '${host}' को Firebase Console में Authorized Domains में जोड़ें।`,
+            `Domain authorization required: '${host}' must be authorized in Firebase Console.`
+          )
+        );
+      } else {
+        showToast(
+          'error',
+          err.message?.includes('popup-closed')
+            ? t('लॉगिन विंडो बंद कर दी गई।', 'Sign in popup closed.')
+            : t(`लॉगिन विफल: ${err.message || 'Error'}`, `Login failed: ${err.message || 'Error'}`)
+        );
+      }
     } finally {
       setIsLoggingIn(false);
     }
@@ -394,6 +409,36 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
                       : t('गूगल खाते से साइन इन करें (Sign in with Google)', 'Sign in with Google')}
                   </span>
                 </button>
+
+                {unauthorizedDomain && (
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11.5px] space-y-2">
+                    <div className="flex items-start gap-2 text-amber-400 font-bold">
+                      <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                      <span>
+                        {t('अधिकृत डोमेन आवश्यक (Domain Authorization Required)', 'Domain Authorization Required')}
+                      </span>
+                    </div>
+                    <p className="text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
+                      {t(
+                        `वर्तमान डोमेन '${unauthorizedDomain}' को Firebase Console (Authentication > Settings > Authorized Domains) में जोड़ना आवश्यक है।`,
+                        `The domain '${unauthorizedDomain}' must be added to Authorized Domains in Firebase Console (Authentication > Settings > Authorized Domains).`
+                      )}
+                    </p>
+                    <div className="flex items-center gap-2 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard?.writeText(unauthorizedDomain);
+                          showToast('success', t('डोमेन क्लिपबोर्ड पर कॉपी हो गया!', 'Domain copied to clipboard!'));
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-[10.5px] flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>{t('डोमेन कॉपी करें (Copy Domain)', 'Copy Domain')}</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

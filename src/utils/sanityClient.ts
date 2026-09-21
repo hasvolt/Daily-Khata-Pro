@@ -32,12 +32,7 @@ export interface SanityBlogPost {
   mainImage?: any;
   bodyText?: string;
   body?: any[];
-  sources?: Array<{
-    title: string;
-    url?: string;
-    notes?: string;
-    date?: string;
-  }>;
+  sources?: Array<{ title: string; url?: string; notes?: string }>;
   disclaimer?: string;
   tags?: string[];
 }
@@ -62,19 +57,13 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
       articleType,
       readTime,
       summary,
-      "mainImage": featuredImage,
+      mainImage,
       bodyText,
       body,
-      "sources": sources[]{
-        "title": name,
-        url,
-        "notes": description,
-        date
-      },
+      sources,
       disclaimer,
       tags
     }`;
-
     const posts = await sanityClient.fetch<SanityBlogPost[]>(query);
     return posts || [];
   } catch (error) {
@@ -86,9 +75,7 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
 /**
  * Fetch a single blog post by slug or ID from Sanity CMS
  */
-export async function getSanityPostBySlug(
-  slugOrId: string
-): Promise<SanityBlogPost | null> {
+export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogPost | null> {
   try {
     const query = `*[_type == "post" && (slug.current == $slugOrId || _id == $slugOrId)][0] {
       _id,
@@ -105,24 +92,14 @@ export async function getSanityPostBySlug(
       articleType,
       readTime,
       summary,
-      "mainImage": featuredImage,
+      mainImage,
       bodyText,
       body,
-      "sources": sources[]{
-        "title": name,
-        url,
-        "notes": description,
-        date
-      },
+      sources,
       disclaimer,
       tags
     }`;
-
-    const post = await sanityClient.fetch<SanityBlogPost | null>(
-      query,
-      { slugOrId }
-    );
-
+    const post = await sanityClient.fetch<SanityBlogPost | null>(query, { slugOrId });
     return post || null;
   } catch (error) {
     console.warn('Sanity fetch single post notice:', error);

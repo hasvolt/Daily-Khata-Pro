@@ -15,7 +15,7 @@ export const DEFAULT_FUNDS: FundConfig[] = [
     label: 'Family & Home',
     hindiLabel: 'परिवार व घर (Family & Home)',
     defaultPct: 30,
-    color: '#FFC700', // Volt Yellow
+    color: '#0D9488', // Emerald Teal
     description: 'House rent, groceries, family support & home utilities',
     iconName: 'Home'
   },

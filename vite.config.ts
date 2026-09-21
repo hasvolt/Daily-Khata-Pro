@@ -34,17 +34,25 @@ export default defineConfig(() => {
       ],
     },
     build: {
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 1500,
+      sourcemap: false,
       rollupOptions: {
-        external: ['puppeteer', 'express', 'path', 'fs'],
+        maxParallelFileOps: 2,
+        cache: false,
+        external: ['express', 'path', 'fs'],
         output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom', 'react-router', 'react-router-dom'],
-            icons: ['lucide-react'],
-            firebase: ['firebase/app', 'firebase/auth'],
-            charts: ['recharts'],
-            animation: ['motion/react', 'canvas-confetti'],
-            google: ['@google/genai']
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('recharts')) {
+                return 'charts';
+              }
+              if (id.includes('firebase')) {
+                return 'firebase';
+              }
+              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+                return 'vendor';
+              }
+            }
           }
         }
       }

@@ -1,20 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createClient } from '@sanity/client';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const CANONICAL_DOMAIN = 'https://www.rozfiber.com';
 const SITEMAP_PATH = path.join(__dirname, '..', 'public', 'sitemap.xml');
-
-const sanityClient = createClient({
-  projectId: '3zccyf67',
-  dataset: 'production',
-  apiVersion: '2024-01-01',
-  useCdn: true,
-});
 
 async function generateSitemap() {
   console.log('[sitemap] Starting build-time sitemap update...');
@@ -37,16 +29,16 @@ async function generateSitemap() {
     newUrls.push(`  <url>\n    <loc>${blogUrl}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>`);
   }
 
-  // 3. Query published Sanity posts with valid slugs
+  // 3. Query published Sanity posts with valid slugs using native fetch
   let posts = [];
   try {
-    posts = await sanityClient.fetch(
-      `*[_type == "post" && defined(slug.current)] {
-        "slug": slug.current,
-        _updatedAt,
-        publishedAt
-      }`
-    );
+    const query = encodeURIComponent('*[_type == "post" && defined(slug.current)] { "slug": slug.current, _updatedAt, publishedAt }');
+    const apiUrl = `https://3zccyf67.api.sanity.io/v2024-01-01/data/query/production?query=${query}`;
+    const res = await fetch(apiUrl);
+    if (res.ok) {
+      const data = await res.json();
+      posts = data.result || [];
+    }
     console.log(`[sitemap] Retrieved ${posts.length} published post(s) from Sanity.`);
 
     // Add each published Sanity post

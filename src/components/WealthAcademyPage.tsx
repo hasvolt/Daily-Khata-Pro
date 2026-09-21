@@ -1,10 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, Search, GraduationCap, Target, Shield, Zap, Sparkles, BookOpen, ChevronRight } from 'lucide-react';
+import {
+  ArrowLeft, Search, GraduationCap, Target, Shield, Zap, Sparkles, BookOpen, ChevronRight,
+  Home, Smile, Heart, History, ShoppingBag, TrendingUp, Briefcase, Download, Percent,
+  User, HelpCircle, BarChart3, Plus, Smartphone, AlertCircle, FileText
+} from 'lucide-react';
 import { AppLanguage } from '../types';
 import { NavTab } from './BottomNav';
 import { ACADEMY_ARTICLES } from '../data/wealthAcademy';
-import * as LucideIcons from 'lucide-react';
+
+const ACADEMY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Home, Target, Shield, Sparkles, BookOpen, Smile, Heart, History, ShoppingBag, TrendingUp,
+  Briefcase, Download, Percent, User, HelpCircle, BarChart3, Plus, Smartphone, AlertCircle, FileText
+};
 
 interface WealthAcademyPageProps {
   onBack: () => void;
@@ -107,7 +115,7 @@ export const WealthAcademyPage: React.FC<WealthAcademyPageProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredArticles.length > 0 ? (
             filteredArticles.map((article, idx) => {
-              const Icon = (LucideIcons as any)[article.icon] || BookOpen;
+              const Icon = ACADEMY_ICONS[article.icon] || BookOpen;
               return (
                 <motion.button
                   key={article.id}

@@ -403,30 +403,6 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          {/* Privacy Eye Toggle */}
-          {onTogglePrivacyMask && (
-            <button
-              type="button"
-              onClick={onTogglePrivacyMask}
-              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
-                privacyMask
-                  ? 'bg-[#F59E0B]/20 border-[#F59E0B]/50 text-[#F59E0B]'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
-              }`}
-              title={privacyMask ? 'Amounts Hidden (Click to show)' : 'Mask Rupee Amounts'}
-              id="header-privacy-mask-btn"
-            >
-              {privacyMask ? (
-                <EyeOff className="w-4 h-4 shrink-0" />
-              ) : (
-                <Eye className="w-4 h-4 shrink-0" />
-              )}
-              <span className="hidden xl:inline">
-                {privacyMask ? tr.menu.hidden : tr.menu.mask}
-              </span>
-            </button>
-          )}
-
           {/* Quick Day/Night Toggle */}
           {onThemeChange && (
             <button
@@ -435,12 +411,12 @@ export const Header: React.FC<HeaderProps> = ({
                 if (isLightMode) {
                   onThemeChange('yellow');
                 } else {
-                  onThemeChange('light');
+                  onThemeChange('white');
                 }
               }}
               className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
                 isLightMode
-                  ? 'bg-[#0284C7]/15 border-[#0284C7]/40 text-[#0284C7] hover:bg-[#0284C7]/25'
+                  ? 'bg-[var(--theme-primary,#0284C7)]/15 border-[var(--theme-primary,#0284C7)]/40 text-[var(--theme-primary,#0284C7)] hover:bg-[var(--theme-primary,#0284C7)]/25'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
               }`}
               title={isLightMode ? 'Switch to Night Mode' : 'Switch to Day Mode'}
@@ -453,6 +429,34 @@ export const Header: React.FC<HeaderProps> = ({
               )}
               <span className="hidden sm:inline">
                 {isLightMode ? tr.menu.night : tr.menu.day}
+              </span>
+            </button>
+          )}
+
+          {/* Privacy Mask Quick Toggle (Header) */}
+          {onTogglePrivacyMask && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onTogglePrivacyMask();
+              }}
+              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
+                privacyMask
+                  ? 'bg-sky-500/15 border-sky-500/40 text-sky-600 dark:text-sky-400 hover:bg-sky-500/25'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
+              }`}
+              title={privacyMask ? (isHindi ? 'बैलेंस दिखाएं' : 'Show Balance') : (isHindi ? 'बैलेंस छिपाएं' : 'Hide Balance')}
+              aria-label={privacyMask ? 'Show Balance' : 'Hide Balance'}
+              id="header-privacy-mask-btn"
+            >
+              {privacyMask ? (
+                <EyeOff className="w-4 h-4 shrink-0 text-sky-500" />
+              ) : (
+                <Eye className="w-4 h-4 shrink-0" />
+              )}
+              <span className="hidden md:inline">
+                {privacyMask ? (isHindi ? 'दिखाएं' : 'Show') : (isHindi ? 'छिपाएं' : 'Hide')}
               </span>
             </button>
           )}

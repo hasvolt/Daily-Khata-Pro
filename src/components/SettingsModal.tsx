@@ -312,16 +312,30 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         )
       );
     } catch (err: any) {
-      console.error('Drive backup failed:', err);
-      showFeedback(
-        'error',
-        err?.message ||
+      const isUnauthorized = err?.code === 'auth/unauthorized-domain' || err?.message?.includes('unauthorized-domain');
+      if (isUnauthorized) {
+        const host = typeof window !== 'undefined' ? window.location.hostname : '';
+        console.warn(`[Drive Backup] Domain "${host}" not authorized in Firebase.`);
+        showFeedback(
+          'error',
           tStr(
-            'गूगल ड्राइव बैकअप में समस्या आई। कृपया पुनः प्रयास करें।',
-            'Google Drive backup mein dikkat aayi. Kripya dobara try karein.',
-            'Failed to backup to Google Drive. Please try again.'
+            `डोमेन अनुमति आवश्यक: '${host}' को Firebase Authorized Domains में जोड़ें।`,
+            `Domain authorization required: '${host}' must be authorized in Firebase Console.`,
+            `Domain authorization required: '${host}' must be added to Firebase Authorized Domains.`
           )
-      );
+        );
+      } else {
+        console.error('Drive backup failed:', err);
+        showFeedback(
+          'error',
+          err?.message ||
+            tStr(
+              'गूगल ड्राइव बैकअप में समस्या आई। कृपया पुनः प्रयास करें।',
+              'Google Drive backup mein dikkat aayi. Kripya dobara try karein.',
+              'Failed to backup to Google Drive. Please try again.'
+            )
+        );
+      }
     } finally {
       setIsQuickBackingUp(false);
     }
