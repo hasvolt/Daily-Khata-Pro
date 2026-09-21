@@ -73,17 +73,17 @@ export function SummaryCard3D({
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)]/30 to-transparent" />
 
         {/* Top row */}
-        <div className="relative z-10 flex items-center justify-between gap-1.5">
-          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+        <div className="relative z-10 flex items-center justify-between gap-1 sm:gap-1.5">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
             <div className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl border flex items-center justify-center shrink-0 ${iconBoxBg}`}>
               <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div className="min-w-0">
-              <div className="text-[12px] sm:text-[13.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">{title}</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[11.5px] xs:text-[12px] sm:text-[13.5px] font-bold text-[var(--theme-text,#F8FAFC)] leading-snug whitespace-normal sm:truncate">{title}</div>
               <div className="text-[8.5px] sm:text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate hidden xs:block">{subtitle}</div>
             </div>
           </div>
-          <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[var(--theme-text-muted,#CBD5E1)] bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] px-1.5 py-0.5 rounded-md sm:rounded-lg whitespace-nowrap shrink-0 notranslate" translate="no">
+          <span className="text-[7.5px] sm:text-[8.5px] font-semibold text-[var(--theme-text-muted,#CBD5E1)] bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] px-1 sm:px-1.5 py-0.5 rounded-md sm:rounded-lg whitespace-nowrap shrink-0 notranslate" translate="no">
             {periodBadge}
           </span>
         </div>

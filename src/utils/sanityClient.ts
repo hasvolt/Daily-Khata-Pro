@@ -30,6 +30,7 @@ export interface SanityBlogPost {
   readTime?: string;
   summary?: string;
   mainImage?: any;
+  featuredImage?: any;
   bodyText?: string;
   body?: any[];
   sources?: Array<{ title: string; url?: string; notes?: string }>;
@@ -57,7 +58,8 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
       articleType,
       readTime,
       summary,
-      mainImage,
+      "mainImage": coalesce(featuredImage, mainImage),
+      featuredImage,
       bodyText,
       body,
       sources,
@@ -92,7 +94,8 @@ export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogP
       articleType,
       readTime,
       summary,
-      mainImage,
+      "mainImage": coalesce(featuredImage, mainImage),
+      featuredImage,
       bodyText,
       body,
       sources,

@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Wallet, Calendar, ShieldCheck, Eye, EyeOff, ArrowUpRight } from 'lucide-react';
+import { Wallet, Calendar, ShieldCheck, Eye, EyeOff, ArrowUpRight, Clock } from 'lucide-react';
 
 interface BankingCard3DProps {
   totalWealth: number;
@@ -45,6 +45,17 @@ export function BankingCard3D({
   };
 
   const isHindi = t?.language === 'hi' || /मंग|बुध|गुरु|शुक्र|शनि|रवि|सोम/.test(dateFormatted);
+
+  const [currentTime, setCurrentTime] = useState(() =>
+    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+  );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
+    }, 10000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div style={{ perspective: 1400 }} className="w-full relative z-10">
@@ -115,10 +126,15 @@ export function BankingCard3D({
                 <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                 <span className="text-[7px] sm:text-[8px] font-bold tracking-wider">SECURED</span>
               </div>
-              <div className="banking-card-date-box hidden xs:flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-lg bg-white/[.05] border border-white/[.08] shrink-0">
-                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300" />
+              <div className="banking-card-date-box flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-lg bg-white/[.05] border border-white/[.08] shrink-0">
+                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300 shrink-0" />
                 <span className="banking-card-date text-[8px] sm:text-[9.5px] font-semibold text-slate-200 whitespace-nowrap notranslate" translate="no">
                   {dateFormatted}
+                </span>
+                <span className="text-[8px] text-cyan-300/40">·</span>
+                <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300 shrink-0" />
+                <span className="banking-card-date text-[8px] sm:text-[9.5px] font-semibold text-cyan-300 whitespace-nowrap notranslate" translate="no">
+                  {currentTime}
                 </span>
               </div>
             </div>

@@ -51,6 +51,7 @@ export interface CommercialArticle {
     change?: string;
   }[];
   sanityBody?: any[];
+  mainImage?: any;
   contentSections: {
     heading: string;
     hindiHeading: string;

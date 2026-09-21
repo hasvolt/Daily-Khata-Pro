@@ -153,7 +153,31 @@ export default defineType({
       title: 'Body',
       type: 'array',
       group: 'content',
-      of: [{type: 'block'}],
+      of: [
+        {type: 'block'},
+        {
+          type: 'image',
+          options: {hotspot: true},
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              description: 'Important for SEO and accessibility.',
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+            },
+            {
+              name: 'credit',
+              type: 'string',
+              title: 'Credit / Source',
+            }
+          ]
+        }
+      ],
     }),
 
     // RESEARCH

@@ -11,7 +11,9 @@ export const AppLogo: React.FC<AppLogoProps> = ({
   className = '',
   showText = false
 }) => {
-  const [imageError, setImageError] = useState(false);
+  const [imgSrcIndex, setImgSrcIndex] = useState(0);
+  const logoCandidates = ['/daily-khata-pro-v4.png', '/daily-Khata-Pro.png', '/favicon.png', '/icons/icon-192x192.png'];
+  const hasError = imgSrcIndex >= logoCandidates.length;
 
   // Normalize sizing whether number or preset like 'sm'
   let pixelSize = 32;
@@ -31,20 +33,21 @@ export const AppLogo: React.FC<AppLogoProps> = ({
 
   return (
     <div className={`inline-flex items-center gap-2 ${className}`}>
-      {!imageError ? (
+      {!hasError ? (
         <div
           style={{ width: dimension, height: dimension }}
           className="shrink-0 rounded-xl bg-[#060606] border border-[var(--theme-border,#213E61)]/70 hover:border-[var(--theme-primary,#00D26A)]/60 shadow-md flex items-center justify-center p-0.5 overflow-hidden transition-all hover:scale-105 select-none"
         >
           <img
-            src="/daily-khata-pro-v4.png"
+            src={logoCandidates[imgSrcIndex]}
             alt="Daily Khata Pro Logo"
             width={pixelSize}
             height={pixelSize}
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             className="select-none block"
-            onError={() => setImageError(true)}
+            onError={() => setImgSrcIndex(prev => prev + 1)}
             loading="eager"
+            decoding="async"
           />
         </div>
       ) : (

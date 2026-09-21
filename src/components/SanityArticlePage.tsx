@@ -329,44 +329,44 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   const portableTextComponents: PortableTextComponents = {
     block: {
       h1: ({ children }) => (
-        <h1 className="text-2xl sm:text-3xl font-black text-[var(--theme-text,#F8FAFC)] mt-8 mb-4 leading-tight">
+        <h1 className="text-2xl sm:text-3xl font-black text-[var(--theme-text,#F8FAFC)] mt-10 mb-4 leading-tight tracking-tight">
           {children}
         </h1>
       ),
       h2: ({ children }) => (
-        <h2 className="text-xl sm:text-2xl font-bold text-[var(--theme-text,#F8FAFC)] mt-8 mb-4 border-l-3 border-[var(--theme-primary,#0284C7)] pl-3 leading-snug">
+        <h2 className="text-xl sm:text-2xl font-bold text-[var(--theme-text,#F8FAFC)] mt-10 mb-4 border-l-4 border-[var(--theme-primary,#0284C7)] pl-3.5 leading-snug tracking-tight">
           {children}
         </h2>
       ),
       h3: ({ children }) => (
-        <h3 className="text-lg sm:text-xl font-bold text-[var(--theme-text,#F8FAFC)] mt-6 mb-3 leading-snug">
+        <h3 className="text-lg sm:text-xl font-bold text-[var(--theme-text,#F8FAFC)] mt-8 mb-3 leading-snug">
           {children}
         </h3>
       ),
       h4: ({ children }) => (
-        <h4 className="text-base sm:text-lg font-bold text-[var(--theme-text,#F8FAFC)] mt-5 mb-2">
+        <h4 className="text-base sm:text-lg font-bold text-[var(--theme-text,#F8FAFC)] mt-6 mb-2">
           {children}
         </h4>
       ),
       normal: ({ children }) => (
-        <p className="text-[var(--theme-text-muted,#334155)] mb-4 leading-relaxed font-normal">
+        <p className="text-[var(--theme-text-muted,#1E293B)] mb-5 leading-relaxed font-normal text-[15.5px] sm:text-[17px]">
           {children}
         </p>
       ),
       blockquote: ({ children }) => (
-        <blockquote className="my-6 p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border-l-4 border-[var(--theme-primary,#0284C7)] text-[var(--theme-text,#F8FAFC)] italic">
+        <blockquote className="my-6 p-4 sm:p-5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border-l-4 border-[var(--theme-primary,#0284C7)] text-[var(--theme-text,#F8FAFC)] italic shadow-xs">
           {children}
         </blockquote>
       ),
     },
     list: {
       bullet: ({ children }) => (
-        <ul className="list-disc pl-5 mb-5 space-y-1.5 text-[var(--theme-text-muted,#334155)]">
+        <ul className="list-disc pl-6 mb-6 space-y-2 text-[var(--theme-text-muted,#1E293B)] text-[15.5px] sm:text-[17px] leading-relaxed">
           {children}
         </ul>
       ),
       number: ({ children }) => (
-        <ol className="list-decimal pl-5 mb-5 space-y-1.5 text-[var(--theme-text-muted,#334155)]">
+        <ol className="list-decimal pl-6 mb-6 space-y-2 text-[var(--theme-text-muted,#1E293B)] text-[15.5px] sm:text-[17px] leading-relaxed">
           {children}
         </ol>
       ),
@@ -391,18 +391,28 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     },
     types: {
       image: ({ value }) => {
-        if (!value?.asset) return null;
+        const imageSource = value?.asset || value;
+        if (!imageSource) return null;
+        let imageUrl = '';
+        try {
+          imageUrl = urlFor(value).width(1200).auto('format').fit('max').url();
+        } catch {
+          return null;
+        }
         return (
-          <figure className="my-6 rounded-2xl overflow-hidden border border-[var(--theme-border,#213E61)]">
+          <figure className="my-8 rounded-2xl overflow-hidden border border-[var(--theme-border,#213E61)]/70 bg-[var(--theme-surface,#0E1A29)] shadow-sm">
             <img
-              src={urlFor(value).width(1200).url()}
+              src={imageUrl}
               alt={value.alt || 'Article illustration'}
-              className="w-full h-auto object-cover max-h-[500px]"
+              className="w-full h-auto object-cover max-h-[540px] block"
               loading="lazy"
+              referrerPolicy="no-referrer"
             />
-            {value.caption && (
-              <figcaption className="p-2.5 text-xs text-center text-[var(--theme-text-dim,#64748B)] bg-[var(--theme-surface,#0E1A29)]">
-                {value.caption}
+            {(value.caption || value.credit) && (
+              <figcaption className="p-3 text-xs text-center text-[var(--theme-text-dim,#64748B)] bg-[var(--theme-surface,#0E1A29)] border-t border-[var(--theme-border,#213E61)]/50 flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                {value.caption && <span className="font-medium">{value.caption}</span>}
+                {value.caption && value.credit && <span className="hidden sm:inline text-slate-500">•</span>}
+                {value.credit && <span className="opacity-75 italic text-[11px]">{value.credit}</span>}
               </figcaption>
             )}
           </figure>
@@ -671,12 +681,21 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
 
         {/* Featured Image (if available) */}
         {post?.mainImage && (
-          <div className="rounded-3xl overflow-hidden border border-[var(--theme-border,#213E61)] shadow-md">
+          <div className="rounded-3xl overflow-hidden border border-[var(--theme-border,#213E61)] shadow-md bg-[var(--theme-surface,#0E1A29)]">
             <img
-              src={urlFor(post.mainImage).width(1200).url()}
-              alt={post.title}
-              className="w-full h-auto object-cover max-h-[500px]"
+              src={urlFor(post.mainImage).width(1200).auto('format').fit('max').url()}
+              alt={post.mainImage?.alt || post.title}
+              className="w-full h-auto object-cover max-h-[500px] block"
+              loading="eager"
+              referrerPolicy="no-referrer"
             />
+            {(post.mainImage?.caption || post.mainImage?.credit) && (
+              <div className="p-3 text-xs text-center text-[var(--theme-text-dim,#64748B)] bg-[var(--theme-surface,#0E1A29)] border-t border-[var(--theme-border,#213E61)]/50 flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                {post.mainImage.caption && <span className="font-medium">{post.mainImage.caption}</span>}
+                {post.mainImage.caption && post.mainImage.credit && <span className="hidden sm:inline text-slate-500">•</span>}
+                {post.mainImage.credit && <span className="opacity-75 italic text-[11px]">{post.mainImage.credit}</span>}
+              </div>
+            )}
           </div>
         )}
 
@@ -707,7 +726,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
                   <h3 className="text-xl sm:text-2xl font-bold text-[var(--theme-text,#F8FAFC)] border-l-3 border-[var(--theme-primary,#0284C7)] pl-3">
                     {isHindi ? sec.hindiHeading : sec.heading}
                   </h3>
-                  <div className="space-y-3 text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
+                  <div className="space-y-3 text-[var(--theme-text-muted,#1E293B)] leading-relaxed">
                     {sec.paragraphs.map((p, pIdx) => (
                       <p key={pIdx}>{isHindi ? p.hi : p.en}</p>
                     ))}
@@ -716,7 +735,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
               ))}
             </div>
           ) : (
-            <p className="text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
+            <p className="text-[var(--theme-text-muted,#1E293B)] leading-relaxed">
               {post?.bodyText || summary}
             </p>
           )}

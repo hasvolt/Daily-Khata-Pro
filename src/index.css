@@ -208,16 +208,16 @@
     --theme-card-hover: #F1F5F9;
     --theme-border: #E2E8F0;
     --theme-border-subtle: #F1F5F9;
-    --theme-text: #0F172A;
-    --theme-text-muted: #334155;
-    --theme-text-dim: #64748B;
+    --theme-text: #090E17;
+    --theme-text-muted: #1E293B;
+    --theme-text-dim: #334155;
 
-    --theme-primary: #0284C7;
-    --theme-primary-hover: #0369A1;
-    --theme-primary-dim: rgba(2, 132, 199, 0.08);
-    --theme-primary-border: rgba(2, 132, 199, 0.25);
-    --theme-glow: rgba(2, 132, 199, 0.04);
-    --theme-badge-text: #0284C7;
+    --theme-primary: #0369A1;
+    --theme-primary-hover: #075985;
+    --theme-primary-dim: rgba(3, 105, 161, 0.10);
+    --theme-primary-border: rgba(3, 105, 161, 0.35);
+    --theme-glow: rgba(3, 105, 161, 0.06);
+    --theme-badge-text: #0369A1;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
@@ -229,18 +229,18 @@
     --theme-surface: #F8FAFC;
     --theme-card: #FFFFFF;
     --theme-card-hover: #F1F5F9;
-    --theme-border: #E2E8F0;
-    --theme-border-subtle: #F8FAFC;
-    --theme-text: #0F172A;
-    --theme-text-muted: #334155;
-    --theme-text-dim: #64748B;
+    --theme-border: #CBD5E1;
+    --theme-border-subtle: #F1F5F9;
+    --theme-text: #090E17;
+    --theme-text-muted: #1E293B;
+    --theme-text-dim: #334155;
 
-    --theme-primary: #0284C7;
-    --theme-primary-hover: #0369A1;
-    --theme-primary-dim: rgba(2, 132, 199, 0.08);
-    --theme-primary-border: rgba(2, 132, 199, 0.25);
-    --theme-glow: rgba(2, 132, 199, 0.05);
-    --theme-badge-text: #0284C7;
+    --theme-primary: #0369A1;
+    --theme-primary-hover: #075985;
+    --theme-primary-dim: rgba(3, 105, 161, 0.10);
+    --theme-primary-border: rgba(3, 105, 161, 0.35);
+    --theme-glow: rgba(3, 105, 161, 0.06);
+    --theme-badge-text: #0369A1;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
@@ -429,28 +429,34 @@
 [data-theme="white"] .text-slate-100,
 [data-theme="light"] .text-slate-200,
 [data-theme="white"] .text-slate-200 {
-  color: #0F172A;
+  color: #090E17;
 }
 
 [data-theme="light"] .text-\[\#CBD5E1\],
 [data-theme="white"] .text-\[\#CBD5E1\],
 [data-theme="light"] .text-slate-300,
 [data-theme="white"] .text-slate-300 {
-  color: #334155;
+  color: #1E293B;
 }
 
 [data-theme="light"] .text-\[\#94A3B8\],
 [data-theme="white"] .text-\[\#94A3B8\],
 [data-theme="light"] .text-slate-400,
 [data-theme="white"] .text-slate-400 {
-  color: #475569;
+  color: #1E293B;
 }
 
 [data-theme="light"] .text-\[\#64748B\],
 [data-theme="white"] .text-\[\#64748B\],
 [data-theme="light"] .text-slate-500,
 [data-theme="white"] .text-slate-500 {
-  color: #475569;
+  color: #334155;
+}
+
+/* Ensure icons and icon wrappers in Light and White mode are crisp and deep */
+[data-theme="light"] .lucide:not(.text-white):not([class*="text-emerald"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-cyan"]),
+[data-theme="white"] .lucide:not(.text-white):not([class*="text-emerald"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-cyan"]) {
+  stroke-width: 2.2px;
 }
 
 /* Light mode text-white handling: convert to high-contrast dark text inside cards and content */

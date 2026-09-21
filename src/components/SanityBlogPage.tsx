@@ -205,6 +205,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
           }
         ],
         sanityBody: p.body,
+        mainImage: p.mainImage,
         tags: p.tags && p.tags.length > 0 ? p.tags : ['LiveBlog', 'SanityCMS', 'Updates']
       }));
       setSanityArticles(formatted);
@@ -507,6 +508,18 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                   </div>
                 </div>
               </div>
+
+              {featuredArticle.mainImage && (
+                <div className="w-full lg:w-72 xl:w-80 shrink-0 rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] border border-[var(--theme-border,#213E61)]/70 bg-[var(--theme-surface,#0E1A29)] shadow-md">
+                  <img
+                    src={urlFor(featuredArticle.mainImage).width(720).height(540).auto('format').fit('crop').url()}
+                    alt={featuredArticle.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              )}
             </div>
           </article>
         )}
@@ -564,6 +577,19 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                     onClick={() => handleArticleClick(article)}
                     className="group rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/50 hover:bg-[var(--theme-card,#132438)]/80 hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer flex flex-col justify-between p-5 relative overflow-hidden shadow-sm hover:shadow-md"
                   >
+                    {/* Featured Image Thumbnail (if available) */}
+                    {article.mainImage && (
+                      <div className="mb-3.5 -mx-5 -mt-5 rounded-t-2xl overflow-hidden aspect-video bg-[var(--theme-surface,#0E1A29)] border-b border-[var(--theme-border,#213E61)]/60">
+                        <img
+                          src={urlFor(article.mainImage).width(600).height(338).auto('format').fit('crop').url()}
+                          alt={article.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+                    )}
+
                     {/* Top Meta */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2">
