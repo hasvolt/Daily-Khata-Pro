@@ -33,11 +33,14 @@ export interface SanityBlogPost {
   bodyText?: string;
   body?: any[];
   sources?: Array<{
-  title: string;
-  url?: string;
-  notes?: string;
-  date?: string;
-}>;
+    title: string;
+    url?: string;
+    notes?: string;
+    date?: string;
+  }>;
+  disclaimer?: string;
+  tags?: string[];
+}
 
 /**
  * Fetch all published blog posts from Sanity CMS
@@ -63,14 +66,15 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
       bodyText,
       body,
       "sources": sources[]{
-  "title": name,
-  url,
-  "notes": description,
-  date
-},
+        "title": name,
+        url,
+        "notes": description,
+        date
+      },
       disclaimer,
       tags
     }`;
+
     const posts = await sanityClient.fetch<SanityBlogPost[]>(query);
     return posts || [];
   } catch (error) {
@@ -82,7 +86,9 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
 /**
  * Fetch a single blog post by slug or ID from Sanity CMS
  */
-export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogPost | null> {
+export async function getSanityPostBySlug(
+  slugOrId: string
+): Promise<SanityBlogPost | null> {
   try {
     const query = `*[_type == "post" && (slug.current == $slugOrId || _id == $slugOrId)][0] {
       _id,
@@ -101,17 +107,22 @@ export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogP
       summary,
       "mainImage": featuredImage,
       bodyText,
-body,
-"sources": sources[]{
-  "title": name,
-  url,
-  "notes": description,
-  date
-},
+      body,
+      "sources": sources[]{
+        "title": name,
+        url,
+        "notes": description,
+        date
+      },
       disclaimer,
       tags
     }`;
-    const post = await sanityClient.fetch<SanityBlogPost | null>(query, { slugOrId });
+
+    const post = await sanityClient.fetch<SanityBlogPost | null>(
+      query,
+      { slugOrId }
+    );
+
     return post || null;
   } catch (error) {
     console.warn('Sanity fetch single post notice:', error);
