@@ -32,10 +32,12 @@ export interface SanityBlogPost {
   mainImage?: any;
   bodyText?: string;
   body?: any[];
-  sources?: Array<{ title: string; url?: string; notes?: string }>;
-  disclaimer?: string;
-  tags?: string[];
-}
+  sources?: Array<{
+  title: string;
+  url?: string;
+  notes?: string;
+  date?: string;
+}>;
 
 /**
  * Fetch all published blog posts from Sanity CMS
@@ -57,10 +59,15 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
       articleType,
       readTime,
       summary,
-      mainImage,
+      "mainImage": featuredImage,
       bodyText,
       body,
-      sources,
+      "sources": sources[]{
+  "title": name,
+  url,
+  "notes": description,
+  date
+},
       disclaimer,
       tags
     }`;
@@ -92,10 +99,15 @@ export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogP
       articleType,
       readTime,
       summary,
-      mainImage,
+      "mainImage": featuredImage,
       bodyText,
-      body,
-      sources,
+body,
+"sources": sources[]{
+  "title": name,
+  url,
+  "notes": description,
+  date
+},
       disclaimer,
       tags
     }`;
