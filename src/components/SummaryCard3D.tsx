@@ -75,8 +75,8 @@ export function SummaryCard3D({
         {/* Top row */}
         <div className="relative z-10 flex items-center justify-between gap-1 sm:gap-1.5">
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
-            <div className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl border flex items-center justify-center shrink-0 ${iconBoxBg}`}>
-              <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <div className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl border flex items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.18)] transition-transform duration-200 hover:scale-105 ${iconBoxBg}`}>
+              <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-[11.5px] xs:text-[12px] sm:text-[13.5px] font-bold text-[var(--theme-text,#F8FAFC)] leading-snug whitespace-normal sm:truncate">{title}</div>
@@ -94,8 +94,8 @@ export function SummaryCard3D({
             {isHindi ? 'शुद्ध बचत' : 'Net Total'}
           </div>
           <div
-            className={`font-mono text-[17px] xs:text-[20px] sm:text-[23px] font-extrabold tracking-tight truncate notranslate ${
-              isNetPositive ? 'text-emerald-500 dark:text-emerald-400' : 'text-rose-500 dark:text-rose-400'
+            className={`font-mono text-[17px] xs:text-[20px] sm:text-[23px] font-black tracking-tight truncate notranslate ${
+              isNetPositive ? 'text-emerald-400 drop-shadow-[0_1px_3px_rgba(16,185,129,0.3)]' : 'text-rose-400 drop-shadow-[0_1px_3px_rgba(244,63,94,0.3)]'
             }`}
             translate="no"
           >
@@ -105,22 +105,22 @@ export function SummaryCard3D({
 
         {/* Bottom 2-stat row with full width for clean reading on mobile */}
         <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-2.5 pt-2.5 border-t border-[var(--theme-border,#213E61)]/40">
-          <div className="rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 border border-[var(--theme-border,#213E61)] px-1.5 py-1 sm:py-1.5 min-w-0">
-            <div className="flex items-center gap-0.5 text-emerald-500 dark:text-emerald-400 text-[8px] sm:text-[9px] font-semibold">
-              <ArrowUpRight className="w-2.5 h-2.5 shrink-0" />
+          <div className="rounded-lg sm:rounded-xl bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-1 sm:py-1.5 min-w-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+            <div className="flex items-center gap-0.5 text-emerald-400 text-[8px] sm:text-[9px] font-semibold">
+              <ArrowUpRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0 stroke-[2.5]" />
               <span className="truncate">{isHindi ? 'आय' : 'Income'}</span>
             </div>
-            <div className="font-mono text-[9px] xs:text-[10px] sm:text-[11.5px] font-bold text-emerald-500 dark:text-emerald-400 truncate mt-0.5 notranslate" translate="no">
+            <div className="font-mono text-[10.5px] xs:text-[11.5px] sm:text-[13px] font-black text-emerald-300 dark:text-emerald-400 truncate mt-0.5 tracking-tight notranslate drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" translate="no">
               +{formatCurrency(incomeValue, privacyMask)}
             </div>
           </div>
 
-          <div className="rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 border border-[var(--theme-border,#213E61)] px-1.5 py-1 sm:py-1.5 min-w-0">
-            <div className="flex items-center gap-0.5 text-rose-500 dark:text-rose-400 text-[8px] sm:text-[9px] font-semibold">
-              <ArrowDownRight className="w-2.5 h-2.5 shrink-0" />
+          <div className="rounded-lg sm:rounded-xl bg-rose-500/10 border border-rose-500/25 px-1.5 py-1 sm:py-1.5 min-w-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+            <div className="flex items-center gap-0.5 text-rose-400 text-[8px] sm:text-[9px] font-semibold">
+              <ArrowDownRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0 stroke-[2.5]" />
               <span className="truncate">{isHindi ? 'व्यय' : 'Expense'}</span>
             </div>
-            <div className="font-mono text-[9px] xs:text-[10px] sm:text-[11.5px] font-bold text-rose-500 dark:text-rose-400 truncate mt-0.5 notranslate" translate="no">
+            <div className="font-mono text-[10.5px] xs:text-[11.5px] sm:text-[13px] font-black text-rose-300 dark:text-rose-400 truncate mt-0.5 tracking-tight notranslate drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" translate="no">
               -{formatCurrency(expenseValue, privacyMask)}
             </div>
           </div>

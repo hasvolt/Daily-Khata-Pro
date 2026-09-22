@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Wallet, Calendar, ShieldCheck, Eye, EyeOff, ArrowUpRight, Clock } from 'lucide-react';
+import { Wallet, Calendar, ShieldCheck, Eye, EyeOff, ArrowUpRight, ArrowDownRight, Clock } from 'lucide-react';
 
 interface BankingCard3DProps {
   totalWealth: number;
@@ -94,13 +94,13 @@ export function BankingCard3D({
 
         <div className="relative z-10" style={{ transform: 'translateZ(28px)' }}>
           {/* Header row */}
-          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
-            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              <div className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_0_14px_var(--theme-glow,rgba(56,189,248,0.25))]">
-                <Wallet className="w-4 h-4" />
+          <div className="flex items-center justify-between gap-1 sm:gap-2 min-w-0">
+            <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 shrink">
+              <div className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_2px_8px_var(--theme-glow,rgba(56,189,248,0.25)),inset_0_1px_0_rgba(255,255,255,0.25)] transition-transform duration-200 hover:scale-105">
+                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
               </div>
-              <div className="flex items-center gap-1 sm:gap-1.5">
-                <span className="banking-card-label text-[11.5px] sm:text-[13.5px] font-extrabold tracking-wider text-slate-100 uppercase whitespace-nowrap">
+              <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
+                <span className="banking-card-label text-[11px] sm:text-[13.5px] font-extrabold tracking-wider text-slate-100 uppercase truncate">
                   {isHindi ? 'कुल बैलेंस' : 'Total Balance'}
                 </span>
                 <button
@@ -121,16 +121,16 @@ export function BankingCard3D({
               </div>
             </div>
 
-            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
-              {/* Distinct SECURE badge */}
-              <div className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-emerald-500/15 border border-emerald-500/30 shrink-0">
+            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 max-w-[55%] xs:max-w-none">
+              {/* Distinct SECURE badge (compact on mobile, full text on sm+) */}
+              <div className="hidden xs:flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-emerald-500/15 border border-emerald-500/30 shrink-0">
                 <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400 shrink-0" />
-                <span className="text-[7.5px] sm:text-[8.5px] font-bold tracking-wider uppercase text-emerald-400">SECURE</span>
+                <span className="hidden sm:inline text-[7.5px] sm:text-[8.5px] font-bold tracking-wider uppercase text-emerald-400">SECURE</span>
               </div>
-              {/* Distinct Date badge (compact on mobile, time only on tablet/desktop) */}
-              <div className="banking-card-date-box flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0A1220)] border border-[var(--theme-border,rgba(255,255,255,0.12))] shadow-xs shrink-0">
+              {/* Distinct Date badge (never overflows on mobile) */}
+              <div className="banking-card-date-box flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0A1220)] border border-[var(--theme-border,rgba(255,255,255,0.12))] shadow-xs shrink-0 max-w-full">
                 <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                <span className="banking-card-date text-[8px] sm:text-[9.5px] font-semibold text-slate-200 whitespace-nowrap notranslate" translate="no">
+                <span className="banking-card-date text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-semibold text-slate-200 whitespace-nowrap notranslate" translate="no">
                   {dateFormatted}
                 </span>
                 <span className="hidden md:inline text-[8px] text-[var(--theme-primary,#38BDF8)]/40">·</span>
@@ -199,10 +199,10 @@ export function BankingCard3D({
                 id="hero-add-income-btn"
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 2, scale: 0.97 }}
-                className="min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-[#22C55E] hover:bg-[#1ea34d] active:bg-[#18803d] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-[0_4px_0_0_#15803d,0_8px_16px_rgba(34,197,94,0.32),inset_0_1px_0_rgba(255,255,255,0.25)] active:shadow-[0_1px_0_0_#15803d,inset_0_2px_4px_rgba(0,0,0,0.4)] cursor-pointer"
+                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#22C55E] via-[#16A34A] to-[#15803D] hover:from-[#2ecc71] hover:to-[#16a34a] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-[0_4px_0_0_#14532D,0_10px_20px_rgba(34,197,94,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] active:shadow-[0_1px_0_0_#14532D,inset_0_2px_4px_rgba(0,0,0,0.4)] cursor-pointer select-none"
               >
-                <span>+ Income</span>
-                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">+ Income</span>
+                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
               </motion.button>
 
               <motion.button
@@ -211,10 +211,10 @@ export function BankingCard3D({
                 id="hero-add-expense-btn"
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 2, scale: 0.97 }}
-                className="min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-[#EF4444] hover:bg-[#dc2626] active:bg-[#b91c1c] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-[0_4px_0_0_#b91c1c,0_8px_16px_rgba(239,68,68,0.32),inset_0_1px_0_rgba(255,255,255,0.25)] active:shadow-[0_1px_0_0_#b91c1c,inset_0_2px_4px_rgba(0,0,0,0.4)] cursor-pointer"
+                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] hover:from-[#f87171] hover:to-[#dc2626] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-[0_4px_0_0_#7F1D1D,0_10px_20px_rgba(239,68,68,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] active:shadow-[0_1px_0_0_#7F1D1D,inset_0_2px_4px_rgba(0,0,0,0.4)] cursor-pointer select-none"
               >
-                <span>− Expense</span>
-                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">− Expense</span>
+                <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform duration-150" />
               </motion.button>
             </div>
           </div>
