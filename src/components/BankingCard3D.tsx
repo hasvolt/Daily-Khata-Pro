@@ -191,7 +191,7 @@ export function BankingCard3D({
           </div>
 
           {/* Actions: + Income and − Expense */}
-          <div className="border-t border-white/10 pt-2.5 sm:pt-3 mt-2.5 sm:mt-3">
+          <div className="banking-card-divider border-t border-white/10 pt-2.5 sm:pt-3 mt-2.5 sm:mt-3">
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
               <motion.button
                 type="button"

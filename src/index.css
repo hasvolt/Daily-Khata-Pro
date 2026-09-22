@@ -652,9 +652,9 @@
 /* Banking Card 3D Light & White Mode Adaptation - Luxury Pearl Glass Card */
 [data-theme="light"] .banking-card-3d,
 [data-theme="white"] .banking-card-3d {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.95) 50%, rgba(224, 242, 254, 0.90) 100%) !important;
-  border: 1px solid rgba(56, 189, 248, 0.35) !important;
-  box-shadow: 0 12px 32px -6px rgba(2, 132, 199, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.04), inset 0 1px 2px rgba(255, 255, 255, 1) !important;
+  background: radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 60%), linear-gradient(145deg, #FFFFFF 0%, #F0F9FF 32%, #E0F2FE 70%, #DDF4FF 100%) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.40) !important;
+  box-shadow: 0 16px 36px -8px rgba(2, 132, 199, 0.20), 0 6px 14px -2px rgba(15, 23, 42, 0.05), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -2px 6px rgba(56, 189, 248, 0.15) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
 }
@@ -673,39 +673,47 @@
 [data-theme="light"] .banking-card-3d .banking-card-label,
 [data-theme="white"] .banking-card-3d .banking-card-label {
   color: #0369A1 !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.04em !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-amount,
 [data-theme="white"] .banking-card-3d .banking-card-amount {
-  color: #0F172A !important;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+  color: #0B192C !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9) !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-icon-box,
 [data-theme="white"] .banking-card-3d .banking-card-icon-box,
 [data-theme="light"] .banking-card-3d .banking-card-date-box,
 [data-theme="white"] .banking-card-3d .banking-card-date-box {
-  background-color: rgba(2, 132, 199, 0.08) !important;
-  border: 1px solid rgba(2, 132, 199, 0.25) !important;
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(56, 189, 248, 0.40) !important;
   color: #0284C7 !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.10), inset 0 1px 0 #FFFFFF !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-date,
 [data-theme="white"] .banking-card-3d .banking-card-date {
-  color: #0F172A !important;
+  color: #0A2540 !important;
   font-weight: 700 !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-waves,
 [data-theme="white"] .banking-card-3d .banking-card-waves {
-  opacity: 0.15 !important;
+  opacity: 0.65 !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-glare,
 [data-theme="white"] .banking-card-3d .banking-card-glare {
-  display: none !important;
+  display: block !important;
+  opacity: 0.15 !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-divider,
+[data-theme="white"] .banking-card-3d .banking-card-divider {
+  border-color: rgba(56, 189, 248, 0.25) !important;
 }
 
 [data-theme="light"] [class*="bg-\[\#0E1A29\]"],
