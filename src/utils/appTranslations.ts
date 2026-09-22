@@ -73,6 +73,13 @@ export interface AppTranslationBundle {
     viewModeAuto: string;
     viewModeMobile: string;
     viewModeDesktop: string;
+    layoutHeading: string;
+    layoutDashboard: string;
+    layoutBento: string;
+    layoutPassbook: string;
+    layoutCardstack: string;
+    layoutCompact: string;
+    layoutMinimal: string;
     privacyMaskHeading: string;
     privacyMaskDesc: string;
     securityPinHeading: string;
@@ -311,6 +318,13 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       viewModeAuto: 'Auto Adaptive',
       viewModeMobile: 'Compact Mobile',
       viewModeDesktop: 'Expanded Desktop',
+      layoutHeading: 'App Layout Design',
+      layoutDashboard: 'Standard Dashboard',
+      layoutBento: 'Bento Grid',
+      layoutPassbook: 'Passbook Ledger',
+      layoutCardstack: '3D Card Stack',
+      layoutCompact: 'Compact Dense',
+      layoutMinimal: 'Minimalist Clean',
       privacyMaskHeading: 'Privacy Masking Mode',
       privacyMaskDesc: 'Hide numerical rupee values on screen when in public or shared spaces.',
       securityPinHeading: 'App Passcode Lock',
@@ -534,19 +548,26 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
     settings: {
       title: 'सेटिंग्स और कस्टम विकल्प',
       subtitle: 'थीम, भाषा, कस्टम श्रेणियां, स्मार्ट फंड प्रतिशत नियम, बैकअप और प्राइवेसी',
-      tabPreferences: 'पसंद (Preferences)',
+      tabPreferences: 'प्राथमिकताएं (Preferences)',
       tabCustomOptions: 'कस्टम श्रेणियां व विकल्प',
       tabRules: 'स्मार्ट फंड नियम',
       tabBackup: 'डेटा बैकअप व एक्सपोर्ट',
-      tabPrivacy: 'गोपनीयता नीति (Privacy)',
+      tabPrivacy: 'गोपनीयता व सुरक्षा (Privacy)',
       tabDeveloper: 'डेवलपर व कानूनी इकाई',
-      tabLegal: 'शर्तें व स्वामित्व',
+      tabLegal: 'शर्तें व कानूनी (Legal)',
       languageHeading: 'ऐप की भाषा (Language)',
       themeHeading: 'रंग थीम (Theme)',
       viewModeHeading: 'इंटरफ़ेस व्यू मोड',
       viewModeAuto: 'ऑटो अनुकूलनीय (Adaptive)',
       viewModeMobile: 'कॉम्पैक्ट मोबाइल',
       viewModeDesktop: 'विस्तृत डेस्कटॉप',
+      layoutHeading: 'ऐप लेआउट डिज़ाइन',
+      layoutDashboard: 'मानक डैशबोर्ड',
+      layoutBento: 'बेंटो ग्रिड (Bento)',
+      layoutPassbook: 'पासबुक लेजर',
+      layoutCardstack: '3D कार्ड स्टैक',
+      layoutCompact: 'कॉम्पैक्ट डेंस',
+      layoutMinimal: 'मिनिमल क्लीन',
       privacyMaskHeading: 'गोपनीयता मोड (संख्या छुपाएं)',
       privacyMaskDesc: 'सार्वजनिक स्थानों पर स्क्रीन पर दिखने वाली रुपये की राशि को छुपाएं।',
       securityPinHeading: 'ऐप पासकोड सुरक्षा लॉक',
@@ -774,15 +795,22 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
       tabCustomOptions: 'Custom Categories & Options',
       tabRules: 'Smart Fund Rules',
       tabBackup: 'Data Backup & Export',
-      tabPrivacy: 'Privacy Policy',
+      tabPrivacy: 'Privacy & Security',
       tabDeveloper: 'Developer & Entity',
-      tabLegal: 'Terms & Ownership',
+      tabLegal: 'Terms & Legal',
       languageHeading: 'App Language',
       themeHeading: 'Theme Color',
       viewModeHeading: 'Interface View Mode',
       viewModeAuto: 'Auto Adaptive',
       viewModeMobile: 'Compact Mobile',
       viewModeDesktop: 'Expanded Desktop',
+      layoutHeading: 'App Layout Design',
+      layoutDashboard: 'Standard Dashboard',
+      layoutBento: 'Bento Grid',
+      layoutPassbook: 'Passbook Ledger',
+      layoutCardstack: '3D Card Stack',
+      layoutCompact: 'Compact Dense',
+      layoutMinimal: 'Minimalist Clean',
       privacyMaskHeading: 'Privacy Masking Mode',
       privacyMaskDesc: 'Public places mein screen par rupee amount chupayein.',
       securityPinHeading: 'App Passcode Lock',

@@ -58,22 +58,17 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
                 id="nav-btn-add"
                 type="button"
                 onClick={() => handleTabClick(tab)}
-                className="group relative flex flex-col items-center justify-center -mt-3.5 sm:-mt-5 cursor-pointer focus:outline-none transition-transform active:scale-90 w-full"
+                className="group relative flex flex-col items-center justify-center -mt-3.5 sm:-mt-5 cursor-pointer focus:outline-none transition-transform hover:-translate-y-1 active:translate-y-0.5 active:scale-95 w-full"
                 title={tab.label}
               >
                 <div
                   className={`w-11 h-11 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-[var(--theme-btn-bg,#0284C7)] text-[var(--theme-btn-text,#FFFFFF)] ring-3 sm:ring-4 ring-[var(--theme-primary-border,rgba(56,189,248,0.5))] shadow-lg scale-105'
-                      : 'bg-gradient-to-tr from-[var(--theme-btn-bg,#0284C7)] via-[var(--theme-btn-bg,#0284C7)] to-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#FFFFFF)] hover:scale-105 shadow-md ring-2 sm:ring-3 ring-[var(--theme-surface,#0E1A29)]'
+                      ? 'bg-[var(--theme-btn-bg,#0284C7)] text-[var(--theme-btn-text,#FFFFFF)] ring-3 sm:ring-4 ring-[var(--theme-primary-border,rgba(56,189,248,0.5))] shadow-[0_5px_0_0_rgba(0,0,0,0.35),0_12px_24px_var(--theme-glow,rgba(56,189,248,0.5)),inset_0_1px_0_rgba(255,255,255,0.4)] scale-105'
+                      : 'bg-gradient-to-tr from-[var(--theme-btn-bg,#0284C7)] via-[var(--theme-btn-bg,#0284C7)] to-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#FFFFFF)] hover:scale-105 shadow-[0_5px_0_0_rgba(0,0,0,0.35),0_10px_20px_var(--theme-glow,rgba(56,189,248,0.4)),inset_0_1px_0_rgba(255,255,255,0.35)] ring-2 sm:ring-3 ring-[var(--theme-surface,#0E1A29)]'
                   }`}
-                  style={{
-                    boxShadow: isActive
-                      ? '0 4px 16px var(--theme-glow, rgba(56,189,248,0.45))'
-                      : '0 4px 14px rgba(2, 132, 199, 0.35)'
-                  }}
                 >
-                  <Plus className="w-5 h-5 sm:w-7 sm:h-7 stroke-[3] text-[var(--theme-btn-text,#FFFFFF)] transition-transform group-hover:rotate-90 duration-200" />
+                  <Plus className="w-5 h-5 sm:w-7 sm:h-7 stroke-[3] text-[var(--theme-btn-text,#FFFFFF)] transition-transform group-hover:rotate-90 duration-200 drop-shadow-sm" />
                 </div>
                 <span className="text-[10px] sm:text-[13px] font-black text-[var(--theme-primary,#0284C7)] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
                   {tab.label}
@@ -89,10 +84,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
               id={`nav-btn-${tab.id}`}
               type="button"
               onClick={() => handleTabClick(tab)}
-              className={`relative flex flex-col items-center justify-center py-0.5 sm:py-2 px-0.5 sm:px-3 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-pointer select-none w-full ${
+              className={`relative flex flex-col items-center justify-center py-0.5 sm:py-2 px-0.5 sm:px-3 rounded-xl sm:rounded-2xl transition-all duration-200 cursor-pointer select-none w-full hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 ${
                 isActive
-                  ? 'text-[var(--theme-primary,#38BDF8)] font-extrabold bg-[var(--theme-card,#132438)]/60'
-                  : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)]/40 active:scale-95'
+                  ? 'text-[var(--theme-primary,#38BDF8)] font-extrabold bg-[var(--theme-card,#132438)]/80 shadow-[0_2px_8px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.06)]'
+                  : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)]/40'
               }`}
             >
               {isActive && (
@@ -101,8 +96,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
               <div
                 className={`relative p-1 sm:p-2 rounded-lg sm:rounded-xl transition-all duration-300 ${
                   isActive
-                    ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] scale-105 sm:scale-110'
-                    : 'text-[var(--theme-text-dim,#94A3B8)]'
+                    ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] scale-105 sm:scale-110 shadow-[0_2px_6px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.15)]'
+                    : 'text-[var(--theme-text-dim,#94A3B8)] group-hover:scale-105'
                 }`}
               >
                 <Icon className="w-4 h-4 sm:w-6 sm:h-6 stroke-[2.2]" />

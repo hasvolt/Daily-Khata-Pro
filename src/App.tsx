@@ -2291,6 +2291,7 @@ function AppContent() {
     <div
       data-theme={theme}
       data-view-mode={viewMode}
+      data-app-layout={appLayout}
       className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex flex-col font-sans transition-colors duration-300"
     >
       {/* Top Header */}

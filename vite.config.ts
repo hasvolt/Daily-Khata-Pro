@@ -34,27 +34,12 @@ export default defineConfig(() => {
       ],
     },
     build: {
-      chunkSizeWarningLimit: 1500,
+      chunkSizeWarningLimit: 2500,
       sourcemap: false,
       rollupOptions: {
         maxParallelFileOps: 2,
         cache: false,
         external: ['express', 'path', 'fs'],
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('recharts')) {
-                return 'charts';
-              }
-              if (id.includes('firebase')) {
-                return 'firebase';
-              }
-              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-                return 'vendor';
-              }
-            }
-          }
-        }
       }
     },
     server: {

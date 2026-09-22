@@ -811,6 +811,86 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
               </div>
 
+              {/* Interface View Mode with Icon Buttons */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+                <div className="flex items-center gap-2">
+                  <Monitor className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                  <span className="font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
+                    {tr.settings.viewModeHeading}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'auto' as AppViewMode, label: tr.settings.viewModeAuto, icon: LayoutGrid },
+                    { id: 'mobile' as AppViewMode, label: tr.settings.viewModeMobile, icon: Smartphone },
+                    { id: 'desktop' as AppViewMode, label: tr.settings.viewModeDesktop, icon: Monitor }
+                  ].map((mode) => {
+                    const Icon = mode.icon;
+                    const isActive = viewMode === mode.id;
+                    return (
+                      <button
+                        key={mode.id}
+                        type="button"
+                        onClick={() => {
+                          onViewModeChange && onViewModeChange(mode.id);
+                          triggerHapticSound('click');
+                        }}
+                        className={`p-2.5 rounded-xl border flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          isActive
+                            ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-text,#F8FAFC)] font-bold shadow-xs'
+                            : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                        }`}
+                      >
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : ''}`} />
+                        <span className="text-[11.5px] text-center whitespace-nowrap">{mode.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* App Layout Design with Icon Buttons */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+                <div className="flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                  <span className="font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
+                    {tr.settings.layoutHeading}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {[
+                    { id: 'dashboard' as AppLayout, label: tr.settings.layoutDashboard, icon: Layers },
+                    { id: 'bento' as AppLayout, label: tr.settings.layoutBento, icon: LayoutGrid },
+                    { id: 'passbook' as AppLayout, label: tr.settings.layoutPassbook, icon: BookOpen },
+                    { id: 'cardstack' as AppLayout, label: tr.settings.layoutCardstack, icon: SlidersHorizontal },
+                    { id: 'compact' as AppLayout, label: tr.settings.layoutCompact, icon: Sliders },
+                    { id: 'minimal' as AppLayout, label: tr.settings.layoutMinimal, icon: Sparkles }
+                  ].map((layout) => {
+                    const Icon = layout.icon;
+                    const isActive = appLayout === layout.id;
+                    return (
+                      <button
+                        key={layout.id}
+                        type="button"
+                        onClick={() => {
+                          onLayoutChange && onLayoutChange(layout.id);
+                          triggerHapticSound('click');
+                        }}
+                        className={`p-2.5 rounded-xl border flex items-center gap-2 transition-all cursor-pointer ${
+                          isActive
+                            ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-text,#F8FAFC)] font-bold shadow-xs'
+                            : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
+                        }`}
+                      >
+                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : 'text-[var(--theme-text-dim,#94A3B8)]'}`} />
+                        <span className="text-[12px] truncate">{layout.label}</span>
+                        {isActive && <Check className="w-3.5 h-3.5 ml-auto text-[var(--theme-primary,#38BDF8)] shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Privacy Eye Mask Mode */}
               <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3">
                 <div className="space-y-0.5">
@@ -1842,7 +1922,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
 
                 {/* GitHub Repo Card */}
-                <div className="p-3 rounded-xl bg-[#060B11] border border-[#213E61] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div className="p-3 rounded-xl bg-[var(--theme-surface,#060B11)] border border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                   <div className="flex items-center gap-2.5">
                     <FolderGit2 className="w-5 h-5 text-[var(--theme-primary,#38BDF8)] shrink-0" />
                     <div>
@@ -1854,7 +1934,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     href="https://github.com/hasvolt/Daily-Khata-Pro"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1.5 rounded-lg bg-[#132438] hover:bg-[#1E3A5F] border border-[var(--theme-primary,#38BDF8)]/40 text-[var(--theme-primary,#38BDF8)] text-[11.5px] font-bold flex items-center justify-center gap-1.5 transition-all self-start sm:self-auto"
+                    className="px-3 py-1.5 rounded-lg bg-[var(--theme-bg,#132438)] hover:bg-[var(--theme-card-hover,#1E3A5F)] border border-[var(--theme-primary-border,rgba(56,189,248,0.4))] text-[var(--theme-primary,#38BDF8)] text-[11.5px] font-bold flex items-center justify-center gap-1.5 transition-all self-start sm:self-auto"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>Inspect Code</span>

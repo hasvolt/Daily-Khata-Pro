@@ -162,37 +162,37 @@ export const HomeView: React.FC<HomeViewProps> = ({
     {
       label: isHindi ? 'लक्ष्य' : 'Goals',
       icon: Target,
-      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
+      tone: 'text-amber-400 bg-amber-500/15 border-amber-500/30',
       action: onNavigateGoals,
     },
     {
       label: isHindi ? 'लोन' : 'Loans',
       icon: Landmark,
-      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
+      tone: 'text-purple-400 bg-purple-500/15 border-purple-500/30',
       action: onNavigateLoans,
     },
     {
       label: isHindi ? 'कैलकुलेटर' : 'Calculator',
       icon: Calculator,
-      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
+      tone: 'text-sky-400 bg-sky-500/15 border-sky-500/30',
       action: onNavigateCalculator,
     },
     {
       label: isHindi ? 'रिपोर्ट्स' : 'Reports',
       icon: BarChart3,
-      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
+      tone: 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30',
       action: onNavigateReports,
     },
     {
       label: isHindi ? 'इतिहास' : 'History',
       icon: History,
-      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
+      tone: 'text-indigo-400 bg-indigo-500/15 border-indigo-500/30',
       action: onViewHistory,
     },
     {
       label: isHindi ? 'कैटेगरी' : 'Categories',
       icon: Grid2X2,
-      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
+      tone: 'text-orange-400 bg-orange-500/15 border-orange-500/30',
       action: () => setIsSelectorOpen(true),
     },
   ];
@@ -298,19 +298,22 @@ export const HomeView: React.FC<HomeViewProps> = ({
           {quickAccess.map((item) => {
             const Icon = item.icon;
             return (
-              <button
+              <motion.button
                 key={item.label}
                 type="button"
                 onClick={item.action}
-                className="min-w-0 rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-0.5 sm:px-1.5 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/40 hover:bg-[var(--theme-card-hover,#19304A)] transition-all active:scale-[.96] cursor-pointer"
+                whileHover={{ y: -3, scale: 1.04 }}
+                whileTap={{ y: 2, scale: 0.94 }}
+                transition={{ type: 'spring', stiffness: 450, damping: 20 }}
+                className="group relative min-w-0 rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-0.5 sm:px-1.5 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-card-hover,#19304A)] transition-colors shadow-[0_4px_0_0_rgba(0,0,0,0.35),0_6px_12px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.06)] active:shadow-[0_1px_0_0_rgba(0,0,0,0.35),inset_0_2px_4px_rgba(0,0,0,0.4)] cursor-pointer select-none"
               >
-                <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl border flex items-center justify-center ${item.tone}`}>
+                <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl border flex items-center justify-center shadow-[0_2px_6px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:scale-110 group-hover:-translate-y-0.5 group-active:translate-y-0.5 transition-transform duration-200 ${item.tone}`}>
                   <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 </div>
-                <span className="text-[7.5px] xs:text-[8.5px] sm:text-[10px] md:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate max-w-full text-center px-0.5">
+                <span className="text-[7.5px] xs:text-[8.5px] sm:text-[10px] md:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate max-w-full text-center px-0.5 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
                   {item.label}
                 </span>
-              </button>
+              </motion.button>
             );
           })}
         </div>

@@ -47,21 +47,21 @@
   }
 
   [data-theme="yellow"] {
-    /* 24K Luxury Gold Accent with Deep Obsidian Warm Canvas */
-    --theme-bg: #120E06;
-    --theme-surface: #1B150A;
-    --theme-card: #241D0E;
-    --theme-card-hover: #2E2513;
-    --theme-border: rgba(245, 158, 11, 0.16);
+    /* 24K Luxury Gold Accent with Sleek Obsidian Deep Slate Canvas */
+    --theme-bg: #09090D;
+    --theme-surface: #101017;
+    --theme-card: #161722;
+    --theme-card-hover: #1E1F2E;
+    --theme-border: rgba(245, 158, 11, 0.20);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
 
     --theme-primary: #F59E0B;
     --theme-primary-hover: #D97706;
-    --theme-primary-dim: rgba(245, 158, 11, 0.12);
-    --theme-primary-border: rgba(245, 158, 11, 0.28);
-    --theme-glow: rgba(245, 158, 11, 0.06);
+    --theme-primary-dim: rgba(245, 158, 11, 0.14);
+    --theme-primary-border: rgba(245, 158, 11, 0.32);
+    --theme-glow: rgba(245, 158, 11, 0.10);
     --theme-badge-text: #FBBF24;
     --theme-btn-bg: #D97706;
     --theme-btn-hover: #B45309;
@@ -69,21 +69,21 @@
   }
 
   [data-theme="orange"] {
-    /* Sunset Flame Accent with Deep Amber-Ember Surfaces */
-    --theme-bg: #130B06;
-    --theme-surface: #1E120A;
-    --theme-card: #29180E;
-    --theme-card-hover: #362013;
-    --theme-border: rgba(249, 115, 22, 0.16);
+    /* Sunset Flame Accent with Sleek Obsidian Deep Slate Canvas */
+    --theme-bg: #09090D;
+    --theme-surface: #101017;
+    --theme-card: #161622;
+    --theme-card-hover: #1E1E2E;
+    --theme-border: rgba(249, 115, 22, 0.20);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
 
     --theme-primary: #F97316;
     --theme-primary-hover: #EA580C;
-    --theme-primary-dim: rgba(249, 115, 22, 0.12);
-    --theme-primary-border: rgba(249, 115, 22, 0.28);
-    --theme-glow: rgba(249, 115, 22, 0.06);
+    --theme-primary-dim: rgba(249, 115, 22, 0.14);
+    --theme-primary-border: rgba(249, 115, 22, 0.32);
+    --theme-glow: rgba(249, 115, 22, 0.10);
     --theme-badge-text: #FB923C;
     --theme-btn-bg: #EA580C;
     --theme-btn-hover: #C2410C;
@@ -91,21 +91,21 @@
   }
 
   [data-theme="emerald"] {
-    /* Mint Emerald Accent with Deep Forest Obsidian Surfaces */
-    --theme-bg: #04140E;
-    --theme-surface: #092017;
-    --theme-card: #0F2D21;
-    --theme-card-hover: #163C2C;
-    --theme-border: rgba(16, 185, 129, 0.16);
+    /* Mint Emerald Accent with Sleek Deep Obsidian Canvas */
+    --theme-bg: #060B09;
+    --theme-surface: #0B1410;
+    --theme-card: #101E18;
+    --theme-card-hover: #162720;
+    --theme-border: rgba(16, 185, 129, 0.22);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
 
     --theme-primary: #10B981;
     --theme-primary-hover: #059669;
-    --theme-primary-dim: rgba(16, 185, 129, 0.12);
-    --theme-primary-border: rgba(16, 185, 129, 0.28);
-    --theme-glow: rgba(16, 185, 129, 0.06);
+    --theme-primary-dim: rgba(16, 185, 129, 0.15);
+    --theme-primary-border: rgba(16, 185, 129, 0.32);
+    --theme-glow: rgba(16, 185, 129, 0.10);
     --theme-badge-text: #34D399;
     --theme-btn-bg: #059669;
     --theme-btn-hover: #047857;
@@ -113,21 +113,21 @@
   }
 
   [data-theme="purple"] {
-    /* Royal Violet Accent with Deep Velvet Indigo Surfaces */
-    --theme-bg: #0D071B;
-    --theme-surface: #150D2B;
-    --theme-card: #1D133B;
-    --theme-card-hover: #261A4E;
-    --theme-border: rgba(168, 85, 247, 0.16);
+    /* Royal Violet Accent with Deep Obsidian Velvet Canvas */
+    --theme-bg: #080710;
+    --theme-surface: #0E0C1B;
+    --theme-card: #151227;
+    --theme-card-hover: #1D1936;
+    --theme-border: rgba(168, 85, 247, 0.22);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
 
     --theme-primary: #A855F7;
     --theme-primary-hover: #9333EA;
-    --theme-primary-dim: rgba(168, 85, 247, 0.12);
-    --theme-primary-border: rgba(168, 85, 247, 0.28);
-    --theme-glow: rgba(168, 85, 247, 0.06);
+    --theme-primary-dim: rgba(168, 85, 247, 0.15);
+    --theme-primary-border: rgba(168, 85, 247, 0.32);
+    --theme-glow: rgba(168, 85, 247, 0.10);
     --theme-badge-text: #C084FC;
     --theme-btn-bg: #9333EA;
     --theme-btn-hover: #7E22CE;
@@ -135,21 +135,21 @@
   }
 
   [data-theme="cyan"] {
-    /* Oceanic Cyan Accent with Deep Oceanic Teal Surfaces */
-    --theme-bg: #041219;
-    --theme-surface: #081D29;
-    --theme-card: #0D293A;
-    --theme-card-hover: #12374E;
-    --theme-border: rgba(6, 182, 212, 0.16);
+    /* Oceanic Cyan Accent with Deep Obsidian Teal Canvas */
+    --theme-bg: #050B10;
+    --theme-surface: #09131C;
+    --theme-card: #0E1C28;
+    --theme-card-hover: #142636;
+    --theme-border: rgba(6, 182, 212, 0.22);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
 
     --theme-primary: #06B6D4;
     --theme-primary-hover: #0891B2;
-    --theme-primary-dim: rgba(6, 182, 212, 0.12);
-    --theme-primary-border: rgba(6, 182, 212, 0.28);
-    --theme-glow: rgba(6, 182, 212, 0.06);
+    --theme-primary-dim: rgba(6, 182, 212, 0.15);
+    --theme-primary-border: rgba(6, 182, 212, 0.32);
+    --theme-glow: rgba(6, 182, 212, 0.10);
     --theme-badge-text: #22D3EE;
     --theme-btn-bg: #0891B2;
     --theme-btn-hover: #0E7490;
@@ -157,21 +157,21 @@
   }
 
   [data-theme="pink"] {
-    /* Crimson Rose Accent with Deep Ruby Velvet Surfaces */
-    --theme-bg: #14060B;
-    --theme-surface: #200B13;
-    --theme-card: #2D101B;
-    --theme-card-hover: #3B1624;
-    --theme-border: rgba(244, 63, 94, 0.16);
+    /* Crimson Rose Accent with Deep Obsidian Velvet Canvas */
+    --theme-bg: #0A070B;
+    --theme-surface: #120D15;
+    --theme-card: #1A131E;
+    --theme-card-hover: #241A2A;
+    --theme-border: rgba(244, 63, 94, 0.20);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
 
     --theme-primary: #F43F5E;
     --theme-primary-hover: #E11D48;
-    --theme-primary-dim: rgba(244, 63, 94, 0.12);
-    --theme-primary-border: rgba(244, 63, 94, 0.28);
-    --theme-glow: rgba(244, 63, 94, 0.06);
+    --theme-primary-dim: rgba(244, 63, 94, 0.14);
+    --theme-primary-border: rgba(244, 63, 94, 0.32);
+    --theme-glow: rgba(244, 63, 94, 0.10);
     --theme-badge-text: #FB7185;
     --theme-btn-bg: #E11D48;
     --theme-btn-hover: #BE123C;
@@ -296,6 +296,38 @@
 .num {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+}
+
+/* Responsive View Mode Containers */
+[data-view-mode="mobile"] {
+  max-width: 480px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.45);
+}
+
+[data-view-mode="desktop"] {
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* App Layout Variants */
+[data-app-layout="compact"] .banking-card-3d {
+  padding: 0.75rem !important;
+}
+
+[data-app-layout="compact"] .fund-card-item {
+  padding: 0.5rem !important;
+}
+
+[data-app-layout="minimal"] .banking-card-waves,
+[data-app-layout="minimal"] .banking-card-glare {
+  display: none !important;
+}
+
+[data-app-layout="bento"] .home-quick-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
 /* Subtle Daily Khata grid micro-pattern */
