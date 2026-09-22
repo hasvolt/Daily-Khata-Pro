@@ -2,13 +2,13 @@
 
 @layer base {
   :root {
-    /* Base Neutral Surface Architecture (Pristine Obsidian / Graphite Dark Canvas) */
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
-    --theme-border-subtle: rgba(255, 255, 255, 0.04);
+    /* Base Neutral Surface Architecture (Premium Rich Midnight Black-Blue Canvas) */
+    --theme-bg: #050B14;
+    --theme-surface: #0A1220;
+    --theme-card: #0E182A;
+    --theme-card-hover: #14223A;
+    --theme-border: rgba(56, 189, 248, 0.14);
+    --theme-border-subtle: rgba(255, 255, 255, 0.05);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -26,11 +26,11 @@
   }
 
   [data-theme="blue"] {
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
+    --theme-bg: #050B14;
+    --theme-surface: #0A1220;
+    --theme-card: #0E182A;
+    --theme-card-hover: #14223A;
+    --theme-border: rgba(56, 189, 248, 0.14);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -47,12 +47,12 @@
   }
 
   [data-theme="yellow"] {
-    /* 24K Luxury Gold Accent with Neutral Graphite Surfaces */
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
+    /* 24K Luxury Gold Accent with Deep Obsidian Warm Canvas */
+    --theme-bg: #120E06;
+    --theme-surface: #1B150A;
+    --theme-card: #241D0E;
+    --theme-card-hover: #2E2513;
+    --theme-border: rgba(245, 158, 11, 0.16);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -69,12 +69,12 @@
   }
 
   [data-theme="orange"] {
-    /* Sunset Flame Accent with Neutral Graphite Surfaces */
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
+    /* Sunset Flame Accent with Deep Amber-Ember Surfaces */
+    --theme-bg: #130B06;
+    --theme-surface: #1E120A;
+    --theme-card: #29180E;
+    --theme-card-hover: #362013;
+    --theme-border: rgba(249, 115, 22, 0.16);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -91,12 +91,12 @@
   }
 
   [data-theme="emerald"] {
-    /* Mint Emerald Accent with Neutral Graphite Surfaces */
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
+    /* Mint Emerald Accent with Deep Forest Obsidian Surfaces */
+    --theme-bg: #04140E;
+    --theme-surface: #092017;
+    --theme-card: #0F2D21;
+    --theme-card-hover: #163C2C;
+    --theme-border: rgba(16, 185, 129, 0.16);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -113,12 +113,12 @@
   }
 
   [data-theme="purple"] {
-    /* Royal Violet Accent with Neutral Graphite Surfaces */
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
+    /* Royal Violet Accent with Deep Velvet Indigo Surfaces */
+    --theme-bg: #0D071B;
+    --theme-surface: #150D2B;
+    --theme-card: #1D133B;
+    --theme-card-hover: #261A4E;
+    --theme-border: rgba(168, 85, 247, 0.16);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -135,12 +135,12 @@
   }
 
   [data-theme="cyan"] {
-    /* Oceanic Cyan Accent with Neutral Graphite Surfaces */
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
+    /* Oceanic Cyan Accent with Deep Oceanic Teal Surfaces */
+    --theme-bg: #041219;
+    --theme-surface: #081D29;
+    --theme-card: #0D293A;
+    --theme-card-hover: #12374E;
+    --theme-border: rgba(6, 182, 212, 0.16);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -157,12 +157,12 @@
   }
 
   [data-theme="pink"] {
-    /* Crimson Rose Accent with Neutral Graphite Surfaces */
-    --theme-bg: #090D16;
-    --theme-surface: #0F1420;
-    --theme-card: #141B28;
-    --theme-card-hover: #1A2334;
-    --theme-border: rgba(255, 255, 255, 0.08);
+    /* Crimson Rose Accent with Deep Ruby Velvet Surfaces */
+    --theme-bg: #14060B;
+    --theme-surface: #200B13;
+    --theme-card: #2D101B;
+    --theme-card-hover: #3B1624;
+    --theme-border: rgba(244, 63, 94, 0.16);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -181,10 +181,10 @@
   [data-theme="black"] {
     /* Pitch OLED Titanium Glass - True Pitch Black Canvas */
     --theme-bg: #000000;
-    --theme-surface: #0C0F14;
-    --theme-card: #111620;
-    --theme-card-hover: #171E2C;
-    --theme-border: rgba(255, 255, 255, 0.10);
+    --theme-surface: #0A0A0D;
+    --theme-card: #111116;
+    --theme-card-hover: #18181E;
+    --theme-border: rgba(255, 255, 255, 0.12);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
@@ -507,8 +507,44 @@
 [data-theme="light"] .text-\[\#FFC700\],
 [data-theme="white"] .text-\[\#FFC700\],
 [data-theme="light"] .text-\[\#F59E0B\],
-[data-theme="white"] .text-\[\#F59E0B\] {
-  color: #0284C7;
+[data-theme="white"] .text-\[\#F59E0B\],
+[data-theme="light"] [class*="text-yellow"],
+[data-theme="white"] [class*="text-yellow"],
+[data-theme="light"] [class*="text-amber"],
+[data-theme="white"] [class*="text-amber"] {
+  color: #0369A1 !important;
+}
+
+[data-theme="light"] [class*="bg-yellow"],
+[data-theme="white"] [class*="bg-yellow"],
+[data-theme="light"] [class*="bg-amber"],
+[data-theme="white"] [class*="bg-amber"] {
+  background-color: #F0F9FF !important;
+  color: #0369A1 !important;
+  border-color: #BAE6FD !important;
+}
+
+[data-theme="light"] [class*="border-yellow"],
+[data-theme="white"] [class*="border-yellow"],
+[data-theme="light"] [class*="border-amber"],
+[data-theme="white"] [class*="border-amber"] {
+  border-color: #BAE6FD !important;
+}
+
+/* Day Mode High Contrast & Sharpness */
+[data-theme="light"] .text-slate-400,
+[data-theme="white"] .text-slate-400 {
+  color: #334155 !important;
+}
+
+[data-theme="light"] .text-slate-300,
+[data-theme="white"] .text-slate-300 {
+  color: #1E293B !important;
+}
+
+[data-theme="light"] .text-slate-200,
+[data-theme="white"] .text-slate-200 {
+  color: #0F172A !important;
 }
 
 [data-theme="light"] .text-\[\#F97316\],

@@ -14,6 +14,15 @@ export function urlFor(source: any) {
   return builder.image(source);
 }
 
+export interface SanitySource {
+  name?: string;
+  title?: string;
+  url?: string;
+  description?: string;
+  notes?: string;
+  date?: string;
+}
+
 export interface SanityBlogPost {
   _id: string;
   title: string;
@@ -33,7 +42,7 @@ export interface SanityBlogPost {
   featuredImage?: any;
   bodyText?: string;
   body?: any[];
-  sources?: Array<{ title: string; url?: string; notes?: string }>;
+  sources?: SanitySource[];
   disclaimer?: string;
   tags?: string[];
 }
@@ -50,9 +59,9 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
       publishedAt,
       updatedAt,
       "authorName": coalesce(author->name, "MD Zafeer Hasan (YAZDAAN)"),
-      "authorRole": coalesce(author->role, "Author & Independent Researcher"),
+      "authorRole": coalesce(author->role, author->professionalDescription, "Author & Independent Researcher"),
       "authorBio": author->bio,
-      "authorImage": author->image,
+      "authorImage": coalesce(author->profilePhoto, author->image),
       "category": coalesce(category, "Finance"),
       topics,
       articleType,
@@ -86,9 +95,9 @@ export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogP
       publishedAt,
       updatedAt,
       "authorName": coalesce(author->name, "MD Zafeer Hasan (YAZDAAN)"),
-      "authorRole": coalesce(author->role, "Author & Independent Researcher"),
+      "authorRole": coalesce(author->role, author->professionalDescription, "Author & Independent Researcher"),
       "authorBio": author->bio,
-      "authorImage": author->image,
+      "authorImage": coalesce(author->profilePhoto, author->image),
       "category": coalesce(category, "Finance"),
       topics,
       articleType,

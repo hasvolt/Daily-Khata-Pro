@@ -94,13 +94,13 @@ export function BankingCard3D({
 
         <div className="relative z-10" style={{ transform: 'translateZ(28px)' }}>
           {/* Header row */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <div className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-cyan-400/15 border border-cyan-400/30 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_14px_rgba(25,191,255,0.2)]">
                 <Wallet className="w-4 h-4" />
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="banking-card-label text-[12px] sm:text-[13.5px] font-extrabold tracking-wider text-slate-100 uppercase whitespace-nowrap">
+              <div className="flex items-center gap-1 sm:gap-1.5">
+                <span className="banking-card-label text-[11.5px] sm:text-[13.5px] font-extrabold tracking-wider text-slate-100 uppercase whitespace-nowrap">
                   {isHindi ? 'कुल बैलेंस' : 'Total Balance'}
                 </span>
                 <button
@@ -122,18 +122,19 @@ export function BankingCard3D({
             </div>
 
             <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
-              <div className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-cyan-400/15 border border-cyan-400/30 text-cyan-300 shrink-0">
-                <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                <span className="text-[7px] sm:text-[8px] font-bold tracking-wider">SECURED</span>
+              {/* Distinct SECURE badge */}
+              <div className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-emerald-500/15 border border-emerald-500/30 shrink-0">
+                <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400 shrink-0" />
+                <span className="text-[7.5px] sm:text-[8.5px] font-bold tracking-wider uppercase text-emerald-400">SECURE</span>
               </div>
-              <div className="banking-card-date-box flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-lg bg-white/[.05] border border-white/[.08] shrink-0">
+              {/* Distinct Date badge (compact on mobile, time only on tablet/desktop) */}
+              <div className="banking-card-date-box flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-slate-900/60 border border-white/10 shadow-xs shrink-0">
                 <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300 shrink-0" />
                 <span className="banking-card-date text-[8px] sm:text-[9.5px] font-semibold text-slate-200 whitespace-nowrap notranslate" translate="no">
                   {dateFormatted}
                 </span>
-                <span className="text-[8px] text-cyan-300/40">·</span>
-                <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-300 shrink-0" />
-                <span className="banking-card-date text-[8px] sm:text-[9.5px] font-semibold text-cyan-300 whitespace-nowrap notranslate" translate="no">
+                <span className="hidden md:inline text-[8px] text-cyan-300/40">·</span>
+                <span className="hidden md:inline banking-card-date text-[8.5px] font-semibold text-cyan-300 whitespace-nowrap notranslate" translate="no">
                   {currentTime}
                 </span>
               </div>

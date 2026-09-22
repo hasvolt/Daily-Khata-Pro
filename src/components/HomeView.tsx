@@ -162,37 +162,37 @@ export const HomeView: React.FC<HomeViewProps> = ({
     {
       label: isHindi ? 'लक्ष्य' : 'Goals',
       icon: Target,
-      tone: 'text-sky-500 bg-sky-500/10 border-sky-500/25',
+      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
       action: onNavigateGoals,
     },
     {
       label: isHindi ? 'लोन' : 'Loans',
       icon: Landmark,
-      tone: 'text-indigo-500 bg-indigo-500/10 border-indigo-500/25',
+      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
       action: onNavigateLoans,
     },
     {
       label: isHindi ? 'कैलकुलेटर' : 'Calculator',
       icon: Calculator,
-      tone: 'text-cyan-500 bg-cyan-500/10 border-cyan-500/25',
+      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
       action: onNavigateCalculator,
     },
     {
       label: isHindi ? 'रिपोर्ट्स' : 'Reports',
       icon: BarChart3,
-      tone: 'text-blue-500 bg-blue-500/10 border-blue-500/25',
+      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
       action: onNavigateReports,
     },
     {
       label: isHindi ? 'इतिहास' : 'History',
       icon: History,
-      tone: 'text-teal-500 bg-teal-500/10 border-teal-500/25',
+      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
       action: onViewHistory,
     },
     {
       label: isHindi ? 'कैटेगरी' : 'Categories',
       icon: Grid2X2,
-      tone: 'text-slate-600 dark:text-slate-300 bg-slate-500/10 border-slate-500/25',
+      tone: 'text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.1))] border-[var(--theme-primary-border,rgba(56,189,248,0.25))]',
       action: () => setIsSelectorOpen(true),
     },
   ];
