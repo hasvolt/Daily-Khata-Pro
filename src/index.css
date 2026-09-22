@@ -619,11 +619,25 @@
 
 /* Banking Card 3D - Luxury Titanium Dark Substrate with Theme Foil Accent */
 .banking-card-3d {
-  background: linear-gradient(135deg, #0B101B 0%, #131A29 50%, #090E17 100%) !important;
-  border-color: rgba(255, 255, 255, 0.10) !important;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+  background: radial-gradient(circle at 85% 15%, var(--theme-primary-dim, rgba(56, 189, 248, 0.18)) 0%, var(--theme-card, #0E182A) 55%, var(--theme-bg, #050B14) 100%) !important;
+  border-color: var(--theme-primary-border, rgba(56, 189, 248, 0.30)) !important;
+  box-shadow: 0 12px 28px -8px var(--theme-glow, rgba(56, 189, 248, 0.18)), 0 0 0 1px var(--theme-border, rgba(255, 255, 255, 0.08)) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
+}
+
+[data-theme="emerald"] .banking-card-3d {
+  background: radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.22) 0%, #101E18 55%, #060B09 100%) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  box-shadow: 0 12px 28px -8px rgba(16, 185, 129, 0.20), 0 0 0 1px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Total Balance Card - Clean Button styling without bottom shadow blocks */
+#hero-add-income-btn,
+#hero-add-expense-btn {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
 }
 
 .banking-card-3d .banking-card-icon-box,
@@ -688,10 +702,19 @@
 [data-theme="white"] .banking-card-3d .banking-card-icon-box,
 [data-theme="light"] .banking-card-3d .banking-card-date-box,
 [data-theme="white"] .banking-card-3d .banking-card-date-box {
-  background-color: rgba(255, 255, 255, 0.85) !important;
-  border: 1px solid rgba(56, 189, 248, 0.40) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
   color: #0284C7 !important;
-  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.10), inset 0 1px 0 #FFFFFF !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+[data-theme="light"] .banking-card-3d .banking-card-icon-box svg,
+[data-theme="white"] .banking-card-3d .banking-card-icon-box svg,
+[data-theme="light"] .banking-card-wallet-graphic,
+[data-theme="white"] .banking-card-wallet-graphic {
+  filter: none !important;
+  box-shadow: none !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-date,
@@ -702,13 +725,13 @@
 
 [data-theme="light"] .banking-card-3d .banking-card-waves,
 [data-theme="white"] .banking-card-3d .banking-card-waves {
-  opacity: 0.65 !important;
+  opacity: 0.45 !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-glare,
 [data-theme="white"] .banking-card-3d .banking-card-glare {
-  display: block !important;
-  opacity: 0.15 !important;
+  display: none !important;
+  opacity: 0 !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-divider,
@@ -766,6 +789,52 @@
 [data-theme="light"] [class*="bg-\[\#132438\]"],
 [data-theme="white"] [class*="bg-\[\#132438\]"] {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* Fund Cards, Summary Cards & Quick Access in Day / White Mode */
+[data-theme="light"] .fund-card-3d,
+[data-theme="white"] .fund-card-3d {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+[data-theme="light"] .fund-card-3d:hover,
+[data-theme="white"] .fund-card-3d:hover {
+  border-color: #94A3B8 !important;
+  box-shadow: 0 4px 14px -3px rgba(15, 23, 42, 0.10) !important;
+}
+
+[data-theme="light"] .summary-card-3d,
+[data-theme="white"] .summary-card-3d {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+[data-theme="light"] .summary-stat-box,
+[data-theme="white"] .summary-stat-box {
+  background-color: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .quick-access-btn,
+[data-theme="white"] .quick-access-btn {
+  background-color: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06) !important;
+}
+
+[data-theme="light"] .quick-access-btn:hover,
+[data-theme="white"] .quick-access-btn:hover {
+  background-color: #F8FAFC !important;
+  border-color: #0284C7 !important;
+}
+
+[data-theme="light"] .quick-access-btn span,
+[data-theme="white"] .quick-access-btn span {
+  color: #0F172A !important;
+  font-weight: 700 !important;
 }
 
 /* Form input styling in Light mode */
@@ -1048,3 +1117,44 @@ html, body {
   top: 0px !important;
   position: static !important;
 }
+
+/* =========================================================================
+   TODAY & MONTH CARDS - INCOME & EXPENSE HIGH-CONTRAST VISIBILITY
+   Guarantees vivid legibility across all dark/night modes & daylight modes
+   ========================================================================= */
+.summary-stat-income {
+  color: #10B981 !important;
+}
+
+.summary-stat-expense {
+  color: #EF4444 !important;
+}
+
+.summary-net-positive {
+  color: #10B981 !important;
+}
+
+.summary-net-negative {
+  color: #EF4444 !important;
+}
+
+[data-theme="light"] .summary-stat-income,
+[data-theme="white"] .summary-stat-income {
+  color: #047857 !important;
+}
+
+[data-theme="light"] .summary-stat-expense,
+[data-theme="white"] .summary-stat-expense {
+  color: #B91C1C !important;
+}
+
+[data-theme="light"] .summary-net-positive,
+[data-theme="white"] .summary-net-positive {
+  color: #047857 !important;
+}
+
+[data-theme="light"] .summary-net-negative,
+[data-theme="white"] .summary-net-negative {
+  color: #B91C1C !important;
+}
+

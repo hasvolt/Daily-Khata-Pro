@@ -96,7 +96,7 @@ export function BankingCard3D({
           {/* Header row */}
           <div className="flex items-center justify-between gap-1 sm:gap-2 min-w-0">
             <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 shrink">
-              <div className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_2px_8px_var(--theme-glow,rgba(56,189,248,0.25)),inset_0_1px_0_rgba(255,255,255,0.25)] transition-transform duration-200 hover:scale-105">
+              <div className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105">
                 <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
               </div>
               <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
@@ -157,7 +157,7 @@ export function BankingCard3D({
             </div>
 
             {/* 3D Glossy Theme-Adaptive Wallet Graphic */}
-            <div className="relative w-16 h-13 sm:w-22 sm:h-18 shrink-0 pointer-events-none select-none drop-shadow-[0_8px_18px_var(--theme-glow,rgba(56,189,248,0.25))]">
+            <div className="banking-card-wallet-graphic relative w-16 h-13 sm:w-22 sm:h-18 shrink-0 pointer-events-none select-none drop-shadow-[0_8px_18px_var(--theme-glow,rgba(56,189,248,0.25))]">
               <svg viewBox="0 0 120 100" fill="none" className="w-full h-full">
                 <defs>
                   <linearGradient id="walletBodyGrad" x1="0" y1="0" x2="1" y2="1">
@@ -199,10 +199,10 @@ export function BankingCard3D({
                 id="hero-add-income-btn"
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 2, scale: 0.97 }}
-                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#22C55E] via-[#16A34A] to-[#15803D] hover:from-[#2ecc71] hover:to-[#16a34a] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-[0_4px_0_0_#14532D,0_10px_20px_rgba(34,197,94,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] active:shadow-[0_1px_0_0_#14532D,inset_0_2px_4px_rgba(0,0,0,0.4)] cursor-pointer select-none"
+                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#22C55E] via-[#16A34A] to-[#15803D] hover:from-[#2ecc71] hover:to-[#16a34a] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
               >
-                <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">+ Income</span>
-                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
+                <span>+ Income</span>
+                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
               </motion.button>
 
               <motion.button
@@ -211,10 +211,10 @@ export function BankingCard3D({
                 id="hero-add-expense-btn"
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 2, scale: 0.97 }}
-                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] hover:from-[#f87171] hover:to-[#dc2626] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-[0_4px_0_0_#7F1D1D,0_10px_20px_rgba(239,68,68,0.35),inset_0_1px_0_rgba(255,255,255,0.35)] active:shadow-[0_1px_0_0_#7F1D1D,inset_0_2px_4px_rgba(0,0,0,0.4)] cursor-pointer select-none"
+                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] hover:from-[#f87171] hover:to-[#dc2626] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
               >
-                <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">− Expense</span>
-                <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform duration-150" />
+                <span>− Expense</span>
+                <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform duration-150" />
               </motion.button>
             </div>
           </div>
