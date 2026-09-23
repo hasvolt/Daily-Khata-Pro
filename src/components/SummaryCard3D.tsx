@@ -102,27 +102,27 @@ export function SummaryCard3D({
         </div>
 
         {/* Bottom 2-stat row with high-contrast distinct surfaces and crisp text */}
-        <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-2.5 pt-2.5 border-t border-[var(--theme-border,#213E61)]/40">
-          <div className="summary-stat-box rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-emerald-500/35 px-2 py-1.5 min-w-0 shadow-xs">
+        <div className="grid grid-cols-1 xs:grid-cols-2 gap-1.5 sm:gap-2 mt-2.5 pt-2.5 border-t border-[var(--theme-border,#213E61)]/40">
+          <div className="summary-stat-box rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-emerald-500/35 px-2 py-1.5 min-w-0 shadow-xs flex xs:block items-center justify-between">
             <div className="flex items-center gap-1 text-[8.5px] sm:text-[9.5px] font-bold text-emerald-500 dark:text-emerald-400">
               <span className="w-3.5 h-3.5 rounded-full bg-emerald-500/15 flex items-center justify-center shrink-0">
                 <ArrowUpRight className="w-2.5 h-2.5 stroke-[2.8]" />
               </span>
               <span className="truncate">{isHindi ? 'आय' : 'Income'}</span>
             </div>
-            <div className="summary-stat-income font-mono text-[12px] xs:text-[13px] sm:text-[14px] font-black text-emerald-500 dark:text-emerald-400 truncate mt-0.5 tracking-tight notranslate" translate="no">
+            <div className="summary-stat-income font-mono text-[11px] xs:text-[11.5px] sm:text-[13px] font-black text-emerald-500 dark:text-emerald-400 mt-0.5 tracking-tight notranslate whitespace-nowrap" translate="no">
               +{formatCurrency(incomeValue, privacyMask)}
             </div>
           </div>
 
-          <div className="summary-stat-box rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-rose-500/35 px-2 py-1.5 min-w-0 shadow-xs">
+          <div className="summary-stat-box rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-rose-500/35 px-2 py-1.5 min-w-0 shadow-xs flex xs:block items-center justify-between">
             <div className="flex items-center gap-1 text-[8.5px] sm:text-[9.5px] font-bold text-rose-500 dark:text-rose-400">
               <span className="w-3.5 h-3.5 rounded-full bg-rose-500/15 flex items-center justify-center shrink-0">
                 <ArrowDownRight className="w-2.5 h-2.5 stroke-[2.8]" />
               </span>
               <span className="truncate">{isHindi ? 'व्यय' : 'Expense'}</span>
             </div>
-            <div className="summary-stat-expense font-mono text-[12px] xs:text-[13px] sm:text-[14px] font-black text-rose-500 dark:text-rose-400 truncate mt-0.5 tracking-tight notranslate" translate="no">
+            <div className="summary-stat-expense font-mono text-[11px] xs:text-[11.5px] sm:text-[13px] font-black text-rose-500 dark:text-rose-400 mt-0.5 tracking-tight notranslate whitespace-nowrap" translate="no">
               -{formatCurrency(expenseValue, privacyMask)}
             </div>
           </div>

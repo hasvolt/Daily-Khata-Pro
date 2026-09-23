@@ -2,202 +2,275 @@
 
 @layer base {
   :root {
-    /* Base Neutral Surface Architecture (Premium Rich Midnight Black-Blue Canvas) */
-    --theme-bg: #050B14;
-    --theme-surface: #0A1220;
-    --theme-card: #0E182A;
-    --theme-card-hover: #14223A;
-    --theme-border: rgba(56, 189, 248, 0.14);
-    --theme-border-subtle: rgba(255, 255, 255, 0.05);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Base Neutral Surface Architecture (Default: Electric Sky Blue Midnight Canvas) */
+    --theme-bg: #070E1A;
+    --theme-surface: #0C182B;
+    --theme-card: #12223D;
+    --theme-card-hover: #192E52;
+    --theme-border: rgba(56, 189, 248, 0.22);
+    --theme-border-subtle: rgba(56, 189, 248, 0.10);
+    --theme-text: #F0F6FC;
+    --theme-text-muted: #93B5E0;
+    --theme-text-dim: #6282AA;
 
-    /* Accent Personality (Default: Electric Sky Blue) */
+    /* Theme Primary Accent Tokens */
     --theme-primary: #38BDF8;
     --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.12);
-    --theme-primary-border: rgba(56, 189, 248, 0.28);
-    --theme-glow: rgba(56, 189, 248, 0.06);
+    --theme-primary-dim: rgba(56, 189, 248, 0.14);
+    --theme-primary-border: rgba(56, 189, 248, 0.35);
+    --theme-glow: rgba(56, 189, 248, 0.20);
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
+
+    /* Generic Standard Token Set Aliases */
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="blue"] {
-    --theme-bg: #050B14;
-    --theme-surface: #0A1220;
-    --theme-card: #0E182A;
-    --theme-card-hover: #14223A;
-    --theme-border: rgba(56, 189, 248, 0.14);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Midnight Navy Deep Blue Atmosphere */
+    --theme-bg: #070E1A;
+    --theme-surface: #0C182B;
+    --theme-card: #12223D;
+    --theme-card-hover: #192E52;
+    --theme-border: rgba(56, 189, 248, 0.22);
+    --theme-border-subtle: rgba(56, 189, 248, 0.10);
+    --theme-text: #F0F6FC;
+    --theme-text-muted: #93B5E0;
+    --theme-text-dim: #6282AA;
 
     --theme-primary: #38BDF8;
     --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.12);
-    --theme-primary-border: rgba(56, 189, 248, 0.28);
-    --theme-glow: rgba(56, 189, 248, 0.06);
+    --theme-primary-dim: rgba(56, 189, 248, 0.14);
+    --theme-primary-border: rgba(56, 189, 248, 0.35);
+    --theme-glow: rgba(56, 189, 248, 0.20);
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="yellow"] {
-    /* 24K Luxury Gold Accent with Sleek Obsidian Deep Slate Canvas */
-    --theme-bg: #09090D;
-    --theme-surface: #101017;
-    --theme-card: #161722;
-    --theme-card-hover: #1E1F2E;
-    --theme-border: rgba(245, 158, 11, 0.20);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* 24K Luxury Gold & Warm Bronze Atmosphere */
+    --theme-bg: #120E04;
+    --theme-surface: #1C1608;
+    --theme-card: #271F0C;
+    --theme-card-hover: #342A12;
+    --theme-border: rgba(245, 158, 11, 0.26);
+    --theme-border-subtle: rgba(245, 158, 11, 0.12);
+    --theme-text: #FFFDF5;
+    --theme-text-muted: #D8BF8E;
+    --theme-text-dim: #9E8659;
 
     --theme-primary: #F59E0B;
     --theme-primary-hover: #D97706;
-    --theme-primary-dim: rgba(245, 158, 11, 0.14);
-    --theme-primary-border: rgba(245, 158, 11, 0.32);
-    --theme-glow: rgba(245, 158, 11, 0.10);
+    --theme-primary-dim: rgba(245, 158, 11, 0.16);
+    --theme-primary-border: rgba(245, 158, 11, 0.38);
+    --theme-glow: rgba(245, 158, 11, 0.22);
     --theme-badge-text: #FBBF24;
     --theme-btn-bg: #D97706;
     --theme-btn-hover: #B45309;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="orange"] {
-    /* Sunset Flame Accent with Sleek Obsidian Deep Slate Canvas */
-    --theme-bg: #09090D;
-    --theme-surface: #101017;
-    --theme-card: #161622;
-    --theme-card-hover: #1E1E2E;
-    --theme-border: rgba(249, 115, 22, 0.20);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Sunset Orange & Rich Warm Terracotta Atmosphere */
+    --theme-bg: #140903;
+    --theme-surface: #1E0F06;
+    --theme-card: #2A160A;
+    --theme-card-hover: #381E0E;
+    --theme-border: rgba(249, 115, 22, 0.26);
+    --theme-border-subtle: rgba(249, 115, 22, 0.12);
+    --theme-text: #FFF7ED;
+    --theme-text-muted: #DDBAA1;
+    --theme-text-dim: #A07F65;
 
     --theme-primary: #F97316;
     --theme-primary-hover: #EA580C;
-    --theme-primary-dim: rgba(249, 115, 22, 0.14);
-    --theme-primary-border: rgba(249, 115, 22, 0.32);
-    --theme-glow: rgba(249, 115, 22, 0.10);
+    --theme-primary-dim: rgba(249, 115, 22, 0.16);
+    --theme-primary-border: rgba(249, 115, 22, 0.38);
+    --theme-glow: rgba(249, 115, 22, 0.22);
     --theme-badge-text: #FB923C;
     --theme-btn-bg: #EA580C;
     --theme-btn-hover: #C2410C;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="emerald"] {
-    /* Mint Emerald Accent with Sleek Deep Obsidian Canvas */
-    --theme-bg: #060B09;
-    --theme-surface: #0B1410;
-    --theme-card: #101E18;
-    --theme-card-hover: #162720;
-    --theme-border: rgba(16, 185, 129, 0.22);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Emerald Forest & Deep Jade Velvet Atmosphere */
+    --theme-bg: #04120A;
+    --theme-surface: #071C10;
+    --theme-card: #0D2818;
+    --theme-card-hover: #123621;
+    --theme-border: rgba(16, 185, 129, 0.26);
+    --theme-border-subtle: rgba(16, 185, 129, 0.12);
+    --theme-text: #F0FDF4;
+    --theme-text-muted: #9BD6B2;
+    --theme-text-dim: #5F9975;
 
     --theme-primary: #10B981;
     --theme-primary-hover: #059669;
-    --theme-primary-dim: rgba(16, 185, 129, 0.15);
-    --theme-primary-border: rgba(16, 185, 129, 0.32);
-    --theme-glow: rgba(16, 185, 129, 0.10);
+    --theme-primary-dim: rgba(16, 185, 129, 0.16);
+    --theme-primary-border: rgba(16, 185, 129, 0.38);
+    --theme-glow: rgba(16, 185, 129, 0.22);
     --theme-badge-text: #34D399;
     --theme-btn-bg: #059669;
     --theme-btn-hover: #047857;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="purple"] {
-    /* Royal Violet Accent with Deep Obsidian Velvet Canvas */
-    --theme-bg: #080710;
-    --theme-surface: #0E0C1B;
-    --theme-card: #151227;
-    --theme-card-hover: #1D1936;
-    --theme-border: rgba(168, 85, 247, 0.22);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Royal Violet & Dark Amethyst Velvet Atmosphere */
+    --theme-bg: #0F071D;
+    --theme-surface: #170B2C;
+    --theme-card: #22113F;
+    --theme-card-hover: #2E1854;
+    --theme-border: rgba(168, 85, 247, 0.28);
+    --theme-border-subtle: rgba(168, 85, 247, 0.12);
+    --theme-text: #FAF5FF;
+    --theme-text-muted: #CBB9F0;
+    --theme-text-dim: #8F7BB8;
 
     --theme-primary: #A855F7;
     --theme-primary-hover: #9333EA;
-    --theme-primary-dim: rgba(168, 85, 247, 0.15);
-    --theme-primary-border: rgba(168, 85, 247, 0.32);
-    --theme-glow: rgba(168, 85, 247, 0.10);
+    --theme-primary-dim: rgba(168, 85, 247, 0.16);
+    --theme-primary-border: rgba(168, 85, 247, 0.38);
+    --theme-glow: rgba(168, 85, 247, 0.22);
     --theme-badge-text: #C084FC;
     --theme-btn-bg: #9333EA;
     --theme-btn-hover: #7E22CE;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="cyan"] {
-    /* Oceanic Cyan Accent with Deep Obsidian Teal Canvas */
-    --theme-bg: #050B10;
-    --theme-surface: #09131C;
-    --theme-card: #0E1C28;
-    --theme-card-hover: #142636;
-    --theme-border: rgba(6, 182, 212, 0.22);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Oceanic Cyan & Abyssal Teal Atmosphere */
+    --theme-bg: #031016;
+    --theme-surface: #061A24;
+    --theme-card: #0A2735;
+    --theme-card-hover: #0F3547;
+    --theme-border: rgba(6, 182, 212, 0.26);
+    --theme-border-subtle: rgba(6, 182, 212, 0.12);
+    --theme-text: #ECFEFF;
+    --theme-text-muted: #9AD5DF;
+    --theme-text-dim: #5B95A2;
 
     --theme-primary: #06B6D4;
     --theme-primary-hover: #0891B2;
-    --theme-primary-dim: rgba(6, 182, 212, 0.15);
-    --theme-primary-border: rgba(6, 182, 212, 0.32);
-    --theme-glow: rgba(6, 182, 212, 0.10);
+    --theme-primary-dim: rgba(6, 182, 212, 0.16);
+    --theme-primary-border: rgba(6, 182, 212, 0.38);
+    --theme-glow: rgba(6, 182, 212, 0.22);
     --theme-badge-text: #22D3EE;
     --theme-btn-bg: #0891B2;
     --theme-btn-hover: #0E7490;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="pink"] {
-    /* Crimson Rose Accent with Deep Obsidian Velvet Canvas */
-    --theme-bg: #0A070B;
-    --theme-surface: #120D15;
-    --theme-card: #1A131E;
-    --theme-card-hover: #241A2A;
-    --theme-border: rgba(244, 63, 94, 0.20);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Crimson Rose & Deep Berry Wine Atmosphere */
+    --theme-bg: #15050B;
+    --theme-surface: #200811;
+    --theme-card: #2D0C18;
+    --theme-card-hover: #3B1121;
+    --theme-border: rgba(244, 63, 94, 0.26);
+    --theme-border-subtle: rgba(244, 63, 94, 0.12);
+    --theme-text: #FFF1F2;
+    --theme-text-muted: #DEABB5;
+    --theme-text-dim: #9E6B77;
 
     --theme-primary: #F43F5E;
     --theme-primary-hover: #E11D48;
-    --theme-primary-dim: rgba(244, 63, 94, 0.14);
-    --theme-primary-border: rgba(244, 63, 94, 0.32);
-    --theme-glow: rgba(244, 63, 94, 0.10);
+    --theme-primary-dim: rgba(244, 63, 94, 0.16);
+    --theme-primary-border: rgba(244, 63, 94, 0.38);
+    --theme-glow: rgba(244, 63, 94, 0.22);
     --theme-badge-text: #FB7185;
     --theme-btn-bg: #E11D48;
     --theme-btn-hover: #BE123C;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="black"] {
     /* Pitch OLED Titanium Glass - True Pitch Black Canvas */
     --theme-bg: #000000;
-    --theme-surface: #0A0A0D;
-    --theme-card: #111116;
-    --theme-card-hover: #18181E;
-    --theme-border: rgba(255, 255, 255, 0.12);
+    --theme-surface: #09090D;
+    --theme-card: #121218;
+    --theme-card-hover: #1A1A22;
+    --theme-border: rgba(255, 255, 255, 0.16);
+    --theme-border-subtle: rgba(255, 255, 255, 0.06);
     --theme-text: #F8FAFC;
     --theme-text-muted: #94A3B8;
     --theme-text-dim: #64748B;
 
     --theme-primary: #38BDF8;
     --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.12);
-    --theme-primary-border: rgba(56, 189, 248, 0.28);
-    --theme-glow: rgba(56, 189, 248, 0.06);
+    --theme-primary-dim: rgba(56, 189, 248, 0.14);
+    --theme-primary-border: rgba(56, 189, 248, 0.32);
+    --theme-glow: rgba(56, 189, 248, 0.14);
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="monochrome"] {
@@ -221,52 +294,73 @@
     --theme-btn-bg: #FFFFFF;
     --theme-btn-hover: #E2E8F0;
     --theme-btn-text: #000000;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="light"] {
     /* Pure Daylight High-Contrast Clean Mode - Crisp White Surfaces */
-    --theme-bg: #F8FAFC;
+    --theme-bg: #F1F5F9;
     --theme-surface: #FFFFFF;
     --theme-card: #FFFFFF;
-    --theme-card-hover: #F1F5F9;
-    --theme-border: #E2E8F0;
-    --theme-border-subtle: #F1F5F9;
-    --theme-text: #090E17;
-    --theme-text-muted: #1E293B;
-    --theme-text-dim: #334155;
+    --theme-card-hover: #F8FAFC;
+    --theme-border: #CBD5E1;
+    --theme-border-subtle: #E2E8F0;
+    --theme-text: #0F172A;
+    --theme-text-muted: #334155;
+    --theme-text-dim: #475569;
 
-    --theme-primary: #0369A1;
-    --theme-primary-hover: #075985;
-    --theme-primary-dim: rgba(3, 105, 161, 0.10);
-    --theme-primary-border: rgba(3, 105, 161, 0.35);
-    --theme-glow: rgba(3, 105, 161, 0.06);
-    --theme-badge-text: #0369A1;
+    --theme-primary: #0284C7;
+    --theme-primary-hover: #0369A1;
+    --theme-primary-dim: rgba(2, 132, 199, 0.12);
+    --theme-primary-border: rgba(2, 132, 199, 0.35);
+    --theme-glow: rgba(2, 132, 199, 0.12);
+    --theme-badge-text: #0284C7;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="white"] {
     /* Pure Clean Architectural White - Zero Yellow, Ultra Crisp */
-    --theme-bg: #FFFFFF;
-    --theme-surface: #F8FAFC;
+    --theme-bg: #F8FAFC;
+    --theme-surface: #FFFFFF;
     --theme-card: #FFFFFF;
     --theme-card-hover: #F1F5F9;
     --theme-border: #CBD5E1;
-    --theme-border-subtle: #F1F5F9;
-    --theme-text: #090E17;
+    --theme-border-subtle: #E2E8F0;
+    --theme-text: #020617;
     --theme-text-muted: #1E293B;
     --theme-text-dim: #334155;
 
-    --theme-primary: #0369A1;
-    --theme-primary-hover: #075985;
-    --theme-primary-dim: rgba(3, 105, 161, 0.10);
-    --theme-primary-border: rgba(3, 105, 161, 0.35);
-    --theme-glow: rgba(3, 105, 161, 0.06);
-    --theme-badge-text: #0369A1;
-    --theme-btn-bg: #0284C7;
-    --theme-btn-hover: #0369A1;
+    --theme-primary: #2563EB;
+    --theme-primary-hover: #1D4ED8;
+    --theme-primary-dim: rgba(37, 99, 235, 0.10);
+    --theme-primary-border: rgba(37, 99, 235, 0.35);
+    --theme-glow: rgba(37, 99, 235, 0.08);
+    --theme-badge-text: #2563EB;
+    --theme-btn-bg: #2563EB;
+    --theme-btn-hover: #1D4ED8;
     --theme-btn-text: #FFFFFF;
+
+    --bg-primary: var(--theme-bg);
+    --bg-surface: var(--theme-card);
+    --border-color: var(--theme-border);
+    --text-primary: var(--theme-text);
+    --text-secondary: var(--theme-text-muted);
+    --accent-color: var(--theme-primary);
   }
 
   [data-theme="light"],
@@ -321,18 +415,32 @@
   font-feature-settings: "tnum";
 }
 
-/* Responsive View Mode Containers */
-[data-view-mode="mobile"] {
-  max-width: 480px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.45);
+/* Responsive View Mode Containers - Full width on all mobile screens & webviews */
+@media (max-width: 767px) {
+  [data-view-mode="mobile"],
+  [data-view-mode="desktop"],
+  [data-view-mode="auto"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-shadow: none !important;
+  }
 }
 
-[data-view-mode="desktop"] {
-  max-width: 1400px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+@media (min-width: 768px) {
+  [data-view-mode="mobile"] {
+    max-width: 480px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.45);
+  }
+
+  [data-view-mode="desktop"] {
+    max-width: 1400px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
 }
 
 /* App Layout Variants */
@@ -661,12 +769,12 @@
   box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
-/* Monochrome: Total Balance Card - High-Contrast Wallet Icon & 3D Graphic */
+/* Monochrome: Total Balance Card - High-Contrast Wallet Icon & 3D Graphic (Clean, no shadow) */
 [data-theme="monochrome"] .banking-card-3d .banking-card-icon-box {
   background-color: #FFFFFF !important;
   border-color: #FFFFFF !important;
   color: #000000 !important;
-  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.35) !important;
+  box-shadow: none !important;
 }
 
 [data-theme="monochrome"] .banking-card-3d .banking-card-icon-box svg {
@@ -676,7 +784,8 @@
 }
 
 [data-theme="monochrome"] .banking-card-wallet-graphic {
-  filter: drop-shadow(0 6px 20px rgba(255, 255, 255, 0.25)) !important;
+  filter: none !important;
+  box-shadow: none !important;
 }
 
 [data-theme="monochrome"] .banking-card-wallet-graphic svg rect:first-of-type {
@@ -878,36 +987,42 @@
 }
 
 /* Bottom nav active tab: pure white badge with crisp black icon */
-[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add).text-\[var\(--theme-primary\,#38BDF8\)\] {
+[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add)[class*="theme-primary"] {
   color: #FFFFFF !important;
   background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add).text-\[var\(--theme-primary\,#38BDF8\)\] span {
+[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add)[class*="theme-primary"] span {
   color: #FFFFFF !important;
   font-weight: 800 !important;
 }
 
-[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) .bg-\[var\(--theme-primary-dim\,rgba\(56\,189\,248\,0\.18\)\)\] {
+[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) div[class*="theme-primary-dim"] {
   background-color: #FFFFFF !important;
   color: #000000 !important;
   box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4) !important;
 }
 
-[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) .bg-\[var\(--theme-primary-dim\,rgba\(56\,189\,248\,0\.18\)\)\] svg {
+[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) div[class*="theme-primary-dim"] svg {
   color: #000000 !important;
   stroke: #000000 !important;
   stroke-width: 2.6px !important;
 }
 
-/* Main Menu Drawer - ALWAYS Premium Monochrome Black & White across ALL themes */
+/* Main Menu Drawer - Adapts dynamically to active color theme; strictly monochrome only in monochrome mode */
 #main-menu-drawer {
+  background: var(--theme-surface, #0E1A29) !important;
+  border-left-color: var(--theme-border, #213E61) !important;
+  color: var(--theme-text, #F8FAFC) !important;
+}
+
+[data-theme="monochrome"] #main-menu-drawer {
   background: #09090C !important;
   border-left-color: rgba(255, 255, 255, 0.18) !important;
   color: #FFFFFF !important;
 }
 
-#main-menu-drawer * {
+[data-theme="monochrome"] #main-menu-drawer * {
   --theme-primary: #FFFFFF !important;
   --theme-primary-hover: #E2E8F0 !important;
   --theme-primary-dim: rgba(255, 255, 255, 0.12) !important;
@@ -920,35 +1035,19 @@
   --theme-text-dim: #94A3B8 !important;
 }
 
-#main-menu-drawer img {
+[data-theme="monochrome"] #main-menu-drawer img {
   filter: grayscale(1) brightness(1.2) contrast(1.1) !important;
 }
 
-#main-menu-drawer svg {
+[data-theme="monochrome"] #main-menu-drawer svg {
   color: #FFFFFF !important;
   stroke: currentColor !important;
 }
 
-#main-menu-drawer .text-\[\#38BDF8\],
-#main-menu-drawer .text-amber-400,
-#main-menu-drawer .text-emerald-400,
-#main-menu-drawer .text-rose-400,
-#main-menu-drawer .text-sky-400,
-#main-menu-drawer .text-indigo-400,
-#main-menu-drawer .text-purple-400,
-#main-menu-drawer .text-cyan-400 {
-  color: #FFFFFF !important;
-}
-
-#main-menu-drawer [class*="bg-amber-500"],
-#main-menu-drawer [class*="bg-emerald-500"],
-#main-menu-drawer [class*="bg-rose-500"],
-#main-menu-drawer [class*="bg-sky-500"],
-#main-menu-drawer [class*="bg-indigo-500"],
-#main-menu-drawer [class*="bg-purple-500"] {
-  background-color: rgba(255, 255, 255, 0.12) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-  color: #FFFFFF !important;
+/* Total Balance Card - Clean Wallet Icon and buttons without shadow/blurriness */
+.banking-card-3d .banking-card-icon-box,
+.banking-card-wallet-graphic {
+  box-shadow: none !important;
 }
 
 /* Total Balance Card - Clean Button styling without bottom shadow blocks */

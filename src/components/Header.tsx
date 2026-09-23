@@ -389,7 +389,7 @@ export const Header: React.FC<HeaderProps> = ({
         ) : null}
 
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Subtle Non-Intrusive Offline Status Chip */}
           {!isOnline && (
             <div

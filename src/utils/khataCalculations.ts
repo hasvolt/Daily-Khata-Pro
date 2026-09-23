@@ -3,7 +3,7 @@ import { FUND_ORDER } from '../data/defaults';
 import confetti from 'canvas-confetti';
 import { formatCurrencyByLang } from './currencyConfig';
 
-export const formatCurrency = (n: number, mask: boolean = false, compact: boolean = true): string => {
+export const formatCurrency = (n: number, mask: boolean = false, compact: boolean = false): string => {
   return formatCurrencyByLang(n, undefined, mask, compact);
 };
 

@@ -157,7 +157,7 @@ export function BankingCard3D({
             </div>
 
             {/* 3D Glossy Theme-Adaptive Wallet Graphic */}
-            <div className="banking-card-wallet-graphic relative w-16 h-13 sm:w-22 sm:h-18 shrink-0 pointer-events-none select-none drop-shadow-[0_8px_18px_var(--theme-glow,rgba(56,189,248,0.25))]">
+            <div className="banking-card-wallet-graphic relative w-16 h-13 sm:w-22 sm:h-18 shrink-0 pointer-events-none select-none drop-shadow-none">
               <svg viewBox="0 0 120 100" fill="none" className="w-full h-full">
                 <defs>
                   <linearGradient id="walletBodyGrad" x1="0" y1="0" x2="1" y2="1">

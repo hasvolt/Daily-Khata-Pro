@@ -142,7 +142,7 @@ export function formatCurrencyByLang(
   amount: number,
   lang: AppLanguage = currentLang,
   mask: boolean = false,
-  compact: boolean = true
+  compact: boolean = false
 ): string {
   const cfg = getCurrencyConfig(lang);
   if (mask) {

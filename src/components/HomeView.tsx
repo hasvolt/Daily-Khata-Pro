@@ -196,15 +196,15 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* Premium Frosted Glass Luminous Backdrops */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[96vw] max-w-5xl h-[420px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.12)_0%,rgba(14,165,233,0.05)_45%,transparent_72%)] blur-3xl -z-10"
+        className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[96vw] max-w-5xl h-[420px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--theme-glow,rgba(56,189,248,0.12))_0%,transparent_72%)] blur-3xl -z-10"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[92vw] max-w-4xl h-[450px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08)_0%,rgba(56,189,248,0.04)_40%,transparent_70%)] blur-3xl -z-10"
+        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[92vw] max-w-4xl h-[450px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--theme-primary-dim,rgba(56,189,248,0.08))_0%,transparent_70%)] blur-3xl -z-10"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-12 left-1/2 -translate-x-1/2 w-[88vw] max-w-3xl h-[360px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.06)_0%,transparent_65%)] blur-3xl -z-10"
+        className="pointer-events-none absolute bottom-12 left-1/2 -translate-x-1/2 w-[88vw] max-w-3xl h-[360px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--theme-glow,rgba(16,185,129,0.06))_0%,transparent_65%)] blur-3xl -z-10"
       />
 
       {/* 1. HERO BALANCE CARD */}
@@ -299,12 +299,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 whileHover={{ y: -2, scale: 1.03 }}
                 whileTap={{ y: 1, scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 450, damping: 20 }}
-                className="quick-access-btn group relative min-w-0 rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-1 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-card-hover,#19304A)] transition-colors shadow-xs cursor-pointer select-none"
+                className="quick-access-btn group relative min-w-0 rounded-xl sm:rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-0.5 py-1.5 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-card-hover,#19304A)] transition-colors shadow-xs cursor-pointer select-none"
               >
-                <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-105">
-                  <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.3]" />
+                <div className="h-7 w-7 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-105">
+                  <Icon className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 stroke-[2.3]" />
                 </div>
-                <span className="text-[10px] xs:text-[10.5px] sm:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate max-w-full text-center px-0.5 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
+                <span className="text-[9px] xs:text-[10px] sm:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] tracking-tight max-w-full text-center px-0.5 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors leading-tight">
                   {item.label}
                 </span>
               </motion.button>

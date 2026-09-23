@@ -4,8 +4,6 @@ import {
   Share2,
   Bookmark,
   BookmarkCheck,
-  Volume2,
-  VolumeX,
   Clock,
   Calendar,
   User,
@@ -18,10 +16,6 @@ import {
   Info,
   Globe,
   Flag,
-  MessageSquare,
-  Play,
-  Square,
-  Send,
   X
 } from 'lucide-react';
 import { PortableText, PortableTextComponents } from '@portabletext/react';
@@ -37,13 +31,6 @@ interface SanityArticlePageProps {
   onNavigateTab?: (tab: string) => void;
 }
 
-interface ArticleComment {
-  id: string;
-  name: string;
-  text: string;
-  createdAt: string;
-}
-
 export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   slugOrId,
   language,
@@ -54,7 +41,6 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   const [fallbackArticle, setFallbackArticle] = useState<CommercialArticle | null>(null);
   const [loading, setLoading] = useState(true);
   const [fontSize, setFontSize] = useState<'sm' | 'base' | 'lg'>('base');
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   const [isTranslateOpen, setIsTranslateOpen] = useState(false);
@@ -62,9 +48,6 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   const [reportReason, setReportReason] = useState('Factual inaccuracy');
   const [reportDetails, setReportDetails] = useState('');
   const [reportSubmitted, setReportSubmitted] = useState(false);
-  const [comments, setComments] = useState<ArticleComment[]>([]);
-  const [commentName, setCommentName] = useState('');
-  const [commentText, setCommentText] = useState('');
 
   const isHindi = language === 'hi' || language === 'hinglish';
 
@@ -114,23 +97,8 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
       // ignore storage error
     }
 
-    // Load comments for this article
-    try {
-      const storedComments = localStorage.getItem(`khata_blog_comments_${slugOrId}`);
-      if (storedComments) {
-        setComments(JSON.parse(storedComments));
-      } else {
-        setComments([]);
-      }
-    } catch {
-      setComments([]);
-    }
-
     return () => {
       isMounted = false;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
     };
   }, [slugOrId]);
 
@@ -332,120 +300,30 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     }
   };
 
-  const handleToggleAudio = () => {
-    if (!('speechSynthesis' in window)) {
-      alert(isHindi ? 'आपका ब्राउज़र टेक्स्ट-टू-स्पीच का समर्थन नहीं करता।' : 'Text-to-speech is not supported on this browser.');
-      return;
-    }
-
-    if (isPlayingAudio) {
-      window.speechSynthesis.cancel();
-      setIsPlayingAudio(false);
-      return;
-    }
-
-    try {
-      window.speechSynthesis.cancel();
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-      }
-
-      const title = post?.title || fallbackArticle?.title || '';
-      const summary = post?.summary || fallbackArticle?.subtitle || '';
-      let bodyText = '';
-      if (post?.body && Array.isArray(post.body)) {
-        bodyText = post.body
-          .map(b => (b.children ? b.children.map((c: any) => c.text).join('') : ''))
-          .join('. ');
-      } else if (post?.bodyText) {
-        bodyText = post.bodyText.replace(/<[^>]*>?/gm, ' ');
-      }
-      const fullText = `${title}. ${summary}. ${bodyText}`.replace(/\s+/g, ' ').trim();
-      if (!fullText) return;
-
-      const utterance = new SpeechSynthesisUtterance(fullText.slice(0, 4500));
-      utterance.rate = 0.95;
-      utterance.pitch = 1.0;
-
-      const voices = window.speechSynthesis.getVoices();
-      if (isHindi) {
-        const hiVoice = voices.find(v => v.lang.startsWith('hi') || v.lang.toLowerCase().includes('hindi'));
-        if (hiVoice) utterance.voice = hiVoice;
-        utterance.lang = 'hi-IN';
-      } else {
-        const enVoice = voices.find(v => v.lang === 'en-IN' || v.lang.startsWith('en'));
-        if (enVoice) utterance.voice = enVoice;
-        utterance.lang = 'en-IN';
-      }
-
-      utterance.onstart = () => setIsPlayingAudio(true);
-      utterance.onend = () => {
-        setIsPlayingAudio(false);
-        (window as any)._khataSpeechUtterance = null;
-      };
-      utterance.onerror = () => {
-        setIsPlayingAudio(false);
-        (window as any)._khataSpeechUtterance = null;
-      };
-
-      // Prevent Chrome garbage collection bug
-      (window as any)._khataSpeechUtterance = utterance;
-
-      window.speechSynthesis.speak(utterance);
-      setIsPlayingAudio(true);
-    } catch (err) {
-      console.error('TTS Audio error:', err);
-      setIsPlayingAudio(false);
-    }
-  };
-
-  const handleAddComment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!commentName.trim() || !commentText.trim()) return;
-
-    const newComment: ArticleComment = {
-      id: Date.now().toString(),
-      name: commentName.trim(),
-      text: commentText.trim(),
-      createdAt: new Date().toLocaleDateString('en-IN', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      })
-    };
-
-    const updated = [newComment, ...comments];
-    setComments(updated);
-    setCommentText('');
-    try {
-      localStorage.setItem(`khata_blog_comments_${slugOrId}`, JSON.stringify(updated));
-    } catch {
-      // ignore
-    }
-  };
-
   const handleReportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const stored = localStorage.getItem('khata_reported_articles');
-      const reports = stored ? JSON.parse(stored) : [];
-      reports.push({
-        articleSlug: slugOrId,
-        title: post?.title || fallbackArticle?.title,
-        reason: reportReason,
-        details: reportDetails,
-        date: new Date().toISOString()
-      });
-      localStorage.setItem('khata_reported_articles', JSON.stringify(reports));
-    } catch {
-      // ignore
-    }
+    const articleTitle = post?.title || fallbackArticle?.title || slugOrId;
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const emailSubject = encodeURIComponent(`[Daily Khata Pro Blog Report] ${articleTitle}`);
+    const emailBody = encodeURIComponent(
+      `Hello Daily Khata Pro Editorial Team,\n\n` +
+      `I would like to report an issue regarding the finance blog article:\n\n` +
+      `Article: ${articleTitle}\n` +
+      `URL: ${currentUrl}\n` +
+      `Reason: ${reportReason}\n` +
+      `Details: ${reportDetails || 'N/A'}\n\n` +
+      `Date: ${new Date().toLocaleString()}\n`
+    );
+
+    // Direct editorial report strictly sent to daily-Khata-Pro@gmail.com
+    window.location.href = `mailto:daily-Khata-Pro@gmail.com?subject=${emailSubject}&body=${emailBody}`;
+
     setReportSubmitted(true);
     setTimeout(() => {
       setIsReportOpen(false);
       setReportSubmitted(false);
       setReportDetails('');
-    }, 1800);
+    }, 2000);
   };
 
   // PortableText components customized for high contrast & theme support
@@ -637,23 +515,6 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
 
           {/* Action Bar Controls */}
           <div className="flex items-center gap-2">
-            {/* Audio Summary Toggle */}
-            <button
-              type="button"
-              onClick={handleToggleAudio}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
-                isPlayingAudio
-                  ? 'bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse'
-                  : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
-              }`}
-              title={isPlayingAudio ? 'Stop Audio' : 'Listen to Audio Summary'}
-            >
-              {isPlayingAudio ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-              <span className="hidden sm:inline">
-                {isPlayingAudio ? (isHindi ? 'रोकें' : 'Stop') : (isHindi ? 'सुनें' : 'Listen')}
-              </span>
-            </button>
-
             {/* Font Size Adjuster */}
             <div className="hidden sm:flex items-center rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] p-0.5 text-xs font-mono">
               <button
@@ -842,43 +703,16 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           </div>
         </div>
 
-        {/* Audio Narration Bar */}
-        <div className="p-3.5 sm:p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={handleToggleAudio}
-              className={`h-10 w-10 rounded-xl flex items-center justify-center font-bold text-white transition-all cursor-pointer shrink-0 shadow-md ${
-                isPlayingAudio
-                  ? 'bg-rose-600 hover:bg-rose-700 animate-pulse'
-                  : 'bg-[var(--theme-primary,#0284C7)] hover:opacity-90'
-              }`}
-              title={isPlayingAudio ? 'Stop Audio' : 'Play Audio Article'}
-            >
-              {isPlayingAudio ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-            </button>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-bold text-[var(--theme-text,#F8FAFC)]">
-                  {isHindi ? 'ऑडियो में सुनें' : 'Listen to Article (Audio)'}
-                </span>
-                {isPlayingAudio && (
-                  <span className="flex items-center gap-0.5">
-                    <span className="w-1 h-3 bg-cyan-400 animate-bounce rounded-full" />
-                    <span className="w-1 h-4 bg-cyan-400 animate-bounce delay-75 rounded-full" />
-                    <span className="w-1 h-2 bg-cyan-400 animate-bounce delay-150 rounded-full" />
-                  </span>
-                )}
-              </div>
-              <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
-                {isPlayingAudio
-                  ? (isHindi ? 'ऑडियो चल रहा है...' : 'Playing narration...')
-                  : (isHindi ? 'पूरा लेख अपनी भाषा में सुनें' : 'Full text audio narration')}
-              </p>
-            </div>
+        {/* Simple Utility Action Bar (Translate & Editorial Report) */}
+        <div className="p-3 sm:p-3.5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-2 h-2 rounded-full bg-[var(--theme-primary,#0284C7)] shrink-0" />
+            <span className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)] truncate">
+              {isHindi ? 'शोध आधारित वित्तीय लेख' : 'Finance Knowledge & Research Article'}
+            </span>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setIsTranslateOpen(true)}
@@ -1038,79 +872,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           </p>
         </section>
 
-        {/* Reader Comments & Discussion Section */}
-        <section className="mt-8 p-6 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-5">
-          <div className="flex items-center justify-between">
-            <h4 className="text-sm sm:text-base font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
-              <MessageSquare className="w-4 h-4 text-[var(--theme-primary,#0284C7)]" />
-              <span>{isHindi ? 'टिप्पणियाँ (Comments)' : 'Reader Comments'}</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] border border-[var(--theme-border,#213E61)]">
-                {comments.length}
-              </span>
-            </h4>
-          </div>
 
-          {/* Add Comment Form */}
-          <form onSubmit={handleAddComment} className="space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <input
-                type="text"
-                placeholder={isHindi ? 'आपका नाम' : 'Your name'}
-                value={commentName}
-                onChange={e => setCommentName(e.target.value)}
-                required
-                className="px-3.5 py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder:text-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-[var(--theme-primary,#0284C7)]"
-              />
-              <div className="sm:col-span-2">
-                <input
-                  type="text"
-                  placeholder={isHindi ? 'अपनी राय या सवाल लिखें...' : 'Write your comment or thought...'}
-                  value={commentText}
-                  onChange={e => setCommentText(e.target.value)}
-                  required
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder:text-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-[var(--theme-primary,#0284C7)]"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-xl bg-[var(--theme-primary,#0284C7)] hover:opacity-90 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>{isHindi ? 'टिप्पणी भेजें' : 'Post Comment'}</span>
-              </button>
-            </div>
-          </form>
-
-          {/* Comments List */}
-          {comments.length > 0 ? (
-            <div className="space-y-2.5 pt-2 border-t border-[var(--theme-border,#213E61)]/60">
-              {comments.map(c => (
-                <div
-                  key={c.id}
-                  className="p-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]/70 space-y-1"
-                >
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-[var(--theme-text,#F8FAFC)]">{c.name}</span>
-                    <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono">
-                      {c.createdAt}
-                    </span>
-                  </div>
-                  <p className="text-xs text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
-                    {c.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-xs text-[var(--theme-text-dim,#94A3B8)] italic pt-2 border-t border-[var(--theme-border,#213E61)]/60">
-              {isHindi
-                ? 'अभी कोई टिप्पणी नहीं है। पहली टिप्पणी लिखकर चर्चा शुरू करें!'
-                : 'No comments yet. Share your thoughts on this finance guide!'}
-            </p>
-          )}
-        </section>
 
         {/* Bottom Navigation & Share Bar */}
         <div className="pt-8 border-t border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row items-center justify-between gap-4 notranslate" translate="no">
@@ -1165,11 +927,16 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             {reportSubmitted ? (
               <div className="p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs text-center font-bold">
                 {isHindi
-                  ? 'आपकी रिपोर्ट दर्ज कर ली गई है। धन्यवाद!'
-                  : 'Your report has been received. Thank you!'}
+                  ? 'आपकी रिपोर्ट daily-Khata-Pro@gmail.com पर भेज दी गई है। धन्यवाद!'
+                  : 'Your report email to daily-Khata-Pro@gmail.com has been opened. Thank you!'}
               </div>
             ) : (
               <form onSubmit={handleReportSubmit} className="space-y-3 text-xs">
+                <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
+                  {isHindi
+                    ? 'रिपोर्ट सीधे संपादकीय टीम को daily-Khata-Pro@gmail.com पर भेजी जाएगी।'
+                    : 'Report message will be emailed directly to daily-Khata-Pro@gmail.com.'}
+                </p>
                 <div>
                   <label className="block font-medium text-[var(--theme-text-dim,#94A3B8)] mb-1">
                     {isHindi ? 'समस्या का प्रकार चुनें:' : 'Select reason:'}

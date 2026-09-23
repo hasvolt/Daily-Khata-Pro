@@ -2292,7 +2292,7 @@ function AppContent() {
       data-theme={theme}
       data-view-mode={viewMode}
       data-app-layout={appLayout}
-      className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex flex-col font-sans transition-colors duration-300"
+      className="min-h-screen w-full max-w-full bg-[var(--theme-bg,#070E1A)] text-[var(--theme-text,#F8FAFC)] flex flex-col font-sans transition-colors duration-300 overflow-x-hidden"
     >
       {/* Top Header */}
       <div className="no-print">
@@ -2346,7 +2346,7 @@ function AppContent() {
       </div>
 
       {/* Main Content Area */}
-      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-2.5 sm:px-6 lg:px-8 pt-2.5 sm:pt-6 pb-20 sm:pb-8">
+      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pt-2 sm:pt-6 pb-20 sm:pb-8">
         {!isDueBannerDismissed && dueRemindersAlert.length > 0 && (
           <div className="mb-3">
             <DueRemindersBanner
