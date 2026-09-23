@@ -80,7 +80,7 @@ export function FundCard3D({
                 strokeLinecap="round"
               />
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-[8px] sm:text-[8.5px] font-black font-mono text-[var(--theme-text,#0F172A)] notranslate" translate="no">
+            <span className="absolute inset-0 flex items-center justify-center text-[8.5px] sm:text-[9.5px] font-black font-mono text-[var(--theme-text,#0F172A)] notranslate" translate="no">
               {Math.round(clampedPct)}%
             </span>
           </div>
@@ -92,12 +92,12 @@ export function FundCard3D({
             {fundTranslatedName}
           </div>
           <div
-            className={`mt-0.5 font-mono text-[13px] sm:text-[14px] font-black tracking-tight truncate notranslate ${
+            className={`mt-0.5 font-mono text-[14px] sm:text-[15.5px] font-black tracking-tight truncate notranslate ${
               val < 0
-                ? 'text-rose-600 dark:text-rose-400 font-extrabold'
+                ? 'text-rose-600 dark:text-rose-400 font-black'
                 : val > 0
-                ? 'text-emerald-600 dark:text-emerald-400 font-extrabold'
-                : 'text-[var(--theme-text-muted,#475569)]'
+                ? 'text-emerald-600 dark:text-emerald-400 font-black'
+                : 'text-[var(--theme-text-muted,#475569)] font-black'
             }`}
             translate="no"
           >

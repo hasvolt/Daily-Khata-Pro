@@ -92,7 +92,7 @@ export function SummaryCard3D({
             {isHindi ? 'शुद्ध बचत' : 'Net Total'}
           </div>
           <div
-            className={`font-mono text-[17px] xs:text-[20px] sm:text-[23px] font-black tracking-tight truncate notranslate ${
+            className={`font-mono text-[18px] xs:text-[21px] sm:text-[24px] font-black tracking-tight truncate notranslate ${
               isNetPositive ? 'summary-net-positive text-emerald-500 dark:text-emerald-400' : 'summary-net-negative text-rose-500 dark:text-rose-400'
             }`}
             translate="no"
@@ -110,7 +110,7 @@ export function SummaryCard3D({
               </span>
               <span className="truncate">{isHindi ? 'आय' : 'Income'}</span>
             </div>
-            <div className="summary-stat-income font-mono text-[11px] xs:text-[12px] sm:text-[13px] font-black text-emerald-500 dark:text-emerald-400 truncate mt-0.5 tracking-tight notranslate" translate="no">
+            <div className="summary-stat-income font-mono text-[12px] xs:text-[13px] sm:text-[14px] font-black text-emerald-500 dark:text-emerald-400 truncate mt-0.5 tracking-tight notranslate" translate="no">
               +{formatCurrency(incomeValue, privacyMask)}
             </div>
           </div>
@@ -122,7 +122,7 @@ export function SummaryCard3D({
               </span>
               <span className="truncate">{isHindi ? 'व्यय' : 'Expense'}</span>
             </div>
-            <div className="summary-stat-expense font-mono text-[11px] xs:text-[12px] sm:text-[13px] font-black text-rose-500 dark:text-rose-400 truncate mt-0.5 tracking-tight notranslate" translate="no">
+            <div className="summary-stat-expense font-mono text-[12px] xs:text-[13px] sm:text-[14px] font-black text-rose-500 dark:text-rose-400 truncate mt-0.5 tracking-tight notranslate" translate="no">
               -{formatCurrency(expenseValue, privacyMask)}
             </div>
           </div>

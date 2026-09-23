@@ -173,6 +173,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
       onClick={onClose}
     >
       <div
+        id="main-menu-drawer"
         className="w-full max-w-sm sm:max-w-md h-full bg-[var(--theme-surface,#0E1A29)] border-l border-[var(--theme-border,#213E61)] shadow-2xl flex flex-col animate-in slide-in-from-right duration-200"
         onClick={(e) => e.stopPropagation()}
       >
@@ -182,13 +183,13 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             <AppLogo size={32} />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="text-[15px] font-bold text-[var(--theme-text,#F8FAFC)]">
+                <span className="text-[15px] font-bold text-white">
                   Daily Khata
                 </span>
-                <span className="text-[14px] font-black text-[var(--theme-primary,#38BDF8)]">
+                <span className="text-[14px] font-black text-white">
                   Pro
                 </span>
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/10 text-white border border-white/20">
                   MENU
                 </span>
               </div>

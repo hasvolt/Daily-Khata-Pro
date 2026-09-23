@@ -201,12 +201,12 @@
   }
 
   [data-theme="monochrome"] {
-    /* Full Premium Monochrome - Pure Pitch OLED Black with Crisp Platinum White Accents */
-    --theme-bg: #000000;
-    --theme-surface: #0B0B0E;
-    --theme-card: #121216;
-    --theme-card-hover: #191920;
-    --theme-border: rgba(255, 255, 255, 0.16);
+    /* Full Dark Premium Rich Monochrome - Velvet Obsidian Black with Crisp Platinum Accents */
+    --theme-bg: #09090C;
+    --theme-surface: #101015;
+    --theme-card: #16161D;
+    --theme-card-hover: #1E1E27;
+    --theme-border: rgba(255, 255, 255, 0.18);
     --theme-border-subtle: rgba(255, 255, 255, 0.08);
     --theme-text: #FFFFFF;
     --theme-text-muted: #E2E8F0;
@@ -214,8 +214,8 @@
 
     --theme-primary: #FFFFFF;
     --theme-primary-hover: #E2E8F0;
-    --theme-primary-dim: rgba(255, 255, 255, 0.15);
-    --theme-primary-border: rgba(255, 255, 255, 0.35);
+    --theme-primary-dim: rgba(255, 255, 255, 0.14);
+    --theme-primary-border: rgba(255, 255, 255, 0.38);
     --theme-glow: rgba(255, 255, 255, 0.12);
     --theme-badge-text: #FFFFFF;
     --theme-btn-bg: #FFFFFF;
@@ -656,9 +656,9 @@
 }
 
 [data-theme="monochrome"] .banking-card-3d {
-  background: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.12) 0%, #121215 55%, #050507 100%) !important;
+  background: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.14) 0%, #15151C 55%, #09090D 100%) !important;
   border-color: rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
 /* Monochrome: Total Balance Card - High-Contrast Wallet Icon & 3D Graphic */
@@ -666,28 +666,28 @@
   background-color: #FFFFFF !important;
   border-color: #FFFFFF !important;
   color: #000000 !important;
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.35) !important;
 }
 
 [data-theme="monochrome"] .banking-card-3d .banking-card-icon-box svg {
   color: #000000 !important;
   stroke: #000000 !important;
-  stroke-width: 2.6px !important;
+  stroke-width: 2.8px !important;
 }
 
 [data-theme="monochrome"] .banking-card-wallet-graphic {
-  filter: drop-shadow(0 6px 18px rgba(255, 255, 255, 0.25)) !important;
+  filter: drop-shadow(0 6px 20px rgba(255, 255, 255, 0.25)) !important;
 }
 
 [data-theme="monochrome"] .banking-card-wallet-graphic svg rect:first-of-type {
-  fill: #27272A !important;
+  fill: #27272F !important;
   stroke: #FFFFFF !important;
   stroke-width: 1.5px !important;
   opacity: 1 !important;
 }
 
 [data-theme="monochrome"] .banking-card-wallet-graphic svg rect:nth-of-type(3) {
-  fill: #141418 !important;
+  fill: #14141A !important;
   stroke: #FFFFFF !important;
   stroke-width: 2px !important;
   stroke-opacity: 1 !important;
@@ -764,7 +764,7 @@
 [data-theme="monochrome"] .summary-stat-box.border-emerald-500\/35,
 [data-theme="monochrome"] .summary-stat-box.border-rose-500\/35 {
   border-color: rgba(255, 255, 255, 0.22) !important;
-  background-color: #121216 !important;
+  background-color: #16161D !important;
 }
 
 [data-theme="monochrome"] .summary-stat-box .text-emerald-500,
@@ -789,21 +789,59 @@
   stroke: #FFFFFF !important;
 }
 
-/* Monochrome: Recent Transactions and Misc badges */
-[data-theme="monochrome"] .bg-emerald-500\/15,
-[data-theme="monochrome"] .bg-rose-500\/15 {
-  background-color: rgba(255, 255, 255, 0.10) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+/* Monochrome: Pure Black & White Mapping for All Status, Categories, Amounts & Dots */
+[data-theme="monochrome"] .text-emerald-400,
+[data-theme="monochrome"] .text-emerald-500,
+[data-theme="monochrome"] .text-emerald-600,
+[data-theme="monochrome"] .text-rose-400,
+[data-theme="monochrome"] .text-rose-500,
+[data-theme="monochrome"] .text-rose-600,
+[data-theme="monochrome"] .text-sky-400,
+[data-theme="monochrome"] .text-sky-500,
+[data-theme="monochrome"] .text-cyan-400,
+[data-theme="monochrome"] .text-cyan-500,
+[data-theme="monochrome"] .text-indigo-400,
+[data-theme="monochrome"] .text-indigo-500,
+[data-theme="monochrome"] .text-amber-400,
+[data-theme="monochrome"] .text-amber-500,
+[data-theme="monochrome"] .text-purple-400,
+[data-theme="monochrome"] .text-purple-500,
+[data-theme="monochrome"] .text-\[\#10B981\],
+[data-theme="monochrome"] .text-\[\#EF4444\],
+[data-theme="monochrome"] .text-\[\#A855F7\],
+[data-theme="monochrome"] .text-red-500 {
+  color: #FFFFFF !important;
 }
 
-[data-theme="monochrome"] .text-emerald-400,
-[data-theme="monochrome"] .text-rose-400 {
+[data-theme="monochrome"] [class*="bg-indigo-500"],
+[data-theme="monochrome"] [class*="bg-cyan-400"],
+[data-theme="monochrome"] [class*="bg-emerald-400"],
+[data-theme="monochrome"] [class*="bg-emerald-500"],
+[data-theme="monochrome"] [class*="bg-rose-500"],
+[data-theme="monochrome"] [class*="bg-sky-500"],
+[data-theme="monochrome"] [class*="bg-\[\#10B981\]"],
+[data-theme="monochrome"] [class*="bg-\[\#EF4444\]"],
+[data-theme="monochrome"] .bg-emerald-500\/15,
+[data-theme="monochrome"] .bg-rose-500\/15 {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="monochrome"] .bg-gradient-to-r {
+  background: linear-gradient(90deg, #94A3B8 0%, #FFFFFF 100%) !important;
+}
+
+[data-theme="monochrome"] .fund-card-3d .text-rose-600,
+[data-theme="monochrome"] .fund-card-3d .text-rose-400,
+[data-theme="monochrome"] .fund-card-3d .text-emerald-600,
+[data-theme="monochrome"] .fund-card-3d .text-emerald-400 {
   color: #FFFFFF !important;
 }
 
 /* Monochrome: Navigation Bar (BottomNav) Full Fix */
 [data-theme="monochrome"] #bottom-nav-bar {
-  background: #000000 !important;
+  background: #09090C !important;
   border-top-color: rgba(255, 255, 255, 0.22) !important;
 }
 
@@ -824,18 +862,22 @@
   font-weight: 800 !important;
 }
 
+/* Bottom nav inactive buttons: crisp, bright silver */
 [data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) {
-  color: #CBD5E1 !important;
+  color: #E2E8F0 !important;
 }
 
 [data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) svg {
-  stroke: #CBD5E1 !important;
+  stroke: #E2E8F0 !important;
+  color: #E2E8F0 !important;
 }
 
 [data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add):hover svg {
   stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
 }
 
+/* Bottom nav active tab: pure white badge with crisp black icon */
 [data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add).text-\[var\(--theme-primary\,#38BDF8\)\] {
   color: #FFFFFF !important;
   background-color: rgba(255, 255, 255, 0.08) !important;
@@ -846,14 +888,67 @@
   font-weight: 800 !important;
 }
 
-[data-theme="monochrome"] #bottom-nav-bar .bg-\[var\(--theme-primary-dim\,rgba\(56\,189\,248\,0\.18\)\)\] {
+[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) .bg-\[var\(--theme-primary-dim\,rgba\(56\,189\,248\,0\.18\)\)\] {
   background-color: #FFFFFF !important;
   color: #000000 !important;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4) !important;
 }
 
-[data-theme="monochrome"] #bottom-nav-bar .bg-\[var\(--theme-primary-dim\,rgba\(56\,189\,248\,0\.18\)\)\] svg {
+[data-theme="monochrome"] #bottom-nav-bar button:not(#nav-btn-add) .bg-\[var\(--theme-primary-dim\,rgba\(56\,189\,248\,0\.18\)\)\] svg {
   color: #000000 !important;
   stroke: #000000 !important;
+  stroke-width: 2.6px !important;
+}
+
+/* Main Menu Drawer - ALWAYS Premium Monochrome Black & White across ALL themes */
+#main-menu-drawer {
+  background: #09090C !important;
+  border-left-color: rgba(255, 255, 255, 0.18) !important;
+  color: #FFFFFF !important;
+}
+
+#main-menu-drawer * {
+  --theme-primary: #FFFFFF !important;
+  --theme-primary-hover: #E2E8F0 !important;
+  --theme-primary-dim: rgba(255, 255, 255, 0.12) !important;
+  --theme-primary-border: rgba(255, 255, 255, 0.28) !important;
+  --theme-border: rgba(255, 255, 255, 0.14) !important;
+  --theme-card: #14141A !important;
+  --theme-surface: #0E0E14 !important;
+  --theme-text: #FFFFFF !important;
+  --theme-text-muted: #E2E8F0 !important;
+  --theme-text-dim: #94A3B8 !important;
+}
+
+#main-menu-drawer img {
+  filter: grayscale(1) brightness(1.2) contrast(1.1) !important;
+}
+
+#main-menu-drawer svg {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+#main-menu-drawer .text-\[\#38BDF8\],
+#main-menu-drawer .text-amber-400,
+#main-menu-drawer .text-emerald-400,
+#main-menu-drawer .text-rose-400,
+#main-menu-drawer .text-sky-400,
+#main-menu-drawer .text-indigo-400,
+#main-menu-drawer .text-purple-400,
+#main-menu-drawer .text-cyan-400 {
+  color: #FFFFFF !important;
+}
+
+#main-menu-drawer [class*="bg-amber-500"],
+#main-menu-drawer [class*="bg-emerald-500"],
+#main-menu-drawer [class*="bg-rose-500"],
+#main-menu-drawer [class*="bg-sky-500"],
+#main-menu-drawer [class*="bg-indigo-500"],
+#main-menu-drawer [class*="bg-purple-500"] {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
 }
 
 /* Total Balance Card - Clean Button styling without bottom shadow blocks */
@@ -887,14 +982,22 @@
   display: none !important;
 }
 
-/* Banking Card 3D Light & White Mode Adaptation - Luxury Pearl Glass Card */
-[data-theme="light"] .banking-card-3d,
-[data-theme="white"] .banking-card-3d {
+/* Banking Card 3D Light & White Mode Adaptation */
+[data-theme="light"] .banking-card-3d {
   background: radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 60%), linear-gradient(145deg, #FFFFFF 0%, #F0F9FF 32%, #E0F2FE 70%, #DDF4FF 100%) !important;
   border: 1.5px solid rgba(56, 189, 248, 0.40) !important;
   box-shadow: 0 16px 36px -8px rgba(2, 132, 199, 0.20), 0 6px 14px -2px rgba(15, 23, 42, 0.05), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -2px 6px rgba(56, 189, 248, 0.15) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
+}
+
+[data-theme="white"] .banking-card-3d {
+  background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 50%, #F1F5F9 100%) !important;
+  border: 1.5px solid #CBD5E1 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-title,
