@@ -11,7 +11,7 @@ export type TransactionType = 'income' | 'expense';
 
 export type PaymentMode = 'cash' | 'upi' | 'bank' | 'card' | 'cheque' | 'wallet' | 'other';
 
-export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cyan' | 'light' | 'white' | 'pink' | 'black';
+export type AppTheme = 'blue' | 'yellow' | 'orange' | 'emerald' | 'purple' | 'cyan' | 'light' | 'white' | 'pink' | 'black' | 'monochrome';
 
 export type AppLanguage = 
   | 'en' // English (Global)

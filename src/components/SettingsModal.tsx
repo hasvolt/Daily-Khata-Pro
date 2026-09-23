@@ -583,7 +583,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     { id: 'purple', label: 'Royal Violet', dot: '#A855F7' },
     { id: 'cyan', label: 'Ocean Teal', dot: '#06B6D4' },
     { id: 'pink', label: 'Crimson Pink', dot: '#F43F5E' },
-    { id: 'black', label: 'Obsidian Black', dot: '#E2E8F0' },
+    { id: 'black', label: 'Obsidian Black', dot: '#94A3B8' },
+    { id: 'monochrome', label: tStr('प्रीमियम ब्लैक & वाइट', 'Premium Black & White', 'Premium Black & White'), dot: '#FFFFFF' },
     { id: 'light', label: tStr('दिन / वाइट मोड (Daylight)', 'Day / White Mode (Daylight)', 'Daylight White'), dot: '#0284C7', isLight: true },
     { id: 'white', label: tStr('आउटडोर प्योर वाइट', 'Outdoor Pure White', 'Outdoor Pure White'), dot: '#2563EB', isLight: true }
   ];

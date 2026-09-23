@@ -453,6 +453,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       { id: 'yellow', name: 'Premium Gold', hindiName: 'प्रीमियम गोल्ड', mode: 'Dark', primaryHex: '#F59E0B', bgHex: '#090D16' },
                       { id: 'orange', name: 'Sunset Copper', hindiName: 'सनसेट संतरी', mode: 'Dark', primaryHex: '#F97316', bgHex: '#090D16' },
                       { id: 'pink', name: 'Ruby Pink', hindiName: 'रूबी गुलाबी', mode: 'Dark', primaryHex: '#F43F5E', bgHex: '#090D16' },
+                      { id: 'monochrome', name: 'Premium Black & White', hindiName: 'प्रीमियम ब्लैक & वाइट', mode: 'OLED', primaryHex: '#FFFFFF', bgHex: '#000000' },
                       { id: 'black', name: 'Pitch OLED', hindiName: 'ओलेड ब्लैक', mode: 'OLED', primaryHex: '#38BDF8', bgHex: '#000000' },
                       { id: 'light', name: 'Modern Studio', hindiName: 'मॉडर्न लाइट', mode: 'Light', primaryHex: '#0284C7', bgHex: '#F8FAFC' },
                       { id: 'white', name: 'Clean Paper', hindiName: 'सफेद मिनिमल', mode: 'Light', primaryHex: '#2563EB', bgHex: '#FFFFFF' }
@@ -472,7 +473,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                                 {isHindi ? 'ऐप थीम व स्टाइल' : 'Color Theme & Style'}
                               </span>
                               <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-tight truncate">
-                                {isHindi ? '10 प्रीमियम रंग संयोजन' : '10 institutional workspace palettes'}
+                                {isHindi ? '11 प्रीमियम रंग संयोजन' : '11 institutional workspace palettes'}
                               </span>
                             </div>
                           </div>
