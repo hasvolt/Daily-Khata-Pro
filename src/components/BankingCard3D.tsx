@@ -64,7 +64,7 @@ export function BankingCard3D({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="banking-card-3d relative overflow-hidden rounded-[24px] sm:rounded-[28px] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[radial-gradient(circle_at_82%_15%,var(--theme-primary-dim,rgba(56,189,248,0.18))_0%,var(--theme-card,#0E182A)_50%,var(--theme-bg,#050B14)_100%)] p-3.5 sm:p-5 shadow-[0_20px_50px_-15px_var(--theme-glow,rgba(56,189,248,0.25)),inset_0_1px_0_rgba(255,255,255,0.15)]"
+        className="banking-card-3d relative overflow-hidden rounded-[24px] sm:rounded-[28px] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[radial-gradient(circle_at_82%_15%,var(--theme-primary-dim,rgba(56,189,248,0.18))_0%,var(--theme-card,#0E182A)_50%,var(--theme-bg,#050B14)_100%)] p-3.5 sm:p-5 shadow-none"
       >
         {/* Subtle radial glow & financial waves */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">

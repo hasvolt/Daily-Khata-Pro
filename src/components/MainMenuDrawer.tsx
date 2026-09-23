@@ -44,7 +44,8 @@ import {
   Newspaper,
   Globe,
   Palette,
-  Check
+  Check,
+  Languages
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -226,13 +227,13 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClick={() => {
                   triggerHapticSound('click');
                   if (isLightMode) {
-                    onThemeChange('yellow');
+                    onThemeChange('cyan');
                   } else {
                     onThemeChange('white');
                   }
                 }}
                 className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] text-[11px] font-bold transition-all cursor-pointer active:scale-95"
-                title={isLightMode ? 'डार्क मोड' : 'लाइट मोड'}
+                title={isLightMode ? 'डार्क मोड (Cyber Ocean)' : 'लाइट मोड (White)'}
                 id="menu-quick-theme-btn"
               >
                 {isLightMode ? <Moon className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" /> : <Sun className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />}
@@ -395,145 +396,109 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                     </button>
                   )}
 
-                  {/* Language & Translation */}
+                  {/* 1. Offline Built-in Languages (100% बिना इंटरनेट) */}
                   {onLanguageChange && (
-                    <div className="w-full flex flex-col p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 border border-[var(--theme-border,#213E61)] gap-2">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0">
-                          <Globe className="w-3.5 h-3.5" />
+                    <div className="w-full flex flex-col p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/85 border border-[var(--theme-border,#213E61)] gap-2 shadow-xs">
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                            <Languages className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                              {isHindi ? 'ऑफ़लाइन भाषाएं (100% बिना इंटरनेट)' : 'Offline Languages (100% Built-in)'}
+                            </span>
+                            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-tight truncate">
+                              {isHindi ? 'इंटरनेट के बिना तुरंत काम करती हैं' : 'Works 100% offline without internet'}
+                            </span>
+                          </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'भाषा और अनुवाद' : 'Language & Translation'}
-                          </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-snug truncate">
-                            {isHindi ? 'पसंदीदा भाषा चुनें या अंग्रेजी पर रीसेट करें' : 'Change app language or reset to English'}
-                          </span>
-                        </div>
+                        <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
+                          OFFLINE
+                        </span>
                       </div>
-                      
-                      <div className="flex items-center gap-2 mt-1">
-                        {onOpenGoogleTranslate && (
+
+                      {/* Offline Language Selector Grid */}
+                      <div className="grid grid-cols-3 gap-1.5 pt-0.5">
+                        {[
+                          { id: 'en', label: 'English', sub: 'Global' },
+                          { id: 'hi', label: 'हिन्दी', sub: 'Hindi' },
+                          { id: 'hinglish', label: 'Hinglish', sub: 'India' },
+                          { id: 'ur', label: 'اردو', sub: 'Urdu' },
+                          { id: 'es', label: 'Español', sub: 'Spanish' },
+                          { id: 'ar', label: 'العربية', sub: 'Arabic' }
+                        ].map((l) => {
+                          const isSelected = language === l.id;
+                          return (
+                            <button
+                              key={l.id}
+                              type="button"
+                              onClick={() => {
+                                triggerHapticSound('click');
+                                onLanguageChange(l.id as AppLanguage);
+                              }}
+                              className={`px-2 py-1.5 rounded-lg border text-center transition-all cursor-pointer ${
+                                isSelected
+                                  ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] font-bold shadow-xs'
+                                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/40'
+                              }`}
+                            >
+                              <div className="text-[11px] font-bold leading-tight truncate">{l.label}</div>
+                              <div className="text-[9px] opacity-75 truncate">{l.sub}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {language !== 'en' && (
+                        <div className="flex justify-end pt-0.5">
                           <button
                             type="button"
-                            onClick={() => handleMenuAction(onOpenGoogleTranslate)}
-                            className="flex-1 px-3 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[11px] font-semibold hover:border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-primary,#38BDF8)]/10 transition-all cursor-pointer text-center"
+                            onClick={() => {
+                              triggerHapticSound('click');
+                              onLanguageChange('en');
+                            }}
+                            className="text-[10px] font-bold text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer"
                           >
-                            {isHindi ? 'भाषा चुनें' : 'Choose Language'}
+                            Reset to English
                           </button>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            triggerHapticSound('click');
-                            onLanguageChange('en');
-                            onClose();
-                          }}
-                          className="px-3 py-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 text-[var(--theme-primary,#38BDF8)] text-[11px] font-semibold hover:bg-[var(--theme-primary,#38BDF8)]/10 transition-all cursor-pointer whitespace-nowrap"
-                        >
-                          Reset to English
-                        </button>
-                      </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  {/* Theme & Appearance (Professional Redesign) */}
-                  {onThemeChange && (() => {
-                    const THEME_OPTIONS: {
-                      id: AppTheme;
-                      name: string;
-                      hindiName: string;
-                      mode: 'Dark' | 'Light' | 'OLED';
-                      primaryHex: string;
-                      bgHex: string;
-                    }[] = [
-                      { id: 'blue', name: 'Sapphire Navy', hindiName: 'नीला नेवी', mode: 'Dark', primaryHex: '#38BDF8', bgHex: '#090D16' },
-                      { id: 'emerald', name: 'Emerald Forest', hindiName: 'पन्ना हरा', mode: 'Dark', primaryHex: '#10B981', bgHex: '#090D16' },
-                      { id: 'cyan', name: 'Cyber Ocean', hindiName: 'साइबर स्यान', mode: 'Dark', primaryHex: '#06B6D4', bgHex: '#090D16' },
-                      { id: 'purple', name: 'Royal Violet', hindiName: 'शाही बैंगनी', mode: 'Dark', primaryHex: '#A855F7', bgHex: '#090D16' },
-                      { id: 'yellow', name: 'Premium Gold', hindiName: 'प्रीमियम गोल्ड', mode: 'Dark', primaryHex: '#F59E0B', bgHex: '#090D16' },
-                      { id: 'orange', name: 'Sunset Copper', hindiName: 'सनसेट संतरी', mode: 'Dark', primaryHex: '#F97316', bgHex: '#090D16' },
-                      { id: 'pink', name: 'Ruby Pink', hindiName: 'रूबी गुलाबी', mode: 'Dark', primaryHex: '#F43F5E', bgHex: '#090D16' },
-                      { id: 'monochrome', name: 'Premium Black & White', hindiName: 'प्रीमियम ब्लैक & वाइट', mode: 'OLED', primaryHex: '#FFFFFF', bgHex: '#000000' },
-                      { id: 'black', name: 'Pitch OLED', hindiName: 'ओलेड ब्लैक', mode: 'OLED', primaryHex: '#38BDF8', bgHex: '#000000' },
-                      { id: 'light', name: 'Modern Studio', hindiName: 'मॉडर्न लाइट', mode: 'Light', primaryHex: '#0284C7', bgHex: '#F8FAFC' },
-                      { id: 'white', name: 'Clean Paper', hindiName: 'सफेद मिनिमल', mode: 'Light', primaryHex: '#2563EB', bgHex: '#FFFFFF' }
-                    ];
-
-                    const activeThemeObj = THEME_OPTIONS.find(t => t.id === theme) || THEME_OPTIONS[0];
-
-                    return (
-                      <div className="w-full flex flex-col p-3 rounded-2xl bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] gap-2.5 shadow-sm">
-                        <div className="flex items-center justify-between min-w-0">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0">
-                              <Palette className="w-3.5 h-3.5" />
-                            </div>
-                            <div className="min-w-0">
-                              <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                                {isHindi ? 'ऐप थीम व स्टाइल' : 'Color Theme & Style'}
-                              </span>
-                              <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-tight truncate">
-                                {isHindi ? '11 प्रीमियम रंग संयोजन' : '11 institutional workspace palettes'}
-                              </span>
-                            </div>
+                  {/* 2. Online Google Translate (100+ ऑनलाइन भाषाएं) */}
+                  {onOpenGoogleTranslate && (
+                    <div className="w-full flex flex-col p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/85 border border-indigo-500/30 gap-2 shadow-xs">
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-7 h-7 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
+                            <Globe className="w-3.5 h-3.5" />
                           </div>
-                          <span className="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full border border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)] text-[var(--theme-primary,#38BDF8)] shrink-0 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--theme-primary,#38BDF8)]"></span>
-                            {isHindi ? activeThemeObj.hindiName : activeThemeObj.name}
-                          </span>
+                          <div className="min-w-0">
+                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                              {isHindi ? 'ऑनलाइन भाषाएं (100+ गूगल ट्रांसलेट)' : 'Online Languages (100+ Google Translate)'}
+                            </span>
+                            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-tight truncate">
+                              {isHindi ? 'इंटरनेट कनेक्शन द्वारा 100+ भाषाओं में अनुवाद' : 'Auto-translates into 100+ languages via internet'}
+                            </span>
+                          </div>
                         </div>
-
-                        {/* Elegant 2-column list of theme choices */}
-                        <div className="grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto pr-0.5 custom-scrollbar">
-                          {THEME_OPTIONS.map((t) => {
-                            const isSelected = theme === t.id;
-                            return (
-                              <button
-                                key={t.id}
-                                type="button"
-                                onClick={() => {
-                                  triggerHapticSound('click');
-                                  onThemeChange(t.id);
-                                }}
-                                className={`flex items-center gap-2 p-1.5 rounded-xl border text-left transition-all cursor-pointer ${
-                                  isSelected
-                                    ? 'bg-[var(--theme-card,#132438)] border-[var(--theme-primary,#38BDF8)] shadow-xs ring-1 ring-[var(--theme-primary,#38BDF8)]/40'
-                                    : 'bg-[var(--theme-bg,#070E18)]/70 border-[var(--theme-border,#213E61)]/70 hover:border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-card,#132438)]/50'
-                                }`}
-                              >
-                                {/* Dual-tone swatch dot */}
-                                <div
-                                  className="w-5 h-5 rounded-lg shrink-0 flex items-center justify-center border shadow-xs"
-                                  style={{ backgroundColor: t.bgHex, borderColor: t.primaryHex }}
-                                >
-                                  <div
-                                    className="w-2 h-2 rounded-full"
-                                    style={{ backgroundColor: t.primaryHex }}
-                                  />
-                                </div>
-
-                                <div className="min-w-0 flex-1">
-                                  <div className="text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] truncate leading-tight">
-                                    {isHindi ? t.hindiName : t.name}
-                                  </div>
-                                  <div className="text-[9px] text-[var(--theme-text-dim,#94A3B8)] uppercase font-mono">
-                                    {t.mode}
-                                  </div>
-                                </div>
-
-                                {isSelected && (
-                                  <div className="w-4 h-4 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0">
-                                    <Check className="w-2.5 h-2.5 stroke-[3]" />
-                                  </div>
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
+                        <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shrink-0">
+                          100+ ONLINE
+                        </span>
                       </div>
-                    );
-                  })()}
+
+                      <button
+                        type="button"
+                        onClick={() => handleMenuAction(onOpenGoogleTranslate)}
+                        className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 hover:text-white text-[11.5px] font-bold transition-all cursor-pointer active:scale-98"
+                      >
+                        <Globe className="w-3.5 h-3.5" />
+                        <span>{isHindi ? '100+ ऑनलाइन भाषाएं चुनें' : 'Choose from 100+ Online Languages'}</span>
+                      </button>
+                    </div>
+                  )}
 
                   {/* App Settings */}
                   <button

@@ -124,7 +124,7 @@ export const Header: React.FC<HeaderProps> = ({
   onLockNow,
   searchQuery = '',
   onSearchChange,
-  theme = 'blue',
+  theme = 'white',
   onThemeChange,
   language = 'en',
   onLanguageChange,
@@ -409,7 +409,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={() => {
                 if (isLightMode) {
-                  onThemeChange('yellow');
+                  onThemeChange('cyan');
                 } else {
                   onThemeChange('white');
                 }

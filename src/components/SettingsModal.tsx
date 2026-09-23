@@ -2137,7 +2137,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             if (onUpdateLifeTags) onUpdateLifeTags(DEFAULT_LIFE_TAGS);
             if (onLayoutChange) onLayoutChange('dashboard');
             if (onViewModeChange) onViewModeChange('auto');
-            if (onThemeChange) onThemeChange('yellow');
+            if (onThemeChange) onThemeChange('white');
             setConfirmAction(null);
             showFeedback('success', tStr('सभी सेटिंग्स डिफ़ॉल्ट पर रीसेट हो गईं!', 'Sabhi settings default par reset ho gayin!', 'All settings restored to defaults!'));
           }}

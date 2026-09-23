@@ -161,7 +161,7 @@ function AppContent() {
   );
 
   const [percentages, setPercentages] = useState<Record<FundType, number>>(DEFAULT_PERCENTAGES);
-  const [theme, setTheme] = useState<AppTheme>('yellow');
+  const [theme, setTheme] = useState<AppTheme>('white');
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<AppViewMode>('auto');
@@ -534,7 +534,7 @@ function AppContent() {
           funds: DEFAULT_FUNDS,
           homepageFundIds: DEFAULT_FUNDS.slice(0, 6).map((f) => f.id),
           percentages: DEFAULT_PERCENTAGES,
-          theme: 'yellow',
+          theme: 'white',
           language: 'en',
           privacyMask: false,
           workLogs: [],

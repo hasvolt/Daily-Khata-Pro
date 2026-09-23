@@ -1050,12 +1050,183 @@
   box-shadow: none !important;
 }
 
-/* Total Balance Card - Clean Button styling without bottom shadow blocks */
-#hero-add-income-btn,
+/* Total Balance Card Action Buttons - High Definition Solid Vibrant Luxury Buttons */
+#hero-add-income-btn {
+  background: linear-gradient(180deg, #16A34A 0%, #15803D 55%, #166534 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 4px 14px -1px rgba(22, 163, 74, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+}
+#hero-add-income-btn:hover {
+  background: linear-gradient(180deg, #22C55E 0%, #16A34A 55%, #15803D 100%) !important;
+  box-shadow: 0 6px 18px -1px rgba(34, 197, 94, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
 #hero-add-expense-btn {
-  box-shadow: none !important;
-  text-shadow: none !important;
-  filter: none !important;
+  background: linear-gradient(180deg, #DC2626 0%, #B91C1C 55%, #991B1B 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 4px 14px -1px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+}
+#hero-add-expense-btn:hover {
+  background: linear-gradient(180deg, #EF4444 0%, #DC2626 55%, #B91C1C 100%) !important;
+  box-shadow: 0 6px 18px -1px rgba(239, 68, 68, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Light / White Mode: Solid Rich Vibrant Buttons */
+[data-theme="light"] #hero-add-income-btn,
+[data-theme="white"] #hero-add-income-btn {
+  background: linear-gradient(180deg, #10B981 0%, #059669 100%) !important;
+  border: 1.5px solid #047857 !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35) !important;
+  color: #FFFFFF !important;
+}
+[data-theme="light"] #hero-add-expense-btn,
+[data-theme="white"] #hero-add-expense-btn {
+  background: linear-gradient(180deg, #EF4444 0%, #DC2626 100%) !important;
+  border: 1.5px solid #B91C1C !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35) !important;
+  color: #FFFFFF !important;
+}
+
+/* Monochrome Mode Buttons */
+[data-theme="monochrome"] #hero-add-income-btn {
+  background: #FFFFFF !important;
+  border: 1.5px solid #FFFFFF !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.20) !important;
+}
+[data-theme="monochrome"] #hero-add-expense-btn {
+  background: #27272A !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.40) !important;
+}
+
+/* Today & This Month Card - Seamless Color Theme Redesign */
+.summary-card-3d {
+  background: linear-gradient(155deg, var(--theme-card, #132438) 0%, var(--theme-surface, #0E1A29) 100%) !important;
+  border-color: var(--theme-border, #213E61) !important;
+  box-shadow: 0 10px 26px -8px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+.summary-card-3d:hover {
+  border-color: var(--theme-primary-border, var(--theme-primary, #38BDF8)) !important;
+  box-shadow: 0 14px 30px -6px rgba(0, 0, 0, 0.65), 0 0 18px -2px var(--theme-glow, rgba(56, 189, 248, 0.22)) !important;
+}
+
+/* Stat Boxes across color themes */
+.summary-stat-box {
+  background: var(--theme-surface, #0E1A29) !important;
+  border-color: var(--theme-border, #213E61) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+.summary-stat-box .summary-stat-label {
+  color: var(--theme-text-muted, #94A3B8) !important;
+}
+
+/* Income Stat Box in color themes */
+.summary-stat-box-income {
+  border-color: var(--theme-border, #213E61) !important;
+}
+.summary-stat-box-income .summary-stat-icon-box {
+  background-color: rgba(34, 197, 94, 0.16) !important;
+  color: #4ADE80 !important;
+}
+.summary-stat-box-income .summary-stat-income {
+  color: #22C55E !important;
+  font-weight: 800 !important;
+}
+
+/* Expense Stat Box in color themes */
+.summary-stat-box-expense {
+  border-color: var(--theme-border, #213E61) !important;
+}
+.summary-stat-box-expense .summary-stat-icon-box {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+  color: #FB7185 !important;
+}
+.summary-stat-box-expense .summary-stat-expense {
+  color: #F43F5E !important;
+  font-weight: 800 !important;
+}
+
+/* Net figures in color themes */
+.summary-net-positive {
+  color: #22C55E !important;
+}
+.summary-net-negative {
+  color: #F43F5E !important;
+}
+
+/* Light & White Day Mode - Completely Untouched and Sharp */
+[data-theme="light"] .summary-card-3d,
+[data-theme="white"] .summary-card-3d {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.06), 0 1px 4px -1px rgba(0, 0, 0, 0.03) !important;
+}
+[data-theme="light"] .summary-card-3d:hover,
+[data-theme="white"] .summary-card-3d:hover {
+  border-color: #CBD5E1 !important;
+}
+
+[data-theme="light"] .summary-stat-box,
+[data-theme="white"] .summary-stat-box {
+  background: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .summary-stat-box-income,
+[data-theme="white"] .summary-stat-box-income {
+  border-color: rgba(5, 150, 105, 0.35) !important;
+}
+[data-theme="light"] .summary-stat-box-income .summary-stat-label,
+[data-theme="white"] .summary-stat-box-income .summary-stat-label {
+  color: #059669 !important;
+}
+[data-theme="light"] .summary-stat-box-income .summary-stat-income,
+[data-theme="white"] .summary-stat-box-income .summary-stat-income {
+  color: #059669 !important;
+}
+[data-theme="light"] .summary-stat-box-income .summary-stat-icon-box,
+[data-theme="white"] .summary-stat-box-income .summary-stat-icon-box {
+  background-color: rgba(5, 150, 105, 0.12) !important;
+  color: #059669 !important;
+}
+
+[data-theme="light"] .summary-stat-box-expense,
+[data-theme="white"] .summary-stat-box-expense {
+  border-color: rgba(220, 38, 38, 0.35) !important;
+}
+[data-theme="light"] .summary-stat-box-expense .summary-stat-label,
+[data-theme="white"] .summary-stat-box-expense .summary-stat-label {
+  color: #DC2626 !important;
+}
+[data-theme="light"] .summary-stat-box-expense .summary-stat-expense,
+[data-theme="white"] .summary-stat-box-expense .summary-stat-expense {
+  color: #DC2626 !important;
+}
+[data-theme="light"] .summary-stat-box-expense .summary-stat-icon-box,
+[data-theme="white"] .summary-stat-box-expense .summary-stat-icon-box {
+  background-color: rgba(220, 38, 38, 0.12) !important;
+  color: #DC2626 !important;
+}
+
+[data-theme="light"] .summary-net-positive,
+[data-theme="white"] .summary-net-positive {
+  color: #059669 !important;
+}
+[data-theme="light"] .summary-net-negative,
+[data-theme="white"] .summary-net-negative {
+  color: #DC2626 !important;
 }
 
 .banking-card-3d .banking-card-icon-box,
@@ -1075,6 +1246,11 @@
 
 .banking-card-3d .banking-card-waves {
   opacity: 0.65 !important;
+}
+
+.banking-card-3d {
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 .banking-card-3d .banking-card-glare {
