@@ -1649,29 +1649,56 @@ main {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 10mm 12mm;
+    margin: 8mm 8mm;
+  }
+
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 
   html, body {
     background: #ffffff !important;
+    background-color: #ffffff !important;
     color: #0f172a !important;
     padding: 0 !important;
     margin: 0 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
-  /* Completely hide all interactive UI elements during printing */
+  /* Completely hide all interactive UI elements, navbars, buttons, and app chrome during printing */
   .no-print,
   #app-root > div.no-print,
   header,
   nav,
+  footer,
+  aside,
   button,
+  .print-hidden,
+  [class*="print:hidden"],
   #toast-notification {
     display: none !important;
   }
 
-  /* Force print area container and invoice sheet to show clearly in full width A4 */
+  /* When printing statement from modal, ensure main app content and background are hidden */
+  body:has(#daily-khata-printable-statement) main,
+  body:has(#daily-khata-printable-statement) footer,
+  body:has(#daily-khata-printable-statement) header {
+    display: none !important;
+  }
+
+  /* When printing invoice, hide all page navigation, editor, tabs, and action toolbars */
+  body:has(#invoice-printable-sheet) header,
+  body:has(#invoice-printable-sheet) footer,
+  body:has(#invoice-printable-sheet) .invoice-page-container > div:not(:has(#invoice-printable-sheet)) {
+    display: none !important;
+  }
+
+  /* Force printable document sheets to display clearly in full width A4 */
   #invoice-printable-sheet,
   #daily-khata-printable-statement,
   #printArea,
@@ -1682,9 +1709,39 @@ main {
     width: 100% !important;
     max-width: 100% !important;
     background: #ffffff !important;
-    color: #000000 !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
     padding: 0 !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* High contrast text and borders inside printable documents */
+  #invoice-printable-sheet table,
+  #daily-khata-printable-statement table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  #invoice-printable-sheet th,
+  #daily-khata-printable-statement th {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    font-weight: 700 !important;
+  }
+
+  #invoice-printable-sheet td,
+  #daily-khata-printable-statement td {
+    color: #0f172a !important;
+    border-color: #e2e8f0 !important;
   }
 }
 
@@ -1874,77 +1931,5 @@ html, body {
 [data-theme="white"] .invoice-total-text,
 [data-theme="light"] .invoice-total-text {
   color: #0F172A !important;
-}
-
-/* =========================================================================
-   A4 INVOICE PRINT & PDF STYLES
-   Ensures crystal-clean white page, rich vibrant colors, zero black background
-   ========================================================================= */
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 8mm 6mm;
-  }
-
-  *, *::before, *::after {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
-  }
-
-  html, body {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #0F172A !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    min-width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  #root,
-  #root > div,
-  .invoice-page-container,
-  div[class*="min-h-screen"] {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #0F172A !important;
-    min-height: 0 !important;
-    height: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important;
-  }
-
-  header,
-  nav,
-  footer,
-  aside,
-  .print-hidden,
-  [class*="print:hidden"] {
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  #invoice-printable-sheet,
-  #daily-khata-printable-statement {
-    display: block !important;
-    visibility: visible !important;
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 6px !important;
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
-    color: #0F172A !important;
-    overflow: visible !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
 }
 

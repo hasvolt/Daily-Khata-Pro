@@ -2347,7 +2347,7 @@ function AppContent() {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pt-2 sm:pt-6 pb-20 sm:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full">
+      <main className={`flex-1 w-full max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pt-2 sm:pt-6 pb-20 sm:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full ${isPrintModalOpen ? 'print:hidden' : ''}`}>
         {!isDueBannerDismissed && dueRemindersAlert.length > 0 && (
           <div className="mb-3 no-print">
             <DueRemindersBanner
@@ -2819,7 +2819,7 @@ function AppContent() {
       </main>
 
       {/* Clean Global Footer */}
-      <footer className="no-print mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-xs select-none">
+      <footer className="no-print print:hidden mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-xs select-none">
         <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col items-center gap-3 sm:gap-3.5 text-center">
           {/* Logo & Brand */}
           <div className="flex items-center gap-2">

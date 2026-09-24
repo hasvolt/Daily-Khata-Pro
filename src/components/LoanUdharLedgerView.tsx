@@ -282,9 +282,9 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
     .brand-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #0284C7; padding-bottom: 12px; margin-bottom: 16px; }
     .brand-title { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
     .brand-sub { font-size: 11.5px; color: #64748b; margin-top: 2px; }
-    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #0f172a; color: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
-    .summary-label { font-size: 10.5px; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
-    .summary-val { font-size: 16px; font-weight: bold; margin-top: 4px; font-family: -apple-system, monospace; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #f8fafc; color: #0f172a; padding: 14px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1.5px solid #cbd5e1; }
+    .summary-label { font-size: 10.5px; text-transform: uppercase; color: #475569; font-weight: 800; letter-spacing: 0.5px; }
+    .summary-val { font-size: 16px; font-weight: 800; margin-top: 4px; font-family: monospace; }
     table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 16px; }
     th { text-align: left; padding: 7px 8px; border-bottom: 2px solid #cbd5e1; color: #475569; font-weight: 700; background: #f1f5f9; }
     td { padding: 7px 8px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
@@ -310,19 +310,19 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
   <div class="summary-grid">
     <div>
       <div class="summary-label">Receivables</div>
-      <div class="summary-val" style="color: #34d399;">${formatCurrency(stats.totalLent, privacyMask)}</div>
+      <div class="summary-val" style="color: #047857;">${formatCurrency(stats.totalLent, privacyMask)}</div>
     </div>
-    <div>
+    <div style="border-left: 1px solid #cbd5e1;">
       <div class="summary-label">Payables</div>
-      <div class="summary-val" style="color: #f87171;">${formatCurrency(stats.totalBorrowed, privacyMask)}</div>
+      <div class="summary-val" style="color: #b91c1c;">${formatCurrency(stats.totalBorrowed, privacyMask)}</div>
     </div>
-    <div>
+    <div style="border-left: 1px solid #cbd5e1;">
       <div class="summary-label">Bank Loans</div>
-      <div class="summary-val" style="color: #7dd3fc;">${formatCurrency(stats.totalLoanPrincipal, privacyMask)}</div>
+      <div class="summary-val" style="color: #0369a1;">${formatCurrency(stats.totalLoanPrincipal, privacyMask)}</div>
     </div>
-    <div>
+    <div style="border-left: 1px solid #cbd5e1;">
       <div class="summary-label">Net Standing</div>
-      <div class="summary-val" style="color: ${stats.netPosition >= 0 ? '#34d399' : '#fbbf24'};">${stats.netPosition >= 0 ? '+' : ''}${formatCurrency(stats.netPosition, privacyMask)}</div>
+      <div class="summary-val" style="color: ${stats.netPosition >= 0 ? '#047857' : '#b91c1c'};">${stats.netPosition >= 0 ? '+' : ''}${formatCurrency(stats.netPosition, privacyMask)}</div>
     </div>
   </div>
 

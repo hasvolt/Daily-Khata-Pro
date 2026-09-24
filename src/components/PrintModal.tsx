@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Entry, FundType } from '../types';
 import { FUND_ORDER, FUND_LABELS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, downloadCSVReport } from '../utils/khataCalculations';
+import { printHTMLContent } from '../utils/printHelpers';
 import { X, Printer, Download, FileText, Zap, FileSpreadsheet, Eye, ListOrdered } from 'lucide-react';
 
 interface PrintModalProps {
@@ -97,18 +98,18 @@ export const PrintModal: React.FC<PrintModalProps> = ({
         </div>
         ` : ''}
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: #0f172a; color: #fff; padding: 14px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 14px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
           <div>
-            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px;">Total Income</div>
-            <div style="font-size: 18px; font-weight: bold; margin-top: 4px; color: #34d399; font-family: monospace;">+${formatCurrency(totalInc, false, false)}</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #475569; font-weight: 800; letter-spacing: 0.5px;">Total Income</div>
+            <div style="font-size: 19px; font-weight: 800; margin-top: 4px; color: #047857; font-family: monospace;">+${formatCurrency(totalInc, false, false)}</div>
+          </div>
+          <div style="border-left: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1;">
+            <div style="font-size: 10px; text-transform: uppercase; color: #475569; font-weight: 800; letter-spacing: 0.5px;">Total Expense</div>
+            <div style="font-size: 19px; font-weight: 800; margin-top: 4px; color: #b91c1c; font-family: monospace;">-${formatCurrency(totalExp, false, false)}</div>
           </div>
           <div>
-            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px;">Total Expense</div>
-            <div style="font-size: 18px; font-weight: bold; margin-top: 4px; color: #f87171; font-family: monospace;">-${formatCurrency(totalExp, false, false)}</div>
-          </div>
-          <div>
-            <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px;">Net Savings / Surplus</div>
-            <div style="font-size: 18px; font-weight: bold; margin-top: 4px; color: ${netSaved >= 0 ? '#34d399' : '#f87171'}; font-family: monospace;">${netSaved >= 0 ? '+' : ''}${formatCurrency(netSaved, false, false)}</div>
+            <div style="font-size: 10px; text-transform: uppercase; color: #475569; font-weight: 800; letter-spacing: 0.5px;">Net Savings / Surplus</div>
+            <div style="font-size: 19px; font-weight: 800; margin-top: 4px; color: ${netSaved >= 0 ? '#047857' : '#b91c1c'}; font-family: monospace;">${netSaved >= 0 ? '+' : ''}${formatCurrency(netSaved, false, false)}</div>
           </div>
         </div>
 
@@ -218,7 +219,11 @@ export const PrintModal: React.FC<PrintModalProps> = ({
 
   // Direct native browser printing with immediate PDF support
   const handlePrint = () => {
-    window.print();
+    try {
+      printHTMLContent(generateStatementHTML());
+    } catch {
+      window.print();
+    }
   };
 
   // Download standalone printable HTML report
