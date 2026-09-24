@@ -2414,6 +2414,10 @@ function AppContent() {
                 setIsDailyLifeModalOpen(true);
               }}
               onOpenManual={() => setCurrentTab('guide')}
+              onNavigateInvoice={() => setCurrentTab('invoice')}
+              onOpenTrash={() => setIsTrashOpen(true)}
+              onNavigateAttendance={() => setCurrentTab('attendance')}
+              onOpenSplitBill={() => setIsSplitBillOpen(true)}
               language={language}
               privacyMask={privacyMask}
             />
@@ -2790,6 +2794,10 @@ function AppContent() {
                 setIsDailyLifeModalOpen(true);
               }}
               onOpenManual={() => setCurrentTab('guide')}
+              onNavigateInvoice={() => setCurrentTab('invoice')}
+              onOpenTrash={() => setIsTrashOpen(true)}
+              onNavigateAttendance={() => setCurrentTab('attendance')}
+              onOpenSplitBill={() => setIsSplitBillOpen(true)}
               language={language}
               privacyMask={privacyMask}
             />} />

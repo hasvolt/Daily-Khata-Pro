@@ -28,6 +28,10 @@ import {
   Grid2X2,
   Zap,
   Lightbulb,
+  FileText,
+  Trash2,
+  ClipboardList,
+  Receipt,
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -54,6 +58,10 @@ interface HomeViewProps {
   goals?: Goal[];
   onOpenCreateGoal?: () => void;
   onOpenDepositGoal?: (goal: Goal) => void;
+  onNavigateInvoice?: () => void;
+  onOpenTrash?: () => void;
+  onNavigateAttendance?: () => void;
+  onOpenSplitBill?: () => void;
   [key: string]: any;
 }
 
@@ -87,6 +95,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
   goals = [],
   onOpenCreateGoal,
   onOpenDepositGoal,
+  budgets = [],
+  onOpenBudgetManager,
+  onNavigateInvoice,
+  onOpenTrash,
+  onNavigateAttendance,
+  onOpenSplitBill,
 }) => {
   const isHindi = language === 'hi' || language === 'hinglish';
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
@@ -219,32 +233,42 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   const quickAccess = [
     {
-      label: isHindi ? 'लक्ष्य' : 'Goals',
-      icon: Target,
-      action: onNavigateGoals,
+      label: isHindi ? 'इनवॉइस जनरेटर' : 'Invoice Generator',
+      icon: FileText,
+      action: onNavigateInvoice,
     },
     {
-      label: isHindi ? 'लोन' : 'Loans',
+      label: isHindi ? 'रीसायकल बिन' : 'Recycle Bin',
+      icon: Trash2,
+      action: onOpenTrash,
+    },
+    {
+      label: isHindi ? 'खाता रजिस्टर' : 'Work Register',
+      icon: ClipboardList,
+      action: onNavigateAttendance,
+    },
+    {
+      label: isHindi ? 'लोन व उधार' : 'Loans / Udhar',
       icon: Landmark,
       action: onNavigateLoans,
     },
     {
-      label: isHindi ? 'कैलकुलेटर' : 'Calculator',
+      label: isHindi ? 'कैलकुलेटर' : 'Multi Calculator',
       icon: Calculator,
       action: onNavigateCalculator,
     },
     {
-      label: isHindi ? 'रिपोर्ट्स' : 'Reports',
-      icon: BarChart3,
-      action: onNavigateReports,
+      label: isHindi ? 'बिल बांटें' : 'Split Bill',
+      icon: Receipt,
+      action: onOpenSplitBill,
     },
     {
-      label: isHindi ? 'इतिहास' : 'History',
-      icon: History,
-      action: onViewHistory,
+      label: isHindi ? 'बजट प्लानर' : 'Budget Manager',
+      icon: PieChart,
+      action: onOpenBudgetManager,
     },
     {
-      label: isHindi ? 'कैटेगरी' : 'Categories',
+      label: isHindi ? 'खाता फंड्स' : 'Fund Settings',
       icon: Grid2X2,
       action: () => setIsSelectorOpen(true),
     },
@@ -323,16 +347,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
         transition={{ duration: 0.3, delay: 0.06 }}
       >
         <div className="flex items-center justify-between gap-2 mb-3">
-          <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
             <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.30))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0">
               <Zap className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-current" />
             </div>
-            <div className="min-w-0">
-              <h3 className="text-[13px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
+            <div className="min-w-0 flex-1 overflow-hidden">
+              <h3 className="text-[12.5px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                 {isHindi ? 'त्वरित पहुंच' : 'Quick Access'}
               </h3>
               <p className="text-[8.5px] sm:text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate">
-                {isHindi ? 'सबसे ज्यादा इस्तेमाल होने वाले टूल्स' : 'Most-used features in one place'}
+                {isHindi ? 'इनवॉइस, रीसायकल, रजिस्टर व उपयोगी वित्तीय टूल्स' : 'Invoice, Recycle Bin, Register & key utilities'}
               </p>
             </div>
           </div>
@@ -347,7 +371,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-6 gap-1 sm:gap-2">
+        <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-1.5 xs:gap-2 sm:gap-2.5">
           {quickAccess.map((item) => {
             const Icon = item.icon;
             return (
@@ -355,15 +379,15 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 key={item.label}
                 type="button"
                 onClick={item.action}
-                whileHover={{ y: -2, scale: 1.03 }}
+                whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 1, scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 450, damping: 20 }}
-                className="quick-access-btn group relative min-w-0 rounded-xl sm:rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-0.5 py-1.5 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-card-hover,#19304A)] transition-colors shadow-xs cursor-pointer select-none"
+                className="quick-access-btn group relative min-w-0 rounded-xl sm:rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-1 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-card-hover,#19304A)] transition-colors shadow-xs cursor-pointer select-none"
               >
-                <div className="h-7 w-7 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-105">
-                  <Icon className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 stroke-[2.3]" />
+                <div className="h-7 w-7 sm:h-8.5 sm:w-8.5 rounded-lg sm:rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-105 shrink-0">
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.3]" />
                 </div>
-                <span className="text-[9px] xs:text-[10px] sm:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] tracking-tight max-w-full text-center px-0.5 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors leading-tight">
+                <span className="text-[9.5px] xs:text-[10px] sm:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] tracking-tight text-center px-0.5 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors leading-tight line-clamp-2 max-w-full break-words">
                   {item.label}
                 </span>
               </motion.button>

@@ -362,7 +362,12 @@ export function loadBusinessProfileFromStorage(): InvoiceBusinessProfile {
   try {
     const data = localStorage.getItem(INVOICE_PROFILE_STORAGE_KEY);
     if (!data) return getDefaultBusinessProfile();
-    return { ...getDefaultBusinessProfile(), ...JSON.parse(data) };
+    const parsed = JSON.parse(data);
+    const profile = { ...getDefaultBusinessProfile(), ...parsed };
+    if (profile.upiId === 'Hasvolt@upi' || profile.upiId === '7827817295@upi') {
+      profile.upiId = '';
+    }
+    return profile;
   } catch (err) {
     console.error('Failed to load business profile:', err);
     return getDefaultBusinessProfile();
@@ -397,7 +402,7 @@ export function getDefaultBusinessProfile(): InvoiceBusinessProfile {
     accountNumber: '',
     ifscCode: '',
     branchName: '',
-    upiId: 'Hasvolt@upi',
+    upiId: '',
     upiPayeeName: '',
     paymentLink: '',
     acceptedMethods: ['upi', 'bank', 'cash'],

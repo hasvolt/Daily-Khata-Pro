@@ -136,7 +136,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
         branchName: profile.branchName || ''
       },
       upiDetails: {
-        upiId: profile.upiId || '',
+        upiId: (profile.upiId === 'Hasvolt@upi' || profile.upiId === '7827817295@upi') ? '' : (profile.upiId || ''),
         payeeName: profile.businessName || ''
       },
       acceptedMethods: ['upi', 'bank', 'cash'],
