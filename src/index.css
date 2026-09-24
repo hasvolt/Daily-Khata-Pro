@@ -1877,3 +1877,92 @@ html, body {
   border-color: var(--theme-border);
 }
 
+/* =========================================================================
+   DAYLIGHT & WHITE THEME HIGH-CONTRAST INVOICE & INPUT READABILITY
+   Guarantees all text, totals, and inputs are sharp dark text on light surfaces
+   ========================================================================= */
+[data-theme="white"] input,
+[data-theme="white"] select,
+[data-theme="white"] textarea,
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  color: #0F172A !important;
+}
+
+[data-theme="white"] .invoice-total-text,
+[data-theme="light"] .invoice-total-text {
+  color: #0F172A !important;
+}
+
+/* =========================================================================
+   A4 INVOICE PRINT & PDF STYLES
+   Ensures crystal-clean white page, rich vibrant colors, zero black background
+   ========================================================================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 6mm;
+  }
+
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html, body {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  #root,
+  #root > div,
+  .invoice-page-container,
+  div[class*="min-h-screen"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  header,
+  nav,
+  footer,
+  aside,
+  .print-hidden,
+  [class*="print:hidden"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  #invoice-printable-sheet {
+    display: block !important;
+    visibility: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 4px !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    overflow: visible !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+

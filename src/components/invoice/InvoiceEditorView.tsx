@@ -36,7 +36,8 @@ import {
   COMMON_UNITS,
   COMMON_GST_RATES,
   PAYMENT_TERMS_LABELS,
-  calculateDueDateFromTerms
+  calculateDueDateFromTerms,
+  loadBusinessProfileFromStorage
 } from '../../utils/invoiceCalculations';
 import { triggerHapticSound } from '../../utils/khataCalculations';
 
@@ -59,6 +60,36 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
 }) => {
   const isHindi = language === 'hi';
   const [profileSavedToast, setProfileSavedToast] = useState(false);
+  const [businessMode, setBusinessMode] = useState<'saved' | 'custom'>(() => {
+    const saved = loadBusinessProfileFromStorage();
+    return saved.businessName ? 'saved' : 'custom';
+  });
+
+  const handleApplySavedProfile = () => {
+    const saved = loadBusinessProfileFromStorage();
+    setBusinessMode('saved');
+    onChange({
+      ...invoice,
+      sender: { ...saved },
+      bankDetails: {
+        bankName: saved.bankName || invoice.bankDetails?.bankName || '',
+        accountName: saved.accountName || invoice.bankDetails?.accountName || '',
+        accountNumber: saved.accountNumber || invoice.bankDetails?.accountNumber || '',
+        ifscCode: saved.ifscCode || invoice.bankDetails?.ifscCode || '',
+        branchName: saved.branchName || invoice.bankDetails?.branchName || ''
+      },
+      upiDetails: {
+        upiId: saved.upiId || invoice.upiDetails?.upiId || 'Hasvolt@upi',
+        payeeName: saved.businessName || invoice.upiDetails?.payeeName || ''
+      }
+    });
+    setProfileSavedToast(true);
+    setTimeout(() => setProfileSavedToast(false), 2500);
+  };
+
+  const handleSwitchToCustomProfile = () => {
+    setBusinessMode('custom');
+  };
 
   // Field change helpers
   const updateSender = (field: keyof InvoiceBusinessProfile, value: any) => {
@@ -315,6 +346,49 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
             </button>
           </div>
 
+          {/* 2 Options: Use Existing Saved Information vs Add New Information */}
+          <div className="p-1 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] grid grid-cols-2 gap-1 text-[11px] font-bold">
+            <button
+              type="button"
+              onClick={handleApplySavedProfile}
+              className={`py-1.5 px-2 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                businessMode === 'saved'
+                  ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] shadow-xs'
+                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+              }`}
+            >
+              <Check className="w-3 h-3 stroke-[2.5]" />
+              <span>{isHindi ? 'सेव की हुई जानकारी' : 'Use Saved Details'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSwitchToCustomProfile}
+              className={`py-1.5 px-2 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                businessMode === 'custom'
+                  ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] shadow-xs'
+                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+              }`}
+            >
+              <span>{isHindi ? '+ नई जानकारी भरें' : '+ Enter New Details'}</span>
+            </button>
+          </div>
+
+          {businessMode === 'saved' && invoice.sender.businessName && (
+            <div className="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[10.5px] text-emerald-300 flex items-center justify-between gap-2">
+              <span className="truncate">
+                {isHindi ? 'सेव प्रोफ़ाइल लोड की गई:' : 'Loaded saved profile:'}{' '}
+                <strong>{invoice.sender.businessName}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={handleSaveProfileClick}
+                className="text-[9.5px] font-bold text-emerald-400 underline shrink-0 cursor-pointer"
+              >
+                Update Default
+              </button>
+            </div>
+          )}
+
           <div className="flex items-start gap-3">
             {/* Logo upload thumbnail */}
             <div className="relative group shrink-0">
@@ -375,58 +449,58 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
             className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
           />
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <input
               type="text"
               value={invoice.sender.city || ''}
               onChange={(e) => updateSender('city', e.target.value)}
               placeholder="City"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <input
               type="text"
               value={invoice.sender.state || ''}
               onChange={(e) => updateSender('state', e.target.value)}
               placeholder="State"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <input
               type="text"
               value={invoice.sender.pincode || ''}
               onChange={(e) => updateSender('pincode', e.target.value)}
               placeholder="Pincode"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <input
               type="text"
               value={invoice.sender.phone || ''}
               onChange={(e) => updateSender('phone', e.target.value)}
               placeholder="Phone Number"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <input
               type="email"
               value={invoice.sender.email || ''}
               onChange={(e) => updateSender('email', e.target.value)}
               placeholder="Email Address"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
           </div>
         </div>
 
         {/* Client / Buyer Card */}
         <div className="p-4 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs space-y-3">
-          <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-2">
             <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-emerald-400" />
-              <h3 className="text-xs sm:text-sm font-bold text-[var(--theme-text,#F8FAFC)]">
+              <User className="w-4 h-4 text-emerald-400 shrink-0" />
+              <h3 className="text-xs sm:text-sm font-bold text-[var(--theme-text)]">
                 {isHindi ? '2. ग्राहक की जानकारी (Buyer / Client)' : '2. Client / Buyer Info (Bill To)'}
               </h3>
             </div>
-            <label className="text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1 cursor-pointer">
+            <label className="text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1 cursor-pointer shrink-0">
               <input
                 type="checkbox"
                 checked={!!invoice.client.hasShippingAddress}
@@ -437,20 +511,20 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
             </label>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <input
               type="text"
               value={invoice.client.clientName}
               onChange={(e) => updateClient('clientName', e.target.value)}
               placeholder="Client / Person Name *"
-              className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-emerald-400"
+              className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-emerald-400"
             />
             <input
               type="text"
               value={invoice.client.companyName || ''}
               onChange={(e) => updateClient('companyName', e.target.value)}
               placeholder="Company Name (Optional)"
-              className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
           </div>
 
@@ -459,7 +533,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
             onChange={(e) => updateClient('billingAddress', e.target.value)}
             rows={2}
             placeholder="Billing Address (Street, City, Pincode) *"
-            className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-emerald-400"
+            className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-emerald-400"
           />
 
           {invoice.client.hasShippingAddress && (
@@ -468,31 +542,31 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               onChange={(e) => updateClient('shippingAddress', e.target.value)}
               rows={2}
               placeholder="Shipping Address (Delivery Location)"
-              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-emerald-500/40 text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-emerald-500/40 text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
           )}
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <input
               type="text"
               value={invoice.client.gstin || ''}
               onChange={(e) => updateClient('gstin', e.target.value.toUpperCase())}
               placeholder="GSTIN (Optional)"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none uppercase"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none uppercase"
             />
             <input
               type="text"
               value={invoice.client.phone || ''}
               onChange={(e) => updateClient('phone', e.target.value)}
               placeholder="Phone"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <input
               type="email"
               value={invoice.client.email || ''}
               onChange={(e) => updateClient('email', e.target.value)}
               placeholder="Email"
-              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
           </div>
         </div>
@@ -507,7 +581,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
           </h3>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
           <div>
             <label className="text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] block mb-1">
               Invoice Number *
@@ -517,7 +591,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               value={invoice.invoiceNumber}
               onChange={(e) => updateMeta('invoiceNumber', e.target.value)}
               placeholder="INV-2026-001"
-              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono font-bold text-[var(--theme-text)] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
             />
           </div>
 
@@ -529,7 +603,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               type="date"
               value={invoice.invoiceDate}
               onChange={(e) => updateMeta('invoiceDate', e.target.value)}
-              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text)] focus:outline-none"
             />
           </div>
 
@@ -540,7 +614,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
             <select
               value={invoice.paymentTerms}
               onChange={(e) => updateMeta('paymentTerms', e.target.value as InvoicePaymentTerms)}
-              className="w-full px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+              className="w-full px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] focus:outline-none"
             >
               {Object.entries(PAYMENT_TERMS_LABELS).map(([k, v]) => (
                 <option key={k} value={k}>
@@ -558,7 +632,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               type="date"
               value={invoice.dueDate}
               onChange={(e) => updateMeta('dueDate', e.target.value)}
-              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text)] focus:outline-none"
             />
           </div>
 
@@ -571,7 +645,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               value={invoice.poNumber || ''}
               onChange={(e) => updateMeta('poNumber', e.target.value)}
               placeholder="e.g. PO-9842"
-              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] focus:outline-none"
             />
           </div>
         </div>
@@ -579,7 +653,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
 
       {/* 4. LINE ITEMS TABLE */}
       <div className="p-4 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs space-y-3">
-        <div className="flex items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-2">
           <div className="flex items-center gap-2">
             <FileText className="w-4 h-4 text-cyan-400" />
             <h3 className="text-xs sm:text-sm font-bold text-[var(--theme-text,#F8FAFC)]">
@@ -588,8 +662,8 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
           </div>
 
           {/* Tax Mode Selector */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)]">
+          <div className="flex items-center gap-1.5 self-start sm:self-auto">
+            <span className="text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] whitespace-nowrap">
               Tax Mode:
             </span>
             <select
@@ -612,46 +686,50 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               key={item.id}
               className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-2"
             >
-              {/* Top Row: Description & Actions */}
-              <div className="flex items-center gap-2">
-                <span className="w-6 text-center font-mono text-xs font-bold text-[var(--theme-text-dim,#94A3B8)] shrink-0">
-                  #{idx + 1}
-                </span>
-                <input
-                  type="text"
-                  value={item.description}
-                  onChange={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
-                  placeholder="Item Name / Description / Service *"
-                  className="flex-1 px-3 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-semibold text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
-                />
-                <input
-                  type="text"
-                  value={item.hsnSac || ''}
-                  onChange={(e) => handleUpdateItem(item.id, 'hsnSac', e.target.value)}
-                  placeholder="HSN/SAC"
-                  className="w-24 sm:w-28 px-2 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none text-center"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleDuplicateItem(item)}
-                  title="Duplicate Row"
-                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white transition-colors cursor-pointer"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveItem(item.id)}
-                  title="Delete Row"
-                  disabled={invoice.items.length <= 1}
-                  className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-rose-400 disabled:opacity-30 transition-colors cursor-pointer"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+              {/* Top Row: Description & Actions (Responsive Layout for Mobile) */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                  <span className="w-5 text-center font-mono text-xs font-bold text-[var(--theme-text-dim,#94A3B8)] shrink-0">
+                    #{idx + 1}
+                  </span>
+                  <input
+                    type="text"
+                    value={item.description}
+                    onChange={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
+                    placeholder="Item Name / Description / Service *"
+                    className="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-semibold text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+                  />
+                </div>
+                <div className="flex items-center gap-1.5 justify-end pl-6 sm:pl-0 shrink-0">
+                  <input
+                    type="text"
+                    value={item.hsnSac || ''}
+                    onChange={(e) => handleUpdateItem(item.id, 'hsnSac', e.target.value)}
+                    placeholder="HSN/SAC"
+                    className="w-20 sm:w-28 px-2 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none text-center"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleDuplicateItem(item)}
+                    title="Duplicate Row"
+                    className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white transition-colors cursor-pointer"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveItem(item.id)}
+                    title="Delete Row"
+                    disabled={invoice.items.length <= 1}
+                    className="p-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-rose-400 disabled:opacity-30 transition-colors cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
 
               {/* Bottom Row: Qty, Unit, Rate, Discount, Tax, Total Amount */}
-              <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 pt-1 pl-8">
+              <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 pt-1 sm:pl-6">
                 <div>
                   <label className="text-[9px] font-bold text-[var(--theme-text-dim,#94A3B8)] block">
                     Quantity
@@ -752,7 +830,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   <label className="text-[9px] font-bold text-[var(--theme-text-dim,#94A3B8)] block text-right">
                     Line Total
                   </label>
-                  <div className="py-1 text-right font-mono font-bold text-xs text-[var(--theme-text,#F8FAFC)]">
+                  <div className="py-1 text-right font-mono font-bold text-xs invoice-total-text" style={{ color: 'var(--theme-text)' }}>
                     {invoice.currency} {item.totalAmount.toFixed(2)}
                   </div>
                 </div>
@@ -778,12 +856,12 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
         <div className="p-4 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs space-y-3">
           <div className="flex items-center gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-2">
             <DollarSign className="w-4 h-4 text-emerald-400" />
-            <h3 className="text-xs sm:text-sm font-bold text-[var(--theme-text,#F8FAFC)]">
+            <h3 className="text-xs sm:text-sm font-bold text-[var(--theme-text)]">
               {isHindi ? '5. अतिरिक्त छूट व शिपिंग' : '5. Additional Discounts & Charges'}
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)]">
@@ -809,7 +887,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                 value={invoice.extraDiscountValue === 0 ? '' : invoice.extraDiscountValue}
                 onChange={(e) => updateMeta('extraDiscountValue', parseFloat(e.target.value) || 0)}
                 placeholder="0"
-                className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+                className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text)] focus:outline-none"
               />
             </div>
 
@@ -824,7 +902,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                 value={invoice.shippingCharges === 0 ? '' : invoice.shippingCharges}
                 onChange={(e) => updateMeta('shippingCharges', parseFloat(e.target.value) || 0)}
                 placeholder="0"
-                className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+                className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text)] focus:outline-none"
               />
             </div>
           </div>
@@ -844,20 +922,20 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
         <div className="p-4 rounded-2xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs space-y-2 text-xs">
           <div className="flex items-center gap-2 border-b border-[var(--theme-border,#213E61)]/70 pb-2">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <h3 className="text-xs sm:text-sm font-bold text-[var(--theme-text,#F8FAFC)]">
+            <h3 className="text-xs sm:text-sm font-bold text-[var(--theme-text)]">
               {isHindi ? 'गणना सारांश (Calculation Breakdown)' : 'Calculation Breakdown'}
             </h3>
           </div>
 
           <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-[var(--theme-text-dim,#94A3B8)]">
             <span>Subtotal:</span>
-            <span className="font-mono text-[var(--theme-text,#F8FAFC)] font-semibold">
+            <span className="font-mono invoice-total-text font-semibold" style={{ color: 'var(--theme-text)' }}>
               {invoice.currency} {invoice.subtotal.toFixed(2)}
             </span>
           </div>
 
           {invoice.totalDiscount > 0 && (
-            <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-emerald-400">
+            <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-emerald-400 font-semibold">
               <span>Total Discount:</span>
               <span className="font-mono font-semibold">
                 - {invoice.currency} {invoice.totalDiscount.toFixed(2)}
@@ -869,13 +947,13 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
             <>
               <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-[var(--theme-text-dim,#94A3B8)]">
                 <span>CGST:</span>
-                <span className="font-mono text-[var(--theme-text,#F8FAFC)]">
+                <span className="font-mono invoice-total-text" style={{ color: 'var(--theme-text)' }}>
                   {invoice.currency} {invoice.cgst.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-[var(--theme-text-dim,#94A3B8)]">
                 <span>SGST:</span>
-                <span className="font-mono text-[var(--theme-text,#F8FAFC)]">
+                <span className="font-mono invoice-total-text" style={{ color: 'var(--theme-text)' }}>
                   {invoice.currency} {invoice.sgst.toFixed(2)}
                 </span>
               </div>
@@ -885,7 +963,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
           {invoice.taxType === 'igst' && invoice.taxTotal > 0 && (
             <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-[var(--theme-text-dim,#94A3B8)]">
               <span>IGST:</span>
-              <span className="font-mono text-[var(--theme-text,#F8FAFC)]">
+              <span className="font-mono invoice-total-text" style={{ color: 'var(--theme-text)' }}>
                 {invoice.currency} {invoice.igst.toFixed(2)}
               </span>
             </div>
@@ -894,7 +972,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
           {invoice.taxType === 'single' && invoice.taxTotal > 0 && (
             <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-[var(--theme-text-dim,#94A3B8)]">
               <span>Tax (VAT):</span>
-              <span className="font-mono text-[var(--theme-text,#F8FAFC)]">
+              <span className="font-mono invoice-total-text" style={{ color: 'var(--theme-text)' }}>
                 {invoice.currency} {invoice.taxTotal.toFixed(2)}
               </span>
             </div>
@@ -903,7 +981,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
           {invoice.shippingCharges > 0 && (
             <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-[var(--theme-text-dim,#94A3B8)]">
               <span>Shipping:</span>
-              <span className="font-mono text-[var(--theme-text,#F8FAFC)]">
+              <span className="font-mono invoice-total-text" style={{ color: 'var(--theme-text)' }}>
                 {invoice.currency} {invoice.shippingCharges.toFixed(2)}
               </span>
             </div>
@@ -912,15 +990,15 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
           {invoice.roundOff !== 0 && (
             <div className="flex justify-between py-1 border-b border-[var(--theme-border,#213E61)]/40 text-[var(--theme-text-dim,#94A3B8)]">
               <span>Round Off:</span>
-              <span className="font-mono text-[var(--theme-text,#F8FAFC)]">
+              <span className="font-mono invoice-total-text" style={{ color: 'var(--theme-text)' }}>
                 {invoice.roundOff > 0 ? `+${invoice.roundOff}` : invoice.roundOff}
               </span>
             </div>
           )}
 
-          <div className="flex justify-between items-center py-2 px-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-primary,#38BDF8)]/40 font-bold text-sm">
-            <span className="text-[var(--theme-text,#F8FAFC)]">Grand Total:</span>
-            <span className="font-mono text-base text-[var(--theme-primary,#38BDF8)]">
+          <div className="flex justify-between items-center py-2.5 px-3.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-primary,#38BDF8)]/40 font-bold text-sm">
+            <span className="invoice-total-text" style={{ color: 'var(--theme-text)' }}>Grand Total:</span>
+            <span className="font-mono text-base font-extrabold" style={{ color: 'var(--theme-primary)' }}>
               {invoice.currency} {invoice.grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </span>
           </div>
@@ -952,7 +1030,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                 })
               }
               placeholder="Bank Name (e.g. State Bank of India)"
-              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+              className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <div className="grid grid-cols-2 gap-2">
               <input
@@ -965,7 +1043,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   })
                 }
                 placeholder="A/C Holder Name"
-                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
               />
               <input
                 type="text"
@@ -977,7 +1055,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   })
                 }
                 placeholder="A/C Number"
-                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
               />
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -991,7 +1069,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   })
                 }
                 placeholder="IFSC Code"
-                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono uppercase text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono uppercase text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
               />
               <input
                 type="text"
@@ -1003,7 +1081,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   })
                 }
                 placeholder="Branch"
-                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
+                className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
               />
             </div>
           </div>
@@ -1022,12 +1100,12 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   upiDetails: { ...invoice.upiDetails, upiId: e.target.value.trim() }
                 })
               }
-              placeholder="e.g. shopname@okhdfcbank or 9876543210@paytm"
+              placeholder="e.g. yourname@upi or mobile@paytm"
               className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-emerald-400 placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <p className="text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
               {isHindi
-                ? 'UPI ID डालने पर बिल पर ऑटोमैटिक QR कोड प्रिंट होगा जिससे ग्राहक स्कैन करके पेमेंट कर सकेंगे।'
+                ? 'UPI ID डालने पर बिल पर ऑटोमैटिक QR कोड प्रिंट होगा जिससे ग्राहक स्कैन करके सीधे भुगतान कर सकेंगे।'
                 : 'Entering a UPI ID automatically adds an instant scan-to-pay QR code to the printed invoice.'}
             </p>
           </div>

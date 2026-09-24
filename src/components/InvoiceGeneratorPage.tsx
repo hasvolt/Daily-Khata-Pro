@@ -71,22 +71,22 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
     const nextNum = getNextInvoiceNumber(existing);
     const profile = loadBusinessProfileFromStorage();
 
-    const sampleItem: InvoiceItem = {
+    const initialItem: InvoiceItem = {
       id: 'item_' + Date.now(),
-      description: 'Consulting / Professional Services',
-      hsnSac: '998311',
+      description: '',
+      hsnSac: '',
       quantity: 1,
-      unit: 'Job',
-      rate: 1500,
+      unit: 'Pcs',
+      rate: 0,
       discountType: 'percent',
       discountValue: 0,
-      taxRate: 18,
-      taxableAmount: 1500,
-      taxAmount: 270,
-      totalAmount: 1770
+      taxRate: 0,
+      taxableAmount: 0,
+      taxAmount: 0,
+      totalAmount: 0
     };
 
-    const totals = calculateInvoiceTotals([sampleItem], 'percent', 0, 'cgst_sgst', 0, true, profile.defaultCurrencyCode || 'INR');
+    const totals = calculateInvoiceTotals([initialItem], 'percent', 0, 'cgst_sgst', 0, true, profile.defaultCurrencyCode || 'INR');
 
     return {
       id: 'inv_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
@@ -244,7 +244,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
       rate: 0,
       discountType: 'percent',
       discountValue: 0,
-      taxRate: 18,
+      taxRate: 0,
       taxableAmount: 0,
       taxAmount: 0,
       totalAmount: 0
@@ -399,10 +399,16 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
     );
   };
 
-  // Print Invoice (clean window print)
+  // Print Invoice (clean window print with automatic PDF title)
   const handlePrint = () => {
     triggerHapticSound('click');
+    const oldTitle = document.title;
+    const sanitizedNumber = (currentInvoice.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9_-]/g, '_');
+    document.title = `Invoice_${sanitizedNumber}_Rozfiber`;
     window.print();
+    setTimeout(() => {
+      document.title = oldTitle;
+    }, 1500);
   };
 
   // Share invoice summary / Web Share
@@ -429,7 +435,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[var(--theme-bg,#07101C)] text-[var(--theme-text,#F8FAFC)] pb-24">
+    <div className="invoice-page-container min-h-screen bg-[var(--theme-bg,#07101C)] text-[var(--theme-text,#F8FAFC)] pb-24 print:bg-white print:text-slate-900 print:min-h-0 print:p-0 print:m-0">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-xl bg-emerald-500 text-[#040D17] font-bold text-xs sm:text-sm shadow-xl flex items-center gap-2 border border-emerald-400">
@@ -599,7 +605,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
             </div>
 
             {/* A4 Sheet Component */}
-            <div className="overflow-x-auto py-2">
+            <div className="overflow-x-auto py-2 print:overflow-visible print:p-0 print:m-0">
               <InvoicePrintView
                 invoice={currentInvoice}
                 qrDataUrl={qrCodeDataUrl}
