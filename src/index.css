@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
 
 @layer base {
   :root {
@@ -1126,55 +1128,33 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.40) !important;
 }
 
-/* Today & This Month Card - Seamless Color Theme Redesign */
+/* Today & This Month Card - Seamless Professional Banking Design */
 .summary-card-3d {
   background: linear-gradient(155deg, var(--theme-card, #132438) 0%, var(--theme-surface, #0E1A29) 100%) !important;
   border-color: var(--theme-border, #213E61) !important;
-  box-shadow: 0 10px 26px -8px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 .summary-card-3d:hover {
   border-color: var(--theme-primary-border, var(--theme-primary, #38BDF8)) !important;
-  box-shadow: 0 14px 30px -6px rgba(0, 0, 0, 0.65), 0 0 18px -2px var(--theme-glow, rgba(56, 189, 248, 0.22)) !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.55), 0 0 14px -2px var(--theme-glow, rgba(56, 189, 248, 0.15)) !important;
 }
 
 /* Stat Boxes across color themes */
 .summary-stat-box {
   background: var(--theme-surface, #0E1A29) !important;
-  border-color: var(--theme-border, #213E61) !important;
+  border: 1px solid var(--theme-border, #213E61) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
 }
 .summary-stat-box .summary-stat-label {
   color: var(--theme-text-muted, #94A3B8) !important;
 }
 
-/* Summary Cards 3D Default (Dark Themes: Elevated Background, Bright Teal/Cyan Border & Depth Shadow) */
-.summary-card-3d {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%), #0F1B24 !important;
-  border: 1px solid rgba(6, 182, 212, 0.35) !important;
-  box-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-}
-
-[data-theme="cyan"] .summary-card-3d {
-  background: linear-gradient(180deg, rgba(34, 211, 238, 0.07) 0%, rgba(34, 211, 238, 0.01) 100%), #0D212E !important;
-  border: 1px solid rgba(34, 211, 238, 0.45) !important;
-  box-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.55), 0 2px 6px -1px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(34, 211, 238, 0.15) !important;
-}
-
-[data-theme="black"] .summary-card-3d {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%), #131722 !important;
-  border: 1px solid rgba(56, 189, 248, 0.38) !important;
-}
-
-.summary-card-3d:hover {
-  border-color: rgba(34, 211, 238, 0.6) !important;
-}
-
-/* Icon chip background (sun/calendar icons) in dark mode: visible dark-teal tinted box */
+/* Icon chip background in dark mode */
 .summary-card-icon-box {
-  background-color: rgba(6, 182, 212, 0.22) !important;
-  border: 1px solid rgba(6, 182, 212, 0.45) !important;
-  color: #22D3EE !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  background-color: var(--theme-primary-dim, rgba(56, 189, 248, 0.15)) !important;
+  border: 1px solid var(--theme-primary-border, rgba(56, 189, 248, 0.3)) !important;
+  color: var(--theme-primary, #38BDF8) !important;
+  box-shadow: none !important;
 }
 
 [data-theme="light"] .summary-card-icon-box,
@@ -1684,7 +1664,6 @@ main {
   /* Completely hide all interactive UI elements during printing */
   .no-print,
   #app-root > div.no-print,
-  #app-root > main,
   header,
   nav,
   button,
@@ -1692,7 +1671,9 @@ main {
     display: none !important;
   }
 
-  /* Force print area container to show clearly in full width A4 */
+  /* Force print area container and invoice sheet to show clearly in full width A4 */
+  #invoice-printable-sheet,
+  #daily-khata-printable-statement,
   #printArea,
   .print-only {
     display: block !important;
@@ -1947,7 +1928,8 @@ html, body {
     visibility: hidden !important;
   }
 
-  #invoice-printable-sheet {
+  #invoice-printable-sheet,
+  #daily-khata-printable-statement {
     display: block !important;
     visibility: visible !important;
     box-shadow: none !important;
@@ -1956,7 +1938,7 @@ html, body {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto !important;
-    padding: 4px !important;
+    padding: 6px !important;
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     color: #0F172A !important;

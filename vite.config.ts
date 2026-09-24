@@ -34,12 +34,28 @@ export default defineConfig(() => {
       ],
     },
     build: {
-      chunkSizeWarningLimit: 2500,
+      chunkSizeWarningLimit: 1500,
       sourcemap: false,
+      target: 'es2022',
       rollupOptions: {
-        maxParallelFileOps: 2,
         cache: false,
-        external: ['express', 'path', 'fs'],
+        external: ['express', 'path', 'fs', 'sanity', 'sanity/structure', '@sanity/vision'],
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/sanity') || id.includes('node_modules/@sanity')) {
+              return 'sanity-vendor';
+            }
+            if (id.includes('node_modules/recharts')) {
+              return 'recharts-vendor';
+            }
+            if (id.includes('node_modules/lucide-react')) {
+              return 'lucide-vendor';
+            }
+            if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router-dom/')) {
+              return 'react-vendor';
+            }
+          },
+        },
       }
     },
     server: {

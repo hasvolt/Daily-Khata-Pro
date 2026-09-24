@@ -2347,9 +2347,9 @@ function AppContent() {
       </div>
 
       {/* Main Content Area */}
-      <main className="no-print flex-1 w-full max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pt-2 sm:pt-6 pb-20 sm:pb-8">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pt-2 sm:pt-6 pb-20 sm:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full">
         {!isDueBannerDismissed && dueRemindersAlert.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3 no-print">
             <DueRemindersBanner
               reminders={dueRemindersAlert}
               onOpenReminders={() => setIsRemindersOpen(true)}

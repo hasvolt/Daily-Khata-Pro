@@ -402,13 +402,59 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
   // Print Invoice (clean window print with automatic PDF title)
   const handlePrint = () => {
     triggerHapticSound('click');
+    if (activeTab !== 'preview') {
+      setActiveTab('preview');
+    }
     const oldTitle = document.title;
     const sanitizedNumber = (currentInvoice.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9_-]/g, '_');
     document.title = `Invoice_${sanitizedNumber}_Rozfiber`;
-    window.print();
+
     setTimeout(() => {
-      document.title = oldTitle;
-    }, 1500);
+      try {
+        window.print();
+      } catch (e) {
+        console.error('Print trigger failed', e);
+      }
+      setTimeout(() => {
+        document.title = oldTitle;
+      }, 1500);
+    }, 150);
+  };
+
+  // Download standalone printable HTML invoice
+  const handleDownloadHTML = () => {
+    triggerHapticSound('click');
+    const sheetEl = document.getElementById('invoice-printable-sheet');
+    const content = sheetEl ? sheetEl.outerHTML : '';
+    const htmlDoc = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Invoice ${currentInvoice.invoiceNumber} - Rozfiber</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @page { size: A4 portrait; margin: 8mm 10mm; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #ffffff; color: #0f172a; margin: 0; padding: 12px; }
+    @media print { body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <div style="max-width: 850px; margin: 0 auto;">
+    ${content}
+  </div>
+</body>
+</html>`;
+    const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Invoice-${(currentInvoice.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9_-]/g, '_')}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast(isHindi ? 'HTML इनवॉइस डाउनलोड हो गया!' : 'Invoice HTML downloaded!');
   };
 
   // Share invoice summary / Web Share
@@ -435,7 +481,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
   };
 
   return (
-    <div className="invoice-page-container min-h-screen bg-[var(--theme-bg,#07101C)] text-[var(--theme-text,#F8FAFC)] pb-24 print:bg-white print:text-slate-900 print:min-h-0 print:p-0 print:m-0">
+    <div className="invoice-page-container min-h-screen bg-[var(--theme-bg,#07101C)] text-[var(--theme-text,#F8FAFC)] pb-24 print:bg-white print:text-slate-900 print:min-h-0 print:p-0 print:m-0 touch-pan-y overscroll-y-auto">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-xl bg-emerald-500 text-[#040D17] font-bold text-xs sm:text-sm shadow-xl flex items-center gap-2 border border-emerald-400">
@@ -445,7 +491,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
       )}
 
       {/* Top Header Bar */}
-      <div className="sticky top-0 z-30 bg-[var(--theme-card,#132438)]/95 backdrop-blur-md border-b border-[var(--theme-border,#213E61)] px-4 py-3 print:hidden">
+      <div className="sticky top-14 sm:top-16 z-30 bg-[var(--theme-card,#132438)]/95 backdrop-blur-md border-b border-[var(--theme-border,#213E61)] px-4 py-3 print:hidden">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
             <button
@@ -576,6 +622,17 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
                   <span>{isHindi ? 'प्रिंट या PDF सेव करें' : 'Print / Save PDF'}</span>
                 </button>
 
+                {/* Download HTML Button */}
+                <button
+                  type="button"
+                  onClick={handleDownloadHTML}
+                  className="py-1.5 px-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-1.5 hover:text-white cursor-pointer"
+                  title="Download standalone printable HTML file"
+                >
+                  <Download className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="hidden xs:inline">{isHindi ? 'HTML डाउनलोड' : 'Download HTML'}</span>
+                </button>
+
                 {/* Share Button */}
                 <button
                   type="button"
@@ -605,7 +662,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
             </div>
 
             {/* A4 Sheet Component */}
-            <div className="overflow-x-auto py-2 print:overflow-visible print:p-0 print:m-0">
+            <div className="overflow-x-auto touch-pan-y overscroll-x-contain py-2 print:overflow-visible print:p-0 print:m-0">
               <InvoicePrintView
                 invoice={currentInvoice}
                 qrDataUrl={qrCodeDataUrl}

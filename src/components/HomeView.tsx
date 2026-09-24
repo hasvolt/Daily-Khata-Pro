@@ -236,58 +236,66 @@ export const HomeView: React.FC<HomeViewProps> = ({
       label: isHindi ? 'इनवॉइस जनरेटर' : 'Invoice Generator',
       icon: FileText,
       action: onNavigateInvoice,
+      iconBg: 'bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+      hoverBorder: 'hover:border-emerald-500/50',
     },
     {
       label: isHindi ? 'रीसायकल बिन' : 'Recycle Bin',
       icon: Trash2,
       action: onOpenTrash,
+      iconBg: 'bg-rose-500/15 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/30',
+      hoverBorder: 'hover:border-rose-500/50',
     },
     {
       label: isHindi ? 'खाता रजिस्टर' : 'Work Register',
       icon: ClipboardList,
       action: onNavigateAttendance,
+      iconBg: 'bg-sky-500/15 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/30',
+      hoverBorder: 'hover:border-sky-500/50',
     },
     {
       label: isHindi ? 'लोन व उधार' : 'Loans / Udhar',
       icon: Landmark,
       action: onNavigateLoans,
+      iconBg: 'bg-purple-500/15 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border-purple-500/30',
+      hoverBorder: 'hover:border-purple-500/50',
     },
     {
       label: isHindi ? 'कैलकुलेटर' : 'Multi Calculator',
       icon: Calculator,
       action: onNavigateCalculator,
+      iconBg: 'bg-amber-500/15 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
+      hoverBorder: 'hover:border-amber-500/50',
     },
     {
       label: isHindi ? 'बिल बांटें' : 'Split Bill',
       icon: Receipt,
       action: onOpenSplitBill,
+      iconBg: 'bg-teal-500/15 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 border-teal-500/30',
+      hoverBorder: 'hover:border-teal-500/50',
     },
     {
       label: isHindi ? 'बजट प्लानर' : 'Budget Manager',
       icon: PieChart,
       action: onOpenBudgetManager,
+      iconBg: 'bg-indigo-500/15 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30',
+      hoverBorder: 'hover:border-indigo-500/50',
     },
     {
       label: isHindi ? 'खाता फंड्स' : 'Fund Settings',
       icon: Grid2X2,
       action: () => setIsSelectorOpen(true),
+      iconBg: 'bg-pink-500/15 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 border-pink-500/30',
+      hoverBorder: 'hover:border-pink-500/50',
     },
   ];
 
   return (
     <div className="relative w-full max-w-6xl mx-auto pb-10 sm:pb-14 space-y-3.5 sm:space-y-4 animate-in fade-in duration-200">
-      {/* Premium Frosted Glass Luminous Backdrops */}
+      {/* Subtle Clean Ambient Canvas Glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[96vw] max-w-5xl h-[420px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--theme-glow,rgba(56,189,248,0.12))_0%,transparent_72%)] blur-3xl -z-10"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[92vw] max-w-4xl h-[450px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--theme-primary-dim,rgba(56,189,248,0.08))_0%,transparent_70%)] blur-3xl -z-10"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-12 left-1/2 -translate-x-1/2 w-[88vw] max-w-3xl h-[360px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--theme-glow,rgba(16,185,129,0.06))_0%,transparent_65%)] blur-3xl -z-10"
+        className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[92vw] max-w-4xl h-[340px] rounded-full bg-[radial-gradient(ellipse_at_top,var(--theme-glow,rgba(56,189,248,0.08))_0%,transparent_70%)] blur-3xl -z-10"
       />
 
       {/* 1. HERO BALANCE CARD */}
@@ -304,18 +312,18 @@ export const HomeView: React.FC<HomeViewProps> = ({
         />
       </motion.div>
 
-      {/* 2. TODAY + THIS MONTH SUMMARY CARDS (Side by Side) */}
+      {/* 2. TODAY + THIS MONTH SUMMARY CARDS (Full Width Stack matching screenshot) */}
       <motion.section
-        className="grid grid-cols-2 gap-2.5 sm:gap-3.5"
+        className="space-y-2 sm:space-y-3.5"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.04 }}
       >
         <SummaryCard3D
           type="daily"
-          title={isHindi ? 'आज का हिसाब' : 'Today'}
-          subtitle={isHindi ? 'कमाई – खर्च' : 'Income – Expense'}
-          periodBadge={pageT.common.today}
+          title={isHindi ? "आज का सारांश" : "Today's Summary"}
+          subtitle={isHindi ? "आज की कमाई, खर्च और बचत" : "Income, expense & savings for today"}
+          periodBadge={isHindi ? "आज" : "Today"}
           incomeValue={todayStats.income}
           expenseValue={todayStats.expense}
           netValue={todayStats.net}
@@ -326,8 +334,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
         />
         <SummaryCard3D
           type="monthly"
-          title={isHindi ? 'इस महीने' : 'This Month'}
-          subtitle={isHindi ? 'कमाई – खर्च' : 'Income – Expense'}
+          title={isHindi ? "इस महीने का सारांश" : "Monthly Summary"}
+          subtitle={isHindi ? "मासिक कमाई, खर्च और बचत" : "Monthly income, expense & savings"}
           periodBadge={monthFormatted}
           incomeValue={monthStats.income}
           expenseValue={monthStats.expense}
@@ -382,9 +390,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 1, scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 450, damping: 20 }}
-                className="quick-access-btn group relative min-w-0 rounded-xl sm:rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-1 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 hover:border-[var(--theme-primary,#38BDF8)]/50 hover:bg-[var(--theme-card-hover,#19304A)] transition-colors shadow-xs cursor-pointer select-none"
+                className={`quick-access-btn group relative min-w-0 rounded-xl sm:rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] px-1 py-2 sm:py-2.5 flex flex-col items-center justify-center gap-1 sm:gap-1.5 ${item.hoverBorder} hover:bg-[var(--theme-card-hover,#19304A)] transition-colors shadow-xs cursor-pointer select-none`}
               >
-                <div className="h-7 w-7 sm:h-8.5 sm:w-8.5 rounded-lg sm:rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.25))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-105 shrink-0">
+                <div className={`h-7 w-7 sm:h-8.5 sm:w-8.5 rounded-lg sm:rounded-xl border ${item.iconBg} flex items-center justify-center shadow-xs transition-transform duration-200 group-hover:scale-110 shrink-0`}>
                   <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.3]" />
                 </div>
                 <span className="text-[9.5px] xs:text-[10px] sm:text-[11px] font-bold text-[var(--theme-text,#F8FAFC)] tracking-tight text-center px-0.5 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors leading-tight line-clamp-2 max-w-full break-words">

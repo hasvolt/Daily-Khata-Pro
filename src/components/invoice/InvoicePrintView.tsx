@@ -53,8 +53,7 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
   return (
     <div
       id="invoice-printable-sheet"
-      className="w-full max-w-[850px] mx-auto bg-white text-slate-900 shadow-2xl rounded-2xl p-6 sm:p-10 border border-slate-200 print:border-none print:shadow-none print:p-2 print:m-0 print:max-w-none print:rounded-none font-sans leading-normal selection:bg-blue-100"
-      style={{ minHeight: '1050px' }}
+      className="w-full max-w-[850px] mx-auto bg-white text-slate-900 shadow-2xl rounded-2xl p-3.5 sm:p-10 border border-slate-200 print:border-none print:shadow-none print:p-2 print:m-0 print:max-w-none print:rounded-none font-sans leading-normal selection:bg-blue-100 min-h-auto sm:min-h-[1050px]"
     >
       {/* Top Colorful Accent Strip */}
       <div className="h-1.5 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 rounded-full mb-6 print:mb-4" />
