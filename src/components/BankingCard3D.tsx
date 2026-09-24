@@ -96,8 +96,11 @@ export function BankingCard3D({
           {/* Header row */}
           <div className="flex items-center justify-between gap-1 sm:gap-2 min-w-0">
             <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 shrink">
-              <div className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105">
-                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
+              <div
+                className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105"
+                style={{ boxShadow: 'none', filter: 'none' }}
+              >
+                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" style={{ filter: 'none', boxShadow: 'none' }} />
               </div>
               <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
                 <span className="banking-card-label text-[11px] sm:text-[13.5px] font-extrabold tracking-wider text-slate-100 uppercase truncate">
@@ -157,13 +160,16 @@ export function BankingCard3D({
             </div>
 
             {/* 3D Glossy Theme-Adaptive Wallet Graphic */}
-            <div className="banking-card-wallet-graphic relative w-16 h-13 sm:w-22 sm:h-18 shrink-0 pointer-events-none select-none drop-shadow-none">
-              <svg viewBox="0 0 120 100" fill="none" className="w-full h-full">
+            <div
+              className="banking-card-wallet-graphic relative w-16 h-13 sm:w-22 sm:h-18 shrink-0 pointer-events-none select-none drop-shadow-none"
+              style={{ filter: 'none', boxShadow: 'none' }}
+            >
+              <svg viewBox="0 0 120 100" fill="none" className="w-full h-full" style={{ filter: 'none' }}>
                 <defs>
                   <linearGradient id="walletBodyGrad" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="var(--theme-primary,#38BDF8)" />
-                    <stop offset="65%" stopColor="var(--theme-btn-hover,#0369A1)" />
-                    <stop offset="100%" stopColor="var(--theme-card,#0E182A)" />
+                    <stop offset="65%" stopColor="var(--theme-btn-hover,#0284C7)" />
+                    <stop offset="100%" stopColor="var(--theme-primary-hover,#0369A1)" />
                   </linearGradient>
                   <linearGradient id="walletFlapGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="var(--theme-badge-text,#7DD3FC)" />
@@ -178,7 +184,7 @@ export function BankingCard3D({
                 <rect x="25" y="10" width="58" height="32" rx="6" fill="url(#cardGradHero)" transform="rotate(-6 55 27)" opacity="0.9" />
                 <rect x="30" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.65" transform="rotate(-6 55 27)" />
                 {/* Main Wallet Base */}
-                <rect x="14" y="24" width="92" height="66" rx="14" fill="url(#walletBodyGrad)" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.2" strokeOpacity="0.6" />
+                <rect x="14" y="24" width="92" height="66" rx="14" fill="url(#walletBodyGrad)" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.2" strokeOpacity="0.6" style={{ filter: 'none' }} />
                 {/* Top specular highlight */}
                 <path d="M 22 26 Q 60 22 98 26" stroke="#FFFFFF" strokeWidth="1.5" strokeOpacity="0.45" fill="none" />
                 {/* Clasp tab */}

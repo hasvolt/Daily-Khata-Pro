@@ -28,7 +28,7 @@ export const ActiveGoalsWidget: React.FC<ActiveGoalsWidgetProps> = ({
 
   if (activeGoals.length === 0) {
     return (
-      <div className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
+      <div className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <div className="h-8 w-8 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-500 dark:text-indigo-400 flex items-center justify-center shrink-0">
@@ -55,7 +55,32 @@ export const ActiveGoalsWidget: React.FC<ActiveGoalsWidgetProps> = ({
           )}
         </div>
 
-        <div className="mt-4 pt-3 border-t border-[var(--theme-border,#213E61)]/40 text-center">
+        {/* Empty-state illustration */}
+        <div className="my-2.5 py-3 px-3 rounded-2xl bg-[var(--theme-surface,#0E1A29)]/60 border border-dashed border-[var(--theme-border,#213E61)]/70 flex flex-col items-center justify-center text-center gap-1.5">
+          <div className="h-10 w-10 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shadow-xs">
+            <Target className="w-5 h-5 stroke-[2.2]" />
+          </div>
+          <span className="text-[11.5px] font-bold text-[var(--theme-text,#F8FAFC)]">
+            {isHindi ? 'लक्ष्य निर्धारित करें' : 'Set Your First Goal'}
+          </span>
+          <p className="text-[9px] text-[var(--theme-text-dim,#94A3B8)] max-w-xs leading-relaxed">
+            {isHindi ? 'बचत, आपातकालीन फंड या सपनों के लिए लक्ष्य बनाएं' : 'Track savings milestones for emergency fund, gadgets, or investments'}
+          </p>
+          {onOpenCreateGoal && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onOpenCreateGoal();
+              }}
+              className="mt-1 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/35 px-3 py-1 text-[9.5px] font-bold text-[var(--theme-primary,#38BDF8)] hover:bg-[var(--theme-primary,#38BDF8)]/25 transition-colors inline-flex items-center gap-1 cursor-pointer"
+            >
+              <Plus className="w-3 h-3" /> {isHindi ? 'नया लक्ष्य जोड़ें' : 'Create Goal'}
+            </button>
+          )}
+        </div>
+
+        <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/40 text-center">
           {onNavigateGoals && (
             <button
               type="button"
@@ -76,7 +101,7 @@ export const ActiveGoalsWidget: React.FC<ActiveGoalsWidgetProps> = ({
   const linkedFundLabel = goal.linkedFund ? FUND_LABELS[goal.linkedFund] : null;
 
   return (
-    <div className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
+    <div className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="h-8 w-8 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-500 dark:text-indigo-400 flex items-center justify-center shrink-0">

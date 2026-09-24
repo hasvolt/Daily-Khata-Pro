@@ -109,6 +109,11 @@ export const ROUTE_SEO_MAP: Record<string, PageSEOMeta> = {
     description: 'Track money given (Udhar/Receivable) and money borrowed (Payable) with automatic net balance, due dates, and settlement logs. 100% private.',
     canonicalPath: '/loans'
   },
+  '/invoice': {
+    title: 'Free Professional Invoice & GST Bill Generator — Daily Khata Pro',
+    description: 'Create, print and download professional GST invoices, bills, and receipts with UPI QR code, itemized taxes, bank details, and 100% offline privacy.',
+    canonicalPath: '/invoice'
+  },
   '/news': {
     title: 'Commercial News & Market Research Intelligence — Daily Khata Pro',
     description: 'Global macroeconomics, fintech analysis, taxation updates, and financial research reports for smart business decisions.',

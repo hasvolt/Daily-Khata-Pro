@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface FundCard3DProps {
   key?: React.Key;
@@ -14,10 +14,11 @@ interface FundCard3DProps {
   privacyMask: boolean;
   onClick: () => void;
   isPrimary?: boolean;
+  trend?: 'up' | 'down' | 'neutral';
 }
 
 export function FundCard3D({
-  config,
+  config: _config,
   val,
   pct,
   fundTranslatedName,
@@ -26,6 +27,7 @@ export function FundCard3D({
   formatCurrency,
   privacyMask,
   onClick,
+  trend,
 }: FundCard3DProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -65,24 +67,38 @@ export function FundCard3D({
             <FundIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" strokeWidth={2.4} />
           </div>
 
-          <div className="relative h-7 w-7 sm:h-7.5 sm:w-7.5 shrink-0">
-            <svg className="h-full w-full -rotate-90" viewBox="0 0 36 36">
-              <circle cx="18" cy="18" r="14.5" fill="none" stroke="currentColor" className="text-slate-200/70 dark:text-slate-800" strokeWidth="3.2" />
-              <circle
-                cx="18"
-                cy="18"
-                r="14.5"
-                fill="none"
-                stroke="var(--theme-primary,#38BDF8)"
-                strokeWidth="3.2"
-                strokeDasharray="91.1"
-                strokeDashoffset={91.1 - (91.1 * clampedPct) / 100}
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-[8.5px] sm:text-[9.5px] font-black font-mono text-[var(--theme-text,#0F172A)] notranslate" translate="no">
-              {Math.round(clampedPct)}%
-            </span>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {trend && trend !== 'neutral' && (
+              <span
+                className={`inline-flex items-center gap-0.5 text-[7.5px] sm:text-[8px] font-bold px-1 py-0.5 rounded ${
+                  trend === 'up'
+                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                    : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                }`}
+                title={trend === 'up' ? 'Trending up vs last month' : 'Trending down vs last month'}
+              >
+                {trend === 'up' ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
+              </span>
+            )}
+            <div className="relative h-7 w-7 sm:h-7.5 sm:w-7.5 shrink-0">
+              <svg className="h-full w-full -rotate-90" viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="14.5" fill="none" stroke="currentColor" className="text-slate-200/70 dark:text-slate-800" strokeWidth="3.2" />
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="14.5"
+                  fill="none"
+                  stroke="var(--theme-primary,#38BDF8)"
+                  strokeWidth="3.2"
+                  strokeDasharray="91.1"
+                  strokeDashoffset={91.1 - (91.1 * clampedPct) / 100}
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-[8.5px] sm:text-[9.5px] font-black font-mono text-[var(--theme-text,#0F172A)] notranslate" translate="no">
+                {Math.round(clampedPct)}%
+              </span>
+            </div>
           </div>
         </div>
 

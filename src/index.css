@@ -2,23 +2,23 @@
 
 @layer base {
   :root {
-    /* Base Neutral Surface Architecture (Default: Electric Sky Blue Midnight Canvas) */
-    --theme-bg: #070E1A;
-    --theme-surface: #0C182B;
-    --theme-card: #12223D;
-    --theme-card-hover: #192E52;
-    --theme-border: rgba(56, 189, 248, 0.22);
-    --theme-border-subtle: rgba(56, 189, 248, 0.10);
-    --theme-text: #F0F6FC;
-    --theme-text-muted: #93B5E0;
-    --theme-text-dim: #6282AA;
+    /* Base Neutral Surface Architecture (Default: Polished Sapphire Midnight Canvas) */
+    --theme-bg: #060D19;
+    --theme-surface: #0B172A;
+    --theme-card: #10213B;
+    --theme-card-hover: #162C4E;
+    --theme-border: rgba(56, 189, 248, 0.26);
+    --theme-border-subtle: rgba(56, 189, 248, 0.14);
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #94A3B8;
+    --theme-text-dim: #64748B;
 
     /* Theme Primary Accent Tokens */
     --theme-primary: #38BDF8;
     --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.14);
-    --theme-primary-border: rgba(56, 189, 248, 0.35);
-    --theme-glow: rgba(56, 189, 248, 0.20);
+    --theme-primary-dim: rgba(56, 189, 248, 0.18);
+    --theme-primary-border: rgba(56, 189, 248, 0.40);
+    --theme-glow: rgba(56, 189, 248, 0.22);
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
@@ -35,21 +35,21 @@
 
   [data-theme="blue"] {
     /* Midnight Navy Deep Blue Atmosphere */
-    --theme-bg: #070E1A;
-    --theme-surface: #0C182B;
-    --theme-card: #12223D;
-    --theme-card-hover: #192E52;
-    --theme-border: rgba(56, 189, 248, 0.22);
-    --theme-border-subtle: rgba(56, 189, 248, 0.10);
-    --theme-text: #F0F6FC;
-    --theme-text-muted: #93B5E0;
-    --theme-text-dim: #6282AA;
+    --theme-bg: #060D19;
+    --theme-surface: #0B172A;
+    --theme-card: #10213B;
+    --theme-card-hover: #162C4E;
+    --theme-border: rgba(56, 189, 248, 0.26);
+    --theme-border-subtle: rgba(56, 189, 248, 0.14);
+    --theme-text: #F8FAFC;
+    --theme-text-muted: #94A3B8;
+    --theme-text-dim: #64748B;
 
     --theme-primary: #38BDF8;
     --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.14);
-    --theme-primary-border: rgba(56, 189, 248, 0.35);
-    --theme-glow: rgba(56, 189, 248, 0.20);
+    --theme-primary-dim: rgba(56, 189, 248, 0.18);
+    --theme-primary-border: rgba(56, 189, 248, 0.40);
+    --theme-glow: rgba(56, 189, 248, 0.22);
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
@@ -397,6 +397,21 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Smooth Theme Switch Transitions */
+  [data-theme] {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+  [data-theme] nav,
+  [data-theme] header,
+  [data-theme] footer,
+  [data-theme] main,
+  [data-theme] .summary-card-3d,
+  [data-theme] .fund-card-3d,
+  [data-theme] .quick-access-btn,
+  [data-theme] .homepage-elevated-card {
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 }
 
@@ -1132,6 +1147,44 @@
   color: var(--theme-text-muted, #94A3B8) !important;
 }
 
+/* Summary Cards 3D Default (Dark Themes: Elevated Background, Bright Teal/Cyan Border & Depth Shadow) */
+.summary-card-3d {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%), #0F1B24 !important;
+  border: 1px solid rgba(6, 182, 212, 0.35) !important;
+  box-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="cyan"] .summary-card-3d {
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.07) 0%, rgba(34, 211, 238, 0.01) 100%), #0D212E !important;
+  border: 1px solid rgba(34, 211, 238, 0.45) !important;
+  box-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.55), 0 2px 6px -1px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(34, 211, 238, 0.15) !important;
+}
+
+[data-theme="black"] .summary-card-3d {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%), #131722 !important;
+  border: 1px solid rgba(56, 189, 248, 0.38) !important;
+}
+
+.summary-card-3d:hover {
+  border-color: rgba(34, 211, 238, 0.6) !important;
+}
+
+/* Icon chip background (sun/calendar icons) in dark mode: visible dark-teal tinted box */
+.summary-card-icon-box {
+  background-color: rgba(6, 182, 212, 0.22) !important;
+  border: 1px solid rgba(6, 182, 212, 0.45) !important;
+  color: #22D3EE !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="light"] .summary-card-icon-box,
+[data-theme="white"] .summary-card-icon-box {
+  background-color: rgba(2, 132, 199, 0.12) !important;
+  border: 1px solid rgba(2, 132, 199, 0.30) !important;
+  color: #0284C7 !important;
+  box-shadow: none !important;
+}
+
 /* Income Stat Box in color themes */
 .summary-stat-box-income {
   border-color: var(--theme-border, #213E61) !important;
@@ -1141,7 +1194,7 @@
   color: #4ADE80 !important;
 }
 .summary-stat-box-income .summary-stat-income {
-  color: #22C55E !important;
+  color: #34D399 !important;
   font-weight: 800 !important;
 }
 
@@ -1154,16 +1207,34 @@
   color: #FB7185 !important;
 }
 .summary-stat-box-expense .summary-stat-expense {
-  color: #F43F5E !important;
+  color: #FB7185 !important;
   font-weight: 800 !important;
 }
 
-/* Net figures in color themes */
+/* Net figures in color themes (High WCAG AA Contrast) */
 .summary-net-positive {
-  color: #22C55E !important;
+  color: #34D399 !important;
 }
 .summary-net-negative {
-  color: #F43F5E !important;
+  color: #FB7185 !important;
+}
+
+/* Unified card elevation across Homepage widgets */
+.homepage-elevated-card {
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.42), 0 1px 4px -1px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+[data-theme="light"] .homepage-elevated-card,
+[data-theme="white"] .homepage-elevated-card {
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.02);
+}
+
+.fund-card-3d {
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+[data-theme="light"] .fund-card-3d,
+[data-theme="white"] .fund-card-3d {
+  box-shadow: 0 3px 12px -2px rgba(0, 0, 0, 0.05) !important;
+  border-color: #E2E8F0 !important;
 }
 
 /* Light & White Day Mode - Completely Untouched and Sharp */
@@ -1304,19 +1375,27 @@
 [data-theme="white"] .banking-card-3d .banking-card-icon-box,
 [data-theme="light"] .banking-card-3d .banking-card-date-box,
 [data-theme="white"] .banking-card-3d .banking-card-date-box {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  background-color: #F0F9FF !important;
+  border: 1px solid rgba(56, 189, 248, 0.40) !important;
   color: #0284C7 !important;
   box-shadow: none !important;
   filter: none !important;
+  -webkit-filter: none !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-icon-box svg,
 [data-theme="white"] .banking-card-3d .banking-card-icon-box svg,
 [data-theme="light"] .banking-card-wallet-graphic,
-[data-theme="white"] .banking-card-wallet-graphic {
+[data-theme="white"] .banking-card-wallet-graphic,
+[data-theme="light"] .banking-card-wallet-graphic svg,
+[data-theme="white"] .banking-card-wallet-graphic svg,
+[data-theme="light"] .banking-card-wallet-graphic *,
+[data-theme="white"] .banking-card-wallet-graphic * {
   filter: none !important;
+  -webkit-filter: none !important;
   box-shadow: none !important;
+  drop-shadow: none !important;
+  text-shadow: none !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-date,
@@ -1327,7 +1406,7 @@
 
 [data-theme="light"] .banking-card-3d .banking-card-waves,
 [data-theme="white"] .banking-card-3d .banking-card-waves {
-  opacity: 0.45 !important;
+  opacity: 0.15 !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-glare,
@@ -1758,5 +1837,43 @@ html, body {
 [data-theme="light"] .summary-net-negative,
 [data-theme="white"] .summary-net-negative {
   color: #B91C1C !important;
+}
+
+/* =========================================================================
+   PREMIUM THEME SURFACE & ELEVATED CARD ARCHITECTURE
+   Dynamically binds cards and surfaces to active theme variables.
+   ========================================================================= */
+.homepage-elevated-card {
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.40), 0 1px 4px 0 rgba(0, 0, 0, 0.25) !important;
+  border-color: var(--theme-border) !important;
+  background-color: var(--theme-card) !important;
+}
+
+[data-theme="white"] .homepage-elevated-card,
+[data-theme="light"] .homepage-elevated-card {
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  border-color: var(--theme-border) !important;
+  background-color: var(--theme-card) !important;
+}
+
+/* Dynamically bind legacy static classes to current active theme palette */
+:root [class*="bg-[#132438]"],
+[data-theme] [class*="bg-[#132438]"] {
+  background-color: var(--theme-card);
+}
+
+:root [class*="bg-[#0E1A29]"],
+[data-theme] [class*="bg-[#0E1A29]"] {
+  background-color: var(--theme-surface);
+}
+
+:root [class*="bg-[#070E18]"],
+[data-theme] [class*="bg-[#070E18]"] {
+  background-color: var(--theme-bg);
+}
+
+:root [class*="border-[#213E61]"],
+[data-theme] [class*="border-[#213E61]"] {
+  border-color: var(--theme-border);
 }
 

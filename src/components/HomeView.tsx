@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Entry, FundType, FundConfig, AppLanguage, CategoryBudget, DebtItem, Goal } from '../types';
 import { DEFAULT_FUNDS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats } from '../utils/khataCalculations';
-import { getFundIcon } from '../utils/iconMap';
+import { getFundIcon, getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
 import { getPageTranslation } from '../utils/pageTranslations';
 import { HomepageFundSelectorModal } from './HomepageFundSelectorModal';
@@ -127,6 +127,65 @@ export const HomeView: React.FC<HomeViewProps> = ({
     const primaryIds = new Set(primaryFunds.map((f) => f.id));
     return activeFunds.filter((f) => !primaryIds.has(f.id));
   }, [activeFunds, primaryFunds]);
+
+  const [recentFilter, setRecentFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
+
+  const categoryTrends = useMemo(() => {
+    const now = new Date();
+    const curYear = now.getFullYear();
+    const curMonth = now.getMonth();
+    const prevMonthDate = new Date(curYear, curMonth - 1, 1);
+    const curMonthPrefix = `${curYear}-${String(curMonth + 1).padStart(2, '0')}`;
+    const prevMonthPrefix = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth() + 1).padStart(2, '0')}`;
+
+    const curMonthSums: Record<string, number> = {};
+    const prevMonthSums: Record<string, number> = {};
+
+    entries.forEach((entry) => {
+      if (!entry.date) return;
+      const amount = Math.abs(entry.amount || 0);
+      const categoryKey = (entry.fund || entry.category || '').toLowerCase();
+      if (entry.date.startsWith(curMonthPrefix)) {
+        curMonthSums[categoryKey] = (curMonthSums[categoryKey] || 0) + amount;
+      } else if (entry.date.startsWith(prevMonthPrefix)) {
+        prevMonthSums[categoryKey] = (prevMonthSums[categoryKey] || 0) + amount;
+      }
+    });
+
+    const trends: Record<string, 'up' | 'down' | 'neutral'> = {};
+    activeFunds.forEach((f) => {
+      const key = f.id.toLowerCase();
+      const cur = curMonthSums[key] || 0;
+      const prev = prevMonthSums[key] || 0;
+      if (cur > prev) trends[f.id] = 'up';
+      else if (cur < prev && prev > 0) trends[f.id] = 'down';
+      else trends[f.id] = 'neutral';
+    });
+    return trends;
+  }, [entries, activeFunds]);
+
+  const filteredRecentEntries = useMemo(() => {
+    const sorted = entries.slice().sort((a, b) => b.createdAt - a.createdAt);
+    if (recentFilter === 'all') return sorted.slice(0, 4);
+
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysStr = sevenDaysAgo.toISOString().slice(0, 10);
+    const curMonthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+    if (recentFilter === 'today') {
+      return sorted.filter((e) => e.date === todayStr).slice(0, 4);
+    }
+    if (recentFilter === 'week') {
+      return sorted.filter((e) => e.date && e.date >= sevenDaysStr).slice(0, 4);
+    }
+    if (recentFilter === 'month') {
+      return sorted.filter((e) => e.date && e.date.startsWith(curMonthPrefix)).slice(0, 4);
+    }
+    return sorted.slice(0, 4);
+  }, [entries, recentFilter]);
 
   const localeMap: Record<string, string> = {
     hi: 'hi-IN',
@@ -258,7 +317,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 3. QUICK ACCESS */}
       <motion.section
-        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs"
+        className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.06 }}
@@ -396,6 +455,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 privacyMask={privacyMask}
                 onClick={() => onFilterFund(config.id)}
                 isPrimary={true}
+                trend={categoryTrends[config.id]}
               />
             );
           })}
@@ -448,6 +508,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   privacyMask={privacyMask}
                   onClick={() => onFilterFund(config.id)}
                   isPrimary={false}
+                  trend={categoryTrends[config.id]}
                 />
               );
             })}
@@ -457,13 +518,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 6. RECENT TRANSACTIONS */}
       <motion.section
-        className="rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs"
+        className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.3, delay: 0.12 }}
       >
-        <div className="flex items-center justify-between gap-2 pb-3 border-b border-[var(--theme-border,#213E61)]/40">
+        <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-[var(--theme-border,#213E61)]/40">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-cyan-400/15 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0">
               <History className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
@@ -487,29 +548,58 @@ export const HomeView: React.FC<HomeViewProps> = ({
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-          {entries
-            .slice()
-            .sort((a, b) => b.createdAt - a.createdAt)
-            .slice(0, 4)
-            .map((entry) => (
+        {/* Quick filter chips row (All / Today / Week / Month) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-2.5 pb-1">
+          {[
+            { id: 'all', label: isHindi ? 'सभी' : 'All' },
+            { id: 'today', label: isHindi ? 'आज' : 'Today' },
+            { id: 'week', label: isHindi ? 'इस सप्ताह' : 'Week' },
+            { id: 'month', label: isHindi ? 'इस महीने' : 'Month' },
+          ].map((chip) => (
+            <button
+              key={chip.id}
+              type="button"
+              onClick={() => setRecentFilter(chip.id as any)}
+              className={`px-2.5 py-1 rounded-lg text-[9.5px] sm:text-[10.5px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                recentFilter === chip.id
+                  ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 font-black shadow-xs'
+                  : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] border border-[var(--theme-border,#213E61)]/60 hover:text-[var(--theme-text,#F8FAFC)]'
+              }`}
+            >
+              {chip.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2.5">
+          {filteredRecentEntries.map((entry) => {
+            const TxIcon = entry.type === 'income'
+              ? getSourceIcon(entry.source || entry.category || '')
+              : getCategoryIcon(entry.category || '');
+
+            return (
               <div
                 key={entry.id}
-                className="min-w-0 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-2.5 sm:p-3 flex items-center justify-between gap-2 hover:border-[var(--theme-primary,#38BDF8)]/40 transition-colors"
+                className="min-w-0 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-2.5 sm:p-3 flex items-center justify-between gap-2 hover:border-[var(--theme-primary,#38BDF8)]/40 transition-colors shadow-xs"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div
-                    className={`h-8 w-8 rounded-xl shrink-0 flex items-center justify-center ${
+                    className={`relative h-8 w-8 sm:h-9 sm:w-9 rounded-xl shrink-0 flex items-center justify-center ${
                       entry.type === 'income'
-                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'
-                        : 'bg-rose-500/15 text-rose-400 border border-rose-500/25'
+                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                        : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
                     }`}
                   >
-                    {entry.type === 'income' ? (
-                      <ArrowUpRight className="w-4 h-4" />
-                    ) : (
-                      <ArrowDownRight className="w-4 h-4" />
-                    )}
+                    <TxIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.2]" />
+                    <span
+                      className={`absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full flex items-center justify-center text-[7.5px] font-black border ${
+                        entry.type === 'income'
+                          ? 'bg-emerald-500 text-slate-950 border-slate-900'
+                          : 'bg-rose-500 text-white border-slate-900'
+                      }`}
+                    >
+                      {entry.type === 'income' ? '+' : '-'}
+                    </span>
                   </div>
                   <div className="min-w-0">
                     <span className="block text-[11px] sm:text-xs font-bold text-[var(--theme-text,#F8FAFC)] truncate">
@@ -528,11 +618,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   {formatCurrency(entry.amount, privacyMask)}
                 </span>
               </div>
-            ))}
+            );
+          })}
 
-          {entries.length === 0 && (
+          {filteredRecentEntries.length === 0 && (
             <div className="col-span-full text-center py-6 text-[11px] text-slate-500">
-              {isHindi ? 'कोई लेन-देन नहीं मिला' : 'No recent transactions'}
+              {isHindi ? 'कोई लेन-देन नहीं मिला' : 'No transactions for selected period'}
             </div>
           )}
         </div>
@@ -541,7 +632,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 7. MOTIVATIONAL / FINANCIAL HINT (Theme-aware frosted glass card) */}
       <motion.div
         onClick={handleNextTip}
-        className="rounded-[20px] sm:rounded-2xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-xs cursor-pointer hover:border-[var(--theme-primary,#38BDF8)]/40 transition-all select-none"
+        className="homepage-elevated-card rounded-[20px] sm:rounded-2xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-xs cursor-pointer hover:border-[var(--theme-primary,#38BDF8)]/40 transition-all select-none"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

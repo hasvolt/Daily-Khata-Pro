@@ -219,6 +219,17 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
       routePath: '/calculator',
       keywords: ['gst', 'tax', 'bill', 'cgst', 'sgst', 'vat', 'कर', 'जीएसटी', 'टैक्स']
     },
+    {
+      id: 'invoice-gen',
+      title: isHindi ? 'इनवॉइस व बिल जनरेटर' : 'Professional Invoice & Bill Generator',
+      subtitle: isHindi ? 'GST बिल, रसीद, UPI QR कोड व PDF प्रिंट जनरेट करें' : 'Create professional GST invoices, receipts, UPI QR code & print PDF',
+      category: 'tools',
+      categoryLabel: isHindi ? 'टूल्स एवं लॉग्स' : 'Tools & Trackers',
+      icon: FileText,
+      targetTab: 'invoice',
+      routePath: '/invoice',
+      keywords: ['invoice', 'bill', 'receipt', 'gst', 'tax invoice', 'quotation', 'upi qr', 'प्रिंट', 'बिल', 'इनवॉइस', 'रसीद', 'जीएसटी']
+    },
 
     // --- 3. Productive Trackers & Tools ---
     {

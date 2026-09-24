@@ -778,6 +778,32 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                     <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
                   </button>
 
+                  {/* Invoice & Bill Generator */}
+                  <button
+                    type="button"
+                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('invoice'))}
+                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
+                      currentTab === 'invoice'
+                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
+                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
+                        <FileText className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                          {isHindi ? 'इनवॉइस व बिल जनरेटर' : 'Invoice & Bill Generator'}
+                        </span>
+                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? 'दुकान व सर्विस हेतु GST बिल व UPI QR कोड' : 'Create professional GST bills, receipts & UPI QR'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
+                  </button>
+
                   {/* Savings Goals */}
                   <button
                     type="button"

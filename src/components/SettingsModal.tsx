@@ -667,12 +667,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Scrollable Tab Body */}
-        <div className="p-5 overflow-y-auto space-y-5 text-[13px] flex-1">
+        <div className="p-3.5 sm:p-5 overflow-y-auto space-y-4 sm:space-y-5 text-[13px] flex-1">
           {/* TAB 1: PREFERENCES */}
           {activeTab === 'preferences' && (
-            <div className="space-y-5">
+            <div className="space-y-4 sm:space-y-5">
               {/* Language Selector */}
-              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-2.5">
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-2.5">
                 <div className="flex items-center gap-2">
                   <Languages className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <label className="font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
@@ -813,14 +813,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Interface View Mode with Icon Buttons */}
-              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <div className="flex items-center gap-2">
                   <Monitor className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <span className="font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
                     {tr.settings.viewModeHeading}
                   </span>
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                   {[
                     { id: 'auto' as AppViewMode, label: tr.settings.viewModeAuto, icon: LayoutGrid },
                     { id: 'mobile' as AppViewMode, label: tr.settings.viewModeMobile, icon: Smartphone },
@@ -836,14 +836,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           onViewModeChange && onViewModeChange(mode.id);
                           triggerHapticSound('click');
                         }}
-                        className={`p-2.5 rounded-xl border flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        className={`p-2 sm:p-2.5 rounded-xl border flex flex-col items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer min-w-0 min-h-[62px] sm:min-h-[68px] ${
                           isActive
                             ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-text,#F8FAFC)] font-bold shadow-xs'
                             : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                         }`}
                       >
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : ''}`} />
-                        <span className="text-[11.5px] text-center whitespace-nowrap">{mode.label}</span>
+                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : ''}`} />
+                        <span className="text-[10px] sm:text-[11.5px] text-center leading-tight break-words px-0.5">{mode.label}</span>
                       </button>
                     );
                   })}
@@ -851,14 +851,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* App Layout Design with Icon Buttons */}
-              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <div className="flex items-center gap-2">
                   <Layers className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
                   <span className="font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
                     {tr.settings.layoutHeading}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2">
                   {[
                     { id: 'dashboard' as AppLayout, label: tr.settings.layoutDashboard, icon: Layers },
                     { id: 'bento' as AppLayout, label: tr.settings.layoutBento, icon: LayoutGrid },
@@ -877,14 +877,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           onLayoutChange && onLayoutChange(layout.id);
                           triggerHapticSound('click');
                         }}
-                        className={`p-2.5 rounded-xl border flex items-center gap-2 transition-all cursor-pointer ${
+                        className={`p-2 sm:p-2.5 rounded-xl border flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer min-w-0 ${
                           isActive
                             ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-text,#F8FAFC)] font-bold shadow-xs'
                             : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                         }`}
                       >
-                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : 'text-[var(--theme-text-dim,#94A3B8)]'}`} />
-                        <span className="text-[12px] truncate">{layout.label}</span>
+                        <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : 'text-[var(--theme-text-dim,#94A3B8)]'}`} />
+                        <span className="text-[10.5px] sm:text-[12px] font-medium leading-tight line-clamp-2 min-w-0 flex-1 text-left">{layout.label}</span>
                         {isActive && <Check className="w-3.5 h-3.5 ml-auto text-[var(--theme-primary,#38BDF8)] shrink-0" />}
                       </button>
                     );
@@ -893,7 +893,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Privacy Eye Mask Mode */}
-              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-3">
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2 font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
                     {privacyMask ? <EyeOff className="w-4 h-4 text-[#F59E0B]" /> : <Eye className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)]" />}
@@ -911,7 +911,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <button
                   type="button"
                   onClick={onTogglePrivacyMask}
-                  className={`px-3.5 py-2 rounded-xl font-bold text-[12.5px] border transition-all cursor-pointer ${
+                  className={`self-end sm:self-auto shrink-0 px-3.5 py-2 rounded-xl font-bold text-[12.5px] border transition-all cursor-pointer ${
                     privacyMask
                       ? 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40'
                       : 'bg-[var(--theme-bg,#070E18)] text-[var(--theme-text-dim,#94A3B8)] border-[var(--theme-border,#213E61)] hover:text-[var(--theme-text,#F8FAFC)]'

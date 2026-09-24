@@ -334,3 +334,133 @@ export interface DebtItem {
   updatedAt: number;
 }
 
+export type InvoiceStatus = 'draft' | 'unpaid' | 'paid' | 'overdue';
+export type InvoiceTaxType = 'cgst_sgst' | 'igst' | 'single' | 'none';
+export type InvoicePaymentTerms = 'receipt' | 'net7' | 'net15' | 'net30' | 'net45' | 'net60' | 'custom';
+export type InvoiceTemplateTheme = 'modern' | 'corporate' | 'minimal' | 'retail';
+
+export interface InvoiceItem {
+  id: string;
+  description: string;
+  hsnSac?: string;
+  quantity: number;
+  unit: string;
+  rate: number;
+  discountType: 'percent' | 'flat';
+  discountValue: number;
+  taxRate: number; // e.g. 18 for 18%
+  taxableAmount: number;
+  taxAmount: number;
+  totalAmount: number;
+}
+
+export interface InvoiceBusinessProfile {
+  businessName: string;
+  logoUrl?: string;
+  address: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  country?: string;
+  gstin?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  bankName?: string;
+  accountName?: string;
+  accountNumber?: string;
+  ifscCode?: string;
+  branchName?: string;
+  upiId?: string;
+  upiPayeeName?: string;
+  paymentLink?: string;
+  acceptedMethods?: string[];
+  defaultNotes?: string;
+  defaultTerms?: string;
+  defaultCurrency?: string;
+  defaultCurrencyCode?: string;
+  signatureData?: string;
+  signatureType?: 'text' | 'draw' | 'upload';
+  signatureText?: string;
+}
+
+export interface InvoiceClientInfo {
+  clientName: string;
+  companyName?: string;
+  billingAddress: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  country?: string;
+  hasShippingAddress?: boolean;
+  shippingAddress?: string;
+  gstin?: string;
+  phone?: string;
+  email?: string;
+}
+
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  dueDate: string;
+  poNumber?: string;
+  paymentTerms: InvoicePaymentTerms;
+  customPaymentTerms?: string;
+  status: InvoiceStatus;
+
+  // Business & Client
+  sender: InvoiceBusinessProfile;
+  client: InvoiceClientInfo;
+
+  // Items & Calculations
+  items: InvoiceItem[];
+  subtotal: number;
+  itemDiscountTotal: number;
+  extraDiscountType: 'percent' | 'flat';
+  extraDiscountValue: number;
+  extraDiscountTotal: number;
+  totalDiscount: number;
+  taxType: InvoiceTaxType;
+  taxTotal: number;
+  cgst: number;
+  sgst: number;
+  igst: number;
+  shippingCharges: number;
+  roundOff: number;
+  grandTotal: number;
+  amountInWords: string;
+
+  // Payment info
+  bankDetails?: {
+    bankName?: string;
+    accountName?: string;
+    accountNumber?: string;
+    ifscCode?: string;
+    branchName?: string;
+  };
+  upiDetails?: {
+    upiId?: string;
+    payeeName?: string;
+  };
+  paymentLink?: string;
+  acceptedMethods: string[];
+
+  // Extras
+  currency: string;
+  currencyCode: string;
+  templateTheme: InvoiceTemplateTheme;
+  notes?: string;
+  terms?: string;
+  signatureType?: 'text' | 'draw' | 'upload';
+  signatureData?: string;
+  signatureText?: string;
+
+  // Khata integration
+  isRecordedInKhata?: boolean;
+  recordedKhataEntryId?: string;
+
+  createdAt: number;
+  updatedAt: number;
+}
+
