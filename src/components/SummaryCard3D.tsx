@@ -71,12 +71,12 @@ export function SummaryCard3D({
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.2 }}
-        className="group summary-card-3d homepage-elevated-card relative overflow-hidden rounded-[18px] sm:rounded-2xl border border-[#143750] dark:border-[#143750] hover:border-sky-500/50 bg-[var(--theme-card,#0c1d2e)] shadow-sm hover:shadow-md transition-all cursor-pointer select-none text-left px-3 py-2 sm:px-3.5 sm:py-2.5 md:p-3.5"
+        className="group summary-card-3d homepage-elevated-card relative overflow-hidden rounded-[18px] sm:rounded-2xl border border-[var(--theme-border,#143750)] hover:border-[var(--theme-primary,#38BDF8)]/50 bg-[var(--theme-card,#0c1d2e)] shadow-sm hover:shadow-md transition-all cursor-pointer select-none text-left px-3 py-2 sm:px-3.5 sm:py-2.5 md:p-3.5"
       >
         {/* Top Header Row */}
         <div className="relative z-10 flex items-center justify-between gap-1.5 mb-1.5 sm:mb-2">
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl border border-sky-400/40 bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(56,189,248,0.2)] transition-transform duration-200 group-hover:scale-105">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.4))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(56,189,248,0.2)] transition-transform duration-200 group-hover:scale-105">
               <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
             </div>
             <div className="min-w-0 flex-1">
@@ -90,7 +90,7 @@ export function SummaryCard3D({
           </div>
 
           {/* Period Badge */}
-          <div className="summary-badge px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-lg border border-sky-700/50 bg-[#0b2234]/85 text-sky-300 text-[9.5px] sm:text-[10.5px] font-bold shrink-0 shadow-2xs notranslate">
+          <div className="summary-badge px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-lg border border-[var(--theme-border,#143750)] bg-[var(--theme-surface,#0b2234)] text-[var(--theme-primary,#38BDF8)] text-[9.5px] sm:text-[10.5px] font-bold shrink-0 shadow-2xs notranslate">
             {periodBadge}
           </div>
         </div>
@@ -137,7 +137,7 @@ export function SummaryCard3D({
         {/* Bottom Savings Row */}
         <div className="summary-stat-box relative z-10 mt-1.5 sm:mt-2 rounded-xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#071927)] px-2.5 py-1.5 sm:px-3 sm:py-1.5 flex items-center justify-between shadow-2xs">
           <div className="flex items-center gap-2">
-            <div className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-lg bg-sky-500/15 border border-sky-500/35 text-sky-400 flex items-center justify-center shrink-0 shadow-2xs">
+            <div className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-lg bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-2xs">
               <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
             </div>
             <span className="summary-stat-label text-[10.5px] sm:text-[11.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">

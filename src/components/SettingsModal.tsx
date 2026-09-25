@@ -576,6 +576,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const themeList: { id: AppTheme; label: string; dot: string; isLight?: boolean }[] = [
+    { id: 'dark', label: tStr('🌙 2026 टाइटेनियम ब्लैक (New Model)', '🌙 2026 Titanium Black (New Model)', '🌙 Titanium Black (New Model)'), dot: '#6366F1' },
+    { id: 'black', label: tStr('डीप ओब्सीडियन (Obsidian)', 'Deep Obsidian (Obsidian)', 'Deep Obsidian'), dot: '#4F46E5' },
+    { id: 'monochrome', label: tStr('प्रीमियम ब्लैक & वाइट (Monochrome)', 'Premium Black & White (Monochrome)', 'Premium Black & White (Monochrome)'), dot: '#FFFFFF' },
     { id: 'blue', label: 'Electric Blue', dot: '#38BDF8' },
     { id: 'yellow', label: 'Premium Gold', dot: '#F59E0B' },
     { id: 'orange', label: 'Sunset Orange', dot: '#F97316' },
@@ -583,10 +586,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     { id: 'purple', label: 'Royal Violet', dot: '#A855F7' },
     { id: 'cyan', label: 'Ocean Teal', dot: '#06B6D4' },
     { id: 'pink', label: 'Crimson Pink', dot: '#F43F5E' },
-    { id: 'black', label: 'Obsidian Black', dot: '#94A3B8' },
-    { id: 'monochrome', label: tStr('प्रीमियम ब्लैक & वाइट', 'Premium Black & White', 'Premium Black & White'), dot: '#FFFFFF' },
-    { id: 'light', label: tStr('दिन / वाइट मोड (Daylight)', 'Day / White Mode (Daylight)', 'Daylight White'), dot: '#0284C7', isLight: true },
-    { id: 'white', label: tStr('आउटडोर प्योर वाइट', 'Outdoor Pure White', 'Outdoor Pure White'), dot: '#2563EB', isLight: true }
+    { id: 'white', label: tStr('दिन / वाइट मोड (White)', 'Day / White Mode (White)', 'Day / White Mode'), dot: '#2563EB', isLight: true },
+    { id: 'light', label: tStr('आउटडोर डेलाइट (Light)', 'Outdoor Daylight (Light)', 'Daylight Light'), dot: '#0284C7', isLight: true }
   ];
 
   return (

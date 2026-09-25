@@ -227,16 +227,16 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClick={() => {
                   triggerHapticSound('click');
                   if (isLightMode) {
-                    onThemeChange('cyan');
+                    onThemeChange('dark');
                   } else {
                     onThemeChange('white');
                   }
                 }}
                 className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] text-[11px] font-bold transition-all cursor-pointer active:scale-95"
-                title={isLightMode ? 'डार्क मोड (Cyber Ocean)' : 'लाइट मोड (White)'}
+                title={isLightMode ? (isHindi ? 'डार्क मोड (Rich Black)' : 'Night Mode (Rich Black)') : (isHindi ? 'लाइट मोड (White)' : 'Day Mode (White)')}
                 id="menu-quick-theme-btn"
               >
-                {isLightMode ? <Moon className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" /> : <Sun className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />}
+                {isLightMode ? <Moon className="w-3.5 h-3.5 text-slate-700" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
                 <span className="hidden xs:inline">{isLightMode ? (isHindi ? 'डार्क' : 'Dark') : (isHindi ? 'लाइट' : 'Light')}</span>
               </button>
             )}

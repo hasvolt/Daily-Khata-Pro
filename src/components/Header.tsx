@@ -421,7 +421,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={() => {
                 if (isLightMode) {
-                  onThemeChange('cyan');
+                  onThemeChange('dark');
                 } else {
                   onThemeChange('white');
                 }
@@ -435,9 +435,9 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-theme-toggle-btn"
             >
               {isLightMode ? (
-                <Moon className="w-4 h-4 shrink-0" />
+                <Moon className="w-4 h-4 shrink-0 text-slate-700" />
               ) : (
-                <Sun className="w-4 h-4 shrink-0" />
+                <Sun className="w-4 h-4 shrink-0 text-amber-400" />
               )}
               <span className="hidden sm:inline">
                 {isLightMode ? tr.menu.night : tr.menu.day}
@@ -455,7 +455,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
                 privacyMask
-                  ? 'bg-sky-500/15 border-sky-500/40 text-sky-600 dark:text-sky-400 hover:bg-sky-500/25'
+                  ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border-[var(--theme-primary-border,rgba(56,189,248,0.4))] text-[var(--theme-primary,#38BDF8)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.25))]'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
               }`}
               title={privacyMask ? (isHindi ? 'बैलेंस दिखाएं' : 'Show Balance') : (isHindi ? 'बैलेंस छिपाएं' : 'Hide Balance')}
@@ -463,7 +463,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-privacy-mask-btn"
             >
               {privacyMask ? (
-                <EyeOff className="w-4 h-4 shrink-0 text-sky-500" />
+                <EyeOff className="w-4 h-4 shrink-0 text-[var(--theme-primary,#38BDF8)]" />
               ) : (
                 <Eye className="w-4 h-4 shrink-0" />
               )}
