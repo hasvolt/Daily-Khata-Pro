@@ -576,8 +576,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const themeList: { id: AppTheme; label: string; dot: string; isLight?: boolean }[] = [
-    { id: 'dark', label: tStr('🌙 2026 टाइटेनियम ब्लैक (New Model)', '🌙 2026 Titanium Black (New Model)', '🌙 Titanium Black (New Model)'), dot: '#6366F1' },
-    { id: 'black', label: tStr('डीप ओब्सीडियन (Obsidian)', 'Deep Obsidian (Obsidian)', 'Deep Obsidian'), dot: '#4F46E5' },
+    { id: 'dark', label: tStr('साइबर एमराल्ड ब्लैक (Emerald)', 'Cyber Emerald Black (Emerald)', 'Emerald Black'), dot: '#10B981' },
+    { id: 'black', label: tStr('डीप ओब्सीडियन (Obsidian)', 'Deep Obsidian (Obsidian)', 'Deep Obsidian'), dot: '#059669' },
     { id: 'monochrome', label: tStr('प्रीमियम ब्लैक & वाइट (Monochrome)', 'Premium Black & White (Monochrome)', 'Premium Black & White (Monochrome)'), dot: '#FFFFFF' },
     { id: 'blue', label: 'Electric Blue', dot: '#38BDF8' },
     { id: 'yellow', label: 'Premium Gold', dot: '#F59E0B' },

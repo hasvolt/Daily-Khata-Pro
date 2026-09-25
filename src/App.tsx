@@ -1,5 +1,6 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
 import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode, CategoryBudget, BillSplitExpense, DebtItem, DebtPayment } from './types';
 import {
@@ -436,10 +437,18 @@ function AppContent() {
     handleUrlSync();
   }, []);
 
-  // Sync theme to document element
+  // Sync theme, viewMode and appLayout to document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-view-mode', viewMode);
+  }, [viewMode]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-app-layout', appLayout);
+  }, [appLayout]);
 
   // Load from localStorage on startup
   useEffect(() => {
@@ -2367,7 +2376,16 @@ function AppContent() {
         )}
         <div className="w-full">
           <ErrorBoundary fallbackTitle="Unable to load page content" fallbackMessage="An error occurred while displaying this page. Your data is safe.">
-            <Routes>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full"
+              >
+                <Routes location={location} key={location.pathname}>
           <Route path="/" element={
             <HomeView
               appLayout={appLayout}
@@ -2819,6 +2837,8 @@ function AppContent() {
               </React.Suspense>
             } />
           </Routes>
+              </motion.div>
+            </AnimatePresence>
           </ErrorBoundary>
         </div>
       </main>

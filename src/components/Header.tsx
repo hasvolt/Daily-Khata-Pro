@@ -445,30 +445,30 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Privacy Mask Quick Toggle (Header) */}
-          {onTogglePrivacyMask && (
+          {/* Quick App Lock (Header) */}
+          {(onLockNow || onOpenSecurity) && (
             <button
               type="button"
               onClick={() => {
                 triggerHapticSound('click');
-                onTogglePrivacyMask();
+                if (isLockEnabled && onLockNow) {
+                  onLockNow();
+                } else if (onOpenSecurity) {
+                  onOpenSecurity();
+                }
               }}
               className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
-                privacyMask
-                  ? 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border-[var(--theme-primary-border,rgba(56,189,248,0.4))] text-[var(--theme-primary,#38BDF8)] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.25))]'
-                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]'
+                isLockEnabled
+                  ? 'bg-rose-500/15 border-rose-500/35 text-rose-500 dark:text-rose-400 hover:bg-rose-500/25'
+                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#34D399)]'
               }`}
-              title={privacyMask ? (isHindi ? 'बैलेंस दिखाएं' : 'Show Balance') : (isHindi ? 'बैलेंस छिपाएं' : 'Hide Balance')}
-              aria-label={privacyMask ? 'Show Balance' : 'Hide Balance'}
-              id="header-privacy-mask-btn"
+              title={isLockEnabled ? (isHindi ? 'ऐप लॉक करें' : 'Lock App Now') : (isHindi ? 'सुरक्षा लॉक सेट करें' : 'Setup App Lock')}
+              aria-label={isLockEnabled ? 'Lock App Now' : 'App Security Lock'}
+              id="header-app-lock-btn"
             >
-              {privacyMask ? (
-                <EyeOff className="w-4 h-4 shrink-0 text-[var(--theme-primary,#38BDF8)]" />
-              ) : (
-                <Eye className="w-4 h-4 shrink-0" />
-              )}
-              <span className="hidden md:inline">
-                {privacyMask ? (isHindi ? 'दिखाएं' : 'Show') : (isHindi ? 'छिपाएं' : 'Hide')}
+              <Lock className={`w-4 h-4 shrink-0 ${isLockEnabled ? 'text-rose-500 dark:text-rose-400' : ''}`} />
+              <span className="hidden sm:inline">
+                {isLockEnabled ? (isHindi ? 'लॉक' : 'Lock') : (isHindi ? 'सुरक्षा' : 'Security')}
               </span>
             </button>
           )}

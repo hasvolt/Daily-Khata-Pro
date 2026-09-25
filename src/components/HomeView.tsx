@@ -610,9 +610,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
               : getCategoryIcon(entry.category || '');
 
             return (
-              <div
+              <motion.div
                 key={entry.id}
-                className="min-w-0 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-2.5 sm:p-3 flex items-center justify-between gap-2 hover:border-[var(--theme-primary,#38BDF8)]/40 transition-colors shadow-xs"
+                whileHover={{ y: -1.5, scale: 1.008 }}
+                transition={{ duration: 0.18 }}
+                className="min-w-0 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-2.5 sm:p-3 flex items-center justify-between gap-2 hover:border-[var(--theme-primary,#38BDF8)]/40 transition-colors shadow-xs cursor-pointer select-none"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div
@@ -649,7 +651,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   {entry.type === 'income' ? '+' : '-'}
                   {formatCurrency(entry.amount, privacyMask)}
                 </span>
-              </div>
+              </motion.div>
             );
           })}
 

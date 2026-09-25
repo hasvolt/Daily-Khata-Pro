@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { Goal, AppLanguage } from '../types';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import { getGoalIcon } from '../utils/iconMap';
@@ -28,7 +29,11 @@ export const ActiveGoalsWidget: React.FC<ActiveGoalsWidgetProps> = ({
 
   if (activeGoals.length === 0) {
     return (
-      <div className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
+      <motion.div
+        whileHover={{ y: -2 }}
+        transition={{ duration: 0.2 }}
+        className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between"
+      >
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <div className="h-8 w-8 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-500 dark:text-indigo-400 flex items-center justify-center shrink-0">
@@ -91,7 +96,7 @@ export const ActiveGoalsWidget: React.FC<ActiveGoalsWidgetProps> = ({
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -101,7 +106,11 @@ export const ActiveGoalsWidget: React.FC<ActiveGoalsWidgetProps> = ({
   const linkedFundLabel = goal.linkedFund ? FUND_LABELS[goal.linkedFund] : null;
 
   return (
-    <div className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
+    <motion.div
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2 }}
+      className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between"
+    >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="h-8 w-8 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-500 dark:text-indigo-400 flex items-center justify-center shrink-0">
@@ -167,7 +176,7 @@ export const ActiveGoalsWidget: React.FC<ActiveGoalsWidgetProps> = ({
           />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

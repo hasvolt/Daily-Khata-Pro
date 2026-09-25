@@ -57,7 +57,9 @@ export function FundCard3D({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onClick={onClick}
+        whileHover={{ y: -2.5, scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.2 }}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         className="fund-card-3d group relative min-w-0 w-full cursor-pointer overflow-hidden rounded-2xl border border-[var(--theme-border,rgba(255,255,255,0.08))] bg-[var(--theme-card,#FFFFFF)] p-3 sm:p-3.5 shadow-xs transition-all duration-200 hover:border-[var(--theme-primary,#38BDF8)]/50 hover:shadow-md"
       >

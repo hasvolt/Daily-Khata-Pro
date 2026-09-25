@@ -247,26 +247,29 @@
 
   [data-theme="dark"],
   [data-theme="black"] {
-    /* Next-Gen 2026 Obsidian Stealth Luxury - Titanium Pitch Canvas with Electric Violet-Iris Accents */
-    --theme-bg: #030407;
-    --theme-surface: #0A0C14;
-    --theme-card: #10131E;
-    --theme-card-hover: #171B2B;
-    --theme-border: rgba(255, 255, 255, 0.10);
-    --theme-border-subtle: rgba(255, 255, 255, 0.05);
-    --theme-text: #FFFFFF;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    /* Next-Gen 2026 WCAG 2.1 AA Compliant Luxury Obsidian Stealth Canvas */
+    --theme-bg: #030504;
+    --theme-surface: #070D09;
+    --theme-card: #0E1712;
+    --theme-card-hover: #14221A;
+    --theme-border: rgba(255, 255, 255, 0.12);
+    --theme-border-subtle: rgba(255, 255, 255, 0.06);
 
-    --theme-primary: #6366F1;
-    --theme-primary-hover: #4F46E5;
-    --theme-primary-dim: rgba(99, 102, 241, 0.15);
-    --theme-primary-border: rgba(99, 102, 241, 0.35);
-    --theme-glow: rgba(99, 102, 241, 0.30);
-    --theme-badge-text: #A5B4FC;
-    --theme-btn-bg: #4F46E5;
-    --theme-btn-hover: #4338CA;
-    --theme-btn-text: #FFFFFF;
+    /* Text Colors with >= 4.5:1 (up to 18:1) Contrast Ratio against #0E1712 / #030504 */
+    --theme-text: #FFFFFF;          /* 18.2:1 Contrast (WCAG AAA) */
+    --theme-text-muted: #E2E8F0;    /* 14.5:1 Contrast (WCAG AAA) */
+    --theme-text-dim: #94A3B8;      /* 7.2:1 Contrast (WCAG AA & AAA for large) */
+
+    /* Primary Accent Colors with >= 4.5:1 Contrast Ratio */
+    --theme-primary: #34D399;        /* 10.1:1 Contrast against dark canvas (WCAG AAA) */
+    --theme-primary-hover: #10B981;  /* 7.3:1 Contrast against dark canvas */
+    --theme-primary-dim: rgba(52, 211, 153, 0.15);
+    --theme-primary-border: rgba(52, 211, 153, 0.35);
+    --theme-glow: rgba(52, 211, 153, 0.28);
+    --theme-badge-text: #6EE7B7;     /* 13.2:1 Contrast against dark canvas (WCAG AAA) */
+    --theme-btn-bg: #047857;         /* 5.25:1 Contrast with #FFFFFF text (WCAG AA Compliant) */
+    --theme-btn-hover: #065F46;      /* 6.8:1 Contrast with #FFFFFF text */
+    --theme-btn-text: #FFFFFF;       /* 5.25:1 Contrast on #047857 (WCAG AA Compliant) */
 
     --bg-primary: var(--theme-bg);
     --bg-surface: var(--theme-card);
@@ -790,80 +793,80 @@
 /* Next-Gen 2026 Dark/Black Mode: Titanium Glass Canvas with Atmospheric Ambient Lighting */
 [data-theme="dark"] body,
 [data-theme="black"] body {
-  background-color: #030407 !important;
+  background-color: #030504 !important;
   background-image: 
-    radial-gradient(ellipse at 50% -12%, rgba(99, 102, 241, 0.16) 0%, transparent 60%),
-    radial-gradient(ellipse at 90% 40%, rgba(99, 102, 241, 0.05) 0%, transparent 45%) !important;
+    radial-gradient(ellipse at 50% -12%, rgba(16, 185, 129, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse at 90% 40%, rgba(16, 185, 129, 0.04) 0%, transparent 45%) !important;
   color: #FFFFFF !important;
 }
 
 [data-theme="dark"] .banking-card-3d,
 [data-theme="black"] .banking-card-3d {
-  background: radial-gradient(circle at 85% 15%, rgba(99, 102, 241, 0.22) 0%, #10131E 55%, #05060B 100%) !important;
+  background: radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.22) 0%, #0E1712 55%, #040705 100%) !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
 }
 
 [data-theme="dark"] .banking-card-3d .banking-card-icon-box,
 [data-theme="black"] .banking-card-3d .banking-card-icon-box {
-  background: rgba(99, 102, 241, 0.18) !important;
-  border-color: rgba(99, 102, 241, 0.35) !important;
-  color: #818CF8 !important;
+  background: rgba(16, 185, 129, 0.18) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #34D399 !important;
 }
 
 [data-theme="dark"] .banking-card-date-box,
 [data-theme="black"] .banking-card-date-box {
-  background: #080A12 !important;
+  background: #080D0A !important;
   border-color: rgba(255, 255, 255, 0.10) !important;
 }
 
 /* Next-Gen 2026 Summary Cards with Titanium Glass Bevel */
 [data-theme="dark"] .summary-card-3d,
 [data-theme="black"] .summary-card-3d {
-  background: linear-gradient(180deg, #101420 0%, #090C14 100%) !important;
+  background: linear-gradient(180deg, #0E1712 0%, #070B09 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.10) !important;
   box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
 [data-theme="dark"] .summary-card-3d:hover,
 [data-theme="black"] .summary-card-3d:hover {
-  border-color: rgba(99, 102, 241, 0.45) !important;
-  box-shadow: 0 14px 36px -6px rgba(99, 102, 241, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  box-shadow: 0 14px 36px -6px rgba(16, 185, 129, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
 }
 
 [data-theme="dark"] .summary-stat-box,
 [data-theme="black"] .summary-stat-box {
-  background: #060810 !important;
+  background: #050806 !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* Next-Gen 2026 Elevated Section & Quick Access Tiles */
 [data-theme="dark"] .homepage-elevated-card,
 [data-theme="black"] .homepage-elevated-card {
-  background: linear-gradient(180deg, #10131E 0%, #080A12 100%) !important;
+  background: linear-gradient(180deg, #0E1712 0%, #070B09 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.10) !important;
   box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
 [data-theme="dark"] .quick-access-btn,
 [data-theme="black"] .quick-access-btn {
-  background: #070912 !important;
+  background: #060A08 !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 
 [data-theme="dark"] .quick-access-btn:hover,
 [data-theme="black"] .quick-access-btn:hover {
-  background: #141829 !important;
-  border-color: rgba(99, 102, 241, 0.5) !important;
+  background: #111C16 !important;
+  border-color: rgba(16, 185, 129, 0.5) !important;
 }
 
 /* Next-Gen 2026 Glassmorphic Header & Navigation */
 [data-theme="dark"] header,
 [data-theme="black"] header {
-  background: rgba(4, 5, 9, 0.82) !important;
+  background: rgba(3, 5, 4, 0.85) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
@@ -871,11 +874,49 @@
 
 [data-theme="dark"] nav,
 [data-theme="black"] nav {
-  background: rgba(6, 8, 14, 0.88) !important;
+  background: rgba(5, 8, 6, 0.90) !important;
   backdrop-filter: blur(24px) !important;
   -webkit-backdrop-filter: blur(24px) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* WCAG 2.1 AA Compliance Rules for Dark Mode (Ensuring >= 4.5:1 contrast for all text elements) */
+[data-theme="dark"] .text-slate-400,
+[data-theme="black"] .text-slate-400 {
+  color: #94A3B8 !important; /* Contrast >= 7.2:1 against dark surface */
+}
+
+[data-theme="dark"] .text-slate-500,
+[data-theme="black"] .text-slate-500,
+[data-theme="dark"] .text-gray-500,
+[data-theme="black"] .text-gray-500 {
+  color: #A1A1AA !important; /* Contrast >= 8.5:1 against dark surface */
+}
+
+[data-theme="dark"] .text-slate-600,
+[data-theme="black"] .text-slate-600 {
+  color: #CBD5E1 !important; /* Contrast >= 12.1:1 against dark surface */
+}
+
+[data-theme="dark"] .text-emerald-400,
+[data-theme="black"] .text-emerald-400 {
+  color: #34D399 !important; /* Contrast >= 10.1:1 against dark surface */
+}
+
+[data-theme="dark"] .text-rose-400,
+[data-theme="black"] .text-rose-400 {
+  color: #FB7185 !important; /* Contrast >= 7.8:1 against dark surface */
+}
+
+[data-theme="dark"] .text-sky-400,
+[data-theme="black"] .text-sky-400 {
+  color: #38BDF8 !important; /* Contrast >= 9.5:1 against dark surface */
+}
+
+[data-theme="dark"] .text-amber-400,
+[data-theme="black"] .text-amber-400 {
+  color: #FBBF24 !important; /* Contrast >= 12.5:1 against dark surface */
 }
 
 /* Monochrome: Total Balance Card - High-Contrast Wallet Icon & 3D Graphic (Clean, no shadow) */

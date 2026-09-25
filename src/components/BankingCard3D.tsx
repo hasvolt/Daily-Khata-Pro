@@ -112,13 +112,14 @@ export function BankingCard3D({
                     e.stopPropagation();
                     if (onTogglePrivacyMask) onTogglePrivacyMask();
                   }}
-                  title={privacyMask ? 'Show Balance' : 'Hide Balance'}
-                  className="text-slate-300 hover:text-white transition-colors cursor-pointer p-0.5 shrink-0"
+                  title={privacyMask ? (isHindi ? 'बैलेंस दिखाएं' : 'Show Balance') : (isHindi ? 'बैलेंस छिपाएं' : 'Hide Balance')}
+                  className="text-slate-200 hover:text-white p-1 rounded-lg hover:bg-white/10 active:scale-90 transition-all cursor-pointer shrink-0"
+                  aria-label={privacyMask ? 'Show Balance' : 'Hide Balance'}
                 >
                   {privacyMask ? (
-                    <EyeOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" />
+                    <EyeOff className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-[var(--theme-primary,#34D399)]" strokeWidth={2.4} />
                   ) : (
-                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-300" />
+                    <Eye className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-slate-200" strokeWidth={2.4} />
                   )}
                 </button>
               </div>

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { motion } from 'motion/react';
 import { DebtItem, AppLanguage } from '../types';
 import { formatCurrency } from '../utils/khataCalculations';
 import { Landmark, ArrowUpRight, ArrowDownLeft, ChevronRight, Plus, AlertCircle, ShieldCheck } from 'lucide-react';
@@ -55,7 +56,11 @@ export const LoanUdharWidget: React.FC<LoanUdharWidgetProps> = ({
 
   if (isAllZero) {
     return (
-      <div className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
+      <motion.div
+        whileHover={{ y: -2 }}
+        transition={{ duration: 0.2 }}
+        className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between"
+      >
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <div className="h-8 w-8 rounded-xl bg-cyan-400/15 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0">
@@ -106,12 +111,16 @@ export const LoanUdharWidget: React.FC<LoanUdharWidgetProps> = ({
             Open Loan Ledger <ChevronRight className="w-3 h-3" />
           </button>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between">
+    <motion.div
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2 }}
+      className="homepage-elevated-card rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 bg-[var(--theme-card,#132438)]/90 backdrop-blur-xl p-3.5 sm:p-4 md:p-5 shadow-xs flex flex-col justify-between"
+    >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <div className="h-8 w-8 rounded-xl bg-cyan-400/15 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0">
@@ -176,7 +185,7 @@ export const LoanUdharWidget: React.FC<LoanUdharWidgetProps> = ({
           </button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
