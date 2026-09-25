@@ -408,16 +408,23 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
     const oldTitle = document.title;
     const sanitizedNumber = (currentInvoice.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9_-]/g, '_');
     document.title = `Invoice_${sanitizedNumber}_Rozfiber`;
+    document.body.classList.add('is-printing-invoice');
+
+    const cleanUpPrint = () => {
+      document.body.classList.remove('is-printing-invoice');
+      document.title = oldTitle;
+      window.removeEventListener('afterprint', cleanUpPrint);
+    };
+    window.addEventListener('afterprint', cleanUpPrint);
 
     setTimeout(() => {
       try {
         window.print();
       } catch (e) {
         console.error('Print trigger failed', e);
+        cleanUpPrint();
       }
-      setTimeout(() => {
-        document.title = oldTitle;
-      }, 1500);
+      setTimeout(cleanUpPrint, 1500);
     }, 150);
   };
 

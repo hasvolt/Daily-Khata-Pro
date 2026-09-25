@@ -4,11 +4,14 @@
  * 100% Offline-First Architecture, Resilient Asset Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.8.4';
+const CACHE_NAME = 'daily-khata-pro-v2.8.5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/favicon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
   '/daily-khata-pro-v4.png',
   '/daily-Khata-Pro.png',
   '/daily-Khata-Pro-aap-icon.png',
@@ -246,7 +249,9 @@ self.addEventListener('fetch', (event) => {
         // 3. Network failed & not in cache: offline fallback
         if (event.request.destination === 'image') {
           const fallbackImg = (await caches.match('/daily-khata-pro-v4.png', { ignoreSearch: true, ignoreVary: true })) ||
-                              (await caches.match('/icons/icon-192x192.png', { ignoreSearch: true, ignoreVary: true }));
+                              (await caches.match('/daily-Khata-Pro.png', { ignoreSearch: true, ignoreVary: true })) ||
+                              (await caches.match('/icon-192.png', { ignoreSearch: true, ignoreVary: true })) ||
+                              (await caches.match('/favicon.png', { ignoreSearch: true, ignoreVary: true }));
           if (fallbackImg) return fallbackImg;
         }
         if (event.request.destination === 'font') {

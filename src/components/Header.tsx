@@ -144,12 +144,24 @@ export const Header: React.FC<HeaderProps> = ({
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<string | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateAvailable, setUpdateAvailable] = useState(false);
   const [isOnline, setIsOnline] = useState<boolean>(() => {
     return typeof navigator !== 'undefined' ? navigator.onLine : true;
   });
   const tr = getAppTranslation((language as AppLanguage) || 'en');
   const isHindi = language === 'hi';
   const isLightMode = theme === 'light' || theme === 'white';
+
+  useEffect(() => {
+    const handleUpdate = () => setUpdateAvailable(true);
+    window.addEventListener('app-update-available', handleUpdate);
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (reg?.waiting) setUpdateAvailable(true);
+      }).catch(() => {});
+    }
+    return () => window.removeEventListener('app-update-available', handleUpdate);
+  }, []);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -517,12 +529,18 @@ export const Header: React.FC<HeaderProps> = ({
               triggerHapticSound('click');
               setIsMenuOpen(true);
             }}
-            className="h-8 w-8 sm:h-9 sm:w-9 min-w-[32px] sm:min-w-[36px] rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 p-0"
-            title={isHindi ? 'मुख्य मेनू व टूल्स' : 'Main Menu & Tools'}
+            className="relative h-8 w-8 sm:h-9 sm:w-9 min-w-[32px] sm:min-w-[36px] rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 p-0"
+            title={updateAvailable ? (isHindi ? 'नया अपडेट उपलब्ध है!' : 'New Update Available!') : (isHindi ? 'मुख्य मेनू व टूल्स' : 'Main Menu & Tools')}
             id="header-main-menu-btn"
             aria-label={isHindi ? 'मुख्य मेनू खोलें' : 'Open Main Menu'}
           >
             <MoreVertical className="w-4 h-4 shrink-0 text-[var(--theme-text,#F8FAFC)]" />
+            {updateAvailable && (
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500 border-2 border-[var(--theme-bg,#070E1A)]"></span>
+              </span>
+            )}
           </button>
         </div>
       </div>

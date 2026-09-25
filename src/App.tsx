@@ -70,6 +70,7 @@ import { CookiesPage } from './components/CookiesPage';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { RemindersModal } from './components/RemindersModal';
 import { DueRemindersBanner } from './components/DueRemindersBanner';
+import { UpdateNotification } from './components/UpdateNotification';
 import {
   checkAndTriggerDueReminders,
   snoozeReminder,
@@ -83,6 +84,7 @@ import {
 import { PageSearchModal } from './components/PageSearchModal';
 import { GoogleDriveSyncModal } from './components/GoogleDriveSyncModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { AppLogo } from './components/AppLogo';
 import {
   initAuth,
   uploadBackupToDrive,
@@ -2295,6 +2297,9 @@ function AppContent() {
       data-app-layout={appLayout}
       className="min-h-screen w-full max-w-full bg-[var(--theme-bg,#070E1A)] text-[var(--theme-text,#F8FAFC)] flex flex-col font-sans transition-colors duration-300 overflow-x-hidden"
     >
+      {/* Real-time PWA App Update Notification Banner */}
+      <UpdateNotification isHindi={language === 'hi'} />
+
       {/* Top Header */}
       <div className="no-print">
         <Header
@@ -2823,7 +2828,7 @@ function AppContent() {
         <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col items-center gap-3 sm:gap-3.5 text-center">
           {/* Logo & Brand */}
           <div className="flex items-center gap-2">
-            <img src="/icon-192.png" alt="Daily Khata Pro Logo" className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg shadow-sm" />
+            <AppLogo size={24} />
             <span className="font-bold text-[14px] sm:text-[15px] tracking-wide text-[var(--theme-text,#F8FAFC)]">Daily Khata Pro</span>
           </div>
 

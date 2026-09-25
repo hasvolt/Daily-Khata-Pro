@@ -517,6 +517,12 @@
                 registration.update().catch(() => {});
               }
 
+              // If a new worker is already waiting in background
+              if (registration.waiting && navigator.serviceWorker.controller) {
+                window.__dailyKhataWaitingWorker = registration.waiting;
+                window.dispatchEvent(new CustomEvent('app-update-available', { detail: { worker: registration.waiting } }));
+              }
+
               // When a new service worker version is detected
               registration.addEventListener('updatefound', () => {
                 const newWorker = registration.installing;
@@ -524,8 +530,9 @@
 
                 newWorker.addEventListener('statechange', () => {
                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    console.log('[PWA Update] New version ready. Activating immediately...');
-                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                    console.log('[PWA Update] New version ready. Notifying user...');
+                    window.__dailyKhataWaitingWorker = newWorker;
+                    window.dispatchEvent(new CustomEvent('app-update-available', { detail: { worker: newWorker } }));
                   }
                 });
               });

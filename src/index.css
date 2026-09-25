@@ -1750,8 +1750,11 @@ main {
   }
 
   /* When printing invoice, hide all page navigation, editor, tabs, and action toolbars */
-  body:has(#invoice-printable-sheet)::after {
+  body.is-printing-invoice::after,
+  body:has(#invoice-printable-sheet)::after,
+  .is-printing-invoice::after {
     display: none !important;
+    content: none !important;
   }
   body:has(#invoice-printable-sheet) header,
   body:has(#invoice-printable-sheet) footer,

@@ -6,14 +6,19 @@ interface AppLogoProps {
   showText?: boolean;
 }
 
+const LOGO_CANDIDATES = [
+  '/daily-khata-pro-v4.png',
+  '/daily-Khata-Pro.png',
+  '/daily-Khata-Pro-aap-icon.png',
+  '/icon-192.png'
+];
+
 export const AppLogo: React.FC<AppLogoProps> = ({
   size = 32,
   className = '',
   showText = false
 }) => {
-  const [imgSrcIndex, setImgSrcIndex] = useState(0);
-  const logoCandidates = ['/daily-khata-pro-v4.png', '/daily-Khata-Pro.png', '/favicon.png', '/icons/icon-192x192.png'];
-  const hasError = imgSrcIndex >= logoCandidates.length;
+  const [candidateIdx, setCandidateIdx] = useState(0);
 
   // Normalize sizing whether number or preset like 'sm'
   let pixelSize = 32;
@@ -30,34 +35,30 @@ export const AppLogo: React.FC<AppLogoProps> = ({
   }
 
   const dimension = `${pixelSize}px`;
+  const currentSrc = LOGO_CANDIDATES[candidateIdx] || LOGO_CANDIDATES[0];
 
   return (
     <div className={`inline-flex items-center gap-2 ${className}`}>
-      {!hasError ? (
-        <div
-          style={{ width: dimension, height: dimension }}
-          className="shrink-0 rounded-xl bg-[#060606] border border-[var(--theme-border,#213E61)]/70 hover:border-[var(--theme-primary,#00D26A)]/60 shadow-md flex items-center justify-center p-0.5 overflow-hidden transition-all hover:scale-105 select-none"
-        >
-          <img
-            src={logoCandidates[imgSrcIndex]}
-            alt="Daily Khata Pro Logo"
-            width={pixelSize}
-            height={pixelSize}
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-            className="select-none block"
-            onError={() => setImgSrcIndex(prev => prev + 1)}
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-      ) : (
-        <div
-          style={{ width: dimension, height: dimension }}
-          className="shrink-0 rounded-xl bg-[#0E1A29] border border-[var(--theme-primary)] flex items-center justify-center font-bold text-[#F59E0B] shadow-md select-none"
-        >
-          <span style={{ fontSize: `${Math.max(11, Math.round(pixelSize * 0.45))}px` }}>₹</span>
-        </div>
-      )}
+      <div
+        style={{ width: dimension, height: dimension }}
+        className="shrink-0 rounded-xl bg-[#060606] border border-[var(--theme-border,#213E61)]/70 hover:border-[var(--theme-primary,#38BDF8)]/60 shadow-md flex items-center justify-center p-0.5 overflow-hidden transition-all hover:scale-105 select-none"
+      >
+        <img
+          src={currentSrc}
+          alt="Daily Khata Pro Logo"
+          width={pixelSize}
+          height={pixelSize}
+          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          className="select-none block rounded-lg"
+          onError={() => {
+            if (candidateIdx < LOGO_CANDIDATES.length - 1) {
+              setCandidateIdx(prev => prev + 1);
+            }
+          }}
+          loading="eager"
+          decoding="async"
+        />
+      </div>
 
       {showText && (
         <div className="flex flex-col text-left">
@@ -74,3 +75,4 @@ export const AppLogo: React.FC<AppLogoProps> = ({
     </div>
   );
 };
+
