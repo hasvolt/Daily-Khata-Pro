@@ -314,15 +314,15 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* 2. TODAY + THIS MONTH SUMMARY CARDS (Full Width Stack matching screenshot) */}
       <motion.section
-        className="space-y-2 sm:space-y-3.5"
+        className="space-y-1.5 sm:space-y-2.5"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.04 }}
       >
         <SummaryCard3D
           type="daily"
-          title={isHindi ? "आज का सारांश" : "Today's Summary"}
-          subtitle={isHindi ? "आज की कमाई, खर्च और बचत" : "Income, expense & savings for today"}
+          title={isHindi ? "आज" : "Today"}
+          subtitle={isHindi ? "आय, खर्च और बचत" : "Income, expense & savings"}
           periodBadge={isHindi ? "आज" : "Today"}
           incomeValue={todayStats.income}
           expenseValue={todayStats.expense}
@@ -334,8 +334,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
         />
         <SummaryCard3D
           type="monthly"
-          title={isHindi ? "इस महीने का सारांश" : "Monthly Summary"}
-          subtitle={isHindi ? "मासिक कमाई, खर्च और बचत" : "Monthly income, expense & savings"}
+          title={isHindi ? "इस महीने" : "This Month"}
+          subtitle={isHindi ? "आय, खर्च और बचत" : "Income, expense & savings"}
           periodBadge={monthFormatted}
           incomeValue={monthStats.income}
           expenseValue={monthStats.expense}

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Calendar, ArrowUpRight, ArrowDownRight, TrendingUp } from 'lucide-react';
+import { Calendar, ArrowUpRight, ArrowDownRight, BarChart3 } from 'lucide-react';
 
 interface SummaryCard3DProps {
   type: 'daily' | 'monthly';
@@ -55,12 +55,11 @@ export function SummaryCard3D({
     y.set(0);
   };
 
-  const isDaily = type === 'daily';
   const isNetPositive = netValue >= 0;
 
-  const defaultIncomeLabel = incomeLabel || (isDaily ? (isHindi ? 'आज की आय' : 'Today Income') : (isHindi ? 'महीने की आय' : 'Month Income'));
-  const defaultExpenseLabel = expenseLabel || (isDaily ? (isHindi ? 'आज का खर्च' : 'Today Expense') : (isHindi ? 'महीने का खर्च' : 'Month Expense'));
-  const defaultNetLabel = netLabel || (isDaily ? (isHindi ? "आज की बचत:" : "Today's Savings:") : (isHindi ? "मासिक बचत:" : "Monthly Savings:"));
+  const defaultIncomeLabel = incomeLabel || (isHindi ? 'आय' : 'Income');
+  const defaultExpenseLabel = expenseLabel || (isHindi ? 'खर्च' : 'Expense');
+  const defaultNetLabel = netLabel || (isHindi ? 'बचत' : 'Savings');
 
   return (
     <div style={{ perspective: 1100 }} className="w-full">
@@ -72,42 +71,44 @@ export function SummaryCard3D({
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.2 }}
-        className="group summary-card-3d homepage-elevated-card relative overflow-hidden rounded-[22px] sm:rounded-3xl border border-[var(--theme-border,#213E61)]/80 hover:border-[var(--theme-primary-border,rgba(56,189,248,0.45))] bg-[var(--theme-card,#132438)] shadow-sm hover:shadow-md transition-all cursor-pointer select-none text-left px-3.5 py-2.5 sm:px-4.5 sm:py-4 md:p-5"
+        className="group summary-card-3d homepage-elevated-card relative overflow-hidden rounded-[18px] sm:rounded-2xl border border-[#143750] dark:border-[#143750] hover:border-sky-500/50 bg-[var(--theme-card,#0c1d2e)] shadow-sm hover:shadow-md transition-all cursor-pointer select-none text-left px-3 py-2 sm:px-3.5 sm:py-2.5 md:p-3.5"
       >
         {/* Top Header Row */}
-        <div className="relative z-10 flex items-center justify-between gap-2 mb-2 sm:mb-3">
+        <div className="relative z-10 flex items-center justify-between gap-1.5 mb-1.5 sm:mb-2">
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.12))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-2xs transition-transform duration-200 group-hover:scale-105">
-              <Calendar className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.2]" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl border border-sky-400/40 bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(56,189,248,0.2)] transition-transform duration-200 group-hover:scale-105">
+              <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-[13.5px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] truncate leading-tight tracking-tight">
+              <h3 className="summary-card-title text-[12.5px] sm:text-[13.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate leading-tight tracking-tight">
                 {title}
               </h3>
-              <p className="text-[10px] sm:text-[11px] font-medium text-[var(--theme-text-dim,#94A3B8)] truncate mt-0.5">
+              <p className="summary-card-sub text-[9px] sm:text-[10px] font-medium text-[var(--theme-text-muted,#94A3B8)] truncate mt-0.5">
                 {subtitle}
               </p>
             </div>
           </div>
 
           {/* Period Badge */}
-          <div className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] text-[10.5px] sm:text-[11.5px] font-bold shrink-0 shadow-2xs notranslate">
+          <div className="summary-badge px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-lg border border-sky-700/50 bg-[#0b2234]/85 text-sky-300 text-[9.5px] sm:text-[10.5px] font-bold shrink-0 shadow-2xs notranslate">
             {periodBadge}
           </div>
         </div>
 
         {/* 2 Inner Cards Grid: Income & Expense */}
-        <div className="relative z-10 grid grid-cols-2 gap-2 sm:gap-3">
+        <div className="relative z-10 grid grid-cols-2 gap-1.5 sm:gap-2">
           {/* Income Box */}
-          <div className="summary-stat-box rounded-xl sm:rounded-2xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#0E1A29)]/80 px-3 py-1.5 sm:px-3.5 sm:py-2.5 shadow-2xs">
-            <div className="flex items-center gap-1.5 text-[var(--theme-text,#F8FAFC)]">
-              <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 stroke-[2.5] shrink-0" />
-              <span className="text-[11px] sm:text-[12px] font-semibold truncate">
+          <div className="summary-stat-box rounded-xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#071927)] px-2.5 py-1.5 sm:px-3 sm:py-2 shadow-2xs">
+            <div className="flex items-center gap-1.5">
+              <div className="w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
+              </div>
+              <span className="summary-stat-label text-[10.5px] sm:text-[11.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                 {defaultIncomeLabel}
               </span>
             </div>
             <div
-              className="font-mono text-[16px] xs:text-[18px] sm:text-[21px] font-bold text-emerald-500 dark:text-emerald-400 mt-0.5 truncate notranslate tracking-tight"
+              className="summary-stat-income font-mono text-[14px] xs:text-[15.5px] sm:text-[18px] font-bold text-emerald-500 dark:text-[#10B981] mt-1 truncate notranslate tracking-tight drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]"
               translate="no"
             >
               +{formatCurrency(incomeValue, privacyMask)}
@@ -115,15 +116,17 @@ export function SummaryCard3D({
           </div>
 
           {/* Expense Box */}
-          <div className="summary-stat-box rounded-xl sm:rounded-2xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#0E1A29)]/80 px-3 py-1.5 sm:px-3.5 sm:py-2.5 shadow-2xs">
-            <div className="flex items-center gap-1.5 text-[var(--theme-text,#F8FAFC)]">
-              <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-500 stroke-[2.5] shrink-0" />
-              <span className="text-[11px] sm:text-[12px] font-semibold truncate">
+          <div className="summary-stat-box rounded-xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#071927)] px-2.5 py-1.5 sm:px-3 sm:py-2 shadow-2xs">
+            <div className="flex items-center gap-1.5">
+              <div className="w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full bg-rose-950/80 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
+                <ArrowDownRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
+              </div>
+              <span className="summary-stat-label text-[10.5px] sm:text-[11.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                 {defaultExpenseLabel}
               </span>
             </div>
             <div
-              className="font-mono text-[16px] xs:text-[18px] sm:text-[21px] font-bold text-rose-500 dark:text-rose-400 mt-0.5 truncate notranslate tracking-tight"
+              className="summary-stat-expense font-mono text-[14px] xs:text-[15.5px] sm:text-[18px] font-bold text-rose-500 dark:text-[#FF5252] mt-1 truncate notranslate tracking-tight drop-shadow-[0_0_6px_rgba(244,63,94,0.3)]"
               translate="no"
             >
               -{formatCurrency(expenseValue, privacyMask)}
@@ -132,16 +135,20 @@ export function SummaryCard3D({
         </div>
 
         {/* Bottom Savings Row */}
-        <div className="relative z-10 mt-1.5 sm:mt-2.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)]/60 bg-[var(--theme-surface,#0E1A29)]/60 px-3 py-1.5 sm:px-3.5 sm:py-2 flex items-center justify-between shadow-2xs">
-          <div className="flex items-center gap-1.5 sm:gap-2 text-[var(--theme-text,#F8FAFC)] font-semibold text-[11px] sm:text-[12.5px] truncate">
-            <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 stroke-[2.2] shrink-0" />
-            <span>{defaultNetLabel}</span>
+        <div className="summary-stat-box relative z-10 mt-1.5 sm:mt-2 rounded-xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#071927)] px-2.5 py-1.5 sm:px-3 sm:py-1.5 flex items-center justify-between shadow-2xs">
+          <div className="flex items-center gap-2">
+            <div className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-lg bg-sky-500/15 border border-sky-500/35 text-sky-400 flex items-center justify-center shrink-0 shadow-2xs">
+              <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
+            </div>
+            <span className="summary-stat-label text-[10.5px] sm:text-[11.5px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
+              {defaultNetLabel}
+            </span>
           </div>
           <div
-            className={`font-mono text-[13px] sm:text-[15px] font-bold truncate notranslate ${
+            className={`summary-savings-val font-mono text-[13.5px] xs:text-[15px] sm:text-[17px] font-bold truncate notranslate drop-shadow-[0_0_6px_rgba(16,185,129,0.3)] ${
               isNetPositive
-                ? 'text-emerald-500 dark:text-emerald-400'
-                : 'text-rose-500 dark:text-rose-400'
+                ? 'text-emerald-500 dark:text-[#10B981]'
+                : 'text-rose-500 dark:text-[#FF5252]'
             }`}
             translate="no"
           >
