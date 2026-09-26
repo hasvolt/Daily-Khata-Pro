@@ -64,7 +64,7 @@ export function BankingCard3D({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="banking-card-3d relative overflow-hidden rounded-[24px] sm:rounded-[28px] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[radial-gradient(circle_at_82%_15%,var(--theme-primary-dim,rgba(56,189,248,0.18))_0%,var(--theme-card,#0E182A)_50%,var(--theme-bg,#050B14)_100%)] p-3.5 sm:p-5 shadow-none"
+        className="banking-card-3d relative overflow-hidden rounded-[26px] sm:rounded-[30px] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[radial-gradient(circle_at_82%_15%,var(--theme-primary-dim,rgba(56,189,248,0.18))_0%,var(--theme-card,#0E182A)_50%,var(--theme-bg,#050B14)_100%)] p-4 sm:p-[22px] shadow-none"
       >
         {/* Subtle radial glow & financial waves */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -97,13 +97,13 @@ export function BankingCard3D({
           <div className="flex items-center justify-between gap-1 sm:gap-2 min-w-0">
             <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 shrink">
               <div
-                className="banking-card-icon-box h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105"
+                className="banking-card-icon-box h-[30px] w-[30px] sm:h-[34px] sm:w-[34px] rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105"
                 style={{ boxShadow: 'none', filter: 'none' }}
               >
-                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" style={{ filter: 'none', boxShadow: 'none' }} />
+                <Wallet className="w-4 h-4 sm:w-[17px] sm:h-[17px] stroke-[2.2]" style={{ filter: 'none', boxShadow: 'none' }} />
               </div>
               <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
-                <span className="banking-card-label text-[11px] sm:text-[13.5px] font-extrabold tracking-wider text-slate-100 uppercase truncate">
+                <span className="banking-card-label text-[11.5px] sm:text-[14px] font-extrabold tracking-wider text-slate-100 uppercase truncate">
                   {isHindi ? 'कुल बैलेंस' : 'Total Balance'}
                 </span>
                 <button
@@ -146,23 +146,23 @@ export function BankingCard3D({
           </div>
 
           {/* Balance area with 3D Wallet Graphic */}
-          <div className="relative mt-2 sm:mt-2.5 flex items-center justify-between gap-3">
+          <div className="relative mt-2.5 sm:mt-3 flex items-center justify-between gap-3">
             <div className="relative z-10 min-w-0 flex-1">
               <div
-                className="banking-card-amount font-mono text-[28px] xs:text-[32px] sm:text-[40px] md:text-[44px] leading-tight font-black text-white tracking-tight notranslate"
+                className="banking-card-amount font-mono text-[29.5px] xs:text-[34px] sm:text-[42px] md:text-[46px] leading-tight font-black text-white tracking-tight notranslate"
                 translate="no"
                 title={formatCurrency(totalWealth, privacyMask)}
               >
                 {formatCurrency(totalWealth, privacyMask)}
               </div>
-              <p className="banking-card-subtitle text-[9.5px] sm:text-[11px] text-slate-400 mt-0.5 whitespace-nowrap">
+              <p className="banking-card-subtitle text-[10px] sm:text-[11.5px] text-slate-400 mt-0.5 whitespace-nowrap">
                 {isHindi ? 'कुल कैश और अकाउंट बैलेंस' : 'Total cash & account balance'}
               </p>
             </div>
 
             {/* 3D Glossy Theme-Adaptive Wallet Graphic */}
             <div
-              className="banking-card-wallet-graphic relative w-16 h-13 sm:w-22 sm:h-18 shrink-0 pointer-events-none select-none drop-shadow-none"
+              className="banking-card-wallet-graphic relative w-[68px] h-[55px] sm:w-[92px] sm:h-[75px] shrink-0 pointer-events-none select-none drop-shadow-none"
               style={{ filter: 'none', boxShadow: 'none' }}
             >
               <svg viewBox="0 0 120 100" fill="none" className="w-full h-full" style={{ filter: 'none' }}>
@@ -198,7 +198,7 @@ export function BankingCard3D({
           </div>
 
           {/* Actions: + Income and − Expense */}
-          <div className="banking-card-divider border-t border-white/10 pt-2.5 sm:pt-3 mt-2.5 sm:mt-3">
+          <div className="banking-card-divider border-t border-white/10 pt-3 sm:pt-3.5 mt-3 sm:mt-3.5">
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
               <motion.button
                 type="button"
@@ -206,7 +206,7 @@ export function BankingCard3D({
                 id="hero-add-income-btn"
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 2, scale: 0.97 }}
-                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#22C55E] via-[#16A34A] to-[#15803D] hover:from-[#2ecc71] hover:to-[#16a34a] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
+                className="group min-h-[42px] sm:min-h-[50px] px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#22C55E] via-[#16A34A] to-[#15803D] hover:from-[#2ecc71] hover:to-[#16a34a] text-white font-extrabold text-[13px] sm:text-[16.5px] flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
               >
                 <span>+ Income</span>
                 <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
@@ -218,7 +218,7 @@ export function BankingCard3D({
                 id="hero-add-expense-btn"
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ y: 2, scale: 0.97 }}
-                className="group min-h-10 sm:min-h-12 px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] hover:from-[#f87171] hover:to-[#dc2626] text-white font-extrabold text-[12.5px] sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
+                className="group min-h-[42px] sm:min-h-[50px] px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] hover:from-[#f87171] hover:to-[#dc2626] text-white font-extrabold text-[13px] sm:text-[16.5px] flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
               >
                 <span>− Expense</span>
                 <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform duration-150" />

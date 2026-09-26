@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Entry, FundType, FundConfig, AppLanguage, CategoryBudget, DebtItem, Goal } from '../types';
 import { DEFAULT_FUNDS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats } from '../utils/khataCalculations';
+import { getCurrencyConfig } from '../utils/currencyConfig';
 import { getFundIcon, getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
 import { getPageTranslation } from '../utils/pageTranslations';
@@ -67,7 +68,7 @@ interface HomeViewProps {
 
 const FINANCIAL_TIPS = [
   'Small Steps Today → Bigger Financial Freedom Tomorrow',
-  'Track every rupee: What gets measured, gets managed.',
+  'Track every transaction: What gets measured, gets managed.',
   'Pay yourself first by putting 20% into savings and emergency fund.',
   'Avoid high-interest debt and keep EMI below 30% of income.',
   'Review monthly subscriptions regularly to plug financial leaks.',
@@ -218,14 +219,15 @@ export const HomeView: React.FC<HomeViewProps> = ({
     en: 'en-IN',
   };
 
+  const activeLocale = getCurrencyConfig(language).locale || localeMap[language] || 'en-US';
   const today = new Date();
-  const dateFormatted = today.toLocaleDateString(localeMap[language] || 'en-IN', {
+  const dateFormatted = today.toLocaleDateString(activeLocale, {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   });
-  const monthFormatted = today.toLocaleString(localeMap[language] || 'default', {
+  const monthFormatted = today.toLocaleString(activeLocale, {
     month: 'short',
     year: 'numeric',
   });

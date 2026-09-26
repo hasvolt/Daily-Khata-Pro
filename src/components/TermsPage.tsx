@@ -26,7 +26,7 @@ export const TermsPage: React.FC<TermsPageProps> = ({
   const pageT = getPageTranslation(language);
   const t = pageT.terms;
   const email = 'daily-Khata-Pro@gmail.com';
-  const devEmail = 'mdzafeerhasan.official@gmail.com';
+  const devEmail = 'mzhyazdaan@gmail.com';
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200 text-left">
@@ -72,71 +72,80 @@ export const TermsPage: React.FC<TermsPageProps> = ({
 
       {/* Terms Sections */}
       <div className="space-y-4 text-[13px] text-[var(--theme-text-muted,#CBD5E1)]">
-        {/* 1. Ownership */}
+        {/* 2.1 Ownership */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[#10B981] font-bold text-[15px]">
             <Code2 className="w-4.5 h-4.5" />
-            <h2>{t.termsList.ownershipTitle}</h2>
+            <h2>2.1 Absolute Data Ownership</h2>
           </div>
           <p className="leading-relaxed">
-            {t.termsList.ownershipDesc}
+            You retain 100% exclusive ownership of, and responsibility for, all financial records, personal notes, and data you enter into the application. We claim no ownership interest in your data at any time.
           </p>
         </div>
 
-        {/* 2. Usage */}
+        {/* 2.2 Lawful & Personal Use */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] font-bold text-[15px]">
             <ShieldCheck className="w-4.5 h-4.5" />
-            <h2>{t.termsList.usageTitle}</h2>
+            <h2>2.2 Lawful &amp; Personal Use</h2>
           </div>
           <p className="leading-relaxed">
-            {t.termsList.usageDesc}
+            You may use this application for any lawful purpose, including personal budgeting, family accounting, freelance income logs, or small commercial/shop bookkeeping, subject to compliance with applicable local laws.
           </p>
         </div>
 
-        {/* 3. Disclaimer */}
+        {/* 2.3 No Financial Warranty */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[#F59E0B] font-bold text-[15px]">
             <FolderGit2 className="w-4.5 h-4.5" />
-            <h2>{t.termsList.disclaimerTitle}</h2>
+            <h2>2.3 No Financial Warranty</h2>
           </div>
           <p className="leading-relaxed">
-            {t.termsList.disclaimerDesc}
+            Daily Khata Pro is an organizational and calculation-assistance tool. It is not a certified accountant, tax consultant, financial advisor, or legal advisor, and nothing in the application constitutes professional financial, tax, investment, or legal advice.
           </p>
         </div>
 
-        {/* 4. Backup */}
+        {/* 2.4 Backup Responsibility */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[#8B5CF6] font-bold text-[15px]">
             <FileText className="w-4.5 h-4.5" />
-            <h2>{t.termsList.backupTitle}</h2>
+            <h2>2.4 Backup Responsibility</h2>
           </div>
           <p className="leading-relaxed">
-            {t.termsList.backupDesc}
+            Because data is stored solely on your client device with no central server, maintaining regular JSON/Excel backup copies is the sole responsibility of the user. We are not liable for data loss arising from device failure, browser cache clearing, uninstallation, or similar events.
           </p>
         </div>
 
-        {/* 5. Commercial Terms & Future Services */}
-        {t.termsList.commercialTitle && (
-          <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-[15px]">
-              <Layers className="w-4.5 h-4.5" />
-              <h2>{t.termsList.commercialTitle}</h2>
-            </div>
-            <p className="leading-relaxed">
-              {t.termsList.commercialDesc}
-            </p>
+        {/* 2.5 Free Standard Edition & Future Commercial Disclosures */}
+        <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
+          <div className="flex items-center gap-2 text-cyan-400 font-bold text-[15px]">
+            <Layers className="w-4.5 h-4.5" />
+            <h2>2.5 Free Standard Edition &amp; Future Commercial Disclosures</h2>
           </div>
-        )}
+          <p className="leading-relaxed">
+            The core features of Daily Khata Pro are provided free of charge under the MIT License. To sustain long-term infrastructure, community support, and continued engineering, the platform reserves the right to introduce optional paid tiers, sponsor partnerships, or contextual advertisements in future releases. Any such changes will be clearly disclosed and will not compromise the core offline bookkeeping functionality of the free edition.
+          </p>
+        </div>
 
-        {/* Contact */}
+        {/* 2.6 License Terms */}
+        <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-[15px]">
+            <Code2 className="w-4.5 h-4.5" />
+            <h2>2.6 License Terms</h2>
+          </div>
+          <p className="leading-relaxed">
+            The MIT License permits use, copying, modification, merging, publishing, and distribution of the software, subject to the inclusion of the original copyright and permission notice. The software is provided &quot;as is,&quot; without warranty of any kind, express or implied.
+          </p>
+        </div>
+
+        {/* 2.7 Support & Contact */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] font-bold text-[15px]">
             <Mail className="w-4.5 h-4.5" />
-            <h2>Support &amp; Contact</h2>
+            <h2>2.7 Support &amp; Contact</h2>
           </div>
           <p className="leading-relaxed">
-            For licensing inquiries or terms clarification, reach out to the project maintainer:
+            For licensing inquiries or clarification of these terms, please contact the project maintainer:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">

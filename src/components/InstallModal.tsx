@@ -25,6 +25,7 @@ import {
 import { AppLogo } from './AppLogo';
 import { AppLanguage } from '../types';
 import { APP_VERSION_TAG } from '../utils/version';
+import { getCurrencyConfig } from '../utils/currencyConfig';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: Array<string>;
@@ -206,6 +207,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
     setDownloadingOffline(true);
     try {
       const currentUrl = window.location.href;
+      const currSym = getCurrencyConfig(language).symbol || '₹';
       const offlineDoc = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -267,7 +269,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
   <div class="container">
     <header>
       <div class="brand">
-        <div class="logo-box">₹</div>
+        <div class="logo-box">\${currSym}</div>
         <div>
           <h1>Daily Khata Pro</h1>
           <div class="tagline">Income & Expense Tracker (100% Offline)</div>
@@ -279,22 +281,22 @@ export const InstallModal: React.FC<InstallModalProps> = ({
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">Total Income</div>
-        <div class="stat-val stat-income" id="totalIncome">₹0</div>
+        <div class="stat-val stat-income" id="totalIncome">\${currSym}0</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Total Expense</div>
-        <div class="stat-val stat-expense" id="totalExpense">₹0</div>
+        <div class="stat-val stat-expense" id="totalExpense">\${currSym}0</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Net Balance</div>
-        <div class="stat-val stat-net" id="netBalance">₹0</div>
+        <div class="stat-val stat-net" id="netBalance">\${currSym}0</div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-title">Add Daily Transaction</div>
       <div class="form-group">
-        <label>Amount (₹)</label>
+        <label>Amount (\${currSym})</label>
         <input type="number" id="txAmount" placeholder="e.g. 500" />
       </div>
       <div class="form-group">
@@ -322,12 +324,12 @@ export const InstallModal: React.FC<InstallModalProps> = ({
     <div class="card">
       <div class="card-title">6-Fund Money Split (Auto-Calculated)</div>
       <div class="funds-grid">
-        <div class="fund-box"><div class="fund-name">Necessity (55%)</div><div class="fund-amt" id="fundNec">₹0</div></div>
-        <div class="fund-box"><div class="fund-name">Emergency (10%)</div><div class="fund-amt" id="fundEmg">₹0</div></div>
-        <div class="fund-box"><div class="fund-name">Investment (10%)</div><div class="fund-amt" id="fundInv">₹0</div></div>
-        <div class="fund-box"><div class="fund-name">Education (10%)</div><div class="fund-amt" id="fundEdu">₹0</div></div>
-        <div class="fund-box"><div class="fund-name">Play & Life (10%)</div><div class="fund-amt" id="fundPlay">₹0</div></div>
-        <div class="fund-box"><div class="fund-name">Give / Charity (5%)</div><div class="fund-amt" id="fundGive">₹0</div></div>
+        <div class="fund-box"><div class="fund-name">Necessity (55%)</div><div class="fund-amt" id="fundNec">\${currSym}0</div></div>
+        <div class="fund-box"><div class="fund-name">Emergency (10%)</div><div class="fund-amt" id="fundEmg">\${currSym}0</div></div>
+        <div class="fund-box"><div class="fund-name">Investment (10%)</div><div class="fund-amt" id="fundInv">\${currSym}0</div></div>
+        <div class="fund-box"><div class="fund-name">Education (10%)</div><div class="fund-amt" id="fundEdu">\${currSym}0</div></div>
+        <div class="fund-box"><div class="fund-name">Play & Life (10%)</div><div class="fund-amt" id="fundPlay">\${currSym}0</div></div>
+        <div class="fund-box"><div class="fund-name">Give / Charity (5%)</div><div class="fund-amt" id="fundGive">\${currSym}0</div></div>
       </div>
     </div>
 
@@ -336,11 +338,12 @@ export const InstallModal: React.FC<InstallModalProps> = ({
       <div id="txList"></div>
     </div>
 
-    <a href="${currentUrl}" class="btn-sync">Open Live Web App &amp; Sync Full Cloud</a>
+    <a href="\${currentUrl}" class="btn-sync">Open Live Web App &amp; Sync Full Cloud</a>
   </div>
 
   <script>
     let transactions = JSON.parse(localStorage.getItem('offline_khata_txs') || '[]');
+    const CURR = '\${currSym}';
     function render() {
       let inc = 0, exp = 0;
       const list = document.getElementById('txList');
@@ -352,19 +355,19 @@ export const InstallModal: React.FC<InstallModalProps> = ({
           if (t.type === 'income') inc += t.amount; else exp += t.amount;
           const row = document.createElement('div');
           row.className = 'tx-item';
-          row.innerHTML = '<div><div class="tx-desc">' + (t.title || 'Untitled') + '</div><div class="tx-meta">' + t.category + ' • ' + t.date + '</div></div><div class="tx-amount ' + (t.type === 'income' ? 'stat-income' : 'stat-expense') + '">' + (t.type === 'income' ? '+' : '-') + '₹' + t.amount.toLocaleString() + '</div>';
+          row.innerHTML = '<div><div class="tx-desc">' + (t.title || 'Untitled') + '</div><div class="tx-meta">' + t.category + ' • ' + t.date + '</div></div><div class="tx-amount ' + (t.type === 'income' ? 'stat-income' : 'stat-expense') + '">' + (t.type === 'income' ? '+' : '-') + CURR + t.amount.toLocaleString() + '</div>';
           list.appendChild(row);
         });
       }
-      document.getElementById('totalIncome').innerText = '₹' + inc.toLocaleString();
-      document.getElementById('totalExpense').innerText = '₹' + exp.toLocaleString();
-      document.getElementById('netBalance').innerText = '₹' + (inc - exp).toLocaleString();
-      document.getElementById('fundNec').innerText = '₹' + Math.round(inc * 0.55).toLocaleString();
-      document.getElementById('fundEmg').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
-      document.getElementById('fundInv').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
-      document.getElementById('fundEdu').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
-      document.getElementById('fundPlay').innerText = '₹' + Math.round(inc * 0.10).toLocaleString();
-      document.getElementById('fundGive').innerText = '₹' + Math.round(inc * 0.05).toLocaleString();
+      document.getElementById('totalIncome').innerText = CURR + inc.toLocaleString();
+      document.getElementById('totalExpense').innerText = CURR + exp.toLocaleString();
+      document.getElementById('netBalance').innerText = CURR + (inc - exp).toLocaleString();
+      document.getElementById('fundNec').innerText = CURR + Math.round(inc * 0.55).toLocaleString();
+      document.getElementById('fundEmg').innerText = CURR + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundInv').innerText = CURR + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundEdu').innerText = CURR + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundPlay').innerText = CURR + Math.round(inc * 0.10).toLocaleString();
+      document.getElementById('fundGive').innerText = CURR + Math.round(inc * 0.05).toLocaleString();
     }
     function addTx(type) {
       const amt = parseFloat(document.getElementById('txAmount').value);

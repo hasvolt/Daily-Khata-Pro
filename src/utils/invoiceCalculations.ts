@@ -302,24 +302,33 @@ export function calculateInvoiceTotals(
   };
 }
 
-// Generate QR Code data URL for UPI Payments
+// Generate QR Code data URL for UPI or Universal Payment Links (PayPal, Stripe, etc.)
 export async function generateUpiQrCode(
   upiId: string,
   payeeName: string,
   amount: number,
   invoiceNumber: string
 ): Promise<string> {
-  if (!upiId || !upiId.includes('@')) return '';
+  if (!upiId) return '';
 
-  const cleanUpi = upiId.trim();
-  const cleanName = payeeName.trim() || 'Merchant';
-  const cleanAmount = Math.max(0, amount).toFixed(2);
-  const note = `Invoice ${invoiceNumber || ''}`.trim();
+  const cleanInput = upiId.trim();
+  let paymentTargetUrl = '';
 
-  const upiUrl = `upi://pay?pa=${encodeURIComponent(cleanUpi)}&pn=${encodeURIComponent(cleanName)}&am=${encodeURIComponent(cleanAmount)}&cu=INR&tn=${encodeURIComponent(note)}`;
+  if (cleanInput.startsWith('http://') || cleanInput.startsWith('https://')) {
+    // Universal web payment link (e.g. PayPal.me, Stripe, Revolut, etc.)
+    paymentTargetUrl = cleanInput;
+  } else if (cleanInput.includes('@')) {
+    // Standard UPI intent URL
+    const cleanName = payeeName.trim() || 'Merchant';
+    const cleanAmount = Math.max(0, amount).toFixed(2);
+    const note = `Invoice ${invoiceNumber || ''}`.trim();
+    paymentTargetUrl = `upi://pay?pa=${encodeURIComponent(cleanInput)}&pn=${encodeURIComponent(cleanName)}&am=${encodeURIComponent(cleanAmount)}&cu=INR&tn=${encodeURIComponent(note)}`;
+  } else {
+    return '';
+  }
 
   try {
-    const dataUrl = await QRCode.toDataURL(upiUrl, {
+    const dataUrl = await QRCode.toDataURL(paymentTargetUrl, {
       errorCorrectionLevel: 'M',
       margin: 1,
       width: 220,
@@ -330,7 +339,7 @@ export async function generateUpiQrCode(
     });
     return dataUrl;
   } catch (err) {
-    console.error('Error generating UPI QR Code:', err);
+    console.error('Error generating Payment QR Code:', err);
     return '';
   }
 }

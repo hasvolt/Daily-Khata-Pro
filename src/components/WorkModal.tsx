@@ -10,7 +10,7 @@ import {
   Calendar,
   Building,
   Clock,
-  IndianRupee,
+  Coins,
   CheckCircle2,
   Check,
   Plus,
@@ -330,8 +330,8 @@ export const WorkModal: React.FC<WorkModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <label className="font-bold uppercase tracking-wider text-[11.5px] text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1">
-                <IndianRupee className="w-3.5 h-3.5 text-[#10B981]" />
-                <span>{isHindi ? 'बिल योग्य आय / राशि ({getCurrencyConfig(getCurrentLanguage()).symbol})' : 'Earnings / Value ({getCurrencyConfig(getCurrentLanguage()).symbol})'}</span>
+                <Coins className="w-3.5 h-3.5 text-[#10B981]" />
+                <span>{isHindi ? `बिल योग्य आय / राशि (${getCurrencyConfig(getCurrentLanguage()).symbol})` : `Earnings / Value (${getCurrencyConfig(getCurrentLanguage()).symbol})`}</span>
               </label>
               <input
                 type="number"

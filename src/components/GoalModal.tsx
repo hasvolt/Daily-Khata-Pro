@@ -334,7 +334,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({
             </label>
             <input
               type="text"
-              placeholder="e.g. Save ₹2,500 monthly from saving pot"
+              placeholder="e.g. Save 2,500 monthly from saving pot"
               value={note}
               onChange={(e) => setNote(e.target.value)}
               className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] focus:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text,#F8FAFC)] rounded-xl px-3.5 py-2 text-[13.5px] focus:outline-none"

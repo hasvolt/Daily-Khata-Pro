@@ -366,6 +366,14 @@ function AppContent() {
     };
   }, [language]);
 
+  // Global Currency Preference Listener
+  const [, setCurrencyUpdateTick] = useState<number>(0);
+  useEffect(() => {
+    const handleCurrencyChange = () => setCurrencyUpdateTick((prev) => prev + 1);
+    window.addEventListener('dailykhata-currency-change', handleCurrencyChange);
+    return () => window.removeEventListener('dailykhata-currency-change', handleCurrencyChange);
+  }, []);
+
   // Dynamic SEO Synchronization: Updates document.title, canonical tag, and meta description per route for Google Search Console
   useEffect(() => {
     updatePageSEO(location.pathname);
@@ -2686,6 +2694,7 @@ function AppContent() {
               onBack={() => setCurrentTab('home')}
               onOpenSourceCode={() => setCurrentTab('safety')}
               onOpenSecurityLock={() => setIsSecurityModalOpen(true)}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
               language={language}
             />
           } />
@@ -3212,6 +3221,10 @@ function AppContent() {
         onClose={() => setIsManualOpen(false)}
         onOpenSourceCode={() => setIsSourceCodeOpen(true)}
         onOpenSecurityLock={() => setIsSecurityModalOpen(true)}
+        onNavigateTab={(tab) => {
+          setIsManualOpen(false);
+          setCurrentTab(tab as NavTab);
+        }}
         language={language}
       />
 

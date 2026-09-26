@@ -126,7 +126,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const [gstSlabMode, setGstSlabMode] = useState<number | 'custom'>(18);
   const [gstCustomRateInput, setGstCustomRateInput] = useState<string>('18');
   const [gstType, setGstType] = useState<'exclusive' | 'inclusive'>('exclusive');
-  const [gstTaxType, setGstTaxType] = useState<'intra' | 'inter'>('intra'); // intra = CGST+SGST, inter = IGST
+  const [gstTaxType, setGstTaxType] = useState<'intra' | 'inter' | 'single'>('intra'); // intra = CGST+SGST, inter = IGST, single = VAT / Sales Tax
 
   // --- 6. Discount & Margin State ---
   const [discMode, setDiscMode] = useState<'discount' | 'margin'>('discount');
@@ -635,7 +635,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     if (gstTaxType === 'intra') {
       gstCgst = gstTotalTax / 2;
       gstSgst = gstTotalTax / 2;
-    } else {
+    } else if (gstTaxType === 'inter') {
       gstIgst = gstTotalTax;
     }
     gstFinalGross = gstBase + gstTotalTax;
@@ -646,7 +646,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
     if (gstTaxType === 'intra') {
       gstCgst = gstTotalTax / 2;
       gstSgst = gstTotalTax / 2;
-    } else {
+    } else if (gstTaxType === 'inter') {
       gstIgst = gstTotalTax;
     }
   }
@@ -1985,13 +1985,13 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--theme-border,#213E61)] pb-3">
             <div>
               <h2 className="text-[16px] font-bold text-[var(--theme-text,#F8FAFC)] flex items-center gap-2">
-                <span>{isHindi ? 'GST टैक्स कैलकुलेटर' : 'GST & Tax Invoice Splitter'}</span>
+                <span>{isHindi ? 'GST एवं टैक्स कैलकुलेटर' : 'GST, VAT & Sales Tax Splitter'}</span>
                 <span className="text-[10px] bg-[#EC4899]/15 text-[#EC4899] font-mono px-1.5 py-0.5 rounded border border-[#EC4899]/30">
                   CUSTOM SLAB
                 </span>
               </h2>
               <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
-                {isHindi ? 'कोई भी कस्टम GST % दर्ज करें (0.25%, 5%, 12%, 18%, 28%, 40% आदि) और CGST/SGST/IGST ब्रेकडाउन देखें' : 'Enter custom GST percentages, CGST/SGST split, or IGST with instant invoice calculations.'}
+                {isHindi ? 'कोई भी कस्टम GST/VAT % दर्ज करें (5%, 12%, 18%, 20% आदि) और CGST/SGST/IGST या सिंगल टैक्स ब्रेकडाउन देखें' : 'Enter custom GST/VAT percentages, CGST/SGST split, IGST, or universal single tax with instant invoice calculations.'}
               </p>
             </div>
 
@@ -2004,7 +2004,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     gstType === 'exclusive' ? 'bg-[#EC4899] text-white' : 'text-[var(--theme-text-dim,#94A3B8)]'
                   }`}
                 >
-                  + Add GST (Net)
+                  + Add Tax (Net)
                 </button>
                 <button
                   type="button"
@@ -2013,7 +2013,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                     gstType === 'inclusive' ? 'bg-[#EC4899] text-white' : 'text-[var(--theme-text-dim,#94A3B8)]'
                   }`}
                 >
-                  - Extract GST (MRP)
+                  - Extract Tax (MRP)
                 </button>
               </div>
 
@@ -2035,6 +2035,15 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   }`}
                 >
                   Inter (IGST)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGstTaxType('single')}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    gstTaxType === 'single' ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]' : 'text-[var(--theme-text-dim,#94A3B8)]'
+                  }`}
+                >
+                  Single / VAT
                 </button>
               </div>
             </div>
@@ -2160,15 +2169,20 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                   <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstSgst.toFixed(2)}</span>
                 </div>
               </>
-            ) : (
+            ) : gstTaxType === 'inter' ? (
               <div className="flex justify-between text-[#EC4899] text-[12px]">
                 <span>IGST ({effectiveGstSlab}%):</span>
                 <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstIgst.toFixed(2)}</span>
               </div>
+            ) : (
+              <div className="flex justify-between text-[#EC4899] text-[12px]">
+                <span>Tax / VAT ({effectiveGstSlab}%):</span>
+                <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstTotalTax.toFixed(2)}</span>
+              </div>
             )}
 
             <div className="flex justify-between text-[#EC4899] border-t border-[var(--theme-border,#213E61)] pt-1.5">
-              <span className="font-bold">Total GST Tax ({effectiveGstSlab}%):</span>
+              <span className="font-bold">Total Tax ({effectiveGstSlab}%):</span>
               <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstTotalTax.toFixed(2)}</span>
             </div>
 
@@ -3212,7 +3226,7 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>
-                  {isHindi ? `आय में जोड़ें (₹${Math.round(netInHandInrEquivalent).toLocaleString('en-IN')})` : `Apply as Income (₹${Math.round(netInHandInrEquivalent).toLocaleString('en-IN')})`}
+                  {isHindi ? `आय में जोड़ें (${formatCurrency(Math.round(netInHandInrEquivalent))})` : `Apply as Income (${formatCurrency(Math.round(netInHandInrEquivalent))})`}
                 </span>
               </button>
             )}

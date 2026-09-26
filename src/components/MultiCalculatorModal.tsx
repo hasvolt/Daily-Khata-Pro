@@ -122,7 +122,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
   const [gstSlabMode, setGstSlabMode] = useState<number | 'custom'>(18);
   const [gstCustomRateInput, setGstCustomRateInput] = useState<string>('18');
   const [gstType, setGstType] = useState<'exclusive' | 'inclusive'>('exclusive');
-  const [gstTaxType, setGstTaxType] = useState<'intra' | 'inter'>('intra');
+  const [gstTaxType, setGstTaxType] = useState<'intra' | 'inter' | 'single'>('intra');
 
   // --- 6. Discount & Margin State ---
   const [discMode, setDiscMode] = useState<'discount' | 'margin'>('discount');
@@ -392,7 +392,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
     if (gstTaxType === 'intra') {
       gstCgst = gstTotalTax / 2;
       gstSgst = gstTotalTax / 2;
-    } else {
+    } else if (gstTaxType === 'inter') {
       gstIgst = gstTotalTax;
     }
     gstFinalGross = gstBase + gstTotalTax;
@@ -403,7 +403,7 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
     if (gstTaxType === 'intra') {
       gstCgst = gstTotalTax / 2;
       gstSgst = gstTotalTax / 2;
-    } else {
+    } else if (gstTaxType === 'inter') {
       gstIgst = gstTotalTax;
     }
   }
@@ -1112,6 +1112,13 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                   >
                     Inter (IGST)
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setGstTaxType('single')}
+                    className={`px-2 py-0.5 text-[10.5px] font-bold rounded ${gstTaxType === 'single' ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]' : 'text-[var(--theme-text-dim,#94A3B8)]'}`}
+                  >
+                    Single / VAT
+                  </button>
                 </div>
               </div>
 
@@ -1193,8 +1200,30 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
                   <span>Base Price:</span>
                   <span className="font-bold text-[var(--theme-text,#F8FAFC)]">{getCurrencyConfig(getCurrentLanguage()).symbol}{gstBase.toFixed(2)}</span>
                 </div>
+                {gstTaxType === 'intra' ? (
+                  <>
+                    <div className="flex justify-between text-[#EC4899]/80 text-[11px]">
+                      <span>CGST ({effectiveGstSlab / 2}%):</span>
+                      <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstCgst.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-[#EC4899]/80 text-[11px]">
+                      <span>SGST ({effectiveGstSlab / 2}%):</span>
+                      <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstSgst.toFixed(2)}</span>
+                    </div>
+                  </>
+                ) : gstTaxType === 'inter' ? (
+                  <div className="flex justify-between text-[#EC4899] text-[11px]">
+                    <span>IGST ({effectiveGstSlab}%):</span>
+                    <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstIgst.toFixed(2)}</span>
+                  </div>
+                ) : (
+                  <div className="flex justify-between text-[#EC4899] text-[11px]">
+                    <span>Tax / VAT ({effectiveGstSlab}%):</span>
+                    <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstTotalTax.toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-[#EC4899]">
-                  <span>GST Tax ({effectiveGstSlab}%):</span>
+                  <span>Total Tax ({effectiveGstSlab}%):</span>
                   <span className="font-bold">+{getCurrencyConfig(getCurrentLanguage()).symbol}{gstTotalTax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-[var(--theme-text,#F8FAFC)] border-t border-[var(--theme-border,#213E61)] pt-1 text-[14px]">

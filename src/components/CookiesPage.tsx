@@ -269,7 +269,7 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 text-left">
           <div className="flex items-center gap-2.5 mb-2.5 text-[var(--theme-primary,#38BDF8)] font-bold text-[15px]">
             <Database className="w-4 h-4" />
-            <h2>{isHindi ? '1. कुकीज़ और लोकल स्टोरेज क्या हैं?' : '1. What Are Cookies and Local Storage?'}</h2>
+            <h2>{isHindi ? '3.1 कुकीज़ और लोकल स्टोरेज क्या हैं?' : '3.1 What Are Cookies and Local Storage?'}</h2>
           </div>
           <p className="text-[13px] text-[var(--theme-text-muted,#94A3B8)] leading-relaxed mb-3">
             {isHindi
@@ -284,7 +284,7 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
               <p className="text-[var(--theme-text-dim,#64748B)]">
                 {isHindi
                   ? 'यह आपके डिवाइस की सुरक्षित मेमोरी है। जब तक आप खुद कैश साफ़ नहीं करते, आपका खाता और सेटिंग्स सुरक्षित रूप से बिना इंटरनेट के भी चालू रहती हैं।'
-                  : 'Encrypted offline storage inside your browser. Allows full accounting access and speed even when your device is completely disconnected from the internet.'}
+                  : 'Encrypted offline storage inside your browser, allowing full accounting access and speed even when your device is completely disconnected from the internet.'}
               </p>
             </div>
             <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)]">
@@ -294,7 +294,7 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
               <p className="text-[var(--theme-text-dim,#64748B)]">
                 {isHindi
                   ? 'Daily Khata Pro स्वयं कोई आंतरिक ट्रैकिंग कुकी नहीं बनाता है।'
-                  : 'Daily Khata Pro sets zero proprietary tracking cookies and no third-party ad scripts.'}
+                  : 'Daily Khata Pro sets no proprietary tracking cookies and loads no third-party advertising scripts.'}
               </p>
             </div>
           </div>
@@ -304,7 +304,7 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 text-left">
           <div className="flex items-center gap-2.5 mb-2.5 text-green-400 font-bold text-[15px]">
             <FileCheck className="w-4 h-4" />
-            <h2>{isHindi ? '2. हम आपके डिवाइस पर क्या स्टोर करते हैं?' : '2. Exact Data Keys Stored on Your Device'}</h2>
+            <h2>{isHindi ? '3.2 हम आपके डिवाइस पर क्या स्टोर करते हैं?' : '3.2 Data Keys Stored on Your Device'}</h2>
           </div>
           <p className="text-[13px] text-[var(--theme-text-muted,#94A3B8)] leading-relaxed mb-3">
             {isHindi
@@ -362,19 +362,19 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 text-left">
           <div className="flex items-center gap-2.5 mb-2.5 text-amber-400 font-bold text-[15px]">
             <HelpCircle className="w-4 h-4" />
-            <h2>{isHindi ? '3. ब्राउज़र में कुकीज़ कैसे साफ़ या ब्लॉक करें?' : '3. How to Clear or Block Cookies in Your Browser'}</h2>
+            <h2>{isHindi ? '3.3 ब्राउज़र में कुकीज़ कैसे साफ़ या ब्लॉक करें?' : '3.3 How to Clear or Block Storage in Your Browser'}</h2>
           </div>
           <p className="text-[13px] text-[var(--theme-text-muted,#94A3B8)] leading-relaxed mb-3">
             {isHindi
               ? 'आप किसी भी समय अपने ब्राउज़र की सेटिंग्स में जाकर कुकीज़ और लोकल डेटा को मिटा सकते हैं। ध्यान रखें कि लोकल स्टोरेज मिटाने से आपकी वित्तीय प्रविष्टियाँ भी हट सकती हैं, इसलिए पहले बैकअप (JSON/Excel) अवश्य निर्यात कर लें।'
-              : 'You can manage, restrict, or clear browser cookies and cached storage at any time through your browser settings. Note that clearing LocalStorage will remove offline transaction entries, so always export a JSON/Excel backup first.'}
+              : 'You may manage, restrict, or clear browser storage at any time through your browser settings. Clearing LocalStorage will remove offline transaction entries, so please export a JSON/Excel backup first.'}
           </p>
 
           <div className="space-y-2 text-[12px] text-[var(--theme-text-dim,#64748B)]">
-            <p>• <strong>Google Chrome:</strong> Settings → Privacy and security → Third-party cookies / Clear browsing data.</p>
-            <p>• <strong>Mozilla Firefox:</strong> Settings → Privacy & Security → Cookies and Site Data.</p>
-            <p>• <strong>Apple Safari:</strong> Settings → Safari → Advanced → Website Data.</p>
-            <p>• <strong>Microsoft Edge:</strong> Settings → Cookies and site permissions → Manage and delete cookies.</p>
+            <p>• <strong>Google Chrome:</strong> Settings → Privacy and security → Third-party cookies / Clear browsing data</p>
+            <p>• <strong>Mozilla Firefox:</strong> Settings → Privacy & Security → Cookies and Site Data</p>
+            <p>• <strong>Apple Safari:</strong> Settings → Safari → Advanced → Website Data</p>
+            <p>• <strong>Microsoft Edge:</strong> Settings → Cookies and site permissions → Manage and delete cookies</p>
           </div>
         </div>
 
@@ -382,12 +382,12 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
         <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 text-left">
           <div className="flex items-center gap-2.5 mb-2.5 text-[var(--theme-text,#F8FAFC)] font-bold text-[15px]">
             <Mail className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <h2>{isHindi ? '4. संपर्क व विधिक प्रश्न' : '4. Contact & Compliance Inquiries'}</h2>
+            <h2>{isHindi ? '3.4 संपर्क व विधिक प्रश्न' : '3.4 Contact & Compliance Inquiries'}</h2>
           </div>
           <p className="text-[13px] text-[var(--theme-text-muted,#94A3B8)] leading-relaxed mb-3">
             {isHindi
               ? 'यदि आपकी इस कुकीज़ नीति या डेटा स्टोरेज के संबंध में कोई जिज्ञासा या प्रश्न है, तो आप हमारी सहायता टीम से सीधे संपर्क कर सकते हैं:'
-              : 'If you have questions regarding this Cookies Policy or your on-device data rights, contact our privacy officer directly:'}
+              : 'For questions regarding this Cookies Policy or your on-device data rights, contact:'}
           </p>
           <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[12.5px] font-mono text-[var(--theme-primary,#38BDF8)]">
             <Mail className="w-4 h-4 text-red-400" />

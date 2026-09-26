@@ -395,8 +395,8 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
     triggerCelebration();
     showToast(
       isHindi
-        ? `₹${inv.grandTotal.toLocaleString('en-IN')} का भुगतान डेली खाता आय में दर्ज कर दिया गया!`
-        : `₹${inv.grandTotal.toLocaleString('en-IN')} recorded as income in Daily Khata!`
+        ? `${inv.currency || '₹'} ${inv.grandTotal.toLocaleString()} का भुगतान डेली खाता आय में दर्ज कर दिया गया!`
+        : `${inv.currency || '₹'} ${inv.grandTotal.toLocaleString()} recorded as income in Daily Khata!`
     );
   };
 

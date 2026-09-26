@@ -17,6 +17,7 @@ import {
   Download
 } from 'lucide-react';
 import { triggerHapticSound } from '../../utils/khataCalculations';
+import { getCurrencyConfig } from '../../utils/currencyConfig';
 
 interface InvoiceHistoryViewProps {
   invoices: Invoice[];
@@ -98,7 +99,7 @@ export const InvoiceHistoryView: React.FC<InvoiceHistoryViewProps> = ({
             {isHindi ? 'भुगतान प्राप्त' : 'Paid Amount'}
           </span>
           <span className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">
-            ₹{stats.totalPaid.toLocaleString('en-IN')}
+            {invoices[0]?.currency || getCurrencyConfig(language).symbol}{stats.totalPaid.toLocaleString()}
           </span>
         </div>
 
@@ -107,7 +108,7 @@ export const InvoiceHistoryView: React.FC<InvoiceHistoryViewProps> = ({
             {isHindi ? 'बकाया राशि' : 'Pending Amount'}
           </span>
           <span className="text-xl sm:text-2xl font-black text-amber-400 font-mono">
-            ₹{stats.totalPending.toLocaleString('en-IN')}
+            {invoices[0]?.currency || getCurrencyConfig(language).symbol}{stats.totalPending.toLocaleString()}
           </span>
         </div>
 

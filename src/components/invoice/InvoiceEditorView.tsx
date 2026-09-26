@@ -434,7 +434,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                 type="text"
                 value={invoice.sender.gstin || ''}
                 onChange={(e) => updateSender('gstin', e.target.value.toUpperCase())}
-                placeholder="GSTIN / Tax ID (Optional)"
+                placeholder="Tax ID / VAT / GSTIN (Optional)"
                 className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)] uppercase"
               />
             </div>
@@ -461,14 +461,14 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               type="text"
               value={invoice.sender.state || ''}
               onChange={(e) => updateSender('state', e.target.value)}
-              placeholder="State"
+              placeholder="State / Province / Region"
               className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <input
               type="text"
               value={invoice.sender.pincode || ''}
               onChange={(e) => updateSender('pincode', e.target.value)}
-              placeholder="Pincode"
+              placeholder="Postal / ZIP / Pincode"
               className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
           </div>
@@ -532,7 +532,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
             value={invoice.client.billingAddress}
             onChange={(e) => updateClient('billingAddress', e.target.value)}
             rows={2}
-            placeholder="Billing Address (Street, City, Pincode) *"
+            placeholder="Billing Address (Street, City, Postal / ZIP) *"
             className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none focus:border-emerald-400"
           />
 
@@ -551,7 +551,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
               type="text"
               value={invoice.client.gstin || ''}
               onChange={(e) => updateClient('gstin', e.target.value.toUpperCase())}
-              placeholder="GSTIN (Optional)"
+              placeholder="Tax ID / VAT / GSTIN (Optional)"
               className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none uppercase"
             />
             <input
@@ -705,7 +705,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                     type="text"
                     value={item.hsnSac || ''}
                     onChange={(e) => handleUpdateItem(item.id, 'hsnSac', e.target.value)}
-                    placeholder="HSN/SAC"
+                    placeholder="HSN / SAC / SKU"
                     className="w-20 sm:w-28 px-2 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none text-center"
                   />
                   <button
@@ -1029,7 +1029,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   bankDetails: { ...invoice.bankDetails, bankName: e.target.value }
                 })
               }
-              placeholder="Bank Name (e.g. State Bank of India)"
+              placeholder="Bank Name (e.g. Chase, SBI, HSBC, Barclays)"
               className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <div className="grid grid-cols-2 gap-2">
@@ -1054,7 +1054,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                     bankDetails: { ...invoice.bankDetails, accountNumber: e.target.value }
                   })
                 }
-                placeholder="A/C Number"
+                placeholder="A/C Number / IBAN"
                 className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
               />
             </div>
@@ -1068,7 +1068,7 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                     bankDetails: { ...invoice.bankDetails, ifscCode: e.target.value.toUpperCase() }
                   })
                 }
-                placeholder="IFSC Code"
+                placeholder="IFSC / SWIFT / Routing Code"
                 className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono uppercase text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
               />
               <input
@@ -1080,16 +1080,16 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                     bankDetails: { ...invoice.bankDetails, branchName: e.target.value }
                   })
                 }
-                placeholder="Branch"
+                placeholder="Branch / Country"
                 className="px-2.5 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs text-[var(--theme-text)] placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
               />
             </div>
           </div>
 
-          {/* UPI ID & Live QR preview */}
+          {/* UPI ID / Payment Link & Live QR preview */}
           <div className="space-y-2">
             <span className="text-[10px] font-bold text-[var(--theme-text-dim,#94A3B8)] block uppercase tracking-wider">
-              UPI ID (Enables Direct Scan & Pay on Invoice)
+              UPI ID / Payment Link (Enables Scan & Pay QR Code)
             </span>
             <input
               type="text"
@@ -1100,13 +1100,13 @@ export const InvoiceEditorView: React.FC<InvoiceEditorViewProps> = ({
                   upiDetails: { ...invoice.upiDetails, upiId: e.target.value.trim() }
                 })
               }
-              placeholder="e.g. yourname@upi or mobile@paytm"
+              placeholder="e.g. yourname@upi or https://paypal.me/yourname"
               className="w-full px-3 py-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-xs font-mono text-emerald-400 placeholder-[var(--theme-text-dim,#94A3B8)] focus:outline-none"
             />
             <p className="text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
               {isHindi
-                ? 'UPI ID डालने पर बिल पर ऑटोमैटिक QR कोड प्रिंट होगा जिससे ग्राहक स्कैन करके सीधे भुगतान कर सकेंगे।'
-                : 'Entering a UPI ID automatically adds an instant scan-to-pay QR code to the printed invoice.'}
+                ? 'UPI ID या ऑनलाइन पेमेंट लिंक (PayPal/Stripe) डालने पर बिल पर ऑटोमैटिक QR कोड प्रिंट होगा जिससे ग्राहक स्कैन करके भुगतान कर सकेंगे।'
+                : 'Entering a UPI ID or payment link (PayPal/Stripe) automatically adds an instant scan-to-pay QR code to the printed invoice.'}
             </p>
           </div>
         </div>

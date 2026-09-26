@@ -16,6 +16,7 @@ import {
 import { Entry, FundType, FundConfig, AppLanguage } from '../types';
 import { DEFAULT_FUNDS, getFundConfig, getFundLabel } from '../data/defaults';
 import { formatCurrency, calculateFundTotals } from '../utils/khataCalculations';
+import { getCurrencyConfig } from '../utils/currencyConfig';
 import { getCategoryIcon } from '../utils/iconMap';
 import {
   TrendingUp,
@@ -318,7 +319,7 @@ export const InteractiveAnalytics: React.FC<InteractiveAnalyticsProps> = ({
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="displayDate" stroke="#64748b" fontSize={10} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={10} tickLine={false} tickFormatter={(val) => `₹${val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}`} />
+                <YAxis stroke="#64748b" fontSize={10} tickLine={false} tickFormatter={(val) => `${getCurrencyConfig(language).symbol}${val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}`} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area type="monotone" dataKey="income" name="Income" stroke="#10B981" strokeWidth={2} fillOpacity={1} fill="url(#incomeGrad)" />
                 <Area type="monotone" dataKey="expense" name="Expense" stroke="#EF4444" strokeWidth={2} fillOpacity={1} fill="url(#expenseGrad)" />
@@ -395,7 +396,7 @@ export const InteractiveAnalytics: React.FC<InteractiveAnalyticsProps> = ({
                   angle={-20}
                   textAnchor="end"
                 />
-                <YAxis stroke="#64748b" fontSize={10} tickLine={false} tickFormatter={(val) => `₹${val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}`} />
+                <YAxis stroke="#64748b" fontSize={10} tickLine={false} tickFormatter={(val) => `${getCurrencyConfig(language).symbol}${val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}`} />
                 <Tooltip
                   formatter={(val: any) => [formatCurrency(Number(val), privacyMask), 'Expense']}
                   contentStyle={{ backgroundColor: '#132438', borderColor: '#213E61', borderRadius: '12px', fontSize: '11px' }}

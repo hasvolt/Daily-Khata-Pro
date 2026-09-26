@@ -9,6 +9,7 @@ import {
   FundConfig
 } from '../types';
 import { formatCurrency, triggerHapticSound, triggerCelebration } from '../utils/khataCalculations';
+import { getCurrencyConfig } from '../utils/currencyConfig';
 import {
   Landmark,
   ArrowUpRight,
@@ -1459,7 +1460,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-sky-400">
-                  ₹
+                  {getCurrencyConfig().symbol}
                 </span>
                 <input
                   type="number"
@@ -1553,11 +1554,11 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                   <div className="space-y-1">
                     <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
-                      Monthly EMI (₹)
+                      Monthly EMI ({getCurrencyConfig().symbol})
                     </label>
                     <div className="relative">
                       <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-sky-400">
-                        ₹
+                        {getCurrencyConfig().symbol}
                       </span>
                       <input
                         type="number"
@@ -1758,7 +1759,7 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
           <div className="space-y-1">
             <div className="flex justify-between items-center text-xs">
               <label className="font-semibold text-[var(--theme-text-dim,#94A3B8)]">
-                Payment Amount (₹) *
+                Payment Amount ({getCurrencyConfig().symbol}) *
               </label>
               <button
                 type="button"
@@ -1770,7 +1771,7 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
             </div>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-emerald-400">
-                ₹
+                {getCurrencyConfig().symbol}
               </span>
               <input
                 type="number"

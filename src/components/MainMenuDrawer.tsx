@@ -48,6 +48,7 @@ import {
   Languages
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import { AppLogo } from './AppLogo';
 import { AppTheme, AppLanguage } from '../types';
 import { getAppTranslation } from '../utils/appTranslations';
@@ -254,11 +255,11 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                     ? 'bg-amber-500/20 border-amber-500/50 text-amber-400'
                     : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
-                title={privacyMask ? 'Amounts Hidden' : 'Mask ₹ Amounts'}
+                title={privacyMask ? 'Amounts Hidden' : `Mask ${getCurrencyConfig(language || getCurrentLanguage()).symbol} Amounts`}
                 id="menu-quick-privacy-btn"
               >
                 {privacyMask ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                <span className="hidden xs:inline">{privacyMask ? (isHindi ? 'छिपा ₹' : 'Masked') : (isHindi ? 'प्राइवेसी' : 'Privacy')}</span>
+                <span className="hidden xs:inline">{privacyMask ? (isHindi ? `छिपा ${getCurrencyConfig(language || getCurrentLanguage()).symbol}` : 'Masked') : (isHindi ? 'प्राइवेसी' : 'Privacy')}</span>
               </button>
             )}
 

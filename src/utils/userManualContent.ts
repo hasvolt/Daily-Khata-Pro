@@ -52,7 +52,7 @@ export interface UserManualTranslation {
 const MANUAL_EN: UserManualTranslation = {
   title: 'User Manual & Comprehensive Guide',
   subtitle: 'Official guide to financial discipline, 6-fund capital allocation, and zero-telemetry offline accounting.',
-  searchPlaceholder: 'Search manual (e.g. 6 funds, app lock, backup, goals, reports)...',
+  searchPlaceholder: 'Search manual (e.g. invoice, 6 funds, calculators, app lock, backup)...',
   officialGuide: 'Official User Guide',
   poweredBy: 'Powered by',
   backToHome: 'Back to Khata',
@@ -477,8 +477,80 @@ const MANUAL_EN: UserManualTranslation = {
       proTip: 'You can verify offline capability anytime by turning on Airplane mode; the app continues working seamlessly.'
     },
     {
+      id: 'invoice_generator',
+      title: '16. GST & Non-GST Invoice Generator Tools',
+      subtitle: 'Professional client billing, tax calculations, 1-click ledger sync, and print-ready PDF invoices',
+      overviewHeading: 'Complete Professional Invoicing & Billing Suite',
+      overviewText: 'Generate sleek, compliant GST and Non-GST bills for freelance contracts, business clients, services, and product sales. Add client details, customize tax slabs and discounts, set payment instructions (Bank transfer, UPI QR, Cash), and export high-resolution printable PDF invoices.',
+      cardsHeading: 'Invoicing Suite Capabilities',
+      cards: [
+        {
+          title: '1-Click "Record to Khata"',
+          desc: 'Directly convert final invoice revenue into an Income entry in Daily Khata, instantly running the 6-fund split formula.'
+        },
+        {
+          title: 'Automated Tax & Discount Math',
+          desc: 'Calculates item-wise GST percentages (5%, 12%, 18%, 28%), subtotal, tax sums, discounts, and grand totals automatically.'
+        },
+        {
+          title: 'High-Res PDF & Print Layout',
+          desc: 'Clean, professional A4 print styling with Rozfiber branding, custom terms & conditions, and bank/UPI details.'
+        },
+        {
+          title: 'Client & Seller Profiles',
+          desc: 'Save business name, GSTIN, contact numbers, billing address, invoice numbers, and payment due dates.'
+        }
+      ],
+      stepsHeading: 'How to Generate an Invoice:',
+      steps: [
+        {
+          step: 'Step 1',
+          title: 'Fill Seller & Client Details',
+          desc: 'Enter your business name, GSTIN, client details, invoice number, and issue date.'
+        },
+        {
+          step: 'Step 2',
+          title: 'Add Line Items & Taxes',
+          desc: 'Add product or service descriptions, quantity, unit price, and applicable GST rate.'
+        },
+        {
+          step: 'Step 3',
+          title: 'Print PDF or Sync to Khata',
+          desc: 'Click "Print / Download PDF" to deliver to your client, and click "Record to Khata" to log your payment.'
+        }
+      ],
+      proTip: 'Always click "Record to Khata" when client payments are received so your 6-fund reserves are automatically distributed.'
+    },
+    {
+      id: 'financial_calculators',
+      title: '17. Multi-Purpose Financial Planning Calculators',
+      subtitle: 'Inflation & goal horizon, SIP wealth compounding, loan EMIs, and cash runway simulators',
+      overviewHeading: 'Advanced Financial Planning Engine',
+      overviewText: 'Daily Khata Pro features a suite of mathematical calculators to plan future goals, project investment compounding, schedule loan repayments, and simulate emergency runway cushions.',
+      cardsHeading: 'Built-in Calculator Suite',
+      cards: [
+        {
+          title: 'Inflation & Goal Horizon Calculator',
+          desc: 'Computes true future inflated costs of life milestones (education, home, retirement) and monthly SIP needed.'
+        },
+        {
+          title: 'SIP & Lumpsum Wealth Compounder',
+          desc: 'Projects wealth accumulation over 1 to 30 years with visual charts and return estimates.'
+        },
+        {
+          title: 'Loan EMI & Debt Amortization',
+          desc: 'Calculates monthly installments, interest vs principal breakdown, and interest savings on prepayment.'
+        },
+        {
+          title: 'Cash Runway & Emergency Simulator',
+          desc: 'Measures how many months your liquid reserves will last during unexpected income pauses.'
+        }
+      ],
+      proTip: 'Use the Inflation & Goal Horizon calculator before setting target amounts in your Financial Goals.'
+    },
+    {
       id: 'forex_calculator',
-      title: '17. Universal Multi-Country Cross-Currency Calculator',
+      title: '18. Universal Multi-Country Cross-Currency Calculator',
       subtitle: '25+ global currencies, any-to-any cross rates, remittance fees, and printable calculation slips',
       overviewHeading: 'Universal Foreign Exchange Engine',
       overviewText: 'Convert between any two world currencies with instant bid/ask rates, reverse multipliers, real-time comparison tables across major currencies, bank remittance spread fees, and formal printable calculation slips.',
@@ -501,7 +573,7 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'market_news',
-      title: '18. Live Sensex, Nifty 50 & Commercial Research',
+      title: '19. Live Sensex, Nifty 50 & Commercial Research',
       subtitle: 'Real-time Indian market indices, macro news portal, and institutional whitepapers',
       overviewHeading: 'Commercial Market Intelligence',
       overviewText: 'Stay informed with live benchmark quotes for BSE Sensex, NSE Nifty 50, and Bank Nifty, along with commercial business headlines, macro-economic insights, and wealth-building strategies.',
@@ -524,7 +596,7 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'attendance',
-      title: '19. Work Attendance & Shift Wage Register',
+      title: '20. Work Attendance & Shift Wage Register',
       subtitle: 'Daily check-in, overtime hours, per-shift payout calculator, and monthly wage summaries',
       overviewHeading: 'Worker & Contractor Shift Ledger',
       overviewText: 'Maintain an accurate attendance roll for yourself, employees, or household staff. Track Present, Half-Day, Absent, and Paid Leave days with automatic wage and overtime rate calculations.',
@@ -549,8 +621,31 @@ const MANUAL_EN: UserManualTranslation = {
       proTip: 'Log daily overtime hours immediately at the end of every shift to ensure monthly payouts match reality.'
     },
     {
+      id: 'finance_blog',
+      title: '21. Finance Knowledge Blog & Editorial Library',
+      subtitle: 'Research-backed financial guides, startup economics, budgeting frameworks, and tax analysis',
+      overviewHeading: 'Rozfiber Finance Editorial Knowledge Base',
+      overviewText: 'Rozfiber Finance delivers independent, research-driven financial education, comprehensive guides, and deep-dive analysis on saving, business accounting, investing, and financial discipline.',
+      cardsHeading: 'Blog Platform Pillars',
+      cards: [
+        {
+          title: 'Research-First Articles',
+          desc: 'In-depth finance guides authored by MD Zafeer Hasan (YAZDAAN) covering practical wealth concepts.'
+        },
+        {
+          title: 'Category & Topic Filtering',
+          desc: 'Explore focused topics including Business, Startup, Budgeting, Emergency Fund, Saving, Taxes, and Loans.'
+        },
+        {
+          title: 'Practical Tool Integration',
+          desc: 'Read actionable theory, then immediately apply concepts using Daily Khata Pro\'s financial tools.'
+        }
+      ],
+      proTip: 'Pair reading blog articles with adjusting your 6-fund rules to continually refine your financial discipline.'
+    },
+    {
       id: 'google_drive',
-      title: '20. Google Drive Client-Side Sync & Backup',
+      title: '22. Google Drive Client-Side Sync & Backup',
       subtitle: 'Private cloud sync directly from your browser to your personal Google Drive account',
       overviewHeading: 'Zero-Intermediary Cloud Backup',
       overviewText: 'Securely sync your encrypted financial records directly with your personal Google Drive account without passing through any intermediary servers, preserving 100% privacy and multi-device synchronization.',
@@ -573,11 +668,19 @@ const MANUAL_EN: UserManualTranslation = {
     },
     {
       id: 'faq',
-      title: '21. Frequently Asked Questions (FAQ)',
+      title: '23. Frequently Asked Questions (FAQ)',
       subtitle: 'Answers to common questions regarding offline data, PIN recovery, and calculations',
       overviewHeading: 'Frequently Asked Questions',
       overviewText: 'Here are answers to the most frequent inquiries from our community of users:',
       faqList: [
+        {
+          q: 'Can I generate professional invoices for my clients and log payments directly into Khata?',
+          a: 'Yes! The Invoice Generator tool allows you to create GST and Non-GST bills with itemized rows, tax calculations, and printable PDFs. You can also click "Record to Khata" to log the payment into your ledger with automatic 6-fund splitting.'
+        },
+        {
+          q: 'Where can I find financial planning calculators like Inflation, SIP, and Loan EMI?',
+          a: 'Navigate to Calculators in the menu or footer. It includes Inflation & Goal Horizon, SIP Compounder, Loan EMI Amortization, Cash Runway Simulator, and Multi-Currency Forex conversion.'
+        },
         {
           q: 'Is my financial data stored on any server?',
           a: 'No. Daily Khata Pro operates on a 100% client-side architecture. All balances, transactions, goals, and notes are saved strictly in your device\'s local storage (daily_khata_pro_v3).'
@@ -607,7 +710,7 @@ const MANUAL_EN: UserManualTranslation = {
 const MANUAL_HI: UserManualTranslation = {
   title: 'उपयोग निर्देशिका एवं संपूर्ण गाइड',
   subtitle: 'वित्तीय अनुशासन, स्मार्ट फंड फॉर्मूला व शून्य-टेलीमेट्री ऑफलाइन धन प्रबंधन की आधिकारिक मार्गदर्शिका।',
-  searchPlaceholder: 'यूजर गाइड में खोजें (उदा. 6 फंड, ऐप लॉक, बैकअप, लक्ष्य, रिपोर्ट्स)...',
+  searchPlaceholder: 'यूजर गाइड में खोजें (उदा. इनवॉइस, 6 फंड, कैलकुलेटर, ऐप लॉक)...',
   officialGuide: 'आधिकारिक उपयोगकर्ता मार्गदर्शिका',
   poweredBy: 'संचालित',
   backToHome: 'वापस खाता पर जाएं',
@@ -1032,8 +1135,80 @@ const MANUAL_HI: UserManualTranslation = {
       proTip: 'हवाई जहाज़ मोड (Airplane Mode) चालू करके ऐप चलाएं; ऐप बिना इंटरनेट के 100% सुचारू रूप से चलता है।'
     },
     {
+      id: 'invoice_generator',
+      title: '16. जीएसटी एवं नॉन-जीएसटी इनवॉइस जनरेटर टूल्स',
+      subtitle: 'पेशेवर बिलिंग, टैक्स गणना, 1-क्लिक खाता सिंक व प्रिंट-रेडी PDF इनवॉइस',
+      overviewHeading: 'संपूर्ण व्यावसायिक इनवॉइस व बिलिंग सुइट',
+      overviewText: 'फ्रीलांस प्रोजेक्ट्स, व्यापारिक ग्राहकों, सेवाओं और उत्पादों के लिए पेशेवर व मान्य GST और Non-GST बिल तैयार करें। ग्राहक का विवरण, टैक्स स्लैब (5%, 12%, 18%, 28%), छूट (Discounts), भुगतान माध्यम (Bank, UPI QR, Cash) और नियम व शर्तें जोड़कर उच्च-गुणवत्ता की A4 प्रिंट-रेडी PDF रसीद निकालें।',
+      cardsHeading: 'इनवॉइस सुइट की प्रमुख क्षमताएं',
+      cards: [
+        {
+          title: '1-क्लिक "Record to Khata"',
+          desc: 'इनवॉइस की कुल रकम को सीधे Daily Khata में आमदनी (Income) के रूप में दर्ज करें, जहाँ 6-फंड फॉर्मूला तुरंत लागू हो जाएगा।'
+        },
+        {
+          title: 'स्वचालित टैक्स व छूट गणना',
+          desc: 'प्रति-आइटम GST दर, कुल सबटोटल, कुल टैक्स, डिस्काउंट कटौती और अंतिम देय राशि की स्वचालित गणना।'
+        },
+        {
+          title: 'हाई-रिज़ॉल्यूशन PDF व प्रिंट लेआउट',
+          desc: 'Rozfiber ब्रांडिंग के साथ A4 आकार में स्वच्छ, औपचारिक और सुंदर प्रिंट लेआउट।'
+        },
+        {
+          title: 'ग्राहक व विक्रेता प्रोफाइल',
+          desc: 'व्यापार का नाम, GSTIN, संपर्क नंबर, बिलिंग पता, इनवॉइस संख्या और भुगतान देय तिथि सुरक्षित रखें।'
+        }
+      ],
+      stepsHeading: 'इनवॉइस बनाने के आसान चरण:',
+      steps: [
+        {
+          step: 'चरण 1',
+          title: 'विक्रेता व ग्राहक विवरण भरें',
+          desc: 'अपनी फर्म का नाम, GSTIN, ग्राहक का नाम, पता, फोन नंबर और इनवॉइस तिथि दर्ज करें।'
+        },
+        {
+          step: 'चरण 2',
+          title: 'आइटम व टैक्स जोड़ें',
+          desc: 'उत्पाद या सेवा का नाम, मात्रा, प्रति इकाई दर और लागू GST दर चुनें।'
+        },
+        {
+          step: 'चरण 3',
+          title: 'PDF निकालें या खाते में जोड़ें',
+          desc: '"Print / Download PDF" दबाकर ग्राहक को बिल दें और "Record to Khata" दबाकर भुगतान तुरंत खाते में दर्ज करें।'
+        }
+      ],
+      proTip: 'ग्राहक से भुगतान मिलते ही हमेशा "Record to Khata" बटन दबाएं ताकि आपकी 6-फंड बचत अपने आप संतुलित रहे।'
+    },
+    {
+      id: 'financial_calculators',
+      title: '17. उन्नत बहु-उद्देश्यीय वित्तीय योजना कैलकुलेटर',
+      subtitle: 'मुद्रास्फीति व गोल होराइजन, SIP वेल्थ कंपाउंडर, लोन EMI और इमरजेंसी रनवे सिमुलेटर',
+      overviewHeading: 'उन्नत वित्तीय योजना एवं पूर्वानुमान इंजन',
+      overviewText: 'Daily Khata Pro में भविष्य के लक्ष्यों की योजना बनाने, चक्रवृद्धि निवेश लाभ का अनुमान लगाने, ऋण की EMI का विश्लेषण करने और आपातकालीन नकदी रनवे की गणना करने के लिए शक्तिशाली गणितीय कैलकुलेटर शामिल हैं।',
+      cardsHeading: 'कैलकुलेटर सुइट का विवरण',
+      cards: [
+        {
+          title: 'इन्फ्लेशन व गोल होराइजन कैलकुलेटर',
+          desc: 'मुद्रास्फीति को जोड़कर भविष्य के लक्ष्यों (मकान, शिक्षा, रिटायरमेंट) की वास्तविक लागत और आवश्यक मासिक SIP की गणना करें।'
+        },
+        {
+          title: 'SIP व एकमुश्त वेल्थ कंपाउंडर',
+          desc: '1 से 30 वर्षों में मिलने वाले चक्रवृद्धि रिटर्न और संपत्ति वृद्धि का विजुअल ग्राफ़ देखें।'
+        },
+        {
+          title: 'लोन EMI व ऋण परिशोधन (Amortization)',
+          desc: 'मासिक किस्त, कुल ब्याज, मूलधन अनुपात और प्री-पेमेंट करने पर होने वाली भारी बचत की जांच करें।'
+        },
+        {
+          title: 'कैश रनवे व इमरजेंसी सिमुलेटर',
+          desc: 'मासिक खर्च की दर के आधार पर जानें कि आपकी वर्तमान तरल बचत बिना किसी आय के कितने महीने चलेगी।'
+        }
+      ],
+      proTip: 'वित्तीय लक्ष्य (Goals) निर्धारित करने से पहले इन्फ्लेशन कैलकुलेटर का उपयोग करके भविष्य की सटीक लागत अवश्य जांच लें।'
+    },
+    {
       id: 'forex_calculator',
-      title: '17. यूनिवर्सल मल्टी-करेंसी व विदेशी मुद्रा कैलकुलेटर',
+      title: '18. यूनिवर्सल मल्टी-करेंसी व विदेशी मुद्रा कैलकुलेटर',
       subtitle: '25+ वैश्विक मुद्राएं, परस्पर विनिमय दरें, बैंक शुल्क व प्रिंट-रेडी स्लिप',
       overviewHeading: 'यूनिवर्सल फॉरेन एक्सचेंज इंजन',
       overviewText: 'दुनिया की किसी भी दो मुद्राओं (उदा. USD, INR, EUR, AED, SAR, GBP, JPY, CAD) के बीच सटीक क्रॉस-रेट कन्वर्जन करें। बैंक स्प्रेड चार्ज, रेमिटेंस वायर फीस और LRS TCS टैक्स की गणना के साथ तुरंत औपचारिक स्लिप प्रिंट करें।',
@@ -1056,7 +1231,7 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'market_news',
-      title: '18. लाइव सेंसेक्स, निफ्टी 50 व वित्तीय समाचार',
+      title: '19. लाइव सेंसेक्स, निफ्टी 50 व वित्तीय समाचार',
       subtitle: 'भारतीय बाजार के मुख्य सूचकांक, कॉर्पोरेट खबरें और वेल्थ व्हाइटपेपर्स',
       overviewHeading: 'लाइव मार्केट इंटेलिजेंस व ज्ञान पोर्टल',
       overviewText: 'BSE Sensex, NSE Nifty 50 और Bank Nifty के लाइव इंडेक्स आंकड़े, दैनिक उतार-चढ़ाव, कॉर्पोरेट वित्तीय नीतियां और धन संचय से जुड़े गहन शोध लेख सीधे अपने वर्कस्पेस में पढ़ें।',
@@ -1079,7 +1254,7 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'attendance',
-      title: '19. कार्य उपस्थिति एवं दैनिक मज़दूरी रजिस्टर',
+      title: '20. कार्य उपस्थिति एवं दैनिक मज़दूरी रजिस्टर',
       subtitle: 'दैनिक हाज़िरी, ओवरटाइम घंटे, प्रति शिफ्ट दर व मासिक वेतन विवरण',
       overviewHeading: 'कर्मचारी व पेशेवर उपस्थिति लेज़र',
       overviewText: 'स्वयं के प्रोजेक्ट्स, कर्मचारियों या सहायक कर्मचारियों की उपस्थिति दर्ज करें। पूरे दिन की हाज़िरी (Present), आधा दिन (Half-Day), अनुपस्थित (Absent) या सवेतन अवकाश (Paid Leave) मार्क करें और वेतन का स्वचालित हिसाब रखें।',
@@ -1104,8 +1279,31 @@ const MANUAL_HI: UserManualTranslation = {
       proTip: 'शिफ्ट समाप्त होते ही ओवरटाइम घंटे तुरंत दर्ज करें ताकि महीने के अंत में किसी विवाद की गुंजाइश न रहे।'
     },
     {
+      id: 'finance_blog',
+      title: '21. फाइनेंस ब्लॉग व संपादकीय ज्ञान मंच',
+      subtitle: 'शोध-आधारित वित्तीय गाइड, स्टार्टअप अर्थशास्त्र, बजटिंग रूपरेखा व कर विश्लेषण',
+      overviewHeading: 'Rozfiber Finance संपादकीय ज्ञान मंच',
+      overviewText: 'Rozfiber Finance शोध-आधारित वित्तीय शिक्षा, मार्गदर्शिकाएं और बचत, व्यापार बहीखाता, निवेश अनुशासन पर गहन विश्लेषण प्रदान करता है।',
+      cardsHeading: 'ब्लॉग मंच के मुख्य आधार',
+      cards: [
+        {
+          title: 'शोध-आधारित मूल लेख',
+          desc: 'लेखक एमडी ज़फ़ीर हसन (यज़्दान) द्वारा लिखित गहन शोध व व्यावहारिक वित्तीय विश्लेषण।'
+        },
+        {
+          title: 'श्रेणी व विषय फ़िल्टर',
+          desc: 'बिजनेस, स्टार्टअप, बजटिंग, इमरजेंसी फंड, बचत, टैक्स और लोन जैसे विषयों पर केंद्रित लेख खोजें।'
+        },
+        {
+          title: 'व्यावहारिक टूल्स के साथ जुड़ाव',
+          desc: 'वित्तीय ज्ञान पढ़ें और तुरंत Daily Khata Pro के कैलकुलेटर व टूल्स में उसका व्यावहारिक उपयोग करें।'
+        }
+      ],
+      proTip: 'ब्लॉग लेख पढ़ने के साथ-साथ अपनी 6-फंड प्रतिशत सेटिंग्स की समीक्षा करते रहें ताकि वित्तीय अनुशासन निरंतर मजबूत रहे।'
+    },
+    {
       id: 'google_drive',
-      title: '20. गूगल ड्राइव क्लाइंट-साइड बैकअप व सिंक',
+      title: '22. गूगल ड्राइव क्लाइंट-साइड बैकअप व सिंक',
       subtitle: 'अपने निजी गूगल ड्राइव खाते में 100% एन्क्रिप्टेड और सुरक्षित क्लाउड बैकअप',
       overviewHeading: 'शून्य-बिचौलिया क्लाउड बैकअप',
       overviewText: 'बिना किसी बाहरी सर्वर के, सीधे अपने ब्राउज़र से अपने निजी गूगल ड्राइव में खाता का बैकअप सुरक्षित करें। इससे आपका डेटा हमेशा सुरक्षित रहता है और अन्य फोन या कंप्यूटर पर आसानी से रिस्टोर किया जा सकता है।',
@@ -1128,11 +1326,19 @@ const MANUAL_HI: UserManualTranslation = {
     },
     {
       id: 'faq',
-      title: '21. अक्सर पूछे जाने वाले प्रश्न (FAQ)',
+      title: '23. अक्सर पूछे जाने वाले प्रश्न (FAQ)',
       subtitle: 'ऑफ़लाइन डेटा, पिन रिकवरी और गणितीय गणनाओं से जुड़े महत्वपूर्ण उत्तर',
       overviewHeading: 'अक्सर पूछे जाने वाले सवाल और उनके जवाब',
       overviewText: 'यहाँ हमारे उपयोगकर्ताओं द्वारा सबसे ज़्यादा पूछे जाने वाले सवालों के विस्तृत जवाब दिए गए हैं:',
       faqList: [
+        {
+          q: 'क्या मैं ग्राहकों के लिए इनवॉइस बनाकर सीधे खाते में भुगतान दर्ज कर सकता हूँ?',
+          a: 'हाँ! इनवॉइस जनरेटर टूल से आप जीएसटी व नॉन-जीएसटी बिल बना सकते हैं, प्रिंट/PDF निकाल सकते हैं और "Record to Khata" बटन दबाकर तुरंत अपनी कमाई को 6-फंड फॉर्मूले के साथ बहीखाते में जोड़ सकते हैं।'
+        },
+        {
+          q: 'मुद्रास्फीति, SIP और लोन EMI जैसे कैलकुलेटर कहाँ मिलेंगे?',
+          a: 'कैलकुलेटर पेज (Calculators) पर आपको इन्फ्लेशन व गोल होराइजन, SIP वेल्थ कंपाउंडर, लोन EMI शेड्यूल, कैश रनवे सिमुलेटर और मल्टी-करेंसी फॉरेक्स कैलकुलेटर मिल जाएंगे।'
+        },
         {
           q: 'क्या मेरा वित्तीय डेटा किसी सर्वर पर सुरक्षित है?',
           a: 'नहीं। Daily Khata Pro पूरी तरह से 100% क्लाइंट-साइड ऑफलाइन चलता है। आपके सभी बैलेंस, लेनदेन, लक्ष्य और नोट्स केवल आपके डिवाइस के लोकल स्टोरेज (daily_khata_pro_v3) में सहेजे जाते हैं।'

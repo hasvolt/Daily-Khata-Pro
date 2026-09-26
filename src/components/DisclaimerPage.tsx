@@ -26,7 +26,7 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
   const pageT = getPageTranslation(language);
   const t = pageT.disclaimer;
   const email = 'daily-Khata-Pro@gmail.com';
-  const devEmail = 'mdzafeerhasan.official@gmail.com';
+  const devEmail = 'mzhyazdaan@gmail.com';
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200 text-left">
@@ -72,64 +72,75 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
 
       {/* Detailed Disclaimer Cards */}
       <div className="space-y-4 text-[13px] text-[var(--theme-text-muted,#CBD5E1)]">
-        {/* 1. Non-advisory */}
+        {/* 4.1 Non-Advisory Nature */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[#F59E0B] font-bold text-[15px]">
             <AlertTriangle className="w-4.5 h-4.5" />
-            <h2>{t.sections.nonAdvisoryTitle}</h2>
+            <h2>4.1 Non-Advisory Nature</h2>
           </div>
           <p className="leading-relaxed">
-            {t.sections.nonAdvisoryDesc}
+            Any default allocation rules, budgeting suggestions, or formulas (such as fund-distribution ratios) offered within the app are general rules of thumb only. You should review and, where appropriate, customize these ratios in Settings to suit your personal financial situation. They do not constitute personalized financial advice.
           </p>
         </div>
 
-        {/* 2. Calculation Integrity & System Errors */}
+        {/* 4.2 Calculation Accuracy & Technical Limitations */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] font-bold text-[15px]">
             <ShieldAlert className="w-4.5 h-4.5" />
-            <h2>{t.sections.calculationTitle} &amp; Technical Limitations</h2>
+            <h2>4.2 Calculation Accuracy &amp; Technical Limitations</h2>
           </div>
           <p className="leading-relaxed">
-            {t.sections.calculationDesc}
+            While the app&apos;s calculators and algorithms are developed with care and tested for accuracy, all software may be subject to occasional technical errors. Users are responsible for independently verifying all figures before relying on them for tax filing, business decisions, or other formal purposes.
           </p>
           <div className="mt-3 p-3 bg-[#EF4444]/10 border border-[#EF4444]/30 rounded-xl">
             <h3 className="font-bold text-[#EF4444] mb-1">Important Disclaimer on Calculations</h3>
             <p className="text-[var(--theme-text,#F8FAFC)]">
-              Although our calculators and algorithms are designed for precision, technical glitches or calculation mistakes can occasionally happen. <strong>Always manually verify any financial numbers, interest, or margins before making actual financial decisions.</strong> The app is not responsible for any financial loss due to calculation errors.
+              Although our calculators and algorithms are designed for precision, technical issues or calculation errors can occasionally occur. Always manually verify any financial numbers, interest, or margins before making actual financial decisions. The app and its developer are not responsible for financial loss arising from calculation errors.
             </p>
           </div>
         </div>
 
-        {/* Free Standard Edition & Third-Party References */}
+        {/* 4.3 Free Standard Edition & Market Data Disclaimer */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
-          <div className="flex items-center gap-2 text-[#F59E0B] font-bold text-[15px]">
+          <div className="flex items-center gap-2 text-cyan-400 font-bold text-[15px]">
             <AlertTriangle className="w-4.5 h-4.5" />
-            <h2>Free Standard Edition &amp; Market Data Disclaimer</h2>
+            <h2>4.3 Free Standard Edition &amp; Market Data Disclaimer</h2>
           </div>
           <p className="leading-relaxed">
-            Daily Khata Pro is offered as a free standard edition under the open-source MIT license. Market index rates (Sensex, Nifty 50) and forex exchange values are gathered from public educational financial feeds and may experience transmission delays. They are provided solely for indicative reference and personal bookkeeping, not for executing securities trading or commercial forex transactions.
+            Daily Khata Pro is offered as a free standard edition under the open-source MIT License. Where the app displays reference market data (such as index levels or indicative forex rates), this information is drawn from public, educational financial feeds and may be subject to transmission delay. It is provided solely for indicative reference and personal bookkeeping purposes, and must not be used for executing securities trading or commercial foreign-exchange transactions.
           </p>
         </div>
 
-        {/* 3. Self Responsibility */}
+        {/* 4.4 Data Custody & Backups */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[#10B981] font-bold text-[15px]">
             <CheckCircle2 className="w-4.5 h-4.5" />
-            <h2>{t.sections.selfResponsibilityTitle}</h2>
+            <h2>4.4 Data Custody &amp; Backups</h2>
           </div>
           <p className="leading-relaxed">
-            {t.sections.selfResponsibilityDesc}
+            Because Daily Khata Pro operates without a central server, all data is stored exclusively on your device. If your browser cache or app data is cleared without a prior JSON/Excel backup, that data cannot be recovered by us, as we hold no copy of it.
           </p>
         </div>
 
-        {/* Support & Inquiries */}
+        {/* 4.5 Limitation of Liability */}
+        <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
+          <div className="flex items-center gap-2 text-rose-400 font-bold text-[15px]">
+            <Scale className="w-4.5 h-4.5" />
+            <h2>4.5 Limitation of Liability</h2>
+          </div>
+          <p className="leading-relaxed">
+            To the maximum extent permitted by applicable law, the developer of Daily Khata Pro shall not be liable for any direct, indirect, incidental, or consequential loss arising from use of the application, including but not limited to reliance on in-app calculations or loss of locally stored data.
+          </p>
+        </div>
+
+        {/* 4.6 Legal & Policy Inquiries */}
         <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 space-y-2.5">
           <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)] font-bold text-[15px]">
             <Mail className="w-4.5 h-4.5" />
-            <h2>Legal &amp; Policy Inquiries</h2>
+            <h2>4.6 Legal &amp; Policy Inquiries</h2>
           </div>
           <p className="leading-relaxed">
-            For questions regarding our legal disclaimer, computational formulas, or compliance:
+            For questions regarding this disclaimer, computational formulas, or compliance matters:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center gap-2.5">

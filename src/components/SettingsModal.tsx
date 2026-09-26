@@ -68,7 +68,8 @@ import {
   Volume1,
   Cloud,
   CloudUpload,
-  CloudCheck
+  CloudCheck,
+  Coins
 } from 'lucide-react';
 import {
   auth,
@@ -101,6 +102,7 @@ import { TRANSLATIONS, isPureHindi, isHinglish, isHindiOrHinglish, pickTranslati
 import { getAppTranslation } from '../utils/appTranslations';
 import { APP_VERSION_FULL, APP_VERSION_FOOTER } from '../utils/version';
 import { applyGoogleTranslateLanguage, resetGoogleTranslate } from '../utils/googleTranslate';
+import { getPreferredCurrency, setPreferredCurrency, getCurrencyConfig } from '../utils/currencyConfig';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -213,6 +215,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [editingFundItem, setEditingFundItem] = useState<FundConfig | null>(null);
   const [isFundEditorOpen, setIsFundEditorOpen] = useState(false);
   const [fundToDelete, setFundToDelete] = useState<FundConfig | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>(() => getPreferredCurrency() || '');
 
   useEffect(() => {
     if (funds && funds.length > 0) {
@@ -779,6 +782,86 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       {tStr('मूल भाषा (Reset)', 'Reset Language', 'Reset Language')}
                     </button>
                   </div>
+                </div>
+              </div>
+
+              {/* Universal Currency & Region Selector */}
+              <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <Coins className="w-4 h-4 text-emerald-400" />
+                    <label className="font-bold text-[13.5px] text-[var(--theme-text,#F8FAFC)]">
+                      {tStr('करेंसी व मुद्रा (Universal Currency)', 'Universal Currency & Symbol', 'Universal Currency & Symbol')}
+                    </label>
+                  </div>
+                  <span className="text-[10.5px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-mono font-bold">
+                    Active: {getCurrencyConfig(language).symbol} ({getCurrencyConfig(language).code})
+                  </span>
+                </div>
+
+                <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                  {tStr(
+                    'अपनी पसंदीदा करेंसी चुनें। यह होमपेज, कुल बैलेंस, इनवॉइस व सभी टूल्स में तुरंत लागू हो जाएगी:',
+                    'Choose your preferred currency. It automatically updates across homepage, total balance, invoices, and all financial tools:',
+                    'Choose your preferred currency. It automatically updates across homepage, total balance, invoices, and all financial tools:'
+                  )}
+                </p>
+
+                <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHapticSound('click');
+                      setPreferredCurrency(null);
+                      setSelectedCurrency('');
+                      window.dispatchEvent(new Event('dailykhata-currency-change'));
+                    }}
+                    className={`p-2 rounded-xl border text-center transition-all cursor-pointer ${
+                      !selectedCurrency
+                        ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] font-extrabold shadow-sm'
+                        : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/50'
+                    }`}
+                  >
+                    <div className="text-[12px] font-bold">🌐 Auto (Language)</div>
+                    <div className="text-[9.5px] opacity-75">{getCurrencyConfig(language).code} ({getCurrencyConfig(language).symbol})</div>
+                  </button>
+
+                  {[
+                    { code: 'INR', symbol: '₹', name: 'INR (₹)', sub: 'India / Rupee' },
+                    { code: 'USD', symbol: '$', name: 'USD ($)', sub: 'US Dollar' },
+                    { code: 'EUR', symbol: '€', name: 'EUR (€)', sub: 'Euro / Europe' },
+                    { code: 'GBP', symbol: '£', name: 'GBP (£)', sub: 'British Pound' },
+                    { code: 'AED', symbol: 'د.إ', name: 'AED (د.إ)', sub: 'UAE / Dubai' },
+                    { code: 'SAR', symbol: '﷼', name: 'SAR (﷼)', sub: 'Saudi Riyal' },
+                    { code: 'CAD', symbol: 'C$', name: 'CAD (C$)', sub: 'Canada' },
+                    { code: 'AUD', symbol: 'A$', name: 'AUD (A$)', sub: 'Australia' },
+                    { code: 'SGD', symbol: 'S$', name: 'SGD (S$)', sub: 'Singapore' },
+                    { code: 'JPY', symbol: '¥', name: 'JPY (¥)', sub: 'Japan' },
+                    { code: 'BDT', symbol: '৳', name: 'BDT (৳)', sub: 'Bangladesh' },
+                    { code: 'PKR', symbol: '₨', name: 'PKR (₨)', sub: 'Pakistan' }
+                  ].map((curr) => {
+                    const isSelected = selectedCurrency === curr.code;
+                    return (
+                      <button
+                        key={curr.code}
+                        type="button"
+                        onClick={() => {
+                          triggerHapticSound('click');
+                          setPreferredCurrency(curr.code);
+                          setSelectedCurrency(curr.code);
+                          window.dispatchEvent(new Event('dailykhata-currency-change'));
+                        }}
+                        className={`p-2 rounded-xl border text-center transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] font-extrabold shadow-sm'
+                            : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/50'
+                        }`}
+                      >
+                        <div className="text-[12px] font-bold">{curr.name}</div>
+                        <div className="text-[9.5px] opacity-75 truncate">{curr.sub}</div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { AttendanceLog, PaymentMode, FundType, AppLanguage } from '../../types';
 import { formatCurrency, triggerHapticSound } from '../../utils/khataCalculations';
+import { getCurrencyConfig, getCurrentLanguage } from '../../utils/currencyConfig';
 import { 
   X, 
   CheckCircle2, 
@@ -154,8 +155,8 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
     // Save batch
     if (onBatchUpdateAttendanceLogs) {
       const successMsg = isHindi
-        ? `₹${amountVal.toLocaleString('en-IN')} का भुगतान ${daysSettled} दिनों के रिकॉर्ड में सफलतापूर्वक दर्ज हुआ!`
-        : `₹${amountVal.toLocaleString('en-IN')} payment settled across ${daysSettled} work days!`;
+        ? `${formatCurrency(amountVal)} का भुगतान ${daysSettled} दिनों के रिकॉर्ड में सफलतापूर्वक दर्ज हुआ!`
+        : `${formatCurrency(amountVal)} payment settled across ${daysSettled} work days!`;
       onBatchUpdateAttendanceLogs(updated, successMsg);
     }
 
@@ -221,11 +222,11 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
               className="w-full bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[13px] px-3 py-2.5 rounded-xl border border-[var(--theme-border,#213E61)] focus:outline-hidden focus:border-[var(--theme-primary,#38BDF8)] font-semibold"
             >
               <option value="all">
-                {isHindi ? `सभी नियोक्ता (कुल ₹${totalPendingAmount.toLocaleString('en-IN')} बाकी)` : `All Employers (Total ${totalPendingAmount.toLocaleString('en-IN')} Pending)`}
+                {isHindi ? `सभी नियोक्ता (कुल ${formatCurrency(totalPendingAmount)} बाकी)` : `All Employers (Total ${formatCurrency(totalPendingAmount)} Pending)`}
               </option>
               {employersWithDues.map((emp) => (
                 <option key={emp.name} value={emp.name}>
-                  {emp.name} — {isHindi ? `₹${emp.totalPending.toLocaleString('en-IN')} बाकी (${emp.pendingLogsCount} दिन)` : `₹${emp.totalPending.toLocaleString('en-IN')} pending (${emp.pendingLogsCount} days)`}
+                  {emp.name} — {isHindi ? `${formatCurrency(emp.totalPending)} बाकी (${emp.pendingLogsCount} दिन)` : `${formatCurrency(emp.totalPending)} pending (${emp.pendingLogsCount} days)`}
                 </option>
               ))}
               {employersWithDues.length === 0 && (
@@ -280,7 +281,7 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-[12px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
-                {isHindi ? 'प्राप्त हुई राशि (Amount Received ₹)' : 'Amount Received (₹)'} *
+                {isHindi ? `प्राप्त हुई राशि (Amount Received ${getCurrencyConfig(getCurrentLanguage()).symbol})` : `Amount Received (${getCurrencyConfig(getCurrentLanguage()).symbol})`} *
               </label>
               <input
                 type="number"

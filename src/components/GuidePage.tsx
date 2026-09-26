@@ -44,6 +44,7 @@ interface GuidePageProps {
   onBack: () => void;
   onOpenSourceCode?: () => void;
   onOpenSecurityLock?: () => void;
+  onNavigateTab?: (tab: string) => void;
   language?: AppLanguage;
 }
 
@@ -51,6 +52,7 @@ export const GuidePage: React.FC<GuidePageProps> = ({
   onBack,
   onOpenSourceCode,
   onOpenSecurityLock,
+  onNavigateTab,
   language = 'en'
 }) => {
   const [activeSectionId, setActiveSectionId] = useState<string>('intro');
@@ -80,9 +82,12 @@ export const GuidePage: React.FC<GuidePageProps> = ({
     settings: Settings,
     backup: ShieldCheck,
     source_code: Code2,
+    invoice_generator: Receipt,
+    financial_calculators: Calculator,
     forex_calculator: Calculator,
     market_news: TrendingUp,
     attendance: CalendarCheck,
+    finance_blog: BookOpen,
     google_drive: Cloud,
     faq: HelpCircle
   };
@@ -566,6 +571,61 @@ export const GuidePage: React.FC<GuidePageProps> = ({
                 >
                   <Lock className="w-4 h-4 text-[#10B981]" />
                   <span>{manual.quickAction}</span>
+                </button>
+              )}
+
+              {currentSection.id === 'invoice_generator' && onNavigateTab && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateTab('invoice')}
+                  className="w-full py-3.5 px-4 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/40 text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)] font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                >
+                  <Receipt className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                  <span>{isHindi ? 'इनवॉइस जनरेटर टूल खोलें' : 'Open Invoice Generator Tool'}</span>
+                </button>
+              )}
+
+              {currentSection.id === 'financial_calculators' && onNavigateTab && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateTab('calculator')}
+                  className="w-full py-3.5 px-4 rounded-xl bg-[#10B981]/15 border border-[#10B981]/40 text-[var(--theme-text,#F8FAFC)] hover:border-[#10B981] font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                >
+                  <Calculator className="w-4 h-4 text-[#10B981]" />
+                  <span>{isHindi ? 'कैलकुलेटर हब खोलें' : 'Open Financial Calculators'}</span>
+                </button>
+              )}
+
+              {currentSection.id === 'finance_blog' && onNavigateTab && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateTab('blog')}
+                  className="w-full py-3.5 px-4 rounded-xl bg-purple-500/15 border border-purple-500/40 text-[var(--theme-text,#F8FAFC)] hover:border-purple-500 font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                >
+                  <BookOpen className="w-4 h-4 text-purple-400" />
+                  <span>{isHindi ? 'फाइनेंस ब्लॉग पर जाएं' : 'Visit Finance Blog'}</span>
+                </button>
+              )}
+
+              {currentSection.id === 'attendance' && onNavigateTab && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateTab('attendance')}
+                  className="w-full py-3.5 px-4 rounded-xl bg-amber-500/15 border border-amber-500/40 text-[var(--theme-text,#F8FAFC)] hover:border-amber-500 font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                >
+                  <CalendarCheck className="w-4 h-4 text-amber-400" />
+                  <span>{isHindi ? 'उपस्थिति रजिस्टर खोलें' : 'Open Attendance Register'}</span>
+                </button>
+              )}
+
+              {currentSection.id === 'loans' && onNavigateTab && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateTab('loans')}
+                  className="w-full py-3.5 px-4 rounded-xl bg-blue-500/15 border border-blue-500/40 text-[var(--theme-text,#F8FAFC)] hover:border-blue-500 font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                >
+                  <CreditCard className="w-4 h-4 text-blue-400" />
+                  <span>{isHindi ? 'लोन व उधार खाता खोलें' : 'Open Loans & Udhar Ledger'}</span>
                 </button>
               )}
 

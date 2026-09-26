@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CategoryBudget, Entry, AppLanguage } from '../types';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
+import { getCurrencyConfig } from '../utils/currencyConfig';
 import { getCategoryIcon } from '../utils/iconMap';
 import { X, Sliders, AlertTriangle, CheckCircle2, Plus, Trash2, Edit3, ShieldAlert } from 'lucide-react';
 
@@ -116,7 +117,7 @@ export const BudgetManagerModal: React.FC<BudgetManagerModalProps> = ({
               </div>
 
               <div>
-                <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mb-1">Monthly Limit (₹)</label>
+                <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mb-1">Monthly Limit ({getCurrencyConfig(language).symbol})</label>
                 <input
                   type="number"
                   placeholder="e.g. 5000"

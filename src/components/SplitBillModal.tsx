@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
+import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import { X, Users, Split, Plus, Trash2, Copy, Check, ArrowRight, Share2, Sparkles } from 'lucide-react';
 
 interface SplitBillModalProps {
@@ -43,9 +44,9 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
 
   // Generate WhatsApp ready text
   const shareText = `🧾 *Bill Split: ${billTitle}*\n` +
-    `💰 Total Amount: ₹${totalNum.toLocaleString('en-IN')}\n` +
+    `💰 Total Amount: ${formatCurrency(totalNum)}\n` +
     `👥 People (${count}): ${participants.join(', ')}\n` +
-    `👉 *Share per person: ₹${perPersonShare.toLocaleString('en-IN')}*\n\n` +
+    `👉 *Share per person: ${formatCurrency(perPersonShare)}*\n\n` +
     `Calculated via Daily Khata Pro ⚡`;
 
   const handleCopy = () => {
@@ -59,7 +60,7 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
 
   const handleAddToLedger = () => {
     if (perPersonShare > 0 && onAddLedgerExpense) {
-      onAddLedgerExpense(perPersonShare, `${billTitle} (My Share of ₹${totalNum})`, 'Food & Groceries');
+      onAddLedgerExpense(perPersonShare, `${billTitle} (My Share of ${formatCurrency(totalNum)})`, 'Food & Groceries');
       setAddedToLedger(true);
       triggerHapticSound('save');
       setTimeout(() => {
@@ -110,7 +111,9 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mb-1">Total Bill Amount (₹)</label>
+              <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mb-1">
+                Total Bill Amount ({getCurrencyConfig(getCurrentLanguage()).symbol})
+              </label>
               <input
                 type="number"
                 value={totalAmount}
@@ -127,7 +130,7 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
               Each Person Pays
             </span>
             <span className="text-2xl sm:text-3xl font-bold font-mono text-purple-400 block">
-              ₹{perPersonShare.toLocaleString('en-IN')}
+              {formatCurrency(perPersonShare)}
             </span>
             <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
               Equally divided among {count} members
@@ -195,7 +198,7 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
               className="w-full sm:flex-1 py-2.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-40"
             >
               {addedToLedger ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-              <span>{addedToLedger ? 'Added to Records!' : 'Add My Share (₹' + perPersonShare + ')'}</span>
+              <span>{addedToLedger ? 'Added to Records!' : `Add My Share (${formatCurrency(perPersonShare)})`}</span>
             </button>
           )}
         </div>

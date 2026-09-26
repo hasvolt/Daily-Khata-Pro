@@ -135,7 +135,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           <div className="flex items-center gap-2">
             <Heart className="w-4.5 h-4.5 text-rose-400" />
             <h3 className="text-[15.5px] font-bold text-white">
-              {isHindi ? 'मूल सिद्धांत (Core Principles)' : 'Core Principles'}
+              {isHindi ? '5.1 मूल सिद्धांत (Core Principles)' : '5.1 Core Principles'}
             </h3>
           </div>
 
@@ -147,7 +147,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div>
                 <div className="text-[13px] font-bold text-white mb-0.5">Privacy-Focused</div>
                 <div className="text-[11.5px] text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
-                  {isHindi ? 'कोई क्लाउड ट्रैकिंग नहीं। सारा डेटा केवल आपके डिवाइस पर सुरक्षित रहता है।' : 'Zero telemetry. All records remain encrypted & local to your device.'}
+                  {isHindi ? 'कोई क्लाउड ट्रैकिंग नहीं। सारा डेटा केवल आपके डिवाइस पर सुरक्षित रहता है।' : 'Zero telemetry. All records remain encrypted and local to your device.'}
                 </div>
               </div>
             </div>
@@ -159,7 +159,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div>
                 <div className="text-[13px] font-bold text-white mb-0.5">Offline-First</div>
                 <div className="text-[11.5px] text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
-                  {isHindi ? 'इंटरनेट के बिना कभी भी, कहीं भी सहज रूप से काम करता है।' : 'Functions seamlessly anywhere without requiring an active internet connection.'}
+                  {isHindi ? 'इंटरनेट के बिना कभी भी, कहीं भी सहज रूप से काम करता है।' : 'Functions seamlessly anywhere, without requiring an active internet connection.'}
                 </div>
               </div>
             </div>
@@ -171,7 +171,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div>
                 <div className="text-[13px] font-bold text-white mb-0.5">Open Source</div>
                 <div className="text-[11.5px] text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
-                  {isHindi ? 'ओपन सोर्स कोड सार्वजनिक समीक्षा और पारदर्शिता के लिए उपलब्ध है।' : 'Publicly verifiable source code released under the permissive MIT license.'}
+                  {isHindi ? 'ओपन सोर्स कोड सार्वजनिक समीक्षा और पारदर्शिता के लिए उपलब्ध है।' : 'Publicly verifiable source code, released under the permissive MIT License.'}
                 </div>
               </div>
             </div>
@@ -181,9 +181,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 <PiggyBank className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-[13px] font-bold text-white mb-0.5">6-Fund Formula</div>
+                <div className="text-[13px] font-bold text-white mb-0.5">Structured Fund Allocation</div>
                 <div className="text-[11.5px] text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
-                  {isHindi ? 'आय को उद्देश्य-आधारित श्रेणियों (Personal, Family, Buffer, Emergency) में विभाजित करें।' : 'Divide income purposefully into Personal, Family, Buffer, Emergency & Savings.'}
+                  {isHindi ? 'आय को उद्देश्य-आधारित श्रेणियों (Personal, Family, Buffer, Emergency, Savings) में विभाजित करें।' : 'An optional, customizable formula to help divide income purposefully across categories such as Personal, Family, Buffer, Emergency, and Savings.'}
                 </div>
               </div>
             </div>
@@ -195,7 +195,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           <div className="flex items-center gap-2">
             <Layers className="w-4.5 h-4.5 text-[var(--theme-primary,#38BDF8)]" />
             <h3 className="text-[15.5px] font-bold text-white">
-              {isHindi ? 'मुख्य सुविधाएं (Features & Utilities)' : 'Features & Utilities'}
+              {isHindi ? '5.2 मुख्य सुविधाएं (Features & Utilities)' : '5.2 Features & Utilities'}
             </h3>
           </div>
 
@@ -206,7 +206,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 <span>Statements &amp; PDF</span>
               </div>
               <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
-                Export monthly, daily and annual financial statements directly to PDF &amp; Excel.
+                Export monthly, daily, and annual financial statements directly to PDF and Excel.
               </p>
             </div>
 
@@ -216,17 +216,17 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 <span>Any-to-Any Calculators</span>
               </div>
               <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
-                Universal 25+ country cross-currency converter, SIP, Loan EMI, and GST slips with instant print.
+                Multi-currency conversion, SIP, loan EMI, and GST calculations with instant results.
               </p>
             </div>
 
             <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-white/5 space-y-1">
               <div className="flex items-center gap-1.5 text-[var(--theme-primary,#38BDF8)] font-bold text-[12.5px]">
                 <CalendarCheck className="w-4 h-4 text-blue-400" />
-                <span>Attendance &amp; Work</span>
+                <span>Attendance &amp; Work Log</span>
               </div>
               <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
-                Dedicated daily attendance registry, shift wage calculations, and timeline tracking.
+                Dedicated attendance registry, shift wage calculations, and timeline tracking.
               </p>
             </div>
           </div>
@@ -237,7 +237,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           <div className="flex items-center gap-2">
             <User className="w-4.5 h-4.5 text-[var(--theme-primary,#38BDF8)]" />
             <h3 className="text-[15.5px] font-bold text-white">
-              {isHindi ? 'संपर्क व डेवलपर सहयोग' : 'Official Support & Developer Contact'}
+              {isHindi ? '5.3 संपर्क व डेवलपर सहयोग' : '5.3 Official Support & Developer Contact'}
             </h3>
           </div>
 
@@ -252,13 +252,13 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div className="min-w-0">
                 <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-medium">App Support</div>
                 <div className="text-[12.5px] font-bold text-white font-mono group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors truncate">
-                  daily-Khata-Pro@gmail.com
+                  daily-khata-pro@gmail.com
                 </div>
               </div>
             </a>
 
             <a
-              href="mailto:mdzafeerhasan.official@gmail.com"
+              href="mailto:mzhyazdaan@gmail.com"
               className="flex items-center gap-2.5 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-white/5 border border-[var(--theme-border,#213E61)] transition-colors group cursor-pointer"
             >
               <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
@@ -267,7 +267,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div className="min-w-0">
                 <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-medium">Developer Direct</div>
                 <div className="text-[12.5px] font-bold text-white font-mono group-hover:text-emerald-400 transition-colors truncate">
-                  mdzafeerhasan.official@gmail.com
+                  mzhyazdaan@gmail.com
                 </div>
               </div>
             </a>
@@ -279,7 +279,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           <div className="flex items-center gap-2">
             <Globe className="w-4.5 h-4.5 text-[var(--theme-primary,#38BDF8)]" />
             <h3 className="text-[15.5px] font-bold text-white">
-              {isHindi ? 'आधिकारिक लिंक (Official Links)' : 'Official Links'}
+              {isHindi ? '5.4 आधिकारिक लिंक (Official Links)' : '5.4 Official Links'}
             </h3>
           </div>
 

@@ -7,7 +7,8 @@ import {
   Layout,
   Github,
   Info,
-  Shield
+  Shield,
+  Mail
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { APP_RELEASE_LABEL } from '../utils/version';
@@ -185,6 +186,48 @@ export const DeveloperProfilePage: React.FC<DeveloperProfilePageProps> = ({
           <p className="text-[13px] leading-relaxed text-[var(--theme-text-muted,#CBD5E1)] border-l-2 border-[var(--theme-border,#213E61)] pl-3.5 italic">
             The source code is publicly available for transparency, learning, review, and further development.
           </p>
+        </div>
+
+        {/* 6. Developer Direct Contact */}
+        <div className="p-5 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl space-y-3">
+          <div className="flex items-center gap-2">
+            <Mail className="w-4.5 h-4.5 text-[var(--theme-primary,#38BDF8)]" />
+            <h3 className="text-[15.5px] font-bold text-white">
+              {isHindi ? 'डेवलपर सीधा संपर्क' : 'Developer Direct Contact'}
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <a
+              href="mailto:mzhyazdaan@gmail.com"
+              className="flex items-center gap-2.5 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-white/5 border border-[var(--theme-border,#213E61)] transition-colors group cursor-pointer"
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                <User className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-medium">Developer Direct</div>
+                <div className="text-[12.5px] font-bold text-white font-mono group-hover:text-emerald-400 transition-colors truncate">
+                  mzhyazdaan@gmail.com
+                </div>
+              </div>
+            </a>
+
+            <a
+              href="mailto:daily-Khata-Pro@gmail.com"
+              className="flex items-center gap-2.5 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-white/5 border border-[var(--theme-border,#213E61)] transition-colors group cursor-pointer"
+            >
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0">
+                <Mail className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-medium">App Support</div>
+                <div className="text-[12.5px] font-bold text-white font-mono group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors truncate">
+                  daily-khata-pro@gmail.com
+                </div>
+              </div>
+            </a>
+          </div>
         </div>
 
         {/* Switch to About App Banner */}
