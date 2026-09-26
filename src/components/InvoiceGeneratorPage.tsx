@@ -40,6 +40,7 @@ import {
 import { InvoiceEditorView } from './invoice/InvoiceEditorView';
 import { InvoicePrintView } from './invoice/InvoicePrintView';
 import { InvoiceHistoryView } from './invoice/InvoiceHistoryView';
+import { printHTMLContent } from '../utils/printHelpers';
 
 export type InvoiceTab = 'editor' | 'preview' | 'history' | 'profile';
 
@@ -399,7 +400,91 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
     );
   };
 
-  // Print Invoice (clean window print with automatic PDF title)
+  // Build crystal-clear self-contained printable document HTML
+  const generateInvoiceDocumentHTML = () => {
+    const sheetEl = document.getElementById('invoice-printable-sheet');
+    const content = sheetEl ? sheetEl.outerHTML : '';
+    const sanitizedNumber = (currentInvoice.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Invoice_${sanitizedNumber}_DailyKhataPro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm 8mm 8mm 8mm;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      margin: 0;
+      padding: 12px;
+      line-height: 1.35;
+      font-size: 11pt;
+    }
+    @media print {
+      body {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+      }
+      #invoice-printable-sheet {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+      }
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      background-color: #f1f5f9 !important;
+      color: #000000 !important;
+      border: 1.5px solid #334155 !important;
+      font-weight: 800 !important;
+    }
+    td {
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    tr, .invoice-summary-section, .invoice-terms-signature-section, .invoice-branding-footer {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    .invoice-branding-footer {
+      border-top: 1.5px solid #94a3b8 !important;
+      margin-top: 10px !important;
+      padding-top: 6px !important;
+      text-align: center !important;
+    }
+  </style>
+</head>
+<body>
+  <div style="max-width: 850px; margin: 0 auto;">
+    ${content}
+  </div>
+</body>
+</html>`;
+  };
+
+  // Print Invoice (crystal-clear print via isolated iframe + native fallback)
   const handlePrint = () => {
     triggerHapticSound('click');
     if (activeTab !== 'preview') {
@@ -419,39 +504,20 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
 
     setTimeout(() => {
       try {
-        window.print();
+        const htmlDoc = generateInvoiceDocumentHTML();
+        printHTMLContent(htmlDoc);
       } catch (e) {
-        console.error('Print trigger failed', e);
-        cleanUpPrint();
+        console.error('Isolated print failed, fallback to native', e);
+        window.print();
       }
-      setTimeout(cleanUpPrint, 1500);
+      setTimeout(cleanUpPrint, 2000);
     }, 150);
   };
 
   // Download standalone printable HTML invoice
   const handleDownloadHTML = () => {
     triggerHapticSound('click');
-    const sheetEl = document.getElementById('invoice-printable-sheet');
-    const content = sheetEl ? sheetEl.outerHTML : '';
-    const htmlDoc = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Invoice ${currentInvoice.invoiceNumber} - Rozfiber</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @page { size: A4 portrait; margin: 8mm 10mm; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #ffffff; color: #0f172a; margin: 0; padding: 12px; }
-    @media print { body { padding: 0; } }
-  </style>
-</head>
-<body>
-  <div style="max-width: 850px; margin: 0 auto;">
-    ${content}
-  </div>
-</body>
-</html>`;
+    const htmlDoc = generateInvoiceDocumentHTML();
     const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

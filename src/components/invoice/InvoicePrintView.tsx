@@ -53,40 +53,40 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
   return (
     <div
       id="invoice-printable-sheet"
-      className="w-full max-w-[850px] mx-auto bg-white text-slate-900 shadow-2xl rounded-2xl p-3.5 sm:p-10 border border-slate-200 print:border-none print:shadow-none print:p-2 print:m-0 print:max-w-none print:rounded-none font-sans leading-normal selection:bg-blue-100 min-h-auto sm:min-h-[1050px]"
+      className="w-full max-w-[850px] mx-auto bg-white text-slate-900 shadow-2xl rounded-2xl p-4 sm:p-8 sm:min-h-[960px] border border-slate-200 print:border-none print:shadow-none print:p-0 print:m-0 print:max-w-none print:rounded-none print:min-h-0 print:h-auto font-sans leading-normal selection:bg-blue-100"
     >
       {/* Top Colorful Accent Strip */}
-      <div className="h-1.5 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 rounded-full mb-6 print:mb-4" />
+      <div className="h-1.5 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 rounded-full mb-4 print:mb-2 print:h-1" />
 
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b-2 border-slate-900 print:border-slate-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 pb-4 sm:pb-5 border-b-2 border-slate-900 print:border-slate-800 print:pb-2.5">
         <div className="flex items-center gap-3.5 min-w-0">
           {sender.logoUrl ? (
             <img
               src={sender.logoUrl}
               alt={sender.businessName}
-              className="h-16 w-16 sm:h-20 sm:w-20 object-contain rounded-lg border border-slate-200 p-1 shrink-0 bg-white"
+              className="h-14 w-14 sm:h-18 sm:w-18 object-contain rounded-lg border border-slate-200 p-1 shrink-0 bg-white print:border-slate-300"
             />
           ) : (
-            <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-800 text-white flex items-center justify-center font-black text-xl tracking-wider shrink-0 print:bg-blue-800 print:text-white shadow-xs">
+            <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-800 text-white flex items-center justify-center font-black text-xl tracking-wider shrink-0 print:bg-blue-900 print:text-white shadow-xs">
               {sender.businessName ? sender.businessName.charAt(0).toUpperCase() : 'DK'}
             </div>
           )}
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
+            <h1 className="text-lg sm:text-xl font-black text-slate-900 print:text-black tracking-tight leading-tight">
               {sender.businessName || 'Business Name'}
             </h1>
-            <p className="text-xs text-slate-600 whitespace-pre-line mt-0.5 max-w-sm">
+            <p className="text-xs text-slate-600 print:text-slate-800 whitespace-pre-line mt-0.5 max-w-sm">
               {sender.address}
               {sender.city ? `, ${sender.city}` : ''}
               {sender.state ? `, ${sender.state}` : ''}
               {sender.pincode ? ` - ${sender.pincode}` : ''}
             </p>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-500 mt-1">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-600 print:text-slate-800 mt-1">
               {sender.phone && <span>Ph: {sender.phone}</span>}
               {sender.email && <span>Email: {sender.email}</span>}
               {sender.gstin && (
-                <span className="font-bold text-slate-800">GSTIN: {sender.gstin}</span>
+                <span className="font-bold text-slate-900 print:text-black">GSTIN: {sender.gstin}</span>
               )}
             </div>
           </div>
@@ -95,38 +95,38 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
         {/* Invoice Title & Meta */}
         <div className="sm:text-right w-full sm:w-auto shrink-0 flex flex-col sm:items-end">
           <div className="inline-flex items-center gap-2">
-            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-wider text-slate-900 print:text-slate-900">
+            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-wider text-slate-900 print:text-black">
               {isRetail ? 'TAX INVOICE' : 'INVOICE'}
             </h2>
             <span
-              className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs ${
+              className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs print:border print:border-slate-800 ${
                 status === 'paid'
-                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 print:bg-emerald-50 print:text-emerald-900'
                   : status === 'overdue'
-                  ? 'bg-rose-100 text-rose-800 border border-rose-300'
-                  : 'bg-amber-100 text-amber-800 border border-amber-300'
+                  ? 'bg-rose-100 text-rose-800 border border-rose-300 print:bg-rose-50 print:text-rose-900'
+                  : 'bg-amber-100 text-amber-800 border border-amber-300 print:bg-amber-50 print:text-amber-900'
               }`}
             >
               {status}
             </span>
           </div>
 
-          <div className="mt-2 text-xs space-y-0.5 text-slate-700">
+          <div className="mt-1.5 text-xs space-y-0.5 text-slate-700 print:text-slate-800">
             <p>
-              <span className="text-slate-500 font-medium">Invoice No: </span>
-              <strong className="text-slate-900 font-bold">{invoiceNumber}</strong>
+              <span className="text-slate-500 print:text-slate-600 font-medium">Invoice No: </span>
+              <strong className="text-slate-900 print:text-black font-bold">{invoiceNumber}</strong>
             </p>
             <p>
-              <span className="text-slate-500 font-medium">Invoice Date: </span>
+              <span className="text-slate-500 print:text-slate-600 font-medium">Invoice Date: </span>
               <strong>{invoiceDate}</strong>
             </p>
             <p>
-              <span className="text-slate-500 font-medium">Due Date: </span>
-              <strong className="text-slate-900 font-bold">{dueDate || 'Due on Receipt'}</strong>
+              <span className="text-slate-500 print:text-slate-600 font-medium">Due Date: </span>
+              <strong className="text-slate-900 print:text-black font-bold">{dueDate || 'Due on Receipt'}</strong>
             </p>
             {poNumber && (
               <p>
-                <span className="text-slate-500 font-medium">PO Number: </span>
+                <span className="text-slate-500 print:text-slate-600 font-medium">PO Number: </span>
                 <strong>{poNumber}</strong>
               </p>
             )}
@@ -135,90 +135,90 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
       </div>
 
       {/* Bill To & Ship To */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-5 border-b border-slate-200">
-        <div className="rounded-xl p-3.5 bg-slate-50/70 border border-slate-100 print:bg-transparent print:border-none print:p-0">
-          <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 py-3 sm:py-4 border-b border-slate-200 print:border-slate-300 print:py-2">
+        <div className="rounded-xl p-3 bg-slate-50/70 border border-slate-200 print:bg-transparent print:border-none print:p-0">
+          <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500 print:text-slate-600 mb-0.5">
             {isHindi ? 'बिल भेजा गया (Bill To)' : 'Billed To'}
           </p>
-          <h3 className="text-sm sm:text-base font-bold text-slate-900">
+          <h3 className="text-sm sm:text-base font-bold text-slate-900 print:text-black">
             {client.clientName || 'Cash / Walk-in Customer'}
           </h3>
           {client.companyName && (
-            <p className="text-xs font-medium text-slate-700">{client.companyName}</p>
+            <p className="text-xs font-semibold text-slate-800 print:text-slate-900">{client.companyName}</p>
           )}
-          <p className="text-xs text-slate-600 whitespace-pre-line mt-0.5">
+          <p className="text-xs text-slate-600 print:text-slate-800 whitespace-pre-line mt-0.5">
             {client.billingAddress}
             {client.city ? `, ${client.city}` : ''}
             {client.state ? `, ${client.state}` : ''}
             {client.pincode ? ` - ${client.pincode}` : ''}
           </p>
-          <div className="text-[11px] text-slate-500 mt-1 space-y-0.5">
+          <div className="text-[11px] text-slate-600 print:text-slate-800 mt-1 space-y-0.5">
             {client.phone && <p>Phone: {client.phone}</p>}
             {client.email && <p>Email: {client.email}</p>}
             {client.gstin && (
-              <p className="font-bold text-slate-800">GSTIN: {client.gstin}</p>
+              <p className="font-bold text-slate-900 print:text-black">GSTIN: {client.gstin}</p>
             )}
           </div>
         </div>
 
         {client.hasShippingAddress && client.shippingAddress ? (
-          <div className="rounded-xl p-3.5 bg-slate-50/70 border border-slate-100 print:bg-transparent print:border-none print:p-0">
-            <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">
+          <div className="rounded-xl p-3 bg-slate-50/70 border border-slate-200 print:bg-transparent print:border-none print:p-0">
+            <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500 print:text-slate-600 mb-0.5">
               {isHindi ? 'डिलीवरी का पता (Ship To)' : 'Shipped To'}
             </p>
-            <p className="text-xs text-slate-700 whitespace-pre-line">
+            <p className="text-xs text-slate-700 print:text-slate-800 whitespace-pre-line">
               {client.shippingAddress}
             </p>
           </div>
         ) : (
-          <div className="hidden sm:flex flex-col justify-end text-right text-xs text-slate-500">
+          <div className="hidden sm:flex flex-col justify-end text-right text-xs text-slate-500 print:text-slate-700">
             <p className="italic">
-              Payment Terms: <span className="font-semibold text-slate-700 capitalize">{paymentTerms}</span>
+              Payment Terms: <span className="font-semibold text-slate-800 print:text-slate-900 capitalize">{paymentTerms}</span>
             </p>
           </div>
         )}
       </div>
 
       {/* Line Items Table */}
-      <div className="py-4 overflow-x-auto">
-        <table className="w-full text-left border-collapse text-xs">
+      <div className="py-2.5 sm:py-3.5 overflow-x-auto print:overflow-visible print:py-1.5">
+        <table className="w-full text-left border-collapse text-xs print:border print:border-slate-400">
           <thead>
-            <tr className="border-b-2 border-slate-900 bg-slate-100 text-slate-900 font-bold uppercase tracking-wider text-[10px] print:bg-transparent print:border-black">
-              <th className="py-2 px-2 text-center w-8">#</th>
-              <th className="py-2 px-2">Item Description</th>
-              {isRetail && <th className="py-2 px-2 text-center">HSN/SAC</th>}
-              <th className="py-2 px-2 text-right">Qty</th>
-              <th className="py-2 px-2 text-right">Rate ({currency})</th>
-              {itemDiscountTotal > 0 && <th className="py-2 px-2 text-right">Disc</th>}
-              {taxType !== 'none' && <th className="py-2 px-2 text-right">Tax %</th>}
+            <tr className="border-b-2 border-slate-900 bg-slate-100 text-slate-900 font-bold uppercase tracking-wider text-[10px] print:bg-slate-100 print:border-slate-800 print:text-black">
+              <th className="py-2 px-2 text-center w-8 print:border-r print:border-slate-300">#</th>
+              <th className="py-2 px-2 print:border-r print:border-slate-300">Item Description</th>
+              {isRetail && <th className="py-2 px-2 text-center print:border-r print:border-slate-300">HSN/SAC</th>}
+              <th className="py-2 px-2 text-right print:border-r print:border-slate-300">Qty</th>
+              <th className="py-2 px-2 text-right print:border-r print:border-slate-300">Rate ({currency})</th>
+              {itemDiscountTotal > 0 && <th className="py-2 px-2 text-right print:border-r print:border-slate-300">Disc</th>}
+              {taxType !== 'none' && <th className="py-2 px-2 text-right print:border-r print:border-slate-300">Tax %</th>}
               <th className="py-2 px-2 text-right">Amount ({currency})</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y divide-slate-200 print:divide-slate-300">
             {items.map((item, idx) => (
               <tr key={item.id} className="hover:bg-slate-50/50 print:hover:bg-transparent">
-                <td className="py-2 px-2 text-center font-mono text-slate-400 text-[11px]">
+                <td className="py-1.5 px-2 text-center font-mono text-slate-500 print:text-slate-700 text-[11px] print:border-r print:border-slate-200">
                   {idx + 1}
                 </td>
-                <td className="py-2 px-2">
-                  <div className="font-bold text-slate-800">{item.description || 'Item Name'}</div>
+                <td className="py-1.5 px-2 print:border-r print:border-slate-200">
+                  <div className="font-bold text-slate-900 print:text-black">{item.description || 'Item Name'}</div>
                   {item.hsnSac && !isRetail && (
-                    <span className="text-[10px] text-slate-400 font-mono">HSN: {item.hsnSac}</span>
+                    <span className="text-[10px] text-slate-500 print:text-slate-600 font-mono">HSN: {item.hsnSac}</span>
                   )}
                 </td>
                 {isRetail && (
-                  <td className="py-2 px-2 text-center font-mono text-slate-600">
+                  <td className="py-1.5 px-2 text-center font-mono text-slate-700 print:border-r print:border-slate-200">
                     {item.hsnSac || '-'}
                   </td>
                 )}
-                <td className="py-2 px-2 text-right font-medium">
+                <td className="py-1.5 px-2 text-right font-medium text-slate-900 print:border-r print:border-slate-200">
                   {item.quantity} {item.unit || ''}
                 </td>
-                <td className="py-2 px-2 text-right font-mono">
+                <td className="py-1.5 px-2 text-right font-mono text-slate-900 print:border-r print:border-slate-200">
                   {item.rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </td>
                 {itemDiscountTotal > 0 && (
-                  <td className="py-2 px-2 text-right text-slate-500 font-mono">
+                  <td className="py-1.5 px-2 text-right text-slate-600 font-mono print:border-r print:border-slate-200">
                     {item.discountValue > 0
                       ? item.discountType === 'percent'
                         ? `${item.discountValue}%`
@@ -227,11 +227,11 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
                   </td>
                 )}
                 {taxType !== 'none' && (
-                  <td className="py-2 px-2 text-right text-slate-600 font-mono">
+                  <td className="py-1.5 px-2 text-right text-slate-700 font-mono print:border-r print:border-slate-200">
                     {item.taxRate > 0 ? `${item.taxRate}%` : '0%'}
                   </td>
                 )}
-                <td className="py-2 px-2 text-right font-bold font-mono text-slate-900">
+                <td className="py-1.5 px-2 text-right font-bold font-mono text-slate-900 print:text-black">
                   {item.totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </td>
               </tr>
@@ -241,50 +241,50 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
       </div>
 
       {/* Calculations & Summary Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-6 pt-4 border-t-2 border-slate-900 print:border-black">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-6 pt-3 sm:pt-4 border-t-2 border-slate-900 print:border-slate-800 print:pt-2 print:gap-3 invoice-summary-section print-break-inside-avoid">
         {/* Left side: Bank, UPI QR, and Amount In Words */}
-        <div className="w-full sm:w-7/12 space-y-3">
+        <div className="w-full sm:w-7/12 space-y-2 sm:space-y-2.5 print:space-y-1.5">
           {/* Amount In Words */}
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs print:bg-transparent print:border-slate-300">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+          <div className="p-2 sm:p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs print:bg-slate-50 print:border-slate-300 print:p-2">
+            <span className="text-[10px] uppercase font-bold text-slate-500 print:text-slate-700 block tracking-wider">
               Amount In Words:
             </span>
-            <p className="font-semibold text-slate-900 italic mt-0.5">
+            <p className="font-semibold text-slate-900 print:text-black italic mt-0.5">
               {amountInWords}
             </p>
           </div>
 
           {/* Payment & Bank Details */}
           {(bankDetails?.accountNumber || upiDetails?.upiId) && (
-            <div className="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200 text-xs flex flex-col sm:flex-row gap-4 items-center justify-between print:bg-transparent">
-              <div className="space-y-1 min-w-0 flex-1">
-                <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">
+            <div className="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl border border-slate-200 text-xs flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-between print:bg-slate-50 print:border-slate-300 print:p-2">
+              <div className="space-y-0.5 min-w-0 flex-1">
+                <span className="text-[10px] uppercase font-bold text-slate-600 print:text-slate-700 block tracking-wider">
                   Payment Details:
                 </span>
                 {bankDetails?.bankName && (
-                  <p className="text-slate-800">
-                    <span className="text-slate-500">Bank:</span> <strong>{bankDetails.bankName}</strong>
+                  <p className="text-slate-800 print:text-black">
+                    <span className="text-slate-500 print:text-slate-600">Bank:</span> <strong>{bankDetails.bankName}</strong>
                     {bankDetails.branchName && ` (${bankDetails.branchName})`}
                   </p>
                 )}
                 {bankDetails?.accountName && (
-                  <p className="text-slate-800">
-                    <span className="text-slate-500">A/C Name:</span> <strong>{bankDetails.accountName}</strong>
+                  <p className="text-slate-800 print:text-black">
+                    <span className="text-slate-500 print:text-slate-600">A/C Name:</span> <strong>{bankDetails.accountName}</strong>
                   </p>
                 )}
                 {bankDetails?.accountNumber && (
-                  <p className="text-slate-800">
-                    <span className="text-slate-500">A/C No:</span> <strong className="font-mono">{bankDetails.accountNumber}</strong>
+                  <p className="text-slate-800 print:text-black">
+                    <span className="text-slate-500 print:text-slate-600">A/C No:</span> <strong className="font-mono">{bankDetails.accountNumber}</strong>
                   </p>
                 )}
                 {bankDetails?.ifscCode && (
-                  <p className="text-slate-800">
-                    <span className="text-slate-500">IFSC Code:</span> <strong className="font-mono">{bankDetails.ifscCode}</strong>
+                  <p className="text-slate-800 print:text-black">
+                    <span className="text-slate-500 print:text-slate-600">IFSC Code:</span> <strong className="font-mono">{bankDetails.ifscCode}</strong>
                   </p>
                 )}
                 {upiDetails?.upiId && (
-                  <p className="text-slate-800 font-mono text-[11px] pt-0.5">
-                    <span className="text-slate-500 font-sans">UPI ID:</span> <strong>{upiDetails.upiId}</strong>
+                  <p className="text-slate-800 print:text-black font-mono text-[11px] pt-0.5">
+                    <span className="text-slate-500 print:text-slate-600 font-sans">UPI ID:</span> <strong>{upiDetails.upiId}</strong>
                   </p>
                 )}
               </div>
@@ -292,11 +292,11 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
               {/* UPI QR Code */}
               {qrDataUrl && (
                 <div className="flex flex-col items-center justify-center shrink-0 text-center">
-                  <div className="p-1.5 bg-white border border-slate-300 rounded-lg shadow-xs">
-                    <img src={qrDataUrl} alt="UPI QR Code" className="w-20 h-20 sm:w-24 sm:h-24 object-contain" />
+                  <div className="p-1 bg-white border border-slate-300 rounded-lg shadow-xs">
+                    <img src={qrDataUrl} alt="UPI QR Code" className="w-16 h-16 sm:w-20 sm:h-20 object-contain print:w-16 print:h-16" />
                   </div>
-                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tight mt-1">
-                    Scan & Pay via UPI
+                  <span className="text-[8.5px] font-bold text-slate-600 print:text-slate-700 uppercase tracking-tight mt-0.5">
+                    Scan & Pay UPI
                   </span>
                 </div>
               )}
@@ -305,16 +305,16 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
         </div>
 
         {/* Right side: Calculations breakdown */}
-        <div className="w-full sm:w-5/12 space-y-1.5 text-xs">
-          <div className="flex justify-between py-1 text-slate-600 border-b border-slate-100">
+        <div className="w-full sm:w-5/12 space-y-1 text-xs print:space-y-0.5">
+          <div className="flex justify-between py-0.5 sm:py-1 text-slate-700 print:text-slate-800 border-b border-slate-100 print:border-slate-200">
             <span>Subtotal:</span>
-            <span className="font-mono font-medium">
+            <span className="font-mono font-medium text-slate-900 print:text-black">
               {currency} {subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </span>
           </div>
 
           {totalDiscount > 0 && (
-            <div className="flex justify-between py-1 text-emerald-700 border-b border-slate-100">
+            <div className="flex justify-between py-0.5 sm:py-1 text-emerald-700 print:text-emerald-900 border-b border-slate-100 print:border-slate-200">
               <span>Total Discount:</span>
               <span className="font-mono font-medium">
                 - {currency} {totalDiscount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -325,15 +325,15 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
           {/* Tax Breakdown */}
           {taxType === 'cgst_sgst' && taxTotal > 0 && (
             <>
-              <div className="flex justify-between py-1 text-slate-600 border-b border-slate-100">
+              <div className="flex justify-between py-0.5 sm:py-1 text-slate-700 print:text-slate-800 border-b border-slate-100 print:border-slate-200">
                 <span>CGST:</span>
-                <span className="font-mono font-medium">
+                <span className="font-mono font-medium text-slate-900 print:text-black">
                   {currency} {cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </span>
               </div>
-              <div className="flex justify-between py-1 text-slate-600 border-b border-slate-100">
+              <div className="flex justify-between py-0.5 sm:py-1 text-slate-700 print:text-slate-800 border-b border-slate-100 print:border-slate-200">
                 <span>SGST:</span>
-                <span className="font-mono font-medium">
+                <span className="font-mono font-medium text-slate-900 print:text-black">
                   {currency} {sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </span>
               </div>
@@ -341,34 +341,34 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
           )}
 
           {taxType === 'igst' && taxTotal > 0 && (
-            <div className="flex justify-between py-1 text-slate-600 border-b border-slate-100">
+            <div className="flex justify-between py-0.5 sm:py-1 text-slate-700 print:text-slate-800 border-b border-slate-100 print:border-slate-200">
               <span>IGST:</span>
-              <span className="font-mono font-medium">
+              <span className="font-mono font-medium text-slate-900 print:text-black">
                 {currency} {igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
             </div>
           )}
 
           {taxType === 'single' && taxTotal > 0 && (
-            <div className="flex justify-between py-1 text-slate-600 border-b border-slate-100">
+            <div className="flex justify-between py-0.5 sm:py-1 text-slate-700 print:text-slate-800 border-b border-slate-100 print:border-slate-200">
               <span>Tax:</span>
-              <span className="font-mono font-medium">
+              <span className="font-mono font-medium text-slate-900 print:text-black">
                 {currency} {taxTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
             </div>
           )}
 
           {shippingCharges > 0 && (
-            <div className="flex justify-between py-1 text-slate-600 border-b border-slate-100">
+            <div className="flex justify-between py-0.5 sm:py-1 text-slate-700 print:text-slate-800 border-b border-slate-100 print:border-slate-200">
               <span>Shipping / Delivery:</span>
-              <span className="font-mono font-medium">
+              <span className="font-mono font-medium text-slate-900 print:text-black">
                 {currency} {shippingCharges.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
             </div>
           )}
 
           {roundOff !== 0 && (
-            <div className="flex justify-between py-1 text-slate-500 border-b border-slate-100">
+            <div className="flex justify-between py-0.5 sm:py-1 text-slate-600 print:text-slate-700 border-b border-slate-100 print:border-slate-200">
               <span>Round Off:</span>
               <span className="font-mono">
                 {roundOff > 0 ? `+${roundOff}` : roundOff}
@@ -377,9 +377,9 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
           )}
 
           {/* Grand Total */}
-          <div className="flex justify-between items-center py-2.5 px-3.5 bg-slate-100 border border-slate-300 text-slate-900 rounded-xl font-bold text-sm sm:text-base print:bg-slate-100 print:border-slate-400 print:text-slate-900 shadow-2xs mt-2">
-            <span className="text-slate-800 font-extrabold uppercase tracking-wide text-xs sm:text-sm">Grand Total:</span>
-            <span className="font-mono text-base sm:text-lg font-black text-slate-900">
+          <div className="flex justify-between items-center py-2 px-3 bg-slate-100 border border-slate-300 text-slate-900 rounded-xl font-bold text-sm sm:text-base print:bg-slate-100 print:border-slate-800 print:text-black shadow-2xs mt-1.5 grand-total-print-bar">
+            <span className="text-slate-800 print:text-black font-extrabold uppercase tracking-wide text-xs sm:text-sm">Grand Total:</span>
+            <span className="font-mono text-base sm:text-lg font-black text-slate-900 print:text-black">
               {currency} {grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </span>
           </div>
@@ -387,24 +387,24 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
       </div>
 
       {/* Terms & Conditions + Authorized Signatory */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 mt-6 border-t border-slate-200">
-        <div className="space-y-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-3 sm:pt-5 mt-3 sm:mt-5 border-t border-slate-200 print:border-slate-300 print:pt-2 print:mt-2 print:gap-3 invoice-terms-signature-section print-break-inside-avoid">
+        <div className="space-y-1.5 print:space-y-1">
           {terms && (
             <div>
-              <h4 className="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">
+              <h4 className="text-[10px] uppercase font-bold tracking-wider text-slate-500 print:text-slate-700 mb-0.5">
                 Terms & Conditions
               </h4>
-              <p className="text-[11px] text-slate-600 whitespace-pre-line leading-relaxed">
+              <p className="text-[11px] text-slate-600 print:text-slate-800 whitespace-pre-line leading-relaxed">
                 {terms}
               </p>
             </div>
           )}
           {notes && (
-            <div className="pt-1">
-              <h4 className="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-0.5">
+            <div className="pt-0.5">
+              <h4 className="text-[10px] uppercase font-bold tracking-wider text-slate-500 print:text-slate-700 mb-0.5">
                 Notes
               </h4>
-              <p className="text-[11px] text-slate-600 italic">
+              <p className="text-[11px] text-slate-600 print:text-slate-800 italic">
                 {notes}
               </p>
             </div>
@@ -412,26 +412,26 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
         </div>
 
         {/* Signature Box */}
-        <div className="flex flex-col items-center sm:items-end justify-end text-center sm:text-right pt-4 sm:pt-0">
+        <div className="flex flex-col items-center sm:items-end justify-end text-center sm:text-right pt-2 sm:pt-0">
           <div className="flex flex-col items-center sm:items-end">
             {signatureData ? (
               <img
                 src={signatureData}
                 alt="Signature"
-                className="h-14 sm:h-16 object-contain mb-1"
+                className="h-12 sm:h-14 object-contain mb-1 print:h-10"
               />
             ) : (
-              <div className="h-12 flex items-end">
-                <span className="font-serif italic text-lg text-slate-800">
+              <div className="h-10 flex items-end">
+                <span className="font-serif italic text-base sm:text-lg text-slate-800 print:text-black">
                   {signatureText || sender.businessName}
                 </span>
               </div>
             )}
-            <div className="w-48 border-b-2 border-slate-900 print:border-black mt-1" />
-            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-600 mt-1">
+            <div className="w-44 sm:w-48 border-b-2 border-slate-900 print:border-black mt-1" />
+            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-600 print:text-slate-800 mt-0.5">
               Authorized Signatory
             </span>
-            <span className="text-[9px] text-slate-400">
+            <span className="text-[9px] text-slate-500 print:text-slate-600">
               For {sender.businessName || 'Business'}
             </span>
           </div>
@@ -439,9 +439,9 @@ export const InvoicePrintView: React.FC<InvoicePrintViewProps> = ({
       </div>
 
       {/* Footer Branding Note */}
-      <div className="pt-4 mt-6 border-t border-slate-200 print:border-slate-200 flex items-center justify-center text-center">
-        <p className="text-[10px] text-slate-400 print:text-slate-500 font-normal">
-          Generated by Daily Khata Pro • <span className="font-mono text-slate-500 print:text-slate-500">www.rozfiber.com</span>
+      <div className="pt-2 sm:pt-3 mt-3 sm:mt-4 border-t border-slate-200 print:border-slate-300 print:pt-1.5 print:mt-2 flex items-center justify-center text-center invoice-branding-footer print-break-inside-avoid">
+        <p className="text-[10.5px] text-slate-500 print:text-slate-700 font-medium">
+          Generated by Daily Khata Pro • <span className="font-mono text-slate-700 print:text-slate-900 font-bold">www.rozfiber.com</span>
         </p>
       </div>
     </div>

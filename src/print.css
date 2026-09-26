@@ -1,0 +1,240 @@
+/* =========================================================================
+   DAILY KHATA PRO — DEDICATED HIGH-CONTRAST PRINT STYLESHEET
+   Ensures crystal-clear, 100% legible, professional single/multi-page A4
+   printing for Invoices, Financial Statements, Passbooks, and Ledgers.
+   Resets margins, strips dark-mode backgrounds, enforces crisp borders,
+   and prevents unwanted page-breaks.
+   ========================================================================= */
+
+@page {
+  size: A4 portrait;
+  margin: 8mm 8mm 8mm 8mm;
+}
+
+@media print {
+  /* 1. Global Print Reset: Pure white background, pitch-black high-contrast text */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    font-size: 10.5pt !important;
+    line-height: 1.35 !important;
+  }
+
+  /* 2. Hide all interactive UI chrome, buttons, navigation, headers, footers, banners */
+  .no-print,
+  .print-hidden,
+  [class*="print:hidden"],
+  header:not(.printable-header),
+  nav,
+  footer:not(.printable-footer):not(.printable-document-footer),
+  aside,
+  button,
+  input,
+  select,
+  textarea,
+  .fixed:not(#daily-khata-printable-statement):not(#invoice-printable-sheet),
+  #app-header,
+  #toast-notification,
+  #google_translate_element,
+  .skiptranslate,
+  iframe.skiptranslate {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* 3. Handle App Modal Wrappers during Print */
+  body:has(#invoice-printable-sheet) #root > div > div.no-print,
+  body:has(#invoice-printable-sheet) #root > div > header,
+  body:has(#invoice-printable-sheet) #root > div > footer,
+  body:has(#daily-khata-printable-statement) #root > div > div.no-print,
+  body:has(#daily-khata-printable-statement) #root > div > header,
+  body:has(#daily-khata-printable-statement) #root > div > footer {
+    display: none !important;
+  }
+
+  /* 4. Core Printable Sheets (#invoice-printable-sheet, #daily-khata-printable-statement) */
+  #invoice-printable-sheet,
+  #daily-khata-printable-statement,
+  #printArea,
+  .print-only,
+  .printable-document {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* 5. High-Contrast Typography & Readability */
+  #invoice-printable-sheet h1,
+  #invoice-printable-sheet h2,
+  #invoice-printable-sheet h3,
+  #invoice-printable-sheet h4,
+  #daily-khata-printable-statement h1,
+  #daily-khata-printable-statement h2,
+  #daily-khata-printable-statement h3 {
+    color: #000000 !important;
+    font-weight: 800 !important;
+  }
+
+  #invoice-printable-sheet p,
+  #invoice-printable-sheet span,
+  #invoice-printable-sheet div,
+  #daily-khata-printable-statement p,
+  #daily-khata-printable-statement span,
+  #daily-khata-printable-statement div {
+    color: #1e293b !important;
+  }
+
+  /* Ensure labels are distinctly legible, not washed-out faint gray */
+  #invoice-printable-sheet .text-slate-400,
+  #invoice-printable-sheet .text-slate-500,
+  #daily-khata-printable-statement .text-slate-400,
+  #daily-khata-printable-statement .text-slate-500 {
+    color: #475569 !important;
+    font-weight: 600 !important;
+  }
+
+  /* 6. Clean Table Structure with High-Contrast Borders */
+  #invoice-printable-sheet table,
+  #daily-khata-printable-statement table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    background-color: #ffffff !important;
+    margin: 6px 0 10px 0 !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  #invoice-printable-sheet thead,
+  #daily-khata-printable-statement thead {
+    display: table-header-group !important;
+  }
+
+  #invoice-printable-sheet tr,
+  #daily-khata-printable-statement tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #invoice-printable-sheet th,
+  #daily-khata-printable-statement th {
+    background-color: #f1f5f9 !important;
+    color: #000000 !important;
+    border: 1.5px solid #334155 !important;
+    font-weight: 800 !important;
+    padding: 5px 8px !important;
+    font-size: 8.5pt !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #invoice-printable-sheet td,
+  #daily-khata-printable-statement td {
+    color: #0f172a !important;
+    border: 1px solid #94a3b8 !important;
+    padding: 5px 8px !important;
+    font-size: 9pt !important;
+    background-color: #ffffff !important;
+  }
+
+  #invoice-printable-sheet tbody tr:nth-child(even) td,
+  #daily-khata-printable-statement tbody tr:nth-child(even) td {
+    background-color: #f8fafc !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 7. Summary & Totals High-Contrast Box */
+  #invoice-printable-sheet .bg-slate-100,
+  #invoice-printable-sheet .bg-slate-50,
+  #daily-khata-printable-statement .bg-slate-50,
+  #daily-khata-printable-statement .bg-slate-100 {
+    background-color: #f8fafc !important;
+    border-color: #94a3b8 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Grand total highlight */
+  .grand-total-print-bar,
+  #invoice-printable-sheet [class*="bg-slate-100"][class*="Grand Total"] {
+    background-color: #f1f5f9 !important;
+    border: 2px solid #0f172a !important;
+    color: #000000 !important;
+    font-weight: 800 !important;
+  }
+
+  /* 8. Break-Inside Prevention for Critical Blocks */
+  .print-break-inside-avoid,
+  .print-avoid-break,
+  .invoice-summary-section,
+  .invoice-terms-signature-section,
+  .invoice-branding-footer,
+  #invoice-printable-sheet .border-t-2 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* 9. Pinned Clean Document Footer */
+  .printable-document-footer,
+  .invoice-branding-footer {
+    display: block !important;
+    width: 100% !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-top: 10px !important;
+    padding-top: 8px !important;
+    border-top: 1.5px solid #94a3b8 !important;
+    text-align: center !important;
+  }
+
+  .printable-document-footer p,
+  .invoice-branding-footer p {
+    color: #475569 !important;
+    font-size: 8pt !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+  }
+
+  .printable-document-footer strong,
+  .invoice-branding-footer strong,
+  .printable-document-footer span.font-mono,
+  .invoice-branding-footer span.font-mono {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+  }
+}

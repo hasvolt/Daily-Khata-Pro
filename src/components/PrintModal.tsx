@@ -204,13 +204,30 @@ export const PrintModal: React.FC<PrintModalProps> = ({
   <style>
     @page {
       size: A4 portrait;
-      margin: 10mm 12mm;
+      margin: 8mm 8mm;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; padding: 16px; color: #0f172a; max-width: 820px; margin: 0 auto; line-height: 1.45; background: #fff; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      padding: 12px;
+      color: #0f172a;
+      max-width: 820px;
+      margin: 0 auto;
+      line-height: 1.4;
+      background: #ffffff;
+    }
     @media print {
-      body { padding: 0; }
+      body { padding: 0 !important; margin: 0 !important; }
       .no-print { display: none !important; }
+    }
+    tr, .page-break-avoid {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
   </style>
 </head>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./print.css";
 @source "../index.html";
 @source "./**/*.{js,ts,jsx,tsx}";
 
