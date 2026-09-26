@@ -8,7 +8,7 @@
 
 @page {
   size: A4 portrait;
-  margin: 8mm 8mm 8mm 8mm;
+  margin: 8mm 8mm 14mm 8mm;
 }
 
 @media print {
@@ -231,10 +231,39 @@
   }
 
   .printable-document-footer strong,
-  .invoice-branding-footer strong,
-  .printable-document-footer span.font-mono,
-  .invoice-branding-footer span.font-mono {
+  .invoice-branding-footer strong {
     color: #0f172a !important;
     font-weight: 700 !important;
+  }
+
+  .printable-document-footer span.font-mono,
+  .invoice-branding-footer span.font-mono {
+    color: #64748b !important;
+    font-weight: 500 !important;
+  }
+
+  /* 10. Multi-Page Running Document Footer (Repeats cleanly at the bottom of every printed page) */
+  .running-page-footer,
+  .print-running-footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 18px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-top: 1px solid #cbd5e1 !important;
+    font-size: 8pt !important;
+    color: #64748b !important;
+    background: #ffffff !important;
+    padding-top: 2px !important;
+    z-index: 9999 !important;
+  }
+
+  .running-page-footer span.font-mono,
+  .print-running-footer span.font-mono {
+    color: #64748b !important;
+    font-weight: 500 !important;
   }
 }

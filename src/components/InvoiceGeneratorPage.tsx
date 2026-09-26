@@ -474,6 +474,10 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
       padding-top: 6px !important;
       text-align: center !important;
     }
+    .invoice-branding-footer span.font-mono {
+      color: #64748b !important;
+      font-weight: 500 !important;
+    }
   </style>
 </head>
 <body>
