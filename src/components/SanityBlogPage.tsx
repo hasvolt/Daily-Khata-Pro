@@ -169,8 +169,8 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
         hindiSubtitle: p.summary || 'सैनिटी सीएमएस से लाइव प्रकाशित संपादकीय लेख',
         category: 'economy',
         categoryLabel: {
-          en: p.category || 'Finance',
-          hi: p.category || 'फाइनेंस'
+          en: (typeof p.category === 'object' ? (p.category as any)?.name : p.category) || 'Finance',
+          hi: (typeof p.category === 'object' ? (p.category as any)?.name : p.category) || 'फाइनेंस'
         },
         readTime: p.readTime || '5 min read',
         heroImageGradient: 'from-blue-900 to-indigo-950',

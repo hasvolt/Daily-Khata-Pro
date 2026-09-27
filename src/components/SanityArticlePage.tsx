@@ -479,7 +479,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   // Active article data
   const title = post?.title || fallbackArticle?.title || '';
   const summary = post?.summary || (isHindi ? fallbackArticle?.hindiSubtitle : fallbackArticle?.subtitle) || '';
-  const category = post?.category || fallbackArticle?.categoryLabel?.en || 'Finance';
+  const category = (typeof post?.category === 'object' ? (post.category as any)?.name : post?.category) || fallbackArticle?.categoryLabel?.en || 'Finance';
   const readTime = post?.readTime || fallbackArticle?.readTime || '5 min read';
   const authorName = post?.authorName || fallbackArticle?.author?.name || 'MD Zafeer Hasan (YAZDAAN)';
   const authorRole = post?.authorRole || fallbackArticle?.author?.role || 'Author & Independent Researcher';
@@ -760,7 +760,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
                 key={idx}
                 className="text-xs px-2.5 py-1 rounded-lg bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)]"
               >
-                #{t}
+                #{typeof t === 'string' ? t : (t as any)?.name || ''}
               </span>
             ))}
           </div>

@@ -1,4 +1,5 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType, defineArrayMember} from 'sanity'
+import {MarkdownPastePortableTextInput} from '../components/MarkdownPastePortableTextInput'
 
 export default defineType({
   name: 'post',
@@ -44,40 +45,16 @@ export default defineType({
     defineField({
       name: 'category',
       title: 'Category',
-      type: 'string',
+      type: 'reference',
+      to: [{ type: 'category' }],
       group: 'articleInfo',
-      options: {
-        list: [
-          { title: 'Finance', value: 'Finance' }
-        ],
-      },
-      initialValue: 'Finance',
     }),
     defineField({
       name: 'topics',
       title: 'Topics',
       type: 'array',
       group: 'articleInfo',
-      of: [{ type: 'string' }],
-      options: {
-        list: [
-          { title: 'Business', value: 'Business' },
-          { title: 'Startup', value: 'Startup' },
-          { title: 'Income & Expenses', value: 'Income & Expenses' },
-          { title: 'Budgeting', value: 'Budgeting' },
-          { title: 'Saving', value: 'Saving' },
-          { title: 'Emergency Fund', value: 'Emergency Fund' },
-          { title: 'Investment', value: 'Investment' },
-          { title: 'Personal Finance', value: 'Personal Finance' },
-          { title: 'Money Management', value: 'Money Management' },
-          { title: 'Wealth Building', value: 'Wealth Building' },
-          { title: 'Banking', value: 'Banking' },
-          { title: 'Loans & Credit', value: 'Loans & Credit' },
-          { title: 'Insurance', value: 'Insurance' },
-          { title: 'Taxes', value: 'Taxes' },
-          { title: 'Financial Planning', value: 'Financial Planning' },
-        ],
-      },
+      of: [{ type: 'reference', to: [{ type: 'topic' }] }],
     }),
     defineField({
       name: 'articleType',
@@ -87,10 +64,15 @@ export default defineType({
       options: {
         list: [
           { title: 'Guide', value: 'Guide' },
+          { title: 'Explainer', value: 'Explainer' },
           { title: 'Analysis', value: 'Analysis' },
           { title: 'News', value: 'News' },
-          { title: 'Explainer', value: 'Explainer' },
+          { title: 'Research', value: 'Research' },
+          { title: 'Report', value: 'Report' },
+          { title: 'Case Study', value: 'Case Study' },
+          { title: 'Review', value: 'Review' },
           { title: 'Opinion', value: 'Opinion' },
+          { title: 'Interview', value: 'Interview' },
         ],
       },
     }),
@@ -153,7 +135,75 @@ export default defineType({
       title: 'Body',
       type: 'array',
       group: 'content',
-      of: [{type: 'block'}],
+      of: [
+        defineArrayMember({
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'Heading 1', value: 'h1' },
+            { title: 'Heading 2', value: 'h2' },
+            { title: 'Heading 3', value: 'h3' },
+            { title: 'Heading 4', value: 'h4' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+          lists: [
+            { title: 'Bullet', value: 'bullet' },
+            { title: 'Numbered', value: 'number' },
+          ],
+          marks: {
+            decorators: [
+              { title: 'Strong', value: 'strong' },
+              { title: 'Emphasis', value: 'em' },
+              { title: 'Code', value: 'code' },
+              { title: 'Underline', value: 'underline' },
+              { title: 'Strike', value: 'strike-through' },
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  {
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                    validation: (Rule) =>
+                      Rule.uri({
+                        scheme: ['http', 'https', 'mailto', 'tel'],
+                      }),
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+        defineArrayMember({
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              description: 'Important for SEO and accessibility.',
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+            },
+            {
+              name: 'credit',
+              type: 'string',
+              title: 'Credit / Source',
+            },
+          ],
+        }),
+      ],
+      components: {
+        input: MarkdownPastePortableTextInput,
+      },
     }),
 
     // RESEARCH
