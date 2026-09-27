@@ -2282,7 +2282,7 @@ function AppContent() {
 
 
   // Allow public informational pages to be accessed directly via URL without private PIN lockout
-  const isPublicPage = ['/about', '/developer', '/privacy', '/terms', '/disclaimer', '/safety', '/guide'].some(
+  const isPublicPage = ['/about', '/developer', '/privacy', '/terms', '/disclaimer', '/safety', '/guide', '/studio'].some(
     (p) => location.pathname.toLowerCase() === p || location.pathname.toLowerCase().startsWith(p + '/')
   );
 
@@ -2303,6 +2303,29 @@ function AppContent() {
           onResetAllData={handleEmergencyReset}
           language={language}
         />
+      </div>
+    );
+  }
+
+  // Dedicated Full-Page View for Sanity Studio (Bypasses app header/footer/bottomNav for 100% full screen)
+  const isStudioRoute = location.pathname.toLowerCase() === '/studio' || location.pathname.toLowerCase().startsWith('/studio/');
+
+  if (isStudioRoute) {
+    return (
+      <div
+        data-theme={theme}
+        className="w-screen h-screen fixed inset-0 z-50 bg-[#070E18] text-white overflow-hidden flex flex-col"
+      >
+        <React.Suspense fallback={
+          <div className="w-full h-full min-h-screen flex items-center justify-center bg-[#070E18] text-white">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-sm text-slate-400">Loading Sanity Studio...</p>
+            </div>
+          </div>
+        }>
+          <StudioPage />
+        </React.Suspense>
       </div>
     );
   }
@@ -2833,6 +2856,18 @@ function AppContent() {
               language={language}
               privacyMask={privacyMask}
             />} />
+            <Route path="/studio" element={
+              <React.Suspense fallback={
+                <div className="min-h-screen flex items-center justify-center bg-[#070E18] text-white">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-sm text-slate-400">Loading Sanity Studio...</p>
+                  </div>
+                </div>
+              }>
+                <StudioPage />
+              </React.Suspense>
+            } />
             <Route path="/studio/*" element={
               <React.Suspense fallback={
                 <div className="min-h-screen flex items-center justify-center bg-[#070E18] text-white">
