@@ -39,7 +39,7 @@ export default defineConfig(() => {
       target: 'es2022',
       rollupOptions: {
         cache: false,
-        external: ['express', 'path', 'fs', 'sanity', 'sanity/structure', '@sanity/vision'],
+        external: ['express', 'path', 'fs'],
         output: {
           manualChunks(id) {
             if (id.includes('node_modules/sanity') || id.includes('node_modules/@sanity')) {
