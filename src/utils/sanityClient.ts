@@ -40,6 +40,7 @@ export interface SanityBlogPost {
   summary?: string;
   mainImage?: any;
   featuredImage?: any;
+  attachedFile?: any;
   bodyText?: string;
   body?: any[];
   sources?: SanitySource[];
@@ -69,6 +70,7 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
       summary,
       "mainImage": coalesce(featuredImage, mainImage),
       featuredImage,
+      attachedFile,
       bodyText,
       body,
       sources,
@@ -105,6 +107,7 @@ export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogP
       summary,
       "mainImage": coalesce(featuredImage, mainImage),
       featuredImage,
+      attachedFile,
       bodyText,
       body,
       sources,

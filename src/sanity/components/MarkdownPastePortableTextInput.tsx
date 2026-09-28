@@ -241,6 +241,47 @@ export function MarkdownPastePortableTextInput(props: ArrayOfObjectsInputProps) 
 
             {/* Modal Body */}
             <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1, overflowY: 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                <span style={{ fontSize: '12px', color: '#94A3B8' }}>
+                  Paste text or choose a local file (.md, .txt) to load:
+                </span>
+                <label
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '5px 12px',
+                    borderRadius: '8px',
+                    background: '#1E293B',
+                    border: '1px solid #38BDF8',
+                    color: '#38BDF8',
+                    fontSize: '11.5px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  📁 Upload / Open File (.md, .txt)
+                  <input
+                    type="file"
+                    accept=".md,.markdown,.txt"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = (ev) => {
+                        const content = ev.target?.result as string;
+                        if (content) {
+                          setMarkdownInput(content);
+                          showToast(`✓ Loaded file: ${file.name}`);
+                        }
+                      };
+                      reader.readAsText(file);
+                    }}
+                  />
+                </label>
+              </div>
+
               <textarea
                 value={markdownInput}
                 onChange={(e) => setMarkdownInput(e.target.value)}
