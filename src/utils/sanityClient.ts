@@ -5,7 +5,7 @@ export const sanityClient = createClient({
   projectId: '3zccyf67',
   dataset: 'production',
   apiVersion: '2024-01-01',
-  useCdn: true, // Super-fast edge-cached delivery
+  useCdn: false, // Real-time delivery so edits show immediately
 });
 
 const builder = imageUrlBuilder(sanityClient);
@@ -29,6 +29,15 @@ export interface SanityBlogPost {
   slug?: { current: string };
   publishedAt?: string;
   updatedAt?: string;
+  author?: {
+    _id?: string;
+    name?: string;
+    role?: string;
+    professionalDescription?: string;
+    bio?: string;
+    profilePhoto?: any;
+    image?: any;
+  } | null;
   authorName?: string;
   authorRole?: string;
   authorBio?: string;
@@ -59,10 +68,18 @@ export async function getSanityPosts(): Promise<SanityBlogPost[]> {
       slug,
       publishedAt,
       updatedAt,
-      "authorName": coalesce(author->name, "MD Zafeer Hasan (YAZDAAN)"),
-      "authorRole": coalesce(author->role, author->professionalDescription, "Author & Independent Researcher"),
-      "authorBio": author->bio,
-      "authorImage": coalesce(author->profilePhoto, author->image),
+      author->{
+        _id,
+        name,
+        role,
+        professionalDescription,
+        bio,
+        "profilePhoto": coalesce(profilePhoto, image)
+      },
+      "authorName": coalesce(author->name, authorName, "MD Zafeer Hasan (YAZDAAN)"),
+      "authorRole": coalesce(author->role, author->professionalDescription, authorRole, "Author & Independent Researcher"),
+      "authorBio": coalesce(author->bio, authorBio),
+      "authorImage": coalesce(author->profilePhoto, author->image, authorImage),
       "category": coalesce(category->name, category, "Finance"),
       "topics": coalesce(select(defined(topics[0]._ref) => topics[]->name[@ != null], topics), []),
       articleType,
@@ -96,10 +113,18 @@ export async function getSanityPostBySlug(slugOrId: string): Promise<SanityBlogP
       slug,
       publishedAt,
       updatedAt,
-      "authorName": coalesce(author->name, "MD Zafeer Hasan (YAZDAAN)"),
-      "authorRole": coalesce(author->role, author->professionalDescription, "Author & Independent Researcher"),
-      "authorBio": author->bio,
-      "authorImage": coalesce(author->profilePhoto, author->image),
+      author->{
+        _id,
+        name,
+        role,
+        professionalDescription,
+        bio,
+        "profilePhoto": coalesce(profilePhoto, image)
+      },
+      "authorName": coalesce(author->name, authorName, "MD Zafeer Hasan (YAZDAAN)"),
+      "authorRole": coalesce(author->role, author->professionalDescription, authorRole, "Author & Independent Researcher"),
+      "authorBio": coalesce(author->bio, authorBio),
+      "authorImage": coalesce(author->profilePhoto, author->image, authorImage),
       "category": coalesce(category->name, category, "Finance"),
       "topics": coalesce(select(defined(topics[0]._ref) => topics[]->name[@ != null], topics), []),
       articleType,

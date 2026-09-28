@@ -146,12 +146,43 @@ export default defineType({
 
     // AUTHOR
     defineField({
+      name: 'authorName',
+      title: 'Author Name',
+      type: 'string',
+      group: 'author',
+      initialValue: 'MD Zafeer Hasan (YAZDAAN)',
+      description: 'Select from established bylines or type custom author name.',
+      options: {
+        list: [
+          { title: 'MD Zafeer Hasan (YAZDAAN)', value: 'MD Zafeer Hasan (YAZDAAN)' },
+          { title: 'Daily Khata Pro Editorial Team', value: 'Daily Khata Pro Editorial Team' },
+          { title: 'Rozfiber Finance Desk', value: 'Rozfiber Finance Desk' },
+        ],
+      },
+    }),
+    defineField({
+      name: 'authorRole',
+      title: 'Author Role / Description',
+      type: 'string',
+      group: 'author',
+      initialValue: 'Author & Independent Researcher',
+      description: 'Designation shown in article byline (e.g. Author & Independent Researcher).',
+      options: {
+        list: [
+          { title: 'Author & Independent Researcher', value: 'Author & Independent Researcher' },
+          { title: 'Finance & Personal Money Management Editorial Team', value: 'Finance & Personal Money Management Editorial Team' },
+          { title: 'Financial Technology Research Analyst', value: 'Financial Technology Research Analyst' },
+        ],
+      },
+    }),
+    defineField({
       name: 'author',
-      title: 'Author',
+      title: 'Author Document Reference (Optional)',
       type: 'reference',
       to: { type: 'author' },
       weak: true,
       group: 'author',
+      description: 'Link to a dedicated Author profile document (if created).',
     }),
 
     // MEDIA
@@ -214,6 +245,13 @@ export default defineType({
       title: 'Updated at',
       type: 'datetime',
       group: 'publication',
+    }),
+    defineField({
+      name: 'readTime',
+      title: 'Reading Time (e.g. 12 min read)',
+      type: 'string',
+      group: 'publication',
+      description: 'Optional manual override (e.g. 10 min read). If left empty, calculated dynamically based on body word count.',
     }),
 
     // CONTENT
@@ -349,12 +387,20 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      author: 'author.name',
+      authorRef: 'author.name',
+      authorName: 'authorName',
+      category: 'category',
       media: 'featuredImage',
     },
     prepare(selection) {
-      const {author} = selection
-      return {...selection, subtitle: author ? `by ${author}` : 'No author'}
+      const {title, authorRef, authorName, category, media} = selection;
+      const author = authorName || authorRef;
+      const subtitle = [author ? `by ${author}` : null, category].filter(Boolean).join(' • ');
+      return {
+        title,
+        subtitle: subtitle || 'No author',
+        media,
+      };
     },
   },
 })

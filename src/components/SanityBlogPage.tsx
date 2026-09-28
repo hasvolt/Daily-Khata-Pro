@@ -160,54 +160,94 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     let isMounted = true;
     getSanityPosts().then(posts => {
       if (!isMounted || !posts || posts.length === 0) return;
-      const formatted: CommercialArticle[] = posts.map(p => ({
-        id: p.slug?.current || `sanity-${p._id}`,
-        slug: p.slug?.current,
-        title: p.title || 'Untitled Post',
-        hindiTitle: p.title || 'शीर्षक उपलब्ध नहीं',
-        subtitle: p.summary || 'Live editorial dispatch from Sanity CMS',
-        hindiSubtitle: p.summary || 'सैनिटी सीएमएस से लाइव प्रकाशित संपादकीय लेख',
-        category: 'economy',
-        categoryLabel: {
-          en: (typeof p.category === 'object' ? (p.category as any)?.name : p.category) || 'Finance',
-          hi: (typeof p.category === 'object' ? (p.category as any)?.name : p.category) || 'फाइनेंस'
-        },
-        readTime: p.readTime || '5 min read',
-        heroImageGradient: 'from-blue-900 to-indigo-950',
-        heroBadge: 'SANITY LIVE',
-        publishedAt: p.publishedAt ? new Date(p.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently Published',
-        author: {
-          name: p.authorName || 'MD Zafeer Hasan (YAZDAAN)',
-          role: p.authorRole || 'Author & Independent Researcher',
-          organization: 'Rozfiber Finance',
-          avatarInitials: p.authorName ? p.authorName.slice(0, 2).toUpperCase() : 'ZH'
-        },
-        keyTakeaways: [
-          {
-            en: p.summary || p.title,
-            hi: p.summary || p.title
-          }
-        ],
-        marketImpact: {
-          status: 'Strategic Outlook',
-          sentimentLabel: 'Live Feed'
-        },
-        contentSections: [
-          {
-            heading: 'Overview & Analysis',
-            hindiHeading: 'मुख्य विश्लेषण व समीक्षा',
-            paragraphs: [
-              {
-                en: p.bodyText || p.summary || '',
-                hi: p.bodyText || p.summary || ''
+      const formatted: CommercialArticle[] = posts.map(p => {
+        const catName = (typeof p.category === 'object' ? (p.category as any)?.name : p.category) || 'Finance';
+        
+        // Dynamic reading time calculation based on actual body content word count
+        let calcReadTime = p.readTime;
+        let wordCount = 0;
+        if (p.body && Array.isArray(p.body)) {
+          for (const b of p.body) {
+            if (b?.children && Array.isArray(b.children)) {
+              for (const c of b.children) {
+                if (c?.text) wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
               }
-            ]
+            } else if (typeof b?.text === 'string') {
+              wordCount += b.text.trim().split(/\s+/).filter(Boolean).length;
+            }
           }
-        ],
-        sanityBody: p.body,
-        mainImage: p.mainImage,
-        tags: p.tags && p.tags.length > 0 ? p.tags : ['LiveBlog', 'SanityCMS', 'Updates']
-      }));
+        } else if (p.bodyText) {
+          wordCount = p.bodyText.trim().split(/\s+/).filter(Boolean).length;
+        } else if (p.summary) {
+          wordCount = p.summary.trim().split(/\s+/).filter(Boolean).length;
+        }
+
+        if (wordCount > 0) {
+          const minutes = Math.max(1, Math.ceil(wordCount / 180));
+          calcReadTime = `${minutes} min read`;
+        } else if (!calcReadTime) {
+          calcReadTime = '5 min read';
+        }
+
+        const resolvedAuthorName =
+          (typeof p.author === 'object' ? (p.author as any)?.name : null) ||
+          p.authorName ||
+          'MD Zafeer Hasan (YAZDAAN)';
+
+        const resolvedAuthorRole =
+          (typeof p.author === 'object' ? ((p.author as any)?.role || (p.author as any)?.professionalDescription) : null) ||
+          p.authorRole ||
+          'Author & Independent Researcher';
+
+        return {
+          id: p.slug?.current || `sanity-${p._id}`,
+          slug: p.slug?.current,
+          title: p.title || 'Untitled Post',
+          hindiTitle: p.title || 'शीर्षक उपलब्ध नहीं',
+          subtitle: p.summary || 'Live editorial dispatch from Sanity CMS',
+          hindiSubtitle: p.summary || 'सैनिटी सीएमएस से लाइव प्रकाशित संपादकीय लेख',
+          category: catName.toLowerCase(),
+          categoryLabel: {
+            en: catName,
+            hi: catName === 'Technology' ? 'टेक्नोलॉजी' : catName === 'Finance' ? 'फाइनेंस' : catName === 'Business' ? 'बिज़नेस' : catName
+          },
+          readTime: calcReadTime,
+          heroImageGradient: 'from-blue-900 to-indigo-950',
+          heroBadge: catName.toUpperCase(),
+          publishedAt: p.publishedAt ? new Date(p.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently Published',
+          author: {
+            name: resolvedAuthorName,
+            role: resolvedAuthorRole,
+            organization: 'Rozfiber Finance',
+            avatarInitials: resolvedAuthorName ? resolvedAuthorName.slice(0, 2).toUpperCase() : 'ZH'
+          },
+          keyTakeaways: [
+            {
+              en: p.summary || p.title,
+              hi: p.summary || p.title
+            }
+          ],
+          marketImpact: {
+            status: 'Strategic Outlook',
+            sentimentLabel: 'Live Feed'
+          },
+          contentSections: [
+            {
+              heading: 'Overview & Analysis',
+              hindiHeading: 'मुख्य विश्लेषण व समीक्षा',
+              paragraphs: [
+                {
+                  en: p.bodyText || p.summary || '',
+                  hi: p.bodyText || p.summary || ''
+                }
+              ]
+            }
+          ],
+          sanityBody: p.body,
+          mainImage: p.mainImage,
+          tags: p.tags && p.tags.length > 0 ? p.tags : ['LiveBlog', 'SanityCMS', 'Updates']
+        };
+      });
       setSanityArticles(formatted);
     }).catch(err => {
       console.warn('Sanity live fetch notice:', err);
@@ -334,11 +374,31 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     }, 2000);
   };
 
-  const categoriesList = [
-    { id: 'all', label: isHindi ? 'सभी लेख' : 'All Articles', icon: Globe2 },
-    { id: 'economy', label: isHindi ? 'अर्थव्यवस्था' : 'Economy', icon: Landmark },
-    { id: 'saved', label: `${isHindi ? 'सहेजे गए' : 'Saved'} (${bookmarkedIds.length})`, icon: Bookmark }
-  ];
+  const categoriesList = useMemo(() => {
+    const list = [
+      { id: 'all', label: isHindi ? 'सभी लेख' : 'All Articles', icon: Globe2 },
+      { id: 'finance', label: isHindi ? 'फाइनेंस' : 'Finance', icon: Landmark },
+      { id: 'technology', label: isHindi ? 'टेक्नोलॉजी' : 'Technology', icon: Cpu },
+      { id: 'business', label: isHindi ? 'बिज़नेस' : 'Business', icon: Building2 },
+    ];
+
+    // Add any other categories present in articles
+    const existingIds = new Set(list.map(c => c.id));
+    allArticles.forEach(a => {
+      const cId = a.category?.toLowerCase();
+      if (cId && !existingIds.has(cId)) {
+        existingIds.add(cId);
+        list.push({
+          id: cId,
+          label: isHindi ? a.categoryLabel.hi : a.categoryLabel.en,
+          icon: Layers,
+        });
+      }
+    });
+
+    list.push({ id: 'saved', label: `${isHindi ? 'सहेजे गए' : 'Saved'} (${bookmarkedIds.length})`, icon: Bookmark });
+    return list;
+  }, [allArticles, bookmarkedIds.length, isHindi]);
 
   const featuredArticle = allArticles.find(a => a.isFeatured) || allArticles[0] || COMMERCIAL_ARTICLES[0];
   const currentBreaking = BREAKING_NEWS_HEADLINES[breakingIndex];

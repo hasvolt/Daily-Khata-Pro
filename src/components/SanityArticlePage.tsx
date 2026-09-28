@@ -40,7 +40,20 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   const [post, setPost] = useState<SanityBlogPost | null>(null);
   const [fallbackArticle, setFallbackArticle] = useState<CommercialArticle | null>(null);
   const [loading, setLoading] = useState(true);
-  const [fontSize, setFontSize] = useState<'sm' | 'base' | 'lg'>('base');
+  const [fontSize, setFontSize] = useState<'sm' | 'base' | 'lg'>(() => {
+    try {
+      const saved = localStorage.getItem('khata_blog_fontsize');
+      if (saved === 'sm' || saved === 'base' || saved === 'lg') return saved;
+    } catch {}
+    return 'base';
+  });
+
+  const handleSetFontSize = (size: 'sm' | 'base' | 'lg') => {
+    setFontSize(size);
+    try {
+      localStorage.setItem('khata_blog_fontsize', size);
+    } catch {}
+  };
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   const [isTranslateOpen, setIsTranslateOpen] = useState(false);
@@ -61,14 +74,15 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
       if (sanityData) {
         setPost(sanityData);
         setLoading(false);
-        document.title = `${sanityData.title} | Daily Khata Pro Finance Blog`;
+        const cat = typeof sanityData.category === 'object' ? (sanityData.category as any)?.name : sanityData.category;
+        document.title = `${sanityData.title} | Daily Khata Pro ${cat || 'Finance'} Blog`;
       } else {
         const match = COMMERCIAL_ARTICLES.find(
           a => a.id === slugOrId || (a as any).slug === slugOrId
         );
         if (match) {
           setFallbackArticle(match);
-          document.title = `${match.title} | Daily Khata Pro Finance Blog`;
+          document.title = `${match.title} | Daily Khata Pro ${match.categoryLabel?.en || 'Finance'} Blog`;
         }
         setLoading(false);
       }
@@ -80,7 +94,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
         );
         if (match) {
           setFallbackArticle(match);
-          document.title = `${match.title} | Daily Khata Pro Finance Blog`;
+          document.title = `${match.title} | Daily Khata Pro ${match.categoryLabel?.en || 'Finance'} Blog`;
         }
         setLoading(false);
       }
@@ -122,14 +136,29 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
         : '') ||
       'Rozfiber Finance editorial dispatch and research.';
 
-    const authorName = post?.authorName || fallbackArticle?.author?.name || 'MD Zafeer Hasan (YAZDAAN)';
-    const authorRole = post?.authorRole || fallbackArticle?.author?.role || 'Author & Independent Researcher';
+    const resolvedCategory =
+      (typeof post?.category === 'object' ? ((post.category as any)?.name || (post.category as any)?.title) : post?.category) ||
+      fallbackArticle?.categoryLabel?.en ||
+      'Finance';
+
+    const authorName =
+      (typeof post?.author === 'object' ? (post.author as any)?.name : null) ||
+      post?.authorName ||
+      fallbackArticle?.author?.name ||
+      'MD Zafeer Hasan (YAZDAAN)';
+
+    const authorRole =
+      (typeof post?.author === 'object' ? ((post.author as any)?.role || (post.author as any)?.professionalDescription) : null) ||
+      post?.authorRole ||
+      fallbackArticle?.author?.role ||
+      'Author & Independent Researcher';
+
     const publishedDate = post?.publishedAt || fallbackArticle?.publishedAt || new Date().toISOString();
     const modifiedDate = post?.updatedAt || publishedDate;
     const imageUrl = post?.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : `${CANONICAL_DOMAIN}/daily-khata-pro-v4.png`;
 
     const prevTitle = document.title;
-    document.title = `${activeTitle} | Rozfiber Finance`;
+    document.title = `${activeTitle} | Rozfiber ${resolvedCategory}`;
 
     // Canonical link management
     let canonicalLink = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
@@ -170,7 +199,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     setMetaTag('meta[name="twitter:description"]', 'content', description);
     setMetaTag('meta[name="twitter:image"]', 'content', imageUrl);
 
-    // JSON-LD Structured Data: BlogPosting & strictly real BreadcrumbList (Home -> Blog -> Article)
+    // JSON-LD Structured Data: BlogPosting & strictly real BreadcrumbList (Home -> Blog -> Category -> Article)
     const jsonLdData = {
       "@context": "https://schema.org",
       "@graph": [
@@ -180,7 +209,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           "isPartOf": {
             "@type": "Blog",
             "@id": `${CANONICAL_DOMAIN}/blog#blog`,
-            "name": "Rozfiber Finance Blog",
+            "name": `Rozfiber ${resolvedCategory} Blog`,
             "publisher": {
               "@type": "Organization",
               "name": "Rozfiber Finance",
@@ -209,7 +238,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             "name": "Rozfiber Finance",
             "url": CANONICAL_DOMAIN
           },
-          "articleSection": "Finance"
+          "articleSection": resolvedCategory
         },
         {
           "@type": "BreadcrumbList",
@@ -230,6 +259,12 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             {
               "@type": "ListItem",
               "position": 3,
+              "name": resolvedCategory,
+              "item": `${CANONICAL_DOMAIN}/blog`
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
               "name": activeTitle,
               "item": canonicalUrl
             }
@@ -326,48 +361,90 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     }, 2000);
   };
 
+  // Dynamic font sizing values for desktop and mobile
+  const fontSizePx = fontSize === 'sm' ? 14.5 : fontSize === 'lg' ? 22 : 17.5;
+  const lineHeightVal = fontSize === 'sm' ? 1.65 : fontSize === 'lg' ? 1.85 : 1.75;
+
+  const heading1Size =
+    fontSize === 'sm'
+      ? 'text-xl sm:text-2xl'
+      : fontSize === 'lg'
+      ? 'text-3xl sm:text-5xl'
+      : 'text-2xl sm:text-4xl';
+
+  const heading2Size =
+    fontSize === 'sm'
+      ? 'text-lg sm:text-xl'
+      : fontSize === 'lg'
+      ? 'text-2xl sm:text-3xl'
+      : 'text-xl sm:text-2xl';
+
   // PortableText components customized for high contrast & theme support
-  const portableTextComponents: PortableTextComponents = {
+  const portableTextComponents: PortableTextComponents = useMemo(() => ({
     block: {
       h1: ({ children }) => (
-        <h1 className="text-2xl sm:text-3xl font-black text-[var(--theme-text,#F8FAFC)] mt-10 mb-4 leading-tight tracking-tight">
+        <h1
+          style={{ fontSize: fontSize === 'sm' ? '1.5rem' : fontSize === 'lg' ? '2.5rem' : '2rem' }}
+          className={`${heading1Size} font-black text-[var(--theme-text,#F8FAFC)] mt-10 mb-4 leading-tight tracking-tight`}
+        >
           {children}
         </h1>
       ),
       h2: ({ children }) => (
-        <h2 className="text-xl sm:text-2xl font-bold text-[var(--theme-text,#F8FAFC)] mt-10 mb-4 border-l-4 border-[var(--theme-primary,#0284C7)] pl-3.5 leading-snug tracking-tight">
+        <h2
+          style={{ fontSize: fontSize === 'sm' ? '1.25rem' : fontSize === 'lg' ? '2rem' : '1.6rem' }}
+          className={`${heading2Size} font-bold text-[var(--theme-text,#F8FAFC)] mt-10 mb-4 border-l-4 border-[var(--theme-primary,#0284C7)] pl-3.5 leading-snug tracking-tight`}
+        >
           {children}
         </h2>
       ),
       h3: ({ children }) => (
-        <h3 className="text-lg sm:text-xl font-bold text-[var(--theme-text,#F8FAFC)] mt-8 mb-3 leading-snug">
+        <h3
+          style={{ fontSize: fontSize === 'sm' ? '1.1rem' : fontSize === 'lg' ? '1.5rem' : '1.3rem' }}
+          className="font-bold text-[var(--theme-text,#F8FAFC)] mt-8 mb-3 leading-snug"
+        >
           {children}
         </h3>
       ),
       h4: ({ children }) => (
-        <h4 className="text-base sm:text-lg font-bold text-[var(--theme-text,#F8FAFC)] mt-6 mb-2">
+        <h4
+          style={{ fontSize: fontSize === 'sm' ? '0.95rem' : fontSize === 'lg' ? '1.25rem' : '1.1rem' }}
+          className="font-bold text-[var(--theme-text,#F8FAFC)] mt-6 mb-2"
+        >
           {children}
         </h4>
       ),
       normal: ({ children }) => (
-        <p className="text-[var(--theme-text,#F8FAFC)]/90 mb-5 leading-relaxed font-normal text-[16px] sm:text-[17.5px]">
+        <p
+          style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+          className="text-[var(--theme-text,#F8FAFC)]/90 mb-5 font-normal transition-all"
+        >
           {children}
         </p>
       ),
       blockquote: ({ children }) => (
-        <blockquote className="my-6 p-4 sm:p-5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border-l-4 border-[var(--theme-primary,#0284C7)] text-[var(--theme-text,#F8FAFC)] italic shadow-xs">
+        <blockquote
+          style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+          className="my-6 p-4 sm:p-5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border-l-4 border-[var(--theme-primary,#0284C7)] text-[var(--theme-text,#F8FAFC)] italic shadow-xs transition-all"
+        >
           {children}
         </blockquote>
       ),
     },
     list: {
       bullet: ({ children }) => (
-        <ul className="list-disc pl-6 mb-6 space-y-2 text-[var(--theme-text,#F8FAFC)]/90 text-[16px] sm:text-[17.5px] leading-relaxed">
+        <ul
+          style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+          className="list-disc pl-6 mb-6 space-y-2 text-[var(--theme-text,#F8FAFC)]/90 transition-all"
+        >
           {children}
         </ul>
       ),
       number: ({ children }) => (
-        <ol className="list-decimal pl-6 mb-6 space-y-2 text-[var(--theme-text,#F8FAFC)]/90 text-[16px] sm:text-[17.5px] leading-relaxed">
+        <ol
+          style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+          className="list-decimal pl-6 mb-6 space-y-2 text-[var(--theme-text,#F8FAFC)]/90 transition-all"
+        >
           {children}
         </ol>
       ),
@@ -395,7 +472,8 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
         if (!value?.html) return null;
         return (
           <div
-            className="my-4 text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed text-base"
+            style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+            className="my-4 text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed"
             dangerouslySetInnerHTML={{ __html: value.html }}
           />
         );
@@ -429,14 +507,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
         );
       },
     },
-  };
-
-  const fontSizeClass =
-    fontSize === 'sm'
-      ? 'text-sm'
-      : fontSize === 'lg'
-      ? 'text-lg sm:text-xl'
-      : 'text-base sm:text-lg';
+  }), [fontSizePx, lineHeightVal, heading1Size, heading2Size, fontSize]);
 
   if (loading) {
     return (
@@ -479,10 +550,65 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   // Active article data
   const title = post?.title || fallbackArticle?.title || '';
   const summary = post?.summary || (isHindi ? fallbackArticle?.hindiSubtitle : fallbackArticle?.subtitle) || '';
-  const category = (typeof post?.category === 'object' ? (post.category as any)?.name : post?.category) || fallbackArticle?.categoryLabel?.en || 'Finance';
-  const readTime = post?.readTime || fallbackArticle?.readTime || '5 min read';
-  const authorName = post?.authorName || fallbackArticle?.author?.name || 'MD Zafeer Hasan (YAZDAAN)';
-  const authorRole = post?.authorRole || fallbackArticle?.author?.role || 'Author & Independent Researcher';
+  const category =
+    (typeof post?.category === 'object' ? ((post.category as any)?.name || (post.category as any)?.title) : post?.category) ||
+    fallbackArticle?.categoryLabel?.en ||
+    'Finance';
+  
+  // Dynamic reading time calculation based on actual word count (avg 180 words/min)
+  const readTime = useMemo(() => {
+    let wordCount = 0;
+    if (post?.body && Array.isArray(post.body)) {
+      for (const b of post.body) {
+        if (b?.children && Array.isArray(b.children)) {
+          for (const c of b.children) {
+            if (c?.text) {
+              wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
+            }
+          }
+        } else if (typeof b?.text === 'string') {
+          wordCount += b.text.trim().split(/\s+/).filter(Boolean).length;
+        }
+      }
+    } else if (post?.bodyText) {
+      wordCount = post.bodyText.trim().split(/\s+/).filter(Boolean).length;
+    } else if (fallbackArticle?.contentSections && Array.isArray(fallbackArticle.contentSections)) {
+      for (const sec of fallbackArticle.contentSections) {
+        if (sec?.paragraphs && Array.isArray(sec.paragraphs)) {
+          for (const p of sec.paragraphs) {
+            if (p?.en) wordCount += p.en.trim().split(/\s+/).filter(Boolean).length;
+          }
+        }
+      }
+    } else if (post?.summary) {
+      wordCount = post.summary.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    if (wordCount > 0) {
+      const minutes = Math.max(1, Math.ceil(wordCount / 180));
+      return `${minutes} min read`;
+    }
+    if (post?.readTime && typeof post.readTime === 'string' && post.readTime.trim()) {
+      return post.readTime;
+    }
+    if (fallbackArticle?.readTime) {
+      return fallbackArticle.readTime;
+    }
+    return '5 min read';
+  }, [post, fallbackArticle]);
+
+  const authorName =
+    (typeof post?.author === 'object' ? (post.author as any)?.name : null) ||
+    post?.authorName ||
+    fallbackArticle?.author?.name ||
+    'MD Zafeer Hasan (YAZDAAN)';
+
+  const authorRole =
+    (typeof post?.author === 'object' ? ((post.author as any)?.role || (post.author as any)?.professionalDescription) : null) ||
+    post?.authorRole ||
+    fallbackArticle?.author?.role ||
+    'Author & Independent Researcher';
+
   const publishedDate = post?.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('en-IN', {
         day: 'numeric',
@@ -515,41 +641,44 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
 
           {/* Action Bar Controls */}
           <div className="flex items-center gap-2">
-            {/* Font Size Adjuster */}
-            <div className="hidden sm:flex items-center rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] p-0.5 text-xs font-mono">
+            {/* Font Size Adjuster - Fully functional on desktop and mobile */}
+            <div className="flex items-center rounded-lg border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] p-0.5 text-xs font-mono">
               <button
                 type="button"
-                onClick={() => setFontSize('sm')}
-                className={`px-2 py-0.5 rounded ${
+                onClick={() => handleSetFontSize('sm')}
+                className={`px-2.5 py-1 rounded transition-all cursor-pointer font-bold ${
                   fontSize === 'sm'
-                    ? 'bg-[var(--theme-primary,#0284C7)] text-white'
+                    ? 'bg-[var(--theme-primary,#0284C7)] text-white shadow-xs'
                     : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
-                title="Small text"
+                title={isHindi ? 'छोटा टेक्स्ट (A-)' : 'Small font (A-)'}
+                aria-label="Decrease font size"
               >
                 A-
               </button>
               <button
                 type="button"
-                onClick={() => setFontSize('base')}
-                className={`px-2 py-0.5 rounded ${
+                onClick={() => handleSetFontSize('base')}
+                className={`px-2.5 py-1 rounded transition-all cursor-pointer font-bold ${
                   fontSize === 'base'
-                    ? 'bg-[var(--theme-primary,#0284C7)] text-white'
+                    ? 'bg-[var(--theme-primary,#0284C7)] text-white shadow-xs'
                     : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
-                title="Default text"
+                title={isHindi ? 'सामान्य टेक्स्ट (A)' : 'Default font (A)'}
+                aria-label="Default font size"
               >
                 A
               </button>
               <button
                 type="button"
-                onClick={() => setFontSize('lg')}
-                className={`px-2 py-0.5 rounded ${
+                onClick={() => handleSetFontSize('lg')}
+                className={`px-2.5 py-1 rounded transition-all cursor-pointer font-bold ${
                   fontSize === 'lg'
-                    ? 'bg-[var(--theme-primary,#0284C7)] text-white'
+                    ? 'bg-[var(--theme-primary,#0284C7)] text-white shadow-xs'
                     : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
                 }`}
-                title="Large text"
+                title={isHindi ? 'बड़ा टेक्स्ट (A+)' : 'Large font (A+)'}
+                aria-label="Increase font size"
               >
                 A+
               </button>
@@ -630,7 +759,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             Blog
           </button>
           <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60" />
-          <span className="text-[var(--theme-primary,#0284C7)] font-medium">Finance</span>
+          <span className="text-[var(--theme-primary,#0284C7)] font-medium">{category}</span>
         </nav>
 
         {/* Article Meta Header */}
@@ -708,7 +837,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           <div className="flex items-center gap-2 min-w-0">
             <span className="w-2 h-2 rounded-full bg-[var(--theme-primary,#0284C7)] shrink-0" />
             <span className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)] truncate">
-              {isHindi ? 'शोध आधारित वित्तीय लेख' : 'Finance Knowledge & Research Article'}
+              {isHindi ? `शोध आधारित ${category === 'Technology' ? 'तकनीकी' : 'वित्तीय'} लेख` : `${category} Knowledge & Research Article`}
             </span>
           </div>
 
@@ -766,8 +895,11 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           </div>
         )}
 
-        {/* Article Body */}
-        <article className={`space-y-6 ${fontSizeClass}`}>
+        {/* Article Body with responsive font sizing */}
+        <article
+          style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+          className="space-y-6"
+        >
           {post?.body && post.body.length > 0 ? (
             <div className="portable-text-wrapper space-y-4">
               <PortableText value={post.body} components={portableTextComponents} />
@@ -776,12 +908,20 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             <div className="space-y-6">
               {fallbackArticle.contentSections.map((sec, sIdx) => (
                 <div key={sIdx} className="space-y-3">
-                  <h3 className="text-xl sm:text-2xl font-bold text-[var(--theme-text,#F8FAFC)] border-l-3 border-[var(--theme-primary,#0284C7)] pl-3">
+                  <h3
+                    style={{ fontSize: fontSize === 'sm' ? '1.25rem' : fontSize === 'lg' ? '2rem' : '1.6rem' }}
+                    className="font-bold text-[var(--theme-text,#F8FAFC)] border-l-3 border-[var(--theme-primary,#0284C7)] pl-3"
+                  >
                     {isHindi ? sec.hindiHeading : sec.heading}
                   </h3>
                   <div className="space-y-3 text-[var(--theme-text-muted,#1E293B)] leading-relaxed">
                     {sec.paragraphs.map((p, pIdx) => (
-                      <p key={pIdx}>{isHindi ? p.hi : p.en}</p>
+                      <p
+                        key={pIdx}
+                        style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+                      >
+                        {isHindi ? p.hi : p.en}
+                      </p>
                     ))}
                   </div>
                 </div>
@@ -789,19 +929,27 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             </div>
           ) : post?.bodyText && /<[a-z][\s\S]*>/i.test(post.bodyText) ? (
             <div
-              className="article-body-html space-y-4 text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed text-base sm:text-lg"
+              style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+              className="article-body-html space-y-4 text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: post.bodyText }}
             />
           ) : post?.bodyText ? (
             <div className="space-y-4">
               {post.bodyText.split(/\n\s*\n/).map((paragraph, pIdx) => (
-                <p key={pIdx} className="text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed text-base sm:text-lg">
+                <p
+                  key={pIdx}
+                  style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+                  className="text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed"
+                >
                   {paragraph}
                 </p>
               ))}
             </div>
           ) : (
-            <p className="text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed text-base sm:text-lg">
+            <p
+              style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
+              className="text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed"
+            >
               {summary}
             </p>
           )}
