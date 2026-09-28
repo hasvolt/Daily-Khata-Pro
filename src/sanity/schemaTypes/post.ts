@@ -61,10 +61,6 @@ export default defineType({
           to: [{ type: 'topic' }],
           weak: true,
         }),
-        defineArrayMember({
-          type: 'string',
-          title: 'Topic',
-        }),
       ],
     }),
     defineField({
