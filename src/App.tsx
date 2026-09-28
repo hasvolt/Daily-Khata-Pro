@@ -2282,7 +2282,7 @@ function AppContent() {
 
 
   // Allow public informational pages to be accessed directly via URL without private PIN lockout
-  const isPublicPage = ['/about', '/developer', '/privacy', '/terms', '/disclaimer', '/safety', '/guide', '/studio'].some(
+  const isPublicPage = ['/about', '/developer', '/privacy', '/terms', '/disclaimer', '/safety', '/guide', '/studio', '/blog'].some(
     (p) => location.pathname.toLowerCase() === p || location.pathname.toLowerCase().startsWith(p + '/')
   );
 

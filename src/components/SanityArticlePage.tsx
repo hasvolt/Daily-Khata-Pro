@@ -155,7 +155,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
 
     const publishedDate = post?.publishedAt || fallbackArticle?.publishedAt || new Date().toISOString();
     const modifiedDate = post?.updatedAt || publishedDate;
-    const imageUrl = post?.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : `${CANONICAL_DOMAIN}/daily-khata-pro-v4.png`;
+    const imageUrl = (post?.mainImage && (post.mainImage.asset || post.mainImage._ref)) ? urlFor(post.mainImage).width(1200).height(630).url() : `${CANONICAL_DOMAIN}/daily-khata-pro-v4.png`;
 
     const prevTitle = document.title;
     document.title = `${activeTitle} | Rozfiber ${resolvedCategory}`;
@@ -414,6 +414,22 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           {children}
         </h4>
       ),
+      h5: ({ children }) => (
+        <h5
+          style={{ fontSize: fontSize === 'sm' ? '0.9rem' : fontSize === 'lg' ? '1.15rem' : '1.05rem' }}
+          className="font-bold text-[var(--theme-text,#F8FAFC)] mt-5 mb-2"
+        >
+          {children}
+        </h5>
+      ),
+      h6: ({ children }) => (
+        <h6
+          style={{ fontSize: fontSize === 'sm' ? '0.85rem' : fontSize === 'lg' ? '1.1rem' : '1rem' }}
+          className="font-bold text-[var(--theme-text,#F8FAFC)] mt-4 mb-2"
+        >
+          {children}
+        </h6>
+      ),
       normal: ({ children }) => (
         <p
           style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
@@ -509,6 +525,48 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     },
   }), [fontSizePx, lineHeightVal, heading1Size, heading2Size, fontSize]);
 
+  // Dynamic reading time calculation based on actual word count (avg 180 words/min)
+  const readTime = useMemo(() => {
+    let wordCount = 0;
+    if (post?.body && Array.isArray(post.body)) {
+      for (const b of post.body) {
+        if (b?.children && Array.isArray(b.children)) {
+          for (const c of b.children) {
+            if (c?.text) {
+              wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
+            }
+          }
+        } else if (typeof b?.text === 'string') {
+          wordCount += b.text.trim().split(/\s+/).filter(Boolean).length;
+        }
+      }
+    } else if (post?.bodyText) {
+      wordCount = post.bodyText.trim().split(/\s+/).filter(Boolean).length;
+    } else if (fallbackArticle?.contentSections && Array.isArray(fallbackArticle.contentSections)) {
+      for (const sec of fallbackArticle.contentSections) {
+        if (sec?.paragraphs && Array.isArray(sec.paragraphs)) {
+          for (const p of sec.paragraphs) {
+            if (p?.en) wordCount += p.en.trim().split(/\s+/).filter(Boolean).length;
+          }
+        }
+      }
+    } else if (post?.summary) {
+      wordCount = post.summary.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    if (wordCount > 0) {
+      const minutes = Math.max(1, Math.ceil(wordCount / 180));
+      return `${minutes} min read`;
+    }
+    if (post?.readTime && typeof post.readTime === 'string' && post.readTime.trim()) {
+      return post.readTime;
+    }
+    if (fallbackArticle?.readTime) {
+      return fallbackArticle.readTime;
+    }
+    return '5 min read';
+  }, [post, fallbackArticle]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] flex items-center justify-center p-6">
@@ -554,48 +612,6 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     (typeof post?.category === 'object' ? ((post.category as any)?.name || (post.category as any)?.title) : post?.category) ||
     fallbackArticle?.categoryLabel?.en ||
     'Finance';
-  
-  // Dynamic reading time calculation based on actual word count (avg 180 words/min)
-  const readTime = useMemo(() => {
-    let wordCount = 0;
-    if (post?.body && Array.isArray(post.body)) {
-      for (const b of post.body) {
-        if (b?.children && Array.isArray(b.children)) {
-          for (const c of b.children) {
-            if (c?.text) {
-              wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
-            }
-          }
-        } else if (typeof b?.text === 'string') {
-          wordCount += b.text.trim().split(/\s+/).filter(Boolean).length;
-        }
-      }
-    } else if (post?.bodyText) {
-      wordCount = post.bodyText.trim().split(/\s+/).filter(Boolean).length;
-    } else if (fallbackArticle?.contentSections && Array.isArray(fallbackArticle.contentSections)) {
-      for (const sec of fallbackArticle.contentSections) {
-        if (sec?.paragraphs && Array.isArray(sec.paragraphs)) {
-          for (const p of sec.paragraphs) {
-            if (p?.en) wordCount += p.en.trim().split(/\s+/).filter(Boolean).length;
-          }
-        }
-      }
-    } else if (post?.summary) {
-      wordCount = post.summary.trim().split(/\s+/).filter(Boolean).length;
-    }
-
-    if (wordCount > 0) {
-      const minutes = Math.max(1, Math.ceil(wordCount / 180));
-      return `${minutes} min read`;
-    }
-    if (post?.readTime && typeof post.readTime === 'string' && post.readTime.trim()) {
-      return post.readTime;
-    }
-    if (fallbackArticle?.readTime) {
-      return fallbackArticle.readTime;
-    }
-    return '5 min read';
-  }, [post, fallbackArticle]);
 
   const authorName =
     (typeof post?.author === 'object' ? (post.author as any)?.name : null) ||
@@ -794,7 +810,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           {/* Author Byline & Publication Dates */}
           <div className="pt-4 border-t border-[var(--theme-border,#213E61)] flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              {post?.authorImage ? (
+              {post?.authorImage && (post.authorImage.asset || post.authorImage._ref) ? (
                 <img
                   src={urlFor(post.authorImage).width(120).height(120).fit('crop').url()}
                   alt={authorName}
@@ -862,7 +878,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
         </div>
 
         {/* Featured Image (if available) */}
-        {post?.mainImage && (
+        {post?.mainImage && (post.mainImage.asset || post.mainImage._ref) && (
           <div className="rounded-3xl overflow-hidden border border-[var(--theme-border,#213E61)] shadow-md bg-[var(--theme-surface,#0E1A29)]">
             <img
               src={urlFor(post.mainImage).width(1200).auto('format').fit('max').url()}
@@ -870,6 +886,9 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
               className="w-full h-auto object-cover max-h-[500px] block"
               loading="eager"
               referrerPolicy="no-referrer"
+              onError={(e) => {
+                (e.currentTarget.parentElement as HTMLElement)?.style.setProperty('display', 'none');
+              }}
             />
             {(post.mainImage?.caption || post.mainImage?.credit) && (
               <div className="p-3 text-xs text-center text-[var(--theme-text-dim,#64748B)] bg-[var(--theme-surface,#0E1A29)] border-t border-[var(--theme-border,#213E61)]/50 flex flex-col sm:flex-row items-center justify-center gap-1.5">

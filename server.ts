@@ -7,12 +7,106 @@ const sanityClient = createClient({
   projectId: "3zccyf67",
   dataset: "production",
   apiVersion: "2024-01-01",
-  useCdn: true,
+  useCdn: false,
 });
+
+const SANITY_POSTS_QUERY = `*[_type == "post"] | order(coalesce(publishedAt, _createdAt) desc) {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  updatedAt,
+  author->{
+    _id,
+    name,
+    role,
+    professionalDescription,
+    bio,
+    "profilePhoto": coalesce(profilePhoto, image)
+  },
+  "authorName": coalesce(author->name, authorName, "MD Zafeer Hasan (YAZDAAN)"),
+  "authorRole": coalesce(author->role, author->professionalDescription, authorRole, "Author & Independent Researcher"),
+  "authorBio": coalesce(author->bio, authorBio),
+  "authorImage": coalesce(author->profilePhoto, author->image, authorImage),
+  "category": coalesce(category->name, category, "Finance"),
+  "topics": coalesce(select(defined(topics[0]._ref) => topics[]->name[@ != null], topics), []),
+  articleType,
+  readTime,
+  "summary": coalesce(excerpt, summary),
+  "excerpt": coalesce(excerpt, summary),
+  "mainImage": coalesce(featuredImage, mainImage),
+  featuredImage,
+  attachedFile,
+  bodyText,
+  body,
+  sources,
+  disclaimer,
+  tags
+}`;
+
+const SANITY_SINGLE_POST_QUERY = `*[_type == "post" && (slug.current == $slugOrId || _id == $slugOrId || slug.current == $cleanId || _id == $cleanId)][0] {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  updatedAt,
+  author->{
+    _id,
+    name,
+    role,
+    professionalDescription,
+    bio,
+    "profilePhoto": coalesce(profilePhoto, image)
+  },
+  "authorName": coalesce(author->name, authorName, "MD Zafeer Hasan (YAZDAAN)"),
+  "authorRole": coalesce(author->role, author->professionalDescription, authorRole, "Author & Independent Researcher"),
+  "authorBio": coalesce(author->bio, authorBio),
+  "authorImage": coalesce(author->profilePhoto, author->image, authorImage),
+  "category": coalesce(category->name, category, "Finance"),
+  "topics": coalesce(select(defined(topics[0]._ref) => topics[]->name[@ != null], topics), []),
+  articleType,
+  readTime,
+  "summary": coalesce(excerpt, summary),
+  "excerpt": coalesce(excerpt, summary),
+  "mainImage": coalesce(featuredImage, mainImage),
+  featuredImage,
+  attachedFile,
+  bodyText,
+  body,
+  sources,
+  disclaimer,
+  tags
+}`;
 
 async function startServer() {
   const app = express();
   const PORT = 3000;
+
+  // Sanity Blog API proxy endpoints (immune to CORS restrictions in all preview, dev, and custom environments)
+  app.get('/api/sanity-posts', async (req, res) => {
+    try {
+      const posts = await sanityClient.fetch(SANITY_POSTS_QUERY);
+      res.setHeader('Cache-Control', 'public, max-age=10, s-maxage=30');
+      res.json(posts || []);
+    } catch (err: any) {
+      console.warn('API /api/sanity-posts fetch failed:', err);
+      res.status(500).json({ error: 'Failed to fetch Sanity posts', message: err?.message });
+    }
+  });
+
+  app.get('/api/sanity-post/:slugOrId', async (req, res) => {
+    try {
+      const { slugOrId } = req.params;
+      const cleanSlug = (slugOrId || '').trim().replace(/\/+$/, '');
+      const cleanId = cleanSlug.replace(/^sanity-/, '');
+      const post = await sanityClient.fetch(SANITY_SINGLE_POST_QUERY, { slugOrId: cleanSlug, cleanId });
+      res.setHeader('Cache-Control', 'public, max-age=10, s-maxage=30');
+      res.json(post || null);
+    } catch (err: any) {
+      console.warn('API /api/sanity-post fetch failed:', err);
+      res.status(500).json({ error: 'Failed to fetch Sanity post', message: err?.message });
+    }
+  });
 
   // Explicit route for Google AdSense ads.txt verification
   app.get('/ads.txt', (req, res) => {

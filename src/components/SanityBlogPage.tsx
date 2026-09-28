@@ -67,6 +67,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
 
   // Live dynamic posts from Sanity CMS
   const [sanityArticles, setSanityArticles] = useState<CommercialArticle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleArticleClick = (article: CommercialArticle) => {
     const target = article.slug || article.id;
@@ -158,99 +159,114 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
 
   useEffect(() => {
     let isMounted = true;
+    setIsLoading(true);
     getSanityPosts().then(posts => {
-      if (!isMounted || !posts || posts.length === 0) return;
-      const formatted: CommercialArticle[] = posts.map(p => {
-        const catName = (typeof p.category === 'object' ? (p.category as any)?.name : p.category) || 'Finance';
-        
-        // Dynamic reading time calculation based on actual body content word count
-        let calcReadTime = p.readTime;
-        let wordCount = 0;
-        if (p.body && Array.isArray(p.body)) {
-          for (const b of p.body) {
-            if (b?.children && Array.isArray(b.children)) {
-              for (const c of b.children) {
-                if (c?.text) wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
-              }
-            } else if (typeof b?.text === 'string') {
-              wordCount += b.text.trim().split(/\s+/).filter(Boolean).length;
-            }
-          }
-        } else if (p.bodyText) {
-          wordCount = p.bodyText.trim().split(/\s+/).filter(Boolean).length;
-        } else if (p.summary) {
-          wordCount = p.summary.trim().split(/\s+/).filter(Boolean).length;
-        }
-
-        if (wordCount > 0) {
-          const minutes = Math.max(1, Math.ceil(wordCount / 180));
-          calcReadTime = `${minutes} min read`;
-        } else if (!calcReadTime) {
-          calcReadTime = '5 min read';
-        }
-
-        const resolvedAuthorName =
-          (typeof p.author === 'object' ? (p.author as any)?.name : null) ||
-          p.authorName ||
-          'MD Zafeer Hasan (YAZDAAN)';
-
-        const resolvedAuthorRole =
-          (typeof p.author === 'object' ? ((p.author as any)?.role || (p.author as any)?.professionalDescription) : null) ||
-          p.authorRole ||
-          'Author & Independent Researcher';
-
-        return {
-          id: p.slug?.current || `sanity-${p._id}`,
-          slug: p.slug?.current,
-          title: p.title || 'Untitled Post',
-          hindiTitle: p.title || 'शीर्षक उपलब्ध नहीं',
-          subtitle: p.summary || 'Live editorial dispatch from Sanity CMS',
-          hindiSubtitle: p.summary || 'सैनिटी सीएमएस से लाइव प्रकाशित संपादकीय लेख',
-          category: catName.toLowerCase(),
-          categoryLabel: {
-            en: catName,
-            hi: catName === 'Technology' ? 'टेक्नोलॉजी' : catName === 'Finance' ? 'फाइनेंस' : catName === 'Business' ? 'बिज़नेस' : catName
-          },
-          readTime: calcReadTime,
-          heroImageGradient: 'from-blue-900 to-indigo-950',
-          heroBadge: catName.toUpperCase(),
-          publishedAt: p.publishedAt ? new Date(p.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently Published',
-          author: {
-            name: resolvedAuthorName,
-            role: resolvedAuthorRole,
-            organization: 'Rozfiber Finance',
-            avatarInitials: resolvedAuthorName ? resolvedAuthorName.slice(0, 2).toUpperCase() : 'ZH'
-          },
-          keyTakeaways: [
-            {
-              en: p.summary || p.title,
-              hi: p.summary || p.title
-            }
-          ],
-          marketImpact: {
-            status: 'Strategic Outlook',
-            sentimentLabel: 'Live Feed'
-          },
-          contentSections: [
-            {
-              heading: 'Overview & Analysis',
-              hindiHeading: 'मुख्य विश्लेषण व समीक्षा',
-              paragraphs: [
-                {
-                  en: p.bodyText || p.summary || '',
-                  hi: p.bodyText || p.summary || ''
+      if (!isMounted) return;
+      if (posts && posts.length > 0) {
+        const formatted: CommercialArticle[] = posts.map(p => {
+          const catName = (typeof p.category === 'object' ? (p.category as any)?.name : p.category) || 'Finance';
+          
+          // Dynamic reading time calculation based on actual body content word count
+          let calcReadTime = p.readTime;
+          let wordCount = 0;
+          if (p.body && Array.isArray(p.body)) {
+            for (const b of p.body) {
+              if (b?.children && Array.isArray(b.children)) {
+                for (const c of b.children) {
+                  if (c?.text) wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
                 }
-              ]
+              } else if (typeof b?.text === 'string') {
+                wordCount += b.text.trim().split(/\s+/).filter(Boolean).length;
+              }
             }
-          ],
-          sanityBody: p.body,
-          mainImage: p.mainImage,
-          tags: p.tags && p.tags.length > 0 ? p.tags : ['LiveBlog', 'SanityCMS', 'Updates']
-        };
-      });
-      setSanityArticles(formatted);
+          } else if (p.bodyText) {
+            wordCount = p.bodyText.trim().split(/\s+/).filter(Boolean).length;
+          } else if (p.summary) {
+            wordCount = p.summary.trim().split(/\s+/).filter(Boolean).length;
+          }
+
+          if (wordCount > 0) {
+            const minutes = Math.max(1, Math.ceil(wordCount / 180));
+            calcReadTime = `${minutes} min read`;
+          } else if (!calcReadTime) {
+            calcReadTime = '5 min read';
+          }
+
+          const resolvedAuthorName =
+            (typeof p.author === 'object' ? (p.author as any)?.name : null) ||
+            p.authorName ||
+            'MD Zafeer Hasan (YAZDAAN)';
+
+          const resolvedAuthorRole =
+            (typeof p.author === 'object' ? ((p.author as any)?.role || (p.author as any)?.professionalDescription) : null) ||
+            p.authorRole ||
+            'Author & Independent Researcher';
+
+          let formattedDate = 'Recently Published';
+          if (p.publishedAt) {
+            try {
+              const d = new Date(p.publishedAt);
+              if (!isNaN(d.getTime())) {
+                formattedDate = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+              }
+            } catch {}
+          }
+
+          return {
+            id: p.slug?.current || `sanity-${p._id}`,
+            slug: p.slug?.current,
+            title: p.title || 'Untitled Post',
+            hindiTitle: p.title || 'शीर्षक उपलब्ध नहीं',
+            subtitle: p.summary || 'Live editorial dispatch from Sanity CMS',
+            hindiSubtitle: p.summary || 'सैनिटी सीएमएस से लाइव प्रकाशित संपादकीय लेख',
+            category: catName.toLowerCase(),
+            categoryLabel: {
+              en: catName,
+              hi: catName === 'Technology' ? 'टेक्नोलॉजी' : catName === 'Finance' ? 'फाइनेंस' : catName === 'Business' ? 'बिज़नेस' : catName
+            },
+            readTime: calcReadTime,
+            heroImageGradient: 'from-blue-900 to-indigo-950',
+            heroBadge: catName.toUpperCase(),
+            publishedAt: formattedDate,
+            author: {
+              name: resolvedAuthorName,
+              role: resolvedAuthorRole,
+              organization: 'Rozfiber Finance',
+              avatarInitials: resolvedAuthorName ? resolvedAuthorName.slice(0, 2).toUpperCase() : 'ZH'
+            },
+            keyTakeaways: [
+              {
+                en: p.summary || p.title,
+                hi: p.summary || p.title
+              }
+            ],
+            marketImpact: {
+              status: 'Strategic Outlook',
+              sentimentLabel: 'Live Feed'
+            },
+            contentSections: [
+              {
+                heading: 'Overview & Analysis',
+                hindiHeading: 'मुख्य विश्लेषण व समीक्षा',
+                paragraphs: [
+                  {
+                    en: p.bodyText || p.summary || '',
+                    hi: p.bodyText || p.summary || ''
+                  }
+                ]
+              }
+            ],
+            sanityBody: p.body,
+            mainImage: p.mainImage,
+            tags: p.tags && p.tags.length > 0 ? p.tags : ['LiveBlog', 'SanityCMS', 'Updates']
+          };
+        });
+        setSanityArticles(formatted);
+      }
+      setIsLoading(false);
     }).catch(err => {
       console.warn('Sanity live fetch notice:', err);
+      if (isMounted) setIsLoading(false);
     });
     return () => {
       isMounted = false;
@@ -287,14 +303,15 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
   // Filtered articles
   const filteredArticles = useMemo(() => {
     return allArticles.filter(article => {
+      const q = searchQuery.trim().toLowerCase();
       const matchesSearch =
-        searchQuery.trim() === '' ||
-        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.hindiTitle.includes(searchQuery) ||
-        article.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.hindiSubtitle.includes(searchQuery) ||
-        article.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        article.author.name.toLowerCase().includes(searchQuery.toLowerCase());
+        q === '' ||
+        (article.title && article.title.toLowerCase().includes(q)) ||
+        (article.hindiTitle && article.hindiTitle.includes(searchQuery)) ||
+        (article.subtitle && article.subtitle.toLowerCase().includes(q)) ||
+        (article.hindiSubtitle && article.hindiSubtitle.includes(searchQuery)) ||
+        (Array.isArray(article.tags) && article.tags.some(t => typeof t === 'string' && t.toLowerCase().includes(q))) ||
+        (article.author?.name && article.author.name.toLowerCase().includes(q));
 
       if (!matchesSearch) return false;
 
@@ -569,7 +586,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                 </div>
               </div>
 
-              {featuredArticle.mainImage && (
+              {featuredArticle.mainImage && (featuredArticle.mainImage.asset || featuredArticle.mainImage._ref) && (
                 <div className="w-full lg:w-72 xl:w-80 shrink-0 rounded-2xl overflow-hidden aspect-video lg:aspect-[4/3] border border-[var(--theme-border,#213E61)]/70 bg-[var(--theme-surface,#0E1A29)] shadow-md">
                   <img
                     src={urlFor(featuredArticle.mainImage).width(720).height(540).auto('format').fit('crop').url()}
@@ -577,6 +594,9 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.currentTarget.parentElement as HTMLElement)?.style.setProperty('display', 'none');
+                    }}
                   />
                 </div>
               )}
@@ -599,12 +619,23 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                   : 'Latest Commercial & Analytical Reports'}
               </span>
               <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)]">
-                {filteredArticles.length}
+                {isLoading ? '...' : filteredArticles.length}
               </span>
             </h3>
           </div>
 
-          {filteredArticles.length === 0 ? (
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="rounded-2xl border border-[var(--theme-border,#213E61)]/60 bg-[var(--theme-card,#132438)]/40 p-5 space-y-4 animate-pulse">
+                  <div className="h-40 bg-[var(--theme-surface,#0E1A29)] rounded-xl" />
+                  <div className="h-4 bg-[var(--theme-surface,#0E1A29)] rounded w-3/4" />
+                  <div className="h-3 bg-[var(--theme-surface,#0E1A29)] rounded w-full" />
+                  <div className="h-3 bg-[var(--theme-surface,#0E1A29)] rounded w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : filteredArticles.length === 0 ? (
             <div className="p-12 text-center rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/40 space-y-3">
               <FileText className="w-10 h-10 text-[var(--theme-text-dim,#64748B)] mx-auto" />
               <p className="text-sm text-[var(--theme-text-dim,#94A3B8)] font-medium">
@@ -638,7 +669,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                     className="group rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/50 hover:bg-[var(--theme-card,#132438)]/80 hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer flex flex-col justify-between p-5 relative overflow-hidden shadow-sm hover:shadow-md"
                   >
                     {/* Featured Image Thumbnail (if available) */}
-                    {article.mainImage && (
+                    {article.mainImage && (article.mainImage.asset || article.mainImage._ref) && (
                       <div className="mb-3.5 -mx-5 -mt-5 rounded-t-2xl overflow-hidden aspect-video bg-[var(--theme-surface,#0E1A29)] border-b border-[var(--theme-border,#213E61)]/60">
                         <img
                           src={urlFor(article.mainImage).width(600).height(338).auto('format').fit('crop').url()}
@@ -646,6 +677,9 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                           referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            (e.currentTarget.parentElement as HTMLElement)?.style.setProperty('display', 'none');
+                          }}
                         />
                       </div>
                     )}
