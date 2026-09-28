@@ -47,6 +47,7 @@ export default defineType({
       title: 'Category',
       type: 'reference',
       to: [{ type: 'category' }],
+      weak: true,
       group: 'articleInfo',
     }),
     defineField({
@@ -54,7 +55,17 @@ export default defineType({
       title: 'Topics',
       type: 'array',
       group: 'articleInfo',
-      of: [{ type: 'reference', to: [{ type: 'topic' }] }],
+      of: [
+        defineArrayMember({
+          type: 'reference',
+          to: [{ type: 'topic' }],
+          weak: true,
+        }),
+        defineArrayMember({
+          type: 'string',
+          title: 'Topic',
+        }),
+      ],
     }),
     defineField({
       name: 'articleType',
@@ -83,6 +94,7 @@ export default defineType({
       title: 'Author',
       type: 'reference',
       to: { type: 'author' },
+      weak: true,
       group: 'author',
     }),
 
