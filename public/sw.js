@@ -1,10 +1,10 @@
 /**
  * Daily Khata Pro — Service Worker
- * Version: 2.8.1
+ * Version: 2.8.3
  * 100% Offline-First Architecture, Resilient Asset Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.8.5';
+const CACHE_NAME = 'daily-khata-pro-v2.8.7';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -114,7 +114,7 @@ self.addEventListener('install', (event) => {
       } catch (htmlErr) {
         console.warn('[SW] Dynamic HTML precache warning:', htmlErr);
       }
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
@@ -247,10 +247,11 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       } catch (netErr) {
         // 3. Network failed & not in cache: offline fallback
-        if (event.request.destination === 'image') {
+        if (event.request.destination === 'image' || url.pathname.match(/\.(png|jpg|svg|ico)$/i)) {
           const fallbackImg = (await caches.match('/daily-khata-pro-v4.png', { ignoreSearch: true, ignoreVary: true })) ||
                               (await caches.match('/daily-Khata-Pro.png', { ignoreSearch: true, ignoreVary: true })) ||
                               (await caches.match('/icon-192.png', { ignoreSearch: true, ignoreVary: true })) ||
+                              (await caches.match('/favicon.svg', { ignoreSearch: true, ignoreVary: true })) ||
                               (await caches.match('/favicon.png', { ignoreSearch: true, ignoreVary: true }));
           if (fallbackImg) return fallbackImg;
         }

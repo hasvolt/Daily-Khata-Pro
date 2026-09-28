@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, RefreshCw, X, ArrowUpCircle } from 'lucide-react';
-import { APP_VERSION_TAG } from '../utils/version';
+import { APP_VERSION, APP_VERSION_TAG } from '../utils/version';
 import { triggerHapticSound } from '../utils/khataCalculations';
 
 interface UpdateNotificationProps {
@@ -13,6 +13,11 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({ isHindi 
   const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
+    // 0. Check if global window flag was already set before React mounted
+    if (typeof window !== 'undefined' && (window as unknown as { __dailyKhataUpdateAvailable?: boolean }).__dailyKhataUpdateAvailable) {
+      setHasUpdate(true);
+    }
+
     // 1. Listen for Service Worker updatefound -> installed event
     const handleUpdateAvailable = () => {
       setHasUpdate(true);
@@ -21,13 +26,59 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({ isHindi 
 
     window.addEventListener('app-update-available', handleUpdateAvailable);
 
-    // 2. Also check if a service worker is already waiting
+    // 2. Comprehensive Service Worker check & update monitoring
     if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistration().then((reg) => {
-        if (reg?.waiting) {
-          setHasUpdate(true);
+      navigator.serviceWorker.getRegistration().then(async (reg) => {
+        if (!reg) return;
+
+        const checkWorker = (worker: ServiceWorker | null) => {
+          if (!worker) return;
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            (window as unknown as { __dailyKhataWaitingWorker?: ServiceWorker }).__dailyKhataWaitingWorker = worker;
+            (window as unknown as { __dailyKhataUpdateAvailable?: boolean }).__dailyKhataUpdateAvailable = true;
+            setHasUpdate(true);
+            setIsDismissed(false);
+          } else {
+            worker.addEventListener('statechange', () => {
+              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                (window as unknown as { __dailyKhataWaitingWorker?: ServiceWorker }).__dailyKhataWaitingWorker = worker;
+                (window as unknown as { __dailyKhataUpdateAvailable?: boolean }).__dailyKhataUpdateAvailable = true;
+                setHasUpdate(true);
+                setIsDismissed(false);
+              }
+            });
+          }
+        };
+
+        if (reg.waiting) checkWorker(reg.waiting);
+        if (reg.installing) checkWorker(reg.installing);
+
+        reg.addEventListener('updatefound', () => {
+          checkWorker(reg.installing);
+        });
+
+        if (navigator.onLine) {
+          try {
+            await reg.update();
+            if (reg.waiting) checkWorker(reg.waiting);
+            if (reg.installing) checkWorker(reg.installing);
+          } catch (e) {}
         }
       }).catch(() => {});
+    }
+
+    // 3. Version file check for immediate server release detection
+    if (typeof window !== 'undefined' && navigator.onLine) {
+      fetch('/version.json?_t=' + Date.now(), { cache: 'no-store' })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data && data.version && data.version !== APP_VERSION) {
+            (window as unknown as { __dailyKhataUpdateAvailable?: boolean }).__dailyKhataUpdateAvailable = true;
+            setHasUpdate(true);
+            setIsDismissed(false);
+          }
+        })
+        .catch(() => {});
     }
 
     return () => {

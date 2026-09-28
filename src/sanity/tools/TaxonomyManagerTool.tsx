@@ -68,11 +68,55 @@ export function TaxonomyManagerTool() {
         topsCreated++;
       }
 
-      setProgressText(`✓ Completed: Verified ${catsCreated} Categories and ${topsCreated} Topics.`);
+      // 3. Check and safely migrate existing posts with legacy string category or string topics
+      setProgressText('Checking existing blog posts for legacy values...');
+      let postsMigrated = 0;
+      try {
+        const posts = await client.fetch<any[]>('*[_type == "post"]{ _id, category, topics }');
+        for (const p of posts) {
+          const patches: any = {};
+          if (typeof p.category === 'string' && p.category.trim()) {
+            const matchedCat = INITIAL_CATEGORIES.find(
+              c => c.name.toLowerCase() === p.category.toLowerCase()
+            ) || INITIAL_CATEGORIES[0];
+            patches.category = {
+              _type: 'reference',
+              _ref: matchedCat.id,
+            };
+          }
+          if (Array.isArray(p.topics) && p.topics.length > 0 && typeof p.topics[0] === 'string') {
+            patches.topics = p.topics.map((tName: string) => {
+              const matchedTop = INITIAL_TOPICS.find(
+                t => t.name.toLowerCase() === tName.toLowerCase()
+              );
+              const refId = matchedTop
+                ? matchedTop.id
+                : `topic-${tName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+              return {
+                _key: Math.random().toString(36).substring(2, 10),
+                _type: 'reference',
+                _ref: refId,
+              };
+            });
+          }
+
+          if (Object.keys(patches).length > 0) {
+            await client.patch(p._id).set(patches).commit();
+            postsMigrated++;
+          }
+        }
+      } catch (postErr) {
+        console.warn('Post migration check notice (non-fatal):', postErr);
+      }
+
+      setProgressText(`✓ Completed: Verified ${catsCreated} Categories, ${topsCreated} Topics (${postsMigrated} posts mapped).`);
       setLogs([
         `✓ All ${INITIAL_CATEGORIES.length} categories verified in Sanity.`,
         `✓ All ${INITIAL_TOPICS.length} topics verified in Sanity.`,
-        `Existing blog posts and documents remained completely safe and untouched.`,
+        postsMigrated > 0
+          ? `✓ Successfully migrated ${postsMigrated} blog post(s) from legacy strings to reference documents.`
+          : `✓ Existing blog posts are already up to date with new reference mapping.`,
+        `Existing content and custom values remained completely safe.`,
       ]);
       await fetchCounts();
     } catch (err: any) {

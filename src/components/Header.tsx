@@ -153,6 +153,9 @@ export const Header: React.FC<HeaderProps> = ({
   const isLightMode = theme === 'light' || theme === 'white';
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && (window as unknown as { __dailyKhataUpdateAvailable?: boolean }).__dailyKhataUpdateAvailable) {
+      setUpdateAvailable(true);
+    }
     const handleUpdate = () => setUpdateAvailable(true);
     window.addEventListener('app-update-available', handleUpdate);
     if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {

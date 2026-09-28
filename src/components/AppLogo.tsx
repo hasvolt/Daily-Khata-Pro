@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DAILY_KHATA_PRO_LOGO_DATA_URL } from './brandLogoData';
 
 interface AppLogoProps {
   size?: number | string;
@@ -9,7 +10,6 @@ interface AppLogoProps {
 const LOGO_CANDIDATES = [
   '/daily-khata-pro-v4.png',
   '/daily-Khata-Pro.png',
-  '/daily-Khata-Pro-aap-icon.png',
   '/icon-192.png'
 ];
 
@@ -19,6 +19,7 @@ export const AppLogo: React.FC<AppLogoProps> = ({
   showText = false
 }) => {
   const [candidateIdx, setCandidateIdx] = useState(0);
+  const [hasFailedAll, setHasFailedAll] = useState(false);
 
   // Normalize sizing whether number or preset like 'sm'
   let pixelSize = 32;
@@ -35,7 +36,10 @@ export const AppLogo: React.FC<AppLogoProps> = ({
   }
 
   const dimension = `${pixelSize}px`;
-  const currentSrc = LOGO_CANDIDATES[candidateIdx] || LOGO_CANDIDATES[0];
+  // When all image URLs fail, use the embedded retina base64 of the authentic daily-khata-pro-v4.png
+  const currentSrc = hasFailedAll
+    ? DAILY_KHATA_PRO_LOGO_DATA_URL
+    : (LOGO_CANDIDATES[candidateIdx] || DAILY_KHATA_PRO_LOGO_DATA_URL);
 
   return (
     <div className={`inline-flex items-center gap-2 ${className}`}>
@@ -53,6 +57,8 @@ export const AppLogo: React.FC<AppLogoProps> = ({
           onError={() => {
             if (candidateIdx < LOGO_CANDIDATES.length - 1) {
               setCandidateIdx(prev => prev + 1);
+            } else {
+              setHasFailedAll(true);
             }
           }}
           loading="eager"
@@ -75,4 +81,3 @@ export const AppLogo: React.FC<AppLogoProps> = ({
     </div>
   );
 };
-
