@@ -12,6 +12,38 @@ export interface InitialTopicItem {
   description: string;
 }
 
+export interface InitialAuthorItem {
+  id: string;
+  name: string;
+  professionalDescription: string;
+  bio: string;
+  profileUrl?: string;
+}
+
+export const INITIAL_AUTHORS: InitialAuthorItem[] = [
+  {
+    id: 'author-md-zafeer-hasan',
+    name: 'MD Zafeer Hasan (YAZDAAN)',
+    professionalDescription: 'Author & Independent Researcher',
+    bio: 'Founder of Daily Khata Pro and independent researcher in personal finance, financial technology, and economic systems.',
+    profileUrl: 'https://www.rozfiber.com',
+  },
+  {
+    id: 'author-editorial-team',
+    name: 'Daily Khata Pro Editorial Team',
+    professionalDescription: 'Finance & Personal Money Management Editorial Team',
+    bio: 'Research and editorial desk at Daily Khata Pro covering personal finance, budgeting, and practical money tools.',
+    profileUrl: 'https://www.rozfiber.com/blog',
+  },
+  {
+    id: 'author-finance-desk',
+    name: 'Rozfiber Finance Desk',
+    professionalDescription: 'Financial Technology Research Analyst',
+    bio: 'Independent financial analysis and economic reporting desk at Rozfiber.',
+    profileUrl: 'https://www.rozfiber.com/blog',
+  },
+];
+
 export const INITIAL_CATEGORIES: InitialCategoryItem[] = [
   { id: 'category-finance', name: 'Finance', slug: 'finance', description: 'Personal finance, banking, business finance, budgeting, and financial growth.' },
   { id: 'category-technology', name: 'Technology', slug: 'technology', description: 'Tech innovations, software platforms, hardware systems, and computing.' },

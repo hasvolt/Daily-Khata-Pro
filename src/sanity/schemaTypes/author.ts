@@ -40,6 +40,7 @@ export default defineType({
   preview: {
     select: {
       title: 'name',
+      subtitle: 'professionalDescription',
       media: 'profilePhoto',
     },
   },

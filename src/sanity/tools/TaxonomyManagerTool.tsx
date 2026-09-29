@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useClient } from 'sanity';
-import { INITIAL_CATEGORIES, INITIAL_TOPICS } from './taxonomyData';
+import { INITIAL_CATEGORIES, INITIAL_TOPICS, INITIAL_AUTHORS } from './taxonomyData';
 
 export function TaxonomyManagerTool() {
   const client = useClient({ apiVersion: '2024-01-01' });
   const [categoriesCount, setCategoriesCount] = useState<number | null>(null);
   const [topicsCount, setTopicsCount] = useState<number | null>(null);
+  const [authorsCount, setAuthorsCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [seeding, setSeeding] = useState(false);
   const [progressText, setProgressText] = useState<string>('');
@@ -14,12 +15,14 @@ export function TaxonomyManagerTool() {
   const fetchCounts = async () => {
     try {
       setLoading(true);
-      const [cats, tops] = await Promise.all([
+      const [cats, tops, auths] = await Promise.all([
         client.fetch<number>('count(*[_type == "category"])'),
         client.fetch<number>('count(*[_type == "topic"])'),
+        client.fetch<number>('count(*[_type == "author"])'),
       ]);
       setCategoriesCount(cats);
       setTopicsCount(tops);
+      setAuthorsCount(auths);
     } catch (err: any) {
       console.error('Error fetching taxonomy counts:', err);
     } finally {
@@ -39,6 +42,7 @@ export function TaxonomyManagerTool() {
 
       let catsCreated = 0;
       let topsCreated = 0;
+      let authsCreated = 0;
 
       // 1. Seed Categories
       for (const cat of INITIAL_CATEGORIES) {
@@ -68,7 +72,21 @@ export function TaxonomyManagerTool() {
         topsCreated++;
       }
 
-      // 3. Check and safely migrate existing posts with legacy string category or string topics
+      // 3. Seed Initial Authors
+      for (const aut of INITIAL_AUTHORS) {
+        setProgressText(`Checking author: ${aut.name}...`);
+        await client.createIfNotExists({
+          _id: aut.id,
+          _type: 'author',
+          name: aut.name,
+          professionalDescription: aut.professionalDescription,
+          bio: aut.bio,
+          profileUrl: aut.profileUrl,
+        });
+        authsCreated++;
+      }
+
+      // 4. Check and safely migrate existing posts with legacy string category or string topics
       setProgressText('Checking existing blog posts for legacy values...');
       let postsMigrated = 0;
       try {
@@ -109,10 +127,11 @@ export function TaxonomyManagerTool() {
         console.warn('Post migration check notice (non-fatal):', postErr);
       }
 
-      setProgressText(`✓ Completed: Verified ${catsCreated} Categories, ${topsCreated} Topics (${postsMigrated} posts mapped).`);
+      setProgressText(`✓ Completed: Verified ${catsCreated} Categories, ${topsCreated} Topics, ${authsCreated} Authors (${postsMigrated} posts mapped).`);
       setLogs([
         `✓ All ${INITIAL_CATEGORIES.length} categories verified in Sanity.`,
         `✓ All ${INITIAL_TOPICS.length} topics verified in Sanity.`,
+        `✓ All ${INITIAL_AUTHORS.length} author profiles verified in Sanity.`,
         postsMigrated > 0
           ? `✓ Successfully migrated ${postsMigrated} blog post(s) from legacy strings to reference documents.`
           : `✓ Existing blog posts are already up to date with new reference mapping.`,
@@ -133,10 +152,10 @@ export function TaxonomyManagerTool() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div>
             <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 800, color: '#38BDF8' }}>
-              Category & Topic Taxonomy Manager
+              Category, Topic & Author Taxonomy Manager
             </h2>
             <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#94A3B8' }}>
-              Manage and seed initial pre-defined Categories and Topics into Sanity Studio.
+              Manage and seed initial pre-defined Categories, Topics, and Authors into Sanity Studio.
             </p>
           </div>
           <button
@@ -158,7 +177,7 @@ export function TaxonomyManagerTool() {
         </div>
 
         {/* Status Dashboard */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', margin: '20px 0' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', margin: '20px 0' }}>
           <div style={{ padding: '16px', background: '#0E1A29', border: '1px solid #213E61', borderRadius: '12px' }}>
             <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>
               Published Categories
@@ -180,6 +199,18 @@ export function TaxonomyManagerTool() {
             </div>
             <span style={{ fontSize: '11px', color: '#64748B' }}>
               Standard list: {INITIAL_TOPICS.length}
+            </span>
+          </div>
+
+          <div style={{ padding: '16px', background: '#0E1A29', border: '1px solid #213E61', borderRadius: '12px' }}>
+            <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>
+              Author Profiles
+            </span>
+            <div style={{ fontSize: '28px', fontWeight: 800, color: '#A78BFA', marginTop: '6px' }}>
+              {loading ? '...' : authorsCount ?? 0}
+            </div>
+            <span style={{ fontSize: '11px', color: '#64748B' }}>
+              Standard list: {INITIAL_AUTHORS.length}
             </span>
           </div>
         </div>

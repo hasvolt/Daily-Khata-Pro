@@ -146,43 +146,27 @@ export default defineType({
 
     // AUTHOR
     defineField({
+      name: 'author',
+      title: 'Author Profile',
+      type: 'reference',
+      to: [{ type: 'author' }],
+      weak: true,
+      group: 'author',
+      description: 'Select an existing Author profile or click "+ Create new Author" to create and select a custom profile with photo, bio, and credentials.',
+    }),
+    defineField({
       name: 'authorName',
-      title: 'Author Name',
+      title: 'Author Name (Direct / Custom Override)',
       type: 'string',
       group: 'author',
-      initialValue: 'MD Zafeer Hasan (YAZDAAN)',
-      description: 'Select from established bylines or type custom author name.',
-      options: {
-        list: [
-          { title: 'MD Zafeer Hasan (YAZDAAN)', value: 'MD Zafeer Hasan (YAZDAAN)' },
-          { title: 'Daily Khata Pro Editorial Team', value: 'Daily Khata Pro Editorial Team' },
-          { title: 'Rozfiber Finance Desk', value: 'Rozfiber Finance Desk' },
-        ],
-      },
+      description: 'Optional: Type custom author name directly if not selecting an Author Profile above.',
     }),
     defineField({
       name: 'authorRole',
-      title: 'Author Role / Description',
+      title: 'Author Role / Designation (Direct / Custom Override)',
       type: 'string',
       group: 'author',
-      initialValue: 'Author & Independent Researcher',
-      description: 'Designation shown in article byline (e.g. Author & Independent Researcher).',
-      options: {
-        list: [
-          { title: 'Author & Independent Researcher', value: 'Author & Independent Researcher' },
-          { title: 'Finance & Personal Money Management Editorial Team', value: 'Finance & Personal Money Management Editorial Team' },
-          { title: 'Financial Technology Research Analyst', value: 'Financial Technology Research Analyst' },
-        ],
-      },
-    }),
-    defineField({
-      name: 'author',
-      title: 'Author Document Reference (Optional)',
-      type: 'reference',
-      to: { type: 'author' },
-      weak: true,
-      group: 'author',
-      description: 'Link to a dedicated Author profile document (if created).',
+      description: 'Optional: Type custom designation (e.g. Author & Independent Researcher) if not selecting an Author Profile above.',
     }),
 
     // MEDIA
