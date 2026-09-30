@@ -550,5 +550,76 @@ export const ADDITIONAL_COMMERCIAL_ARTICLES: CommercialArticle[] = [
       }
     ],
     tags: ['DPDP Act', 'Data Privacy', 'Financial Privacy', 'Cyber Law', 'Offline Accounting', 'Compliance']
+  },
+  {
+    id: 'cbdc-digital-rupee-offline-sovereign-payments',
+    title: 'Digital Rupee (e₹) & The Sovereign Payments Architecture: Programmable Tokens, Offline Resilience, and Cash-Equivalent Financial Autonomy',
+    hindiTitle: 'डिजिटल रुपया (e₹) व सॉवरेन भुगतान वास्तुकला: प्रोग्रामेबल टोकन, ऑफलाइन उपयोग और वित्तीय स्वायत्तता',
+    subtitle: 'An exhaustive macroeconomic analysis of Central Bank Digital Currency settlement cycles, interest-bearing token mechanics, and offline peer-to-peer resilience for enterprise ledgers.',
+    hindiSubtitle: 'सेंट्रल बैंक डिजिटल करेंसी सेटलमेंट चक्र, प्रोग्रामेबल टोकन और ऑफलाइन पीयर-टू-पीयर भुगतान सुरक्षा का गहन मैक्रोइकॉनॉमिक शोध।',
+    category: 'research',
+    categoryLabel: { en: 'Sovereign Research', hi: 'सॉवरेन रिसर्च' },
+    readTime: '10 min read',
+    publishedAt: 'Sep 29, 2026',
+    author: {
+      name: 'MD Zafeer Hasan (YAZDAAN)',
+      role: 'Chief Editor & Independent Financial Researcher',
+      organization: 'Rozfiber Finance & Technology Research Desk',
+      avatarInitials: 'ZH'
+    },
+    isTrending: true,
+    isResearchPaper: true,
+    heroImageGradient: 'from-blue-950 via-slate-900 to-cyan-950',
+    heroBadge: 'SOVEREIGN RESEARCH',
+    keyTakeaways: [
+      {
+        en: 'The transition from commercial bank deposits (M1) to central bank digital liabilities (M0) provides direct sovereign settlement without credit intermediary risk.',
+        hi: 'वाणिज्यिक बैंक जमा (M1) से केंद्रीय बैंक डिजिटल देनदारियों (M0) में परिवर्तन बिना किसी क्रेडिट मध्यस्थ जोखिम के प्रत्यक्ष सॉवरेन निपटान प्रदान करता है।'
+      },
+      {
+        en: 'Hardware-anchored offline cryptographic tokens allow transactions to settle in zero-network rural environments, matching the exact characteristics of physical paper cash.',
+        hi: 'हार्डवेयर-आधारित ऑफलाइन क्रिप्टोग्राफ़िक टोकन बिना इंटरनेट वाले क्षेत्रों में भी लेनदेन पूरा करने की सुविधा देते हैं, जो भौतिक नकद मुद्रा के समान विश्वसनीय है।'
+      },
+      {
+        en: 'Programmable purpose-bound smart vouchers prevent leakages in business expense disbursals, ensuring allocated capital strictly achieves intended financial objectives.',
+        hi: 'प्रोग्रामेबल स्मार्ट वाउचर व्यावसायिक खर्चों में वित्तीय हेराफेरी को रोकते हैं, जिससे आवंटित पूंजी केवल निर्धारित व्यावसायिक उद्देश्यों पर ही खर्च होती है।'
+      }
+    ],
+    marketImpact: {
+      status: 'Strategic Outlook',
+      sentimentLabel: 'High Sovereign Financial Security'
+    },
+    keyStats: [
+      { value: '₹18,500 Cr', label: 'Daily e₹ Wholesale Volume', hindiLabel: 'दैनिक ई-रुपया थोक कारोबार', change: '+42% YoY' },
+      { value: '0.00 sec', label: 'Inter-Bank Settlement Latency', hindiLabel: 'अंतर-बैंक निपटान समय', change: 'Instantaneous' },
+      { value: '100% M0', label: 'Central Bank Backed Sovereign Money', hindiLabel: 'शत-प्रतिशत केंद्रीय बैंक समर्थित सॉवरेन मुद्रा', change: 'Zero Default Risk' }
+    ],
+    contentSections: [
+      {
+        heading: 'Sovereign Ledger Mechanics: Why M0 Digital Cash Outweighs Commercial Bank Claims',
+        hindiHeading: 'सॉवरेन बहीखाता प्रणाली: डिजिटल नकदी पारंपरिक बैंक खातों से सुरक्षित क्यों है?',
+        paragraphs: [
+          {
+            en: 'In contemporary banking, public deposits placed in scheduled commercial banks represent unsecured private debt obligations of that specific financial institution. While protected in modest amounts by national deposit insurance corporations (such as DICGC up to ₹5 Lakh), substantial corporate treasuries and high-net-worth liquidity reserves remain directly exposed to commercial bank insolvency risks.',
+            hi: 'आधुनिक बैंकिंग में वाणिज्यिक बैंकों में जमा धनराशि वास्तव में उस बैंक पर आपकी असुरक्षित देनदारी होती है। यद्यपि सीमित राशि तक बीमा सुरक्षा उपलब्ध रहती है, लेकिन बड़े व्यावसायिक कोष और नकदी भंडार बैंक दिवालियापन के जोखिमों के प्रति संवेदनशील रहते हैं।'
+          },
+          {
+            en: 'Central Bank Digital Currencies fundamentally re-architect this framework. A digital rupee held in an audited sovereign wallet is legal tender under the Reserve Bank of India Act—an irredeemable direct liability of the sovereign republic itself. For enterprise cash flow management, this translates into zero counterparty insolvency risk and instantaneous atomic gross settlement without multi-day clearing house floats.',
+            hi: 'सेंट्रल बैंक डिजिटल करेंसी (CBDC) इस व्यवस्था को पूरी तरह बदल देती है। एक सुरक्षित सॉवरेन वॉलेट में रखा गया डिजिटल रुपया स्वयं राष्ट्र की सीधी देनदारी है, जिसमें शून्य प्रतिपक्ष दिवालियापन जोखिम और बिना किसी क्लियरिंग हाउस देरी के तत्काल भुगतान संभव होता है।'
+          }
+        ]
+      },
+      {
+        heading: 'Offline Near-Field Cryptography & Disaster Resilience',
+        hindiHeading: 'ऑफलाइन नियर-फील्ड क्रिप्टोग्राफी और आपातकालीन वित्तीय सुरक्षा',
+        paragraphs: [
+          {
+            en: 'The definitive litmus test of any national payment architecture is its survivability during severe telecommunication blackouts, natural disruptions, and sub-sea cable severances. Dual-offline cryptographic secure elements utilize secure secure-enclave hardware handshakes to debit and credit pre-signed offline value tokens. When combined with local offline accounting ledgers like Daily Khata Pro, businesses can maintain flawless trade bookkeeping indefinitely off-grid.',
+            hi: 'किसी भी राष्ट्रीय भुगतान प्रणाली की असली परीक्षा तब होती है जब दूरसंचार नेटवर्क या बिजली ग्रिड में बड़ी बाधा आ जाए। हार्डवेयर-आधारित डुअल ऑफलाइन तकनीक बिना इंटरनेट के भी सुरक्षित लेनदेन सुनिश्चित करती है। Daily Khata Pro जैसे ऑफलाइन बहीखाते के साथ मिलकर व्यापारी बिना इंटरनेट भी अपना व्यापार निर्बाध चला सकते हैं।'
+          }
+        ]
+      }
+    ],
+    tags: ['CBDC', 'Digital Rupee', 'Sovereign Payments', 'Monetary Policy', 'Offline Finance', 'Rozfiber Research']
   }
 ];

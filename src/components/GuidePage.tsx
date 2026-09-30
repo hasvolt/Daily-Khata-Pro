@@ -603,7 +603,7 @@ export const GuidePage: React.FC<GuidePageProps> = ({
                   className="w-full py-3.5 px-4 rounded-xl bg-purple-500/15 border border-purple-500/40 text-[var(--theme-text,#F8FAFC)] hover:border-purple-500 font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
                 >
                   <BookOpen className="w-4 h-4 text-purple-400" />
-                  <span>{isHindi ? 'फाइनेंस ब्लॉग पर जाएं' : 'Visit Finance Blog'}</span>
+                  <span>{isHindi ? 'रोज़फाइबर ब्लॉग पर जाएं' : 'Visit Rozfiber Blog'}</span>
                 </button>
               )}
 
@@ -639,6 +639,31 @@ export const GuidePage: React.FC<GuidePageProps> = ({
                   <span>{manual.quickAction}</span>
                 </button>
               )}
+
+              {/* Comprehensive Documentation & Deep Dive Link */}
+              <div className="p-4 sm:p-4.5 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-[13px] font-bold text-[var(--theme-text,#F8FAFC)]">
+                      {isHindi ? 'विस्तृत तकनीकी दस्तावेज़ व संपूर्ण विवरण' : 'Detailed Documentation & Technical Reference'}
+                    </div>
+                    <div className="text-[11.5px] text-[var(--theme-text-dim,#94A3B8)]">
+                      docs.rozfiber.com/{currentSection.id}
+                    </div>
+                  </div>
+                </div>
+                <a
+                  href={`https://docs.rozfiber.com?topic=${currentSection.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)]/15 hover:bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)] hover:text-black border border-[var(--theme-primary,#38BDF8)]/30 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-xs"
+                >
+                  <span>{isHindi ? 'docs.rozfiber.com पर पढ़ें ↗' : 'Read on docs.rozfiber.com ↗'}</span>
+                </a>
+              </div>
 
               {/* Bottom Sequential Chapter Navigation (Previous & Next) */}
               <div className="border-t border-[var(--theme-border,#213E61)]/70 pt-6 space-y-4">

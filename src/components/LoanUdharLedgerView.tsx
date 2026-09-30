@@ -414,7 +414,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6 pb-20 text-left animate-in fade-in duration-200">
+    <div className="w-full max-w-6xl mx-auto space-y-6 pb-24 text-left animate-in fade-in duration-200 overflow-x-hidden touch-pan-y">
       {/* 1. Header with Back Navigation & Quick Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-4 sm:p-5 rounded-2xl shadow-sm">
         <div className="space-y-1.5">
@@ -624,7 +624,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
       {/* 4. Controls: Type Tabs, Status Filter, Search */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-3 rounded-2xl">
         {/* Type Filter Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none touch-pan-x overscroll-contain">
           {[
             { id: 'all', label: 'All Records', icon: Landmark },
             { id: 'lent', label: 'Receivables (Lent)', icon: ArrowUpRight, color: 'text-emerald-400' },
@@ -826,10 +826,10 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             return (
               <motion.div
                 key={item.id}
-                layout
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
                 className={`bg-[var(--theme-surface,#0E1A29)] border rounded-2xl p-4 sm:p-5 shadow-sm space-y-4 transition-all relative ${
                   isSettled
                     ? 'border-emerald-500/30 opacity-85'

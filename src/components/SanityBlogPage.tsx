@@ -111,8 +111,8 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
   useEffect(() => {
     const prevTitle = document.title;
     document.title = isHindi
-      ? 'फाइनेंस ब्लॉग — रिसर्च, विश्लेषण एवं टूल्स | Rozfiber'
-      : 'Finance Blog — Research, Insights & Tools | Rozfiber';
+      ? 'रोज़फाइबर फाइनेंस — रिसर्च, विश्लेषण एवं टूल्स'
+      : 'Rozfiber Finance — Research, Analysis & Tools';
 
     const CANONICAL_URL = 'https://www.rozfiber.com/blog';
     const DESCRIPTION = isHindi
@@ -144,7 +144,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     };
 
     setMetaTag('meta[name="description"]', 'content', DESCRIPTION);
-    setMetaTag('meta[property="og:title"]', 'content', 'Finance Blog | Rozfiber');
+    setMetaTag('meta[property="og:title"]', 'content', 'Rozfiber Finance');
     setMetaTag('meta[property="og:description"]', 'content', DESCRIPTION);
     setMetaTag('meta[property="og:url"]', 'content', CANONICAL_URL);
     setMetaTag('meta[property="og:type"]', 'content', 'website');
@@ -452,12 +452,12 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                   </span>
                 </div>
                 <h1 className="text-lg sm:text-2xl lg:text-3xl font-black tracking-tight text-[var(--theme-text,#F8FAFC)] mt-0.5">
-                  {isHindi ? 'सैनिटी लाइव ब्लॉग व संपादकीय' : 'Sanity Live CMS Blog & Editorial'}
+                  {isHindi ? 'रोज़फाइबर फाइनेंस — संपादकीय व रिसर्च' : 'Rozfiber Finance — Editorial & Research'}
                 </h1>
                 <p className="hidden sm:block text-xs sm:text-sm text-[var(--theme-text-dim,#94A3B8)] mt-0.5 max-w-2xl">
                   {isHindi
-                    ? 'सैनिटी हेडलेस सीएमएस से सीधे प्रकाशित आपके नए और ताज़ा ब्लॉग व संपादकीय लेख'
-                    : 'Your fresh, live blog updates and editorial posts published directly from Sanity CMS'}
+                    ? 'गहन वित्तीय समझ, बजट, बचत और उपयोगी टूल्स के साथ स्वतंत्र शोध व संपादकीय लेख'
+                    : 'In-depth financial analysis, budgeting, money management, and practical financial insights'}
                 </p>
               </div>
             </div>
@@ -566,6 +566,25 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleToggleAudio(featuredArticle);
+                      }}
+                      className={`p-2 rounded-xl border transition-colors cursor-pointer ${
+                        isPlayingAudio
+                          ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
+                          : 'bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#1C2B3E)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] border border-[var(--theme-border,#213E61)]'
+                      }`}
+                      title={isPlayingAudio ? (isHindi ? 'ऑडियो बंद करें' : 'Stop Audio') : (isHindi ? 'लेख सुनें' : 'Listen to Article')}
+                    >
+                      {isPlayingAudio ? (
+                        <VolumeX className="w-4 h-4 text-emerald-400 animate-pulse" />
+                      ) : (
+                        <Volume2 className="w-4 h-4" />
+                      )}
+                    </button>
                     <button
                       type="button"
                       onClick={e => toggleBookmark(featuredArticle.id, e)}
@@ -698,18 +717,31 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                           </span>
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={e => toggleBookmark(article.id, e)}
-                          className="text-[var(--theme-text-dim,#64748B)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors p-1"
-                          title={isBookmarked ? 'Bookmarked' : 'Save for later'}
-                        >
-                          {isBookmarked ? (
-                            <BookmarkCheck className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-                          ) : (
-                            <Bookmark className="w-4 h-4" />
-                          )}
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={e => {
+                              e.stopPropagation();
+                              handleToggleAudio(article);
+                            }}
+                            className="text-[var(--theme-text-dim,#64748B)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors p-1 cursor-pointer"
+                            title={isHindi ? 'लेख सुनें' : 'Listen Aloud'}
+                          >
+                            <Volume2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={e => toggleBookmark(article.id, e)}
+                            className="text-[var(--theme-text-dim,#64748B)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors p-1 cursor-pointer"
+                            title={isBookmarked ? 'Bookmarked' : 'Save for later'}
+                          >
+                            {isBookmarked ? (
+                              <BookmarkCheck className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                            ) : (
+                              <Bookmark className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
                       </div>
 
                       {/* Title */}

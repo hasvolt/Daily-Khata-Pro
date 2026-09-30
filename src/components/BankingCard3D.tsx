@@ -80,6 +80,11 @@ export function BankingCard3D({
             </svg>
           </div>
 
+          {/* Subtle concentric rings & high-end geometric luxury watermark */}
+          <div className="absolute -right-12 -bottom-12 w-48 h-48 rounded-full border border-[var(--theme-primary,#38BDF8)]/20 pointer-events-none" />
+          <div className="absolute -right-6 -bottom-6 w-36 h-36 rounded-full border border-[var(--theme-primary,#38BDF8)]/25 pointer-events-none" />
+          <div className="absolute -right-0 -bottom-0 w-24 h-24 rounded-full border border-[var(--theme-primary,#38BDF8)]/30 pointer-events-none" />
+
           {/* Dotted texture */}
           <div
             className="banking-card-glare absolute right-0 top-0 w-[55%] h-[55%] opacity-20"
@@ -103,7 +108,7 @@ export function BankingCard3D({
                 <Wallet className="w-4 h-4 sm:w-[17px] sm:h-[17px] stroke-[2.2]" style={{ filter: 'none', boxShadow: 'none' }} />
               </div>
               <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
-                <span className="banking-card-label text-[11.5px] sm:text-[14px] font-extrabold tracking-wider text-slate-100 uppercase truncate">
+                <span className="banking-card-label text-[11.5px] sm:text-[14px] font-black tracking-wider text-slate-100 uppercase truncate antialiased">
                   {isHindi ? 'कुल बैलेंस' : 'Total Balance'}
                 </span>
                 <button

@@ -285,6 +285,9 @@ export interface Goal {
             <p className="text-[13px] text-[var(--theme-text-dim,#94A3B8)] mt-0.5">
               {tr.safety.subtitle}
             </p>
+            <div className="text-[11px] font-mono text-[#10B981] mt-1.5 flex items-center gap-1.5">
+              <span>📅 {language === 'hi' ? 'सत्यापित तिथि: सितंबर 2026 · ऑडिट संस्करण: v2.8' : 'Verified Date: September 2026 · Audit Release: v2.8'}</span>
+            </div>
           </div>
         </div>
 

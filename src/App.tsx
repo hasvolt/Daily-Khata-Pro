@@ -2968,7 +2968,7 @@ function AppContent() {
 
           {/* Tier 1: Editorial & Knowledge Navigation */}
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11.5px] sm:text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)]/90 max-w-2xl px-2">
-            <button onClick={() => setCurrentTab('blog')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'फाइनेंस ब्लॉग' : 'Finance Blog'}</button>
+            <button onClick={() => setCurrentTab('blog')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'रोज़फाइबर ब्लॉग' : 'Rozfiber Blog'}</button>
             <span className="opacity-30">•</span>
             <button onClick={() => setCurrentTab('invoice')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'इनवॉइस जनरेटर' : 'Invoice Generator'}</button>
             <span className="opacity-30">•</span>
@@ -2977,6 +2977,8 @@ function AppContent() {
             <button onClick={() => setCurrentTab('academy')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'अकादमी' : 'Wealth Academy'}</button>
             <span className="opacity-30">•</span>
             <button onClick={() => setCurrentTab('guide')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'यूज़र मैन्युअल' : 'User Manual'}</button>
+            <span className="opacity-30">•</span>
+            <a href="https://docs.rozfiber.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">Docs</a>
           </div>
 
           {/* Tier 2: Legal, Policy & Organization Links */}
@@ -2996,7 +2998,7 @@ function AppContent() {
 
           {/* Copyright */}
           <p className="text-[11px] sm:text-[12px] text-[var(--theme-text-dim,#64748B)] flex items-center justify-center gap-1 pb-16 sm:pb-20">
-            © {new Date().getFullYear()} Daily Khata Pro · Rozfiber Finance Ecosystem
+            © {new Date().getFullYear()} Daily Khata Pro · Rozfiber. All rights reserved.
           </p>
         </div>
       </footer>

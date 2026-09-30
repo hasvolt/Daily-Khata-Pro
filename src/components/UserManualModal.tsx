@@ -591,9 +591,24 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                     className="w-full py-3 px-4 rounded-xl bg-purple-500/15 border border-purple-500/40 text-[var(--theme-text,#F8FAFC)] hover:border-purple-500 font-bold text-[13px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
                   >
                     <BookOpen className="w-4 h-4 text-purple-400" />
-                    <span>{isHindi ? 'फाइनेंस ब्लॉग पर जाएं' : 'Visit Finance Blog'}</span>
+                    <span>{isHindi ? 'रोज़फाइबर ब्लॉग पर जाएं' : 'Visit Rozfiber Blog'}</span>
                   </button>
                 )}
+
+                {/* Docs Link */}
+                <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-2">
+                  <div className="text-xs text-[var(--theme-text-dim,#94A3B8)]">
+                    {isHindi ? 'विस्तृत तकनीकी दस्तावेज़:' : 'Detailed Technical Docs:'}
+                  </div>
+                  <a
+                    href={`https://docs.rozfiber.com?topic=${currentSection.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-[var(--theme-primary,#38BDF8)] hover:underline font-bold"
+                  >
+                    docs.rozfiber.com ↗
+                  </a>
+                </div>
 
                 {currentSection.id === 'attendance' && onNavigateTab && (
                   <button

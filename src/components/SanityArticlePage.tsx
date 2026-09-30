@@ -16,6 +16,8 @@ import {
   Info,
   Globe,
   Flag,
+  Volume2,
+  VolumeX,
   X
 } from 'lucide-react';
 import { PortableText, PortableTextComponents } from '@portabletext/react';
@@ -61,8 +63,59 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   const [reportReason, setReportReason] = useState('Factual inaccuracy');
   const [reportDetails, setReportDetails] = useState('');
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   const isHindi = language === 'hi' || language === 'hinglish';
+
+  // Audio Speech Synthesis / Text-to-Speech function
+  const togglePlayAudio = () => {
+    if (!('speechSynthesis' in window)) {
+      setCopyFeedback(isHindi ? 'ब्राउज़र में ऑडियो उपलब्ध नहीं है' : 'Audio TTS not supported in browser');
+      setTimeout(() => setCopyFeedback(null), 2500);
+      return;
+    }
+
+    if (isPlayingAudio) {
+      window.speechSynthesis.cancel();
+      setIsPlayingAudio(false);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const activeTitle = post?.title || fallbackArticle?.title || '';
+    const activeExcerpt = post?.summary || fallbackArticle?.subtitle || '';
+    let bodyText = '';
+    if (post?.body && Array.isArray(post.body)) {
+      bodyText = post.body
+        .map(b => (b.children ? b.children.map((c: any) => c.text).join('') : ''))
+        .join('. ');
+    } else if (fallbackArticle?.contentSections) {
+      bodyText = fallbackArticle.contentSections
+        .map(s => s.paragraphs.map(p => isHindi ? p.hi : p.en).join('. '))
+        .join('. ');
+    }
+
+    const textToSpeak = `${activeTitle}. ${activeExcerpt}. ${bodyText}`.slice(0, 4500);
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = isHindi ? 'hi-IN' : 'en-US';
+    utterance.rate = 0.95;
+
+    utterance.onend = () => setIsPlayingAudio(false);
+    utterance.onerror = () => setIsPlayingAudio(false);
+
+    setIsPlayingAudio(true);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Stop audio on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   // Load article from Sanity by slug or id, with seamless fallback
   useEffect(() => {
@@ -74,15 +127,14 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
       if (sanityData) {
         setPost(sanityData);
         setLoading(false);
-        const cat = typeof sanityData.category === 'object' ? (sanityData.category as any)?.name : sanityData.category;
-        document.title = `${sanityData.title} | Daily Khata Pro ${cat || 'Finance'} Blog`;
+        document.title = `${sanityData.title} | Rozfiber`;
       } else {
         const match = COMMERCIAL_ARTICLES.find(
           a => a.id === slugOrId || (a as any).slug === slugOrId
         );
         if (match) {
           setFallbackArticle(match);
-          document.title = `${match.title} | Daily Khata Pro ${match.categoryLabel?.en || 'Finance'} Blog`;
+          document.title = `${match.title} | Rozfiber`;
         }
         setLoading(false);
       }
@@ -94,7 +146,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
         );
         if (match) {
           setFallbackArticle(match);
-          document.title = `${match.title} | Daily Khata Pro ${match.categoryLabel?.en || 'Finance'} Blog`;
+          document.title = `${match.title} | Rozfiber`;
         }
         setLoading(false);
       }
@@ -158,7 +210,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     const imageUrl = (post?.mainImage && (post.mainImage.asset || post.mainImage._ref)) ? urlFor(post.mainImage).width(1200).height(630).url() : `${CANONICAL_DOMAIN}/daily-khata-pro-v4.png`;
 
     const prevTitle = document.title;
-    document.title = `${activeTitle} | Rozfiber ${resolvedCategory}`;
+    document.title = `${activeTitle} | Rozfiber`;
 
     // Canonical link management
     let canonicalLink = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
@@ -209,7 +261,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           "isPartOf": {
             "@type": "Blog",
             "@id": `${CANONICAL_DOMAIN}/blog#blog`,
-            "name": `Rozfiber ${resolvedCategory} Blog`,
+            "name": "Rozfiber Finance",
             "publisher": {
               "@type": "Organization",
               "name": "Rozfiber Finance",
@@ -339,10 +391,10 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
     e.preventDefault();
     const articleTitle = post?.title || fallbackArticle?.title || slugOrId;
     const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const emailSubject = encodeURIComponent(`[Daily Khata Pro Blog Report] ${articleTitle}`);
+    const emailSubject = encodeURIComponent(`[Rozfiber Finance Article Report] ${articleTitle}`);
     const emailBody = encodeURIComponent(
-      `Hello Daily Khata Pro Editorial Team,\n\n` +
-      `I would like to report an issue regarding the finance blog article:\n\n` +
+      `Hello Rozfiber Finance Editorial Team,\n\n` +
+      `I would like to report an issue regarding the Rozfiber Finance article:\n\n` +
       `Article: ${articleTitle}\n` +
       `URL: ${currentUrl}\n` +
       `Reason: ${reportReason}\n` +
@@ -645,15 +697,19 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
       {/* 1. Sticky Navigation Top Bar */}
       <header className="sticky top-0 z-30 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-md px-4 py-3 notranslate" translate="no">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
-          {/* Back to Blog */}
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-primary,#0284C7)] transition-colors cursor-pointer py-1 px-2 -ml-2 rounded-lg hover:bg-[var(--theme-card-hover,#1C2B3E)]"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>{isHindi ? 'ब्लॉग पर वापस' : 'Back to Blog'}</span>
-          </button>
+          {/* Back to Blog & Publication Brand */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onBack}
+              className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-primary,#0284C7)] transition-colors cursor-pointer py-1 px-2 -ml-2 rounded-lg hover:bg-[var(--theme-card-hover,#1C2B3E)]"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>{isHindi ? 'ब्लॉग पर वापस' : 'Back to Blog'}</span>
+            </button>
+            <span className="hidden sm:inline-block text-xs text-[var(--theme-text-dim,#94A3B8)]/60">•</span>
+            <span className="hidden sm:inline-block text-xs font-bold text-[var(--theme-text-muted,#CBD5E1)] tracking-wide">Rozfiber Blog</span>
+          </div>
 
           {/* Action Bar Controls */}
           <div className="flex items-center gap-2">
@@ -699,6 +755,31 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
                 A+
               </button>
             </div>
+
+            {/* Audio Listen / Read Aloud Button */}
+            <button
+              type="button"
+              onClick={togglePlayAudio}
+              className={`p-2 rounded-lg border transition-colors cursor-pointer flex items-center gap-1.5 ${
+                isPlayingAudio
+                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
+                  : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-primary,#0284C7)]'
+              }`}
+              title={isPlayingAudio ? (isHindi ? 'ऑडियो बंद करें' : 'Stop Audio') : (isHindi ? 'लेख सुनें' : 'Listen to Article')}
+              aria-label="Listen to Article"
+            >
+              {isPlayingAudio ? (
+                <>
+                  <VolumeX className="w-4 h-4 text-emerald-400 animate-pulse" />
+                  <span className="text-[11px] font-bold text-emerald-400 hidden xs:inline">{isHindi ? 'सुन रहे हैं...' : 'Playing...'}</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-4 h-4" />
+                  <span className="text-[11px] font-semibold hidden xs:inline">{isHindi ? 'सुनें' : 'Listen'}</span>
+                </>
+              )}
+            </button>
 
             {/* Bookmark Toggle */}
             <button
@@ -757,25 +838,27 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
 
       {/* 2. Main Article Content Container */}
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-12 space-y-8">
-        {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[var(--theme-text-dim,#94A3B8)]">
+        {/* Breadcrumb Navigation: Home -> Blog -> Category -> Article */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[var(--theme-text-dim,#94A3B8)] overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => onNavigateTab?.('home')}
-            className="hover:text-[var(--theme-primary,#0284C7)] transition-colors"
+            className="hover:text-[var(--theme-primary,#0284C7)] transition-colors shrink-0"
           >
             Home
           </button>
-          <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60" />
+          <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60 shrink-0" />
           <button
             type="button"
             onClick={onBack}
-            className="hover:text-[var(--theme-primary,#0284C7)] transition-colors"
+            className="hover:text-[var(--theme-primary,#0284C7)] transition-colors shrink-0"
           >
             Blog
           </button>
-          <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60" />
-          <span className="text-[var(--theme-primary,#0284C7)] font-medium">{category}</span>
+          <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60 shrink-0" />
+          <span className="text-[var(--theme-text-dim,#94A3B8)] shrink-0">{category}</span>
+          <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#94A3B8)]/60 shrink-0" />
+          <span className="text-[var(--theme-primary,#0284C7)] font-medium shrink-0">{isHindi ? 'लेख' : 'Article'}</span>
         </nav>
 
         {/* Article Meta Header */}
@@ -858,6 +941,22 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={togglePlayAudio}
+              className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs ${
+                isPlayingAudio
+                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300'
+                  : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#0284C7)]'
+              }`}
+            >
+              {isPlayingAudio ? (
+                <VolumeX className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              ) : (
+                <Volume2 className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)]" />
+              )}
+              <span>{isPlayingAudio ? (isHindi ? 'ऑडियो रोकें' : 'Stop Audio') : (isHindi ? 'लेख सुनें' : 'Listen')}</span>
+            </button>
             <button
               type="button"
               onClick={() => setIsTranslateOpen(true)}

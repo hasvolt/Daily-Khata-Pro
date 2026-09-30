@@ -1455,11 +1455,16 @@
 }
 
 .banking-card-3d .banking-card-label {
-  color: #94A3B8 !important;
+  color: #F1F5F9 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .banking-card-3d .banking-card-subtitle {
-  color: #CBD5E1 !important;
+  color: #E2E8F0 !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .banking-card-3d .banking-card-waves {

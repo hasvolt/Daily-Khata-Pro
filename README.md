@@ -199,7 +199,7 @@ The compiled static assets will be in the `dist/` directory, ready to deploy to 
 - **Official Support & Feedback**: [daily-Khata-Pro@gmail.com](mailto:daily-Khata-Pro@gmail.com)
 - **Developer Direct Email**: [mzhyazdaan@gmail.com](mailto:mzhyazdaan@gmail.com)
 - **Creator & Developer**: [Md Zafeer Hasan (Yazdaan)](https://github.com/hasvolt)
-- **Brand**: [Hasvolt](https://github.com/hasvolt)
+- **Brand**: [Rozfiber](https://www.rozfiber.com)
 - **Repository**: [https://github.com/hasvolt/Daily-Khata-Pro](https://github.com/hasvolt/Daily-Khata-Pro)
 
 ---

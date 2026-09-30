@@ -199,23 +199,27 @@ export function formatCurrencyByLang(
     return `${cfg.symbol} •••••`;
   }
   const isNegative = amount < 0;
-  const abs = Math.abs(Math.round(amount));
+  const abs = Math.abs(amount);
   let formattedNumber = '';
 
-  if (compact && abs >= 10000) {
+  if (compact && abs >= 10000000) {
     const isIndian = cfg.code === 'INR' || cfg.code === 'BDT' || cfg.code === 'PKR';
     const compactLocale = isIndian ? 'en-IN' : 'en-US';
     try {
       formattedNumber = new Intl.NumberFormat(compactLocale, {
         notation: 'compact',
-        maximumFractionDigits: 1
+        maximumFractionDigits: 2
       }).format(abs);
     } catch {
       formattedNumber = abs.toLocaleString('en-US');
     }
   } else {
     try {
-      formattedNumber = abs.toLocaleString(cfg.locale);
+      const hasDecimals = Math.abs(abs - Math.round(abs)) >= 0.005;
+      formattedNumber = abs.toLocaleString(cfg.locale, {
+        minimumFractionDigits: hasDecimals ? 2 : 0,
+        maximumFractionDigits: 2
+      });
     } catch {
       formattedNumber = abs.toLocaleString('en-US');
     }

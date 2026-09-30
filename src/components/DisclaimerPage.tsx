@@ -62,6 +62,9 @@ export const DisclaimerPage: React.FC<DisclaimerPageProps> = ({
             <p className="text-[12px] sm:text-[13px] text-[var(--theme-text-dim,#94A3B8)]">
               {t.subtitle}
             </p>
+            <div className="text-[11px] font-mono text-amber-400 mt-1.5 flex items-center gap-1.5">
+              <span>📅 {language === 'hi' ? 'प्रभावी तिथि: सितंबर 2026 · अंतिम समीक्षा: 2026' : 'Effective Date: September 2026 · Last Reviewed: September 2026'}</span>
+            </div>
           </div>
         </div>
 
