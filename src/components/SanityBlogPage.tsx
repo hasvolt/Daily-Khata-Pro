@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowLeft,
@@ -6,8 +6,6 @@ import {
   Bookmark,
   BookmarkCheck,
   Share2,
-  Volume2,
-  VolumeX,
   FileText,
   TrendingUp,
   Globe2,
@@ -97,8 +95,6 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     }
   });
 
-  // Audio speech synthesis state
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [fontSizeLevel, setFontSizeLevel] = useState<'sm' | 'base' | 'lg'>('base');
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -169,20 +165,27 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
           // Dynamic reading time calculation based on actual body content word count
           let calcReadTime = p.readTime;
           let wordCount = 0;
+          let extractedBodyText = '';
           if (p.body && Array.isArray(p.body)) {
             for (const b of p.body) {
               if (b?.children && Array.isArray(b.children)) {
                 for (const c of b.children) {
-                  if (c?.text) wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
+                  if (c?.text) {
+                    wordCount += c.text.trim().split(/\s+/).filter(Boolean).length;
+                    extractedBodyText += (extractedBodyText ? ' ' : '') + c.text;
+                  }
                 }
               } else if (typeof b?.text === 'string') {
                 wordCount += b.text.trim().split(/\s+/).filter(Boolean).length;
+                extractedBodyText += (extractedBodyText ? ' ' : '') + b.text;
               }
             }
           } else if (p.bodyText) {
             wordCount = p.bodyText.trim().split(/\s+/).filter(Boolean).length;
+            extractedBodyText = p.bodyText;
           } else if (p.summary) {
             wordCount = p.summary.trim().split(/\s+/).filter(Boolean).length;
+            extractedBodyText = p.summary;
           }
 
           if (wordCount > 0) {
@@ -250,8 +253,8 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                 hindiHeading: 'मुख्य विश्लेषण व समीक्षा',
                 paragraphs: [
                   {
-                    en: p.bodyText || p.summary || '',
-                    hi: p.bodyText || p.summary || ''
+                    en: extractedBodyText || p.bodyText || p.summary || '',
+                    hi: extractedBodyText || p.bodyText || p.summary || ''
                   }
                 ]
               }
@@ -273,9 +276,14 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     };
   }, []);
 
-  // Filtered articles (Only live Sanity CMS dynamic blogs)
+  // Filtered articles (Live Sanity CMS blogs + Comprehensive Research articles)
   const allArticles = useMemo(() => {
-    return sanityArticles;
+    if (sanityArticles.length > 0) {
+      const sanitySlugs = new Set(sanityArticles.map(a => a.slug || a.id));
+      const remainingCommercial = COMMERCIAL_ARTICLES.filter(a => !sanitySlugs.has(a.id) && !sanitySlugs.has(a.slug));
+      return [...sanityArticles, ...remainingCommercial];
+    }
+    return COMMERCIAL_ARTICLES;
   }, [sanityArticles]);
 
   // Toggle bookmark
@@ -322,40 +330,8 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     });
   }, [allArticles, searchQuery, activeCategory, bookmarkedIds]);
 
-  // Audio Text-To-Speech for reader
-  const handleToggleAudio = (article: CommercialArticle) => {
-    if (!('speechSynthesis' in window)) {
-      setCopyFeedback(isHindi ? 'ऑडियो ब्राउज़र में समर्थित नहीं है' : 'Audio speech not supported');
-      setTimeout(() => setCopyFeedback(null), 2500);
-      return;
-    }
-
-    if (isPlayingAudio) {
-      window.speechSynthesis.cancel();
-      setIsPlayingAudio(false);
-    } else {
-      window.speechSynthesis.cancel();
-      const textToRead = isHindi
-        ? `${article.hindiTitle}. ${article.hindiSubtitle}. मुख्य निष्कर्ष: ${article.keyTakeaways.map(t => t.hi).join('. ')}`
-        : `${article.title}. ${article.subtitle}. Key takeaways: ${article.keyTakeaways.map(t => t.en).join('. ')}`;
-
-      const utterance = new SpeechSynthesisUtterance(textToRead);
-      utterance.lang = isHindi ? 'hi-IN' : 'en-US';
-      utterance.rate = 0.95;
-      utterance.onend = () => setIsPlayingAudio(false);
-      utterance.onerror = () => setIsPlayingAudio(false);
-
-      window.speechSynthesis.speak(utterance);
-      setIsPlayingAudio(true);
-    }
-  };
-
-  // Stop audio if modal closes
+  // Close modal
   const handleCloseArticle = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-    setIsPlayingAudio(false);
     setSelectedArticle(null);
   };
 
@@ -462,9 +438,9 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
               </div>
             </div>
 
-            {/* Quick Actions / Search Bar */}
-            <div className="w-full md:w-80 mt-2 md:mt-0">
-              <div className="relative">
+            {/* Search Bar */}
+            <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
+              <div className="relative flex-1 md:w-64">
                 <Search className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
@@ -566,25 +542,6 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={e => {
-                        e.stopPropagation();
-                        handleToggleAudio(featuredArticle);
-                      }}
-                      className={`p-2 rounded-xl border transition-colors cursor-pointer ${
-                        isPlayingAudio
-                          ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
-                          : 'bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#1C2B3E)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-text,#F8FAFC)] border border-[var(--theme-border,#213E61)]'
-                      }`}
-                      title={isPlayingAudio ? (isHindi ? 'ऑडियो बंद करें' : 'Stop Audio') : (isHindi ? 'लेख सुनें' : 'Listen to Article')}
-                    >
-                      {isPlayingAudio ? (
-                        <VolumeX className="w-4 h-4 text-emerald-400 animate-pulse" />
-                      ) : (
-                        <Volume2 className="w-4 h-4" />
-                      )}
-                    </button>
                     <button
                       type="button"
                       onClick={e => toggleBookmark(featuredArticle.id, e)}
@@ -717,18 +674,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1">
-                          <button
-                            type="button"
-                            onClick={e => {
-                              e.stopPropagation();
-                              handleToggleAudio(article);
-                            }}
-                            className="text-[var(--theme-text-dim,#64748B)] hover:text-[var(--theme-primary,#38BDF8)] transition-colors p-1 cursor-pointer"
-                            title={isHindi ? 'लेख सुनें' : 'Listen Aloud'}
-                          >
-                            <Volume2 className="w-4 h-4" />
-                          </button>
+                        <div className="flex items-center gap-1.5">
                           <button
                             type="button"
                             onClick={e => toggleBookmark(article.id, e)}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowLeft,
@@ -137,6 +137,46 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
     });
   }, [allArticles, searchQuery, activeCategory, bookmarkedIds]);
 
+  const newsChunksRef = useRef<string[]>([]);
+  const newsChunkIdxRef = useRef<number>(0);
+
+  const speakNewsChunk = (idx: number) => {
+    if (!('speechSynthesis' in window)) return;
+    const chunks = newsChunksRef.current;
+    if (idx >= chunks.length) {
+      setIsPlayingAudio(false);
+      return;
+    }
+
+    newsChunkIdxRef.current = idx;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(chunks[idx]);
+    utterance.lang = isHindi ? 'hi-IN' : 'en-US';
+    utterance.rate = 0.95;
+
+    utterance.onend = () => {
+      const nextIdx = idx + 1;
+      if (nextIdx < chunks.length) {
+        speakNewsChunk(nextIdx);
+      } else {
+        setIsPlayingAudio(false);
+      }
+    };
+
+    utterance.onerror = (e) => {
+      if (e.error !== 'interrupted' && e.error !== 'canceled') {
+        const nextIdx = idx + 1;
+        if (nextIdx < chunks.length) {
+          speakNewsChunk(nextIdx);
+        } else {
+          setIsPlayingAudio(false);
+        }
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
   // Audio Text-To-Speech for reader
   const handleToggleAudio = (article: CommercialArticle) => {
     if (!('speechSynthesis' in window)) {
@@ -147,21 +187,47 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
 
     if (isPlayingAudio) {
       window.speechSynthesis.cancel();
+      newsChunksRef.current = [];
+      newsChunkIdxRef.current = 0;
       setIsPlayingAudio(false);
     } else {
       window.speechSynthesis.cancel();
-      const textToRead = isHindi
-        ? `${article.hindiTitle}. ${article.hindiSubtitle}. मुख्य निष्कर्ष: ${article.keyTakeaways.map(t => t.hi).join('. ')}`
-        : `${article.title}. ${article.subtitle}. Key takeaways: ${article.keyTakeaways.map(t => t.en).join('. ')}`;
 
-      const utterance = new SpeechSynthesisUtterance(textToRead);
-      utterance.lang = isHindi ? 'hi-IN' : 'en-US';
-      utterance.rate = 0.95;
-      utterance.onend = () => setIsPlayingAudio(false);
-      utterance.onerror = () => setIsPlayingAudio(false);
+      const title = isHindi ? (article.hindiTitle || article.title) : article.title;
+      const subtitle = isHindi ? (article.hindiSubtitle || article.subtitle) : article.subtitle;
+      const bodyParagraphs = (article.contentSections || [])
+        .map(s => s.paragraphs.map(p => isHindi ? p.hi : p.en).join('. '))
+        .filter(Boolean)
+        .join('. ');
+      const takeaways = (article.keyTakeaways || []).map(t => isHindi ? t.hi : t.en).filter(Boolean).join('. ');
+      const fullText = [
+        title,
+        subtitle,
+        takeaways ? (isHindi ? `मुख्य निष्कर्ष: ${takeaways}` : `Key takeaways: ${takeaways}`) : '',
+        bodyParagraphs
+      ].filter(Boolean).join('. ');
 
-      window.speechSynthesis.speak(utterance);
+      // Split into chunks of < 180 chars to prevent browser speech cutoff
+      const rawParts = fullText.split(/([.?!।\n]+)/g);
+      const chunks: string[] = [];
+      let cur = '';
+      for (const part of rawParts) {
+        const trimmed = part.trim();
+        if (!trimmed) continue;
+        if ((cur + ' ' + trimmed).length < 180) {
+          cur = cur ? `${cur} ${trimmed}` : trimmed;
+        } else {
+          if (cur) chunks.push(cur);
+          cur = trimmed;
+        }
+      }
+      if (cur) chunks.push(cur);
+      if (chunks.length === 0) chunks.push(fullText.slice(0, 300));
+
+      newsChunksRef.current = chunks;
+      newsChunkIdxRef.current = 0;
       setIsPlayingAudio(true);
+      speakNewsChunk(0);
     }
   };
 
@@ -170,9 +236,27 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
+    newsChunksRef.current = [];
+    newsChunkIdxRef.current = 0;
     setIsPlayingAudio(false);
     setSelectedArticle(null);
   };
+
+  // Keep-alive timer for speech synthesis in Chrome
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (isPlayingAudio) {
+      interval = setInterval(() => {
+        if ('speechSynthesis' in window && window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 10000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isPlayingAudio]);
 
   const handleShare = (article: CommercialArticle) => {
     const text = isHindi ? article.hindiTitle : article.title;

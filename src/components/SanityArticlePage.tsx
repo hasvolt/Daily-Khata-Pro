@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   ArrowLeft,
   Share2,
@@ -16,8 +16,6 @@ import {
   Info,
   Globe,
   Flag,
-  Volume2,
-  VolumeX,
   X
 } from 'lucide-react';
 import { PortableText, PortableTextComponents } from '@portabletext/react';
@@ -63,59 +61,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
   const [reportReason, setReportReason] = useState('Factual inaccuracy');
   const [reportDetails, setReportDetails] = useState('');
   const [reportSubmitted, setReportSubmitted] = useState(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-
   const isHindi = language === 'hi' || language === 'hinglish';
-
-  // Audio Speech Synthesis / Text-to-Speech function
-  const togglePlayAudio = () => {
-    if (!('speechSynthesis' in window)) {
-      setCopyFeedback(isHindi ? 'ब्राउज़र में ऑडियो उपलब्ध नहीं है' : 'Audio TTS not supported in browser');
-      setTimeout(() => setCopyFeedback(null), 2500);
-      return;
-    }
-
-    if (isPlayingAudio) {
-      window.speechSynthesis.cancel();
-      setIsPlayingAudio(false);
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    const activeTitle = post?.title || fallbackArticle?.title || '';
-    const activeExcerpt = post?.summary || fallbackArticle?.subtitle || '';
-    let bodyText = '';
-    if (post?.body && Array.isArray(post.body)) {
-      bodyText = post.body
-        .map(b => (b.children ? b.children.map((c: any) => c.text).join('') : ''))
-        .join('. ');
-    } else if (fallbackArticle?.contentSections) {
-      bodyText = fallbackArticle.contentSections
-        .map(s => s.paragraphs.map(p => isHindi ? p.hi : p.en).join('. '))
-        .join('. ');
-    }
-
-    const textToSpeak = `${activeTitle}. ${activeExcerpt}. ${bodyText}`.slice(0, 4500);
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.lang = isHindi ? 'hi-IN' : 'en-US';
-    utterance.rate = 0.95;
-
-    utterance.onend = () => setIsPlayingAudio(false);
-    utterance.onerror = () => setIsPlayingAudio(false);
-
-    setIsPlayingAudio(true);
-    window.speechSynthesis.speak(utterance);
-  };
-
-  // Stop audio on unmount
-  useEffect(() => {
-    return () => {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
 
   // Load article from Sanity by slug or id, with seamless fallback
   useEffect(() => {
@@ -756,31 +702,6 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
               </button>
             </div>
 
-            {/* Audio Listen / Read Aloud Button */}
-            <button
-              type="button"
-              onClick={togglePlayAudio}
-              className={`p-2 rounded-lg border transition-colors cursor-pointer flex items-center gap-1.5 ${
-                isPlayingAudio
-                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
-                  : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-primary,#0284C7)]'
-              }`}
-              title={isPlayingAudio ? (isHindi ? 'ऑडियो बंद करें' : 'Stop Audio') : (isHindi ? 'लेख सुनें' : 'Listen to Article')}
-              aria-label="Listen to Article"
-            >
-              {isPlayingAudio ? (
-                <>
-                  <VolumeX className="w-4 h-4 text-emerald-400 animate-pulse" />
-                  <span className="text-[11px] font-bold text-emerald-400 hidden xs:inline">{isHindi ? 'सुन रहे हैं...' : 'Playing...'}</span>
-                </>
-              ) : (
-                <>
-                  <Volume2 className="w-4 h-4" />
-                  <span className="text-[11px] font-semibold hidden xs:inline">{isHindi ? 'सुनें' : 'Listen'}</span>
-                </>
-              )}
-            </button>
-
             {/* Bookmark Toggle */}
             <button
               type="button"
@@ -941,22 +862,6 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={togglePlayAudio}
-              className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs ${
-                isPlayingAudio
-                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300'
-                  : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#0284C7)]'
-              }`}
-            >
-              {isPlayingAudio ? (
-                <VolumeX className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-              ) : (
-                <Volume2 className="w-3.5 h-3.5 text-[var(--theme-primary,#0284C7)]" />
-              )}
-              <span>{isPlayingAudio ? (isHindi ? 'ऑडियो रोकें' : 'Stop Audio') : (isHindi ? 'लेख सुनें' : 'Listen')}</span>
-            </button>
             <button
               type="button"
               onClick={() => setIsTranslateOpen(true)}

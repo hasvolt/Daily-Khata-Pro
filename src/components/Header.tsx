@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Settings,
-  Search,
   X,
   Eye,
   EyeOff,
@@ -281,8 +280,8 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-md sticky top-0 z-40 shadow-md transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-1 sm:gap-3">
-        {/* Brand Icon & Name */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-shrink">
+        {/* Brand Icon & Name (Un-truncated, clear across all devices: Laptop, Desktop & Mobile) */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0 whitespace-nowrap min-w-max select-none">
           <div
             onClick={() => onSelectTab && onSelectTab('home')}
             className="cursor-pointer active:scale-95 transition-transform shrink-0"
@@ -296,29 +295,29 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col text-left min-w-0 justify-center">
+          <div className="flex flex-col text-left justify-center shrink-0 min-w-max">
             <div
               onClick={() => onSelectTab && onSelectTab('home')}
-              className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group"
+              className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group whitespace-nowrap min-w-max"
             >
-              <span className="font-bold text-[14px] xs:text-[15px] sm:text-[18px] tracking-tight text-[var(--theme-text,#F8FAFC)] group-hover:opacity-95 transition-opacity truncate">
+              <span className="font-extrabold text-[15px] sm:text-[18px] tracking-tight text-[var(--theme-text,#F8FAFC)] group-hover:opacity-95 transition-opacity whitespace-nowrap">
                 Daily Khata
               </span>
-              <span className="font-black text-[13px] xs:text-[14px] sm:text-[17px] tracking-tight transition-colors drop-shadow-xs text-[var(--theme-primary,#38BDF8)]">
+              <span className="font-black text-[14px] sm:text-[17px] tracking-tight transition-colors drop-shadow-xs text-[var(--theme-primary,#38BDF8)] whitespace-nowrap">
                 Pro
               </span>
             </div>
-            <div className="mt-0.5 min-w-0 block">
-              <span className="text-[8.5px] xs:text-[9.5px] sm:text-[11px] font-semibold tracking-wide truncate transition-colors text-[var(--theme-text-muted,#8BA4D0)] block leading-tight">
+            <div className="mt-0.5 block whitespace-nowrap min-w-max">
+              <span className="text-[9.5px] sm:text-[11px] font-semibold tracking-wide transition-colors text-[var(--theme-text-muted,#8BA4D0)] block leading-tight whitespace-nowrap">
                 {isHindi ? 'आय-व्यय ट्रैकर' : 'Income & Expense Tracker'}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Desktop Navigation Links for SaaS Desktop Experience */}
+        {/* Desktop Navigation Links for SaaS Desktop Experience (Compact to prevent squeezing brand) */}
         {onSelectTab && (
-          <nav className="hidden xl:flex items-center gap-1 mx-1">
+          <nav className="hidden 2xl:flex items-center gap-1 mx-1 shrink min-w-0">
             {[
               { id: 'home' as NavTab, label: tr.menu.khata, icon: Home },
               { id: 'history' as NavTab, label: tr.menu.record, icon: History },
@@ -349,62 +348,8 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
         )}
 
-        {/* Advance Search Command Bar (Desktop / Tablets) */}
-        {onOpenPageSearch ? (
-          <div className="hidden md:flex items-center flex-1 max-w-sm lg:max-w-md mx-2">
-            <button
-              type="button"
-              onClick={onOpenPageSearch}
-              className="w-full flex items-center justify-between gap-2.5 bg-[var(--theme-bg,#070E18)] hover:bg-[var(--theme-card,#132438)] focus:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[var(--theme-text-dim,#64748B)] hover:text-[var(--theme-text,#F8FAFC)] text-[12px] rounded-xl pl-3 pr-2.5 py-1.5 transition-all outline-none shadow-xs cursor-pointer group"
-              title={isHindi ? 'एडवांस सर्च व नेविगेटर (Ctrl+K)' : 'Advanced Search & Navigator (Ctrl+K)'}
-              id="header-desktop-page-search"
-            >
-              <div className="flex items-center gap-2 truncate">
-                <Search className="w-4 h-4 text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="truncate text-[12px] font-medium text-[var(--theme-text-muted,#94A3B8)] group-hover:text-[var(--theme-text,#F8FAFC)]">
-                  {isHindi ? 'पेज, टूल्स, कैलकुलेटर खोजें...' : 'Search pages, tools, calculators...'}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <kbd className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] group-hover:border-[var(--theme-primary,#38BDF8)]/50 group-hover:text-[var(--theme-primary,#38BDF8)]">
-                  ⌘K
-                </kbd>
-              </div>
-            </button>
-          </div>
-        ) : onSearchChange ? (
-          <div className="hidden md:flex items-center flex-1 max-w-xs mx-2">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-dim,#64748B)] pointer-events-none" />
-              <input
-                id="header-desktop-search"
-                type="text"
-                placeholder={tr.menu.searchPlaceholder}
-                value={searchQuery}
-                onChange={(e) => {
-                  onSearchChange(e.target.value);
-                  if (onSelectTab && currentTab !== 'history' && e.target.value.trim().length > 0) {
-                    onSelectTab('history');
-                  }
-                }}
-                className="w-full bg-[var(--theme-bg,#070E18)] hover:bg-[var(--theme-card,#132438)] focus:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#64748B)] text-[12px] rounded-xl pl-8 pr-7 py-1.5 transition-all outline-none shadow-xs"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => onSearchChange('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:bg-[var(--theme-card,#132438)] transition-colors cursor-pointer"
-                  title="Clear search"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-          </div>
-        ) : null}
-
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
           {/* Subtle Non-Intrusive Offline Status Chip */}
           {!isOnline && (
             <div

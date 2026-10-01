@@ -165,7 +165,18 @@ function AppContent() {
   );
 
   const [percentages, setPercentages] = useState<Record<FundType, number>>(DEFAULT_PERCENTAGES);
-  const [theme, setTheme] = useState<AppTheme>('white');
+  const [theme, setTheme] = useState<AppTheme>(() => {
+    try {
+      const saved = localStorage.getItem('khata_pro_data_v2');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.settings?.theme) return parsed.settings.theme;
+      }
+    } catch {
+      // fallback
+    }
+    return 'emerald';
+  });
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<AppViewMode>('auto');
@@ -374,9 +385,10 @@ function AppContent() {
     return () => window.removeEventListener('dailykhata-currency-change', handleCurrencyChange);
   }, []);
 
-  // Dynamic SEO Synchronization: Updates document.title, canonical tag, and meta description per route for Google Search Console
+  // Dynamic SEO Synchronization & Scroll to top: Updates document.title, canonical tag, and meta description per route
   useEffect(() => {
     updatePageSEO(location.pathname);
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, [location.pathname]);
 
   // Deep Link URL Sync: Read hashes and query params on mount & navigation for universal deep linking

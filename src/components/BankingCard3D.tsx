@@ -58,58 +58,73 @@ export function BankingCard3D({
   }, []);
 
   return (
-    <div style={{ perspective: 1400 }} className="w-full relative z-10">
+    <div style={{ perspective: 1200 }} className="w-full relative z-10">
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="banking-card-3d relative overflow-hidden rounded-[26px] sm:rounded-[30px] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[radial-gradient(circle_at_82%_15%,var(--theme-primary-dim,rgba(56,189,248,0.18))_0%,var(--theme-card,#0E182A)_50%,var(--theme-bg,#050B14)_100%)] p-4 sm:p-[22px] shadow-none"
+        style={{ rotateX, rotateY }}
+        className="banking-card-3d relative overflow-hidden rounded-[20px] sm:rounded-2xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[radial-gradient(circle_at_82%_15%,var(--theme-primary-dim,rgba(56,189,248,0.22))_0%,var(--theme-card,#0E182A)_50%,var(--theme-bg,#050B14)_100%)] p-3.5 sm:p-4 md:p-[18px] shadow-none"
       >
-        {/* Subtle radial glow & financial waves */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -right-16 -top-12 h-64 w-80 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 blur-3xl banking-card-glare" />
-          <div className="absolute -left-16 -bottom-12 h-48 w-64 rounded-full bg-[var(--theme-primary-hover,#0284C7)]/15 blur-3xl banking-card-glare" />
+        {/* Subtle radial glow & theme-adaptive financial design watermark */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+          {/* Theme Primary Ambient Glow Spots */}
+          <div className="banking-card-ambient-glow absolute -right-16 -top-12 h-64 w-80 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 blur-3xl" />
+          <div className="banking-card-ambient-glow absolute -left-16 -bottom-12 h-48 w-64 rounded-full bg-[var(--theme-primary-hover,#0284C7)]/15 blur-3xl" />
 
-          {/* Flowing financial wave decoration */}
-          <div className="banking-card-waves absolute right-[-4%] bottom-[16%] w-[68%] h-[58%] opacity-80">
+          {/* Flowing Financial Vector Waves (Matches All Active Themes) */}
+          <div className="banking-card-waves absolute right-[-2%] bottom-[12%] w-[72%] h-[64%] opacity-75">
             <svg className="w-full h-full" viewBox="0 0 520 280" fill="none" preserveAspectRatio="none">
-              <path d="M0 230C105 229 166 183 247 151C325 120 380 64 445 71C481 75 505 91 520 104" stroke="var(--theme-primary,#38BDF8)" strokeWidth="2.8" strokeOpacity=".9" />
-              <path d="M0 248C105 247 174 201 255 169C332 139 386 84 449 91C482 95 505 108 520 119" stroke="var(--theme-primary,#38BDF8)" strokeWidth="2.1" strokeOpacity=".6" />
-              <path d="M0 263C105 262 181 216 264 186C341 157 393 103 454 110C485 114 507 126 520 137" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.6" strokeOpacity=".35" />
+              <path d="M0 230C105 229 166 183 247 151C325 120 380 64 445 71C481 75 505 91 520 104" stroke="var(--theme-primary,#38BDF8)" strokeWidth="2.5" strokeOpacity=".85" />
+              <path d="M0 248C105 247 174 201 255 169C332 139 386 84 449 91C482 95 505 108 520 119" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.8" strokeOpacity=".55" />
+              <path d="M0 263C105 262 181 216 264 186C341 157 393 103 454 110C485 114 507 126 520 137" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.2" strokeOpacity=".3" />
             </svg>
           </div>
 
-          {/* Subtle concentric rings & high-end geometric luxury watermark */}
-          <div className="absolute -right-12 -bottom-12 w-48 h-48 rounded-full border border-[var(--theme-primary,#38BDF8)]/20 pointer-events-none" />
-          <div className="absolute -right-6 -bottom-6 w-36 h-36 rounded-full border border-[var(--theme-primary,#38BDF8)]/25 pointer-events-none" />
-          <div className="absolute -right-0 -bottom-0 w-24 h-24 rounded-full border border-[var(--theme-primary,#38BDF8)]/30 pointer-events-none" />
+          {/* Concentric Precision Radar Rings in Active Theme Color */}
+          <div className="absolute -right-14 -bottom-14 w-56 h-56 rounded-full border border-[var(--theme-primary,#38BDF8)]/20" />
+          <div className="absolute -right-8 -bottom-8 w-44 h-44 rounded-full border border-[var(--theme-primary,#38BDF8)]/25" />
+          <div className="absolute -right-2 -bottom-2 w-32 h-32 rounded-full border border-[var(--theme-primary,#38BDF8)]/35" />
 
-          {/* Dotted texture */}
+          {/* Luxury Geometric Cyber Security Accents */}
+          <div className="absolute left-1/4 top-0 w-36 h-[1.5px] bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)]/45 to-transparent" />
+          <div className="absolute left-1/3 bottom-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)]/35 to-transparent" />
+
+          {/* Micro-Dot Grid Security Matrix in Theme Color */}
           <div
-            className="banking-card-glare absolute right-0 top-0 w-[55%] h-[55%] opacity-20"
+            className="absolute right-0 top-0 w-[55%] h-[55%] opacity-25"
             style={{
-              backgroundImage: 'radial-gradient(var(--theme-primary,#38BDF8) 1px, transparent 1px)',
-              backgroundSize: '10px 10px',
-              maskImage: 'linear-gradient(135deg, black, transparent 72%)',
-              WebkitMaskImage: 'linear-gradient(135deg, black, transparent 72%)'
+              backgroundImage: 'radial-gradient(var(--theme-primary,#38BDF8) 1.2px, transparent 1.2px)',
+              backgroundSize: '12px 12px',
+              maskImage: 'linear-gradient(135deg, black, transparent 75%)',
+              WebkitMaskImage: 'linear-gradient(135deg, black, transparent 75%)'
             }}
           />
         </div>
 
-        <div className="relative z-10" style={{ transform: 'translateZ(28px)' }}>
+        {/* Razor-Sharp High-Definition Text & Content Container */}
+        <div
+          className="relative z-10"
+          style={{
+            transform: 'translateZ(0)',
+            WebkitFontSmoothing: 'antialiased',
+            MozOsxFontSmoothing: 'grayscale',
+            textRendering: 'geometricPrecision'
+          }}
+        >
           {/* Header row */}
           <div className="flex items-center justify-between gap-1 sm:gap-2 min-w-0">
             <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 shrink">
               <div
-                className="banking-card-icon-box h-[30px] w-[30px] sm:h-[34px] sm:w-[34px] rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105"
+                className="banking-card-icon-box h-[26px] w-[26px] sm:h-[30px] sm:w-[30px] rounded-lg sm:rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105"
                 style={{ boxShadow: 'none', filter: 'none' }}
               >
-                <Wallet className="w-4 h-4 sm:w-[17px] sm:h-[17px] stroke-[2.2]" style={{ filter: 'none', boxShadow: 'none' }} />
+                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" style={{ filter: 'none', boxShadow: 'none' }} />
               </div>
-              <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
-                <span className="banking-card-label text-[11.5px] sm:text-[14px] font-black tracking-wider text-slate-100 uppercase truncate antialiased">
-                  {isHindi ? 'कुल बैलेंस' : 'Total Balance'}
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_rgba(52,211,153,0.9)] animate-pulse" />
+                <span className="banking-card-label text-[11px] sm:text-[13px] font-black tracking-wider text-white uppercase truncate">
+                  {isHindi ? 'कुल बैलेंस' : 'TOTAL NET BALANCE'}
                 </span>
                 <button
                   type="button"
@@ -122,9 +137,9 @@ export function BankingCard3D({
                   aria-label={privacyMask ? 'Show Balance' : 'Hide Balance'}
                 >
                   {privacyMask ? (
-                    <EyeOff className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-[var(--theme-primary,#34D399)]" strokeWidth={2.4} />
+                    <EyeOff className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[var(--theme-primary,#34D399)]" strokeWidth={2.4} />
                   ) : (
-                    <Eye className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-slate-200" strokeWidth={2.4} />
+                    <Eye className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-200" strokeWidth={2.4} />
                   )}
                 </button>
               </div>
@@ -132,42 +147,49 @@ export function BankingCard3D({
 
             <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 max-w-[55%] xs:max-w-none">
               {/* Distinct SECURE badge (compact on mobile, full text on sm+) */}
-              <div className="hidden xs:flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-emerald-500/15 border border-emerald-500/30 shrink-0">
+              <div className="hidden xs:flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-md sm:rounded-lg bg-emerald-950/80 border border-emerald-500/40 shrink-0">
                 <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400 shrink-0" />
-                <span className="hidden sm:inline text-[7.5px] sm:text-[8.5px] font-bold tracking-wider uppercase text-emerald-400">SECURE</span>
+                <span className="hidden sm:inline text-[7.5px] sm:text-[8px] font-bold tracking-wider uppercase text-emerald-400">SECURED</span>
               </div>
               {/* Distinct Date badge (never overflows on mobile) */}
-              <div className="banking-card-date-box flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg sm:rounded-xl bg-[var(--theme-surface,#0A1220)] border border-[var(--theme-border,rgba(255,255,255,0.12))] shadow-xs shrink-0 max-w-full">
-                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-                <span className="banking-card-date text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-semibold text-slate-200 whitespace-nowrap notranslate" translate="no">
+              <div className="banking-card-date-box flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-md sm:rounded-lg bg-[var(--theme-surface,#071C12)] border border-[var(--theme-border,rgba(46,236,163,0.25))] shadow-xs shrink-0 max-w-full">
+                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#10B981)] shrink-0" />
+                <span className="banking-card-date text-[7.5px] xs:text-[8px] sm:text-[9px] font-bold text-emerald-300 uppercase whitespace-nowrap notranslate" translate="no">
                   {dateFormatted}
                 </span>
-                <span className="hidden md:inline text-[8px] text-[var(--theme-primary,#38BDF8)]/40">·</span>
-                <span className="hidden md:inline banking-card-date text-[8.5px] font-semibold text-[var(--theme-primary,#38BDF8)] whitespace-nowrap notranslate" translate="no">
+                <span className="hidden md:inline text-[8px] text-[var(--theme-primary,#10B981)]/40">·</span>
+                <span className="hidden md:inline banking-card-date text-[8px] font-semibold text-[var(--theme-primary,#10B981)] whitespace-nowrap notranslate" translate="no">
                   {currentTime}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Balance area with 3D Wallet Graphic */}
-          <div className="relative mt-2.5 sm:mt-3 flex items-center justify-between gap-3">
+          {/* Balance area & 3D Wallet Graphic */}
+          <div className="relative mt-1.5 sm:mt-2 flex items-center justify-between gap-3">
             <div className="relative z-10 min-w-0 flex-1">
+              <span className="text-[9.5px] sm:text-[10.5px] font-mono font-bold tracking-wider text-emerald-400 uppercase block mb-0.5">
+                AVAILABLE BALANCE
+              </span>
               <div
-                className="banking-card-amount font-mono text-[29.5px] xs:text-[34px] sm:text-[42px] md:text-[46px] leading-tight font-black text-white tracking-tight notranslate"
+                className="banking-card-amount font-mono text-[24px] xs:text-[29px] sm:text-[35px] md:text-[38px] leading-tight font-black text-white tracking-tight notranslate drop-shadow-none"
                 translate="no"
+                style={{
+                  letterSpacing: '-0.03em',
+                  textRendering: 'geometricPrecision'
+                }}
                 title={formatCurrency(totalWealth, privacyMask)}
               >
                 {formatCurrency(totalWealth, privacyMask)}
               </div>
-              <p className="banking-card-subtitle text-[10px] sm:text-[11.5px] text-slate-400 mt-0.5 whitespace-nowrap">
-                {isHindi ? 'कुल कैश और अकाउंट बैलेंस' : 'Total cash & account balance'}
+              <p className="banking-card-subtitle text-[10px] sm:text-[11.5px] font-medium text-emerald-400/90 mt-0.5 whitespace-nowrap tracking-wide">
+                {isHindi ? 'कुल कैश और अकाउंट बैलेंस' : 'Your overall financial summary'}
               </p>
             </div>
 
             {/* 3D Glossy Theme-Adaptive Wallet Graphic */}
             <div
-              className="banking-card-wallet-graphic relative w-[68px] h-[55px] sm:w-[92px] sm:h-[75px] shrink-0 pointer-events-none select-none drop-shadow-none"
+              className="banking-card-wallet-graphic relative w-[54px] h-[44px] sm:w-[74px] sm:h-[60px] shrink-0 pointer-events-none select-none drop-shadow-none"
               style={{ filter: 'none', boxShadow: 'none' }}
             >
               <svg viewBox="0 0 120 100" fill="none" className="w-full h-full" style={{ filter: 'none' }}>
@@ -203,30 +225,30 @@ export function BankingCard3D({
           </div>
 
           {/* Actions: + Income and − Expense */}
-          <div className="banking-card-divider border-t border-white/10 pt-3 sm:pt-3.5 mt-3 sm:mt-3.5">
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
+          <div className="banking-card-divider border-t border-white/10 pt-2.5 sm:pt-3 mt-2 sm:mt-2.5">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
               <motion.button
                 type="button"
                 onClick={() => onAddClick('income')}
                 id="hero-add-income-btn"
-                whileHover={{ y: -2, scale: 1.02 }}
-                whileTap={{ y: 2, scale: 0.97 }}
-                className="group min-h-[42px] sm:min-h-[50px] px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#22C55E] via-[#16A34A] to-[#15803D] hover:from-[#2ecc71] hover:to-[#16a34a] text-white font-extrabold text-[13px] sm:text-[16.5px] flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
+                whileHover={{ y: -1, scale: 1.01 }}
+                whileTap={{ y: 1, scale: 0.98 }}
+                className="group min-h-[36px] sm:min-h-[42px] px-2.5 sm:px-3 rounded-lg sm:rounded-xl bg-gradient-to-b from-[#22C55E] via-[#16A34A] to-[#15803D] hover:from-[#2ecc71] hover:to-[#16a34a] text-white font-extrabold text-[12px] sm:text-[14px] flex items-center justify-center gap-1.5 transition-all shadow-none cursor-pointer select-none"
               >
                 <span>+ Income</span>
-                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
+                <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
               </motion.button>
 
               <motion.button
                 type="button"
                 onClick={() => onAddClick('expense')}
                 id="hero-add-expense-btn"
-                whileHover={{ y: -2, scale: 1.02 }}
-                whileTap={{ y: 2, scale: 0.97 }}
-                className="group min-h-[42px] sm:min-h-[50px] px-3 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] hover:from-[#f87171] hover:to-[#dc2626] text-white font-extrabold text-[13px] sm:text-[16.5px] flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-none cursor-pointer select-none"
+                whileHover={{ y: -1, scale: 1.01 }}
+                whileTap={{ y: 1, scale: 0.98 }}
+                className="group min-h-[36px] sm:min-h-[42px] px-2.5 sm:px-3 rounded-lg sm:rounded-xl bg-gradient-to-b from-[#EF4444] via-[#DC2626] to-[#B91C1C] hover:from-[#f87171] hover:to-[#dc2626] text-white font-extrabold text-[12px] sm:text-[14px] flex items-center justify-center gap-1.5 transition-all shadow-none cursor-pointer select-none"
               >
                 <span>− Expense</span>
-                <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform duration-150" />
+                <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 stroke-[2.5] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform duration-150" />
               </motion.button>
             </div>
           </div>

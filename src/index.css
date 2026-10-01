@@ -5,27 +5,27 @@
 
 @layer base {
   :root {
-    /* Base Neutral Surface Architecture (Default: Polished Sapphire Midnight Canvas) */
-    --theme-bg: #060D19;
-    --theme-surface: #0B172A;
-    --theme-card: #10213B;
-    --theme-card-hover: #162C4E;
-    --theme-border: rgba(56, 189, 248, 0.26);
-    --theme-border-subtle: rgba(56, 189, 248, 0.14);
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #94A3B8;
-    --theme-text-dim: #64748B;
+    /* Base Neutral Surface Architecture (Default: Green Premium Palette matching reference) */
+    --theme-bg: #041009;
+    --theme-surface: #071C12;
+    --theme-card: #0A2619;
+    --theme-card-hover: #0F3822;
+    --theme-border: rgba(46, 236, 163, 0.28);
+    --theme-border-subtle: rgba(46, 236, 163, 0.14);
+    --theme-text: #F2FFF7;
+    --theme-text-muted: #80AB95;
+    --theme-text-dim: #547A67;
 
     /* Theme Primary Accent Tokens */
-    --theme-primary: #38BDF8;
-    --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.18);
-    --theme-primary-border: rgba(56, 189, 248, 0.40);
-    --theme-glow: rgba(56, 189, 248, 0.22);
-    --theme-badge-text: #38BDF8;
-    --theme-btn-bg: #0284C7;
-    --theme-btn-hover: #0369A1;
-    --theme-btn-text: #FFFFFF;
+    --theme-primary: #10B981;
+    --theme-primary-hover: #059669;
+    --theme-primary-dim: rgba(16, 185, 129, 0.20);
+    --theme-primary-border: rgba(16, 185, 129, 0.45);
+    --theme-glow: rgba(16, 185, 129, 0.35);
+    --theme-badge-text: #34D399;
+    --theme-btn-bg: #10B981;
+    --theme-btn-hover: #059669;
+    --theme-btn-text: #041009;
 
     /* Generic Standard Token Set Aliases */
     --bg-primary: var(--theme-bg);
@@ -127,26 +127,26 @@
   }
 
   [data-theme="emerald"] {
-    /* Emerald Forest & Deep Jade Velvet Atmosphere - Enhanced Vibrancy (+30% color, +15% brightness) */
-    --theme-bg: #05160D;
-    --theme-surface: #0A2215;
-    --theme-card: #103320;
-    --theme-card-hover: #17452C;
-    --theme-border: rgba(46, 236, 163, 0.32);
-    --theme-border-subtle: rgba(46, 236, 163, 0.16);
+    /* Emerald Forest & Deep Jade Velvet Atmosphere - Premium Reference Palette */
+    --theme-bg: #041009;
+    --theme-surface: #071C12;
+    --theme-card: #0A2619;
+    --theme-card-hover: #0F3822;
+    --theme-border: rgba(46, 236, 163, 0.28);
+    --theme-border-subtle: rgba(46, 236, 163, 0.14);
     --theme-text: #F2FFF7;
-    --theme-text-muted: #B3F5D1;
-    --theme-text-dim: #70B891;
+    --theme-text-muted: #80AB95;
+    --theme-text-dim: #547A67;
 
-    --theme-primary: #2EECA3;
-    --theme-primary-hover: #15D494;
-    --theme-primary-dim: rgba(46, 236, 163, 0.22);
-    --theme-primary-border: rgba(46, 236, 163, 0.45);
-    --theme-glow: rgba(46, 236, 163, 0.32);
-    --theme-badge-text: #5EF096;
-    --theme-btn-bg: #05A876;
-    --theme-btn-hover: #078A62;
-    --theme-btn-text: #FFFFFF;
+    --theme-primary: #10B981;
+    --theme-primary-hover: #059669;
+    --theme-primary-dim: rgba(16, 185, 129, 0.20);
+    --theme-primary-border: rgba(16, 185, 129, 0.45);
+    --theme-glow: rgba(16, 185, 129, 0.35);
+    --theme-badge-text: #34D399;
+    --theme-btn-bg: #10B981;
+    --theme-btn-hover: #059669;
+    --theme-btn-text: #041009;
 
     --bg-primary: var(--theme-bg);
     --bg-surface: var(--theme-card);
@@ -1455,16 +1455,20 @@
 }
 
 .banking-card-3d .banking-card-label {
-  color: #F1F5F9 !important;
+  color: #FFFFFF !important;
   font-weight: 800 !important;
   letter-spacing: 0.05em;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  text-shadow: none !important;
 }
 
 .banking-card-3d .banking-card-subtitle {
-  color: #E2E8F0 !important;
+  color: #F1F5F9 !important;
   font-weight: 600 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: none !important;
+}
+
+.banking-card-3d .banking-card-amount {
+  text-shadow: none !important;
 }
 
 .banking-card-3d .banking-card-waves {
@@ -1480,19 +1484,24 @@
   display: none !important;
 }
 
-/* Banking Card 3D Light & White Mode Adaptation */
+/* Banking Card 3D Light & White Mode Adaptation - Crisp Day Mode without blue shadows */
+[data-theme="light"] .banking-card-ambient-glow,
+[data-theme="white"] .banking-card-ambient-glow {
+  display: none !important;
+}
+
 [data-theme="light"] .banking-card-3d {
-  background: radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 60%), linear-gradient(145deg, #FFFFFF 0%, #F0F9FF 32%, #E0F2FE 70%, #DDF4FF 100%) !important;
-  border: 1.5px solid rgba(56, 189, 248, 0.40) !important;
-  box-shadow: 0 16px 36px -8px rgba(2, 132, 199, 0.20), 0 6px 14px -2px rgba(15, 23, 42, 0.05), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -2px 6px rgba(56, 189, 248, 0.15) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 [data-theme="white"] .banking-card-3d {
-  background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 50%, #F1F5F9 100%) !important;
-  border: 1.5px solid #CBD5E1 !important;
-  box-shadow: none !important;
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03) !important;
   filter: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -1505,13 +1514,13 @@
 
 [data-theme="light"] .banking-card-3d .banking-card-subtitle,
 [data-theme="white"] .banking-card-3d .banking-card-subtitle {
-  color: #0284C7 !important;
-  font-weight: 700 !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-label,
 [data-theme="white"] .banking-card-3d .banking-card-label {
-  color: #0369A1 !important;
+  color: #0F172A !important;
   font-weight: 800 !important;
   letter-spacing: 0.05em !important;
 }
@@ -1520,15 +1529,15 @@
 [data-theme="white"] .banking-card-3d .banking-card-amount {
   color: #0B192C !important;
   font-weight: 900 !important;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+  text-shadow: none !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-icon-box,
 [data-theme="white"] .banking-card-3d .banking-card-icon-box,
 [data-theme="light"] .banking-card-3d .banking-card-date-box,
 [data-theme="white"] .banking-card-3d .banking-card-date-box {
-  background-color: #F0F9FF !important;
-  border: 1px solid rgba(56, 189, 248, 0.40) !important;
+  background-color: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
   color: #0284C7 !important;
   box-shadow: none !important;
   filter: none !important;

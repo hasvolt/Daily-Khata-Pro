@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   DebtItem,
   DebtType,
@@ -89,6 +89,11 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
   // WhatsApp Reminder Modal
   const [activeReminderItem, setActiveReminderItem] = useState<DebtItem | null>(null);
   const [copiedReminder, setCopiedReminder] = useState(false);
+
+  // Always reset scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // 1. Calculate Aggregate Financial KPIs
   const stats = useMemo(() => {
@@ -414,7 +419,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6 pb-24 text-left animate-in fade-in duration-200 overflow-x-hidden touch-pan-y">
+    <div className="w-full max-w-6xl mx-auto space-y-6 pb-44 sm:pb-28 text-left animate-in fade-in duration-200" style={{ WebkitOverflowScrolling: 'touch' }}>
       {/* 1. Header with Back Navigation & Quick Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-4 sm:p-5 rounded-2xl shadow-sm">
         <div className="space-y-1.5">
@@ -477,60 +482,60 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
       {/* 2. Top Metric Financial Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Card 1: To Receive (Money Lent) */}
-        <div className="bg-gradient-to-br from-emerald-500/10 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-emerald-500/30 rounded-2xl p-4 shadow-sm relative overflow-hidden">
+        <div className="bg-gradient-to-br from-emerald-500/15 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-emerald-500/40 rounded-2xl p-4 shadow-md relative overflow-hidden">
           <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
             <span className="min-w-0 text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-start gap-1.5 leading-tight">
               <ArrowUpRight className="w-4 h-4 shrink-0 mt-0.5" />
               <span className="min-w-0 break-words">{_language === 'hi' ? 'उधार दिया (Lent)' : 'Money Lent (Receivable)'}</span>
             </span>
-            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
+            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-300 font-mono font-bold">
               {stats.activeLentCount} active
             </span>
           </div>
           <div className="mt-2">
-            <span className="text-lg sm:text-2xl font-black font-mono text-[var(--theme-text,#F8FAFC)] block tracking-tight">
+            <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400 block tracking-tight">
               {formatCurrency(stats.totalLent, privacyMask)}
             </span>
-            <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mt-0.5">
+            <span className="text-[11px] text-slate-300 font-medium block mt-0.5">
               {_language === 'hi' ? 'कुल पैसा जो आपको वापस लेना है' : 'Total amount to collect back'}
             </span>
           </div>
         </div>
 
         {/* Card 2: To Pay (Money Borrowed) */}
-        <div className="bg-gradient-to-br from-rose-500/10 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-rose-500/30 rounded-2xl p-4 shadow-sm relative overflow-hidden">
+        <div className="bg-gradient-to-br from-rose-500/15 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-rose-500/40 rounded-2xl p-4 shadow-md relative overflow-hidden">
           <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
             <span className="min-w-0 text-xs font-bold text-rose-400 uppercase tracking-wider flex items-start gap-1.5 leading-tight">
               <ArrowDownLeft className="w-4 h-4 shrink-0 mt-0.5" />
               <span className="min-w-0 break-words">{_language === 'hi' ? 'उधार लिया (Borrowed)' : 'Money Borrowed (Payable)'}</span>
             </span>
-            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono">
+            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-rose-500/25 text-rose-300 font-mono font-bold">
               {stats.activeBorrowedCount} active
             </span>
           </div>
           <div className="mt-2">
-            <span className="text-lg sm:text-2xl font-black font-mono text-[var(--theme-text,#F8FAFC)] block tracking-tight">
+            <span className="text-xl sm:text-2xl font-black font-mono text-rose-400 block tracking-tight">
               {formatCurrency(stats.totalBorrowed, privacyMask)}
             </span>
-            <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mt-0.5">
+            <span className="text-[11px] text-slate-300 font-medium block mt-0.5">
               {_language === 'hi' ? 'कुल पैसा जो आपको चुकाना है' : 'Personal borrowings to return'}
             </span>
           </div>
         </div>
 
         {/* Card 3: Bank Loan & Monthly EMI */}
-        <div className="bg-gradient-to-br from-sky-500/10 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-sky-500/30 rounded-2xl p-4 shadow-sm relative overflow-hidden">
+        <div className="bg-gradient-to-br from-sky-500/15 via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border border-sky-500/40 rounded-2xl p-4 shadow-md relative overflow-hidden">
           <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
             <span className="min-w-0 text-xs font-bold text-sky-400 uppercase tracking-wider flex items-start gap-1.5 leading-tight">
               <Landmark className="w-4 h-4 shrink-0 mt-0.5" />
               <span className="min-w-0 break-words">Bank Loans & EMIs</span>
             </span>
-            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">
+            <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-300 font-mono font-bold">
               {stats.activeLoanCount} active
             </span>
           </div>
           <div className="mt-2">
-            <span className="text-lg sm:text-2xl font-black font-mono text-[var(--theme-text,#F8FAFC)] block tracking-tight">
+            <span className="text-xl sm:text-2xl font-black font-mono text-sky-400 block tracking-tight">
               {formatCurrency(stats.totalLoanPrincipal, privacyMask)}
             </span>
             <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 text-[11px] text-sky-300/90 font-medium mt-0.5">
@@ -541,21 +546,21 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
         </div>
 
         {/* Card 4: Net Position */}
-        <div className={`bg-gradient-to-br ${stats.netPosition >= 0 ? 'from-emerald-500/10' : 'from-amber-500/10'} via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border ${stats.netPosition >= 0 ? 'border-emerald-500/30' : 'border-amber-500/30'} rounded-2xl p-4 shadow-sm relative overflow-hidden`}>
+        <div className={`bg-gradient-to-br ${stats.netPosition >= 0 ? 'from-emerald-500/15' : 'from-amber-500/15'} via-[var(--theme-surface,#0E1A29)] to-[var(--theme-surface,#0E1A29)] border ${stats.netPosition >= 0 ? 'border-emerald-500/40' : 'border-amber-500/40'} rounded-2xl p-4 shadow-md relative overflow-hidden`}>
           <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
             <span className={`min-w-0 text-xs font-bold uppercase tracking-wider flex items-start gap-1.5 leading-tight ${stats.netPosition >= 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
               <Wallet className="w-4 h-4 shrink-0 mt-0.5" />
               <span className="min-w-0 break-words">Net Debt Standing</span>
             </span>
-            <span className={`shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded font-bold ${stats.netPosition >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
+            <span className={`shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded font-bold ${stats.netPosition >= 0 ? 'bg-emerald-500/25 text-emerald-300' : 'bg-amber-500/25 text-amber-300'}`}>
               {stats.netPosition >= 0 ? 'Net Creditor' : 'Net Debtor'}
             </span>
           </div>
           <div className="mt-2">
-            <span className={`text-lg sm:text-2xl font-black font-mono block tracking-tight ${stats.netPosition >= 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
+            <span className={`text-xl sm:text-2xl font-black font-mono block tracking-tight ${stats.netPosition >= 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
               {stats.netPosition >= 0 ? '+' : ''}{formatCurrency(stats.netPosition, privacyMask)}
             </span>
-            <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mt-0.5">
+            <span className="text-[11px] text-slate-300 font-medium block mt-0.5">
               {stats.netPosition >= 0
                 ? 'Receivables exceed total debt obligations'
                 : 'Outstanding liabilities exceed receivables'}
@@ -624,7 +629,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
       {/* 4. Controls: Type Tabs, Status Filter, Search */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] p-3 rounded-2xl">
         {/* Type Filter Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none touch-pan-x overscroll-contain">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 no-scrollbar touch-pan-x">
           {[
             { id: 'all', label: 'All Records', icon: Landmark },
             { id: 'lent', label: 'Receivables (Lent)', icon: ArrowUpRight, color: 'text-emerald-400' },
@@ -643,8 +648,8 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] shadow-sm'
-                    : 'bg-[var(--theme-card,#132438)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] border border-[var(--theme-border,#213E61)]'
+                    ? 'bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-black shadow-sm'
+                    : 'bg-[var(--theme-card,#132438)] text-slate-200 hover:text-white border border-[var(--theme-border,#213E61)]'
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? '' : tab.color}`} />
@@ -657,33 +662,33 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
         {/* Search & Status Controls */}
         <div className="flex items-center gap-2 w-full lg:w-auto">
           <div className="relative flex-1 lg:w-56">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--theme-text-dim,#94A3B8)]" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search person, bank, phone..."
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl pl-8 pr-3 py-1.5 text-xs text-[var(--theme-text,#F8FAFC)] placeholder-[var(--theme-text-dim,#94A3B8)]/60 focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
+              className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl pl-8 pr-3 py-1.5 text-xs text-[var(--theme-text,#F8FAFC)] placeholder-slate-400 focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
 
-          <div className="flex items-center bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl p-0.5">
+          <div className="flex items-center bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-0.5">
             <button
               type="button"
               onClick={() => setSelectedStatus('all')}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer transition-colors ${
                 selectedStatus === 'all'
-                  ? 'bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)]'
-                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 font-black'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               All
@@ -693,8 +698,8 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
               onClick={() => setSelectedStatus('active')}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer transition-colors ${
                 selectedStatus === 'active'
-                  ? 'bg-[var(--theme-card,#132438)] text-emerald-400'
-                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  ? 'bg-emerald-500 text-slate-950 font-black'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               Active
@@ -704,8 +709,8 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
               onClick={() => setSelectedStatus('settled')}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer transition-colors ${
                 selectedStatus === 'settled'
-                  ? 'bg-[var(--theme-card,#132438)] text-sky-400'
-                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  ? 'bg-sky-500 text-slate-950 font-black'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               Settled
@@ -824,13 +829,9 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
             }
 
             return (
-              <motion.div
+              <div
                 key={item.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className={`bg-[var(--theme-surface,#0E1A29)] border rounded-2xl p-4 sm:p-5 shadow-sm space-y-4 transition-all relative ${
+                className={`bg-[var(--theme-surface,#0E1A29)] border rounded-2xl p-4 sm:p-5 shadow-sm space-y-4 transition-all relative animate-in fade-in duration-150 ${
                   isSettled
                     ? 'border-emerald-500/30 opacity-85'
                     : isOverdue
@@ -916,14 +917,14 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                 </div>
 
                 {/* Amount & Progress Section */}
-                <div className="bg-[var(--theme-bg,#070E18)]/70 border border-[var(--theme-border,#213E61)] rounded-xl p-3 space-y-2.5">
+                <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-3.5 space-y-2.5 shadow-xs">
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block uppercase tracking-wider font-semibold">
+                      <span className="text-[11px] text-slate-300 block uppercase tracking-wider font-bold">
                         {isSettled ? 'Settled Amount' : 'Remaining Balance'}
                       </span>
                       <span
-                        className={`text-xl sm:text-2xl font-black font-mono tracking-tight ${
+                        className={`text-2xl sm:text-3xl font-black font-mono tracking-tight ${
                           isSettled
                             ? 'text-emerald-400'
                             : item.type === 'lent'
@@ -936,10 +937,10 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block">
+                      <span className="text-[11px] text-slate-400 block font-medium">
                         Principal
                       </span>
-                      <span className="text-xs sm:text-sm font-mono text-[var(--theme-text-dim,#94A3B8)]">
+                      <span className="text-xs sm:text-sm font-mono font-bold text-slate-200">
                         {formatCurrency(item.principalAmount, privacyMask)}
                       </span>
                     </div>
@@ -947,7 +948,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
 
                   {/* Progress Bar */}
                   <div className="space-y-1">
-                    <div className="w-full bg-[var(--theme-card,#132438)] h-2 rounded-full overflow-hidden">
+                    <div className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)]/50 h-2.5 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-500 ${
                           isSettled
@@ -959,9 +960,9 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                         style={{ width: `${progressPercent}%` }}
                       />
                     </div>
-                    <div className="flex justify-between text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    <div className="flex justify-between text-[11px] text-slate-300 font-mono font-medium">
                       <span>Repaid: {formatCurrency(repaidAmount, privacyMask)}</span>
-                      <span>{progressPercent}%</span>
+                      <span className="font-bold text-slate-200">{progressPercent}%</span>
                     </div>
                   </div>
 
@@ -969,31 +970,31 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                   {item.isEmi && (
                     <div className="pt-2 border-t border-[var(--theme-border,#213E61)]/70 grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                       {item.emiAmount && (
-                        <div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block">
+                        <div className="bg-[var(--theme-bg,#070E18)]/90 border border-[var(--theme-border,#213E61)] p-2 rounded-lg">
+                          <span className="text-[10.5px] text-slate-300 font-semibold block">
                             Monthly EMI
                           </span>
-                          <span className="font-mono font-bold text-sky-400">
+                          <span className="font-mono font-extrabold text-sky-400 text-xs sm:text-sm">
                             {formatCurrency(item.emiAmount, privacyMask)}
                           </span>
                         </div>
                       )}
                       {item.totalEmis && (
-                        <div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block">
+                        <div className="bg-[var(--theme-bg,#070E18)]/90 border border-[var(--theme-border,#213E61)] p-2 rounded-lg">
+                          <span className="text-[10.5px] text-slate-300 font-semibold block">
                             Tenure Progress
                           </span>
-                          <span className="font-mono font-semibold text-[var(--theme-text,#F8FAFC)]">
+                          <span className="font-mono font-bold text-slate-200 text-xs sm:text-sm">
                             {item.paidEmis || item.payments?.length || 0} / {item.totalEmis}
                           </span>
                         </div>
                       )}
                       {item.emiDayOfMonth && (
-                        <div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block">
+                        <div className="bg-[var(--theme-bg,#070E18)]/90 border border-[var(--theme-border,#213E61)] p-2 rounded-lg">
+                          <span className="text-[10.5px] text-slate-300 font-semibold block">
                             Due Day
                           </span>
-                          <span className="font-mono font-semibold text-[var(--theme-text,#F8FAFC)]">
+                          <span className="font-mono font-bold text-slate-200 text-xs sm:text-sm">
                             {item.emiDayOfMonth}th monthly
                           </span>
                         </div>
@@ -1003,9 +1004,9 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                 </div>
 
                 {/* Dates & Notes */}
-                <div className="flex items-center justify-between text-xs text-[var(--theme-text-dim,#94A3B8)] flex-wrap gap-2">
+                <div className="flex items-center justify-between text-xs text-slate-300 font-medium flex-wrap gap-2">
                   <div className="flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)]" />
+                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
                     <span>
                       Started: {new Date(item.startDate).toLocaleDateString()}
                     </span>
@@ -1013,7 +1014,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
 
                   {item.dueDate && (
                     <div className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)]" />
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
                       <span className={isOverdue && !isSettled ? 'text-rose-400 font-bold' : ''}>
                         Due: {new Date(item.dueDate).toLocaleDateString()}
                         {diffDays !== null && !isSettled && (
@@ -1027,7 +1028,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                 </div>
 
                 {item.note && (
-                  <p className="text-xs text-[var(--theme-text-dim,#94A3B8)] bg-[var(--theme-card,#132438)]/50 p-2 rounded-lg italic">
+                  <p className="text-xs text-slate-200 bg-[var(--theme-card,#132438)]/90 border border-[var(--theme-border,#213E61)]/70 p-2.5 rounded-xl italic">
                     "{item.note}"
                   </p>
                 )}
@@ -1131,7 +1132,7 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
                     </button>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -1359,10 +1360,10 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-150">
-      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden text-left">
-        {/* Modal Header */}
-        <div className="p-4 sm:p-5 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-150">
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-t-[24px] sm:rounded-2xl max-w-lg w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col shadow-2xl overflow-hidden text-left">
+        {/* Modal Header (Pinned at top) */}
+        <div className="p-4 sm:p-5 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between shrink-0 bg-[var(--theme-surface,#0E1A29)]">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400">
               <Landmark className="w-4 h-4" />
@@ -1374,14 +1375,19 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
+            className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Modal Form Content */}
-        <form onSubmit={handleSubmit} className="p-4 sm:p-5 overflow-y-auto space-y-4 flex-1">
+        {/* Modal Form Content (Smooth Touch Scrolling, never blocks or freezes) */}
+        <form
+          id="loan-entry-form"
+          onSubmit={handleSubmit}
+          className="p-4 sm:p-5 space-y-4 flex-1 overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           {/* 1. Type Selector Tabs */}
           <div className="grid grid-cols-3 gap-1.5 p-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl">
             <button
@@ -1389,8 +1395,8 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
               onClick={() => handleTypeChange('lent')}
               className={`py-2 px-1 rounded-lg text-xs font-bold text-center flex flex-col sm:flex-row items-center justify-center gap-1 transition-all cursor-pointer ${
                 type === 'lent'
-                  ? 'bg-emerald-500 text-white shadow-sm'
-                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1401,8 +1407,8 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
               onClick={() => handleTypeChange('borrowed')}
               className={`py-2 px-1 rounded-lg text-xs font-bold text-center flex flex-col sm:flex-row items-center justify-center gap-1 transition-all cursor-pointer ${
                 type === 'borrowed'
-                  ? 'bg-rose-500 text-white shadow-sm'
-                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  ? 'bg-rose-500 text-white font-black shadow-sm'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               <ArrowDownLeft className="w-3.5 h-3.5" />
@@ -1413,8 +1419,8 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
               onClick={() => handleTypeChange('loan_emi')}
               className={`py-2 px-1 rounded-lg text-xs font-bold text-center flex flex-col sm:flex-row items-center justify-center gap-1 transition-all cursor-pointer ${
                 type === 'loan_emi'
-                  ? 'bg-sky-500 text-slate-950 shadow-sm'
-                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                  ? 'bg-sky-500 text-slate-950 font-black shadow-sm'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               <Building2 className="w-3.5 h-3.5" />
@@ -1425,7 +1431,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
           {/* 2. Person / Bank Name & Phone */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 {type === 'loan_emi' ? 'Bank or Institution Name *' : 'Person or Entity Name *'}
               </label>
               <input
@@ -1434,12 +1440,12 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={type === 'loan_emi' ? 'e.g. HDFC Bank, SBI Auto Loan' : 'e.g. John Doe, Sarah Jenkins'}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs sm:text-sm text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs sm:text-sm text-[var(--theme-text,#F8FAFC)] placeholder-slate-400 focus:outline-none focus:border-sky-400"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 {type === 'loan_emi' ? 'Loan Account / Ref No.' : 'Contact Phone (for WhatsApp)'}
               </label>
               <input
@@ -1447,7 +1453,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                 value={type === 'loan_emi' ? loanAccountNumber : phone}
                 onChange={(e) => type === 'loan_emi' ? setLoanAccountNumber(e.target.value) : setPhone(e.target.value)}
                 placeholder={type === 'loan_emi' ? 'e.g. LN-984321' : 'e.g. +91 9876543210'}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs sm:text-sm text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs sm:text-sm text-[var(--theme-text,#F8FAFC)] placeholder-slate-400 focus:outline-none focus:border-sky-400"
               />
             </div>
           </div>
@@ -1455,7 +1461,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
           {/* 3. Principal Amount & Date */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 Principal Amount *
               </label>
               <div className="relative">
@@ -1470,13 +1476,13 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                   value={principalAmountStr}
                   onChange={(e) => setPrincipalAmountStr(e.target.value)}
                   placeholder="0.00"
-                  className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 pl-7 pr-3 text-xs sm:text-sm font-mono font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
+                  className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 pl-7 pr-3 text-xs sm:text-sm font-mono font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 Start Date
               </label>
               <input
@@ -1484,7 +1490,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                 required
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
               />
             </div>
           </div>
@@ -1492,25 +1498,25 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
           {/* 4. Repayment Due Date & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 {type === 'loan_emi' ? 'Next Due / Maturity Date' : 'Target Settlement Date'}
               </label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
               >
                 <option value="Personal">Personal</option>
                 <option value="Friends & Family">Friends & Family</option>
@@ -1553,7 +1559,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
               <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-3">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                   <div className="space-y-1">
-                    <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
+                    <label className="text-[11px] font-bold text-slate-300 block">
                       Monthly EMI ({getCurrencyConfig().symbol})
                     </label>
                     <div className="relative">
@@ -1571,7 +1577,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
+                    <label className="text-[11px] font-bold text-slate-300 block">
                       Tenure (Months)
                     </label>
                     <input
@@ -1584,7 +1590,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
+                    <label className="text-[11px] font-bold text-slate-300 block">
                       Monthly Due Day
                     </label>
                     <input
@@ -1598,7 +1604,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
+                    <label className="text-[11px] font-bold text-slate-300 block">
                       Interest Rate (% p.a.)
                     </label>
                     <input
@@ -1613,7 +1619,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
 
                   {!editingItem && (
                     <div className="space-y-1">
-                      <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">
+                      <label className="text-[11px] font-bold text-slate-300 block">
                         Already Paid EMIs
                       </label>
                       <input
@@ -1632,7 +1638,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
 
           {/* 6. Remarks / Note */}
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+            <label className="text-xs font-bold text-slate-200">
               Notes & Remarks
             </label>
             <textarea
@@ -1640,27 +1646,29 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="e.g. Personal emergency assistance, agreed repayment schedule"
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl p-2 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-sky-400"
+              className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl p-2 text-xs text-[var(--theme-text,#F8FAFC)] placeholder-slate-400 focus:outline-none focus:border-sky-400"
             />
           </div>
-
-          {/* Submit Button */}
-          <div className="pt-2 flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white text-xs font-semibold cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2 rounded-xl text-xs font-bold shadow-md cursor-pointer hover:opacity-90 bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)]"
-            >
-              {editingItem ? 'Update Record' : 'Save Record'}
-            </button>
-          </div>
         </form>
+
+        {/* Modal Sticky Bottom Action Footer (ALWAYS 100% VISIBLE & NEVER CUT OFF) */}
+        <div className="p-3 sm:p-4 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-end gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-slate-200 hover:text-white text-xs font-semibold cursor-pointer transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            form="loan-entry-form"
+            className="px-6 py-2.5 rounded-xl text-xs font-bold shadow-md cursor-pointer hover:opacity-90 bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] transition-transform active:scale-95 flex items-center gap-1.5"
+          >
+            <Check className="w-4 h-4 stroke-[3]" />
+            <span>{editingItem ? 'Update Record' : 'Save Record'}</span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -1729,9 +1737,10 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-150">
-      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 text-left">
-        <div className="flex items-center justify-between pb-3 border-b border-[var(--theme-border,#213E61)]">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-150">
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-t-[24px] sm:rounded-2xl max-w-md w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col shadow-2xl overflow-hidden text-left">
+        {/* Header */}
+        <div className="p-4 sm:p-5 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between shrink-0 bg-[var(--theme-surface,#0E1A29)]">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
@@ -1740,7 +1749,7 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
               <h3 className="text-sm font-bold text-[var(--theme-text,#F8FAFC)]">
                 Record Payment / EMI
               </h3>
-              <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate block max-w-[220px]">
+              <span className="text-[11px] text-slate-300 truncate block max-w-[220px]">
                 {debtItem.title} • Balance: {formatCurrency(debtItem.remainingAmount)}
               </span>
             </div>
@@ -1748,23 +1757,29 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-[var(--theme-text-dim,#94A3B8)] hover:text-white"
+            className="p-1 rounded-lg text-slate-300 hover:text-white hover:bg-white/10"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3.5">
+        {/* Scrollable Form Body */}
+        <form
+          id="record-payment-form"
+          onSubmit={handleSubmit}
+          className="p-4 sm:p-5 space-y-3.5 flex-1 overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           {/* Amount */}
           <div className="space-y-1">
             <div className="flex justify-between items-center text-xs">
-              <label className="font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="font-bold text-slate-200">
                 Payment Amount ({getCurrencyConfig().symbol}) *
               </label>
               <button
                 type="button"
                 onClick={() => setAmountStr(String(debtItem.remainingAmount))}
-                className="text-[10px] text-sky-400 hover:underline font-bold cursor-pointer"
+                className="text-[11px] text-sky-400 hover:underline font-bold cursor-pointer"
               >
                 Pay Full Balance
               </button>
@@ -1781,7 +1796,7 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
                 value={amountStr}
                 onChange={(e) => setAmountStr(e.target.value)}
                 placeholder="0.00"
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 pl-7 pr-3 text-sm font-mono font-bold text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-emerald-500"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2.5 pl-7 pr-3 text-sm font-mono font-bold text-[var(--theme-text,#F8FAFC)] placeholder-slate-400 focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
@@ -1789,7 +1804,7 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
           {/* Date & Payment Mode */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 Payment Date
               </label>
               <input
@@ -1797,18 +1812,18 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-emerald-500"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+              <label className="text-xs font-bold text-slate-200">
                 Payment Method
               </label>
               <select
                 value={mode}
                 onChange={(e) => setMode(e.target.value as PaymentMode)}
-                className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+                className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none focus:border-emerald-500"
               >
                 <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
                 <option value="cash">Cash</option>
@@ -1821,7 +1836,7 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
 
           {/* Note */}
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)]">
+            <label className="text-xs font-bold text-slate-200">
               Reference / Note
             </label>
             <input
@@ -1829,12 +1844,12 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="e.g. Month 4 installment received via UPI"
-              className="w-full bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+              className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 px-3 text-xs text-[var(--theme-text,#F8FAFC)] placeholder-slate-400 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           {/* Integration with Daily Khata Ledger */}
-          <div className="p-3 rounded-xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] space-y-2">
+          <div className="p-3 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] space-y-2">
             <label className="flex items-center gap-2 text-xs font-bold text-[var(--theme-text,#F8FAFC)] cursor-pointer">
               <input
                 type="checkbox"
@@ -1848,30 +1863,32 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
                   : 'Record as Expense in Daily Khata passbook'}
               </span>
             </label>
-            <p className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] pl-5">
+            <p className="text-[10.5px] text-slate-300 pl-5">
               {debtItem.type === 'lent'
                 ? 'Will credit into your fund balances as recovered debt.'
                 : 'Will debit from your funds as loan repayment.'}
             </p>
           </div>
-
-          {/* Actions */}
-          <div className="pt-2 flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white text-xs font-semibold cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2 rounded-xl text-xs font-bold shadow-md cursor-pointer bg-emerald-500 text-white hover:bg-emerald-600 transition-all"
-            >
-              Confirm Payment
-            </button>
-          </div>
         </form>
+
+        {/* Modal Sticky Bottom Action Footer (ALWAYS VISIBLE) */}
+        <div className="p-3 sm:p-4 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] flex items-center justify-end gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-slate-200 hover:text-white text-xs font-semibold cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            form="record-payment-form"
+            className="px-6 py-2.5 rounded-xl text-xs font-bold shadow-md cursor-pointer bg-emerald-500 text-slate-950 font-black hover:bg-emerald-400 transition-all flex items-center gap-1.5"
+          >
+            <Check className="w-4 h-4 stroke-[3]" />
+            <span>Confirm Payment</span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -1899,7 +1916,7 @@ const PaymentHistoryModal: React.FC<PaymentHistoryModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-150">
-      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl max-w-md w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-left">
+      <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl max-w-md w-full max-h-[88dvh] sm:max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-left">
         <div className="p-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400">
@@ -1923,7 +1940,7 @@ const PaymentHistoryModal: React.FC<PaymentHistoryModalProps> = ({
           </button>
         </div>
 
-        <div className="p-4 overflow-y-auto space-y-2.5 flex-1">
+        <div className="p-4 overflow-y-auto space-y-2.5 flex-1 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
           {payments.length === 0 ? (
             <div className="text-center py-8 text-[var(--theme-text-dim,#94A3B8)] text-xs space-y-1">
               <Clock className="w-8 h-8 mx-auto opacity-40 mb-2" />
