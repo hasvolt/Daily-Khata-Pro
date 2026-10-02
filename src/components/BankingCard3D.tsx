@@ -64,37 +64,37 @@ export function BankingCard3D({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY }}
-        className="banking-card-3d relative overflow-hidden rounded-[20px] sm:rounded-2xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[radial-gradient(circle_at_82%_15%,var(--theme-primary-dim,rgba(56,189,248,0.22))_0%,var(--theme-card,#0E182A)_50%,var(--theme-bg,#050B14)_100%)] p-3.5 sm:p-4 md:p-[18px] shadow-none"
+        className="banking-card-3d relative overflow-hidden rounded-[20px] sm:rounded-2xl border border-[var(--theme-border,rgba(46,236,163,0.35))] bg-gradient-to-br from-[#0f3d25] via-[#092919] to-[#05170e] p-3.5 sm:p-4 md:p-[18px] shadow-xl"
       >
         {/* Subtle radial glow & theme-adaptive financial design watermark */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
           {/* Theme Primary Ambient Glow Spots */}
-          <div className="banking-card-ambient-glow absolute -right-16 -top-12 h-64 w-80 rounded-full bg-[var(--theme-primary,#38BDF8)]/20 blur-3xl" />
-          <div className="banking-card-ambient-glow absolute -left-16 -bottom-12 h-48 w-64 rounded-full bg-[var(--theme-primary-hover,#0284C7)]/15 blur-3xl" />
+          <div className="banking-card-ambient-glow absolute -right-16 -top-12 h-64 w-80 rounded-full bg-emerald-500/25 blur-3xl" />
+          <div className="banking-card-ambient-glow absolute -left-16 -bottom-12 h-48 w-64 rounded-full bg-emerald-600/20 blur-3xl" />
 
           {/* Flowing Financial Vector Waves (Matches All Active Themes) */}
-          <div className="banking-card-waves absolute right-[-2%] bottom-[12%] w-[72%] h-[64%] opacity-75">
+          <div className="banking-card-waves absolute right-[-2%] bottom-[12%] w-[72%] h-[64%] opacity-85">
             <svg className="w-full h-full" viewBox="0 0 520 280" fill="none" preserveAspectRatio="none">
-              <path d="M0 230C105 229 166 183 247 151C325 120 380 64 445 71C481 75 505 91 520 104" stroke="var(--theme-primary,#38BDF8)" strokeWidth="2.5" strokeOpacity=".85" />
-              <path d="M0 248C105 247 174 201 255 169C332 139 386 84 449 91C482 95 505 108 520 119" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.8" strokeOpacity=".55" />
-              <path d="M0 263C105 262 181 216 264 186C341 157 393 103 454 110C485 114 507 126 520 137" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.2" strokeOpacity=".3" />
+              <path d="M0 230C105 229 166 183 247 151C325 120 380 64 445 71C481 75 505 91 520 104" stroke="var(--theme-primary,#10B981)" strokeWidth="2.5" strokeOpacity=".85" />
+              <path d="M0 248C105 247 174 201 255 169C332 139 386 84 449 91C482 95 505 108 520 119" stroke="var(--theme-primary,#10B981)" strokeWidth="1.8" strokeOpacity=".55" />
+              <path d="M0 263C105 262 181 216 264 186C341 157 393 103 454 110C485 114 507 126 520 137" stroke="var(--theme-primary,#10B981)" strokeWidth="1.2" strokeOpacity=".3" />
             </svg>
           </div>
 
           {/* Concentric Precision Radar Rings in Active Theme Color */}
-          <div className="absolute -right-14 -bottom-14 w-56 h-56 rounded-full border border-[var(--theme-primary,#38BDF8)]/20" />
-          <div className="absolute -right-8 -bottom-8 w-44 h-44 rounded-full border border-[var(--theme-primary,#38BDF8)]/25" />
-          <div className="absolute -right-2 -bottom-2 w-32 h-32 rounded-full border border-[var(--theme-primary,#38BDF8)]/35" />
+          <div className="absolute -right-14 -bottom-14 w-56 h-56 rounded-full border border-emerald-400/20" />
+          <div className="absolute -right-8 -bottom-8 w-44 h-44 rounded-full border border-emerald-400/25" />
+          <div className="absolute -right-2 -bottom-2 w-32 h-32 rounded-full border border-emerald-400/35" />
 
           {/* Luxury Geometric Cyber Security Accents */}
-          <div className="absolute left-1/4 top-0 w-36 h-[1.5px] bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)]/45 to-transparent" />
-          <div className="absolute left-1/3 bottom-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)]/35 to-transparent" />
+          <div className="absolute left-1/4 top-0 w-36 h-[1.5px] bg-gradient-to-r from-transparent via-emerald-400/45 to-transparent" />
+          <div className="absolute left-1/3 bottom-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-emerald-400/35 to-transparent" />
 
           {/* Micro-Dot Grid Security Matrix in Theme Color */}
           <div
-            className="absolute right-0 top-0 w-[55%] h-[55%] opacity-25"
+            className="absolute right-0 top-0 w-[55%] h-[55%] opacity-30"
             style={{
-              backgroundImage: 'radial-gradient(var(--theme-primary,#38BDF8) 1.2px, transparent 1.2px)',
+              backgroundImage: 'radial-gradient(var(--theme-primary,#10B981) 1.2px, transparent 1.2px)',
               backgroundSize: '12px 12px',
               maskImage: 'linear-gradient(135deg, black, transparent 75%)',
               WebkitMaskImage: 'linear-gradient(135deg, black, transparent 75%)'
@@ -114,17 +114,16 @@ export function BankingCard3D({
         >
           {/* Header row */}
           <div className="flex items-center justify-between gap-1 sm:gap-2 min-w-0">
-            <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 shrink">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 shrink">
               <div
-                className="banking-card-icon-box h-[26px] w-[26px] sm:h-[30px] sm:w-[30px] rounded-lg sm:rounded-xl bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-none transition-transform duration-200 hover:scale-105"
-                style={{ boxShadow: 'none', filter: 'none' }}
+                className="banking-card-icon-box h-[28px] w-[28px] sm:h-[32px] sm:w-[32px] rounded-lg sm:rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 flex items-center justify-center shrink-0 shadow-sm transition-transform duration-200 hover:scale-105"
               >
-                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" style={{ filter: 'none', boxShadow: 'none' }} />
+                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.4]" />
               </div>
               <div className="flex items-center gap-1.5 min-w-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_rgba(52,211,153,0.9)] animate-pulse" />
-                <span className="banking-card-label text-[11px] sm:text-[13px] font-black tracking-wider text-white uppercase truncate">
-                  {isHindi ? 'कुल बैलेंस' : 'TOTAL NET BALANCE'}
+                <span className="banking-card-label text-[12px] sm:text-[14px] font-black tracking-wider text-white uppercase truncate">
+                  {isHindi ? 'कुल बैलेंस' : 'TOTAL BALANCE'}
                 </span>
                 <button
                   type="button"
@@ -133,32 +132,32 @@ export function BankingCard3D({
                     if (onTogglePrivacyMask) onTogglePrivacyMask();
                   }}
                   title={privacyMask ? (isHindi ? 'बैलेंस दिखाएं' : 'Show Balance') : (isHindi ? 'बैलेंस छिपाएं' : 'Hide Balance')}
-                  className="text-slate-200 hover:text-white p-1 rounded-lg hover:bg-white/10 active:scale-90 transition-all cursor-pointer shrink-0"
+                  className="text-emerald-200 hover:text-white p-1 rounded-lg hover:bg-emerald-500/20 active:scale-90 transition-all cursor-pointer shrink-0"
                   aria-label={privacyMask ? 'Show Balance' : 'Hide Balance'}
                 >
                   {privacyMask ? (
-                    <EyeOff className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[var(--theme-primary,#34D399)]" strokeWidth={2.4} />
+                    <EyeOff className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-400" strokeWidth={2.4} />
                   ) : (
-                    <Eye className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-200" strokeWidth={2.4} />
+                    <Eye className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-200 hover:text-white" strokeWidth={2.4} />
                   )}
                 </button>
               </div>
             </div>
 
             <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 max-w-[55%] xs:max-w-none">
-              {/* Distinct SECURE badge (compact on mobile, full text on sm+) */}
+              {/* Distinct SECURE badge */}
               <div className="hidden xs:flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-md sm:rounded-lg bg-emerald-950/80 border border-emerald-500/40 shrink-0">
                 <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400 shrink-0" />
                 <span className="hidden sm:inline text-[7.5px] sm:text-[8px] font-bold tracking-wider uppercase text-emerald-400">SECURED</span>
               </div>
-              {/* Distinct Date badge (never overflows on mobile) */}
-              <div className="banking-card-date-box flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-md sm:rounded-lg bg-[var(--theme-surface,#071C12)] border border-[var(--theme-border,rgba(46,236,163,0.25))] shadow-xs shrink-0 max-w-full">
-                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#10B981)] shrink-0" />
+              {/* Distinct Date badge */}
+              <div className="banking-card-date-box flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-md sm:rounded-lg bg-emerald-950/70 border border-emerald-500/35 shadow-xs shrink-0 max-w-full">
+                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400 shrink-0" />
                 <span className="banking-card-date text-[7.5px] xs:text-[8px] sm:text-[9px] font-bold text-emerald-300 uppercase whitespace-nowrap notranslate" translate="no">
                   {dateFormatted}
                 </span>
-                <span className="hidden md:inline text-[8px] text-[var(--theme-primary,#10B981)]/40">·</span>
-                <span className="hidden md:inline banking-card-date text-[8px] font-semibold text-[var(--theme-primary,#10B981)] whitespace-nowrap notranslate" translate="no">
+                <span className="hidden md:inline text-[8px] text-emerald-400/50">·</span>
+                <span className="hidden md:inline banking-card-date text-[8px] font-semibold text-emerald-300 whitespace-nowrap notranslate" translate="no">
                   {currentTime}
                 </span>
               </div>
@@ -166,13 +165,10 @@ export function BankingCard3D({
           </div>
 
           {/* Balance area & 3D Wallet Graphic */}
-          <div className="relative mt-1.5 sm:mt-2 flex items-center justify-between gap-3">
+          <div className="relative mt-2 sm:mt-2.5 flex items-center justify-between gap-3">
             <div className="relative z-10 min-w-0 flex-1">
-              <span className="text-[9.5px] sm:text-[10.5px] font-mono font-bold tracking-wider text-emerald-400 uppercase block mb-0.5">
-                AVAILABLE BALANCE
-              </span>
               <div
-                className="banking-card-amount font-mono text-[24px] xs:text-[29px] sm:text-[35px] md:text-[38px] leading-tight font-black text-white tracking-tight notranslate drop-shadow-none"
+                className="banking-card-amount font-mono text-[26px] xs:text-[31px] sm:text-[37px] md:text-[40px] leading-tight font-black text-white tracking-tight notranslate drop-shadow-none"
                 translate="no"
                 style={{
                   letterSpacing: '-0.03em',
@@ -182,8 +178,8 @@ export function BankingCard3D({
               >
                 {formatCurrency(totalWealth, privacyMask)}
               </div>
-              <p className="banking-card-subtitle text-[10px] sm:text-[11.5px] font-medium text-emerald-400/90 mt-0.5 whitespace-nowrap tracking-wide">
-                {isHindi ? 'कुल कैश और अकाउंट बैलेंस' : 'Your overall financial summary'}
+              <p className="banking-card-subtitle text-[10.5px] sm:text-[12px] font-medium text-emerald-300/90 mt-0.5 whitespace-nowrap tracking-wide">
+                {isHindi ? 'दैनिक खाता कुल शुद्ध शेष' : 'Total Net Cash & Account Balance'}
               </p>
             </div>
 
@@ -195,31 +191,31 @@ export function BankingCard3D({
               <svg viewBox="0 0 120 100" fill="none" className="w-full h-full" style={{ filter: 'none' }}>
                 <defs>
                   <linearGradient id="walletBodyGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="var(--theme-primary,#38BDF8)" />
-                    <stop offset="65%" stopColor="var(--theme-btn-hover,#0284C7)" />
-                    <stop offset="100%" stopColor="var(--theme-primary-hover,#0369A1)" />
+                    <stop offset="0%" stopColor="#10B981" />
+                    <stop offset="65%" stopColor="#059669" />
+                    <stop offset="100%" stopColor="#047857" />
                   </linearGradient>
                   <linearGradient id="walletFlapGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--theme-badge-text,#7DD3FC)" />
-                    <stop offset="100%" stopColor="var(--theme-primary,#38BDF8)" />
+                    <stop offset="0%" stopColor="#6EE7B7" />
+                    <stop offset="100%" stopColor="#10B981" />
                   </linearGradient>
                   <linearGradient id="cardGradHero" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="var(--theme-primary,#38BDF8)" />
-                    <stop offset="100%" stopColor="var(--theme-btn-bg,#0284C7)" />
+                    <stop offset="0%" stopColor="#34D399" />
+                    <stop offset="100%" stopColor="#059669" />
                   </linearGradient>
                 </defs>
                 {/* Background card peek */}
-                <rect x="25" y="10" width="58" height="32" rx="6" fill="url(#cardGradHero)" transform="rotate(-6 55 27)" opacity="0.9" />
-                <rect x="30" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.65" transform="rotate(-6 55 27)" />
+                <rect x="25" y="10" width="58" height="32" rx="6" fill="url(#cardGradHero)" transform="rotate(-6 55 27)" opacity="0.95" />
+                <rect x="30" y="14" width="22" height="3" rx="1.5" fill="#FFFFFF" opacity="0.75" transform="rotate(-6 55 27)" />
                 {/* Main Wallet Base */}
-                <rect x="14" y="24" width="92" height="66" rx="14" fill="url(#walletBodyGrad)" stroke="var(--theme-primary,#38BDF8)" strokeWidth="1.2" strokeOpacity="0.6" style={{ filter: 'none' }} />
+                <rect x="14" y="24" width="92" height="66" rx="14" fill="url(#walletBodyGrad)" stroke="#34D399" strokeWidth="1.2" strokeOpacity="0.7" style={{ filter: 'none' }} />
                 {/* Top specular highlight */}
-                <path d="M 22 26 Q 60 22 98 26" stroke="#FFFFFF" strokeWidth="1.5" strokeOpacity="0.45" fill="none" />
+                <path d="M 22 26 Q 60 22 98 26" stroke="#FFFFFF" strokeWidth="1.5" strokeOpacity="0.5" fill="none" />
                 {/* Clasp tab */}
-                <path d="M 72 45 L 98 45 A 9 9 0 0 1 98 63 L 72 63 Z" fill="url(#walletFlapGrad)" stroke="var(--theme-badge-text,#7DD3FC)" strokeWidth="1" />
+                <path d="M 72 45 L 98 45 A 9 9 0 0 1 98 63 L 72 63 Z" fill="url(#walletFlapGrad)" stroke="#A7F3D0" strokeWidth="1" />
                 {/* Clasp button */}
                 <circle cx="88" cy="54" r="4.5" fill="#FFFFFF" />
-                <circle cx="88" cy="54" r="2.5" fill="var(--theme-btn-hover,#0369A1)" />
+                <circle cx="88" cy="54" r="2.5" fill="#047857" />
               </svg>
             </div>
           </div>

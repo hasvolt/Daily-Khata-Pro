@@ -1084,12 +1084,13 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
             </div>
           </div>
 
-          {/* LCD / OLED Display Screen with Guaranteed Stable Height & 1-Click Copy */}
-          <div className={`p-4 sm:p-5 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-inner space-y-1 text-right relative overflow-hidden flex flex-col justify-between backdrop-blur-md ${
-            calcScale === 'jumbo' ? 'min-h-[155px]' : calcScale === 'large' ? 'min-h-[140px]' : 'min-h-[120px]'
+          {/* LCD / OLED Display Screen with Guaranteed Stable Height & Dedicated Header */}
+          <div className={`p-4 sm:p-5 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-inner space-y-1.5 text-right relative overflow-hidden flex flex-col justify-between backdrop-blur-md ${
+            calcScale === 'jumbo' ? 'min-h-[160px]' : calcScale === 'large' ? 'min-h-[145px]' : 'min-h-[125px]'
           }`}>
-            <div className="flex items-center justify-between text-[var(--theme-text-dim,#94A3B8)] min-h-[22px]">
-              <div className="flex items-center gap-1.5">
+            {/* Top row: Status on left, Copy button on right (Cleanly separated so it NEVER hides numbers) */}
+            <div className="flex items-center justify-between text-[var(--theme-text-dim,#94A3B8)] min-h-[24px]">
+              <div className="flex items-center gap-1.5 shrink-0">
                 {memoryVal !== 0 ? (
                   <span className="text-[11px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 px-2 py-0.5 rounded-md border border-[var(--theme-primary,#38BDF8)]/30 shrink-0">
                     MEMORY: {memoryVal}
@@ -1097,39 +1098,42 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 ) : (
                   <span className="text-[11px] font-mono text-[#64748B] shrink-0 font-semibold">CALC READY</span>
                 )}
-                <button
-                  type="button"
-                  onPointerDown={(e) => e.preventDefault()}
-                  onClick={() => {
-                    if (stdLiveResult && stdLiveResult !== '0') {
-                      handleCopy(stdLiveResult, 'calc-res');
-                    }
-                  }}
-                  className="px-2 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[10.5px] font-mono text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)] transition-colors flex items-center gap-1 cursor-pointer"
-                  title="Copy Result"
-                >
-                  {copiedKey === 'calc-res' ? (
-                    <>
-                      <Check className="w-3 h-3 text-emerald-400" />
-                      <span className="text-emerald-400 font-bold">Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3 h-3" />
-                      <span>Copy</span>
-                    </>
-                  )}
-                </button>
               </div>
 
-              <div className={`font-mono text-[var(--theme-text-dim,#94A3B8)] overflow-x-auto whitespace-nowrap custom-scrollbar pl-3 font-semibold ${
-                calcScale === 'jumbo' ? 'text-[17px]' : calcScale === 'large' ? 'text-[16px]' : 'text-[14px]'
-              }`}>
-                {stdExpr || '0'}
-              </div>
+              {/* Dedicated Copy Button positioned at top-right away from the numbers */}
+              <button
+                type="button"
+                onPointerDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  if (stdLiveResult && stdLiveResult !== '0') {
+                    handleCopy(stdLiveResult, 'calc-res');
+                  }
+                }}
+                className="px-2.5 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[11px] font-mono text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)] transition-colors flex items-center gap-1 cursor-pointer shrink-0 shadow-xs"
+                title="Copy Result"
+              >
+                {copiedKey === 'calc-res' ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400 font-bold">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
             </div>
 
-            {/* Main Result Number */}
+            {/* Expression Row: Dedicated full-width row right-aligned so input numbers are always visible */}
+            <div className={`font-mono text-[var(--theme-text-dim,#94A3B8)] overflow-x-auto whitespace-nowrap no-scrollbar py-0.5 font-semibold text-right ${
+              calcScale === 'jumbo' ? 'text-[17px]' : calcScale === 'large' ? 'text-[16px]' : 'text-[14px]'
+            }`}>
+              {stdExpr || '0'}
+            </div>
+
+            {/* Main Result Number: Un-truncated, scrollable horizontally if very wide, completely immune to privacyMask */}
             <div 
               onClick={() => {
                 if (stdLiveResult && stdLiveResult !== '0') {
@@ -1137,21 +1141,21 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
                 }
               }}
               title="Click to copy result"
-              className={`font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] tracking-tight truncate select-all py-0.5 cursor-pointer hover:opacity-95 active:scale-[0.99] transition-transform ${
+              className={`font-mono font-black text-[var(--theme-primary,#38BDF8)] tracking-tight overflow-x-auto whitespace-nowrap no-scrollbar select-all py-0.5 cursor-pointer hover:opacity-95 active:scale-[0.99] transition-transform text-right ${
                 calcScale === 'jumbo'
-                  ? 'text-[44px] sm:text-[58px] md:text-[68px] leading-tight'
+                  ? 'text-[36px] xs:text-[44px] sm:text-[56px] md:text-[66px] leading-tight'
                   : calcScale === 'large'
-                  ? 'text-[38px] sm:text-[50px] md:text-[60px] leading-tight'
-                  : 'text-[28px] sm:text-[34px] md:text-[38px] leading-tight'
+                  ? 'text-[32px] xs:text-[38px] sm:text-[48px] md:text-[56px] leading-tight'
+                  : 'text-[28px] xs:text-[32px] sm:text-[40px] leading-tight'
               }`}>
-              {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : (stdLiveResult || '0')}
+              {stdLiveResult || '0'}
             </div>
 
-            {/* Indian Lakhs/Crores Word Indicator - Fixed height to avoid ANY layout shift */}
+            {/* Indian Lakhs/Crores Word Indicator: Shows full exact rupee amount */}
             <div className="h-6 flex items-center justify-end text-[12px] sm:text-[13px] font-mono font-bold text-[#10B981] overflow-hidden">
               {parseFloat(stdLiveResult) > 0 ? (
-                <div className="flex items-center gap-1 truncate">
-                  <span>≈ {getCurrencyConfig(getCurrentLanguage()).symbol} {parseFloat(stdLiveResult).toLocaleString('en-IN')}</span>
+                <div className="flex items-center gap-1.5 truncate">
+                  <span>= {getCurrencyConfig(getCurrentLanguage()).symbol} {Number(stdLiveResult).toLocaleString('en-IN', { maximumFractionDigits: 6 })}</span>
                   {formatIndianWords(parseFloat(stdLiveResult)) && (
                     <span className="bg-[#10B981]/15 px-1.5 py-0.5 rounded text-[#10B981] border border-[#10B981]/30 text-[11px]">
                       ({formatIndianWords(parseFloat(stdLiveResult))})

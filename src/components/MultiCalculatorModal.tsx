@@ -583,34 +583,38 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
               <div className={`p-4 sm:p-5 rounded-2xl bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] shadow-inner space-y-1 text-right relative overflow-hidden flex flex-col justify-between ${
                 calcScale === 'jumbo' ? 'min-h-[145px]' : calcScale === 'large' ? 'min-h-[130px]' : 'min-h-[115px]'
               }`}>
+                {/* Top row: Status on left, dedicated full row */}
                 <div className="flex items-center justify-between text-[var(--theme-text-dim,#94A3B8)] min-h-[22px]">
                   {memoryVal !== 0 ? (
                     <span className="text-[11px] font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded border border-[#10B981]/30 shrink-0">
                       M = {memoryVal}
                     </span>
                   ) : (
-                    <span className="text-[11px] font-mono text-[#64748B] shrink-0">CALCULATOR</span>
+                    <span className="text-[11px] font-mono text-[#64748B] shrink-0 font-semibold">CALCULATOR</span>
                   )}
-                  <div className="text-[14px] sm:text-[16px] font-mono text-[var(--theme-text-dim,#94A3B8)] overflow-x-auto whitespace-nowrap custom-scrollbar pl-2 font-semibold">
-                    {stdExpr || '0'}
-                  </div>
                 </div>
 
-                <div className={`font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] tracking-tight truncate select-all py-0.5 ${
+                {/* Expression row right-aligned */}
+                <div className="w-full text-right text-[14px] sm:text-[16px] font-mono text-[var(--theme-text-dim,#94A3B8)] overflow-x-auto whitespace-nowrap no-scrollbar py-0.5 font-semibold">
+                  {stdExpr || '0'}
+                </div>
+
+                {/* Main Result: Un-truncated, unmasked, horizontal scroll for large numbers */}
+                <div className={`w-full text-right font-mono font-black text-[var(--theme-primary,#38BDF8)] tracking-tight overflow-x-auto whitespace-nowrap no-scrollbar select-all py-0.5 ${
                   calcScale === 'jumbo'
-                    ? 'text-[40px] sm:text-[50px] md:text-[60px] leading-tight'
+                    ? 'text-[36px] sm:text-[46px] md:text-[56px] leading-tight'
                     : calcScale === 'large'
-                    ? 'text-[34px] sm:text-[44px] md:text-[50px] leading-tight'
-                    : 'text-[28px] sm:text-[34px] leading-tight'
+                    ? 'text-[30px] sm:text-[38px] md:text-[46px] leading-tight'
+                    : 'text-[26px] sm:text-[32px] leading-tight'
                 }`}>
-                  {privacyMask ? `${getCurrencyConfig(getCurrentLanguage()).symbol} ****` : (stdResult || '0')}
+                  {stdResult || '0'}
                 </div>
 
-                {/* Indian words preview in fixed height container to stop screen jumping */}
+                {/* Indian words preview showing exact full rupee calculation */}
                 <div className="h-5 flex items-center justify-end text-[12px] font-mono font-bold text-[#10B981] overflow-hidden">
                   {parseFloat(stdResult) > 0 ? (
-                    <div className="flex items-center gap-1 truncate">
-                      <span>≈ {getCurrencyConfig(getCurrentLanguage()).symbol} {parseFloat(stdResult).toLocaleString('en-IN')}</span>
+                    <div className="flex items-center gap-1.5 truncate">
+                      <span>= {getCurrencyConfig(getCurrentLanguage()).symbol} {Number(stdResult).toLocaleString('en-IN', { maximumFractionDigits: 6 })}</span>
                       {formatIndianWords(parseFloat(stdResult)) && (
                         <span className="bg-[#10B981]/15 px-1.5 py-0.5 rounded text-[#10B981] border border-[#10B981]/30 text-[11px]">
                           ({formatIndianWords(parseFloat(stdResult))})

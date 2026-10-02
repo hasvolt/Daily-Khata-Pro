@@ -371,9 +371,22 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
               </div>
             </div>
 
-            {/* Quick Actions / Search Bar */}
-            <div className="w-full md:w-80 mt-2 md:mt-0">
-              <div className="relative">
+            {/* Quick Actions / Search Bar & Link to Blog */}
+            <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onNavigateTab) onNavigateTab('blog');
+                  else window.location.href = '/blog';
+                }}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-semibold text-emerald-400 hover:text-emerald-300 hover:border-emerald-500/50 transition-all shrink-0 cursor-pointer"
+                title={isHindi ? 'फाइनेंस ब्लॉग व गाइड्स देखें' : 'Visit Finance Blog & Practical Guides'}
+              >
+                <FileText className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{isHindi ? 'फाइनेंस ब्लॉग व गाइड्स →' : 'Finance Blog & Guides →'}</span>
+              </button>
+
+              <div className="relative flex-1 md:w-64">
                 <Search className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"

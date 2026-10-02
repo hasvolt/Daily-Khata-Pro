@@ -2980,7 +2980,7 @@ function AppContent() {
 
           {/* Tier 1: Editorial & Knowledge Navigation */}
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11.5px] sm:text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)]/90 max-w-2xl px-2">
-            <button onClick={() => setCurrentTab('blog')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'रोज़फाइबर ब्लॉग' : 'Rozfiber Blog'}</button>
+            <button onClick={() => setCurrentTab('blog')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'ब्लॉग' : 'Blog'}</button>
             <span className="opacity-30">•</span>
             <button onClick={() => setCurrentTab('invoice')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'इनवॉइस जनरेटर' : 'Invoice Generator'}</button>
             <span className="opacity-30">•</span>

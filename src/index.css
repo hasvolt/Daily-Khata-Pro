@@ -6,12 +6,12 @@
 @layer base {
   :root {
     /* Base Neutral Surface Architecture (Default: Green Premium Palette matching reference) */
-    --theme-bg: #041009;
-    --theme-surface: #071C12;
-    --theme-card: #0A2619;
-    --theme-card-hover: #0F3822;
-    --theme-border: rgba(46, 236, 163, 0.28);
-    --theme-border-subtle: rgba(46, 236, 163, 0.14);
+    --theme-bg: #072014;
+    --theme-surface: #0B2A1B;
+    --theme-card: #0F3522;
+    --theme-card-hover: #15452D;
+    --theme-border: rgba(46, 236, 163, 0.32);
+    --theme-border-subtle: rgba(46, 236, 163, 0.16);
     --theme-text: #F2FFF7;
     --theme-text-muted: #80AB95;
     --theme-text-dim: #547A67;
@@ -19,9 +19,9 @@
     /* Theme Primary Accent Tokens */
     --theme-primary: #10B981;
     --theme-primary-hover: #059669;
-    --theme-primary-dim: rgba(16, 185, 129, 0.20);
-    --theme-primary-border: rgba(16, 185, 129, 0.45);
-    --theme-glow: rgba(16, 185, 129, 0.35);
+    --theme-primary-dim: rgba(16, 185, 129, 0.22);
+    --theme-primary-border: rgba(16, 185, 129, 0.48);
+    --theme-glow: rgba(16, 185, 129, 0.40);
     --theme-badge-text: #34D399;
     --theme-btn-bg: #10B981;
     --theme-btn-hover: #059669;
@@ -128,21 +128,21 @@
 
   [data-theme="emerald"] {
     /* Emerald Forest & Deep Jade Velvet Atmosphere - Premium Reference Palette */
-    --theme-bg: #041009;
-    --theme-surface: #071C12;
-    --theme-card: #0A2619;
-    --theme-card-hover: #0F3822;
-    --theme-border: rgba(46, 236, 163, 0.28);
-    --theme-border-subtle: rgba(46, 236, 163, 0.14);
+    --theme-bg: #072014;
+    --theme-surface: #0B2A1B;
+    --theme-card: #0F3522;
+    --theme-card-hover: #15452D;
+    --theme-border: rgba(46, 236, 163, 0.32);
+    --theme-border-subtle: rgba(46, 236, 163, 0.16);
     --theme-text: #F2FFF7;
     --theme-text-muted: #80AB95;
     --theme-text-dim: #547A67;
 
     --theme-primary: #10B981;
     --theme-primary-hover: #059669;
-    --theme-primary-dim: rgba(16, 185, 129, 0.20);
-    --theme-primary-border: rgba(16, 185, 129, 0.45);
-    --theme-glow: rgba(16, 185, 129, 0.35);
+    --theme-primary-dim: rgba(16, 185, 129, 0.22);
+    --theme-primary-border: rgba(16, 185, 129, 0.48);
+    --theme-glow: rgba(16, 185, 129, 0.40);
     --theme-badge-text: #34D399;
     --theme-btn-bg: #10B981;
     --theme-btn-hover: #059669;

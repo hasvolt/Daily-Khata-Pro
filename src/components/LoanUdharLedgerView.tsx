@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   DebtItem,
   DebtType,
@@ -1359,8 +1360,8 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-150">
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-150">
       <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-t-[24px] sm:rounded-2xl max-w-lg w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col shadow-2xl overflow-hidden text-left">
         {/* Modal Header (Pinned at top) */}
         <div className="p-4 sm:p-5 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between shrink-0 bg-[var(--theme-surface,#0E1A29)]">
@@ -1381,12 +1382,12 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
           </button>
         </div>
 
-        {/* Modal Form Content (Smooth Touch Scrolling, never blocks or freezes) */}
+        {/* Modal Form Content (Smooth Touch Scrolling, min-h-0 enables internal scrollbar on mobile) */}
         <form
           id="loan-entry-form"
           onSubmit={handleSubmit}
-          className="p-4 sm:p-5 space-y-4 flex-1 overflow-y-auto overscroll-contain"
-          style={{ WebkitOverflowScrolling: 'touch' }}
+          className="p-4 sm:p-5 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
         >
           {/* 1. Type Selector Tabs */}
           <div className="grid grid-cols-3 gap-1.5 p-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl">
@@ -1670,7 +1671,8 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
@@ -1736,8 +1738,8 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-150">
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-150">
       <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-t-[24px] sm:rounded-2xl max-w-md w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col shadow-2xl overflow-hidden text-left">
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between shrink-0 bg-[var(--theme-surface,#0E1A29)]">
@@ -1767,8 +1769,8 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
         <form
           id="record-payment-form"
           onSubmit={handleSubmit}
-          className="p-4 sm:p-5 space-y-3.5 flex-1 overflow-y-auto overscroll-contain"
-          style={{ WebkitOverflowScrolling: 'touch' }}
+          className="p-4 sm:p-5 space-y-3.5 flex-1 min-h-0 overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
         >
           {/* Amount */}
           <div className="space-y-1">
@@ -1890,7 +1892,8 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
@@ -1914,8 +1917,8 @@ const PaymentHistoryModal: React.FC<PaymentHistoryModalProps> = ({
 }) => {
   const payments = debtItem.payments || [];
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-150">
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-150">
       <div className="bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] rounded-2xl max-w-md w-full max-h-[88dvh] sm:max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-left">
         <div className="p-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -1940,7 +1943,7 @@ const PaymentHistoryModal: React.FC<PaymentHistoryModalProps> = ({
           </button>
         </div>
 
-        <div className="p-4 overflow-y-auto space-y-2.5 flex-1 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div className="p-4 overflow-y-auto space-y-2.5 flex-1 min-h-0 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}>
           {payments.length === 0 ? (
             <div className="text-center py-8 text-[var(--theme-text-dim,#94A3B8)] text-xs space-y-1">
               <Clock className="w-8 h-8 mx-auto opacity-40 mb-2" />
@@ -1997,6 +2000,7 @@ const PaymentHistoryModal: React.FC<PaymentHistoryModalProps> = ({
           </span>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

@@ -35,9 +35,6 @@ import {
 import { AppLanguage } from '../types';
 import { PortableText } from '@portabletext/react';
 import {
-  LIVE_MARKET_INDICES,
-  BREAKING_NEWS_HEADLINES,
-  COMMERCIAL_ARTICLES,
   CommercialArticle
 } from '../data/newsPortalData';
 import { getSanityPosts, urlFor } from '../utils/sanityClient';
@@ -276,14 +273,9 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     };
   }, []);
 
-  // Filtered articles (Live Sanity CMS blogs + Comprehensive Research articles)
+  // Dedicated Sanity CMS blog articles only (Strictly separate from research/news)
   const allArticles = useMemo(() => {
-    if (sanityArticles.length > 0) {
-      const sanitySlugs = new Set(sanityArticles.map(a => a.slug || a.id));
-      const remainingCommercial = COMMERCIAL_ARTICLES.filter(a => !sanitySlugs.has(a.id) && !sanitySlugs.has(a.slug));
-      return [...sanityArticles, ...remainingCommercial];
-    }
-    return COMMERCIAL_ARTICLES;
+    return sanityArticles;
   }, [sanityArticles]);
 
   // Toggle bookmark
@@ -299,14 +291,6 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
       return updated;
     });
   };
-
-  // Cycling breaking news headlines
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setBreakingIndex(prev => (prev + 1) % BREAKING_NEWS_HEADLINES.length);
-    }, 5500);
-    return () => clearInterval(timer);
-  }, []);
 
   // Filtered articles
   const filteredArticles = useMemo(() => {
@@ -371,7 +355,8 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     const list = [
       { id: 'all', label: isHindi ? 'सभी लेख' : 'All Articles', icon: Globe2 },
       { id: 'finance', label: isHindi ? 'फाइनेंस' : 'Finance', icon: Landmark },
-      { id: 'technology', label: isHindi ? 'टेक्नोलॉजी' : 'Technology', icon: Cpu },
+      { id: 'saving', label: isHindi ? 'बचत व फंड' : 'Savings & Fund', icon: CheckCircle2 },
+      { id: 'budgeting', label: isHindi ? 'बजट' : 'Budgeting', icon: Scale },
       { id: 'business', label: isHindi ? 'बिज़नेस' : 'Business', icon: Building2 },
     ];
 
@@ -383,7 +368,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
         existingIds.add(cId);
         list.push({
           id: cId,
-          label: isHindi ? a.categoryLabel.hi : a.categoryLabel.en,
+          label: isHindi ? a.categoryLabel?.hi || a.categoryLabel?.en : a.categoryLabel?.en || cId,
           icon: Layers,
         });
       }
@@ -393,8 +378,7 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
     return list;
   }, [allArticles, bookmarkedIds.length, isHindi]);
 
-  const featuredArticle = allArticles.find(a => a.isFeatured) || allArticles[0] || COMMERCIAL_ARTICLES[0];
-  const currentBreaking = BREAKING_NEWS_HEADLINES[breakingIndex];
+  const featuredArticle = allArticles.find(a => a.isFeatured) || allArticles[0] || null;
 
   return (
     <div className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] pb-24 font-sans selection:bg-[var(--theme-primary,#38BDF8)] selection:text-black">
@@ -438,15 +422,28 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
               </div>
             </div>
 
-            {/* Search Bar */}
+            {/* Search Bar & Switch to Research/News Portal */}
             <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onNavigateTab) onNavigateTab('news');
+                  else navigate('/news');
+                }}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] text-xs font-semibold text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:border-[var(--theme-primary,#38BDF8)] transition-all shrink-0 cursor-pointer"
+                title={isHindi ? 'वाणिज्यिक व मार्केट रिसर्च देखें' : 'Visit Market & Research Portal'}
+              >
+                <Globe2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                <span>{isHindi ? 'मार्केट व रिसर्च पोर्टल →' : 'Market & Research Portal →'}</span>
+              </button>
+
               <div className="relative flex-1 md:w-64">
                 <Search className="w-4 h-4 text-[var(--theme-text-dim,#94A3B8)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder={isHindi ? 'समाचार, लेखक या विषय खोजें...' : 'Search articles, topics or authors...'}
+                  placeholder={isHindi ? 'ब्लॉग लेख, लेखक या विषय खोजें...' : 'Search blog articles, topics or authors...'}
                   className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-xl py-2 pl-9 pr-8 text-xs text-[var(--theme-text,#F8FAFC)] placeholder:text-[var(--theme-text-dim,#64748B)] focus:outline-none focus:border-[var(--theme-primary,#38BDF8)] transition-all"
                 />
                 {searchQuery && (
@@ -591,8 +588,8 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                     ? 'आपकी सहेजी गई पढ़ने की सूची'
                     : 'Your Saved Reading List'
                   : isHindi
-                  ? 'नवीनतम वाणिज्यिक व शोध रिपोर्ट'
-                  : 'Latest Commercial & Analytical Reports'}
+                  ? 'नवीनतम वित्तीय लेख एवं संपादकीय गाइड्स'
+                  : 'Latest Finance Articles & Editorial Guides'}
               </span>
               <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)]">
                 {isLoading ? '...' : filteredArticles.length}
@@ -620,8 +617,8 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
                     ? 'आपने अभी तक कोई लेख बुकमार्क नहीं किया है।'
                     : 'You have not saved any articles yet.'
                   : isHindi
-                  ? 'खोज मापदंड से मेल खाने वाला कोई लेख नहीं मिला।'
-                  : 'No commercial articles matched your search query.'}
+                  ? 'खोज मापदंड से मेल खाने वाला कोई ब्लॉग लेख नहीं मिला।'
+                  : 'No finance blog articles matched your search query.'}
               </p>
               <button
                 type="button"
@@ -746,17 +743,17 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 text-[var(--theme-primary,#38BDF8)] text-xs font-mono font-bold">
               <Mail className="w-3.5 h-3.5" />
-              {isHindi ? 'वाणिज्यिक अनुसंधान बुलेटिन' : 'COMMERCIAL MARKET DISPATCH'}
+              {isHindi ? 'रोज़फाइबर फाइनेंस बुलेटिन' : 'ROZFIBER FINANCE BULLETIN'}
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-[var(--theme-text,#F8FAFC)]">
               {isHindi
-                ? 'संस्थागत शोध, बाज़ार विश्लेषण और नीति अपडेट सीधे पाएं'
-                : 'Get Institutional Research & Policy Briefs Every Morning'}
+                ? 'व्यावहारिक वित्तीय समझ, बजट और टूल्स अपडेट सीधे पाएं'
+                : 'Get Practical Finance & Money Management Guides'}
             </h3>
             <p className="text-xs sm:text-sm text-[var(--theme-text-dim,#94A3B8)] max-w-xl mx-auto">
               {isHindi
-                ? 'निजी इक्विटी, मैक्रोइकॉनॉमिक्स और कॉर्पोरेट टैक्स के अग्रणी अर्थशास्त्रियों व विश्लेषकों द्वारा तैयार किया गया दैनिक सारांश।'
-                : 'Curated financial intelligence, regulatory changes and sector outlooks delivered directly for decision makers.'}
+                ? 'बजट, इमरजेंसी फंड, बचत और दैनिक खाता प्रबंधन पर शोध-आधारित वित्तीय संपादकीय लेख।'
+                : 'Research-backed insights on budgeting, emergency savings, and practical financial tools.'}
             </p>
 
             <form
