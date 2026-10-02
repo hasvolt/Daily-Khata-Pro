@@ -194,9 +194,22 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  const server = app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
   });
+
+  const handleShutdown = (signal: string) => {
+    console.log(`Received ${signal}, shutting down gracefully...`);
+    server.close(() => {
+      process.exit(0);
+    });
+    setTimeout(() => {
+      process.exit(0);
+    }, 1000).unref();
+  };
+
+  process.on("SIGTERM", () => handleShutdown("SIGTERM"));
+  process.on("SIGINT", () => handleShutdown("SIGINT"));
 }
 
 startServer();

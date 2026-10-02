@@ -71,44 +71,53 @@ export function SummaryCard3D({
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.2 }}
-        className="group summary-card-3d homepage-elevated-card relative overflow-hidden rounded-[20px] sm:rounded-2xl border border-[var(--theme-border,#143750)] hover:border-[var(--theme-primary,#38BDF8)]/50 bg-[var(--theme-card,#0c1d2e)] shadow-sm hover:shadow-md transition-all cursor-pointer select-none text-left p-3.5 sm:p-4 md:p-[18px]"
+        className="group summary-card-3d homepage-elevated-card relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary-border,rgba(56,189,248,0.4))] backdrop-blur-xl transition-all cursor-pointer select-none text-left p-2.5 xs:p-3 sm:p-4 md:p-[18px]"
       >
+        {/* Rich Ambient Atmospheric Glow matching active theme */}
+        <div className="summary-card-ambient-glow absolute inset-0 pointer-events-none overflow-hidden select-none">
+          <div className="absolute -right-14 -top-12 h-48 w-64 rounded-full bg-[var(--theme-primary,#38BDF8)]/15 blur-3xl" />
+          <div className="absolute -left-14 -bottom-10 h-40 w-52 rounded-full bg-[var(--theme-primary,#38BDF8)]/10 blur-3xl" />
+        </div>
+
+        {/* Top subtle glass rim highlight */}
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+
         {/* Top Header Row */}
         <div className="relative z-10 flex items-center justify-between gap-1.5 mb-2 sm:mb-2.5">
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.4))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(56,189,248,0.2)] transition-transform duration-200 group-hover:scale-105">
-              <Calendar className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.2]" />
+            <div className="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_0_10px_var(--theme-glow,rgba(56,189,248,0.25))] transition-transform duration-200 group-hover:scale-105">
+              <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="summary-card-title text-[13.5px] sm:text-[15px] font-bold text-[var(--theme-text,#F8FAFC)] truncate leading-tight tracking-tight">
+              <h3 className="summary-card-title text-[13px] sm:text-[14.5px] font-bold text-white truncate leading-tight tracking-tight">
                 {title}
               </h3>
-              <p className="summary-card-sub text-[10px] sm:text-[11px] font-medium text-[var(--theme-text-muted,#94A3B8)] truncate mt-0.5">
+              <p className="summary-card-sub text-[9.5px] sm:text-[11px] font-medium text-[var(--theme-text-muted,#94A3B8)] truncate mt-0.5">
                 {subtitle}
               </p>
             </div>
           </div>
 
-          {/* Period Badge */}
-          <div className="summary-badge px-2.5 py-1 sm:px-3 sm:py-1 rounded-lg border border-[var(--theme-border,#143750)] bg-[var(--theme-surface,#0b2234)] text-[var(--theme-primary,#38BDF8)] text-[10px] sm:text-[11px] font-bold shrink-0 shadow-2xs notranslate">
+          {/* Period Badge (Rounded) */}
+          <div className="summary-badge px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-surface,#0E1A29)]/85 text-[var(--theme-primary,#38BDF8)] text-[9.5px] sm:text-[10.5px] font-bold shrink-0 shadow-2xs notranslate">
             {periodBadge}
           </div>
         </div>
 
-        {/* 2 Inner Cards Grid: Income & Expense */}
+        {/* 2 Inner Cards Grid: Income & Expense (Rounded Themed Boxes with Subtle Inner Glow) */}
         <div className="relative z-10 grid grid-cols-2 gap-2 sm:gap-2.5">
           {/* Income Box */}
-          <div className="summary-stat-box rounded-xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#071927)] px-3 py-2 sm:px-3.5 sm:py-2.5 shadow-2xs">
+          <div className="summary-stat-box rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all">
             <div className="flex items-center gap-1.5">
-              <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
-                <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-400 shrink-0">
+                <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
               </div>
-              <span className="summary-stat-label text-[11px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
+              <span className="summary-stat-label text-[10.5px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                 {defaultIncomeLabel}
               </span>
             </div>
             <div
-              className="summary-stat-income font-mono text-[15.5px] xs:text-[17px] sm:text-[20px] font-bold text-emerald-500 dark:text-[#10B981] mt-1 truncate notranslate tracking-tight drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]"
+              className="summary-stat-income font-mono text-[14.5px] xs:text-[16px] sm:text-[19px] font-bold text-emerald-400 mt-1 truncate notranslate tracking-tight"
               translate="no"
             >
               +{formatCurrency(incomeValue, privacyMask)}
@@ -116,17 +125,17 @@ export function SummaryCard3D({
           </div>
 
           {/* Expense Box */}
-          <div className="summary-stat-box rounded-xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#071927)] px-3 py-2 sm:px-3.5 sm:py-2.5 shadow-2xs">
+          <div className="summary-stat-box rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all">
             <div className="flex items-center gap-1.5">
-              <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-rose-950/80 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
-                <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-rose-500/15 border border-rose-500/35 flex items-center justify-center text-rose-400 shrink-0">
+                <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
               </div>
-              <span className="summary-stat-label text-[11px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
+              <span className="summary-stat-label text-[10.5px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                 {defaultExpenseLabel}
               </span>
             </div>
             <div
-              className="summary-stat-expense font-mono text-[15.5px] xs:text-[17px] sm:text-[20px] font-bold text-rose-500 dark:text-[#FF5252] mt-1 truncate notranslate tracking-tight drop-shadow-[0_0_6px_rgba(244,63,94,0.3)]"
+              className="summary-stat-expense font-mono text-[14.5px] xs:text-[16px] sm:text-[19px] font-bold text-rose-400 mt-1 truncate notranslate tracking-tight drop-shadow-[0_0_6px_rgba(244,63,94,0.3)]"
               translate="no"
             >
               -{formatCurrency(expenseValue, privacyMask)}
@@ -134,21 +143,21 @@ export function SummaryCard3D({
           </div>
         </div>
 
-        {/* Bottom Savings Row */}
-        <div className="summary-stat-box relative z-10 mt-2 sm:mt-2.5 rounded-xl border border-[var(--theme-border,#213E61)]/75 bg-[var(--theme-surface,#071927)] px-3 py-2 sm:px-3.5 sm:py-2 flex items-center justify-between shadow-2xs">
+        {/* Bottom Savings Row (Rounded Themed Box) */}
+        <div className="summary-stat-box relative z-10 mt-1.5 sm:mt-2.5 rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2 flex items-center justify-between transition-all">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-2xs">
-              <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
+            <div className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-lg bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_0_8px_var(--theme-glow,rgba(56,189,248,0.2))]">
+              <BarChart3 className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.2]" />
             </div>
-            <span className="summary-stat-label text-[11px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
+            <span className="summary-stat-label text-[10.5px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
               {defaultNetLabel}
             </span>
           </div>
           <div
-            className={`summary-savings-val font-mono text-[15px] xs:text-[16.5px] sm:text-[19px] font-bold truncate notranslate drop-shadow-[0_0_6px_rgba(16,185,129,0.3)] ${
+            className={`summary-savings-val font-mono text-[14.5px] xs:text-[16px] sm:text-[18px] font-bold truncate notranslate ${
               isNetPositive
-                ? 'text-emerald-500 dark:text-[#10B981]'
-                : 'text-rose-500 dark:text-[#FF5252]'
+                ? 'text-[var(--theme-primary,#38BDF8)]'
+                : 'text-rose-400'
             }`}
             translate="no"
           >

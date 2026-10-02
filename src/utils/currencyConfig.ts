@@ -1,236 +1,38 @@
-import { AppLanguage } from '../types';
-
 export interface CurrencyConfig {
-  symbol: string;
   code: string;
+  symbol: string;
   name: string;
-  locale: string;
-  symbolPosition: 'prefix' | 'suffix';
-  spaceAfterSymbol: boolean;
 }
 
-export const LANGUAGE_CURRENCY_MAP: Record<AppLanguage, CurrencyConfig> = {
-  en: {
-    symbol: '₹',
+export function getCurrencyConfig(): CurrencyConfig {
+  return {
     code: 'INR',
-    name: 'Indian Rupee (Default)',
-    locale: 'en-IN',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: false
-  },
-  hi: {
     symbol: '₹',
-    code: 'INR',
-    name: 'भारतीय रुपया (INR)',
-    locale: 'hi-IN',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: false
-  },
-  hinglish: {
-    symbol: '₹',
-    code: 'INR',
-    name: 'Indian Rupee (INR)',
-    locale: 'en-IN',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: false
-  },
-  es: {
-    symbol: '€',
-    code: 'EUR',
-    name: 'Euro (€)',
-    locale: 'es-ES',
-    symbolPosition: 'suffix',
-    spaceAfterSymbol: true
-  },
-  ar: {
-    symbol: 'د.إ',
-    code: 'AED',
-    name: 'درهم إماراتي (AED)',
-    locale: 'ar-AE',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: true
-  },
-  fr: {
-    symbol: '€',
-    code: 'EUR',
-    name: 'Euro (€)',
-    locale: 'fr-FR',
-    symbolPosition: 'suffix',
-    spaceAfterSymbol: true
-  },
-  de: {
-    symbol: '€',
-    code: 'EUR',
-    name: 'Euro (€)',
-    locale: 'de-DE',
-    symbolPosition: 'suffix',
-    spaceAfterSymbol: true
-  },
-  ru: {
-    symbol: '₽',
-    code: 'RUB',
-    name: 'Российский рубль (₽)',
-    locale: 'ru-RU',
-    symbolPosition: 'suffix',
-    spaceAfterSymbol: true
-  },
-  pt: {
-    symbol: 'R$',
-    code: 'BRL',
-    name: 'Real brasileiro (R$)',
-    locale: 'pt-BR',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: true
-  },
-  bn: {
-    symbol: '৳',
-    code: 'BDT',
-    name: 'বাংলাদেশি টাকা (৳)',
-    locale: 'bn-BD',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: false
-  },
-  ur: {
-    symbol: 'Rs',
-    code: 'PKR',
-    name: 'روپیہ (PKR)',
-    locale: 'ur-PK',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: true
-  },
-  id: {
-    symbol: 'Rp',
-    code: 'IDR',
-    name: 'Rupiah (Rp)',
-    locale: 'id-ID',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: true
-  },
-  ja: {
-    symbol: '¥',
-    code: 'JPY',
-    name: '日本円 (¥)',
-    locale: 'ja-JP',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: false
-  },
-  zh: {
-    symbol: '¥',
-    code: 'CNY',
-    name: '人民币 (¥)',
-    locale: 'zh-CN',
-    symbolPosition: 'prefix',
-    spaceAfterSymbol: false
-  }
-};
-
-export const UNIVERSAL_CURRENCY_MAP: Record<string, CurrencyConfig> = {
-  INR: { symbol: '₹', code: 'INR', name: 'Indian Rupee (INR)', locale: 'en-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  USD: { symbol: '$', code: 'USD', name: 'US Dollar (USD)', locale: 'en-US', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  EUR: { symbol: '€', code: 'EUR', name: 'Euro (EUR)', locale: 'de-DE', symbolPosition: 'suffix', spaceAfterSymbol: true },
-  GBP: { symbol: '£', code: 'GBP', name: 'British Pound (GBP)', locale: 'en-GB', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  AED: { symbol: 'د.إ', code: 'AED', name: 'UAE Dirham (AED)', locale: 'ar-AE', symbolPosition: 'prefix', spaceAfterSymbol: true },
-  SAR: { symbol: '﷼', code: 'SAR', name: 'Saudi Riyal (SAR)', locale: 'ar-SA', symbolPosition: 'prefix', spaceAfterSymbol: true },
-  CAD: { symbol: 'C$', code: 'CAD', name: 'Canadian Dollar (CAD)', locale: 'en-CA', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  AUD: { symbol: 'A$', code: 'AUD', name: 'Australian Dollar (AUD)', locale: 'en-AU', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  SGD: { symbol: 'S$', code: 'SGD', name: 'Singapore Dollar (SGD)', locale: 'en-SG', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  JPY: { symbol: '¥', code: 'JPY', name: 'Japanese Yen (JPY)', locale: 'ja-JP', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  BDT: { symbol: '৳', code: 'BDT', name: 'Bangladeshi Taka (BDT)', locale: 'bn-BD', symbolPosition: 'prefix', spaceAfterSymbol: false },
-  PKR: { symbol: '₨', code: 'PKR', name: 'Pakistani Rupee (PKR)', locale: 'ur-PK', symbolPosition: 'prefix', spaceAfterSymbol: true },
-  BRL: { symbol: 'R$', code: 'BRL', name: 'Real brasileiro (R$)', locale: 'pt-BR', symbolPosition: 'prefix', spaceAfterSymbol: true },
-  RUB: { symbol: '₽', code: 'RUB', name: 'Russian Ruble (₽)', locale: 'ru-RU', symbolPosition: 'suffix', spaceAfterSymbol: true },
-  IDR: { symbol: 'Rp', code: 'IDR', name: 'Indonesian Rupiah (Rp)', locale: 'id-ID', symbolPosition: 'prefix', spaceAfterSymbol: true },
-  CNY: { symbol: '¥', code: 'CNY', name: 'Chinese Yuan (¥)', locale: 'zh-CN', symbolPosition: 'prefix', spaceAfterSymbol: false }
-};
-
-let userPreferredCurrency: string | null = null;
-try {
-  if (typeof window !== 'undefined' && window.localStorage) {
-    userPreferredCurrency = window.localStorage.getItem('dailykhata_preferred_currency');
-  }
-} catch {
-  // ignore
+    name: 'Indian Rupee',
+  };
 }
 
-export function setPreferredCurrency(code: string | null) {
-  userPreferredCurrency = code;
-  try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      if (code) {
-        window.localStorage.setItem('dailykhata_preferred_currency', code);
-      } else {
-        window.localStorage.removeItem('dailykhata_preferred_currency');
-      }
-    }
-  } catch {
-    // ignore
-  }
-}
-
-export function getPreferredCurrency(): string | null {
-  return userPreferredCurrency;
-}
-
-export function getCurrencyConfig(lang: AppLanguage = 'en'): CurrencyConfig {
-  if (userPreferredCurrency && UNIVERSAL_CURRENCY_MAP[userPreferredCurrency]) {
-    return UNIVERSAL_CURRENCY_MAP[userPreferredCurrency];
-  }
-  return LANGUAGE_CURRENCY_MAP[lang] || LANGUAGE_CURRENCY_MAP.en;
-}
-
-let currentLang: AppLanguage = 'en';
-
-export function setCurrentLanguage(lang: AppLanguage) {
-  currentLang = lang;
-}
-
-export function getCurrentLanguage(): AppLanguage {
-  return currentLang;
-}
-
-export function formatCurrencyByLang(
-  amount: number,
-  lang: AppLanguage = currentLang,
-  mask: boolean = false,
-  compact: boolean = false
-): string {
-  const cfg = getCurrencyConfig(lang);
-  if (mask) {
-    return `${cfg.symbol} •••••`;
-  }
+export function formatIndianCurrency(amount: number): string {
   const isNegative = amount < 0;
   const abs = Math.abs(amount);
-  let formattedNumber = '';
+  
+  const parts = abs.toFixed(2).split('.');
+  let integerPart = parts[0];
+  const decimalPart = parts[1] === '00' ? '' : `.${parts[1]}`;
 
-  if (compact && abs >= 10000000) {
-    const isIndian = cfg.code === 'INR' || cfg.code === 'BDT' || cfg.code === 'PKR';
-    const compactLocale = isIndian ? 'en-IN' : 'en-US';
-    try {
-      formattedNumber = new Intl.NumberFormat(compactLocale, {
-        notation: 'compact',
-        maximumFractionDigits: 2
-      }).format(abs);
-    } catch {
-      formattedNumber = abs.toLocaleString('en-US');
-    }
-  } else {
-    try {
-      const hasDecimals = Math.abs(abs - Math.round(abs)) >= 0.005;
-      formattedNumber = abs.toLocaleString(cfg.locale, {
-        minimumFractionDigits: hasDecimals ? 2 : 0,
-        maximumFractionDigits: 2
-      });
-    } catch {
-      formattedNumber = abs.toLocaleString('en-US');
-    }
+  let lastThree = integerPart.substring(integerPart.length - 3);
+  const otherNumbers = integerPart.substring(0, integerPart.length - 3);
+  if (otherNumbers !== '') {
+    lastThree = ',' + lastThree;
   }
+  const formattedInt = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
 
-  const prefixSign = isNegative ? '-' : '';
-  const space = cfg.spaceAfterSymbol ? ' ' : '';
+  return `${isNegative ? '-' : ''}₹${formattedInt}${decimalPart}`;
+}
 
-  if (cfg.symbolPosition === 'prefix') {
-    return `${prefixSign}${cfg.symbol}${space}${formattedNumber}`;
-  } else {
-    return `${prefixSign}${formattedNumber}${space}${cfg.symbol}`;
+export function formatCurrencyByLang(amount: number, mask: boolean = false): string {
+  if (mask) {
+    return '₹ • • • • •';
   }
+  return formatIndianCurrency(amount);
 }

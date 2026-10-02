@@ -52,7 +52,7 @@
     --theme-primary-hover: #0EA5E9;
     --theme-primary-dim: rgba(56, 189, 248, 0.18);
     --theme-primary-border: rgba(56, 189, 248, 0.40);
-    --theme-glow: rgba(56, 189, 248, 0.22);
+    --theme-glow: rgba(56, 189, 248, 0.38);
     --theme-badge-text: #38BDF8;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
@@ -82,7 +82,7 @@
     --theme-primary-hover: #D97706;
     --theme-primary-dim: rgba(245, 158, 11, 0.16);
     --theme-primary-border: rgba(245, 158, 11, 0.38);
-    --theme-glow: rgba(245, 158, 11, 0.22);
+    --theme-glow: rgba(245, 158, 11, 0.38);
     --theme-badge-text: #FBBF24;
     --theme-btn-bg: #D97706;
     --theme-btn-hover: #B45309;
@@ -112,7 +112,7 @@
     --theme-primary-hover: #EA580C;
     --theme-primary-dim: rgba(249, 115, 22, 0.16);
     --theme-primary-border: rgba(249, 115, 22, 0.38);
-    --theme-glow: rgba(249, 115, 22, 0.22);
+    --theme-glow: rgba(249, 115, 22, 0.38);
     --theme-badge-text: #FB923C;
     --theme-btn-bg: #EA580C;
     --theme-btn-hover: #C2410C;
@@ -172,7 +172,7 @@
     --theme-primary-hover: #9333EA;
     --theme-primary-dim: rgba(168, 85, 247, 0.16);
     --theme-primary-border: rgba(168, 85, 247, 0.38);
-    --theme-glow: rgba(168, 85, 247, 0.22);
+    --theme-glow: rgba(168, 85, 247, 0.38);
     --theme-badge-text: #C084FC;
     --theme-btn-bg: #9333EA;
     --theme-btn-hover: #7E22CE;
@@ -202,7 +202,7 @@
     --theme-primary-hover: #0891B2;
     --theme-primary-dim: rgba(6, 182, 212, 0.16);
     --theme-primary-border: rgba(6, 182, 212, 0.38);
-    --theme-glow: rgba(6, 182, 212, 0.22);
+    --theme-glow: rgba(6, 182, 212, 0.38);
     --theme-badge-text: #22D3EE;
     --theme-btn-bg: #0891B2;
     --theme-btn-hover: #0E7490;
@@ -232,7 +232,7 @@
     --theme-primary-hover: #E11D48;
     --theme-primary-dim: rgba(244, 63, 94, 0.16);
     --theme-primary-border: rgba(244, 63, 94, 0.38);
-    --theme-glow: rgba(244, 63, 94, 0.22);
+    --theme-glow: rgba(244, 63, 94, 0.38);
     --theme-badge-text: #FB7185;
     --theme-btn-bg: #E11D48;
     --theme-btn-hover: #BE123C;
@@ -324,9 +324,9 @@
 
     --theme-primary: #0284C7;
     --theme-primary-hover: #0369A1;
-    --theme-primary-dim: rgba(2, 132, 199, 0.12);
-    --theme-primary-border: rgba(2, 132, 199, 0.35);
-    --theme-glow: rgba(2, 132, 199, 0.12);
+    --theme-primary-dim: rgba(0, 0, 0, 0.03);
+    --theme-primary-border: #E2E8F0;
+    --theme-glow: transparent;
     --theme-badge-text: #0284C7;
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
@@ -352,14 +352,14 @@
     --theme-text-muted: #1E293B;
     --theme-text-dim: #334155;
 
-    --theme-primary: #2563EB;
-    --theme-primary-hover: #1D4ED8;
-    --theme-primary-dim: rgba(37, 99, 235, 0.10);
-    --theme-primary-border: rgba(37, 99, 235, 0.35);
-    --theme-glow: rgba(37, 99, 235, 0.08);
-    --theme-badge-text: #2563EB;
-    --theme-btn-bg: #2563EB;
-    --theme-btn-hover: #1D4ED8;
+    --theme-primary: #0284C7;
+    --theme-primary-hover: #0369A1;
+    --theme-primary-dim: rgba(0, 0, 0, 0.03);
+    --theme-primary-border: #CBD5E1;
+    --theme-glow: transparent;
+    --theme-badge-text: #0284C7;
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
 
     --bg-primary: var(--theme-bg);
@@ -826,21 +826,30 @@
 /* Next-Gen 2026 Summary Cards with Titanium Glass Bevel */
 [data-theme="dark"] .summary-card-3d,
 [data-theme="black"] .summary-card-3d {
-  background: linear-gradient(180deg, #0F2218 0%, #08150E 100%) !important;
-  border: 1px solid rgba(46, 236, 163, 0.20) !important;
-  box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+  background: linear-gradient(180deg, var(--theme-card) 0%, var(--theme-surface) 100%) !important;
+  border: 1px solid var(--theme-border) !important;
+  box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
 [data-theme="dark"] .summary-card-3d:hover,
 [data-theme="black"] .summary-card-3d:hover {
-  border-color: rgba(46, 236, 163, 0.55) !important;
-  box-shadow: 0 14px 36px -6px rgba(46, 236, 163, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  border-color: var(--theme-primary-border) !important;
+  box-shadow: 0 14px 36px -6px var(--theme-glow, rgba(0, 0, 0, 0.4)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
-[data-theme="dark"] .summary-stat-box,
-[data-theme="black"] .summary-stat-box {
-  background: #050806 !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+[data-theme="light"] .homepage-canvas-glow,
+[data-theme="white"] .homepage-canvas-glow,
+[data-theme="light"] .banking-card-ambient-glow,
+[data-theme="white"] .banking-card-ambient-glow,
+[data-theme="light"] .summary-card-ambient-glow,
+[data-theme="white"] .summary-card-ambient-glow {
+  display: none !important;
+}
+
+[data-theme="light"] .banking-card-decor,
+[data-theme="white"] .banking-card-decor {
+  color: #CBD5E1 !important;
+  opacity: 0.25 !important;
 }
 
 /* Next-Gen 2026 Elevated Section & Quick Access Tiles */
@@ -1273,13 +1282,32 @@
   box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.55), 0 0 14px -2px var(--theme-glow, rgba(56, 189, 248, 0.15)) !important;
 }
 
-/* Stat Boxes across color themes */
+/* Stat Boxes across all color themes - Premium Translucent Glass */
 .summary-stat-box {
-  background: var(--theme-surface, #0E1A29) !important;
-  border: 1px solid var(--theme-border, #213E61) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, var(--theme-primary-dim, rgba(255, 255, 255, 0.02)) 100%) !important;
+  border: 1px solid var(--theme-primary-border, rgba(255, 255, 255, 0.16)) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 3px 10px rgba(0, 0, 0, 0.25) !important;
 }
+
+.summary-stat-box:hover {
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, var(--theme-primary-dim, rgba(255, 255, 255, 0.04)) 100%) !important;
+  border-color: var(--theme-primary, rgba(255, 255, 255, 0.35)) !important;
+}
+
 .summary-stat-box .summary-stat-label {
+  color: var(--theme-text-muted, #94A3B8) !important;
+}
+
+/* In-Words Amount Pill across all color themes - Clean Unboxed Text */
+.banking-card-words {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
   color: var(--theme-text-muted, #94A3B8) !important;
 }
 
@@ -1299,16 +1327,16 @@
   box-shadow: none !important;
 }
 
-/* Income Stat Box in color themes */
+/* Income Stat Box in color themes - Bound to theme */
 .summary-stat-box-income {
   border-color: var(--theme-border, #213E61) !important;
 }
 .summary-stat-box-income .summary-stat-icon-box {
-  background-color: rgba(34, 197, 94, 0.16) !important;
-  color: #4ADE80 !important;
+  background-color: var(--theme-primary-dim, rgba(56, 189, 248, 0.16)) !important;
+  color: var(--theme-primary, #38BDF8) !important;
 }
 .summary-stat-box-income .summary-stat-income {
-  color: #34D399 !important;
+  color: var(--theme-primary, #38BDF8) !important;
   font-weight: 800 !important;
 }
 
@@ -1325,9 +1353,9 @@
   font-weight: 800 !important;
 }
 
-/* Net figures in color themes (High WCAG AA Contrast) */
+/* Net figures in color themes (High WCAG AA Contrast) - Theme Primary */
 .summary-net-positive {
-  color: #34D399 !important;
+  color: var(--theme-primary, #38BDF8) !important;
 }
 .summary-net-negative {
   color: #FB7185 !important;
@@ -1391,15 +1419,35 @@
   color: #B91C1C !important;
   filter: none !important;
 }
+[data-theme="light"] .summary-card-3d,
+[data-theme="white"] .summary-card-3d {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+
 [data-theme="light"] .summary-card-3d:hover,
 [data-theme="white"] .summary-card-3d:hover {
   border-color: #CBD5E1 !important;
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
 }
 
 [data-theme="light"] .summary-stat-box,
 [data-theme="white"] .summary-stat-box {
   background: #F8FAFC !important;
+  background-image: none !important;
   border-color: #E2E8F0 !important;
+  box-shadow: none !important;
+}
+
+[data-theme="light"] .banking-card-words,
+[data-theme="white"] .banking-card-words {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
 [data-theme="light"] .summary-stat-box-income,

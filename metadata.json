@@ -1,6 +1,5 @@
 {
   "name": "Daily Khata Pro",
-  "description": "Daily Khata Pro — Universal professional daily income & expense record with automated 6-fund money allocation, financial goals, work deliverables, and daily life timeline tracker.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "description": "Daily Khata Pro - Smart Expense Tracker & Finance Platform by Rozfiber. Track daily income, expenses, loans, EMIs, and read research-based finance articles.",
+  "requestServerSideGemini": true
 }

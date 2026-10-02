@@ -6,11 +6,22 @@ import { defineConfig } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  const isBuild = command === 'build';
+
   return {
     plugins: [
       react(),
-      tailwindcss()
+      tailwindcss(),
+      {
+        name: 'stub-lucide-index',
+        enforce: 'pre',
+        load(id) {
+          if (id.includes('lucide-react') && id.endsWith('icons/index.js')) {
+            return 'export default {};';
+          }
+        },
+      },
     ],
     resolve: {
       alias: {
@@ -34,17 +45,22 @@ export default defineConfig(() => {
       ],
     },
     build: {
-      chunkSizeWarningLimit: 1500,
+      chunkSizeWarningLimit: 2500,
       sourcemap: false,
       target: 'es2022',
       rollupOptions: {
-        cache: false,
-        external: ['express', 'path', 'fs'],
+        external: isBuild
+          ? ['express', 'path', 'fs', 'sanity', '@sanity/vision', 'sanity/structure']
+          : ['express', 'path', 'fs'],
         output: {
+          paths: isBuild
+            ? {
+                'sanity': 'https://esm.sh/sanity@6.15.0?external=react,react-dom',
+                '@sanity/vision': 'https://esm.sh/@sanity/vision@6.15.0?external=react,react-dom,sanity',
+                'sanity/structure': 'https://esm.sh/sanity@6.15.0/structure?external=react,react-dom,sanity',
+              }
+            : {},
           manualChunks(id) {
-            if (id.includes('node_modules/sanity') || id.includes('node_modules/@sanity')) {
-              return 'sanity-vendor';
-            }
             if (id.includes('node_modules/recharts')) {
               return 'recharts-vendor';
             }
