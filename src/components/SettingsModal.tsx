@@ -68,7 +68,6 @@ import {
   Volume1,
   Cloud,
   CloudUpload,
-  CloudCheck,
   Coins
 } from 'lucide-react';
 import {
@@ -1624,7 +1623,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {/* Account Status Badge */}
                   {isGoogleLinked() ? (
                     <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold shrink-0 self-start sm:self-auto">
-                      <CloudCheck className="w-3.5 h-3.5" />
+                      <Cloud className="w-3.5 h-3.5" />
                       <span className="truncate max-w-[140px]">{auth.currentUser?.displayName || getStoredUserProfile()?.displayName || auth.currentUser?.email || getStoredUserProfile()?.email || 'Connected'}</span>
                     </div>
                   ) : (

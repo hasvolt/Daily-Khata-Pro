@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Cloud,
-  CloudCheck,
   CloudUpload,
   CloudDownload,
   RotateCw,
