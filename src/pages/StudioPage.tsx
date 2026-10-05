@@ -160,6 +160,17 @@ export function StudioPage() {
           </a>
 
           <a
+            href="https://3zccyf67.sanity.studio"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/50 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+            title="Open Hosted Sanity Cloud Studio Directly"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">Cloud Studio</span>
+          </a>
+
+          <a
             href="https://www.sanity.io/manage/project/3zccyf67/api#cors-origins"
             target="_blank"
             rel="noopener noreferrer"

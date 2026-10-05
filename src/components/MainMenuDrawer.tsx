@@ -1178,6 +1178,36 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                     <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
                   </button>
 
+                  {/* Sanity Studio (Write & Manage Blog Posts) */}
+                  <button
+                    type="button"
+                    onClick={() => handleMenuAction(() => {
+                      window.open('/studio', '_blank') || (onSelectTab && onSelectTab('blog'));
+                    })}
+                    className="w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/50"
+                    id="menu-sanity-studio-btn"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <Sparkles className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
+                            {isHindi ? 'सैनिटी स्टूडियो (लेख लिखें)' : 'Sanity Studio (Write Post)'}
+                          </span>
+                          <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-400/20 text-emerald-400 border border-emerald-400/30">
+                            CMS
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
+                          {isHindi ? 'ब्लॉग पोस्ट लिखने व संपादित करने का स्टूडियो' : 'Write, edit & publish blog posts'}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-emerald-400 transition-colors" />
+                  </button>
+
                   {/* Wealth Academy */}
                   <button
                     type="button"

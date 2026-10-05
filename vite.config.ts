@@ -49,18 +49,12 @@ export default defineConfig(({ command }) => {
       sourcemap: false,
       target: 'es2022',
       rollupOptions: {
-        external: isBuild
-          ? ['express', 'path', 'fs', 'sanity', '@sanity/vision', 'sanity/structure']
-          : ['express', 'path', 'fs'],
+        external: ['express', 'path', 'fs'],
         output: {
-          paths: isBuild
-            ? {
-                'sanity': 'https://esm.sh/sanity@6.15.0?external=react,react-dom',
-                '@sanity/vision': 'https://esm.sh/@sanity/vision@6.15.0?external=react,react-dom,sanity',
-                'sanity/structure': 'https://esm.sh/sanity@6.15.0/structure?external=react,react-dom,sanity',
-              }
-            : {},
           manualChunks(id) {
+            if (id.includes('node_modules/sanity') || id.includes('node_modules/@sanity')) {
+              return 'sanity-vendor';
+            }
             if (id.includes('node_modules/recharts')) {
               return 'recharts-vendor';
             }

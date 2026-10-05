@@ -802,41 +802,46 @@
 }
 
 [data-theme="dark"] .banking-card-3d,
-[data-theme="black"] .banking-card-3d {
-  background: radial-gradient(circle at 85% 15%, rgba(46, 236, 163, 0.28) 0%, #0F2218 55%, #030805 100%) !important;
-  border-color: rgba(46, 236, 163, 0.25) !important;
-  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(46, 236, 163, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
+[data-theme="black"] .banking-card-3d,
+[data-theme="emerald"] .banking-card-3d,
+.banking-card-3d {
+  background: radial-gradient(circle at 85% 15%, var(--theme-primary-dim, rgba(16, 185, 129, 0.22)) 0%, var(--theme-card, #0F3522) 55%, var(--theme-bg, #072014) 100%) !important;
+  border-color: var(--theme-primary-border, rgba(16, 185, 129, 0.38)) !important;
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--theme-primary-border, rgba(16, 185, 129, 0.25)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
 }
 
 [data-theme="dark"] .banking-card-3d .banking-card-icon-box,
 [data-theme="black"] .banking-card-3d .banking-card-icon-box {
-  background: rgba(46, 236, 163, 0.24) !important;
-  border-color: rgba(46, 236, 163, 0.45) !important;
-  color: #2EECA3 !important;
+  background: var(--theme-primary-dim, rgba(46, 236, 163, 0.24)) !important;
+  border-color: var(--theme-primary-border, rgba(46, 236, 163, 0.45)) !important;
+  color: var(--theme-primary, #2EECA3) !important;
 }
 
 [data-theme="dark"] .banking-card-date-box,
 [data-theme="black"] .banking-card-date-box {
-  background: #08150E !important;
-  border-color: rgba(46, 236, 163, 0.20) !important;
+  background: var(--theme-surface, #08150E) !important;
+  border-color: var(--theme-border-subtle, rgba(46, 236, 163, 0.20)) !important;
 }
 
 /* Next-Gen 2026 Summary Cards with Titanium Glass Bevel matching Total Balance */
 [data-theme="dark"] .summary-card-3d,
-[data-theme="black"] .summary-card-3d {
-  background: radial-gradient(circle at 85% 15%, rgba(46, 236, 163, 0.28) 0%, #0F2218 55%, #030805 100%) !important;
-  border-color: rgba(46, 236, 163, 0.25) !important;
-  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(46, 236, 163, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
+[data-theme="black"] .summary-card-3d,
+[data-theme="emerald"] .summary-card-3d,
+.summary-card-3d {
+  background: radial-gradient(circle at 85% 15%, var(--theme-primary-dim, rgba(16, 185, 129, 0.22)) 0%, var(--theme-card, #0F3522) 55%, var(--theme-bg, #072014) 100%) !important;
+  border-color: var(--theme-primary-border, rgba(16, 185, 129, 0.38)) !important;
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--theme-primary-border, rgba(16, 185, 129, 0.25)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
 }
 
 [data-theme="dark"] .summary-card-3d:hover,
-[data-theme="black"] .summary-card-3d:hover {
+[data-theme="black"] .summary-card-3d:hover,
+.summary-card-3d:hover {
   border-color: var(--theme-primary-border) !important;
-  box-shadow: 0 14px 36px -6px var(--theme-glow, rgba(0, 0, 0, 0.4)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 14px 32px -6px var(--theme-glow, rgba(0, 0, 0, 0.4)), 0 0 0 1px var(--theme-primary, rgba(46, 236, 163, 0.4)), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
 }
 
 [data-theme="light"] .homepage-canvas-glow,
@@ -1306,19 +1311,19 @@
   color: var(--theme-text-muted, #94A3B8) !important;
 }
 
-/* Stat Boxes across all color themes - Premium Translucent Glass */
+/* Stat Boxes across all color themes - Crisp Luminous Glass */
 .summary-stat-box {
-  background: rgba(255, 255, 255, 0.04) !important;
-  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, var(--theme-primary-dim, rgba(255, 255, 255, 0.02)) 100%) !important;
+  background: rgba(0, 0, 0, 0.25) !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(0, 0, 0, 0.32) 100%) !important;
   border: 1px solid var(--theme-primary-border, rgba(255, 255, 255, 0.16)) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 3px 10px rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 8px rgba(0, 0, 0, 0.35) !important;
 }
 
 .summary-stat-box:hover {
-  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, var(--theme-primary-dim, rgba(255, 255, 255, 0.04)) 100%) !important;
-  border-color: var(--theme-primary, rgba(255, 255, 255, 0.35)) !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(0, 0, 0, 0.22) 100%) !important;
+  border-color: var(--theme-primary, rgba(255, 255, 255, 0.40)) !important;
 }
 
 .summary-stat-box .summary-stat-label {

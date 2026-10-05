@@ -3,7 +3,13 @@ import { useClient } from 'sanity';
 import { INITIAL_CATEGORIES, INITIAL_TOPICS, INITIAL_AUTHORS } from './taxonomyData';
 
 export function TaxonomyManagerTool() {
-  const client = useClient({ apiVersion: '2024-01-01' });
+  let client: any = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    client = useClient({ apiVersion: '2024-01-01' });
+  } catch (err) {
+    console.warn('TaxonomyManagerTool client initialization notice:', err);
+  }
   const [categoriesCount, setCategoriesCount] = useState<number | null>(null);
   const [topicsCount, setTopicsCount] = useState<number | null>(null);
   const [authorsCount, setAuthorsCount] = useState<number | null>(null);
@@ -13,12 +19,16 @@ export function TaxonomyManagerTool() {
   const [logs, setLogs] = useState<string[]>([]);
 
   const fetchCounts = async () => {
+    if (!client) {
+      setLoading(false);
+      return;
+    }
     try {
       setLoading(true);
       const [cats, tops, auths] = await Promise.all([
-        client.fetch<number>('count(*[_type == "category"])'),
-        client.fetch<number>('count(*[_type == "topic"])'),
-        client.fetch<number>('count(*[_type == "author"])'),
+        client.fetch('count(*[_type == "category"])'),
+        client.fetch('count(*[_type == "topic"])'),
+        client.fetch('count(*[_type == "author"])'),
       ]);
       setCategoriesCount(cats);
       setTopicsCount(tops);

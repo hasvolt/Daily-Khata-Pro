@@ -422,8 +422,21 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
               </div>
             </div>
 
-            {/* Search Bar & Switch to Research/News Portal */}
-            <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
+            {/* Action Bar: Write Post (Studio), Research Portal & Search Bar */}
+            <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0 flex-wrap sm:flex-nowrap">
+              <button
+                type="button"
+                onClick={() => {
+                  window.open('/studio', '_blank') || navigate('/studio');
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs font-bold text-emerald-400 hover:bg-emerald-500/25 hover:text-emerald-300 transition-all shrink-0 cursor-pointer shadow-xs"
+                title={isHindi ? 'ब्लॉग पोस्ट लिखने व प्रबंधित करने के लिए Sanity Studio खोलें' : 'Open Sanity Studio to write and manage blog posts'}
+                id="blog-open-sanity-studio-btn"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{isHindi ? 'स्टूडियो (लेख लिखें)' : 'Write Post (Studio)'}</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => {

@@ -2376,11 +2376,11 @@ function AppContent() {
           <button
             type="button"
             onClick={() => resetGoogleTranslate()}
-            className="group px-3.5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-black text-[12px] sm:text-[13px] flex items-center gap-2 cursor-pointer shadow-[0_8px_24px_rgba(16,185,129,0.45)] border border-emerald-300/50 backdrop-blur-md transition-all"
+            className="group px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold text-[11px] sm:text-[11.5px] flex items-center gap-1.5 cursor-pointer shadow-md border border-emerald-300/50 backdrop-blur-md transition-all"
             id="global-back-to-english-btn"
             title={language === 'hi' ? 'मूल अंग्रेजी भाषा पर लौटें' : 'Return to English'}
           >
-            <RotateCcw className="w-4 h-4 text-slate-950 stroke-[2.8] transition-transform group-hover:-rotate-90 duration-300" />
+            <RotateCcw className="w-3 h-3 text-slate-950 stroke-[2.8] transition-transform group-hover:-rotate-90 duration-300" />
             <span className="leading-none">{language === 'hi' ? 'वापस इंग्लिश' : 'Return to English'}</span>
           </button>
         </div>
