@@ -241,6 +241,20 @@ function AppContent() {
   const [isGoogleTranslated, setIsGoogleTranslated] = useState<boolean>(false);
   const [activeGoogleCode, setActiveGoogleCode] = useState<string | null>(null);
 
+  // Dismiss App Splash Preloader smoothly when App mounts
+  useEffect(() => {
+    const preloader = document.getElementById('app-preloader');
+    if (preloader) {
+      const timer = setTimeout(() => {
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 350);
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   useEffect(() => {
     const checkGoogle = () => {
       const active = isGoogleTranslateActive();
@@ -2372,16 +2386,16 @@ function AppContent() {
 
       {/* Professional Floating Return to English Button when Google Translate is Active */}
       {isGoogleTranslated && (
-        <div className="fixed bottom-20 right-3.5 sm:bottom-24 sm:right-6 z-40 animate-in slide-in-from-bottom duration-300 pointer-events-auto">
+        <div className="fixed bottom-16 right-3 sm:bottom-20 sm:right-5 z-40 animate-in slide-in-from-bottom duration-300 pointer-events-auto">
           <button
             type="button"
             onClick={() => resetGoogleTranslate()}
-            className="group px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold text-[11px] sm:text-[11.5px] flex items-center gap-1.5 cursor-pointer shadow-md border border-emerald-300/50 backdrop-blur-md transition-all"
+            className="group px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold text-[10px] sm:text-[10.5px] flex items-center gap-1 cursor-pointer shadow-sm border border-emerald-300/60 backdrop-blur-md transition-all"
             id="global-back-to-english-btn"
             title={language === 'hi' ? 'मूल अंग्रेजी भाषा पर लौटें' : 'Return to English'}
           >
-            <RotateCcw className="w-3 h-3 text-slate-950 stroke-[2.8] transition-transform group-hover:-rotate-90 duration-300" />
-            <span className="leading-none">{language === 'hi' ? 'वापस इंग्लिश' : 'Return to English'}</span>
+            <RotateCcw className="w-2.5 h-2.5 text-slate-950 stroke-[3] transition-transform group-hover:-rotate-90 duration-300" />
+            <span className="leading-none">{language === 'hi' ? 'English' : 'English'}</span>
           </button>
         </div>
       )}

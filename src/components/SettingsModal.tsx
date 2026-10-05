@@ -579,17 +579,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const themeList: { id: AppTheme; label: string; dot: string; isLight?: boolean }[] = [
     { id: 'dark', label: tStr('साइबर एमराल्ड ब्लैक (Emerald)', 'Cyber Emerald Black (Emerald)', 'Emerald Black'), dot: '#10B981' },
-    { id: 'black', label: tStr('डीप ओब्सीडियन (Obsidian)', 'Deep Obsidian (Obsidian)', 'Deep Obsidian'), dot: '#059669' },
-    { id: 'monochrome', label: tStr('प्रीमियम ब्लैक & वाइट (Monochrome)', 'Premium Black & White (Monochrome)', 'Premium Black & White (Monochrome)'), dot: '#FFFFFF' },
-    { id: 'blue', label: 'Electric Blue', dot: '#38BDF8' },
+    { id: 'black', label: tStr('डीप ओब्सीडियन (Obsidian)', 'Deep Obsidian (Obsidian)', 'Deep Obsidian'), dot: '#38BDF8' },
+    { id: 'monochrome', label: tStr('प्रीमियम ब्लैक & वाइट (Monochrome)', 'Premium Black & White (Monochrome)', 'Premium Black & White (Monochrome)'), dot: '#F8FAFC' },
+    { id: 'blue', label: 'Electric Blue', dot: '#2563EB' },
     { id: 'yellow', label: 'Premium Gold', dot: '#F59E0B' },
     { id: 'orange', label: 'Sunset Orange', dot: '#F97316' },
-    { id: 'emerald', label: 'Emerald Green', dot: '#10B981' },
+    { id: 'emerald', label: 'Emerald Green', dot: '#22C55E' },
     { id: 'purple', label: 'Royal Violet', dot: '#A855F7' },
     { id: 'cyan', label: 'Ocean Teal', dot: '#06B6D4' },
     { id: 'pink', label: 'Crimson Pink', dot: '#F43F5E' },
-    { id: 'white', label: tStr('दिन / वाइट मोड (White)', 'Day / White Mode (White)', 'Day / White Mode'), dot: '#2563EB', isLight: true },
-    { id: 'light', label: tStr('आउटडोर डेलाइट (Light)', 'Outdoor Daylight (Light)', 'Daylight Light'), dot: '#0284C7', isLight: true }
+    { id: 'white', label: tStr('दिन / वाइट मोड (White)', 'Day / White Mode (White)', 'Day / White Mode'), dot: '#E2E8F0', isLight: true },
+    { id: 'light', label: tStr('आउटडोर डेलाइट (Light)', 'Outdoor Daylight (Light)', 'Daylight Light'), dot: '#38BDF8', isLight: true }
   ];
 
   return (
@@ -881,15 +881,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onClick={() => onThemeChange && onThemeChange(th.id)}
                       className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                         theme === th.id
-                          ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] font-bold shadow-xs'
-                          : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text-muted,#CBD5E1)]'
+                          ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-text,#F8FAFC)] font-bold shadow-xs'
+                          : 'bg-[var(--theme-bg,#070E18)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-white hover:border-[var(--theme-primary,#38BDF8)]/60'
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: th.dot }} />
+                        <span className="w-3.5 h-3.5 rounded-full shrink-0 aspect-square border border-white/20 shadow-xs" style={{ backgroundColor: th.dot }} />
                         <span className="text-[12.5px]">{th.label}</span>
                       </div>
-                      {theme === th.id && <Check className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />}
+                      {theme === th.id && <Check className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" />}
                     </button>
                   ))}
                 </div>

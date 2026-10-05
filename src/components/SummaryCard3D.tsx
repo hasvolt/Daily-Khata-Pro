@@ -128,7 +128,7 @@ export function SummaryCard3D({
           {/* Expense Box */}
           <div className="summary-stat-box rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all">
             <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-rose-500/15 border border-rose-500/35 flex items-center justify-center text-rose-400 shrink-0">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-red-500/15 border border-red-500/35 flex items-center justify-center text-[var(--theme-expense,#FF4D4D)] shrink-0">
                 <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
               </div>
               <span className="summary-stat-label text-[10.5px] sm:text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
@@ -136,7 +136,7 @@ export function SummaryCard3D({
               </span>
             </div>
             <div
-              className="summary-stat-expense font-mono text-[14.5px] xs:text-[16px] sm:text-[19px] font-bold text-rose-400 mt-1 truncate notranslate tracking-tight drop-shadow-[0_0_6px_rgba(244,63,94,0.3)]"
+              className="summary-stat-expense font-mono text-[14.5px] xs:text-[16px] sm:text-[19px] font-extrabold text-[var(--theme-expense,#FF4D4D)] mt-1 truncate notranslate tracking-tight drop-shadow-[0_0_8px_rgba(255,77,77,0.35)]"
               translate="no"
             >
               -{formatCurrency(expenseValue, privacyMask)}
@@ -158,7 +158,7 @@ export function SummaryCard3D({
             className={`summary-savings-val font-mono text-[14.5px] xs:text-[16px] sm:text-[18px] font-bold truncate notranslate ${
               isNetPositive
                 ? 'text-[var(--theme-primary,#38BDF8)]'
-                : 'text-rose-400'
+                : 'text-[var(--theme-expense,#FF4D4D)]'
             }`}
             translate="no"
           >

@@ -75,7 +75,7 @@ export function FundCard3D({
                 className={`inline-flex items-center gap-0.5 text-[7.5px] sm:text-[8px] font-bold px-1 py-0.5 rounded ${
                   trend === 'up'
                     ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                    : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                    : 'bg-red-500/15 text-[var(--theme-expense,#FF4D4D)] border border-red-500/35'
                 }`}
                 title={trend === 'up' ? 'Trending up vs last month' : 'Trending down vs last month'}
               >
@@ -97,7 +97,7 @@ export function FundCard3D({
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-[8.5px] sm:text-[9.5px] font-black font-mono text-[var(--theme-text,#0F172A)] notranslate" translate="no">
+              <span className="absolute inset-0 flex items-center justify-center text-[8.5px] sm:text-[9.5px] font-black font-mono text-[var(--theme-text,#F8FAFC)] notranslate" translate="no">
                 {Math.round(clampedPct)}%
               </span>
             </div>
@@ -106,16 +106,16 @@ export function FundCard3D({
 
         {/* Content Row: Full width for Title & Amount without truncation */}
         <div className="mt-2.5 min-w-0" style={{ transform: 'translateZ(10px)' }}>
-          <div className="text-[12px] sm:text-[13px] font-bold text-[var(--theme-text,#0F172A)] truncate group-hover:text-[var(--theme-primary,#0284C7)] transition-colors">
+          <div className="text-[12px] sm:text-[13px] font-bold text-[var(--theme-text,#F8FAFC)] truncate group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors">
             {fundTranslatedName}
           </div>
           <div
             className={`mt-0.5 font-mono text-[14px] sm:text-[15.5px] font-black tracking-tight truncate notranslate ${
               val < 0
-                ? 'text-rose-600 dark:text-rose-400 font-black'
+                ? 'text-[var(--theme-expense,#FF4D4D)] font-black'
                 : val > 0
-                ? 'text-emerald-600 dark:text-emerald-400 font-black'
-                : 'text-[var(--theme-text-muted,#475569)] font-black'
+                ? 'text-emerald-400 font-black'
+                : 'text-[var(--theme-text-muted,#CBD5E1)] font-black'
             }`}
             translate="no"
           >
@@ -126,7 +126,7 @@ export function FundCard3D({
 
         {subtitle && (
           <div className="mt-2 pt-1.5 border-t border-[var(--theme-border-subtle,rgba(0,0,0,0.06))]" style={{ transform: 'translateZ(8px)' }}>
-            <p className="text-[8.5px] sm:text-[9.5px] text-[var(--theme-text-dim,#64748B)] truncate">{subtitle}</p>
+            <p className="text-[8.5px] sm:text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] truncate">{subtitle}</p>
           </div>
         )}
 

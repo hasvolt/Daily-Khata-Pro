@@ -198,7 +198,7 @@ export function BankingCard3D({
                     )}
                   </button>
                 </div>
-                <p className="text-[9.5px] sm:text-[10.5px] font-medium text-[var(--theme-primary,#38BDF8)] leading-tight mt-0.5 truncate">
+                <p className="text-[9.5px] sm:text-[10.5px] font-medium text-[var(--theme-text-muted,#CBD5E1)] leading-tight mt-0.5 truncate">
                   {isHindi ? 'आपका संपूर्ण वित्तीय सारांश' : 'Your overall financial summary'}
                 </p>
               </div>
@@ -226,7 +226,7 @@ export function BankingCard3D({
           {/* Middle Section: AVAILABLE BALANCE & Exact Amount / In Words */}
           <div className="mt-1.5 sm:mt-2.5">
             <div className="mb-0.5 flex items-center gap-1.5">
-              <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-[var(--theme-primary,#38BDF8)] uppercase">
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-[var(--theme-text-muted,#CBD5E1)] uppercase">
                 {isHindi ? 'उपलब्ध बैलेंस' : 'AVAILABLE BALANCE'}
               </span>
             </div>

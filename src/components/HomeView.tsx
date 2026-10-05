@@ -472,10 +472,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <PieChart className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-[14px] sm:text-[16px] font-bold text-[var(--theme-text,#0F172A)] truncate">
+              <h3 className="text-[14px] sm:text-[16px] font-bold text-[var(--theme-text,#F8FAFC)] truncate">
                 {isHindi ? 'कैटेगरी के अनुसार खर्च' : 'Top Categories'}
               </h3>
-              <p className="hidden sm:block text-[9.5px] text-[var(--theme-text-dim,#64748B)] truncate">Your fund allocation at a glance</p>
+              <p className="hidden sm:block text-[9.5px] text-[var(--theme-text-dim,#94A3B8)] truncate">Your fund allocation at a glance</p>
             </div>
           </div>
 
@@ -483,7 +483,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={() => setIsSelectorOpen(true)}
-              className="text-[10px] sm:text-[11px] font-bold text-[var(--theme-primary,#0284C7)] hover:opacity-80 cursor-pointer transition-opacity"
+              className="text-[10px] sm:text-[11px] font-bold text-[var(--theme-primary,#38BDF8)] hover:opacity-80 cursor-pointer transition-opacity"
             >
               View All →
             </button>
@@ -649,7 +649,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     className={`relative h-8 w-8 sm:h-9 sm:w-9 rounded-xl shrink-0 flex items-center justify-center ${
                       entry.type === 'income'
                         ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                        : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                        : 'bg-red-500/15 text-[var(--theme-expense,#FF4D4D)] border border-red-500/35'
                     }`}
                   >
                     <TxIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.2]" />
@@ -657,7 +657,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       className={`absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full flex items-center justify-center text-[7.5px] font-black border ${
                         entry.type === 'income'
                           ? 'bg-emerald-500 text-slate-950 border-slate-900'
-                          : 'bg-rose-500 text-white border-slate-900'
+                          : 'bg-[#FF4D4D] text-white border-slate-900'
                       }`}
                     >
                       {entry.type === 'income' ? '+' : '-'}
@@ -672,7 +672,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </div>
                 <span
                   className={`font-mono font-extrabold text-[11px] sm:text-xs shrink-0 notranslate ${
-                    entry.type === 'income' ? 'text-emerald-400' : 'text-rose-400'
+                    entry.type === 'income' ? 'text-emerald-400' : 'text-[var(--theme-expense,#FF4D4D)]'
                   }`}
                   translate="no"
                 >
