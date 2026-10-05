@@ -262,8 +262,8 @@ export function BankingCard3D({
             )}
           </div>
 
-          {/* Divider Line above buttons */}
-          <div className="border-t border-[var(--theme-border-subtle,rgba(56,189,248,0.2))] pt-2 sm:pt-2.5 mt-2 sm:mt-2.5">
+          {/* Divider Line above buttons - Crisp 3D Horizon Line (Boosted Visibility) */}
+          <div className="hero-buttons-divider border-t-2 border-[var(--theme-primary,#38BDF8)] shadow-[0_1px_8px_var(--theme-glow,rgba(56,189,248,0.45))] pt-2 sm:pt-2.5 mt-2 sm:mt-2.5 opacity-90">
             <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
               <motion.button
                 type="button"

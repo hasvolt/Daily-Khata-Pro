@@ -43,8 +43,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
     <nav
       id="bottom-nav-bar"
       aria-label="Bottom Navigation"
-      className="fixed bottom-0 left-0 right-0 w-full bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-2xl border-t border-[var(--theme-border,#213E61)] shadow-[0_-4px_20px_rgba(15,23,42,0.06)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.35)] z-50 px-1 sm:px-6 lg:px-10 pt-1.5 sm:pt-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] transition-colors duration-200"
+      className="fixed bottom-1.5 sm:bottom-3 left-2 right-2 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto rounded-2xl sm:rounded-3xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] shadow-[0_8px_30px_rgba(0,0,0,0.7),0_0_0_1px_var(--theme-primary-border,rgba(56,189,248,0.22)),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-2xl z-50 px-1 sm:px-3 pt-1.5 sm:pt-2 pb-1.5 sm:pb-2 transition-colors duration-200 overflow-hidden"
     >
+      {/* 3D Animated Top Rim Horizon Accent */}
+      <div className="absolute inset-x-0 top-0 h-[2px] overflow-hidden pointer-events-none">
+        <div className="bottomnav-3d-sheen w-full h-full bg-gradient-to-r from-transparent via-[var(--theme-primary,#2EECA3)] to-transparent opacity-70" />
+      </div>
+
       <div className="grid grid-cols-6 items-center w-full max-w-6xl mx-auto gap-0.5 sm:gap-3">
         {tabs.map((tab) => {
           const Icon = tab.icon;

@@ -105,10 +105,10 @@ export function SummaryCard3D({
           </div>
         </div>
 
-        {/* 2 Inner Cards Grid: Income & Expense (Rounded Themed Boxes with Subtle Inner Glow) */}
+        {/* 2 Inner Cards Grid: Income & Expense (Rounded Themed Boxes with 3D Perimeter Line & Depth) */}
         <div className="relative z-10 grid grid-cols-2 gap-2 sm:gap-2.5">
           {/* Income Box */}
-          <div className="summary-stat-box rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all">
+          <div className="summary-stat-box summary-stat-box-income rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all">
             <div className="flex items-center gap-1.5">
               <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-400 shrink-0">
                 <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
@@ -126,7 +126,7 @@ export function SummaryCard3D({
           </div>
 
           {/* Expense Box */}
-          <div className="summary-stat-box rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all">
+          <div className="summary-stat-box summary-stat-box-expense rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all">
             <div className="flex items-center gap-1.5">
               <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-red-500/15 border border-red-500/35 flex items-center justify-center text-[var(--theme-expense,#FF4D4D)] shrink-0">
                 <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 stroke-[2.5]" />
@@ -144,8 +144,8 @@ export function SummaryCard3D({
           </div>
         </div>
 
-        {/* Bottom Savings Row (Rounded Themed Box) */}
-        <div className="summary-stat-box relative z-10 mt-1.5 sm:mt-2.5 rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2 flex items-center justify-between transition-all">
+        {/* Bottom Savings Row (Rounded Themed Box with 3D Perimeter Line & Depth) */}
+        <div className="summary-stat-box summary-stat-box-savings relative z-10 mt-1.5 sm:mt-2.5 rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2 flex items-center justify-between transition-all">
           <div className="flex items-center gap-2">
             <div className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-lg bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)] flex items-center justify-center shrink-0 shadow-[0_0_8px_var(--theme-glow,rgba(56,189,248,0.2))]">
               <BarChart3 className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.2]" />

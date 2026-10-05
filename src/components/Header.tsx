@@ -279,8 +279,13 @@ export const Header: React.FC<HeaderProps> = ({
   }, [isMenuOpen]);
 
   return (
-    <header className="border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)]/95 backdrop-blur-md sticky top-0 z-40 shadow-md transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-1.5 sm:py-2 flex items-center justify-between gap-1 sm:gap-3">
+    <header className="sticky top-0 z-40 w-full border-b border-[var(--theme-primary-border,rgba(56,189,248,0.25))] bg-[color-mix(in_srgb,var(--theme-primary,#2EECA3)_12%,var(--theme-surface,#08120d))] backdrop-blur-xl shadow-md transition-colors duration-300">
+      {/* 3D Animated Luminous Accent Line */}
+      <div className="absolute inset-x-0 bottom-0 h-[1.5px] overflow-hidden pointer-events-none z-10">
+        <div className="header-3d-sheen w-full h-full bg-gradient-to-r from-transparent via-[var(--theme-primary,#2EECA3)] to-transparent opacity-80" />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-2 flex items-center justify-between gap-1 sm:gap-3">
         {/* Brand Icon & Name (Un-truncated, clear across all devices: Laptop, Desktop & Mobile) */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0 whitespace-nowrap min-w-max select-none">
           <div

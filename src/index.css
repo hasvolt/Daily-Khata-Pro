@@ -1112,7 +1112,8 @@
   background: rgba(3, 5, 4, 0.85) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
 [data-theme="dark"] nav,
@@ -1120,8 +1121,48 @@
   background: rgba(5, 8, 6, 0.90) !important;
   backdrop-filter: blur(24px) !important;
   -webkit-backdrop-filter: blur(24px) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+
+@keyframes headerSheenSlide {
+  0% {
+    transform: translateX(-65%);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(65%);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(-65%);
+    opacity: 0.35;
+  }
+}
+
+.header-3d-sheen {
+  animation: headerSheenSlide 7s ease-in-out infinite;
+  box-shadow: 0 0 14px var(--theme-glow, rgba(46, 236, 163, 0.7));
+}
+
+@keyframes bottomNavSheenSlide {
+  0% {
+    transform: translateX(65%);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(-65%);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(65%);
+    opacity: 0.35;
+  }
+}
+
+.bottomnav-3d-sheen {
+  animation: bottomNavSheenSlide 7s ease-in-out infinite;
+  box-shadow: 0 0 14px var(--theme-glow, rgba(46, 236, 163, 0.7));
 }
 
 /* WCAG 2.1 AA Compliance Rules for Dark Mode (Ensuring >= 4.5:1 contrast for all text elements) */
@@ -1537,64 +1578,57 @@
   color: var(--theme-text-muted, #94A3B8) !important;
 }
 
-/* Stat Boxes across all color themes - Crisp Luminous Glass */
+/* Stat Boxes across all color themes - 30% Theme-Matched Substrate with 3D Depth */
 .summary-stat-box {
-  background: rgba(0, 0, 0, 0.22) !important;
-  border: 1px solid var(--theme-border, rgba(255, 255, 255, 0.16)) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 26%, #050b08) !important;
+  border: 1px solid var(--theme-primary-border, rgba(46, 236, 163, 0.35)) !important;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--theme-primary-border, rgba(46, 236, 163, 0.22)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease !important;
 }
 
 .summary-stat-box:hover {
-  background: rgba(0, 0, 0, 0.16) !important;
-  border-color: var(--theme-primary, rgba(255, 255, 255, 0.40)) !important;
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 34%, #050b08) !important;
+  border-color: var(--theme-primary, #2EECA3) !important;
+  box-shadow: 0 8px 24px -2px rgba(0, 0, 0, 0.70), 0 0 0 1px var(--theme-primary, rgba(46, 236, 163, 0.35)), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
 .summary-stat-box .summary-stat-label {
   color: #FFFFFF !important;
 }
 
-/* In-Words Amount Pill across all color themes - Clean Unboxed Text */
-.banking-card-words {
-  background: transparent !important;
-  background-image: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  color: var(--theme-text-muted, #94A3B8) !important;
-}
-
-/* Icon chip background in dark mode */
-.summary-card-icon-box {
-  background-color: var(--theme-primary-dim, rgba(56, 189, 248, 0.15)) !important;
-  border: 1px solid var(--theme-primary-border, rgba(56, 189, 248, 0.3)) !important;
-  color: var(--theme-primary, #38BDF8) !important;
-  box-shadow: none !important;
-}
-
-[data-theme="light"] .summary-card-icon-box,
-[data-theme="white"] .summary-card-icon-box {
-  background-color: rgba(2, 132, 199, 0.12) !important;
-  border: 1px solid rgba(2, 132, 199, 0.30) !important;
-  color: #0284C7 !important;
-  box-shadow: none !important;
-}
-
-/* Income Stat Box in color themes - Bound to theme */
+/* Income Stat Box 3D Perimeter Line & Hover Depth */
 .summary-stat-box-income {
-  border-color: var(--theme-border, #213E61) !important;
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 26%, #050b08) !important;
+  border: 1.5px solid rgba(46, 236, 163, 0.45) !important;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.55), 0 0 12px rgba(46, 236, 163, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+}
+.summary-stat-box-income:hover {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 34%, #050b08) !important;
+  border-color: rgba(46, 236, 163, 0.85) !important;
+  box-shadow: 0 8px 24px -2px rgba(0, 0, 0, 0.75), 0 0 18px rgba(46, 236, 163, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
 }
 .summary-stat-box-income .summary-stat-icon-box {
   background-color: var(--theme-primary-dim, rgba(56, 189, 248, 0.16)) !important;
   color: var(--theme-primary, #38BDF8) !important;
 }
 .summary-stat-box-income .summary-stat-income {
-  color: var(--theme-primary, #38BDF8) !important;
+  color: var(--theme-income, #2EECA3) !important;
   font-weight: 800 !important;
 }
 
-/* Expense Stat Box in color themes */
+/* Expense Stat Box 3D Perimeter Line & Hover Depth */
 .summary-stat-box-expense {
-  border-color: var(--theme-border, #213E61) !important;
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 22%, #0e0506) !important;
+  border: 1.5px solid rgba(255, 77, 77, 0.45) !important;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.55), 0 0 12px rgba(255, 77, 77, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+}
+.summary-stat-box-expense:hover {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 28%, #140708) !important;
+  border-color: rgba(255, 77, 77, 0.85) !important;
+  box-shadow: 0 8px 24px -2px rgba(0, 0, 0, 0.75), 0 0 18px rgba(255, 77, 77, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
 }
 .summary-stat-box-expense .summary-stat-icon-box {
   background-color: rgba(255, 77, 77, 0.16) !important;
@@ -1605,6 +1639,18 @@
   font-weight: 800 !important;
 }
 
+/* Savings Stat Box 3D Perimeter Line & Hover Depth */
+.summary-stat-box-savings {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 26%, #050b08) !important;
+  border: 1.5px solid var(--theme-primary-border, rgba(46, 236, 163, 0.45)) !important;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.55), 0 0 12px var(--theme-glow, rgba(46, 236, 163, 0.12)), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+}
+.summary-stat-box-savings:hover {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 34%, #050b08) !important;
+  border-color: var(--theme-primary, #38BDF8) !important;
+  box-shadow: 0 8px 24px -2px rgba(0, 0, 0, 0.75), 0 0 18px var(--theme-glow, rgba(56, 189, 248, 0.25)), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
+}
+
 /* Net figures in color themes (High WCAG AA Contrast) - Theme Primary */
 .summary-net-positive {
   color: var(--theme-primary, #38BDF8) !important;
@@ -1613,22 +1659,117 @@
   color: #FF4D4D !important;
 }
 
-/* Unified card elevation across Homepage widgets */
-.homepage-elevated-card {
-  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.42), 0 1px 4px -1px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-[data-theme="light"] .homepage-elevated-card,
-[data-theme="white"] .homepage-elevated-card {
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.02);
+/* Divider Line above hero action buttons - Boosted Visibility & Glow */
+.hero-buttons-divider {
+  border-top: 2.5px solid var(--theme-primary, #38BDF8) !important;
+  opacity: 0.90 !important;
+  box-shadow: 0 1px 8px var(--theme-glow, rgba(56, 189, 248, 0.45)) !important;
 }
 
-.fund-card-3d {
-  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+/* Quick Access Cards - 30% Theme Match & 3D Border Line */
+.quick-access-btn {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 22%, #050b08) !important;
+  border: 1px solid var(--theme-primary-border, rgba(46, 236, 163, 0.35)) !important;
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.50), 0 0 0 1px var(--theme-primary-border, rgba(46, 236, 163, 0.20)), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
+.quick-access-btn:hover {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 32%, #050b08) !important;
+  border-color: var(--theme-primary, #2EECA3) !important;
+  box-shadow: 0 12px 24px -4px var(--theme-glow, rgba(0, 0, 0, 0.6)), 0 0 0 1px var(--theme-primary, rgba(46, 236, 163, 0.35)), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Unified Card 3D Perimeter Border Line across all Homepage Widgets */
+.homepage-elevated-card {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 18%, #07100b) !important;
+  border: 1px solid var(--theme-primary-border, rgba(46, 236, 163, 0.38)) !important;
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--theme-primary-border, rgba(46, 236, 163, 0.22)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+.homepage-elevated-card:hover {
+  border-color: var(--theme-primary-border, rgba(46, 236, 163, 0.55)) !important;
+  box-shadow: 0 14px 32px -6px var(--theme-glow, rgba(0, 0, 0, 0.6)), 0 0 0 1px var(--theme-primary, rgba(46, 236, 163, 0.35)), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Category Cards - 3D Perimeter Border Line & Theme Tint */
+.fund-card-3d {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 18%, #07100b) !important;
+  border: 1px solid var(--theme-primary-border, rgba(46, 236, 163, 0.38)) !important;
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--theme-primary-border, rgba(46, 236, 163, 0.20)), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+.fund-card-3d:hover {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 26%, #07100b) !important;
+  border-color: var(--theme-primary, #2EECA3) !important;
+  box-shadow: 0 14px 30px -4px var(--theme-glow, rgba(0, 0, 0, 0.6)), 0 0 0 1px var(--theme-primary, rgba(46, 236, 163, 0.35)), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Header & Bottom Navigation Bar - Theme-Matched Background with 3D Border Box */
+#app-header-box {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 20%, #060e09) !important;
+  border: 1px solid var(--theme-primary-border, rgba(46, 236, 163, 0.38)) !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--theme-primary-border, rgba(46, 236, 163, 0.22)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+#bottom-nav-bar {
+  background: color-mix(in srgb, var(--theme-primary, #2EECA3) 20%, #060e09) !important;
+  border: 1px solid var(--theme-primary-border, rgba(46, 236, 163, 0.38)) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.70), 0 0 0 1px var(--theme-primary-border, rgba(46, 236, 163, 0.22)), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+/* Light / White Mode Overrides */
+[data-theme="light"] .summary-stat-box,
+[data-theme="white"] .summary-stat-box {
+  background: color-mix(in srgb, var(--theme-primary, #0284C7) 12%, #FFFFFF) !important;
+  border: 1px solid var(--theme-primary-border, rgba(2, 132, 199, 0.30)) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+[data-theme="light"] .summary-stat-box:hover,
+[data-theme="white"] .summary-stat-box:hover {
+  background: color-mix(in srgb, var(--theme-primary, #0284C7) 18%, #FFFFFF) !important;
+}
+
+[data-theme="light"] .quick-access-btn,
+[data-theme="white"] .quick-access-btn {
+  background: color-mix(in srgb, var(--theme-primary, #0284C7) 10%, #FFFFFF) !important;
+  border: 1px solid var(--theme-primary-border, rgba(2, 132, 199, 0.30)) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 0 0 1px var(--theme-primary-border, rgba(2, 132, 199, 0.15)) !important;
+}
+
+[data-theme="light"] .homepage-elevated-card,
+[data-theme="white"] .homepage-elevated-card {
+  background: color-mix(in srgb, var(--theme-primary, #0284C7) 6%, #FFFFFF) !important;
+  border: 1px solid var(--theme-primary-border, rgba(2, 132, 199, 0.30)) !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px var(--theme-primary-border, rgba(2, 132, 199, 0.15)) !important;
+}
+
 [data-theme="light"] .fund-card-3d,
 [data-theme="white"] .fund-card-3d {
-  box-shadow: 0 3px 12px -2px rgba(0, 0, 0, 0.05) !important;
-  border-color: #E2E8F0 !important;
+  background: color-mix(in srgb, var(--theme-primary, #0284C7) 6%, #FFFFFF) !important;
+  border: 1px solid var(--theme-primary-border, rgba(2, 132, 199, 0.30)) !important;
+  box-shadow: 0 3px 12px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px var(--theme-primary-border, rgba(2, 132, 199, 0.15)) !important;
+}
+
+[data-theme="light"] #app-header-box,
+[data-theme="white"] #app-header-box {
+  background: color-mix(in srgb, var(--theme-primary, #0284C7) 8%, #FFFFFF) !important;
+  border: 1px solid var(--theme-primary-border, rgba(2, 132, 199, 0.30)) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 0 0 1px var(--theme-primary-border, rgba(2, 132, 199, 0.15)) !important;
+}
+
+[data-theme="light"] #bottom-nav-bar,
+[data-theme="white"] #bottom-nav-bar {
+  background: color-mix(in srgb, var(--theme-primary, #0284C7) 8%, #FFFFFF) !important;
+  border: 1px solid var(--theme-primary-border, rgba(2, 132, 199, 0.30)) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--theme-primary-border, rgba(2, 132, 199, 0.15)) !important;
 }
 
 /* Light & White Day Mode - Completely Untouched and Sharp */
