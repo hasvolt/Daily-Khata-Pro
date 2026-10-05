@@ -2370,23 +2370,18 @@ function AppContent() {
       {/* Real-time PWA App Update Notification Banner */}
       <UpdateNotification isHindi={language === 'hi'} />
 
-      {/* 1-Click Back to English Banner when Online Google Translate is Active */}
+      {/* Professional Floating Return to English Button when Google Translate is Active */}
       {isGoogleTranslated && (
-        <div className="bg-gradient-to-r from-indigo-900/95 via-indigo-950/95 to-slate-950/95 text-white px-3 py-1.5 flex items-center justify-between text-xs sticky top-0 z-[100] border-b border-indigo-400/30 shadow-lg backdrop-blur-md animate-in fade-in duration-200">
-          <div className="flex items-center gap-2 truncate">
-            <Globe className="w-3.5 h-3.5 text-indigo-300 shrink-0 animate-pulse" />
-            <span className="truncate font-semibold text-indigo-100">
-              {language === 'hi' ? `ऑनलाइन अनुवाद सक्रिय (${activeGoogleCode || 'Google Translate'})` : `Online Translation Active (${activeGoogleCode || 'Google Translate'})`}
-            </span>
-          </div>
+        <div className="fixed bottom-20 right-3.5 sm:bottom-24 sm:right-6 z-40 animate-in slide-in-from-bottom duration-300 pointer-events-auto">
           <button
             type="button"
             onClick={() => resetGoogleTranslate()}
-            className="ml-2 px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-black text-[11.5px] flex items-center gap-1.5 cursor-pointer shrink-0 transition-all shadow-md"
+            className="group px-3.5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-black text-[12px] sm:text-[13px] flex items-center gap-2 cursor-pointer shadow-[0_8px_24px_rgba(16,185,129,0.45)] border border-emerald-300/50 backdrop-blur-md transition-all"
             id="global-back-to-english-btn"
+            title={language === 'hi' ? 'मूल अंग्रेजी भाषा पर लौटें' : 'Return to English'}
           >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-950 stroke-[2.5]" />
-            <span>{language === 'hi' ? 'वापस इंग्लिश' : 'Back to English'}</span>
+            <RotateCcw className="w-4 h-4 text-slate-950 stroke-[2.8] transition-transform group-hover:-rotate-90 duration-300" />
+            <span className="leading-none">{language === 'hi' ? 'वापस इंग्लिश' : 'Return to English'}</span>
           </button>
         </div>
       )}

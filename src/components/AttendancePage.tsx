@@ -601,55 +601,55 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           </div>
         </div>
 
-        <div className="flex w-full sm:w-auto items-stretch sm:items-center gap-2 flex-wrap">
+        <div className="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
           {/* Quick Bulk Settlement Button */}
           <button
             type="button"
             onClick={() => handleOpenBulkSettlement('all')}
-            className="flex-1 sm:flex-none justify-center px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[12px] sm:text-[12.5px] flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 transition-all"
+            className="justify-center px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[11px] xs:text-[12px] sm:text-[12.5px] flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-md active:scale-95 transition-all truncate"
             title="Settle Lump-sum / Pending Dues in One Click"
           >
-            <Coins className="w-4 h-4" />
-            <span>{isHindi ? '💰 बल्क भुगतान निपटान' : '💰 Settle Dues'}</span>
+            <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+            <span className="truncate">{isHindi ? 'बल्क निपटान' : 'Settle Dues'}</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsPrintFilterModalOpen(true)}
-            className="px-3 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
+            className="justify-center px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] text-[11px] xs:text-[12px] font-bold flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all truncate"
             title="Print Attendance Slip & Filtered Reports"
           >
-            <Printer className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <span className="hidden xs:inline">{isHindi ? 'प्रिंट रिपोर्ट' : 'Print Slip'}</span>
+            <Printer className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+            <span className="truncate">{isHindi ? 'प्रिंट रिपोर्ट' : 'Print Slip'}</span>
           </button>
 
           <button
             type="button"
             onClick={() => handleOpenNewModal()}
-            className="flex-1 sm:flex-none justify-center px-3 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[12.5px] sm:text-[13px] flex items-center gap-1.5 cursor-pointer hover:opacity-95 shadow-md active:scale-95"
+            className="justify-center px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#040D17)] font-extrabold text-[11px] xs:text-[12px] sm:text-[13px] flex items-center gap-1 sm:gap-1.5 cursor-pointer hover:opacity-95 shadow-md active:scale-95 truncate"
           >
-            <Plus className="w-4 h-4" />
-            <span>{isHindi ? 'नया रिकॉर्ड' : 'Log Attendance'}</span>
+            <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+            <span className="truncate">{isHindi ? 'नया रिकॉर्ड' : 'Log Entry'}</span>
           </button>
         </div>
       </div>
 
       {/* Main Navigation Tabs: Register | Employer Accounts | Analytics */}
-      <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl min-w-0">
+      <div className="grid grid-cols-3 gap-1 sm:gap-1.5 p-1 sm:p-1.5 bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl min-w-0">
         <button
           type="button"
           onClick={() => {
             setActiveTab('register');
             triggerHapticSound('click');
           }}
-          className={`min-w-0 py-2.5 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
+          className={`min-w-0 py-2 sm:py-2.5 px-1 sm:px-3 rounded-xl text-[10.5px] xs:text-[11.5px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
             activeTab === 'register'
               ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 shadow-md font-extrabold'
               : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-surface,#0E1A29)]'
           }`}
         >
-          <CalendarCheck className="w-4 h-4" />
-          <span>{isHindi ? 'दैनिक उपस्थिति (Register)' : 'Daily Register'}</span>
+          <CalendarCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+          <span className="truncate">{isHindi ? 'दैनिक रजिस्टर' : 'Daily Register'}</span>
         </button>
 
         <button
@@ -658,16 +658,16 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             setActiveTab('employers');
             triggerHapticSound('click');
           }}
-          className={`min-w-0 py-2.5 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
+          className={`min-w-0 py-2 sm:py-2.5 px-1 sm:px-3 rounded-xl text-[10.5px] xs:text-[11.5px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer transition-all ${
             activeTab === 'employers'
               ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 shadow-md font-extrabold'
               : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-surface,#0E1A29)]'
           }`}
         >
-          <Building className="w-4 h-4" />
-          <span>{isHindi ? 'कंपनी व काम खाते' : 'Employer Accounts'}</span>
+          <Building className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+          <span className="truncate">{isHindi ? 'कंपनी खाते' : 'Accounts'}</span>
           {globalTotalPending > 0 && (
-            <span className="ml-1 text-[10px] font-mono font-black px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950">
+            <span className="shrink-0 text-[9px] xs:text-[10px] font-mono font-black px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 leading-none">
               {formatCurrency(globalTotalPending, privacyMask)}
             </span>
           )}
@@ -679,14 +679,14 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             setActiveTab('summary');
             triggerHapticSound('click');
           }}
-          className={`min-w-0 py-2.5 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
+          className={`min-w-0 py-2 sm:py-2.5 px-1 sm:px-3 rounded-xl text-[10.5px] xs:text-[11.5px] sm:text-[13px] font-bold flex items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all ${
             activeTab === 'summary'
               ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 shadow-md font-extrabold'
               : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-surface,#0E1A29)]'
           }`}
         >
-          <PieChart className="w-4 h-4" />
-          <span>{isHindi ? 'विश्लेषण व रिपोर्ट' : 'Analytics'}</span>
+          <PieChart className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+          <span className="truncate">{isHindi ? 'एनालिटिक्स' : 'Analytics'}</span>
         </button>
       </div>
 
@@ -1189,7 +1189,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
 
       {/* Add / Edit Attendance Modal */}
       {isLogModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-150">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 pb-20 sm:pb-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
             
             {/* Modal Header */}

@@ -35,6 +35,8 @@ import {
   Trash2,
   ClipboardList,
   Receipt,
+  CalendarCheck,
+  Menu,
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -251,8 +253,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
       hoverBorder: 'hover:border-rose-500/50',
     },
     {
-      label: getUIText('Work Register', language),
-      icon: ClipboardList,
+      label: isHindi ? 'हाजिरी रजिस्टर' : 'Attendance',
+      icon: CalendarCheck,
       action: onNavigateAttendance,
       iconBg: 'bg-sky-500/15 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/30',
       hoverBorder: 'hover:border-sky-500/50',
@@ -286,9 +288,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
       hoverBorder: 'hover:border-indigo-500/50',
     },
     {
-      label: getUIText('Fund Settings', language),
-      icon: Grid2X2,
-      action: () => setIsSelectorOpen(true),
+      label: isHindi ? 'और मेनू' : 'More Menu',
+      icon: Menu,
+      action: () => {
+        window.dispatchEvent(new CustomEvent('open-main-menu'));
+      },
       iconBg: 'bg-pink-500/15 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 border-pink-500/30',
       hoverBorder: 'hover:border-pink-500/50',
     },

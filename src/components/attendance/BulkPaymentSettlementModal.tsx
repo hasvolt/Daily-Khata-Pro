@@ -181,8 +181,8 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
   const employersWithDues = employerSummaries.filter((e) => e.totalPending > 0);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 pb-20 sm:pb-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-xl max-h-[88vh] sm:max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
         
         {/* Modal Header */}
         <div className="px-5 py-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between bg-[var(--theme-surface,#0E1A29)] shrink-0">
