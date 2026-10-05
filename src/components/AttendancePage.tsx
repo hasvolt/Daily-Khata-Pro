@@ -36,6 +36,7 @@ import {
 } from './attendance/attendanceTypes';
 import { BulkPaymentSettlementModal } from './attendance/BulkPaymentSettlementModal';
 import { EmployerAccountsView } from './attendance/EmployerAccountsView';
+import { AttendancePrintModal } from './attendance/AttendancePrintModal';
 
 export interface AttendancePageProps {
   attendanceLogs: AttendanceLog[];
@@ -89,6 +90,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [editingLog, setEditingLog] = useState<AttendanceLog | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [isPrintFilterModalOpen, setIsPrintFilterModalOpen] = useState(false);
 
   // Bulk Settlement Modal
   const [isBulkPayModalOpen, setIsBulkPayModalOpen] = useState(false);
@@ -613,12 +615,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
 
           <button
             type="button"
-            onClick={handlePrintAttendanceSlip}
-            className="px-3 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
-            title="Print Monthly Attendance Slip"
+            onClick={() => setIsPrintFilterModalOpen(true)}
+            className="px-3 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-border,#213E61)] text-[12px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
+            title="Print Attendance Slip & Filtered Reports"
           >
             <Printer className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
-            <span className="hidden sm:inline">{isHindi ? 'प्रिंट स्लिप' : 'Print Slip'}</span>
+            <span className="hidden xs:inline">{isHindi ? 'प्रिंट रिपोर्ट' : 'Print Slip'}</span>
           </button>
 
           <button
@@ -891,15 +893,15 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             </div>
 
             {/* Filter Dropdowns */}
-            <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
               
               {/* Category Filter */}
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
+                className="w-full sm:w-auto min-w-0 truncate bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
               >
-                <option value="all">{isHindi ? 'सभी कार्य श्रेणियां' : 'All Work Categories'}</option>
+                <option value="all">{isHindi ? 'सभी श्रेणियां' : 'All Categories'}</option>
                 {WORK_CATEGORIES_CATALOG.map((c) => (
                   <option key={c.id} value={c.id}>
                     {isHindi ? c.nameHi : c.nameEn}
@@ -912,9 +914,9 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                 <select
                   value={employerFilter}
                   onChange={(e) => setEmployerFilter(e.target.value)}
-                  className="bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
+                  className="w-full sm:w-auto min-w-0 truncate bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
                 >
-                  <option value="all">{isHindi ? 'सभी नियोक्ता/कंपनी' : 'All Employers'}</option>
+                  <option value="all">{isHindi ? 'सभी नियोक्ता' : 'All Employers'}</option>
                   {existingEmployers.map((emp) => (
                     <option key={emp} value={emp}>{emp}</option>
                   ))}
@@ -925,7 +927,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as any)}
-                className="bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
+                className="w-full sm:w-auto min-w-0 truncate bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
               >
                 <option value="all">{isHindi ? 'सभी स्थितियां' : 'All Status'}</option>
                 <option value="present">{isHindi ? 'उपस्थित' : 'Present'}</option>
@@ -939,7 +941,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
               <select
                 value={paymentFilter}
                 onChange={(e) => setPaymentFilter(e.target.value as any)}
-                className="bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
+                className="w-full sm:w-auto min-w-0 truncate bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-2.5 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] font-semibold cursor-pointer outline-hidden"
               >
                 <option value="all">{isHindi ? 'सभी भुगतान' : 'All Payments'}</option>
                 <option value="pending">{isHindi ? 'बाकी भुगतान' : 'Pending'}</option>
@@ -1450,6 +1452,17 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
         onRecordBulkAttendancePaymentToKhata={onRecordBulkAttendancePaymentToKhata}
         isHindi={isHindi}
         privacyMask={privacyMask}
+      />
+
+      {/* Attendance History Print / Export Filter Modal */}
+      <AttendancePrintModal
+        isOpen={isPrintFilterModalOpen}
+        onClose={() => setIsPrintFilterModalOpen(false)}
+        logs={attendanceLogs}
+        existingEmployers={existingEmployers}
+        language={language}
+        privacyMask={privacyMask}
+        formatCurrency={formatCurrency}
       />
 
       {/* Delete Confirmation Modal */}

@@ -4,7 +4,7 @@
  * 100% Offline-First Architecture, Resilient Asset Caching, Background Sync & Push Capabilities
  */
 
-const CACHE_NAME = 'daily-khata-pro-v2.8.7';
+const CACHE_NAME = 'daily-khata-pro-v2.8.8';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

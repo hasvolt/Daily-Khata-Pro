@@ -96,7 +96,8 @@ import {
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { TRANSLATIONS } from './utils/translations';
 import { updatePageSEO } from './utils/seo';
-import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu, Shield, ShieldCheck, Github, Globe, Heart, Code2 } from 'lucide-react';
+import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu, Shield, ShieldCheck, Github, Globe, Heart, Code2, RotateCcw } from 'lucide-react';
+import { resetGoogleTranslate, isGoogleTranslateActive, getActiveGoogleLanguage } from './utils/googleTranslate';
 
 const STORAGE_KEY = 'daily-khata-pro-v3';
 
@@ -237,6 +238,23 @@ function AppContent() {
   const [dueRemindersAlert, setDueRemindersAlert] = useState<AppReminder[]>([]);
   const [isDueBannerDismissed, setIsDueBannerDismissed] = useState<boolean>(false);
   const [isPrintModalOpen, setIsPrintModalOpen] = useState<boolean>(false);
+  const [isGoogleTranslated, setIsGoogleTranslated] = useState<boolean>(false);
+  const [activeGoogleCode, setActiveGoogleCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkGoogle = () => {
+      const active = isGoogleTranslateActive();
+      setIsGoogleTranslated(active);
+      setActiveGoogleCode(getActiveGoogleLanguage());
+    };
+    checkGoogle();
+    window.addEventListener('focus', checkGoogle);
+    const interval = setInterval(checkGoogle, 2000);
+    return () => {
+      window.removeEventListener('focus', checkGoogle);
+      clearInterval(interval);
+    };
+  }, []);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
   const [printMonthDate, setPrintMonthDate] = useState<Date>(new Date());
@@ -2352,6 +2370,27 @@ function AppContent() {
       {/* Real-time PWA App Update Notification Banner */}
       <UpdateNotification isHindi={language === 'hi'} />
 
+      {/* 1-Click Back to English Banner when Online Google Translate is Active */}
+      {isGoogleTranslated && (
+        <div className="bg-gradient-to-r from-indigo-900/95 via-indigo-950/95 to-slate-950/95 text-white px-3 py-1.5 flex items-center justify-between text-xs sticky top-0 z-[100] border-b border-indigo-400/30 shadow-lg backdrop-blur-md animate-in fade-in duration-200">
+          <div className="flex items-center gap-2 truncate">
+            <Globe className="w-3.5 h-3.5 text-indigo-300 shrink-0 animate-pulse" />
+            <span className="truncate font-semibold text-indigo-100">
+              {language === 'hi' ? `ऑनलाइन अनुवाद सक्रिय (${activeGoogleCode || 'Google Translate'})` : `Online Translation Active (${activeGoogleCode || 'Google Translate'})`}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => resetGoogleTranslate()}
+            className="ml-2 px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-black text-[11.5px] flex items-center gap-1.5 cursor-pointer shrink-0 transition-all shadow-md"
+            id="global-back-to-english-btn"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-slate-950 stroke-[2.5]" />
+            <span>{language === 'hi' ? 'वापस इंग्लिश' : 'Back to English'}</span>
+          </button>
+        </div>
+      )}
+
       {/* Top Header */}
       <div className="no-print">
         <Header
@@ -2529,6 +2568,8 @@ function AppContent() {
               onAddIncomeSource={handleAddIncomeSource}
               language={language}
               privacyMask={privacyMask}
+              budgets={budgets}
+              entries={entries}
             />
           } />
 
@@ -3438,6 +3479,7 @@ function AppContent() {
           setBudgets(updated);
           showToast(language === 'hi' ? 'श्रेणी बजट अपडेट किए गए' : 'Category budgets updated');
         }}
+        onAddCategory={handleAddCategory}
         currentMonthEntries={entries}
         language={language}
       />

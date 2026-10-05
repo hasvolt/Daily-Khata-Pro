@@ -1,6 +1,6 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "../utils/currencyConfig";
 import React, { useState, useEffect } from 'react';
-import { Entry, FundType, FundConfig, PaymentMode, AppLanguage } from '../types';
+import { Entry, FundType, FundConfig, PaymentMode, AppLanguage, CategoryBudget } from '../types';
 import { DEFAULT_FUNDS, FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_INCOME_SOURCES, DEFAULT_CATEGORIES } from '../data/defaults';
 import { formatCurrency, calculateFundSplits, triggerHapticSound } from '../utils/khataCalculations';
 import { playIncomeSound, playExpenseSound, playClickSound } from '../utils/audioService';
@@ -23,7 +23,9 @@ import {
   Sliders,
   Target,
   Briefcase,
-  Zap
+  Zap,
+  AlertTriangle,
+  AlertCircle
 } from 'lucide-react';
 
 interface AddViewProps {
@@ -41,6 +43,8 @@ interface AddViewProps {
   onCancelEdit?: () => void;
   language?: AppLanguage;
   privacyMask?: boolean;
+  budgets?: CategoryBudget[];
+  entries?: Entry[];
 }
 
 export const AddView: React.FC<AddViewProps> = ({
@@ -56,7 +60,9 @@ export const AddView: React.FC<AddViewProps> = ({
   onAddIncomeSource,
   onCancelEdit,
   language = 'en',
-  privacyMask = false
+  privacyMask = false,
+  budgets = [],
+  entries = []
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi' || language === 'hinglish';
@@ -80,6 +86,16 @@ export const AddView: React.FC<AddViewProps> = ({
   // Smart Auto-Categorization state
   const [isManuallyChanged, setIsManuallyChanged] = useState<boolean>(false);
   const [autoDetectedLabel, setAutoDetectedLabel] = useState<string | null>(null);
+
+  // Category Monthly Budget Warning / Alert State
+  const [budgetAlertData, setBudgetAlertData] = useState<{
+    type: 'warning' | 'exceeded';
+    category: string;
+    limit: number;
+    currentSpent: number;
+    projected: number;
+    entry: Omit<Entry, 'id' | 'createdAt'>;
+  } | null>(null);
 
   const EXPENSE_KEYWORDS: Record<string, string[]> = {
     'Food & Groceries': ['food', 'zomato', 'swiggy', 'grocery', 'milk', 'ration', 'dinner', 'lunch', 'breakfast', 'pizza', 'burger', 'restaurant', 'cafe', 'tea', 'coffee', 'chai', 'veg', 'meat', 'fruit', 'snack', 'biscuit', 'water', 'sabzi', 'khana'],
@@ -335,12 +351,60 @@ export const AddView: React.FC<AddViewProps> = ({
         : { category, fund: selectedFund })
     };
 
+    if (type === 'expense') {
+      const targetBudget = (budgets || []).find((b) => b.category === category);
+      if (targetBudget && targetBudget.monthlyLimit > 0) {
+        const entryMonth = (date || new Date().toISOString()).slice(0, 7);
+        const currentCatSpent = (entries || [])
+          .filter(
+            (e) =>
+              e.type === 'expense' &&
+              e.category === category &&
+              e.date.startsWith(entryMonth) &&
+              e.id !== editingEntry?.id
+          )
+          .reduce((sum, e) => sum + e.amount, 0);
+
+        const projected = currentCatSpent + parsedAmount;
+        if (projected > targetBudget.monthlyLimit) {
+          triggerHapticSound('error');
+          setBudgetAlertData({
+            type: 'exceeded',
+            category,
+            limit: targetBudget.monthlyLimit,
+            currentSpent: currentCatSpent,
+            projected,
+            entry: newEntry
+          });
+          return;
+        } else if (projected / targetBudget.monthlyLimit >= 0.8) {
+          triggerHapticSound('click');
+          setBudgetAlertData({
+            type: 'warning',
+            category,
+            limit: targetBudget.monthlyLimit,
+            currentSpent: currentCatSpent,
+            projected,
+            entry: newEntry
+          });
+          return;
+        }
+      }
+    }
+
     if (type === 'income') {
       playIncomeSound();
     } else {
       playExpenseSound();
     }
     onSaveEntry(newEntry, editingEntry?.id);
+  };
+
+  const handleConfirmBudgetSave = () => {
+    if (!budgetAlertData) return;
+    playExpenseSound();
+    onSaveEntry(budgetAlertData.entry, editingEntry?.id);
+    setBudgetAlertData(null);
   };
 
   const paymentModesList: { id: PaymentMode; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
@@ -998,6 +1062,114 @@ export const AddView: React.FC<AddViewProps> = ({
           </button>
         </div>
       </form>
+
+      {/* Category Monthly Budget Warning / Limit Exceeded Confirmation Modal */}
+      {budgetAlertData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
+            <div className="flex items-start gap-3">
+              <div
+                className={`p-3 rounded-2xl shrink-0 ${
+                  budgetAlertData.type === 'exceeded'
+                    ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                    : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                }`}
+              >
+                {budgetAlertData.type === 'exceeded' ? (
+                  <AlertCircle className="w-6 h-6 stroke-[2.5]" />
+                ) : (
+                  <AlertTriangle className="w-6 h-6 stroke-[2.5]" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3
+                  className={`text-base font-bold leading-tight ${
+                    budgetAlertData.type === 'exceeded' ? 'text-rose-400' : 'text-amber-400'
+                  }`}
+                >
+                  {budgetAlertData.type === 'exceeded'
+                    ? isHindi
+                      ? 'मासिक बजट सीमा पार!'
+                      : 'Monthly Budget Limit Exceeded!'
+                    : isHindi
+                    ? 'मासिक बजट चेतावनी (80%+)'
+                    : 'Approaching Budget Limit (80%+)'}
+                </h3>
+                <p className="text-xs text-[var(--theme-text-dim,#94A3B8)] mt-1">
+                  {budgetAlertData.type === 'exceeded'
+                    ? isHindi
+                      ? `इस खर्च से "${budgetAlertData.category}" का मासिक बजट पार हो जाएगा।`
+                      : `Saving this expense will exceed your monthly limit for "${budgetAlertData.category}".`
+                    : isHindi
+                    ? `इस खर्च के बाद "${budgetAlertData.category}" का 80% से अधिक बजट इस्तेमाल हो जाएगा।`
+                    : `This expense will push "${budgetAlertData.category}" past 80% of your monthly budget.`}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-xl p-3.5 space-y-2 text-xs">
+              <div className="flex justify-between items-center text-[var(--theme-text-dim,#94A3B8)]">
+                <span>{isHindi ? 'मासिक बजट सीमा' : 'Monthly Budget Limit'}:</span>
+                <span className="font-mono font-bold text-[var(--theme-text,#F8FAFC)]">
+                  {formatCurrency(budgetAlertData.limit, privacyMask)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-[var(--theme-text-dim,#94A3B8)]">
+                <span>{isHindi ? 'अब तक का खर्च' : 'Current Month Spent'}:</span>
+                <span className="font-mono font-semibold text-[var(--theme-text,#F8FAFC)]">
+                  {formatCurrency(budgetAlertData.currentSpent, privacyMask)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-[var(--theme-text-dim,#94A3B8)]">
+                <span>{isHindi ? 'यह नया खर्च' : 'This Expense'}:</span>
+                <span className="font-mono font-bold text-rose-400">
+                  +{formatCurrency(parsedAmount, privacyMask)}
+                </span>
+              </div>
+              <div className="pt-2 border-t border-[var(--theme-border,#213E61)] flex justify-between items-center font-bold">
+                <span className="text-[var(--theme-text,#F8FAFC)]">
+                  {isHindi ? 'कुल अनुमानित खर्च' : 'Projected Spending'}:
+                </span>
+                <span
+                  className={`font-mono text-sm ${
+                    budgetAlertData.type === 'exceeded' ? 'text-rose-400' : 'text-amber-400'
+                  }`}
+                >
+                  {formatCurrency(budgetAlertData.projected, privacyMask)} (
+                  {Math.round((budgetAlertData.projected / budgetAlertData.limit) * 100)}%)
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => setBudgetAlertData(null)}
+                className="flex-1 py-2.5 px-4 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-white font-semibold text-xs cursor-pointer transition-colors"
+              >
+                {isHindi ? 'रद्द करें (Cancel)' : 'Cancel'}
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmBudgetSave}
+                className={`flex-1 py-2.5 px-4 rounded-xl font-bold text-xs cursor-pointer shadow-md transition-all active:scale-95 ${
+                  budgetAlertData.type === 'exceeded'
+                    ? 'bg-rose-500 hover:bg-rose-600 text-white'
+                    : 'bg-amber-500 hover:bg-amber-600 text-slate-950'
+                }`}
+              >
+                {budgetAlertData.type === 'exceeded'
+                  ? isHindi
+                    ? 'पुष्टि करें व सहेजें'
+                    : 'Save Anyway'
+                  : isHindi
+                  ? 'सहेजें (Proceed)'
+                  : 'Confirm & Save'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

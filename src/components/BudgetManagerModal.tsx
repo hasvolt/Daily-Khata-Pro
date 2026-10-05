@@ -11,6 +11,7 @@ interface BudgetManagerModalProps {
   categories: string[];
   budgets: CategoryBudget[];
   onSaveBudgets: (newBudgets: CategoryBudget[]) => void;
+  onAddCategory?: (categoryName: string) => void;
   currentMonthEntries?: Entry[];
   language?: AppLanguage;
   privacyMask?: boolean;
@@ -22,6 +23,7 @@ export const BudgetManagerModal: React.FC<BudgetManagerModalProps> = ({
   categories,
   budgets,
   onSaveBudgets,
+  onAddCategory,
   currentMonthEntries = [],
   language = 'en',
   privacyMask = false
@@ -29,6 +31,22 @@ export const BudgetManagerModal: React.FC<BudgetManagerModalProps> = ({
   const [localBudgets, setLocalBudgets] = useState<CategoryBudget[]>([...budgets]);
   const [selectedCat, setSelectedCat] = useState<string>(categories[0] || '');
   const [limitInput, setLimitInput] = useState<string>('');
+  const [isAddingCustomCategory, setIsAddingCustomCategory] = useState<boolean>(false);
+  const [customCategoryInput, setCustomCategoryInput] = useState<string>('');
+
+  React.useEffect(() => {
+    setLocalBudgets([...budgets]);
+  }, [budgets]);
+
+  React.useEffect(() => {
+    if (!selectedCat || !categories.includes(selectedCat)) {
+      setSelectedCat(categories[0] || '');
+    }
+  }, [categories, selectedCat]);
+
+  const availableCategories = React.useMemo(() => {
+    return Array.from(new Set(categories.filter(Boolean)));
+  }, [categories]);
 
   if (!isOpen) return null;
 
@@ -67,6 +85,18 @@ export const BudgetManagerModal: React.FC<BudgetManagerModalProps> = ({
     triggerHapticSound('delete');
   };
 
+  const handleCreateCustomCategory = () => {
+    const trimmed = customCategoryInput.trim();
+    if (!trimmed) return;
+    if (onAddCategory) {
+      onAddCategory(trimmed);
+    }
+    setSelectedCat(trimmed);
+    setCustomCategoryInput('');
+    setIsAddingCustomCategory(false);
+    triggerHapticSound('save');
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="w-full max-w-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -102,13 +132,23 @@ export const BudgetManagerModal: React.FC<BudgetManagerModalProps> = ({
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
-                <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block mb-1">Select Category</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] block">Select Category</label>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingCustomCategory(!isAddingCustomCategory)}
+                    className="text-[11px] text-[var(--theme-primary,#38BDF8)] hover:underline flex items-center gap-1 cursor-pointer font-medium"
+                  >
+                    <Plus className="w-3 h-3" />
+                    {language === 'hi' ? '+ कस्टम श्रेणी' : '+ Custom Category'}
+                  </button>
+                </div>
                 <select
                   value={selectedCat}
                   onChange={(e) => setSelectedCat(e.target.value)}
                   className="w-full bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-lg p-2 text-[var(--theme-text,#F8FAFC)] text-xs focus:outline-none focus:border-[var(--theme-primary,#38BDF8)]"
                 >
-                  {categories.map((c) => (
+                  {availableCategories.map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
@@ -127,6 +167,43 @@ export const BudgetManagerModal: React.FC<BudgetManagerModalProps> = ({
                 />
               </div>
             </div>
+
+            {/* Inline Custom Category Creator */}
+            {isAddingCustomCategory && (
+              <div className="p-2.5 bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-primary,#38BDF8)]/50 rounded-xl flex gap-2 animate-in fade-in duration-150">
+                <input
+                  type="text"
+                  placeholder={language === 'hi' ? 'नई श्रेणी का नाम...' : 'New category name...'}
+                  value={customCategoryInput}
+                  onChange={(e) => setCustomCategoryInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleCreateCustomCategory();
+                    }
+                  }}
+                  className="flex-1 bg-[var(--theme-bg,#070E18)] border border-[var(--theme-border,#213E61)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--theme-text,#F8FAFC)] focus:outline-none"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={handleCreateCustomCategory}
+                  className="px-3 py-1.5 bg-[var(--theme-primary,#38BDF8)] text-[#040D17] rounded-lg text-xs font-bold cursor-pointer hover:brightness-110"
+                >
+                  {language === 'hi' ? 'जोड़ें' : 'Add'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAddingCustomCategory(false);
+                    setCustomCategoryInput('');
+                  }}
+                  className="px-2 py-1.5 text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] text-xs cursor-pointer"
+                >
+                  {language === 'hi' ? 'रद्द' : 'Cancel'}
+                </button>
+              </div>
+            )}
 
             <button
               type="submit"

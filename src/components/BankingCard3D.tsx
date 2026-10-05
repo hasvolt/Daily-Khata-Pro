@@ -178,7 +178,7 @@ export function BankingCard3D({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1 sm:gap-1.5">
-                  <h2 className="text-[11.5px] xs:text-[12.5px] sm:text-[14px] font-bold text-white tracking-wide uppercase leading-tight whitespace-nowrap">
+                  <h2 className="banking-card-title text-[11.5px] xs:text-[12.5px] sm:text-[14px] font-bold text-white tracking-wide uppercase leading-tight whitespace-nowrap">
                     {isHindi ? 'कुल शुद्ध बैलेंस' : 'TOTAL NET BALANCE'}
                   </h2>
                   <button
@@ -208,7 +208,6 @@ export function BankingCard3D({
             <div className="flex flex-col items-end gap-1 shrink-0">
               {/* SECURED badge */}
               <div className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-surface,#0E1A29)]/85 shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--theme-primary,#38BDF8)] animate-pulse shrink-0" />
                 <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" strokeWidth={2.4} />
                 <span className="text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-bold text-white tracking-wider uppercase">
                   SECURED

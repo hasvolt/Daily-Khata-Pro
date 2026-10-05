@@ -25,12 +25,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
   const isHindi = language === 'hi';
 
   const tabs: TabItem[] = [
-    { id: 'home', label: isHindi ? 'होम' : 'Home', icon: Home },
-    { id: 'history', label: isHindi ? 'रिकॉर्ड्स' : 'Records', icon: History },
-    { id: 'add', label: isHindi ? '+ जोड़ें' : '+ Add', icon: Plus, isAction: true },
-    { id: 'goals', label: isHindi ? 'लक्ष्य' : 'Goals', icon: Target },
-    { id: 'calculator', label: isHindi ? 'कैलकुलेटर' : 'Calculator', icon: Calculator },
-    { id: 'report', label: isHindi ? 'रिपोर्ट्स' : 'Reports', icon: BarChart3 }
+    { id: 'home', label: t.nav.home || (isHindi ? 'होम' : 'Home'), icon: Home },
+    { id: 'history', label: t.nav.tracker || (isHindi ? 'रिकॉर्ड्स' : 'Records'), icon: History },
+    { id: 'add', label: t.nav.add || (isHindi ? '+ जोड़ें' : '+ Add'), icon: Plus, isAction: true },
+    { id: 'goals', label: t.nav.goals || (isHindi ? 'लक्ष्य' : 'Goals'), icon: Target },
+    { id: 'calculator', label: t.nav.calculator || t.home.calculator || (isHindi ? 'कैलकुलेटर' : 'Calculator'), icon: Calculator },
+    { id: 'report', label: t.nav.reports || (isHindi ? 'रिपोर्ट्स' : 'Reports'), icon: BarChart3 }
   ];
 
   const handleTabClick = (tab: TabItem) => {

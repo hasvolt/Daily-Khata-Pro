@@ -71,16 +71,17 @@ export function SummaryCard3D({
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.2 }}
-        className="group summary-card-3d homepage-elevated-card relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary-border,rgba(56,189,248,0.4))] backdrop-blur-xl transition-all cursor-pointer select-none text-left p-2.5 xs:p-3 sm:p-4 md:p-[18px]"
+        className="group summary-card-3d relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-primary-border,rgba(56,189,248,0.30))] hover:border-[var(--theme-primary-border,rgba(56,189,248,0.5))] backdrop-blur-xl transition-all cursor-pointer select-none text-left p-2.5 xs:p-3 sm:p-4 md:p-[18px]"
       >
-        {/* Rich Ambient Atmospheric Glow matching active theme */}
+        {/* Rich Ambient Atmospheric Glow matching Total Balance card */}
         <div className="summary-card-ambient-glow absolute inset-0 pointer-events-none overflow-hidden select-none">
-          <div className="absolute -right-14 -top-12 h-48 w-64 rounded-full bg-[var(--theme-primary,#38BDF8)]/15 blur-3xl" />
-          <div className="absolute -left-14 -bottom-10 h-40 w-52 rounded-full bg-[var(--theme-primary,#38BDF8)]/10 blur-3xl" />
+          <div className="absolute -right-14 -top-12 h-52 w-72 rounded-full bg-[var(--theme-primary,#38BDF8)]/25 blur-3xl" />
+          <div className="absolute -left-14 -bottom-10 h-44 w-60 rounded-full bg-[var(--theme-glow,var(--theme-primary,#38BDF8))]/20 blur-3xl" />
         </div>
 
-        {/* Top subtle glass rim highlight */}
-        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+        {/* Subtle diagonal luxury glass sheen and top rim highlight */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-transparent select-none" />
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
         {/* Top Header Row */}
         <div className="relative z-10 flex items-center justify-between gap-1.5 mb-2 sm:mb-2.5">

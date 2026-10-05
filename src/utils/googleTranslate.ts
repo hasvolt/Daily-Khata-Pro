@@ -68,16 +68,59 @@ export const ALL_GOOGLE_LANGUAGES: GoogleLanguage[] = [
 ];
 
 /**
+ * Check if browser is online
+ */
+export function isNetworkOnline(): boolean {
+  return typeof navigator !== 'undefined' ? navigator.onLine : true;
+}
+
+/**
+ * Ensure Google Translate script & container are mounted
+ */
+export function ensureGoogleTranslateInitialized(): void {
+  if (typeof document === 'undefined') return;
+
+  // 1. Ensure anchor div exists
+  let el = document.getElementById('google_translate_element');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'google_translate_element';
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    el.style.top = '-9999px';
+    el.style.width = '1px';
+    el.style.height = '1px';
+    el.style.opacity = '0';
+    el.style.pointerEvents = 'none';
+    el.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(el);
+  }
+
+  // 2. Ensure script is loaded if online
+  if (typeof window !== 'undefined' && !window.google?.translate && isNetworkOnline()) {
+    if (!document.getElementById('google-translate-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.type = 'text/javascript';
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  }
+}
+
+/**
  * Get the currently active Google Translate language from cookie
  */
 export function getActiveGoogleLanguage(): string | null {
   try {
+    if (typeof document === 'undefined') return null;
     const cookies = document.cookie.split(';');
     for (const c of cookies) {
       const trimmed = c.trim();
       if (trimmed.startsWith('googtrans=')) {
         const val = trimmed.substring('googtrans='.length);
-        // format is usually /en/hi or /auto/hi
         const parts = val.split('/');
         if (parts.length >= 3 && parts[2]) {
           return decodeURIComponent(parts[2]);
@@ -91,43 +134,78 @@ export function getActiveGoogleLanguage(): string | null {
 }
 
 /**
+ * Check if Google Translate is actively translating the page
+ */
+export function isGoogleTranslateActive(): boolean {
+  const current = getActiveGoogleLanguage();
+  return Boolean(current && current !== 'en');
+}
+
+export interface TranslateResult {
+  success: boolean;
+  reason?: 'offline' | 'error' | 'success';
+  message?: string;
+}
+
+/**
  * Trigger Google Translate for the entire page
  */
-export function applyGoogleTranslateLanguage(langCode: string): boolean {
-  if (!langCode || langCode === 'original' || langCode === 'en_reset') {
+export function applyGoogleTranslateLanguage(langCode: string): TranslateResult {
+  if (!langCode || langCode === 'original' || langCode === 'en_reset' || langCode === 'en') {
     resetGoogleTranslate();
-    return true;
+    return { success: true, reason: 'success' };
+  }
+
+  if (!isNetworkOnline()) {
+    return {
+      success: false,
+      reason: 'offline',
+      message: 'Internet connection is required for Google Translate.'
+    };
   }
 
   try {
-    // 1. Set cookie for root path and host domain
+    ensureGoogleTranslateInitialized();
+
     const hostname = window.location.hostname;
-    const cookieValues = [
+    const cleanHost = hostname.replace(/^www\./, '');
+
+    // Set cookie across root and domain variations
+    const cookiesToSet = [
       `googtrans=/auto/${langCode}; path=/;`,
-      `googtrans=/en/${langCode}; path=/;`
+      `googtrans=/en/${langCode}; path=/;`,
+      `googtrans=/auto/${langCode}; path=/; domain=${hostname};`,
+      `googtrans=/en/${langCode}; path=/; domain=${hostname};`
     ];
 
-    cookieValues.forEach((cookieStr) => {
-      document.cookie = cookieStr;
-      if (hostname) {
-        document.cookie = `${cookieStr} domain=${hostname};`;
-      }
+    if (cleanHost && cleanHost !== hostname) {
+      cookiesToSet.push(`googtrans=/auto/${langCode}; path=/; domain=.${cleanHost};`);
+      cookiesToSet.push(`googtrans=/en/${langCode}; path=/; domain=.${cleanHost};`);
+    }
+
+    cookiesToSet.forEach((c) => {
+      try {
+        document.cookie = c;
+      } catch (e) {}
     });
 
-    // 2. Trigger native select element if it exists in DOM
+    // Try finding Google Translate dropdown combo
     const combo = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
     if (combo) {
       combo.value = langCode;
-      combo.dispatchEvent(new Event('change'));
-      return true;
+      combo.dispatchEvent(new Event('change', { bubbles: true }));
+      combo.dispatchEvent(new Event('input', { bubbles: true }));
+      return { success: true, reason: 'success' };
     } else {
-      // If combo is not rendered yet, reload to let Google Translate read the cookie
-      window.location.reload();
-      return true;
+      // If combo not rendered in DOM yet, reload so the cookie triggers Google Translate init
+      setTimeout(() => {
+        window.location.reload();
+      }, 150);
+      return { success: true, reason: 'success' };
     }
   } catch (err) {
     console.error('Failed to apply Google Translate', err);
-    return false;
+    return { success: false, reason: 'error', message: 'Failed to apply translation.' };
   }
 }
 
@@ -137,22 +215,31 @@ export function applyGoogleTranslateLanguage(langCode: string): boolean {
 export function resetGoogleTranslate(): void {
   try {
     const hostname = window.location.hostname;
-    
-    // Clear cookie
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    if (hostname) {
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname};`;
+    const cleanHost = hostname.replace(/^www\./, '');
+
+    const clearCookies = [
+      'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;',
+      `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname};`
+    ];
+    if (cleanHost && cleanHost !== hostname) {
+      clearCookies.push(`googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${cleanHost};`);
     }
 
-    // Reset select
+    clearCookies.forEach((c) => {
+      try {
+        document.cookie = c;
+      } catch (e) {}
+    });
+
     const combo = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
     if (combo) {
       combo.value = '';
-      combo.dispatchEvent(new Event('change'));
+      combo.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    // Reload page to restore original DOM texts cleanly
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   } catch (e) {
     console.error('Failed to reset Google Translate', e);
     window.location.reload();

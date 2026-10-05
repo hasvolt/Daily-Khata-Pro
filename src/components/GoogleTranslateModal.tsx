@@ -16,8 +16,11 @@ import {
   getActiveGoogleLanguage,
   applyGoogleTranslateLanguage,
   resetGoogleTranslate,
-  GoogleLanguage
+  GoogleLanguage,
+  isNetworkOnline,
+  ensureGoogleTranslateInitialized
 } from '../utils/googleTranslate';
+import { WifiOff, AlertTriangle } from 'lucide-react';
 
 interface GoogleTranslateModalProps {
   isOpen: boolean;
@@ -34,12 +37,27 @@ export const GoogleTranslateModal: React.FC<GoogleTranslateModalProps> = ({
   const [activeCategory, setActiveCategory] = useState<'all' | 'indian' | 'global'>('all');
   const [activeLang, setActiveLang] = useState<string | null>(null);
   const [isApplying, setIsApplying] = useState<string | null>(null);
+  const [isOffline, setIsOffline] = useState<boolean>(!isNetworkOnline());
+  const [offlineNotice, setOfflineNotice] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
+      ensureGoogleTranslateInitialized();
       const current = getActiveGoogleLanguage();
       setActiveLang(current);
+      setIsOffline(!isNetworkOnline());
     }
+
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, [isOpen]);
 
   const filteredLanguages = useMemo(() => {
@@ -66,8 +84,32 @@ export const GoogleTranslateModal: React.FC<GoogleTranslateModalProps> = ({
   if (!isOpen) return null;
 
   const handleSelectLanguage = (code: string) => {
+    if (code === 'en') {
+      handleReset();
+      return;
+    }
+
+    if (!isNetworkOnline()) {
+      setOfflineNotice(
+        isHindi
+          ? 'गूगल ट्रांसलेट के लिए इंटरनेट कनेक्शन आवश्यक है। आप ऑफलाइन हैं।'
+          : 'Google Translate requires an active internet connection. You are offline.'
+      );
+      setTimeout(() => setOfflineNotice(''), 3500);
+      return;
+    }
+
     setIsApplying(code);
-    applyGoogleTranslateLanguage(code);
+    const res = applyGoogleTranslateLanguage(code);
+    if (!res.success && res.reason === 'offline') {
+      setOfflineNotice(
+        isHindi
+          ? 'गूगल ट्रांसलेट के लिए इंटरनेट कनेक्शन आवश्यक है। आप ऑफलाइन हैं।'
+          : 'Google Translate requires an active internet connection. You are offline.'
+      );
+      setIsApplying(null);
+      return;
+    }
     setActiveLang(code);
     setTimeout(() => {
       setIsApplying(null);
@@ -180,6 +222,22 @@ export const GoogleTranslateModal: React.FC<GoogleTranslateModalProps> = ({
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
+          </div>
+
+          {/* Quick Return to English Button */}
+          <div className="flex items-center justify-between gap-2 pt-0.5">
+            <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+              {isHindi ? 'मूल भाषा (अंग्रेजी) में वापस लौटें:' : 'Restore Default Language:'}
+            </span>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
+              id="modal-quick-back-to-english"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>{isHindi ? 'वापस इंग्लिश (Back to English)' : 'Back to English'}</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-1">

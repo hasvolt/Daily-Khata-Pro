@@ -1,5 +1,6 @@
 import { getCurrencyConfig, getCurrentLanguage } from './currencyConfig';
 import { AppLanguage, FundType } from '../types';
+import { getUIText } from './localization';
 
 export interface Translations {
   appName: string;
@@ -1432,6 +1433,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
         name: 'Famille & Foyer (35%)',
         desc: 'Loyer, courses, soutien familial et charges de la maison'
       },
+      business: {
+        name: 'Affaires & Commerce (15%)',
+        desc: 'Revenus professionnels, factures, commerce, stock et bureau'
+      },
       buffer: {
         name: 'Réserve Tampon (5%)',
         desc: 'Coussin financier temporaire pour fluctuations imprévues'
@@ -1638,6 +1643,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       family: {
         name: 'Familie & Haushalt (35%)',
         desc: 'Miete, Lebensmittel, Familienunterstützung & Nebenkosten'
+      },
+      business: {
+        name: 'Geschäft & Handel (15%)',
+        desc: 'Geschäftseinnahmen, Rechnungen, Handel, Inventar & Büro'
       },
       buffer: {
         name: 'Puffer-Reserve (5%)',
@@ -1846,6 +1855,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
         name: 'Семья и дом (35%)',
         desc: 'Аренда, продукты, коммунальные платежи и поддержка семьи'
       },
+      business: {
+        name: 'Бизнес и дело (15%)',
+        desc: 'Доходы от бизнеса, счета, торговля, инвентарь и офис'
+      },
       buffer: {
         name: 'Буферный резерв (5%)',
         desc: 'Быстрая временная подушка для непредвиденных колебаний'
@@ -2052,6 +2065,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       family: {
         name: 'Família e Casa (35%)',
         desc: 'Aluguel, compras, apoio familiar e contas da casa'
+      },
+      business: {
+        name: 'Negócios e Comércio (15%)',
+        desc: 'Receitas comerciais, faturas, comércio, estoque e escritório'
       },
       buffer: {
         name: 'Reserva Tampão (5%)',
@@ -2260,6 +2277,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
         name: 'পরিবার ও ঘর (৩৫%)',
         desc: 'বাড়ি ভাড়া, বাজার, পরিবার ও বাড়ির ইউটিলিটি বিল'
       },
+      business: {
+        name: 'ব্যবসা ও বাণিজ্য (১৫%)',
+        desc: 'ব্যবসায়িক আয়, ইনভয়েস, কেনাবেচা, ইনভেন্টরি ও অফিস খরচ'
+      },
       buffer: {
         name: 'বাফার রিজার্ভ (৫%)',
         desc: 'অনাকাঙ্ক্ষিত ওঠানামার জন্য দ্রুত অস্থায়ী ব্যাকআপ'
@@ -2466,6 +2487,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       family: {
         name: 'خاندان اور گھر (۳۵٪)',
         desc: 'گھر کا کرایہ، راشن، خاندانی کفالت اور یوٹیلیٹی بل'
+      },
+      business: {
+        name: 'کاروبار و تجارت (۱۵٪)',
+        desc: 'کاروباری آمدنی، انوائس، تجارت، انوینٹری اور دفتر'
       },
       buffer: {
         name: 'بفر ریزرو (۵٪)',
@@ -2674,6 +2699,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
         name: 'Keluarga & Rumah (35%)',
         desc: 'Sewa rumah, belanja kebutuhan pokok, keluarga & tagihan rumah'
       },
+      business: {
+        name: 'Bisnis & Usaha (15%)',
+        desc: 'Pendapatan bisnis, faktur, perdagangan, inventaris & kantor'
+      },
       buffer: {
         name: 'Cadangan Buffer (5%)',
         desc: 'Bantalan darurat sementara untuk fluktuasi tak terduga'
@@ -2880,6 +2909,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
       family: {
         name: '家庭・生活費 (35%)',
         desc: '家賃、食費、家族支援、光熱費・生活維持費'
+      },
+      business: {
+        name: '事業・ビジネス (15%)',
+        desc: '事業収益、請求書、商業、在庫、オフィス費用'
       },
       buffer: {
         name: 'バッファー予備 (5%)',
@@ -3088,6 +3121,10 @@ export const TRANSLATIONS: Record<AppLanguage, Translations> = {
         name: '家庭与居家 (35%)',
         desc: '房租房贷、生鲜食材、家庭抚养与水电杂费'
       },
+      business: {
+        name: '商业与业务 (15%)',
+        desc: '商业收入、发票结算、贸易、库存与办公支出'
+      },
       buffer: {
         name: '缓冲备用金 (5%)',
         desc: '应对短期意外波动的快速应急缓冲池'
@@ -3122,6 +3159,34 @@ export function pickTranslation<T>(
 ): T {
   if (lang === 'hi') return options.hi;
   if (lang === 'hinglish') return options.hinglish;
+  if (lang && lang !== 'en' && typeof options.en === 'string') {
+    const translated = getUIText(options.en as string, lang as AppLanguage);
+    if (translated && translated !== options.en) {
+      return translated as unknown as T;
+    }
+  }
   return options.en;
 }
 
+// Safe recursive fallback proxy guaranteeing English defaults for any missing language key
+function createFallbackProxy<T extends object>(target: T, fallback: T): T {
+  return new Proxy(target, {
+    get(obj: any, prop: string | symbol) {
+      const val = obj[prop];
+      const fallbackVal = (fallback as any)?.[prop];
+      if (val === undefined) {
+        return fallbackVal;
+      }
+      if (typeof val === 'object' && val !== null && typeof fallbackVal === 'object' && fallbackVal !== null && !Array.isArray(val)) {
+        return createFallbackProxy(val, fallbackVal);
+      }
+      return val;
+    }
+  });
+}
+
+(Object.keys(TRANSLATIONS) as AppLanguage[]).forEach((l) => {
+  if (l !== 'en' && TRANSLATIONS[l]) {
+    TRANSLATIONS[l] = createFallbackProxy(TRANSLATIONS[l], TRANSLATIONS.en);
+  }
+});

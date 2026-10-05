@@ -147,7 +147,7 @@ export const downloadCSVReport = (entries: Entry[], targetMonthOrDate?: Date | s
   if (targetMonthOrDate instanceof Date) {
     const prefix = `${targetMonthOrDate.getFullYear()}-${String(targetMonthOrDate.getMonth() + 1).padStart(2, '0')}`;
     filtered = entries.filter((e) => e.date.startsWith(prefix));
-    title = `daily-khata-pro-statement-${prefix}` | title;
+    title = `daily-khata-pro-statement-${prefix}`;
   }
 
   const headers = ['ID', 'Date', 'Type', 'Amount (INR)', 'Category / Source', 'Fund / Splits', 'Payment Mode', 'Note', 'Created At'];

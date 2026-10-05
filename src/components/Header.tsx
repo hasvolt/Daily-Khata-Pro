@@ -55,6 +55,7 @@ import { MainMenuDrawer } from './MainMenuDrawer';
 import { AppTheme, AppLanguage, AppViewMode, AppLayout } from '../types';
 import { TRANSLATIONS } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
+import { getUIText } from '../utils/localization';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { APP_VERSION, APP_VERSION_TAG, APP_VERSION_FULL, APP_RELEASE_LABEL } from '../utils/version';
 
@@ -321,7 +322,7 @@ export const Header: React.FC<HeaderProps> = ({
             {[
               { id: 'home' as NavTab, label: tr.menu.khata, icon: Home },
               { id: 'history' as NavTab, label: tr.menu.record, icon: History },
-              { id: 'attendance' as NavTab, label: isHindi ? 'उपस्थिति' : 'Attendance', icon: CalendarCheck },
+              { id: 'attendance' as NavTab, label: getUIText('Attendance', language), icon: CalendarCheck },
               { id: 'goals' as NavTab, label: tr.menu.goals, icon: Target },
               { id: 'tracker' as NavTab, label: tr.menu.workAndLife, icon: Briefcase },
               { id: 'notes' as NavTab, label: tr.menu.notes, icon: FileText },

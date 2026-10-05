@@ -6,12 +6,14 @@ import { getCurrencyConfig } from '../utils/currencyConfig';
 import { getFundIcon, getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
 import { getPageTranslation } from '../utils/pageTranslations';
+import { getUIText } from '../utils/localization';
 import { HomepageFundSelectorModal } from './HomepageFundSelectorModal';
 import { BankingCard3D } from './BankingCard3D';
 import { FundCard3D } from './FundCard3D';
 import { SummaryCard3D } from './SummaryCard3D';
 import { LoanUdharWidget } from './LoanUdharWidget';
 import { ActiveGoalsWidget } from './ActiveGoalsWidget';
+import { BudgetOverviewWidget } from './BudgetOverviewWidget';
 import { motion } from 'motion/react';
 import {
   ArrowUpRight,
@@ -235,56 +237,56 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   const quickAccess = [
     {
-      label: isHindi ? 'इनवॉइस जनरेटर' : 'Invoice Generator',
+      label: getUIText('Invoice Generator', language),
       icon: FileText,
       action: onNavigateInvoice,
       iconBg: 'bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
       hoverBorder: 'hover:border-emerald-500/50',
     },
     {
-      label: isHindi ? 'रीसायकल बिन' : 'Recycle Bin',
+      label: getUIText('Recycle Bin', language),
       icon: Trash2,
       action: onOpenTrash,
       iconBg: 'bg-rose-500/15 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/30',
       hoverBorder: 'hover:border-rose-500/50',
     },
     {
-      label: isHindi ? 'खाता रजिस्टर' : 'Work Register',
+      label: getUIText('Work Register', language),
       icon: ClipboardList,
       action: onNavigateAttendance,
       iconBg: 'bg-sky-500/15 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/30',
       hoverBorder: 'hover:border-sky-500/50',
     },
     {
-      label: isHindi ? 'लोन व उधार' : 'Loans / Udhar',
+      label: getUIText('Loans / Udhar', language),
       icon: Landmark,
       action: onNavigateLoans,
       iconBg: 'bg-purple-500/15 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border-purple-500/30',
       hoverBorder: 'hover:border-purple-500/50',
     },
     {
-      label: isHindi ? 'कैलकुलेटर' : 'Multi Calculator',
+      label: getUIText('Multi Calculator', language),
       icon: Calculator,
       action: onNavigateCalculator,
       iconBg: 'bg-amber-500/15 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
       hoverBorder: 'hover:border-amber-500/50',
     },
     {
-      label: isHindi ? 'बिल बांटें' : 'Split Bill',
+      label: getUIText('Split Bill', language),
       icon: Receipt,
       action: onOpenSplitBill,
       iconBg: 'bg-teal-500/15 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 border-teal-500/30',
       hoverBorder: 'hover:border-teal-500/50',
     },
     {
-      label: isHindi ? 'बजट प्लानर' : 'Budget Manager',
+      label: getUIText('Budget Manager', language),
       icon: PieChart,
       action: onOpenBudgetManager,
       iconBg: 'bg-indigo-500/15 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30',
       hoverBorder: 'hover:border-indigo-500/50',
     },
     {
-      label: isHindi ? 'खाता फंड्स' : 'Fund Settings',
+      label: getUIText('Fund Settings', language),
       icon: Grid2X2,
       action: () => setIsSelectorOpen(true),
       iconBg: 'bg-pink-500/15 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 border-pink-500/30',
@@ -329,9 +331,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
           type="daily"
           title={isHindi ? "आज" : "Today"}
           subtitle={isHindi ? "आय, खर्च और बचत" : "Income, expense & savings"}
-          periodBadge={isHindi ? "आज" : "Today"}
+          periodBadge={language === 'en' ? "Today" : (isHindi ? "आज" : (t.home.dailySummaryHeading?.split(' ')[0] || "Today"))}
+          incomeLabel={isHindi ? 'आय' : 'Income'}
           incomeValue={todayStats.income}
+          expenseLabel={isHindi ? 'खर्च' : 'Expense'}
           expenseValue={todayStats.expense}
+          netLabel={isHindi ? 'बचत' : 'Savings'}
           netValue={todayStats.net}
           formatCurrency={formatCurrency}
           privacyMask={privacyMask}
@@ -343,8 +348,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
           title={isHindi ? "इस महीने" : "This Month"}
           subtitle={isHindi ? "आय, खर्च और बचत" : "Income, expense & savings"}
           periodBadge={monthFormatted}
+          incomeLabel={isHindi ? 'आय' : 'Income'}
           incomeValue={monthStats.income}
+          expenseLabel={isHindi ? 'खर्च' : 'Expense'}
           expenseValue={monthStats.expense}
+          netLabel={isHindi ? 'बचत' : 'Savings'}
           netValue={monthStats.net}
           formatCurrency={formatCurrency}
           privacyMask={privacyMask}
@@ -435,6 +443,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
           />
         )}
       </motion.section>
+
+      {/* 4.5 CATEGORY MONTHLY BUDGET OVERVIEW WIDGET */}
+      {onOpenBudgetManager && (
+        <BudgetOverviewWidget
+          budgets={budgets}
+          entries={entries}
+          onOpenBudgetManager={onOpenBudgetManager}
+          privacyMask={privacyMask}
+        />
+      )}
 
       {/* 5. TOP CATEGORIES */}
       <motion.section

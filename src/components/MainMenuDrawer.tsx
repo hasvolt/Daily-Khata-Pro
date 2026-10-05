@@ -45,7 +45,8 @@ import {
   Globe,
   Palette,
   Check,
-  Languages
+  Languages,
+  RotateCcw
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
@@ -53,6 +54,7 @@ import { AppLogo } from './AppLogo';
 import { AppTheme, AppLanguage } from '../types';
 import { getAppTranslation } from '../utils/appTranslations';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import { resetGoogleTranslate } from '../utils/googleTranslate';
 import { APP_VERSION, APP_VERSION_TAG } from '../utils/version';
 
 export interface MainMenuDrawerProps {
@@ -497,6 +499,20 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       >
                         <Globe className="w-3.5 h-3.5" />
                         <span>{isHindi ? '100+ ऑनलाइन भाषाएं चुनें' : 'Choose from 100+ Online Languages'}</span>
+                      </button>
+
+                      {/* 1-Click Back to English / Reset */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          triggerHapticSound('click');
+                          resetGoogleTranslate();
+                        }}
+                        className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-emerald-500/20 border border-[var(--theme-border,#213E61)] hover:border-emerald-500/40 text-[var(--theme-text-dim,#94A3B8)] hover:text-emerald-300 text-[11px] font-semibold transition-all cursor-pointer active:scale-98"
+                        id="menu-reset-google-translate-btn"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>{isHindi ? 'वापस इंग्लिश पर आएं (Reset to English)' : 'Reset / Back to English'}</span>
                       </button>
                     </div>
                   )}

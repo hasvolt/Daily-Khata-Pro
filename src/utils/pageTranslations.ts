@@ -922,6 +922,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'ذاتی ضروریات اور طرز زندگی',
       family: 'گھریلو اخراجات، کرایہ اور راشن',
+      business: 'کاروباری آمدنی، انوائس اور دفتر',
       buffer: 'روزمرہ کے غیر متوقع اخراجات',
       emergency: 'ہنگامی فنڈ اور طبی تحفظ',
       saving: 'قلیل مدتی بچت اور خریداری',
@@ -1117,6 +1118,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'ব্যক্তিগত প্রয়োজন ও জীবনযাত্রা',
       family: 'পরিবারের খরচ, বাড়ি ভাড়া ও রেশন',
+      business: 'ব্যবসায়িক আয়, ইনভয়েস ও অফিস',
       buffer: 'দৈনন্দিন অপ্রত্যাশিত খরচ',
       emergency: 'জরুরি তহবিল ও চিকিৎসা সুরক্ষা',
       saving: 'স্বল্পমেয়াদী সঞ্চয় ও কেনাকাটা',
@@ -1312,6 +1314,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'Gastos personales, comida y estilo de vida',
       family: 'Hogar, alquiler y compras familiares',
+      business: 'Ingresos comerciales, facturación y oficina',
       buffer: 'Gastos diarios imprevistos y facturas',
       emergency: 'Seguridad ante emergencias y salud',
       saving: 'Ahorros a corto plazo y objetivos de compra',
@@ -1507,6 +1510,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'الاحتياجات الشخصية ونمط الحياة',
       family: 'مصاريف المنزل والإيجار والأسرة',
+      business: 'إيرادات الأعمال والفواتير والمكتب',
       buffer: 'المصاريف اليومية غير المتوقعة',
       emergency: 'حالات الطوارئ والسلامة الطبية',
       saving: 'المدخرات قصيرة الأجل والمشتريات',
@@ -1703,6 +1707,7 @@ export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
     homeSubtitles: {
       personal: 'Besoins personnels, repas et style de vie',
       family: 'Ménage, loyer et dépenses familiales',
+      business: 'Revenus professionnels, facturation et bureau',
       buffer: 'Dépenses imprévues du quotidien',
       emergency: 'Fonds d’urgence et santé médicale',
       saving: 'Épargne à court terme et projets d’achat',
@@ -1746,6 +1751,7 @@ otherLangs.forEach((lang) => {
         de: {
           personal: 'Persönliche Bedürfnisse & Lebensstil',
           family: 'Haushalt, Miete & Lebensmittel',
+          business: 'Geschäftseinnahmen, Rechnungen & Büro',
           buffer: 'Tägliche unerwartete Ausgaben',
           emergency: 'Notfall- und Gesundheitsreserve',
           saving: 'Kurzfristige Ersparnisse & Anschaffungen',
@@ -1754,6 +1760,7 @@ otherLangs.forEach((lang) => {
         ru: {
           personal: 'Личные нужды, питание и образ жизни',
           family: 'Дом, аренда и семейные расходы',
+          business: 'Доходы от бизнеса, счета и офис',
           buffer: 'Ежедневные непредвиденные траты',
           emergency: 'Резерв на экстренные случаи и здоровье',
           saving: 'Краткосрочные сбережения и покупки',
@@ -1762,6 +1769,7 @@ otherLangs.forEach((lang) => {
         pt: {
           personal: 'Necessidades pessoais e estilo de vida',
           family: 'Despesas domésticas, aluguel e mercado',
+          business: 'Receitas comerciais, faturas e escritório',
           buffer: 'Despesas diárias imprevistas',
           emergency: 'Reserva de emergência e saúde',
           saving: 'Poupança de curto prazo e metas',
@@ -1770,6 +1778,7 @@ otherLangs.forEach((lang) => {
         id: {
           personal: 'Kebutuhan pribadi dan gaya hidup',
           family: 'Kebutuhan rumah tangga, sewa & belanja',
+          business: 'Pendapatan bisnis, faktur & kantor',
           buffer: 'Pengeluaran tak terduga harian',
           emergency: 'Dana darurat dan kesehatan',
           saving: 'Tabungan jangka pendek & belanja impian',
@@ -1778,6 +1787,7 @@ otherLangs.forEach((lang) => {
         ja: {
           personal: '個人の生活費・日用品',
           family: '家賃・食費・家庭の諸経費',
+          business: '事業収益・請求書・オフィス',
           buffer: '日常の予期せぬ出費・予備費',
           emergency: '緊急時・医療安全基金',
           saving: '短期貯蓄・目標の買い物',
@@ -1786,6 +1796,7 @@ otherLangs.forEach((lang) => {
         zh: {
           personal: '个人需求、日常开销与生活方式',
           family: '家庭支出、房租与日常食品',
+          business: '商业收入、发票与办公支出',
           buffer: '日常备用金与意外开销',
           emergency: '应急基金与医疗安全保障',
           saving: '短期储蓄与目标购物',
@@ -1834,7 +1845,22 @@ otherLangs.forEach((lang) => {
   }
 });
 
+function createPageFallbackProxy<T extends object>(target: T, fallback: T): T {
+  return new Proxy(target, {
+    get(obj: any, prop: string | symbol) {
+      const val = obj[prop];
+      const fallbackVal = (fallback as any)?.[prop];
+      if (val === undefined) return fallbackVal;
+      if (typeof val === 'object' && val !== null && typeof fallbackVal === 'object' && fallbackVal !== null && !Array.isArray(val)) {
+        return createPageFallbackProxy(val, fallbackVal);
+      }
+      return val;
+    }
+  });
+}
+
 export const getPageTranslation = (lang?: string | AppLanguage): PageTranslations => {
-  if (!lang) return PAGE_TRANSLATIONS.en;
-  return (PAGE_TRANSLATIONS as any)[lang] || PAGE_TRANSLATIONS.en;
+  if (!lang || lang === 'en') return PAGE_TRANSLATIONS.en;
+  const target = (PAGE_TRANSLATIONS as any)[lang] || PAGE_TRANSLATIONS.en;
+  return createPageFallbackProxy(target, PAGE_TRANSLATIONS.en);
 };

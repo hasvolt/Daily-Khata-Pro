@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <meta name="theme-color" content="#070E18" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Daily Khata Pro - Smart Expense Tracker & Finance Platform</title>
     <meta name="description" content="Daily Khata Pro - Smart Expense Tracker & Finance Platform by Rozfiber. Track daily income, expenses, loans, EMIs, and read research-based finance articles." />
@@ -11,9 +17,156 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Synchronous Pre-render Theme Initialization (Prevents Icon & Color Flickering) -->
+    <script>
+      (function() {
+        try {
+          var stored = localStorage.getItem('daily-khata-pro-v3') || localStorage.getItem('hasvolt-khata-v2') || localStorage.getItem('khata_pro_data_v2');
+          var theme = 'emerald';
+          if (stored) {
+            var parsed = JSON.parse(stored);
+            if (parsed && parsed.settings && parsed.settings.theme) {
+              theme = parsed.settings.theme;
+            }
+          }
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Google Translate Script Setup -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        try {
+          if (window.google && window.google.translate) {
+            new window.google.translate.TranslateElement({
+              pageLanguage: 'en',
+              autoDisplay: false
+            }, 'google_translate_element');
+          }
+        } catch (e) {
+          console.warn('Google Translate Init Warning:', e);
+        }
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+
+    <style>
+      /* Permanent Google Translate Banner & Tooltip Suppressor */
+      .skiptranslate > iframe,
+      iframe.skiptranslate,
+      .goog-te-banner-frame,
+      #goog-gt-tt,
+      .goog-te-balloon-frame {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      body {
+        top: 0px !important;
+        position: static !important;
+      }
+      .goog-text-highlight {
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+    </style>
   </head>
   <body class="bg-[#05111f] text-slate-100 antialiased selection:bg-emerald-500 selection:text-white min-h-screen">
+    <!-- Anchor for Google Translate Engine -->
+    <div id="google_translate_element" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true"></div>
+
     <div id="root"></div>
+
+    <!-- Early PWA Install Prompt Capture -->
+    <script>
+      window.__DAILY_KHATA_PWA_PROMPT__ = null;
+      window.addEventListener('beforeinstallprompt', function(event) {
+        event.preventDefault();
+        window.deferredPrompt = event;
+        window.__DAILY_KHATA_PWA_PROMPT__ = event;
+        window.dispatchEvent(new CustomEvent('pwa-install-ready', { detail: event }));
+      });
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Service Worker Registration for PWA & Offline Support with Auto-Update Strategy -->
+    <script>
+      (function() {
+        if ('serviceWorker' in navigator) {
+          var initSW = function() {
+            var hadController = Boolean(navigator.serviceWorker.controller);
+            navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' })
+              .then(function(registration) {
+                window.__dailyKhataSwReg = registration;
+
+                // Precache loaded bundle chunks into active service worker
+                setTimeout(function() {
+                  try {
+                    var assets = [];
+                    document.querySelectorAll('script[src], link[rel="stylesheet"], link[rel="modulepreload"]').forEach(function(el) {
+                      var src = el.getAttribute('src') || el.getAttribute('href');
+                      if (src && !src.startsWith('http') && !src.startsWith('//') && !src.includes('hot-update') && !src.startsWith('/src/') && !src.startsWith('/node_modules/') && !src.startsWith('/@') && !src.includes('?v=')) {
+                        assets.push(src.startsWith('/') ? src : '/' + src);
+                      }
+                    });
+                    if (assets.length > 0 && registration.active) {
+                      registration.active.postMessage({ type: 'CACHE_URLS', urls: assets });
+                    }
+                  } catch (e) {}
+                }, 1000);
+
+                if (navigator.onLine) {
+                  registration.update().catch(function() {});
+                }
+
+                if (registration.waiting) {
+                  window.__dailyKhataWaitingWorker = registration.waiting;
+                  window.__dailyKhataUpdateAvailable = true;
+                  window.dispatchEvent(new CustomEvent('app-update-available', { detail: { worker: registration.waiting } }));
+                }
+
+                registration.addEventListener('updatefound', function() {
+                  var newWorker = registration.installing;
+                  if (!newWorker) return;
+                  newWorker.addEventListener('statechange', function() {
+                    if (newWorker.state === 'installed') {
+                      window.__dailyKhataWaitingWorker = newWorker;
+                      window.__dailyKhataUpdateAvailable = true;
+                      window.dispatchEvent(new CustomEvent('app-update-available', { detail: { worker: newWorker } }));
+                    }
+                  });
+                });
+
+                document.addEventListener('visibilitychange', function() {
+                  if (document.visibilityState === 'visible' && navigator.onLine) {
+                    registration.update().catch(function() {});
+                  }
+                });
+              })
+              .catch(function(error) {
+                console.warn('[PWA] Service Worker registration notice:', error);
+              });
+
+            var refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', function() {
+              if (!hadController || refreshing) return;
+              refreshing = true;
+              window.location.reload();
+            });
+          };
+
+          if (document.readyState === 'complete') {
+            initSW();
+          } else {
+            window.addEventListener('load', initSW);
+          }
+        }
+      })();
+    </script>
   </body>
 </html>
