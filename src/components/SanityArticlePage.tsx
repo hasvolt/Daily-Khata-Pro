@@ -23,6 +23,7 @@ import { AppLanguage } from '../types';
 import { getSanityPostBySlug, urlFor, SanityBlogPost } from '../utils/sanityClient';
 import { COMMERCIAL_ARTICLES, CommercialArticle } from '../data/newsPortalData';
 import { GoogleTranslateModal } from './GoogleTranslateModal';
+import { AdsterraBanner300x250, AdsterraNativeBanner } from './AdUnits';
 
 interface SanityArticlePageProps {
   slugOrId: string;
@@ -977,6 +978,9 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             </p>
           )}
         </article>
+
+        {/* Sponsored / Recommended Partner Unit (Isolated Native Format) */}
+        <AdsterraNativeBanner />
 
         {/* Sources & References Section */}
         {post?.sources && post.sources.length > 0 && (

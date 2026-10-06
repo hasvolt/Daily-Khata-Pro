@@ -39,6 +39,7 @@ import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import { playKeypadSound, playIncomeSound, playDeleteSound } from '../utils/audioService';
 import { printCalculatorSlip, downloadCalculatorSlipHTML, CalcPrintParams } from '../utils/calculatorPrint';
 import { evaluateFinancialMath } from '../utils/calculatorEngine';
+import { AdsterraBanner300x250 } from './AdUnits';
 
 export type CalculatorViewType = 'standard' | 'currency' | 'emi' | 'sip' | 'funds' | 'gst' | 'discount' | 'inflation';
 
@@ -3237,6 +3238,11 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
           </div>
         </div>
       )}
+
+      {/* Clean Sponsored Partner Banner at end of Calculator Tool */}
+      <div className="flex justify-center pt-2">
+        <AdsterraBanner300x250 className="max-w-md w-full" />
+      </div>
 
     </div>
   );

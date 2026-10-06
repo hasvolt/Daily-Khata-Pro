@@ -38,6 +38,7 @@ import {
   CommercialArticle
 } from '../data/newsPortalData';
 import { getSanityPosts, urlFor } from '../utils/sanityClient';
+import { AdsterraBanner300x250 } from './AdUnits';
 import { useNavigate } from 'react-router-dom';
 
 interface SanityBlogPageProps {
@@ -750,6 +751,11 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
             </div>
           )}
         </section>
+
+        {/* Clean Sponsored Partner Banner */}
+        <div className="flex justify-center">
+          <AdsterraBanner300x250 className="max-w-md w-full" />
+        </div>
 
         {/* 5. Commercial Intelligence Dispatch Subscription */}
         <section className="rounded-3xl border border-[var(--theme-border,#213E61)] bg-gradient-to-r from-[var(--theme-card,#132438)] via-[var(--theme-surface,#0E1A29)] to-[var(--theme-card,#132438)] p-6 sm:p-8">
