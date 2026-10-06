@@ -279,7 +279,7 @@ export const Header: React.FC<HeaderProps> = ({
   }, [isMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[var(--theme-primary-border,rgba(56,189,248,0.25))] bg-[color-mix(in_srgb,var(--theme-primary,#2EECA3)_12%,var(--theme-surface,#08120d))] backdrop-blur-xl shadow-md transition-colors duration-300">
+    <header className="sticky top-0 z-40 w-full border-b border-[var(--theme-border,#26364D)] bg-[var(--theme-surface,#0F1724)]/95 backdrop-blur-xl shadow-sm transition-colors duration-300">
       {/* 3D Animated Luminous Accent Line */}
       <div className="absolute inset-x-0 bottom-0 h-[1.5px] overflow-hidden pointer-events-none z-10">
         <div className="header-3d-sheen w-full h-full bg-gradient-to-r from-transparent via-[var(--theme-primary,#2EECA3)] to-transparent opacity-80" />

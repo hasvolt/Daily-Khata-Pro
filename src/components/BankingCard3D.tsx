@@ -131,36 +131,43 @@ export function BankingCard3D({
         style={{ rotateX, rotateY }}
         className="banking-card-3d relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] backdrop-blur-xl p-2.5 xs:p-3 sm:p-4 md:p-[18px] transition-all"
       >
-        {/* Subtle, premium atmospheric ambient background glow matching theme */}
+        {/* Subtle, soft localized corner accent atmosphere */}
         <div className="banking-card-ambient-glow absolute inset-0 pointer-events-none overflow-hidden select-none">
-          <div className="absolute -right-14 -top-12 h-52 w-72 rounded-full bg-[var(--theme-primary,#38BDF8)]/25 blur-3xl" />
-          <div className="absolute -left-14 -bottom-10 h-44 w-60 rounded-full bg-[var(--theme-glow,var(--theme-primary,#38BDF8))]/20 blur-3xl" />
+          <div className="absolute right-0 top-0 h-28 w-36 rounded-full bg-[var(--theme-primary,#38BDF8)]/10 blur-xl" />
         </div>
 
-        {/* Professional Fintech Guilloche Waves & Geometric Contours */}
-        <div className="banking-card-decor absolute inset-0 pointer-events-none overflow-hidden opacity-[0.14] select-none text-[var(--theme-primary,#38BDF8)]">
-          <svg className="w-full h-full" viewBox="0 0 400 240" fill="none" preserveAspectRatio="none">
-            <path d="M-40 40 Q 120 180 320 60 T 520 140" stroke="currentColor" strokeWidth="1.2" />
-            <path d="M-40 70 Q 130 210 330 90 T 520 170" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
-            <path d="M-40 100 Q 140 240 340 120 T 520 200" stroke="currentColor" strokeWidth="1.2" />
-            <path d="M-40 130 Q 150 270 350 150 T 520 230" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2 3" />
-            <path d="M-40 160 Q 160 300 360 180 T 520 260" stroke="currentColor" strokeWidth="1" />
-            {/* Concentric radar watermark */}
-            <circle cx="340" cy="50" r="32" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
-            <circle cx="340" cy="50" r="54" stroke="currentColor" strokeWidth="0.8" />
-            <circle cx="340" cy="50" r="76" stroke="currentColor" strokeWidth="0.8" strokeDasharray="2 4" />
+        {/* Decorative Wave & Dotted Background Geometry (Theme Foil Accent) */}
+        <div className="banking-card-waves absolute inset-0 pointer-events-none overflow-hidden select-none opacity-40">
+          {/* Subtle dotted matrix watermark */}
+          <div
+            className="absolute inset-0 opacity-15"
+            style={{
+              backgroundImage: 'radial-gradient(circle, var(--theme-primary, #38BDF8) 1px, transparent 1px)',
+              backgroundSize: '16px 16px',
+            }}
+          />
+          {/* Organic luxury banking fluid wave curves */}
+          <svg
+            className="absolute -right-6 -bottom-6 w-64 h-48 sm:w-80 sm:h-56 pointer-events-none stroke-[var(--theme-primary,#38BDF8)] opacity-25"
+            viewBox="0 0 320 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 190C60 140 120 180 180 120C240 60 280 110 330 40"
+              strokeWidth="1.5"
+              strokeDasharray="4 4"
+            />
+            <path
+              d="M30 195C85 145 145 175 205 105C265 35 300 80 340 10"
+              strokeWidth="2"
+            />
+            <path
+              d="M60 200C110 160 170 170 230 95C290 20 320 50 350 -10"
+              strokeWidth="1"
+              strokeOpacity="0.5"
+            />
           </svg>
-        </div>
-
-        {/* Professional EMV Smart Chip Watermark in Top-Right Background */}
-        <div className="banking-card-decor absolute right-28 top-3.5 pointer-events-none opacity-[0.12] select-none hidden xs:block text-[var(--theme-primary,#38BDF8)]">
-          <div className="w-9 h-6 rounded-md border border-current p-0.5 relative">
-            <div className="w-full h-full border border-current rounded-[2px] flex items-center justify-center">
-              <div className="w-3 h-full border-x border-current relative">
-                <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-current -translate-y-1/2" />
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Subtle diagonal luxury glass sheen and top rim highlight */}
@@ -172,9 +179,9 @@ export function BankingCard3D({
           {/* Header Row: Wallet + TOTAL NET BALANCE & Rounded Badges */}
           <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             {/* Left: Wallet Icon Box & Titles */}
-            <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-              <div className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 rounded-xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] flex items-center justify-center shrink-0 shadow-[0_0_12px_var(--theme-glow,rgba(56,189,248,0.25)),inset_0_1px_0_rgba(255,255,255,0.2)]">
-                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)] stroke-[2.2]" />
+            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <div className="banking-card-icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl border border-[var(--theme-primary-border,rgba(56,189,248,0.40))] bg-gradient-to-br from-[var(--theme-primary,#38BDF8)]/25 to-[var(--theme-primary,#38BDF8)]/10 flex items-center justify-center shrink-0 transition-transform duration-200">
+                <Wallet className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-[var(--theme-primary,#38BDF8)] stroke-[2.2] drop-shadow-sm" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1 sm:gap-1.5">

@@ -43,10 +43,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
     <nav
       id="bottom-nav-bar"
       aria-label="Bottom Navigation"
-      className="fixed bottom-1.5 sm:bottom-3 left-2 right-2 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto rounded-2xl sm:rounded-3xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] shadow-[0_8px_30px_rgba(0,0,0,0.7),0_0_0_1px_var(--theme-primary-border,rgba(56,189,248,0.22)),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-2xl z-50 px-1 sm:px-3 pt-1.5 sm:pt-2 pb-1.5 sm:pb-2 transition-colors duration-200 overflow-hidden"
+      className="fixed bottom-0 left-0 right-0 w-full bg-[var(--theme-surface,#0E1A29)]/75 backdrop-blur-xl border-t border-[var(--theme-primary-border,rgba(56,189,248,0.20))] shadow-[0_-4px_20px_rgba(0,0,0,0.35)] z-50 px-1 sm:px-6 lg:px-10 pt-1.5 sm:pt-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] transition-colors duration-200"
     >
       {/* 3D Animated Top Rim Horizon Accent */}
-      <div className="absolute inset-x-0 top-0 h-[2px] overflow-hidden pointer-events-none">
+      <div className="absolute inset-x-0 top-0 h-[1.5px] overflow-hidden pointer-events-none">
         <div className="bottomnav-3d-sheen w-full h-full bg-gradient-to-r from-transparent via-[var(--theme-primary,#2EECA3)] to-transparent opacity-70" />
       </div>
 
@@ -67,15 +67,15 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onSelectTab, l
                 title={tab.label}
               >
                 <div
-                  className={`w-11 h-11 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer ${
+                  className={`w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-[var(--theme-btn-bg,#0284C7)] text-[var(--theme-btn-text,#FFFFFF)] ring-3 sm:ring-4 ring-[var(--theme-primary-border,rgba(56,189,248,0.5))] shadow-[0_5px_0_0_rgba(0,0,0,0.35),0_12px_24px_var(--theme-glow,rgba(56,189,248,0.5)),inset_0_1px_0_rgba(255,255,255,0.4)] scale-105'
-                      : 'bg-gradient-to-tr from-[var(--theme-btn-bg,#0284C7)] via-[var(--theme-btn-bg,#0284C7)] to-[var(--theme-primary,#38BDF8)] text-[var(--theme-btn-text,#FFFFFF)] hover:scale-105 shadow-[0_5px_0_0_rgba(0,0,0,0.35),0_10px_20px_var(--theme-glow,rgba(56,189,248,0.4)),inset_0_1px_0_rgba(255,255,255,0.35)] ring-2 sm:ring-3 ring-[var(--theme-surface,#0E1A29)]'
+                      ? 'bg-gradient-to-tr from-[var(--theme-primary,#38BDF8)] to-[var(--theme-primary-hover,#0284C7)] text-white ring-2 ring-[var(--theme-primary-border,rgba(56,189,248,0.5))] shadow-[0_2px_10px_var(--theme-glow,rgba(56,189,248,0.25)),inset_0_1px_0_rgba(255,255,255,0.4)] scale-105'
+                      : 'bg-gradient-to-tr from-[var(--theme-primary,#38BDF8)] to-[var(--theme-primary-hover,#0284C7)] text-white hover:scale-105 shadow-[0_2px_10px_var(--theme-glow,rgba(56,189,248,0.20)),inset_0_1px_0_rgba(255,255,255,0.35)] ring-1 ring-[var(--theme-primary-border,rgba(255,255,255,0.25))]'
                   }`}
                 >
-                  <Plus className="w-5 h-5 sm:w-7 sm:h-7 stroke-[3] text-[var(--theme-btn-text,#FFFFFF)] transition-transform group-hover:rotate-90 duration-200 drop-shadow-sm" />
+                  <Plus className="w-5 h-5 sm:w-6 sm:h-6 stroke-[3] text-white transition-transform group-hover:rotate-90 duration-200 drop-shadow-sm" />
                 </div>
-                <span className="text-[10px] sm:text-[13px] font-black text-[var(--theme-primary,#0284C7)] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
+                <span className="text-[10px] sm:text-[12px] font-extrabold text-[var(--theme-primary,#38BDF8)] mt-0.5 sm:mt-1 tracking-tight truncate max-w-full">
                   {tab.label}
                 </span>
               </button>

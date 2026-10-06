@@ -300,16 +300,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   return (
     <div className="relative w-full max-w-6xl mx-auto pb-10 sm:pb-14 space-y-3.5 sm:space-y-4 animate-in fade-in duration-200">
-      {/* Luminous Atmospheric Canvas Glow matching active theme */}
-      <div
-        aria-hidden="true"
-        className="homepage-canvas-glow pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[96vw] max-w-5xl h-[420px] rounded-full bg-[radial-gradient(ellipse_at_top,var(--theme-glow,transparent)_0%,var(--theme-primary-dim,transparent)_45%,transparent_75%)] blur-3xl -z-10 opacity-90 transition-all duration-300"
-      />
-      <div
-        aria-hidden="true"
-        className="homepage-canvas-glow pointer-events-none absolute top-64 left-1/2 -translate-x-1/2 w-[90vw] max-w-4xl h-[320px] rounded-full bg-[radial-gradient(ellipse_at_center,var(--theme-glow,transparent)_0%,transparent_70%)] blur-3xl -z-10 opacity-70 transition-all duration-300"
-      />
-
       {/* 1. HERO BALANCE CARD */}
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
         <BankingCard3D
