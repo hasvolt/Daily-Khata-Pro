@@ -591,6 +591,11 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
           </article>
         )}
 
+        {/* Sponsored Mid-Page Responsive Leaderboard */}
+        <div className="flex justify-center w-full">
+          <AdsterraResponsiveLeaderboard className="w-full max-w-4xl" />
+        </div>
+
         {/* Article Grid Section */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
@@ -752,9 +757,9 @@ export const SanityBlogPage: React.FC<SanityBlogPageProps> = ({
           )}
         </section>
 
-        {/* Clean Responsive Sponsored Banner (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
-        <div className="flex justify-center w-full">
-          <AdsterraResponsiveLeaderboard className="w-full max-w-3xl" />
+        {/* Sponsored Native Recommendation Unit (4-Card / Multi-Image Format) */}
+        <div className="w-full">
+          <AdsterraNativeBanner className="w-full" label={isHindi ? 'प्रायोजित संपादकीय सुझाव' : 'Sponsored Recommendations'} />
         </div>
 
         {/* 5. Commercial Intelligence Dispatch Subscription */}

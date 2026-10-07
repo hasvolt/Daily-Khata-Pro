@@ -8,7 +8,7 @@ import {
 import { AppLanguage } from '../types';
 import { NavTab } from './BottomNav';
 import { ACADEMY_ARTICLES } from '../data/wealthAcademy';
-import { AdsterraNativeBanner } from './AdUnits';
+import { AdsterraNativeBanner, AdsterraResponsiveLeaderboard } from './AdUnits';
 
 const ACADEMY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Home, Target, Shield, Sparkles, BookOpen, Smile, Heart, History, ShoppingBag, TrendingUp,
@@ -53,7 +53,7 @@ export const WealthAcademyPage: React.FC<WealthAcademyPageProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)]">
+    <div className="w-full min-h-full bg-[var(--theme-bg,#070E18)] text-[var(--theme-text,#F8FAFC)] overflow-visible">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-[var(--theme-bg,#070E18)]/80 backdrop-blur-md border-b border-[var(--theme-border,#213E61)] px-4 py-4">
         <div className="max-w-4xl mx-auto flex items-center gap-4">
@@ -75,7 +75,7 @@ export const WealthAcademyPage: React.FC<WealthAcademyPageProps> = ({
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto p-4 space-y-6 pb-24">
+      <div className="max-w-4xl mx-auto p-4 space-y-6 pb-36 sm:pb-24">
         {/* Search & Hero */}
         <div className="relative group">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -110,6 +110,11 @@ export const WealthAcademyPage: React.FC<WealthAcademyPageProps> = ({
               </button>
             );
           })}
+        </div>
+
+        {/* Sponsored Responsive Leaderboard Banner */}
+        <div className="flex justify-center w-full">
+          <AdsterraResponsiveLeaderboard className="w-full" />
         </div>
 
         {/* Articles Grid */}

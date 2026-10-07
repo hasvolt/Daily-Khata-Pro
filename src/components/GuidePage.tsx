@@ -39,7 +39,7 @@ import {
 import { FUND_LABELS, FUND_ORDER, DEFAULT_PERCENTAGES, FUND_CONFIGS } from '../data/defaults';
 import { AppLanguage } from '../types';
 import { getUserManualContent } from '../utils/userManualContent';
-import { AdsterraResponsiveLeaderboard } from './AdUnits';
+import { AdsterraResponsiveLeaderboard, AdsterraNativeBanner, AdsterraBanner } from './AdUnits';
 
 interface GuidePageProps {
   onBack: () => void;
@@ -732,8 +732,18 @@ export const GuidePage: React.FC<GuidePageProps> = ({
                   </button>
                 </div>
 
-                {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
-                <AdsterraResponsiveLeaderboard className="mt-5" />
+                {/* Dynamic Sponsored Ad per Chapter (Alternating ad formats across chapters) */}
+                {currentIndex % 3 === 0 && (
+                  <AdsterraResponsiveLeaderboard className="mt-5" />
+                )}
+                {currentIndex % 3 === 1 && (
+                  <AdsterraNativeBanner className="mt-5" label={isHindi ? 'प्रायोजित सुझाव' : 'Sponsored Recommendations'} />
+                )}
+                {currentIndex % 3 === 2 && (
+                  <div className="flex justify-center mt-5">
+                    <AdsterraBanner size="300x250" />
+                  </div>
+                )}
               </div>
             </div>
           )}

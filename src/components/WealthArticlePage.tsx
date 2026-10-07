@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { ACADEMY_ARTICLES, AcademyArticle } from '../data/wealthAcademy';
-import { AdsterraNativeBanner } from './AdUnits';
+import { AdsterraNativeBanner, AdsterraResponsiveLeaderboard } from './AdUnits';
 
 const ACADEMY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Home, Target, Shield, Sparkles, BookOpen, Smile, Heart, History, ShoppingBag, TrendingUp,
@@ -142,6 +142,11 @@ export const WealthArticlePage: React.FC<WealthArticlePageProps> = ({
             })()}
           </div>
         </motion.div>
+
+        {/* Sponsored Responsive Article Banner */}
+        <div className="flex justify-center w-full my-8">
+          <AdsterraResponsiveLeaderboard className="w-full" />
+        </div>
 
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-[var(--theme-border,#213E61)] to-transparent my-12" />

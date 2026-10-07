@@ -23,7 +23,7 @@ import { AppLanguage } from '../types';
 import { getSanityPostBySlug, urlFor, SanityBlogPost } from '../utils/sanityClient';
 import { COMMERCIAL_ARTICLES, CommercialArticle } from '../data/newsPortalData';
 import { GoogleTranslateModal } from './GoogleTranslateModal';
-import { AdsterraBanner300x250, AdsterraNativeBanner } from './AdUnits';
+import { AdsterraBanner300x250, AdsterraNativeBanner, AdsterraResponsiveLeaderboard } from './AdUnits';
 
 interface SanityArticlePageProps {
   slugOrId: string;
@@ -918,6 +918,11 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             ))}
           </div>
         )}
+
+        {/* Sponsored In-Article Responsive Leaderboard */}
+        <div className="flex justify-center w-full my-6">
+          <AdsterraResponsiveLeaderboard className="w-full max-w-3xl" />
+        </div>
 
         {/* Article Body with responsive font sizing */}
         <article

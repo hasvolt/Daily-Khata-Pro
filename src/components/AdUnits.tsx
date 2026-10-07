@@ -79,8 +79,11 @@ export const AdsterraBanner: React.FC<{
       className={`my-3 sm:my-4 flex flex-col items-center justify-center p-2 rounded-2xl bg-[var(--theme-card,#132438)]/40 border border-[var(--theme-border,#213E61)]/70 max-w-full overflow-hidden ${className}`}
     >
       {showLabel && (
-        <div className="text-[9.5px] font-mono tracking-wider uppercase text-[var(--theme-text-dim,#64748B)] mb-1 select-none">
-          Sponsored
+        <div className="flex items-center justify-center w-full mb-2">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            Sponsored
+          </span>
         </div>
       )}
       <div
@@ -135,8 +138,11 @@ export const AdsterraResponsiveLeaderboard: React.FC<{
       className={`my-4 flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-[var(--theme-card,#132438)]/40 border border-[var(--theme-border,#213E61)]/70 max-w-full overflow-hidden ${className}`}
     >
       {showLabel && (
-        <div className="text-[9.5px] font-mono tracking-wider uppercase text-[var(--theme-text-dim,#64748B)] mb-1.5 select-none">
-          Sponsored
+        <div className="flex items-center justify-center w-full mb-2">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            Sponsored
+          </span>
         </div>
       )}
       <div className="flex justify-center items-center overflow-hidden max-w-full">
@@ -184,7 +190,7 @@ export const AdsterraBanner300x250: React.FC<{ className?: string }> = ({ classN
 };
 
 /**
- * Adsterra Native Banner Component
+ * Adsterra Native Banner Component (Multi-Card / 4-Image Format)
  * Script: https://bauval.org/21/f5bbfccec2bbdc526388b13f1b3de5e6
  * Target Container: container-f5bbfccec2bbdc526388b13f1b3de5e6
  */
@@ -194,9 +200,25 @@ export const AdsterraNativeBanner: React.FC<{
   showLabel?: boolean;
 }> = ({
   className = '',
-  label = 'Sponsored / Recommended',
+  label = 'Partner Recommendations',
   showLabel = true,
 }) => {
+  const [frameHeight, setFrameHeight] = React.useState<number>(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 640) return 460;
+    return 280;
+  });
+
+  React.useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data && e.data.type === 'adsterra-native-height' && typeof e.data.height === 'number') {
+        const measured = Math.max(Math.ceil(e.data.height), 240);
+        setFrameHeight(measured);
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   const nativeHtml = `<!DOCTYPE html>
 <html>
   <head>
@@ -204,31 +226,123 @@ export const AdsterraNativeBanner: React.FC<{
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       * { box-sizing: border-box; }
-      body { margin: 0; padding: 0; background: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; display: flex; justify-content: center; }
-      #container-f5bbfccec2bbdc526388b13f1b3de5e6 { width: 100%; max-width: 100%; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        width: 100%;
+        min-height: 100%;
+        overflow-x: hidden;
+        color: #F8FAFC !important;
+        touch-action: pan-y;
+      }
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        min-height: 220px;
+        touch-action: pan-y;
+      }
+      /* Ensure title words & text are bright white/light in dark or color themes */
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 * {
+        color: #E2E8F0 !important;
+      }
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a {
+        color: #FFFFFF !important;
+        text-decoration: none !important;
+      }
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a:hover {
+        color: #38BDF8 !important;
+      }
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 h1,
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 h2,
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 h3,
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 h4,
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="title"],
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="header"] {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+      }
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="desc"],
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="domain"],
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 p,
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 span {
+        color: #94A3B8 !important;
+      }
     </style>
   </head>
   <body>
     <div id="container-f5bbfccec2bbdc526388b13f1b3de5e6"></div>
     <script async="async" data-cfasync="false" src="https://bauval.org/21/f5bbfccec2bbdc526388b13f1b3de5e6"></script>
+    <script>
+      function reportHeight() {
+        var el = document.getElementById('container-f5bbfccec2bbdc526388b13f1b3de5e6');
+        var h = Math.max(
+          document.body.scrollHeight || 0,
+          document.documentElement.scrollHeight || 0,
+          el ? el.scrollHeight : 0
+        );
+        if (h > 60) {
+          window.parent.postMessage({ type: 'adsterra-native-height', height: h }, '*');
+        }
+      }
+      function enforceLightText() {
+        var el = document.getElementById('container-f5bbfccec2bbdc526388b13f1b3de5e6');
+        if (!el) return;
+        var nodes = el.querySelectorAll('*');
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          var computed = window.getComputedStyle(n).color;
+          if (computed === 'rgb(0, 0, 0)' || computed === 'rgb(34, 34, 34)' || computed === 'rgb(51, 51, 51)' || computed === 'black') {
+            n.style.setProperty('color', '#FFFFFF', 'important');
+          }
+        }
+      }
+      window.addEventListener('load', function() {
+        reportHeight();
+        enforceLightText();
+      });
+      if (window.ResizeObserver) {
+        new ResizeObserver(function() {
+          reportHeight();
+          enforceLightText();
+        }).observe(document.body);
+      }
+      setInterval(function() {
+        reportHeight();
+        enforceLightText();
+      }, 1000);
+    </script>
   </body>
 </html>`;
 
   return (
     <aside
       aria-label="Recommended Content"
-      className={`my-4 sm:my-5 p-2.5 sm:p-3.5 rounded-2xl bg-[var(--theme-card,#132438)]/40 border border-[var(--theme-border,#213E61)]/70 max-w-full overflow-hidden ${className}`}
+      className={`my-4 sm:my-5 p-3 sm:p-4 rounded-2xl bg-[var(--theme-card,#132438)]/40 border border-[var(--theme-border,#213E61)]/70 max-w-full overflow-hidden ${className}`}
     >
       {showLabel && (
-        <div className="text-[9.5px] font-mono tracking-wider uppercase text-[var(--theme-text-dim,#64748B)] mb-1.5 select-none px-1">
-          {label}
+        <div className="flex items-center justify-between w-full mb-2.5 pb-1.5 border-b border-[var(--theme-border,#213E61)]/40 px-1">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold tracking-wider uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            Sponsored
+          </span>
+          <span className="text-[10px] font-mono text-[var(--theme-text,#F8FAFC)]/90 uppercase tracking-wider font-semibold">
+            {label}
+          </span>
         </div>
       )}
-      <div className="w-full min-h-[120px] sm:min-h-[140px] flex items-center justify-center overflow-hidden rounded-xl">
+      <div
+        style={{ minHeight: `${frameHeight}px`, touchAction: 'pan-y' }}
+        className="w-full flex items-center justify-center overflow-hidden rounded-xl transition-[min-height] duration-200"
+      >
         <iframe
           srcDoc={nativeHtml}
           title="Sponsored Recommendation"
-          className="w-full min-h-[120px] sm:min-h-[140px] border-none overflow-hidden block"
+          style={{ height: `${frameHeight}px`, minHeight: `${frameHeight}px`, touchAction: 'pan-y' }}
+          className="w-full border-none overflow-hidden block"
           scrolling="no"
           loading="lazy"
         />
