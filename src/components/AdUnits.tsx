@@ -244,32 +244,43 @@ export const AdsterraNativeBanner: React.FC<{
         min-height: 220px;
         touch-action: pan-y;
       }
-      /* Ensure title words & text are bright white/light in dark or color themes */
+      /* Ensure ALL title words, headlines, links & text are solid bright white/light across all themes */
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 * {
-        color: #E2E8F0 !important;
-      }
-      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a {
         color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+      }
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a,
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a * {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
         text-decoration: none !important;
       }
-      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a:hover {
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a:hover,
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 a:hover * {
         color: #38BDF8 !important;
+        -webkit-text-fill-color: #38BDF8 !important;
       }
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 h1,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 h2,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 h3,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 h4,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="title"],
-      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="header"] {
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="header"],
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="headline"] {
         color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
         font-weight: 700 !important;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
       }
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="desc"],
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="domain"],
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="brand"],
+      #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="source"],
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 p,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 span {
-        color: #94A3B8 !important;
+        color: #CBD5E1 !important;
+        -webkit-text-fill-color: #CBD5E1 !important;
       }
     </style>
   </head>
@@ -294,12 +305,29 @@ export const AdsterraNativeBanner: React.FC<{
         var nodes = el.querySelectorAll('*');
         for (var i = 0; i < nodes.length; i++) {
           var n = nodes[i];
-          var computed = window.getComputedStyle(n).color;
-          if (computed === 'rgb(0, 0, 0)' || computed === 'rgb(34, 34, 34)' || computed === 'rgb(51, 51, 51)' || computed === 'black') {
+          if (n.tagName === 'A' || n.tagName === 'P' || n.tagName === 'SPAN' || n.tagName === 'H1' || n.tagName === 'H2' || n.tagName === 'H3' || n.tagName === 'H4' || n.tagName === 'DIV' || n.tagName === 'B' || n.tagName === 'STRONG') {
             n.style.setProperty('color', '#FFFFFF', 'important');
+            n.style.setProperty('-webkit-text-fill-color', '#FFFFFF', 'important');
           }
         }
       }
+      // Touch scroll passthrough on mobile so dragging over the ad smoothly scrolls the parent page
+      var touchStartY = 0;
+      window.addEventListener('touchstart', function(e) {
+        if (e.touches && e.touches.length === 1) {
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+      window.addEventListener('touchmove', function(e) {
+        if (e.touches && e.touches.length === 1 && window.parent && window.parent !== window) {
+          var deltaY = touchStartY - e.touches[0].clientY;
+          touchStartY = e.touches[0].clientY;
+          try {
+            window.parent.scrollBy({ top: deltaY, behavior: 'auto' });
+          } catch (err) {}
+        }
+      }, { passive: true });
+
       window.addEventListener('load', function() {
         reportHeight();
         enforceLightText();
@@ -310,10 +338,20 @@ export const AdsterraNativeBanner: React.FC<{
           enforceLightText();
         }).observe(document.body);
       }
-      setInterval(function() {
+      if (window.MutationObserver) {
+        var mo = new MutationObserver(function() {
+          reportHeight();
+          enforceLightText();
+        });
+        mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+      }
+      var pollCount = 0;
+      var pollInterval = setInterval(function() {
         reportHeight();
         enforceLightText();
-      }, 1000);
+        pollCount++;
+        if (pollCount > 25) clearInterval(pollInterval);
+      }, 400);
     </script>
   </body>
 </html>`;
@@ -329,7 +367,7 @@ export const AdsterraNativeBanner: React.FC<{
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
             Sponsored
           </span>
-          <span className="text-[10px] font-mono text-[var(--theme-text,#F8FAFC)]/90 uppercase tracking-wider font-semibold">
+          <span className="text-[10px] font-mono text-[var(--theme-text,#F8FAFC)] uppercase tracking-wider font-bold">
             {label}
           </span>
         </div>

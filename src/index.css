@@ -5,595 +5,668 @@
 
 @layer base {
   :root {
-    /* Base Neutral Surface Architecture (Default: Emerald Green) */
-    --theme-bg: #061D13;
-    --theme-surface: #0B2F1F;
-    --theme-card: #103F2A;
-    --theme-card-hover: #154F35;
-    --theme-border: #1E6142;
-    --theme-border-subtle: #13462F;
-    --theme-text: #F2FFF7;
-    --theme-text-muted: #A4D4BE;
-    --theme-text-dim: #76B095;
+    /* Default Base Tokens: Emerald Black */
+    --bg: #04100C;
+    --surface: #072118;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #1A4D3B;
+    --border-subtle: #12382B;
+    --text: #F1F5F9;
+    --text-muted: #9DB8AE;
+    --text-dim: #6B9385;
+    --accent: #10B981;
+    --accent-contrast: #02160A;
+    --card-gradient-from: #0E6B4B;
+    --card-gradient-to: #062E22;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    /* Theme Primary Accent Tokens */
-    --theme-primary: #10B981;
+    /* Semantic Theme Aliases */
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #0A3D2B;
+    --theme-card-hover: #0E4F38;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #059669;
-    --theme-primary-dim: rgba(16, 185, 129, 0.22);
-    --theme-primary-border: #10B981;
+    --theme-primary-dim: rgba(16, 185, 129, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
-    --theme-badge-text: #34D399;
-    --theme-btn-bg: #10B981;
+    --theme-badge-text: var(--accent);
+    --theme-btn-bg: var(--accent);
     --theme-btn-hover: #059669;
-    --theme-btn-text: #021C11;
+    --theme-btn-text: var(--accent-contrast);
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    /* Universal Functional Colors */
-    --theme-income: #34D399;
-    --theme-expense: #F87171;
-    --theme-warning: #FBBF24;
-
-    /* Canonical Standard Design Tokens */
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --border-subtle: var(--theme-border-subtle);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --text-dim: var(--theme-text-dim);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-
-    /* Aliases for backwards compatibility */
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    /* Canonical Aliases */
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
-  [data-theme="emerald"] {
-    /* Emerald Forest - Clean Neutral Dark with Emerald Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
-
-    --theme-primary: #10B981;
-    --theme-primary-hover: #059669;
-    --theme-primary-dim: rgba(16, 185, 129, 0.14);
-    --theme-primary-border: #10B981;
-    --theme-glow: transparent;
-    --theme-badge-text: #34D399;
-    --theme-btn-bg: #10B981;
-    --theme-btn-hover: #059669;
-    --theme-btn-text: #021C11;
-
-    --theme-income: #34D399;
-    --theme-expense: #F87171;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
-  }
-
+  /* 1. Emerald Black */
   [data-theme="dark"] {
-    /* Cyber Emerald Black - Clean Neutral Dark with Luminous Mint Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #FFFFFF;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    --bg: #04100C;
+    --surface: #072118;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #1A4D3B;
+    --border-subtle: #12382B;
+    --text: #F1F5F9;
+    --text-muted: #9DB8AE;
+    --text-dim: #6B9385;
+    --accent: #10B981;
+    --accent-contrast: #02160A;
+    --card-gradient-from: #0E6B4B;
+    --card-gradient-to: #062E22;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #2EECA3;
-    --theme-primary-hover: #15D494;
-    --theme-primary-dim: rgba(46, 236, 163, 0.14);
-    --theme-primary-border: #2EECA3;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #0A3D2B;
+    --theme-card-hover: #0E4F38;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
+    --theme-primary-hover: #059669;
+    --theme-primary-dim: rgba(16, 185, 129, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
-    --theme-badge-text: #86F5C7;
-    --theme-btn-bg: #10B981;
+    --theme-badge-text: var(--accent);
+    --theme-btn-bg: var(--accent);
     --theme-btn-hover: #059669;
-    --theme-btn-text: #02160A;
+    --theme-btn-text: var(--accent-contrast);
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #2EECA3;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
+  /* 2. Deep Obsidian */
   [data-theme="black"] {
-    /* Deep Obsidian Charcoal with Sky Blue Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    --bg: #050810;
+    --surface: #091829;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #1E3A5F;
+    --border-subtle: #142944;
+    --text: #F1F5F9;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+    --accent: #38BDF8;
+    --accent-contrast: #082F49;
+    --card-gradient-from: #0F4C75;
+    --card-gradient-to: #0A1F33;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #38BDF8;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #0D2D49;
+    --theme-card-hover: #123B5E;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.14);
-    --theme-primary-border: #38BDF8;
+    --theme-primary-dim: rgba(56, 189, 248, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
-    --theme-badge-text: #38BDF8;
+    --theme-badge-text: var(--accent);
     --theme-btn-bg: #0284C7;
     --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
+  /* 3. Premium Black & White (Monochrome) */
   [data-theme="monochrome"] {
-    /* Full Dark Premium Monochrome - Clean Obsidian with Platinum */
-    --theme-bg: #070709;
-    --theme-surface: #101015;
-    --theme-card: #171720;
-    --theme-card-hover: #21212B;
-    --theme-border: #383848;
-    --theme-border-subtle: #242430;
-    --theme-text: #FFFFFF;
-    --theme-text-muted: #E2E8F0;
-    --theme-text-dim: #A1A1AA;
+    --bg: #000000;
+    --surface: #121212;
+    --surface-2: rgba(255, 255, 255, 0.05);
+    --border: #3A3A3A;
+    --border-subtle: #262626;
+    --text: #FFFFFF;
+    --text-muted: #A1A1AA;
+    --text-dim: #71717A;
+    --accent: #FFFFFF;
+    --accent-contrast: #000000;
+    --card-gradient-from: #2B2B2B;
+    --card-gradient-to: #0A0A0A;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #FFFFFF;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #1A1A1A;
+    --theme-card-hover: #262626;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #E4E4E7;
-    --theme-primary-dim: rgba(255, 255, 255, 0.12);
-    --theme-primary-border: #D4D4D8;
+    --theme-primary-dim: rgba(255, 255, 255, 0.14);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
-    --theme-badge-text: #FFFFFF;
+    --theme-badge-text: var(--accent);
     --theme-btn-bg: #FFFFFF;
     --theme-btn-hover: #E4E4E7;
     --theme-btn-text: #000000;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
+  /* 4. Electric Blue */
   [data-theme="blue"] {
-    /* Electric Blue - Clean Neutral Dark Slate with Vibrant Blue Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    --bg: #050B1F;
+    --surface: #0C1A3D;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #1E3A8A;
+    --border-subtle: #172554;
+    --text: #F1F5F9;
+    --text-muted: #93C5FD;
+    --text-dim: #60A5FA;
+    --accent: #3B82F6;
+    --accent-contrast: #FFFFFF;
+    --card-gradient-from: #1D4ED8;
+    --card-gradient-to: #0B1E4A;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #38BDF8;
-    --theme-primary-hover: #0EA5E9;
-    --theme-primary-dim: rgba(56, 189, 248, 0.14);
-    --theme-primary-border: #38BDF8;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #11285A;
+    --theme-card-hover: #17377C;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
+    --theme-primary-hover: #2563EB;
+    --theme-primary-dim: rgba(59, 130, 246, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
-    --theme-badge-text: #38BDF8;
-    --theme-btn-bg: #0284C7;
-    --theme-btn-hover: #0369A1;
+    --theme-badge-text: var(--accent);
+    --theme-btn-bg: #2563EB;
+    --theme-btn-hover: #1D4ED8;
     --theme-btn-text: #FFFFFF;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
+  /* 5. Premium Gold */
   [data-theme="yellow"] {
-    /* 24K Luxury Gold - Clean Neutral Dark Slate with Brilliant Gold Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    --bg: #0F0A02;
+    --surface: #211502;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #593A00;
+    --border-subtle: #3D2800;
+    --text: #F1F5F9;
+    --text-muted: #FCD34D;
+    --text-dim: #D97706;
+    --accent: #F59E0B;
+    --accent-contrast: #1E1000;
+    --card-gradient-from: #8A5A00;
+    --card-gradient-to: #2B1B00;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #F59E0B;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #382402;
+    --theme-card-hover: #4D3203;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #D97706;
-    --theme-primary-dim: rgba(245, 158, 11, 0.14);
-    --theme-primary-border: #F59E0B;
+    --theme-primary-dim: rgba(245, 158, 11, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
     --theme-badge-text: #FBBF24;
     --theme-btn-bg: #F59E0B;
     --theme-btn-hover: #D97706;
-    --theme-btn-text: #0F172A;
+    --theme-btn-text: #1E1000;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
+  /* 6. Sunset Orange */
   [data-theme="orange"] {
-    /* Sunset Orange - Clean Neutral Dark Slate with Vibrant Orange Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    --bg: #110804;
+    --surface: #230D05;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #5E220D;
+    --border-subtle: #431709;
+    --text: #F1F5F9;
+    --text-muted: #FDBA74;
+    --text-dim: #EA580C;
+    --accent: #F97316;
+    --accent-contrast: #FFFFFF;
+    --card-gradient-from: #9A3412;
+    --card-gradient-to: #2E1006;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #F97316;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #3A1508;
+    --theme-card-hover: #501D0C;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #EA580C;
-    --theme-primary-dim: rgba(249, 115, 22, 0.14);
-    --theme-primary-border: #F97316;
+    --theme-primary-dim: rgba(249, 115, 22, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
     --theme-badge-text: #FB923C;
     --theme-btn-bg: #F97316;
     --theme-btn-hover: #EA580C;
     --theme-btn-text: #FFFFFF;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
-  [data-theme="purple"] {
-    /* Royal Violet - Clean Neutral Dark Slate with Rich Purple Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+  /* 7. Emerald Green */
+  [data-theme="emerald"] {
+    --bg: #04120A;
+    --surface: #072615;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #166534;
+    --border-subtle: #14532D;
+    --text: #F1F5F9;
+    --text-muted: #86EFAC;
+    --text-dim: #4ADE80;
+    --accent: #22C55E;
+    --accent-contrast: #022C14;
+    --card-gradient-from: #15803D;
+    --card-gradient-to: #052E16;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #A855F7;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #0B3A21;
+    --theme-card-hover: #0F4E2D;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
+    --theme-primary-hover: #16A34A;
+    --theme-primary-dim: rgba(34, 197, 94, 0.16);
+    --theme-primary-border: var(--border);
+    --theme-glow: transparent;
+    --theme-badge-text: #4ADE80;
+    --theme-btn-bg: #22C55E;
+    --theme-btn-hover: #16A34A;
+    --theme-btn-text: #022C14;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
+
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
+  }
+
+  /* 8. Royal Violet */
+  [data-theme="purple"] {
+    --bg: #0A0614;
+    --surface: #190A33;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #4C1D95;
+    --border-subtle: #3B0764;
+    --text: #F1F5F9;
+    --text-muted: #D8B4FE;
+    --text-dim: #A855F7;
+    --accent: #A855F7;
+    --accent-contrast: #FFFFFF;
+    --card-gradient-from: #6D28D9;
+    --card-gradient-to: #1E0B3F;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
+
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #2B1154;
+    --theme-card-hover: #3C1875;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #9333EA;
-    --theme-primary-dim: rgba(168, 85, 247, 0.14);
-    --theme-primary-border: #A855F7;
+    --theme-primary-dim: rgba(168, 85, 247, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
     --theme-badge-text: #C084FC;
     --theme-btn-bg: #A855F7;
     --theme-btn-hover: #9333EA;
     --theme-btn-text: #FFFFFF;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
+  /* 9. Ocean Teal */
   [data-theme="cyan"] {
-    /* Oceanic Cyan - Clean Neutral Dark Slate with Vibrant Cyan Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    --bg: #04141A;
+    --surface: #062530;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #155E75;
+    --border-subtle: #164E63;
+    --text: #F1F5F9;
+    --text-muted: #67E8F9;
+    --text-dim: #22D3EE;
+    --accent: #06B6D4;
+    --accent-contrast: #042F3A;
+    --card-gradient-from: #0E7490;
+    --card-gradient-to: #042F3A;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #06B6D4;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #0A3747;
+    --theme-card-hover: #0E495E;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #0891B2;
-    --theme-primary-dim: rgba(6, 182, 212, 0.14);
-    --theme-primary-border: #06B6D4;
+    --theme-primary-dim: rgba(6, 182, 212, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
     --theme-badge-text: #22D3EE;
     --theme-btn-bg: #06B6D4;
     --theme-btn-hover: #0891B2;
-    --theme-btn-text: #041E26;
+    --theme-btn-text: #042F3A;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
+  /* 10. Crimson Pink */
   [data-theme="pink"] {
-    /* Crimson Pink - Clean Neutral Dark Slate with Vibrant Rose Accent */
-    --theme-bg: #080B11;
-    --theme-surface: #0F1724;
-    --theme-card: #162030;
-    --theme-card-hover: #1D2A3E;
-    --theme-border: #26364D;
-    --theme-border-subtle: #1A2637;
-    --theme-text: #F8FAFC;
-    --theme-text-muted: #CBD5E1;
-    --theme-text-dim: #94A3B8;
+    --bg: #12060C;
+    --surface: #240715;
+    --surface-2: rgba(0, 0, 0, 0.28);
+    --border: #701A40;
+    --border-subtle: #50072B;
+    --text: #F1F5F9;
+    --text-muted: #F472B6;
+    --text-dim: #DB2777;
+    --accent: #EC4899;
+    --accent-contrast: #FFFFFF;
+    --card-gradient-from: #9D174D;
+    --card-gradient-to: #2D0A1B;
+    --income: #4ADE80;
+    --expense: #F87171;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
 
-    --theme-primary: #F43F5E;
-    --theme-primary-hover: #E11D48;
-    --theme-primary-dim: rgba(244, 63, 94, 0.14);
-    --theme-primary-border: #F43F5E;
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #3A0D23;
+    --theme-card-hover: #4F1330;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
+    --theme-primary-hover: #DB2777;
+    --theme-primary-dim: rgba(236, 72, 153, 0.16);
+    --theme-primary-border: var(--border);
     --theme-glow: transparent;
-    --theme-badge-text: #FB7185;
-    --theme-btn-bg: #F43F5E;
-    --theme-btn-hover: #E11D48;
+    --theme-badge-text: #F472B6;
+    --theme-btn-bg: #EC4899;
+    --theme-btn-hover: #DB2777;
     --theme-btn-text: #FFFFFF;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #F59E0B;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --theme-income: #4ADE80;
-    --theme-expense: #FF4D4D;
-    --theme-warning: #FBBF24;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
-  [data-theme="light"] {
-    /* Pure Daylight High-Contrast Clean Mode - Crisp White Surfaces */
-    --theme-bg: #F0F9FF;
-    --theme-surface: #FFFFFF;
-    --theme-card: #FFFFFF;
-    --theme-card-hover: #E0F2FE;
-    --theme-border: #BAE6FD;
-    --theme-border-subtle: #E0F2FE;
-    --theme-text: #0C4A6E;
-    --theme-text-muted: #0369A1;
-    --theme-text-dim: #0284C7;
-
-    --theme-primary: #0284C7;
-    --theme-primary-hover: #0369A1;
-    --theme-primary-dim: rgba(2, 132, 199, 0.10);
-    --theme-primary-border: #7DD3FC;
-    --theme-glow: transparent;
-    --theme-badge-text: #0284C7;
-    --theme-btn-bg: #0284C7;
-    --theme-btn-hover: #0369A1;
-    --theme-btn-text: #FFFFFF;
-
-    --theme-income: #16A34A;
-    --theme-expense: #DC2626;
-    --theme-warning: #D97706;
-
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
-  }
-
+  /* 11. Day / White Mode */
   [data-theme="white"] {
-    /* Pure Clean Architectural White - Zero Yellow, Ultra Crisp */
-    --theme-bg: #F8FAFC;
-    --theme-surface: #FFFFFF;
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface-2: #F1F5F9;
+    --border: #CBD5E1;
+    --border-subtle: #E2E8F0;
+    --text: #0F172A;
+    --text-muted: #475569;
+    --text-dim: #64748B;
+    --accent: #2563EB;
+    --accent-contrast: #FFFFFF;
+    --card-gradient-from: #FFFFFF;
+    --card-gradient-to: #EFF6FF;
+    --income: #15803D;
+    --expense: #B91C1C;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
+
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
     --theme-card: #FFFFFF;
     --theme-card-hover: #F1F5F9;
-    --theme-border: #CBD5E1;
-    --theme-border-subtle: #E2E8F0;
-    --theme-text: #0F172A;
-    --theme-text-muted: #334155;
-    --theme-text-dim: #475569;
-
-    --theme-primary: #2563EB;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
     --theme-primary-hover: #1D4ED8;
-    --theme-primary-dim: rgba(37, 99, 235, 0.10);
+    --theme-primary-dim: rgba(37, 99, 235, 0.12);
     --theme-primary-border: #93C5FD;
     --theme-glow: transparent;
-    --theme-badge-text: #2563EB;
+    --theme-badge-text: var(--accent);
     --theme-btn-bg: #2563EB;
     --theme-btn-hover: #1D4ED8;
     --theme-btn-text: #FFFFFF;
-
-    --theme-income: #16A34A;
-    --theme-expense: #DC2626;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
     --theme-warning: #D97706;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
 
-    --bg: var(--theme-bg);
-    --surface: var(--theme-surface);
-    --surface-2: var(--theme-card);
-    --border: var(--theme-border);
-    --text: var(--theme-text);
-    --text-muted: var(--theme-text-muted);
-    --accent: var(--theme-primary);
-    --accent-contrast: var(--theme-btn-text);
-    --income: var(--theme-income);
-    --expense: var(--theme-expense);
-    --warning: var(--theme-warning);
-    --bg-primary: var(--theme-bg);
-    --bg-surface: var(--theme-card);
-    --border-color: var(--theme-border);
-    --text-primary: var(--theme-text);
-    --text-secondary: var(--theme-text-muted);
-    --accent-color: var(--theme-primary);
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
+  }
+
+  /* 12. Daylight Light */
+  [data-theme="light"] {
+    --bg: #F0F9FF;
+    --surface: #FFFFFF;
+    --surface-2: #F0F9FF;
+    --border: #BAE6FD;
+    --border-subtle: #E0F2FE;
+    --text: #0C4A6E;
+    --text-muted: #334155;
+    --text-dim: #475569;
+    --accent: #0284C7;
+    --accent-contrast: #FFFFFF;
+    --card-gradient-from: #FFFFFF;
+    --card-gradient-to: #E0F2FE;
+    --income: #15803D;
+    --expense: #B91C1C;
+    --btn-income: #16A34A;
+    --btn-expense: #DC2626;
+
+    --theme-bg: var(--bg);
+    --theme-surface: var(--surface);
+    --theme-card: #FFFFFF;
+    --theme-card-hover: #E0F2FE;
+    --theme-border: var(--border);
+    --theme-border-subtle: var(--border-subtle);
+    --theme-text: var(--text);
+    --theme-text-muted: var(--text-muted);
+    --theme-text-dim: var(--text-dim);
+    --theme-primary: var(--accent);
+    --theme-primary-hover: #0369A1;
+    --theme-primary-dim: rgba(2, 132, 199, 0.12);
+    --theme-primary-border: #7DD3FC;
+    --theme-glow: transparent;
+    --theme-badge-text: var(--accent);
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0369A1;
+    --theme-btn-text: #FFFFFF;
+    --theme-income: var(--income);
+    --theme-expense: var(--expense);
+    --theme-warning: #D97706;
+    --theme-card-gradient-from: var(--card-gradient-from);
+    --theme-card-gradient-to: var(--card-gradient-to);
+
+    --bg-primary: var(--bg);
+    --bg-surface: var(--surface);
+    --border-color: var(--border);
+    --text-primary: var(--text);
+    --text-secondary: var(--text-muted);
+    --accent-color: var(--accent);
   }
 
   [data-theme="light"],

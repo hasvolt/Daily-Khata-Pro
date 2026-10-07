@@ -82,7 +82,7 @@ export const WealthArticlePage: React.FC<WealthArticlePageProps> = ({
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto p-4 md:p-8 space-y-8 pb-32">
+      <div className="max-w-3xl mx-auto p-4 md:p-8 space-y-8 pb-44 sm:pb-28">
         {/* Article Meta */}
         <div className="space-y-4 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--theme-primary,#38BDF8)]/10 border border-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] text-[12px] font-bold">
