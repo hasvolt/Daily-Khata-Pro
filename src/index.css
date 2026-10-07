@@ -1879,7 +1879,7 @@
 }
 
 .banking-card-3d .banking-card-waves {
-  opacity: 0.65 !important;
+  opacity: 0.90 !important;
 }
 
 .banking-card-3d {
@@ -1974,7 +1974,7 @@
 
 [data-theme="light"] .banking-card-3d .banking-card-waves,
 [data-theme="white"] .banking-card-3d .banking-card-waves {
-  opacity: 0.15 !important;
+  opacity: 0.55 !important;
 }
 
 [data-theme="light"] .banking-card-3d .banking-card-glare,

@@ -137,35 +137,43 @@ export function BankingCard3D({
         </div>
 
         {/* Decorative Wave & Dotted Background Geometry (Theme Foil Accent) */}
-        <div className="banking-card-waves absolute inset-0 pointer-events-none overflow-hidden select-none opacity-40">
+        <div className="banking-card-waves absolute inset-0 pointer-events-none overflow-hidden select-none">
           {/* Subtle dotted matrix watermark */}
           <div
-            className="absolute inset-0 opacity-15"
+            className="absolute inset-0 opacity-20"
             style={{
-              backgroundImage: 'radial-gradient(circle, var(--theme-primary, #38BDF8) 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(circle, var(--theme-primary, #38BDF8) 1.2px, transparent 1.2px)',
               backgroundSize: '16px 16px',
             }}
           />
-          {/* Organic luxury banking fluid wave curves */}
+          {/* Elegant geometric banking card arcs & security wave watermark */}
           <svg
-            className="absolute -right-6 -bottom-6 w-64 h-48 sm:w-80 sm:h-56 pointer-events-none stroke-[var(--theme-primary,#38BDF8)] opacity-25"
-            viewBox="0 0 320 200"
+            className="absolute -right-4 -top-6 w-72 h-52 sm:w-88 sm:h-64 pointer-events-none stroke-[var(--theme-primary,#38BDF8)]"
+            viewBox="0 0 320 220"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
+            {/* Concentric security watermark rings */}
+            <circle cx="260" cy="50" r="40" strokeWidth="1.2" strokeOpacity="0.28" />
+            <circle cx="260" cy="50" r="70" strokeWidth="1.2" strokeOpacity="0.22" strokeDasharray="4 4" />
+            <circle cx="260" cy="50" r="105" strokeWidth="1" strokeOpacity="0.18" />
+            
+            {/* Flowing modern financial wave curves */}
             <path
-              d="M10 190C60 140 120 180 180 120C240 60 280 110 330 40"
+              d="M30 220 C100 150, 180 180, 260 90 C300 45, 315 20, 330 -10"
+              strokeWidth="1.8"
+              strokeOpacity="0.38"
+            />
+            <path
+              d="M70 230 C130 170, 200 195, 275 115 C310 75, 325 50, 340 10"
+              strokeWidth="2.2"
+              strokeOpacity="0.48"
+            />
+            <path
+              d="M110 240 C160 190, 220 210, 290 140 C320 105, 335 80, 350 30"
               strokeWidth="1.5"
-              strokeDasharray="4 4"
-            />
-            <path
-              d="M30 195C85 145 145 175 205 105C265 35 300 80 340 10"
-              strokeWidth="2"
-            />
-            <path
-              d="M60 200C110 160 170 170 230 95C290 20 320 50 350 -10"
-              strokeWidth="1"
-              strokeOpacity="0.5"
+              strokeDasharray="5 5"
+              strokeOpacity="0.32"
             />
           </svg>
         </div>

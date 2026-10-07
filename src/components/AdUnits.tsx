@@ -229,12 +229,12 @@ export const AdsterraNativeBanner: React.FC<{
       html, body {
         margin: 0;
         padding: 0;
-        background: transparent;
+        background: #FFFFFF !important;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         width: 100%;
         min-height: 100%;
         overflow-x: hidden;
-        color: #F8FAFC !important;
+        color: #111827 !important;
         touch-action: pan-y;
       }
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 {
@@ -242,24 +242,25 @@ export const AdsterraNativeBanner: React.FC<{
         max-width: 100% !important;
         display: block !important;
         min-height: 220px;
+        background: #FFFFFF !important;
         touch-action: pan-y;
       }
-      /* Ensure ALL title words, headlines, links & text are solid bright white/light across all themes */
+      /* Ensure ALL title words, headlines, links & text are solid dark on white background */
       #container-f5bbfccec2bbdc526388b13f1b3de5e6,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 * {
-        color: #FFFFFF !important;
-        -webkit-text-fill-color: #FFFFFF !important;
+        color: #111827 !important;
+        -webkit-text-fill-color: #111827 !important;
       }
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 a,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 a * {
-        color: #FFFFFF !important;
-        -webkit-text-fill-color: #FFFFFF !important;
+        color: #111827 !important;
+        -webkit-text-fill-color: #111827 !important;
         text-decoration: none !important;
       }
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 a:hover,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 a:hover * {
-        color: #38BDF8 !important;
-        -webkit-text-fill-color: #38BDF8 !important;
+        color: #2563EB !important;
+        -webkit-text-fill-color: #2563EB !important;
       }
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 h1,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 h2,
@@ -268,10 +269,10 @@ export const AdsterraNativeBanner: React.FC<{
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="title"],
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="header"],
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="headline"] {
-        color: #FFFFFF !important;
-        -webkit-text-fill-color: #FFFFFF !important;
+        color: #111827 !important;
+        -webkit-text-fill-color: #111827 !important;
         font-weight: 700 !important;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
+        text-shadow: none !important;
       }
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="desc"],
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="domain"],
@@ -279,8 +280,8 @@ export const AdsterraNativeBanner: React.FC<{
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 [class*="source"],
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 p,
       #container-f5bbfccec2bbdc526388b13f1b3de5e6 span {
-        color: #CBD5E1 !important;
-        -webkit-text-fill-color: #CBD5E1 !important;
+        color: #4B5563 !important;
+        -webkit-text-fill-color: #4B5563 !important;
       }
     </style>
   </head>
@@ -299,15 +300,24 @@ export const AdsterraNativeBanner: React.FC<{
           window.parent.postMessage({ type: 'adsterra-native-height', height: h }, '*');
         }
       }
-      function enforceLightText() {
+      function enforceDarkText() {
         var el = document.getElementById('container-f5bbfccec2bbdc526388b13f1b3de5e6');
         if (!el) return;
         var nodes = el.querySelectorAll('*');
         for (var i = 0; i < nodes.length; i++) {
           var n = nodes[i];
-          if (n.tagName === 'A' || n.tagName === 'P' || n.tagName === 'SPAN' || n.tagName === 'H1' || n.tagName === 'H2' || n.tagName === 'H3' || n.tagName === 'H4' || n.tagName === 'DIV' || n.tagName === 'B' || n.tagName === 'STRONG') {
-            n.style.setProperty('color', '#FFFFFF', 'important');
-            n.style.setProperty('-webkit-text-fill-color', '#FFFFFF', 'important');
+          if (n.tagName === 'A' || n.tagName === 'H1' || n.tagName === 'H2' || n.tagName === 'H3' || n.tagName === 'H4' || n.tagName === 'B' || n.tagName === 'STRONG') {
+            n.style.setProperty('color', '#111827', 'important');
+            n.style.setProperty('-webkit-text-fill-color', '#111827', 'important');
+          } else if (n.tagName === 'P' || n.tagName === 'SPAN' || n.tagName === 'DIV') {
+            var cls = (n.className || '').toLowerCase();
+            if (cls.indexOf('desc') !== -1 || cls.indexOf('domain') !== -1 || cls.indexOf('brand') !== -1 || cls.indexOf('source') !== -1) {
+              n.style.setProperty('color', '#4B5563', 'important');
+              n.style.setProperty('-webkit-text-fill-color', '#4B5563', 'important');
+            } else {
+              n.style.setProperty('color', '#111827', 'important');
+              n.style.setProperty('-webkit-text-fill-color', '#111827', 'important');
+            }
           }
         }
       }
@@ -330,25 +340,25 @@ export const AdsterraNativeBanner: React.FC<{
 
       window.addEventListener('load', function() {
         reportHeight();
-        enforceLightText();
+        enforceDarkText();
       });
       if (window.ResizeObserver) {
         new ResizeObserver(function() {
           reportHeight();
-          enforceLightText();
+          enforceDarkText();
         }).observe(document.body);
       }
       if (window.MutationObserver) {
         var mo = new MutationObserver(function() {
           reportHeight();
-          enforceLightText();
+          enforceDarkText();
         });
         mo.observe(document.body, { childList: true, subtree: true, attributes: true });
       }
       var pollCount = 0;
       var pollInterval = setInterval(function() {
         reportHeight();
-        enforceLightText();
+        enforceDarkText();
         pollCount++;
         if (pollCount > 25) clearInterval(pollInterval);
       }, 400);
@@ -374,7 +384,7 @@ export const AdsterraNativeBanner: React.FC<{
       )}
       <div
         style={{ minHeight: `${frameHeight}px`, touchAction: 'pan-y' }}
-        className="w-full flex items-center justify-center overflow-hidden rounded-xl transition-[min-height] duration-200"
+        className="w-full flex items-center justify-center overflow-hidden rounded-xl bg-white p-1 transition-[min-height] duration-200"
       >
         <iframe
           srcDoc={nativeHtml}
