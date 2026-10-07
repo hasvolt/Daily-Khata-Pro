@@ -4,6 +4,7 @@ import { FUND_ORDER, FUND_LABELS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, downloadCSVReport } from '../utils/khataCalculations';
 import { printHTMLContent } from '../utils/printHelpers';
 import { X, Printer, Download, FileText, Zap, FileSpreadsheet, Eye, ListOrdered } from 'lucide-react';
+import { AdsterraBanner } from './AdUnits';
 
 interface PrintModalProps {
   isOpen: boolean;
@@ -567,6 +568,9 @@ export const PrintModal: React.FC<PrintModalProps> = ({
               )}
             </div>
           )}
+
+          {/* Sponsored Partner Medium Rectangle (300x250) */}
+          <AdsterraBanner size="300x250" className="no-print print:hidden my-3" />
         </div>
 
         {/* Modal Footer Controls */}

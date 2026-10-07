@@ -41,6 +41,7 @@ import { InvoiceEditorView } from './invoice/InvoiceEditorView';
 import { InvoicePrintView } from './invoice/InvoicePrintView';
 import { InvoiceHistoryView } from './invoice/InvoiceHistoryView';
 import { printHTMLContent } from '../utils/printHelpers';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 export type InvoiceTab = 'editor' | 'preview' | 'history' | 'profile';
 
@@ -768,6 +769,9 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
             language={language}
           />
         )}
+
+        {/* Sponsored Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+        <AdsterraResponsiveLeaderboard className="mt-6 no-print print:hidden" />
       </div>
     </div>
   );

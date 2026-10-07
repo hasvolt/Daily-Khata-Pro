@@ -8,6 +8,7 @@ import {
 import { AppLanguage } from '../types';
 import { NavTab } from './BottomNav';
 import { ACADEMY_ARTICLES } from '../data/wealthAcademy';
+import { AdsterraNativeBanner } from './AdUnits';
 
 const ACADEMY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Home, Target, Shield, Sparkles, BookOpen, Smile, Heart, History, ShoppingBag, TrendingUp,
@@ -156,6 +157,9 @@ export const WealthAcademyPage: React.FC<WealthAcademyPageProps> = ({
             </div>
           )}
         </div>
+
+        {/* Sponsored / Recommended Partner Native Banner */}
+        <AdsterraNativeBanner className="my-6" />
 
         {/* Navigation Footer Links */}
         <div className="flex flex-wrap items-center justify-center gap-3 pt-6 text-[12px] text-[var(--theme-text-dim,#94A3B8)] border-t border-[var(--theme-border,#213E61)]/30">

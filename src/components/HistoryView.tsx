@@ -6,6 +6,7 @@ import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
 import { ChevronLeft, ChevronRight, Search, Edit3, Trash2, Plus, Zap, Banknote, Smartphone, Building2, CreditCard, Calendar, Download, Printer } from 'lucide-react';
 import { ConfirmModal } from './ConfirmModal';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 interface HistoryViewProps {
   entries: Entry[];
@@ -466,6 +467,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           })}
         </div>
       )}
+
+      {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+      <AdsterraResponsiveLeaderboard className="my-4" />
 
       {/* Confirm Delete Modal */}
       <ConfirmModal

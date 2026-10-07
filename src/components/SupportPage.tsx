@@ -25,6 +25,7 @@ import {
 import { AppLogo } from './AppLogo';
 import { AppLanguage } from '../types';
 import { APP_VERSION_TAG } from '../utils/version';
+import { AdsterraBanner } from './AdUnits';
 
 export type SupportTab = 'help' | 'bug' | 'suggestion';
 
@@ -699,6 +700,9 @@ export const SupportPage: React.FC<SupportPageProps> = ({
           </div>
         )}
       </div>
+
+      {/* Sponsored Partner Medium Rectangle (300x250) */}
+      <AdsterraBanner size="300x250" className="my-5" />
 
       {/* Footer Strip */}
       <div className="p-4 rounded-2xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] flex items-center justify-between text-[11.5px] text-[var(--theme-text-dim,#94A3B8)] flex-wrap gap-2">

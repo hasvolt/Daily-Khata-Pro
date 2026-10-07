@@ -20,6 +20,7 @@ import {
 import { AppLanguage } from '../types';
 import { APP_RELEASE_LABEL } from '../utils/version';
 import devPhoto from '../assets/md-zafeer-hasan-yazdaan.jpg';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 interface AboutPageProps {
   onBack: () => void;
@@ -326,6 +327,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </div>
         </div>
 
+        {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+        <AdsterraResponsiveLeaderboard className="my-5" />
+
         {/* Footer Navigation Links */}
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[12px] text-[var(--theme-text-dim,#94A3B8)]">
           {onNavigateTab && (
@@ -363,6 +367,13 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 className="hover:text-white underline cursor-pointer"
               >
                 Safety
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => onNavigateTab('ads-policy')}
+                className="hover:text-white underline cursor-pointer"
+              >
+                Ads Policy
               </button>
             </>
           )}

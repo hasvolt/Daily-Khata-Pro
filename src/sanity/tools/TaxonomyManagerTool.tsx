@@ -100,7 +100,7 @@ export function TaxonomyManagerTool() {
       setProgressText('Checking existing blog posts for legacy values...');
       let postsMigrated = 0;
       try {
-        const posts = await client.fetch<any[]>('*[_type == "post"]{ _id, category, topics }');
+        const posts: any[] = (await client.fetch('*[_type == "post"]{ _id, category, topics }')) || [];
         for (const p of posts) {
           const patches: any = {};
           if (typeof p.category === 'string' && p.category.trim()) {

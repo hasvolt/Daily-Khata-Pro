@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { getPageTranslation } from '../utils/pageTranslations';
+import { AdsterraBanner } from './AdUnits';
 
 interface TermsPageProps {
   onBack: () => void;
@@ -169,6 +170,9 @@ export const TermsPage: React.FC<TermsPageProps> = ({
         </div>
       </div>
 
+      {/* Sponsored Partner Medium Rectangle (300x250) */}
+      <AdsterraBanner size="300x250" className="my-5" />
+
       {/* Navigation Footer Links */}
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[12px] text-[var(--theme-text-dim,#94A3B8)]">
         {onNavigateTab && (
@@ -199,6 +203,13 @@ export const TermsPage: React.FC<TermsPageProps> = ({
               className="hover:text-white underline cursor-pointer"
             >
               Disclaimer
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('ads-policy')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Ads Policy
             </button>
           </>
         )}

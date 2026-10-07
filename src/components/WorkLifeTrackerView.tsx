@@ -35,6 +35,7 @@ import {
   Printer,
   FileText
 } from 'lucide-react';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 interface WorkLifeTrackerViewProps {
   workLogs: WorkLog[];
@@ -669,6 +670,9 @@ export const WorkLifeTrackerView: React.FC<WorkLifeTrackerViewProps> = ({
           )}
         </div>
       )}
+
+      {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+      <AdsterraResponsiveLeaderboard className="my-4" />
     </div>
   );
 };

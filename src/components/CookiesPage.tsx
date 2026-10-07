@@ -17,6 +17,7 @@ import {
   Laptop
 } from 'lucide-react';
 import { AppLanguage } from '../types';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 import {
   getCookieConsent,
   saveCookieConsent,
@@ -396,6 +397,9 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
         </div>
       </div>
 
+      {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+      <AdsterraResponsiveLeaderboard className="my-5" />
+
       {/* Navigation Footer */}
       <div className="pt-4 flex flex-wrap items-center justify-between gap-3 text-[12px] text-[var(--theme-text-muted,#94A3B8)] border-t border-[var(--theme-border,#213E61)]/60">
         <button
@@ -424,6 +428,12 @@ export const CookiesPage: React.FC<CookiesPageProps> = ({
             className="hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer"
           >
             {isHindi ? 'सोर्स कोड सुरक्षा' : 'Security Audit'}
+          </button>
+          <button
+            onClick={() => onNavigateTab && onNavigateTab('ads-policy')}
+            className="hover:text-[var(--theme-primary,#38BDF8)] transition-colors cursor-pointer"
+          >
+            {isHindi ? 'विज्ञापन नीति' : 'Ads Policy'}
           </button>
         </div>
       </div>

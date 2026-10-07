@@ -31,6 +31,7 @@ import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import { evaluateFinancialMath } from '../utils/calculatorEngine';
 import { TRANSLATIONS } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
+import { AdsterraBanner } from './AdUnits';
 
 type CalculatorTab = 'standard' | 'funds' | 'sip' | 'emi' | 'gst' | 'discount' | 'inflation' | 'gold' | 'currency';
 
@@ -1448,6 +1449,8 @@ export const MultiCalculatorModal: React.FC<MultiCalculatorModalProps> = ({
             </div>
           )}
 
+          {/* Sponsored Partner Medium Rectangle (300x250) */}
+          <AdsterraBanner size="300x250" className="mt-4" />
         </div>
       </div>
     </div>

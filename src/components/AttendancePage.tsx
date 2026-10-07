@@ -37,6 +37,7 @@ import {
 import { BulkPaymentSettlementModal } from './attendance/BulkPaymentSettlementModal';
 import { EmployerAccountsView } from './attendance/EmployerAccountsView';
 import { AttendancePrintModal } from './attendance/AttendancePrintModal';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 export interface AttendancePageProps {
   attendanceLogs: AttendanceLog[];
@@ -1186,6 +1187,9 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           </div>
         </div>
       )}
+
+      {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+      <AdsterraResponsiveLeaderboard className="mt-6" />
 
       {/* Add / Edit Attendance Modal */}
       {isLogModalOpen && (

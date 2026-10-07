@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { ConfirmModal } from './ConfirmModal';
 import { TRANSLATIONS } from '../utils/translations';
+import { AdsterraBanner } from './AdUnits';
 
 interface GoalsViewProps {
   goals: Goal[];
@@ -394,6 +395,9 @@ export const GoalsView: React.FC<GoalsViewProps> = ({
           })}
         </div>
       )}
+
+      {/* Sponsored Partner Medium Rectangle (300x250) */}
+      <AdsterraBanner size="300x250" className="my-4" />
 
       {/* Delete Confirmation Modal */}
       <ConfirmModal

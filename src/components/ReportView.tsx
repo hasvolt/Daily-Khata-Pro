@@ -7,6 +7,7 @@ import { TRANSLATIONS } from '../utils/translations';
 import { GenericCard3D } from './GenericCard3D';
 import { InteractiveAnalytics } from './InteractiveAnalytics';
 import { CashRunwayWidget } from './CashRunwayWidget';
+import { AdsterraBanner } from './AdUnits';
 import { ChevronLeft, ChevronRight, Printer, Download, Save, Plus, Minus, Trash2, PieChart, Sparkles, Check, AlertCircle, TrendingUp, BarChart3, Wallet, Sliders, Tags, RotateCcw } from 'lucide-react';
 
 interface ReportViewProps {
@@ -580,6 +581,9 @@ export const ReportView: React.FC<ReportViewProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Sponsored Medium Rectangle (300x250) */}
+        <AdsterraBanner size="300x250" className="mt-4" />
       </div>
     </div>
   );

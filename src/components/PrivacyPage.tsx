@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { getPageTranslation } from '../utils/pageTranslations';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 interface PrivacyPageProps {
   onBack: () => void;
@@ -203,6 +204,9 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
         </p>
       </div>
 
+      {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+      <AdsterraResponsiveLeaderboard className="my-5" />
+
       {/* Navigation Footer Links */}
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[12px] text-[var(--theme-text-dim,#94A3B8)]">
         {onNavigateTab && (
@@ -233,6 +237,13 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({
               className="hover:text-white underline cursor-pointer"
             >
               Terms of Service
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('ads-policy')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Ads Policy
             </button>
           </>
         )}

@@ -37,6 +37,7 @@ import { AppLogo } from './AppLogo';
 import { FUND_LABELS, FUND_ORDER, DEFAULT_PERCENTAGES, FUND_CONFIGS } from '../data/defaults';
 import { AppLanguage } from '../types';
 import { getUserManualContent } from '../utils/userManualContent';
+import { AdsterraNativeBanner } from './AdUnits';
 
 interface UserManualModalProps {
   isOpen: boolean;
@@ -652,6 +653,9 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                   </button>
                 )}
 
+                {/* Sponsored Partner Recommendation */}
+                <AdsterraNativeBanner className="my-3.5" />
+
                 {/* Bottom Prev / Next Navigation in Modal */}
                 <div className="border-t border-[var(--theme-border,#213E61)]/70 pt-4 space-y-3">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -698,6 +702,9 @@ export const UserManualModal: React.FC<UserManualModalProps> = ({
                     )}
                   </div>
                 </div>
+
+                {/* Sponsored Partner Recommendation */}
+                <AdsterraNativeBanner className="mt-4" />
               </div>
             )}
           </div>

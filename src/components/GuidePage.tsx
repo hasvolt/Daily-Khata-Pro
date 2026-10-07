@@ -39,6 +39,7 @@ import {
 import { FUND_LABELS, FUND_ORDER, DEFAULT_PERCENTAGES, FUND_CONFIGS } from '../data/defaults';
 import { AppLanguage } from '../types';
 import { getUserManualContent } from '../utils/userManualContent';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 interface GuidePageProps {
   onBack: () => void;
@@ -730,6 +731,9 @@ export const GuidePage: React.FC<GuidePageProps> = ({
                     <ArrowUp className="w-4 h-4" />
                   </button>
                 </div>
+
+                {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+                <AdsterraResponsiveLeaderboard className="mt-5" />
               </div>
             </div>
           )}

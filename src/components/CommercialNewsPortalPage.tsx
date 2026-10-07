@@ -41,6 +41,7 @@ import {
   COMMERCIAL_ARTICLES,
   CommercialArticle
 } from '../data/newsPortalData';
+import { AdsterraNativeBanner, AdsterraResponsiveLeaderboard } from './AdUnits';
 
 
 interface CommercialNewsPortalPageProps {
@@ -856,6 +857,11 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
           )}
         </section>
 
+        {/* Clean Responsive Sponsored Banner (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+        <div className="flex justify-center w-full">
+          <AdsterraResponsiveLeaderboard className="w-full max-w-3xl" />
+        </div>
+
         {/* 5. Commercial Intelligence Dispatch Subscription */}
         <section className="rounded-3xl border border-[var(--theme-border,#213E61)] bg-gradient-to-r from-[var(--theme-card,#132438)] via-[var(--theme-surface,#0E1A29)] to-[var(--theme-card,#132438)] p-6 sm:p-8">
           <div className="max-w-3xl mx-auto text-center space-y-4">
@@ -1145,6 +1151,9 @@ export const CommercialNewsPortalPage: React.FC<CommercialNewsPortalPageProps> =
                     </div>
                   ))}
                 </div>
+
+                {/* Sponsored / Recommended Partner Native Banner */}
+                <AdsterraNativeBanner className="my-6" />
 
                 {/* Tags & Regulatory Disclaimer */}
                 <div className="pt-6 border-t border-[var(--theme-border,#213E61)] space-y-4 text-xs text-[var(--theme-text-muted,#CBD5E1)]">

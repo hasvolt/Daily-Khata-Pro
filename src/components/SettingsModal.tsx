@@ -97,6 +97,7 @@ import { getFundIcon } from '../utils/iconMap';
 import { ConfirmModal } from './ConfirmModal';
 import { FundEditorModal } from './FundEditorModal';
 import { AppLogo } from './AppLogo';
+import { AdsterraBanner } from './AdUnits';
 import { TRANSLATIONS, isPureHindi, isHinglish, isHindiOrHinglish, pickTranslation } from '../utils/translations';
 import { getAppTranslation } from '../utils/appTranslations';
 import { APP_VERSION_FULL, APP_VERSION_FOOTER } from '../utils/version';
@@ -2071,6 +2072,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     { id: 'terms', label: language === 'hi' ? 'शर्तें' : 'Terms', icon: FileText },
                     { id: 'disclaimer', label: language === 'hi' ? 'डिस्क्लेमर' : 'Disclaimer', icon: AlertCircle },
                     { id: 'safety', label: language === 'hi' ? 'सोर्स सेफ्टी' : 'Code Safety', icon: ShieldCheck, color: 'text-[var(--theme-primary,#38BDF8)]' },
+                    { id: 'ads-policy', label: language === 'hi' ? 'विज्ञापन नीति' : 'Ads Policy', icon: Sparkles, color: 'text-amber-400' },
                     { id: 'support-project', label: language === 'hi' ? 'प्रोजेक्ट सपोर्ट' : 'Support Project', icon: Heart, color: 'text-red-500' }
                   ].map((link) => {
                     const Icon = link.icon;
@@ -2138,6 +2140,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
             </div>
           )}
+          {/* Sponsored Partner Medium Rectangle (300x250) */}
+          <AdsterraBanner size="300x250" className="mt-4" />
         </div>
 
         {/* Modal Footer */}

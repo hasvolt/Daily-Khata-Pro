@@ -20,6 +20,7 @@ import {
 import { AppLanguage } from '../types';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { getAppTranslation } from '../utils/appTranslations';
+import { AdsterraResponsiveLeaderboard } from './AdUnits';
 
 interface SafetyPageProps {
   onBack: () => void;
@@ -563,6 +564,9 @@ export interface Goal {
         </div>
       </div>
 
+      {/* Sponsored Partner Responsive Leaderboard (728x90 Desktop / 468x60 Tablet / 320x50 Mobile) */}
+      <AdsterraResponsiveLeaderboard className="my-5" />
+
       {/* Navigation Footer Links */}
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-[12px] text-[var(--theme-text-dim,#94A3B8)]">
         <button
@@ -593,6 +597,13 @@ export interface Goal {
               className="hover:text-white underline cursor-pointer"
             >
               Terms
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onNavigateTab('ads-policy')}
+              className="hover:text-white underline cursor-pointer"
+            >
+              Ads Policy
             </button>
           </>
         )}

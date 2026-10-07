@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { AppLanguage } from '../types';
 import { ACADEMY_ARTICLES, AcademyArticle } from '../data/wealthAcademy';
+import { AdsterraNativeBanner } from './AdUnits';
 
 const ACADEMY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Home, Target, Shield, Sparkles, BookOpen, Smile, Heart, History, ShoppingBag, TrendingUp,
@@ -177,6 +178,9 @@ export const WealthArticlePage: React.FC<WealthArticlePageProps> = ({
             </button>
           ) : <div />}
         </div>
+
+        {/* Sponsored / Recommended Partner Native Banner */}
+        <AdsterraNativeBanner className="my-8" />
 
         {/* Navigation Footer Links */}
         <div className="flex flex-wrap items-center justify-center gap-3 pt-12 text-[12px] text-[var(--theme-text-dim,#94A3B8)] border-t border-[var(--theme-border,#213E61)]/30">

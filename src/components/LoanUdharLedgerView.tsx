@@ -11,6 +11,7 @@ import {
 } from '../types';
 import { formatCurrency, triggerHapticSound, triggerCelebration } from '../utils/khataCalculations';
 import { getCurrencyConfig } from '../utils/currencyConfig';
+import { AdsterraBanner } from './AdUnits';
 import {
   Landmark,
   ArrowUpRight,
@@ -1138,6 +1139,9 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
           })}
         </div>
       )}
+
+      {/* Sponsored Partner Medium Rectangle (300x250) */}
+      <AdsterraBanner size="300x250" className="mt-4" />
 
       {/* 6. WhatsApp Reminder Modal */}
       {activeReminderItem && (

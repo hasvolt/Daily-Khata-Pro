@@ -25,6 +25,7 @@ import {
   ArrowRight,
   FolderLock
 } from 'lucide-react';
+import { AdsterraBanner } from './AdUnits';
 
 interface PersonalNotesViewProps {
   notes: PersonalNote[];
@@ -590,6 +591,9 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
           })}
         </div>
       )}
+
+      {/* Sponsored Partner Medium Rectangle (300x250) */}
+      <AdsterraBanner size="300x250" className="my-4" />
     </div>
   );
 };

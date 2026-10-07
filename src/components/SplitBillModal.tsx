@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import { X, Users, Split, Plus, Trash2, Copy, Check, ArrowRight, Share2, Sparkles } from 'lucide-react';
+import { AdsterraBanner } from './AdUnits';
 
 interface SplitBillModalProps {
   isOpen: boolean;
@@ -178,6 +179,9 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
               </button>
             </form>
           </div>
+
+          {/* Sponsored Partner Compact Mobile Banner (320x50) */}
+          <AdsterraBanner size="320x50" className="my-2" />
         </div>
 
         {/* Action Buttons */}

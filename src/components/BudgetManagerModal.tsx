@@ -4,6 +4,7 @@ import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import { getCurrencyConfig } from '../utils/currencyConfig';
 import { getCategoryIcon } from '../utils/iconMap';
 import { X, Sliders, AlertTriangle, CheckCircle2, Plus, Trash2, Edit3, ShieldAlert } from 'lucide-react';
+import { AdsterraBanner } from './AdUnits';
 
 interface BudgetManagerModalProps {
   isOpen: boolean;
@@ -298,6 +299,9 @@ export const BudgetManagerModal: React.FC<BudgetManagerModalProps> = ({
               })
             )}
           </div>
+
+          {/* Sponsored Partner Medium Rectangle (300x250) */}
+          <AdsterraBanner size="300x250" className="my-3" />
         </div>
 
         {/* Footer */}

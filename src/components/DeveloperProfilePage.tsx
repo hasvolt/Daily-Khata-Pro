@@ -13,6 +13,7 @@ import {
 import { AppLanguage } from '../types';
 import { APP_RELEASE_LABEL } from '../utils/version';
 import devPhoto from '../assets/md-zafeer-hasan-yazdaan.jpg';
+import { AdsterraBanner } from './AdUnits';
 
 interface DeveloperProfilePageProps {
   onBack: () => void;
@@ -229,6 +230,9 @@ export const DeveloperProfilePage: React.FC<DeveloperProfilePageProps> = ({
             </a>
           </div>
         </div>
+
+        {/* Sponsored Partner Medium Rectangle (300x250) */}
+        <AdsterraBanner size="300x250" className="my-5" />
 
         {/* Switch to About App Banner */}
         {onNavigateTab && (

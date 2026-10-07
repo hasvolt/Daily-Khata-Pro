@@ -39,7 +39,7 @@ import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import { playKeypadSound, playIncomeSound, playDeleteSound } from '../utils/audioService';
 import { printCalculatorSlip, downloadCalculatorSlipHTML, CalcPrintParams } from '../utils/calculatorPrint';
 import { evaluateFinancialMath } from '../utils/calculatorEngine';
-import { AdsterraBanner300x250 } from './AdUnits';
+import { AdsterraBanner300x250, AdsterraResponsiveLeaderboard, AdsterraNativeBanner } from './AdUnits';
 
 export type CalculatorViewType = 'standard' | 'currency' | 'emi' | 'sip' | 'funds' | 'gst' | 'discount' | 'inflation';
 
@@ -3239,11 +3239,13 @@ export const CalculatorPage: React.FC<CalculatorPageProps> = ({
         </div>
       )}
 
-      {/* Clean Sponsored Partner Banner at end of Calculator Tool */}
+      {/* Clean Sponsored Responsive Banner */}
       <div className="flex justify-center pt-2">
-        <AdsterraBanner300x250 className="max-w-md w-full" />
+        <AdsterraResponsiveLeaderboard className="w-full max-w-3xl" />
       </div>
 
+      {/* Sponsored Partner Recommendation Native Unit */}
+      <AdsterraNativeBanner className="my-4" />
     </div>
   );
 };

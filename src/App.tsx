@@ -68,6 +68,7 @@ import { CommercialNewsPortalPage } from './components/CommercialNewsPortalPage'
 import { SanityBlogPage } from './components/SanityBlogPage';
 import { SanityArticlePage } from './components/SanityArticlePage';
 import { CookiesPage } from './components/CookiesPage';
+import { AdsPolicyPage } from './components/AdsPolicyPage';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
 import { RemindersModal } from './components/RemindersModal';
 import { DueRemindersBanner } from './components/DueRemindersBanner';
@@ -2758,6 +2759,22 @@ function AppContent() {
             />
           } />
 
+          <Route path="/ads-policy" element={
+            <AdsPolicyPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
+
+          <Route path="/ads" element={
+            <AdsPolicyPage
+              onBack={() => setCurrentTab('home')}
+              onNavigateTab={(tab) => setCurrentTab(tab as NavTab)}
+              language={language}
+            />
+          } />
+
           <Route path="/disclaimer" element={
             <DisclaimerPage
               onBack={() => setCurrentTab('home')}
@@ -3056,6 +3073,8 @@ function AppContent() {
             <button onClick={() => setCurrentTab('disclaimer')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Disclaimer</button>
             <span className="opacity-30">•</span>
             <button onClick={() => setCurrentTab('safety')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Security & Safety</button>
+            <span className="opacity-30">•</span>
+            <button onClick={() => setCurrentTab('ads-policy')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'विज्ञापन नीति' : 'Ads Policy'}</button>
           </div>
 
           {/* Copyright */}
