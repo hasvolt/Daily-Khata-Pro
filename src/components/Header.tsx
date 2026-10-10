@@ -401,7 +401,7 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Quick App Lock (Header) */}
+          {/* Quick App Lock (Header: Desktop/Tablet only to avoid mobile header overload) */}
           {(onLockNow || onOpenSecurity) && (
             <button
               type="button"
@@ -413,7 +413,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onOpenSecurity();
                 }
               }}
-              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
+              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold hidden sm:flex items-center justify-center gap-1.5 shrink-0 ${
                 isLockEnabled
                   ? 'bg-rose-500/15 border-rose-500/35 text-rose-500 dark:text-rose-400 hover:bg-rose-500/25'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#34D399)]'
@@ -478,7 +478,7 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Quick Google Translate Button (Header) */}
+          {/* Quick Google Translate Button (Desktop/Tablet only; on mobile accessible directly in Main Menu drawer) */}
           {onOpenGoogleTranslate && (
             <button
               type="button"
@@ -486,7 +486,7 @@ export const Header: React.FC<HeaderProps> = ({
                 triggerHapticSound('click');
                 onOpenGoogleTranslate();
               }}
-              className="relative h-8 sm:h-9 px-1.5 sm:px-2.5 rounded-lg sm:rounded-xl border border-sky-500/35 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 hover:text-sky-300 transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
+              className="relative hidden sm:flex h-8 sm:h-9 px-1.5 sm:px-2.5 rounded-lg sm:rounded-xl border border-sky-500/35 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 hover:text-sky-300 transition-all cursor-pointer shadow-xs active:scale-95 items-center justify-center gap-1.5 shrink-0"
               title={isHindi ? 'गूगल ट्रांसलेटर (100+ भाषाएँ)' : 'Google Translator (100+ Languages)'}
               id="header-google-translate-btn"
               aria-label="Google Translate"
@@ -498,7 +498,7 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Quick Rozfiber Apps Hub Button (Header) */}
+          {/* Quick Rozfiber Apps Hub Button (Desktop/Tablet only; on mobile accessible via Main Menu) */}
           {onOpenRozfiberApps && (
             <button
               type="button"
@@ -506,7 +506,7 @@ export const Header: React.FC<HeaderProps> = ({
                 triggerHapticSound('click');
                 onOpenRozfiberApps();
               }}
-              className="relative h-8 w-8 sm:h-9 sm:w-9 min-w-[32px] sm:min-w-[36px] rounded-lg sm:rounded-xl border border-emerald-500/35 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 hover:text-emerald-300 transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 p-0"
+              className="relative hidden sm:flex h-8 w-8 sm:h-9 sm:w-9 min-w-[32px] sm:min-w-[36px] rounded-lg sm:rounded-xl border border-emerald-500/35 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 hover:text-emerald-300 transition-all cursor-pointer shadow-xs active:scale-95 items-center justify-center shrink-0 p-0"
               title={isHindi ? 'Rozfiber ऐप्स (Staff Manager, Docs)' : 'Rozfiber Apps (Staff Manager, Docs)'}
               id="header-rozfiber-apps-btn"
               aria-label="Rozfiber Apps"

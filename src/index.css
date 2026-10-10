@@ -1450,6 +1450,20 @@
   color: var(--theme-text, #F8FAFC) !important;
 }
 
+[data-theme="white"] #main-menu-drawer,
+[data-theme="light"] #main-menu-drawer {
+  background: #FFFFFF !important;
+  border-left-color: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+
+[data-theme="white"] #main-menu-drawer input,
+[data-theme="light"] #main-menu-drawer input {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
 [data-theme="monochrome"] #main-menu-drawer {
   background: #09090C !important;
   border-left-color: rgba(255, 255, 255, 0.18) !important;

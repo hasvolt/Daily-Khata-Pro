@@ -585,26 +585,69 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
     >
       <div
         id="main-menu-drawer"
-        className="w-full max-w-sm sm:max-w-md h-full bg-[#08111E] text-slate-100 border-l border-slate-800/80 shadow-2xl flex flex-col animate-in slide-in-from-right duration-200 select-none"
+        className={`w-full max-w-sm sm:max-w-md h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-200 select-none ${
+          isLightMode
+            ? 'bg-white text-slate-900 border-l border-slate-200'
+            : 'bg-[#08111E] text-slate-100 border-l border-slate-800/80'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Drawer Header (Clean, Matching Screenshot Design) */}
-        <div className="p-4 sm:p-5 flex items-center justify-between gap-3 shrink-0">
+        {/* Drawer Header (Logo, Brand Title, Professional Tagline & Status) */}
+        <div className={`p-4 sm:p-5 flex items-center justify-between gap-3 shrink-0 ${
+          isLightMode ? 'border-b border-slate-100' : 'border-b border-slate-800/50'
+        }`}>
           <div className="flex items-center gap-3 min-w-0">
-            {/* App Logo or Blue Badge */}
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-md shrink-0">
+            {/* App Logo with Modern Gradient Container */}
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-md shrink-0 ${
+              isLightMode
+                ? 'bg-gradient-to-br from-blue-600 to-sky-600 text-white border border-blue-400/30 shadow-blue-500/10'
+                : 'bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/20'
+            }`}>
               <AppLogo size={26} />
             </div>
 
             <div className="min-w-0">
-              <h2 className="text-[16px] sm:text-[17px] font-bold text-white tracking-tight truncate">
-                Daily Khata Pro
-              </h2>
-              <p className="text-[11.5px] text-slate-400 font-medium truncate mt-0.5">
-                {isDriveConnected
-                  ? (isHindi ? 'Role: Owner • क्लाउड सिंक सक्रिय' : 'Role: Owner • Cloud Connected')
-                  : (isHindi ? 'Role: Owner • 100% ऑफ़लाइन' : 'Role: Owner • 100% Offline')}
+              <div className="flex items-center gap-1.5">
+                <h2 className={`text-[16px] sm:text-[17px] font-extrabold tracking-tight truncate ${
+                  isLightMode ? 'text-slate-900' : 'text-white'
+                }`}>
+                  Daily Khata
+                </h2>
+                <span className="text-[15px] sm:text-[16px] font-black tracking-tight text-sky-500">
+                  Pro
+                </span>
+              </div>
+              <p className={`text-[11px] font-medium truncate mt-0.5 ${
+                isLightMode ? 'text-slate-500' : 'text-slate-400'
+              }`}>
+                {isHindi ? 'स्मार्ट आय-व्यय ट्रैकर • Rozfiber' : 'Smart Expense Tracker • Rozfiber'}
               </p>
+              <div className="mt-1 flex items-center gap-1.5">
+                {isDriveConnected ? (
+                  <span className={`inline-flex items-center gap-1 text-[9.5px] font-bold px-1.5 py-0.5 rounded-md ${
+                    isLightMode
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-300'
+                      : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                  }`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    {isHindi ? 'क्लाउड सिंक' : 'Cloud Connected'}
+                  </span>
+                ) : (
+                  <span className={`inline-flex items-center gap-1 text-[9.5px] font-bold px-1.5 py-0.5 rounded-md ${
+                    isLightMode
+                      ? 'bg-slate-100 text-slate-600 border border-slate-300'
+                      : 'bg-slate-800 text-slate-400 border border-slate-700'
+                  }`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                    {isHindi ? '100% ऑफ़लाइन' : '100% Offline'}
+                  </span>
+                )}
+                <span className={`text-[9.5px] font-mono font-medium ${
+                  isLightMode ? 'text-slate-400' : 'text-slate-500'
+                }`}>
+                  v{APP_VERSION}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -612,29 +655,41 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer shrink-0"
+            className={`p-1.5 rounded-xl transition-colors cursor-pointer shrink-0 ${
+              isLightMode
+                ? 'text-slate-400 hover:text-slate-800 hover:bg-slate-100'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
             title="Close Menu"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Search Bar (Clean and helpful to find any feature instantly) */}
-        <div className="px-4 sm:px-5 pb-2 shrink-0">
+        {/* Search Bar */}
+        <div className="px-4 sm:px-5 pt-2.5 pb-2 shrink-0">
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${
+              isLightMode ? 'text-slate-400' : 'text-slate-400'
+            }`} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={isHindi ? 'मेनू में खोजें (उदा. लोन, सेटिंग्स, अटेंडेंस)...' : 'Search menu items...'}
-              className="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-800/50 border border-slate-700/60 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-sky-500"
+              className={`w-full pl-9 pr-8 py-2 rounded-xl text-xs placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-all ${
+                isLightMode
+                  ? 'bg-slate-100 border border-slate-200 text-slate-900 focus:bg-white focus:border-sky-500'
+                  : 'bg-slate-800/50 border border-slate-700/60 text-slate-200 focus:border-sky-500'
+              }`}
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                className={`absolute right-2.5 top-1/2 -translate-y-1/2 ${
+                  isLightMode ? 'text-slate-400 hover:text-slate-700' : 'text-slate-400 hover:text-white'
+                }`}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -654,31 +709,49 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClose();
                 handleDirectUpdateApp();
               }}
-              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-emerald-950/70 via-teal-950/40 to-slate-900 border border-emerald-500/40 hover:border-emerald-400 text-left transition-all hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer shadow-xs group disabled:opacity-50"
+              className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group disabled:opacity-50 ${
+                isLightMode
+                  ? 'bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100/50 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-100/60 text-slate-900'
+                  : 'bg-gradient-to-r from-emerald-950/70 via-teal-950/40 to-slate-900 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-800/60 text-white'
+              }`}
               title={isHindi ? 'नया वर्शन 1-क्लिक अपडेट व कैश रिफ्रेश' : 'New Version 1-Click Direct Update'}
               id="main-menu-version-update-banner"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:text-emerald-300 shrink-0">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                  isLightMode
+                    ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                    : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 group-hover:text-emerald-300'
+                }`}>
                   <RefreshCw className={`w-4 h-4 ${isUpdatingApp ? 'animate-spin' : ''}`} />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[13px] font-bold text-white tracking-tight truncate">
+                    <span className={`text-[13px] font-bold tracking-tight truncate ${
+                      isLightMode ? 'text-slate-900' : 'text-white'
+                    }`}>
                       {isHindi ? 'नया वर्शन 1-क्लिक अपडेट' : 'New Version 1-Click Update'}
                     </span>
-                    <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded-md bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 shrink-0">
+                    <span className={`text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
+                      isLightMode
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                        : 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40'
+                    }`}>
                       v{APP_VERSION}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                  <p className={`text-[11px] truncate mt-0.5 ${
+                    isLightMode ? 'text-slate-600' : 'text-slate-400'
+                  }`}>
                     {isUpdatingApp
                       ? (isHindi ? 'कैश रीफ्रेश व अपडेट हो रहा है...' : 'Refreshing cache & updating...')
                       : (isHindi ? '1-क्लिक में तुरंत वर्शन अपडेट करें • डेटा सुरक्षित' : '1-Click instant version update • Data 100% safe')}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-emerald-400 text-xs font-semibold shrink-0">
+              <div className={`flex items-center gap-1 text-xs font-semibold shrink-0 ${
+                isLightMode ? 'text-emerald-700' : 'text-emerald-400'
+              }`}>
                 <span className="hidden sm:inline text-[11px]">
                   {isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}
                 </span>
@@ -696,29 +769,47 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClose();
                 onOpenGoogleTranslate();
               }}
-              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-blue-950/70 via-sky-950/40 to-slate-900 border border-sky-500/35 hover:border-sky-400 text-left transition-all hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer shadow-xs group"
+              className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group ${
+                isLightMode
+                  ? 'bg-gradient-to-r from-sky-50 via-blue-50 to-sky-100/50 border-sky-300 hover:border-sky-400 hover:bg-sky-100/60 text-slate-900'
+                  : 'bg-gradient-to-r from-blue-950/70 via-sky-950/40 to-slate-900 border-sky-500/35 hover:border-sky-400 hover:bg-slate-800/60 text-white'
+              }`}
               title={isHindi ? 'गूगल ट्रांसलेटर (100+ भाषाएँ)' : 'Google Translator (100+ Languages)'}
               id="main-menu-google-translator-banner"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 group-hover:text-sky-300 shrink-0">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                  isLightMode
+                    ? 'bg-sky-100 text-sky-700 border border-sky-300'
+                    : 'bg-sky-500/20 text-sky-400 border border-sky-500/40 group-hover:text-sky-300'
+                }`}>
                   <Globe className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[13px] font-bold text-white tracking-tight truncate">
+                    <span className={`text-[13px] font-bold tracking-tight truncate ${
+                      isLightMode ? 'text-slate-900' : 'text-white'
+                    }`}>
                       {isHindi ? 'गूगल अनुवादक (Google Translate)' : 'Google Translator'}
                     </span>
-                    <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded-md bg-sky-500/25 text-sky-300 border border-sky-500/40 shrink-0">
+                    <span className={`text-[9.5px] font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
+                      isLightMode
+                        ? 'bg-sky-100 text-sky-800 border border-sky-300'
+                        : 'bg-sky-500/25 text-sky-300 border border-sky-500/40'
+                    }`}>
                       {isGoogleTranslated && activeLangLabel ? activeLangLabel : '100+ LANGS'}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                  <p className={`text-[11px] truncate mt-0.5 ${
+                    isLightMode ? 'text-slate-600' : 'text-slate-400'
+                  }`}>
                     {isHindi ? 'हिन्दी, বাংলা, தமிழ், اردو, मराठी व 100+ भाषाएँ' : 'Translate entire app to 100+ languages'}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-sky-400 text-xs font-semibold shrink-0">
+              <div className={`flex items-center gap-1 text-xs font-semibold shrink-0 ${
+                isLightMode ? 'text-sky-700' : 'text-sky-400'
+              }`}>
                 <span className="hidden sm:inline text-[11px]">{isHindi ? 'खोलें' : 'Open'}</span>
                 <ChevronRight className="w-4 h-4" />
               </div>
@@ -727,15 +818,17 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
         </div>
 
         {/* Subtle Divider */}
-        <div className="mx-4 sm:mx-5 h-px bg-slate-800/80" />
+        <div className={`mx-4 sm:mx-5 h-px ${isLightMode ? 'bg-slate-200' : 'bg-slate-800/80'}`} />
 
-        {/* Drawer Body - Clean, Spacious List Matching Screenshot Style */}
+        {/* Drawer Body - Clean, Spacious List Matching Design */}
         <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-3 space-y-4">
           {filteredSections.map((section, idx) => (
             <div key={section.id} className="space-y-1">
               {/* Clean Section Header Label */}
               <div className="px-2 pt-1 pb-1">
-                <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                <span className={`text-[11px] font-mono font-bold uppercase tracking-wider block ${
+                  isLightMode ? 'text-slate-500' : 'text-slate-400'
+                }`}>
                   {section.title}
                 </span>
               </div>
@@ -758,22 +851,40 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                           triggerHapticSound('click');
                           onClose();
                         }}
-                        className="w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors hover:bg-slate-800/40 active:scale-[0.99] group cursor-pointer"
+                        className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
+                          isLightMode
+                            ? 'hover:bg-slate-100 text-slate-800'
+                            : 'hover:bg-slate-800/40 text-slate-100'
+                        }`}
                       >
                         <div className="flex items-center gap-3.5 min-w-0">
-                          <ItemIcon className="w-5 h-5 text-sky-400 shrink-0 group-hover:text-sky-300 transition-colors" />
-                          <span className="text-[14px] sm:text-[14.5px] font-medium text-slate-100 group-hover:text-white transition-colors truncate">
+                          <ItemIcon className={`w-5 h-5 shrink-0 transition-colors ${
+                            isLightMode
+                              ? 'text-sky-600 group-hover:text-sky-700'
+                              : 'text-sky-400 group-hover:text-sky-300'
+                          }`} />
+                          <span className={`text-[14px] sm:text-[14.5px] font-medium transition-colors truncate ${
+                            isLightMode
+                              ? 'text-slate-800 group-hover:text-slate-950'
+                              : 'text-slate-100 group-hover:text-white'
+                          }`}>
                             {item.label}
                           </span>
                         </div>
 
                         {item.badge && (
                           <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full shrink-0 ${
-                            item.badgeColor === 'blue'
-                              ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
-                              : item.badgeColor === 'emerald'
-                              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                              : 'bg-slate-800 text-slate-400 border border-slate-700'
+                            isLightMode
+                              ? (item.badgeColor === 'blue'
+                                  ? 'bg-blue-100 text-blue-700 border border-blue-300'
+                                  : item.badgeColor === 'emerald'
+                                  ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                                  : 'bg-slate-100 text-slate-700 border border-slate-300')
+                              : (item.badgeColor === 'blue'
+                                  ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
+                                  : item.badgeColor === 'emerald'
+                                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                                  : 'bg-slate-800 text-slate-400 border border-slate-700')
                           }`}>
                             {item.badge}
                           </span>
@@ -790,20 +901,24 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       onClick={item.onClick}
                       className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
                         isRowActive
-                          ? 'bg-sky-500/15 border border-sky-500/30 text-sky-300'
-                          : 'hover:bg-slate-800/40 text-slate-100'
+                          ? (isLightMode
+                              ? 'bg-sky-50 border border-sky-300 text-sky-800'
+                              : 'bg-sky-500/15 border border-sky-500/30 text-sky-300')
+                          : (isLightMode
+                              ? 'hover:bg-slate-100 text-slate-800'
+                              : 'hover:bg-slate-800/40 text-slate-100')
                       }`}
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
                         <ItemIcon className={`w-5 h-5 shrink-0 transition-colors ${
                           isRowActive
-                            ? 'text-sky-400'
-                            : 'text-sky-400 group-hover:text-sky-300'
+                            ? (isLightMode ? 'text-sky-700' : 'text-sky-400')
+                            : (isLightMode ? 'text-sky-600 group-hover:text-sky-700' : 'text-sky-400 group-hover:text-sky-300')
                         }`} />
                         <span className={`text-[14px] sm:text-[14.5px] font-medium transition-colors truncate ${
                           isRowActive
-                            ? 'text-sky-200 font-semibold'
-                            : 'text-slate-100 group-hover:text-white'
+                            ? (isLightMode ? 'text-sky-900 font-bold' : 'text-sky-200 font-semibold')
+                            : (isLightMode ? 'text-slate-800 group-hover:text-slate-950' : 'text-slate-100 group-hover:text-white')
                         }`}>
                           {item.label}
                         </span>
@@ -811,15 +926,25 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 
                       {item.badge && (
                         <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full shrink-0 ${
-                          item.badgeColor === 'emerald'
-                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                            : item.badgeColor === 'amber'
-                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                            : item.badgeColor === 'rose'
-                            ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                            : item.badgeColor === 'blue'
-                            ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                            : 'bg-slate-800 text-slate-400 border border-slate-700'
+                          isLightMode
+                            ? (item.badgeColor === 'emerald'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : item.badgeColor === 'amber'
+                                ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                                : item.badgeColor === 'rose'
+                                ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                                : item.badgeColor === 'blue'
+                                ? 'bg-blue-100 text-blue-800 border border-blue-300'
+                                : 'bg-slate-100 text-slate-700 border border-slate-300')
+                            : (item.badgeColor === 'emerald'
+                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                : item.badgeColor === 'amber'
+                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                                : item.badgeColor === 'rose'
+                                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                                : item.badgeColor === 'blue'
+                                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                                : 'bg-slate-800 text-slate-400 border border-slate-700')
                         }`}>
                           {item.badge}
                         </span>
@@ -832,21 +957,27 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
               {/* Divider between sections */}
               {idx < filteredSections.length - 1 && (
                 <div className="pt-2">
-                  <div className="h-px bg-slate-800/60" />
+                  <div className={`h-px ${isLightMode ? 'bg-slate-200' : 'bg-slate-800/60'}`} />
                 </div>
               )}
             </div>
           ))}
 
           {filteredSections.length === 0 && (
-            <div className="py-12 text-center text-xs text-slate-400">
+            <div className={`py-12 text-center text-xs ${
+              isLightMode ? 'text-slate-500' : 'text-slate-400'
+            }`}>
               {isHindi ? 'कोई परिणाम नहीं मिला' : 'No menu items match your search'}
             </div>
           )}
         </div>
 
         {/* Quick Utility Strip: Day/Night, Language, Privacy Mask */}
-        <div className="px-4 sm:px-5 py-2.5 bg-slate-900/60 border-t border-slate-800/70 flex items-center justify-between gap-1.5 shrink-0">
+        <div className={`px-4 sm:px-5 py-2.5 border-t flex items-center justify-between gap-1.5 shrink-0 ${
+          isLightMode
+            ? 'bg-slate-100/90 border-slate-200'
+            : 'bg-slate-900/60 border-slate-800/70'
+        }`}>
           {/* Day/Night Theme Toggle */}
           {onThemeChange && (
             <button
@@ -855,10 +986,14 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 triggerHapticSound('click');
                 onThemeChange(isLightMode ? 'blue' : 'white');
               }}
-              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-slate-700/60 text-slate-300 hover:text-white text-[11px] font-medium transition-all cursor-pointer active:scale-95"
+              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
+                isLightMode
+                  ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-700 hover:text-slate-900 shadow-2xs'
+                  : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white'
+              }`}
               title={isLightMode ? 'Night Mode' : 'Day Mode'}
             >
-              {isLightMode ? <Moon className="w-3.5 h-3.5 text-slate-300" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
+              {isLightMode ? <Moon className="w-3.5 h-3.5 text-slate-700" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
               <span>{isLightMode ? (isHindi ? 'डार्क' : 'Dark') : (isHindi ? 'लाइट' : 'Light')}</span>
             </button>
           )}
@@ -871,10 +1006,14 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 triggerHapticSound('click');
                 onLanguageChange(isHindi ? 'en' : 'hi');
               }}
-              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-slate-700/60 text-slate-300 hover:text-white text-[11px] font-medium transition-all cursor-pointer active:scale-95"
+              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
+                isLightMode
+                  ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-700 hover:text-slate-900 shadow-2xs'
+                  : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white'
+              }`}
               title="Toggle Language"
             >
-              <Languages className="w-3.5 h-3.5 text-sky-400" />
+              <Languages className={`w-3.5 h-3.5 ${isLightMode ? 'text-sky-600' : 'text-sky-400'}`} />
               <span>{isHindi ? 'English' : 'हिन्दी'}</span>
             </button>
           )}
@@ -888,11 +1027,15 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClose();
                 onOpenGoogleTranslate();
               }}
-              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/40 text-sky-300 hover:text-white text-[11px] font-medium transition-all cursor-pointer active:scale-95"
+              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
+                isLightMode
+                  ? 'bg-sky-50 hover:bg-sky-100 border-sky-300 text-sky-800 shadow-2xs'
+                  : 'bg-sky-500/15 hover:bg-sky-500/25 border-sky-500/40 text-sky-300 hover:text-white'
+              }`}
               title="Google Translator (100+ Languages)"
               id="drawer-utility-google-translate-btn"
             >
-              <Globe className="w-3.5 h-3.5 text-sky-400" />
+              <Globe className={`w-3.5 h-3.5 ${isLightMode ? 'text-sky-700' : 'text-sky-400'}`} />
               <span>{isHindi ? 'अनुवाद' : 'Translate'}</span>
             </button>
           )}
@@ -907,8 +1050,12 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
               }}
               className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
                 privacyMask
-                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
-                  : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white'
+                  ? (isLightMode
+                      ? 'bg-amber-100 border-amber-300 text-amber-800'
+                      : 'bg-amber-500/20 border-amber-500/50 text-amber-300')
+                  : (isLightMode
+                      ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-700 hover:text-slate-900 shadow-2xs'
+                      : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white')
               }`}
               title="Mask Amounts"
             >
@@ -918,13 +1065,21 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           )}
         </div>
 
-        {/* Drawer Footer (Matching Screenshot Style) */}
-        <div className="px-4 sm:px-5 py-3 border-t border-slate-800/80 bg-[#060D17] flex items-center justify-between text-xs text-slate-400 shrink-0">
+        {/* Drawer Footer */}
+        <div className={`px-4 sm:px-5 py-3 border-t flex items-center justify-between text-xs shrink-0 ${
+          isLightMode
+            ? 'bg-slate-100 border-slate-200 text-slate-600'
+            : 'bg-[#060D17] border-slate-800/80 text-slate-400'
+        }`}>
           <div className="flex flex-col min-w-0">
-            <span className="text-[12px] font-semibold text-slate-300 tracking-tight">
+            <span className={`text-[12px] font-semibold tracking-tight ${
+              isLightMode ? 'text-slate-800' : 'text-slate-300'
+            }`}>
               Daily Khata Pro v{APP_VERSION}
             </span>
-            <span className="text-[10.5px] text-slate-500 truncate">
+            <span className={`text-[10.5px] truncate ${
+              isLightMode ? 'text-slate-500' : 'text-slate-500'
+            }`}>
               MD Zafeer Hasan (YAZDAAN) • Rozfiber
             </span>
           </div>
@@ -939,7 +1094,11 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                   handleDirectUpdateApp();
                 }}
                 disabled={isUpdatingApp}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-[11px] font-bold text-emerald-400 active:scale-95 transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-bold active:scale-95 transition-all cursor-pointer shadow-xs disabled:opacity-50 ${
+                  isLightMode
+                    ? 'bg-emerald-100 hover:bg-emerald-200 border-emerald-300 text-emerald-800'
+                    : 'bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/35 text-emerald-400'
+                }`}
                 title={isHindi ? '1-क्लिक ऐप अपडेट' : '1-Click Direct Update'}
                 id="drawer-footer-direct-update-btn"
               >
@@ -947,7 +1106,11 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 <span>{isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}</span>
               </button>
             )}
-            <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700/60 text-[10.5px] font-mono text-slate-300 shadow-xs">
+            <span className={`inline-flex items-center px-2.5 py-1 rounded-lg border text-[10.5px] font-mono shadow-xs ${
+              isLightMode
+                ? 'bg-white border-slate-300 text-slate-700'
+                : 'bg-slate-800/90 border-slate-700/60 text-slate-300'
+            }`}>
               PWA • Local-First
             </span>
           </div>
