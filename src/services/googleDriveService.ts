@@ -231,6 +231,18 @@ export const googleSignIn = async (
       (authErr as any).unauthorizedDomain = host;
       throw authErr;
     }
+    if (
+      error?.code === 'auth/popup-closed-by-user' ||
+      error?.code === 'auth/cancelled-popup-request' ||
+      error?.code === 'auth/popup-blocked' ||
+      error?.message?.includes('popup-closed-by-user') ||
+      error?.message?.includes('cancelled-popup-request')
+    ) {
+      console.info('[Google Auth] Sign in popup closed or cancelled by user.');
+      const cancelErr = new Error('Sign in popup closed by user.');
+      (cancelErr as any).code = error?.code || 'auth/popup-closed-by-user';
+      throw cancelErr;
+    }
     console.error('Google Sign In Error:', error);
     throw error;
   } finally {

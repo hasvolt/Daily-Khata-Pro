@@ -38,6 +38,7 @@ import {
   DollarSign,
   Heart,
   User,
+  Users,
   Cloud,
   Landmark,
   Newspaper
@@ -453,6 +454,43 @@ export const PageSearchModal: React.FC<PageSearchModalProps> = ({
       targetTab: 'support',
       routePath: '/support',
       keywords: ['support', 'help', 'faq', 'bug', 'feedback', 'contact', 'सहायता', 'सपोर्ट', 'बग', 'फीडबैक']
+    },
+    // --- 7. Rozfiber Ecosystem & Official Apps ---
+    {
+      id: 'staff-manager-app',
+      title: isHindi ? 'Staff Manager (स्टाफ मैनेजर ऐप)' : 'Staff Manager (Universal Staff & Attendance App)',
+      subtitle: isHindi ? 'दुकानों, ठेकेदारों और व्यापार के लिए दैनिक हाजिरी, दिहाड़ी, एडवांस व सैलरी स्लिप (staff.rozfiber.com)' : 'Daily attendance, wages, advances & salary slips for local business owners & contractors (staff.rozfiber.com)',
+      category: 'docs',
+      categoryLabel: isHindi ? 'Rozfiber ऐप्स' : 'Rozfiber Apps',
+      icon: Users,
+      targetTab: 'staff-manager-external',
+      routePath: 'https://staff.rozfiber.com',
+      badge: 'NEW APP',
+      keywords: ['staff', 'manager', 'attendance', 'employee', 'wages', 'salary', 'contractor', 'shop', 'rozfiber', 'हाजिरी', 'स्टाफ', 'कर्मचारी', 'दिहाड़ी', 'ठेकेदार', 'मजदूर', 'वेतन']
+    },
+    {
+      id: 'rozfiber-docs-app',
+      title: isHindi ? 'Rozfiber Docs (आधिकारिक डॉक्स)' : 'Rozfiber Docs (Official Knowledge Base)',
+      subtitle: isHindi ? 'रोज़फाइबर के सभी आधिकारिक ऐप्स के लिए यूजर मैनुअल व गाइड्स (docs.rozfiber.com)' : 'Comprehensive step-by-step user manuals & guides for all Rozfiber apps (docs.rozfiber.com)',
+      category: 'docs',
+      categoryLabel: isHindi ? 'Rozfiber ऐप्स' : 'Rozfiber Apps',
+      icon: BookOpen,
+      targetTab: 'docs-external',
+      routePath: 'https://docs.rozfiber.com',
+      badge: 'DOCS',
+      keywords: ['docs', 'documentation', 'manual', 'guide', 'rozfiber', 'help', 'दस्तावेज', 'गाइड', 'सहायता']
+    },
+    {
+      id: 'rozfiber-apps-hub',
+      title: isHindi ? 'Rozfiber ऐप्स इकोसिस्टम हब' : 'Rozfiber Apps Ecosystem Hub',
+      subtitle: isHindi ? 'Rozfiber के सभी आधिकारिक ऐप्स व टूल्स देखें (Staff Manager, Docs, Khata Pro)' : 'Explore all official Rozfiber digital products, apps & business tools',
+      category: 'docs',
+      categoryLabel: isHindi ? 'Rozfiber ऐप्स' : 'Rozfiber Apps',
+      icon: Layers,
+      targetTab: 'apps',
+      routePath: '/apps',
+      badge: 'ECOSYSTEM',
+      keywords: ['apps', 'ecosystem', 'rozfiber', 'suite', 'products', 'other apps', 'टूल्स', 'ऐप्स', 'अन्य ऐप्स']
     }
   ], [isHindi]);
 

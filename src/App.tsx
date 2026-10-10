@@ -85,6 +85,8 @@ import {
 } from './utils/reminderService';
 import { PageSearchModal } from './components/PageSearchModal';
 import { GoogleDriveSyncModal } from './components/GoogleDriveSyncModal';
+import { RozfiberAppsModal } from './components/RozfiberAppsModal';
+import { RozfiberAppsPage } from './components/RozfiberAppsPage';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { AppLogo } from './components/AppLogo';
 import {
@@ -97,7 +99,7 @@ import {
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { TRANSLATIONS } from './utils/translations';
 import { updatePageSEO } from './utils/seo';
-import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu, Shield, ShieldCheck, Github, Globe, Heart, Code2, RotateCcw } from 'lucide-react';
+import { Mail, Instagram, Twitter, FolderGit2, User, Sparkles, Menu, Shield, ShieldCheck, Github, Globe, Heart, Code2, RotateCcw, Layers } from 'lucide-react';
 import { resetGoogleTranslate, isGoogleTranslateActive, getActiveGoogleLanguage } from './utils/googleTranslate';
 
 const STORAGE_KEY = 'daily-khata-pro-v3';
@@ -177,7 +179,7 @@ function AppContent() {
     } catch {
       // fallback
     }
-    return 'emerald';
+    return 'blue';
   });
   const [language, setLanguage] = useState<AppLanguage>('en');
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
@@ -239,6 +241,7 @@ function AppContent() {
   const [dueRemindersAlert, setDueRemindersAlert] = useState<AppReminder[]>([]);
   const [isDueBannerDismissed, setIsDueBannerDismissed] = useState<boolean>(false);
   const [isPrintModalOpen, setIsPrintModalOpen] = useState<boolean>(false);
+  const [isRozfiberAppsModalOpen, setIsRozfiberAppsModalOpen] = useState<boolean>(false);
   const [isGoogleTranslated, setIsGoogleTranslated] = useState<boolean>(false);
   const [activeGoogleCode, setActiveGoogleCode] = useState<string | null>(null);
 
@@ -599,7 +602,7 @@ function AppContent() {
           funds: DEFAULT_FUNDS,
           homepageFundIds: DEFAULT_FUNDS.slice(0, 6).map((f) => f.id),
           percentages: DEFAULT_PERCENTAGES,
-          theme: 'white',
+          theme: 'blue',
           language: 'en',
           privacyMask: false,
           workLogs: [],
@@ -2449,6 +2452,7 @@ function AppContent() {
           isDriveConnected={isDriveConnected}
           isAutoSyncing={isAutoSyncing}
           autoSyncEnabled={autoSyncEnabled}
+          onOpenRozfiberApps={() => setIsRozfiberAppsModalOpen(true)}
         />
       </div>
 
@@ -2881,6 +2885,13 @@ function AppContent() {
             />
           } />
 
+          <Route path="/apps" element={
+            <RozfiberAppsPage
+              onBack={() => setCurrentTab('home')}
+              language={language}
+            />
+          } />
+
           <Route path="*" element={<HomeView
               appLayout={appLayout}
               onLayoutChange={handleAppLayoutChange}
@@ -3014,6 +3025,15 @@ function AppContent() {
               <span>{language === 'hi' ? 'सपोर्ट' : 'Support'}</span>
             </button>
 
+            <button 
+              onClick={() => setIsRozfiberAppsModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-emerald-500/40 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 hover:border-emerald-400 shadow-xs transition-colors cursor-pointer"
+              title={language === 'hi' ? 'Rozfiber आधिकारिक ऐप्स देखें' : 'View all official Rozfiber apps'}
+            >
+              <Layers className="w-3 h-3 text-emerald-400 shrink-0" />
+              <span>{language === 'hi' ? 'अन्य ऐप्स' : 'Rozfiber Apps'}</span>
+            </button>
+
             <div className="flex items-center gap-1.5">
               <a 
                 href="https://x.com/Dailykhatapro" 
@@ -3057,7 +3077,16 @@ function AppContent() {
             <span className="opacity-30">•</span>
             <button onClick={() => setCurrentTab('guide')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'यूज़र मैन्युअल' : 'User Manual'}</button>
             <span className="opacity-30">•</span>
+            <a href="https://staff.rozfiber.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 hover:underline cursor-pointer transition-colors inline-flex items-center gap-1 font-semibold text-emerald-400">
+              <span>Staff Manager</span>
+              <span className="text-[8.5px] font-mono font-bold px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">NEW</span>
+            </a>
+            <span className="opacity-30">•</span>
             <a href="https://docs.rozfiber.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">Docs</a>
+            <span className="opacity-30">•</span>
+            <button onClick={() => setIsRozfiberAppsModalOpen(true)} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">
+              {language === 'hi' ? 'अन्य ऐप्स (Ecosystem)' : 'More Apps'}
+            </button>
           </div>
 
           {/* Tier 2: Legal, Policy & Organization Links */}
@@ -3486,6 +3515,18 @@ function AppContent() {
             setIsGoogleDriveModalOpen(true);
             return;
           }
+          if (tab === 'staff-manager-external') {
+            window.open('https://staff.rozfiber.com', '_blank', 'noopener,noreferrer');
+            return;
+          }
+          if (tab === 'docs-external') {
+            window.open('https://docs.rozfiber.com', '_blank', 'noopener,noreferrer');
+            return;
+          }
+          if (tab === 'apps' || tab === 'rozfiber-apps') {
+            setIsRozfiberAppsModalOpen(true);
+            return;
+          }
           if (route) {
             navigate(route);
             setCurrentTab(tab as any);
@@ -3494,6 +3535,13 @@ function AppContent() {
             navigate(`/${tab === 'home' ? '' : tab}`);
           }
         }}
+        language={language}
+      />
+
+      {/* Rozfiber Ecosystem Applications Directory Modal */}
+      <RozfiberAppsModal
+        isOpen={isRozfiberAppsModalOpen}
+        onClose={() => setIsRozfiberAppsModalOpen(false)}
         language={language}
       />
 

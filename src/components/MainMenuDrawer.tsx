@@ -1,61 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import {
+  User,
+  Cloud,
   Settings,
-  Search,
-  X,
-  Eye,
-  EyeOff,
+  Trash2,
+  HelpCircle,
+  ExternalLink,
   Calculator,
+  BookOpen,
+  Layers,
+  Info,
+  Shield,
+  FileText,
+  Mail,
   Sun,
   Moon,
-  Home,
-  Target,
-  Briefcase,
-  BarChart3,
-  History,
-  FileText,
-  CalendarCheck,
-  Shield,
-  Trash2,
-  Bell,
-  Share2,
-  HelpCircle,
-  ChevronRight,
-  ChevronDown,
-  Download,
-  BookOpen,
-  GraduationCap,
-  KeyRound,
-  ShieldCheck,
-  Database,
-  RefreshCw,
-  Cookie,
-  PlusCircle,
-  AlertCircle,
-  User,
-  Split,
-  Sliders,
-  Landmark,
-  Wrench,
-  Sparkles,
-  Heart,
-  Cloud,
-  Newspaper,
-  Globe,
-  Palette,
-  Check,
+  Eye,
+  EyeOff,
+  Search,
+  Lock,
   Languages,
-  RotateCcw
+  Globe,
+  ChevronRight,
+  RefreshCw,
+  ArrowUpCircle,
+  X,
+  Home,
+  PlusCircle,
+  History,
+  BarChart3,
+  Landmark,
+  Target,
+  Sliders,
+  CalendarCheck,
+  Briefcase,
+  FileText as NotesIcon,
+  Split,
+  GraduationCap,
+  Newspaper,
+  ShieldCheck,
+  AlertCircle,
+  Cookie,
+  Download,
+  Share2,
+  Bell,
+  Sparkles,
+  Users
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
-import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
 import { AppLogo } from './AppLogo';
 import { AppTheme, AppLanguage } from '../types';
-import { getAppTranslation } from '../utils/appTranslations';
 import { triggerHapticSound } from '../utils/khataCalculations';
-import { resetGoogleTranslate } from '../utils/googleTranslate';
-import { APP_VERSION, APP_VERSION_TAG } from '../utils/version';
+import { APP_VERSION } from '../utils/version';
+import { isGoogleTranslateActive, getActiveGoogleLanguage, ALL_GOOGLE_LANGUAGES } from '../utils/googleTranslate';
 
 export interface MainMenuDrawerProps {
   isOpen: boolean;
@@ -89,11 +87,30 @@ export interface MainMenuDrawerProps {
   onOpenSplitBill?: () => void;
   onOpenBudgetManager?: () => void;
   onOpenLoans?: () => void;
-  handleDirectUpdateApp: (e?: React.MouseEvent) => void;
-  isUpdatingApp: boolean;
+  handleDirectUpdateApp?: (e?: React.MouseEvent) => void;
+  isUpdatingApp?: boolean;
   onOpenGoogleDrive?: () => void;
   isDriveConnected?: boolean;
   autoSyncEnabled?: boolean;
+  onOpenRozfiberApps?: () => void;
+}
+
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  onClick?: () => void;
+  href?: string;
+  badge?: string;
+  badgeColor?: 'blue' | 'emerald' | 'amber' | 'rose' | 'slate';
+  isExternal?: boolean;
+  isActive?: boolean;
+}
+
+interface MenuSection {
+  id: string;
+  title: string;
+  items: MenuItem[];
 }
 
 export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
@@ -127,18 +144,20 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   onOpenSplitBill,
   onOpenBudgetManager,
   onOpenLoans,
-  handleDirectUpdateApp,
-  isUpdatingApp,
   onOpenGoogleDrive,
   isDriveConnected = false,
-  autoSyncEnabled = false
+  handleDirectUpdateApp,
+  isUpdatingApp = false,
+  onOpenRozfiberApps
 }) => {
-  const [menuFilter, setMenuFilter] = useState<'all' | 'ledger' | 'finance' | 'work' | 'tools' | 'settings' | 'info'>('all');
-  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
-
-  const tr = getAppTranslation((language as AppLanguage) || 'en');
+  const [searchQuery, setSearchQuery] = useState('');
   const isHindi = language === 'hi';
   const isLightMode = theme === 'light' || theme === 'white';
+
+  const isGoogleTranslated = isGoogleTranslateActive();
+  const activeLangCode = getActiveGoogleLanguage();
+  const activeLangObj = activeLangCode ? ALL_GOOGLE_LANGUAGES.find((l) => l.code === activeLangCode) : null;
+  const activeLangLabel = activeLangObj ? activeLangObj.nativeName : (activeLangCode ? activeLangCode.toUpperCase() : null);
 
   // Keyboard shortcut listener (ESC to close menu)
   useEffect(() => {
@@ -154,1312 +173,783 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
-  const handleMenuAction = (action?: () => void) => {
-    if (!action) return;
+  const handleAction = (action?: () => void) => {
     triggerHapticSound('click');
     onClose();
-    action();
+    if (action) {
+      action();
+    }
   };
 
-  const toggleSection = (sec: string) => {
+  const handleNavigate = (tab: NavTab) => {
     triggerHapticSound('click');
-    setCollapsedSections((prev) => ({ ...prev, [sec]: !prev[sec] }));
+    onClose();
+    if (onSelectTab) {
+      onSelectTab(tab);
+    }
   };
+
+  // Master List of all original Daily Khata Pro features grouped cleanly
+  const sections: MenuSection[] = useMemo(() => [
+    // 1. Settings & Cloud Backup (सेटिंग्स व बैकअप)
+    {
+      id: 'settings-cloud',
+      title: isHindi ? 'सेटिंग्स व क्लाउड बैकअप' : 'Settings & Cloud Sync',
+      items: [
+        {
+          id: 'settings',
+          label: isHindi ? 'ऐप सेटिंग्स व मुद्रा' : 'App Settings & Currency',
+          icon: Settings,
+          onClick: onOpenSettings ? () => handleAction(onOpenSettings) : undefined
+        },
+        {
+          id: 'direct-update-app',
+          label: isHindi
+            ? `1-क्लिक ऐप अपडेट (v${APP_VERSION} New Version)`
+            : `1-Click App Update (v${APP_VERSION} New Version)`,
+          icon: RefreshCw,
+          badge: isUpdatingApp ? (isHindi ? 'अपडेट जारी...' : 'UPDATING...') : '1-CLICK',
+          badgeColor: 'emerald',
+          onClick: handleDirectUpdateApp ? () => {
+            onClose();
+            handleDirectUpdateApp();
+          } : undefined
+        },
+        {
+          id: 'google-translate',
+          label: isHindi
+            ? 'गूगल ट्रांसलेटर (100+ भाषाएँ - Google Translate)'
+            : 'Google Translator (100+ Languages)',
+          icon: Globe,
+          badge: isGoogleTranslated ? (activeLangLabel ? activeLangLabel : 'ACTIVE') : '100+ LANGS',
+          badgeColor: isGoogleTranslated ? 'emerald' : 'blue',
+          onClick: onOpenGoogleTranslate ? () => handleAction(onOpenGoogleTranslate) : undefined
+        },
+        {
+          id: 'master-edit',
+          label: isHindi ? 'मास्टर लेजर व श्रेणियां' : 'Master Categories & Ledger',
+          icon: User,
+          onClick: onOpenMasterEdit ? () => handleAction(onOpenMasterEdit) : undefined
+        },
+        {
+          id: 'cloud-drive',
+          label: isHindi ? 'गूगल ड्राइव सिंक व बैकअप' : 'Google Drive Cloud Sync',
+          icon: Cloud,
+          badge: isDriveConnected ? 'SYNC ON' : undefined,
+          badgeColor: 'emerald',
+          onClick: onOpenGoogleDrive ? () => handleAction(onOpenGoogleDrive) : undefined
+        },
+        {
+          id: 'security',
+          label: isHindi ? 'ऐप सुरक्षा व पिन लॉक' : 'App Security & PIN Lock',
+          icon: Lock,
+          badge: isLockEnabled ? (isHindi ? 'सक्रिय' : 'LOCKED') : undefined,
+          badgeColor: isLockEnabled ? 'rose' : undefined,
+          onClick: isLockEnabled && onLockNow
+            ? () => handleAction(onLockNow)
+            : onOpenSecurity
+            ? () => handleAction(onOpenSecurity)
+            : undefined
+        },
+        {
+          id: 'reminders',
+          label: isHindi ? 'बिल व भुगतान रिमाइंडर' : 'Reminders & Bill Alerts',
+          icon: Bell,
+          badge: remindersCount > 0 ? String(remindersCount) : undefined,
+          badgeColor: 'amber',
+          onClick: onOpenReminders ? () => handleAction(onOpenReminders) : undefined
+        },
+        {
+          id: 'trash',
+          label: isHindi ? 'रीसायकल बिन (ट्रैश)' : 'Trash (Recycle Bin)',
+          icon: Trash2,
+          badge: trashCount > 0 ? String(trashCount) : undefined,
+          badgeColor: 'rose',
+          onClick: onOpenTrash ? () => handleAction(onOpenTrash) : undefined
+        }
+      ]
+    },
+
+    // 2. Core Ledger & Records (मुख्य लेजर व रिकॉर्ड्स)
+    {
+      id: 'core-ledger',
+      title: isHindi ? 'मुख्य लेजर व खाते' : 'Core Ledger & Accounts',
+      items: [
+        {
+          id: 'home',
+          label: isHindi ? 'होम / बहीखाता सारांश' : 'Home Ledger Dashboard',
+          icon: Home,
+          isActive: currentTab === 'home',
+          onClick: () => handleNavigate('home')
+        },
+        {
+          id: 'add',
+          label: isHindi ? 'नया लेन-देन जोड़ें' : 'Add Transaction (Income / Expense)',
+          icon: PlusCircle,
+          isActive: currentTab === 'add',
+          onClick: () => handleNavigate('add')
+        },
+        {
+          id: 'history',
+          label: isHindi ? 'लेन-देन इतिहास व पासबुक' : 'Passbook & Transaction History',
+          icon: History,
+          isActive: currentTab === 'history',
+          onClick: () => handleNavigate('history')
+        },
+        {
+          id: 'report',
+          label: isHindi ? 'वित्तीय रिपोर्ट्स व चार्ट्स' : 'Financial Reports & Analytics',
+          icon: BarChart3,
+          isActive: currentTab === 'report',
+          onClick: () => handleNavigate('report')
+        }
+      ]
+    },
+
+    // 3. Loans, Goals & Budgets (ऋण, लक्ष्य व बजट)
+    {
+      id: 'loans-goals',
+      title: isHindi ? 'ऋण, लक्ष्य व बजट' : 'Loans, Goals & Budgets',
+      items: [
+        {
+          id: 'loans',
+          label: isHindi ? 'ऋण, किश्त व उधार लेजर' : 'Loans, EMIs & Udhar Ledger',
+          icon: Landmark,
+          badge: 'PRO',
+          badgeColor: 'amber',
+          isActive: currentTab === 'loans',
+          onClick: onOpenLoans ? () => handleAction(onOpenLoans) : () => handleNavigate('loans')
+        },
+        {
+          id: 'goals',
+          label: isHindi ? 'वित्तीय लक्ष्य व बचत' : 'Financial Goals & Milestones',
+          icon: Target,
+          isActive: currentTab === 'goals',
+          onClick: () => handleNavigate('goals')
+        },
+        {
+          id: 'budgets',
+          label: isHindi ? 'मासिक बजट व खर्च सीमा' : 'Category Budgets & Limits',
+          icon: Sliders,
+          onClick: onOpenBudgetManager ? () => handleAction(onOpenBudgetManager) : undefined
+        }
+      ]
+    },
+
+    // 4. Productivity & Work (कार्य व दैनिक आदतें)
+    {
+      id: 'productivity',
+      title: isHindi ? 'कार्य व दैनिक आदतें' : 'Productivity & Habits',
+      items: [
+        {
+          id: 'attendance',
+          label: isHindi ? 'दैनिक उपस्थिति / हाजिरी' : 'Daily Attendance Tracker',
+          icon: CalendarCheck,
+          isActive: currentTab === 'attendance',
+          onClick: () => handleNavigate('attendance')
+        },
+        {
+          id: 'tracker',
+          label: isHindi ? 'कार्य व क्लाइंट डिलीवरी' : 'Work Deliverables Tracker',
+          icon: Briefcase,
+          isActive: currentTab === 'tracker',
+          onClick: () => handleNavigate('tracker')
+        },
+        {
+          id: 'notes',
+          label: isHindi ? 'दैनिक डायरी व नोट्स' : 'Daily Journal & Personal Notes',
+          icon: NotesIcon,
+          isActive: currentTab === 'notes',
+          onClick: () => handleNavigate('notes')
+        },
+        {
+          id: 'split-bill',
+          label: isHindi ? 'बिल विभाजन कैलकुलेटर' : 'Bill Splitting Calculator',
+          icon: Split,
+          onClick: onOpenSplitBill ? () => handleAction(onOpenSplitBill) : undefined
+        }
+      ]
+    },
+
+    // 5. Calculators Suite (वित्तीय कैलकुलेटर व इनवॉइस)
+    {
+      id: 'calculators-suite',
+      title: isHindi ? 'कैलकुलेटर व इनवॉइस सूट' : 'Calculators & Invoicing',
+      items: [
+        {
+          id: 'calculator',
+          label: isHindi ? 'वित्तीय कैलकुलेटर सूट' : 'Financial Calculators (SIP, CAGR, EMI, GST)',
+          icon: Calculator,
+          isActive: currentTab === 'calculator',
+          onClick: () => handleNavigate('calculator')
+        },
+        {
+          id: 'invoice',
+          label: isHindi ? 'फ्री GST इनवॉइस जनरेटर' : 'Free Invoice & Bill Generator',
+          icon: FileText,
+          badge: 'FREE',
+          badgeColor: 'emerald',
+          isActive: currentTab === 'invoice',
+          onClick: () => handleNavigate('invoice')
+        }
+      ]
+    },
+
+    // 6. Rozfiber Apps Ecosystem (इकोसिस्टम ऐप्स)
+    {
+      id: 'rozfiber-ecosystem',
+      title: isHindi ? 'Rozfiber ऐप्स इकोसिस्टम' : 'Rozfiber Apps Ecosystem',
+      items: [
+        {
+          id: 'staff-manager',
+          label: 'Staff Manager',
+          icon: Users,
+          badge: 'Sister App',
+          badgeColor: 'blue',
+          isExternal: true,
+          href: 'https://staff.rozfiber.com'
+        },
+        {
+          id: 'rozfiber-docs',
+          label: isHindi ? 'रोज़फाइबर डॉक्स (Docs)' : 'Rozfiber Docs',
+          icon: BookOpen,
+          badge: 'Docs ↗',
+          badgeColor: 'slate',
+          isExternal: true,
+          href: 'https://docs.rozfiber.com'
+        },
+        {
+          id: 'all-apps',
+          label: isHindi ? 'सभी Rozfiber ऐप्स देखें' : 'Explore All Rozfiber Apps',
+          icon: Layers,
+          badge: 'HUB',
+          badgeColor: 'emerald',
+          onClick: onOpenRozfiberApps ? () => handleAction(onOpenRozfiberApps) : () => handleNavigate('apps')
+        }
+      ]
+    },
+
+    // 7. Knowledge, Help & Policies (गाइड, अकादमी व नीतियां)
+    {
+      id: 'knowledge-legal',
+      title: isHindi ? 'गाइड, अकादमी व नीतियां' : 'Knowledge, Help & Policies',
+      items: [
+        {
+          id: 'guide',
+          label: isHindi ? 'उपयोगकर्ता गाइड व मैन्युअल' : 'User Manual & 6-Fund Guide',
+          icon: BookOpen,
+          isActive: currentTab === 'guide',
+          onClick: onOpenManual ? () => handleAction(onOpenManual) : () => handleNavigate('guide')
+        },
+        {
+          id: 'academy',
+          label: isHindi ? 'वेल्थ अकादमी (वित्तीय ज्ञान)' : 'Wealth Academy (Financial Mastery)',
+          icon: GraduationCap,
+          isActive: currentTab === 'academy',
+          onClick: () => handleNavigate('academy')
+        },
+        {
+          id: 'news',
+          label: isHindi ? 'समाचार व रिसर्च पोर्टल' : 'Commercial News & Research',
+          icon: Newspaper,
+          badge: 'PORTAL',
+          badgeColor: 'blue',
+          isActive: currentTab === 'news',
+          onClick: () => handleNavigate('news')
+        },
+        {
+          id: 'support',
+          label: isHindi ? 'सहायता केंद्र व फीडबैक' : 'Help & Support Centre',
+          icon: HelpCircle,
+          isActive: currentTab === 'support',
+          onClick: onOpenSupport ? () => handleAction(onOpenSupport) : () => handleNavigate('support')
+        },
+        {
+          id: 'about',
+          label: isHindi ? 'डेली खाता प्रो के बारे में' : 'About Daily Khata Pro',
+          icon: Info,
+          isActive: currentTab === 'about',
+          onClick: onOpenAbout ? () => handleAction(onOpenAbout) : () => handleNavigate('about')
+        },
+        {
+          id: 'developer',
+          label: isHindi ? 'डेवलपर प्रोफाइल (MD Zafeer Hasan)' : 'Developer Profile (MD Zafeer Hasan)',
+          icon: User,
+          isActive: currentTab === 'developer',
+          onClick: () => handleNavigate('developer')
+        },
+        {
+          id: 'privacy',
+          label: isHindi ? 'गोपनीयता नीति' : 'Privacy Policy (100% Offline)',
+          icon: ShieldCheck,
+          isActive: currentTab === 'privacy',
+          onClick: () => handleNavigate('privacy')
+        },
+        {
+          id: 'terms',
+          label: isHindi ? 'नियम व शर्तें' : 'Terms of Service',
+          icon: FileText,
+          isActive: currentTab === 'terms',
+          onClick: () => handleNavigate('terms')
+        },
+        {
+          id: 'disclaimer',
+          label: isHindi ? 'अस्वीकरण' : 'Disclaimer',
+          icon: AlertCircle,
+          isActive: currentTab === 'disclaimer',
+          onClick: () => handleNavigate('disclaimer')
+        },
+        {
+          id: 'cookies',
+          label: isHindi ? 'कुकीज़ नीति' : 'Cookie Policy',
+          icon: Cookie,
+          isActive: currentTab === 'cookies',
+          onClick: () => handleNavigate('cookies')
+        },
+        {
+          id: 'safety',
+          label: isHindi ? 'सोर्स कोड एवं सुरक्षा ऑडिट' : 'Source Safety & Audit Guarantee',
+          icon: Shield,
+          isActive: currentTab === 'safety',
+          onClick: onOpenSourceCode ? () => handleAction(onOpenSourceCode) : () => handleNavigate('safety')
+        },
+        {
+          id: 'install',
+          label: isHindi ? 'ऐप इंस्टॉल करें' : 'Install PWA App',
+          icon: Download,
+          onClick: onOpenInstall ? () => handleAction(onOpenInstall) : undefined
+        },
+        {
+          id: 'share',
+          label: isHindi ? 'ऐप शेयर करें' : 'Share App',
+          icon: Share2,
+          onClick: onOpenShare ? () => handleAction(onOpenShare) : undefined
+        }
+      ]
+    }
+  ], [
+    isHindi,
+    isDriveConnected,
+    isLockEnabled,
+    remindersCount,
+    trashCount,
+    currentTab,
+    onOpenSettings,
+    onOpenMasterEdit,
+    onOpenGoogleDrive,
+    onLockNow,
+    onOpenSecurity,
+    onOpenReminders,
+    onOpenTrash,
+    onOpenLoans,
+    onOpenBudgetManager,
+    onOpenSplitBill,
+    onOpenRozfiberApps,
+    onOpenManual,
+    onOpenSupport,
+    onOpenAbout,
+    onOpenSourceCode,
+    onOpenInstall,
+    onOpenShare,
+    onOpenGoogleTranslate,
+    isGoogleTranslated,
+    activeLangLabel,
+    handleDirectUpdateApp,
+    isUpdatingApp
+  ]);
+
+  // Filter items if user is searching
+  const filteredSections = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return sections;
+
+    return sections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) =>
+          item.label.toLowerCase().includes(q) ||
+          item.id.toLowerCase().includes(q)
+        )
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [sections, searchQuery]);
+
+  if (!isOpen) return null;
 
   return createPortal(
     <div
+      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex justify-end transition-opacity duration-200"
+      onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={isHindi ? 'मुख्य मेनू' : 'Main Navigation Menu'}
-      className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-md animate-in fade-in duration-150 text-left"
-      onClick={onClose}
     >
       <div
         id="main-menu-drawer"
-        className="w-full max-w-sm sm:max-w-md h-full bg-[var(--theme-surface,#0E1A29)] border-l border-[var(--theme-border,#213E61)] shadow-2xl flex flex-col animate-in slide-in-from-right duration-200"
+        className="w-full max-w-sm sm:max-w-md h-full bg-[#08111E] text-slate-100 border-l border-slate-800/80 shadow-2xl flex flex-col animate-in slide-in-from-right duration-200 select-none"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Drawer Header */}
-        <div className="p-3.5 sm:p-4 border-b border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/95 backdrop-blur-md flex items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <AppLogo size={32} />
+        {/* Drawer Header (Clean, Matching Screenshot Design) */}
+        <div className="p-4 sm:p-5 flex items-center justify-between gap-3 shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            {/* App Logo or Blue Badge */}
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-md shrink-0">
+              <AppLogo size={26} />
+            </div>
+
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[15px] font-bold text-white">
-                  Daily Khata
-                </span>
-                <span className="text-[14px] font-black text-white">
-                  Pro
-                </span>
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/10 text-white border border-white/20">
-                  MENU
-                </span>
-              </div>
-              <p className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] truncate">
-                {isHindi ? 'व्यवस्थित श्रेणियां व त्वरित टूल्स' : 'Organized Categories & Tools'}
+              <h2 className="text-[16px] sm:text-[17px] font-bold text-white tracking-tight truncate">
+                Daily Khata Pro
+              </h2>
+              <p className="text-[11.5px] text-slate-400 font-medium truncate mt-0.5">
+                {isDriveConnected
+                  ? (isHindi ? 'Role: Owner • क्लाउड सिंक सक्रिय' : 'Role: Owner • Cloud Connected')
+                  : (isHindi ? 'Role: Owner • 100% ऑफ़लाइन' : 'Role: Owner • 100% Offline')}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-dim,#94A3B8)]">
-              ESC
-            </kbd>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-1.5 rounded-xl bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] transition-colors cursor-pointer"
-              title="Close Menu"
-              id="menu-close-btn"
-            >
-              <X className="w-4 h-4" />
-            </button>
+          {/* Close Button */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer shrink-0"
+            title="Close Menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Search Bar (Clean and helpful to find any feature instantly) */}
+        <div className="px-4 sm:px-5 pb-2 shrink-0">
+          <div className="relative">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={isHindi ? 'मेनू में खोजें (उदा. लोन, सेटिंग्स, अटेंडेंस)...' : 'Search menu items...'}
+              className="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-800/50 border border-slate-700/60 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-sky-500"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Drawer Body - Reorganized & Filterable */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3.5">
-          {/* Quick Utility Strip */}
-          <div className="p-2 rounded-2xl bg-[var(--theme-card,#132438)]/60 border border-[var(--theme-border,#213E61)]/70 flex items-center justify-between gap-1.5 shadow-sm">
-            {/* Day/Night Theme */}
-            {onThemeChange && (
-              <button
-                type="button"
-                onClick={() => {
-                  triggerHapticSound('click');
-                  if (isLightMode) {
-                    onThemeChange('dark');
-                  } else {
-                    onThemeChange('white');
-                  }
-                }}
-                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] text-[11px] font-bold transition-all cursor-pointer active:scale-95"
-                title={isLightMode ? (isHindi ? 'डार्क मोड (Rich Black)' : 'Night Mode (Rich Black)') : (isHindi ? 'लाइट मोड (White)' : 'Day Mode (White)')}
-                id="menu-quick-theme-btn"
-              >
-                {isLightMode ? <Moon className="w-3.5 h-3.5 text-slate-700" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
-                <span className="hidden xs:inline">{isLightMode ? (isHindi ? 'डार्क' : 'Dark') : (isHindi ? 'लाइट' : 'Light')}</span>
-              </button>
-            )}
-
-            {/* Privacy Eye Toggle */}
-            {onTogglePrivacyMask && (
-              <button
-                type="button"
-                onClick={() => {
-                  triggerHapticSound('click');
-                  onTogglePrivacyMask();
-                }}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-bold transition-all cursor-pointer active:scale-95 ${
-                  privacyMask
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-400'
-                    : 'bg-[var(--theme-surface,#0E1A29)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
-                }`}
-                title={privacyMask ? 'Amounts Hidden' : `Mask ${getCurrencyConfig(language || getCurrentLanguage()).symbol} Amounts`}
-                id="menu-quick-privacy-btn"
-              >
-                {privacyMask ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                <span className="hidden xs:inline">{privacyMask ? (isHindi ? `छिपा ${getCurrencyConfig(language || getCurrentLanguage()).symbol}` : 'Masked') : (isHindi ? 'प्राइवेसी' : 'Privacy')}</span>
-              </button>
-            )}
-
-            {/* Command Search */}
-            {onOpenPageSearch && (
-              <button
-                type="button"
-                onClick={() => handleMenuAction(onOpenPageSearch)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] text-[11px] font-bold transition-all cursor-pointer active:scale-95"
-                title="Search pages (Ctrl+K)"
-                id="menu-quick-search-btn"
-              >
-                <Search className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                <span className="hidden xs:inline">{isHindi ? 'सर्च' : 'Search'}</span>
-              </button>
-            )}
-
-            {/* Instant Lock */}
-            {isLockEnabled && onLockNow && (
-              <button
-                type="button"
-                onClick={() => handleMenuAction(onLockNow)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 text-[11px] font-bold transition-all cursor-pointer active:scale-95"
-                title={tr.menu.lock}
-                id="menu-quick-lock-btn"
-              >
-                <KeyRound className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline">{tr.menu.lock}</span>
-              </button>
-            )}
-          </div>
-
-          {/* Category Filter Pills (Instant categorization to prevent confusion) */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)] px-1">
-              <span>{isHindi ? 'श्रेणी चुनें (Filter):' : 'Filter by Category:'}</span>
-            </div>
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-              {[
-                { id: 'all', label: isHindi ? 'सभी' : 'All', count: null },
-                { id: 'settings', label: isHindi ? 'सेटिंग्स' : 'Settings', count: 6 },
-                { id: 'ledger', label: isHindi ? 'लेजर' : 'Ledger', count: 4 },
-                { id: 'finance', label: isHindi ? 'ऋण व लक्ष्य' : 'Debts & Goals', count: 3 },
-                { id: 'work', label: isHindi ? 'कार्य व रूटीन' : 'Work & Habits', count: 4 },
-                { id: 'tools', label: isHindi ? 'कैलकुलेटर' : 'Calculators', count: 2 },
-                { id: 'info', label: isHindi ? 'गाइड व सहायता' : 'Guides & Help', count: 5 }
-              ].map((cat) => {
-                const isSelected = menuFilter === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => {
-                      triggerHapticSound('click');
-                      setMenuFilter(cat.id as typeof menuFilter);
-                    }}
-                    className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border cursor-pointer shrink-0 flex items-center gap-1.5 ${
-                      isSelected
-                        ? 'bg-[var(--theme-primary,#38BDF8)] text-slate-950 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-card,#132438)]/60 text-[var(--theme-text-dim,#94A3B8)] border-[var(--theme-border,#213E61)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/40'
-                    }`}
-                  >
-                    <span>{cat.label}</span>
-                    {cat.count !== null && (
-                      <span className={`text-[9px] font-mono px-1 rounded-full ${
-                        isSelected ? 'bg-slate-950/25 text-slate-950' : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-dim,#94A3B8)]'
-                      }`}>
-                        {cat.count}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 1. Category 1: सेटिंग्स व क्लाउड बैकअप (Settings & Cloud - 6 items) */}
-          {(menuFilter === 'all' || menuFilter === 'settings') && (
-            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/45 p-2.5 sm:p-3 space-y-2 shadow-sm">
-              <div
-                onClick={() => menuFilter === 'all' && toggleSection('settings')}
-                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Settings className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                    {isHindi ? '1. सेटिंग्स व क्लाउड बैकअप' : '1. Settings & Cloud Backup'}
-                  </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                    6 ITEMS
-                  </span>
+        {/* Quick Action Banners (New Version 1-Click Update & Google Translator) */}
+        <div className="px-4 sm:px-5 pb-2 shrink-0 space-y-2">
+          {/* 1-Click New Version Direct Update Banner */}
+          {handleDirectUpdateApp && (
+            <button
+              type="button"
+              disabled={isUpdatingApp}
+              onClick={() => {
+                triggerHapticSound('save');
+                onClose();
+                handleDirectUpdateApp();
+              }}
+              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-emerald-950/70 via-teal-950/40 to-slate-900 border border-emerald-500/40 hover:border-emerald-400 text-left transition-all hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer shadow-xs group disabled:opacity-50"
+              title={isHindi ? 'नया वर्शन 1-क्लिक अपडेट व कैश रिफ्रेश' : 'New Version 1-Click Direct Update'}
+              id="main-menu-version-update-banner"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:text-emerald-300 shrink-0">
+                  <RefreshCw className={`w-4 h-4 ${isUpdatingApp ? 'animate-spin' : ''}`} />
                 </div>
-                {menuFilter === 'all' && (
-                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]">
-                    {collapsedSections['settings'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                  </button>
-                )}
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[13px] font-bold text-white tracking-tight truncate">
+                      {isHindi ? 'नया वर्शन 1-क्लिक अपडेट' : 'New Version 1-Click Update'}
+                    </span>
+                    <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded-md bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 shrink-0">
+                      v{APP_VERSION}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                    {isUpdatingApp
+                      ? (isHindi ? 'कैश रीफ्रेश व अपडेट हो रहा है...' : 'Refreshing cache & updating...')
+                      : (isHindi ? '1-क्लिक में तुरंत वर्शन अपडेट करें • डेटा सुरक्षित' : '1-Click instant version update • Data 100% safe')}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-emerald-400 text-xs font-semibold shrink-0">
+                <span className="hidden sm:inline text-[11px]">
+                  {isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}
+                </span>
+                <ChevronRight className="w-4 h-4" />
+              </div>
+            </button>
+          )}
+
+          {/* Google Translator Quick Banner (Prominently visible for instant language translation) */}
+          {onOpenGoogleTranslate && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onClose();
+                onOpenGoogleTranslate();
+              }}
+              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-blue-950/70 via-sky-950/40 to-slate-900 border border-sky-500/35 hover:border-sky-400 text-left transition-all hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer shadow-xs group"
+              title={isHindi ? 'गूगल ट्रांसलेटर (100+ भाषाएँ)' : 'Google Translator (100+ Languages)'}
+              id="main-menu-google-translator-banner"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 group-hover:text-sky-300 shrink-0">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[13px] font-bold text-white tracking-tight truncate">
+                      {isHindi ? 'गूगल अनुवादक (Google Translate)' : 'Google Translator'}
+                    </span>
+                    <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded-md bg-sky-500/25 text-sky-300 border border-sky-500/40 shrink-0">
+                      {isGoogleTranslated && activeLangLabel ? activeLangLabel : '100+ LANGS'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                    {isHindi ? 'हिन्दी, বাংলা, தமிழ், اردو, मराठी व 100+ भाषाएँ' : 'Translate entire app to 100+ languages'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-sky-400 text-xs font-semibold shrink-0">
+                <span className="hidden sm:inline text-[11px]">{isHindi ? 'खोलें' : 'Open'}</span>
+                <ChevronRight className="w-4 h-4" />
+              </div>
+            </button>
+          )}
+        </div>
+
+        {/* Subtle Divider */}
+        <div className="mx-4 sm:mx-5 h-px bg-slate-800/80" />
+
+        {/* Drawer Body - Clean, Spacious List Matching Screenshot Style */}
+        <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-3 space-y-4">
+          {filteredSections.map((section, idx) => (
+            <div key={section.id} className="space-y-1">
+              {/* Clean Section Header Label */}
+              <div className="px-2 pt-1 pb-1">
+                <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                  {section.title}
+                </span>
               </div>
 
-              {!collapsedSections['settings'] && (
-                <div className="space-y-1 pt-0.5">
-                  {/* Google Drive 1-Click Backup & Auto-Sync */}
-                  {onOpenGoogleDrive && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(onOpenGoogleDrive)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/30 hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                      id="menu-google-drive-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Cloud className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {isHindi ? 'गूगल ड्राइव बैकअप व ऑटो सिंक' : 'Google Drive Backup & Auto-Sync'}
-                            </span>
-                            {autoSyncEnabled ? (
-                              <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                                {isHindi ? 'ऑटो ON' : 'AUTO ON'}
-                              </span>
-                            ) : isDriveConnected ? (
-                              <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                                {isHindi ? 'कनेक्टेड' : 'LINKED'}
-                              </span>
-                            ) : null}
-                          </div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? '1-क्लिक बैकअप व ऑटोमैटिक क्लाउड अपडेट' : '1-click backup & automatic cloud updates'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
+              {/* Section Rows */}
+              <div className="space-y-0.5">
+                {section.items.map((item) => {
+                  const ItemIcon = item.icon;
+                  const isRowActive = item.isActive;
 
-                  {/* 1. Offline Built-in Languages (100% बिना इंटरनेट) */}
-                  {onLanguageChange && (
-                    <div className="w-full flex flex-col p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/85 border border-[var(--theme-border,#213E61)] gap-2 shadow-xs">
-                      <div className="flex items-center justify-between gap-2 min-w-0">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                            <Languages className="w-3.5 h-3.5" />
-                          </div>
-                          <div className="min-w-0">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {isHindi ? 'ऑफ़लाइन भाषाएं (100% बिना इंटरनेट)' : 'Offline Languages (100% Built-in)'}
-                            </span>
-                            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-tight truncate">
-                              {isHindi ? 'इंटरनेट के बिना तुरंत काम करती हैं' : 'Works 100% offline without internet'}
-                            </span>
-                          </div>
-                        </div>
-                        <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
-                          OFFLINE
-                        </span>
-                      </div>
-
-                      {/* Offline Language Selector Grid */}
-                      <div className="grid grid-cols-3 gap-1.5 pt-0.5">
-                        {[
-                          { id: 'en', label: 'English', sub: 'Global' },
-                          { id: 'hi', label: 'हिन्दी', sub: 'Hindi' },
-                          { id: 'hinglish', label: 'Hinglish', sub: 'India' },
-                          { id: 'ur', label: 'اردو', sub: 'Urdu' },
-                          { id: 'es', label: 'Español', sub: 'Spanish' },
-                          { id: 'ar', label: 'العربية', sub: 'Arabic' }
-                        ].map((l) => {
-                          const isSelected = language === l.id;
-                          return (
-                            <button
-                              key={l.id}
-                              type="button"
-                              onClick={() => {
-                                triggerHapticSound('click');
-                                onLanguageChange(l.id as AppLanguage);
-                              }}
-                              className={`px-2 py-1.5 rounded-lg border text-center transition-all cursor-pointer ${
-                                isSelected
-                                  ? 'bg-[var(--theme-primary,#38BDF8)] text-[#040D17] border-[var(--theme-primary,#38BDF8)] font-bold shadow-xs'
-                                  : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#38BDF8)]/40'
-                              }`}
-                            >
-                              <div className="text-[11px] font-bold leading-tight truncate">{l.label}</div>
-                              <div className="text-[9px] opacity-75 truncate">{l.sub}</div>
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {language !== 'en' && (
-                        <div className="flex justify-end pt-0.5">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              triggerHapticSound('click');
-                              onLanguageChange('en');
-                            }}
-                            className="text-[10px] font-bold text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer"
-                          >
-                            Reset to English
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* 2. Online Google Translate (100+ ऑनलाइन भाषाएं) */}
-                  {onOpenGoogleTranslate && (
-                    <div className="w-full flex flex-col p-2.5 rounded-xl bg-[var(--theme-surface,#0E1A29)]/85 border border-indigo-500/30 gap-2 shadow-xs">
-                      <div className="flex items-center justify-between gap-2 min-w-0">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-7 h-7 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
-                            <Globe className="w-3.5 h-3.5" />
-                          </div>
-                          <div className="min-w-0">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {isHindi ? 'ऑनलाइन भाषाएं (100+ गूगल ट्रांसलेट)' : 'Online Languages (100+ Google Translate)'}
-                            </span>
-                            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] block leading-tight truncate">
-                              {isHindi ? 'इंटरनेट कनेक्शन द्वारा 100+ भाषाओं में अनुवाद' : 'Auto-translates into 100+ languages via internet'}
-                            </span>
-                          </div>
-                        </div>
-                        <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shrink-0">
-                          100+ ONLINE
-                        </span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleMenuAction(onOpenGoogleTranslate)}
-                        className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 hover:text-white text-[11.5px] font-bold transition-all cursor-pointer active:scale-98"
-                      >
-                        <Globe className="w-3.5 h-3.5" />
-                        <span>{isHindi ? '100+ ऑनलाइन भाषाएं चुनें' : 'Choose from 100+ Online Languages'}</span>
-                      </button>
-
-                      {/* 1-Click Back to English / Reset */}
-                      <button
-                        type="button"
+                  // External Link Row
+                  if (item.isExternal && item.href) {
+                    return (
+                      <a
+                        key={item.id}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         onClick={() => {
                           triggerHapticSound('click');
-                          resetGoogleTranslate();
+                          onClose();
                         }}
-                        className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg bg-[var(--theme-card,#132438)] hover:bg-emerald-500/20 border border-[var(--theme-border,#213E61)] hover:border-emerald-500/40 text-[var(--theme-text-dim,#94A3B8)] hover:text-emerald-300 text-[11px] font-semibold transition-all cursor-pointer active:scale-98"
-                        id="menu-reset-google-translate-btn"
+                        className="w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors hover:bg-slate-800/40 active:scale-[0.99] group cursor-pointer"
                       >
-                        <RotateCcw className="w-3.5 h-3.5" />
-                        <span>{isHindi ? 'वापस इंग्लिश पर आएं (Reset to English)' : 'Reset / Back to English'}</span>
-                      </button>
-                    </div>
-                  )}
-
-                  {/* App Settings */}
-                  <button
-                    type="button"
-                    onClick={() => handleMenuAction(onOpenSettings)}
-                    className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                    id="menu-settings-btn"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Settings className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {tr.menu.appSettings || (isHindi ? 'ऐप सेटिंग्स' : 'App Settings')}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? '6-फंड %, मुद्रा, भाषा, बैकअप व ऑडियो साउंड' : 'Fund %, currency, sound, backup & export'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Security PIN Lock */}
-                  {onOpenSecurity && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(onOpenSecurity)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                      id="menu-security-pin-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Shield className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {tr.menu.securityPinLock || (isHindi ? 'सुरक्षा पिन लॉक' : 'Security PIN & Lock')}
-                            </span>
-                            {isLockEnabled ? (
-                              <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                                {isHindi ? 'सक्रिय' : 'ACTIVE'}
-                              </span>
-                            ) : (
-                              <span className="text-[8.5px] font-mono font-medium px-1.5 py-0.2 rounded bg-slate-500/20 text-slate-400 border border-slate-500/30">
-                                {isHindi ? 'बंद' : 'OFF'}
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? '4-अंकों के गुप्त पिन कोड से डेटा सुरक्षित करें' : '4-digit offline PIN code security'}
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          <ItemIcon className="w-5 h-5 text-sky-400 shrink-0 group-hover:text-sky-300 transition-colors" />
+                          <span className="text-[14px] sm:text-[14.5px] font-medium text-slate-100 group-hover:text-white transition-colors truncate">
+                            {item.label}
                           </span>
                         </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
 
-                  {/* Master Edit Hub */}
-                  {onOpenMasterEdit && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(onOpenMasterEdit)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                      id="menu-master-edit-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Database className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'मास्टर डेटा व श्रेणियां' : 'Master Data & Categories'}
+                        {item.badge && (
+                          <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full shrink-0 ${
+                            item.badgeColor === 'blue'
+                              ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
+                              : item.badgeColor === 'emerald'
+                              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                              : 'bg-slate-800 text-slate-400 border border-slate-700'
+                          }`}>
+                            {item.badge}
                           </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'श्रेणियां, आय स्रोत और कस्टम टैग बदलें' : 'Manage categories, income sources & tags'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-
-                  {/* Help & Support Centre */}
-                  {(onOpenSupport || onSelectTab) && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onOpenSupport) handleMenuAction(() => onOpenSupport('help'));
-                        else if (onSelectTab) handleMenuAction(() => onSelectTab('support'));
-                      }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/30 hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                      id="menu-settings-support-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <HelpCircle className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {isHindi ? 'सहायता केंद्र व फीडबैक' : 'Help & Support Centre'}
-                            </span>
-                            <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                              HELP
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'समस्या रिपोर्ट, फीचर सुझाव व 24x7 सहायता' : 'Report bugs, feature ideas & instant assistance'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-
-                  {/* Recycle Bin / Trash */}
-                  {onOpenTrash && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(onOpenTrash)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                      id="menu-trash-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {isHindi ? 'रीसायकल बिन / ट्रैश' : 'Recycle Bin & Recovery'}
-                            </span>
-                            {trashCount > 0 && (
-                              <span className="text-[9px] font-mono font-extrabold px-1.5 py-0.2 rounded-full bg-rose-500 text-white animate-pulse">
-                                {trashCount}
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'हटाए गए लेन-देन देखें व रीस्टोर करें' : 'View, restore or empty deleted records'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* 2. Category 2: मुख्य लेजर व खाते (Core Ledger & Passbook - 4 items) */}
-          {(menuFilter === 'all' || menuFilter === 'ledger') && (
-            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/45 p-2.5 sm:p-3 space-y-2 shadow-sm">
-              <div
-                onClick={() => menuFilter === 'all' && toggleSection('ledger')}
-                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Home className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                    {isHindi ? '2. मुख्य लेजर व खाते' : '2. Core Ledger & Passbook'}
-                  </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/25">
-                    4 ITEMS
-                  </span>
-                </div>
-                {menuFilter === 'all' && (
-                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]">
-                    {collapsedSections['ledger'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                  </button>
-                )}
-              </div>
-
-              {!collapsedSections['ledger'] && (
-                <div className="space-y-1 pt-0.5">
-                  {[
-                    { id: 'home', label: tr.menu.khata || (isHindi ? 'दैनिक खाता (Dashboard)' : 'Daily Khata Dashboard'), desc: isHindi ? 'डैशबोर्ड, 6-फंड सारांश व बैलेंस' : 'Dashboard & 6-Fund Rule Split', icon: Home, color: 'text-[var(--theme-primary,#38BDF8)]' },
-                    { id: 'history', label: tr.menu.record || (isHindi ? 'लेन-देन पासबुक' : 'Passbook & Records'), desc: isHindi ? 'सभी प्रविष्टियां, फ़िल्टर व खोज' : 'All transaction records, search & print', icon: History, color: 'text-[var(--theme-primary,#38BDF8)]' },
-                    { id: 'add', label: isHindi ? 'नया लेन-देन जोड़ें' : 'Add New Transaction', desc: isHindi ? 'आय या खर्च की नई प्रविष्टि दर्ज करें' : 'Record new income or expense entry', icon: PlusCircle, color: 'text-[var(--theme-primary,#38BDF8)]' },
-                    { id: 'report', label: tr.menu.analytics || (isHindi ? 'मासिक रिपोर्ट व विश्लेषण' : 'Monthly Analytics'), desc: isHindi ? 'खर्च पाई-चार्ट, रुझान व पीडीएफ रिपोर्ट' : 'Expense charts, fund analytics & PDF', icon: BarChart3, color: 'text-[var(--theme-primary,#38BDF8)]' }
-                  ].map((item) => {
-                    const isActive = currentTab === item.id;
-                    const ItemIcon = item.icon;
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => {
-                          if (onSelectTab) {
-                            handleMenuAction(() => onSelectTab(item.id as NavTab));
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                          isActive
-                            ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                            : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/40'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className={`w-7 h-7 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] flex items-center justify-center ${item.color} shrink-0 group-hover:scale-105 transition-transform`}>
-                            <ItemIcon className="w-3.5 h-3.5" />
-                          </div>
-                          <div className="min-w-0">
-                            <span className={`text-[12.5px] font-bold block truncate ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : 'text-[var(--theme-text,#F8FAFC)]'}`}>
-                              {item.label}
-                            </span>
-                            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">{item.desc}</span>
-                          </div>
-                        </div>
-                        <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-colors ${isActive ? 'text-[var(--theme-primary,#38BDF8)]' : 'text-[var(--theme-text-dim,#64748B)] group-hover:text-[var(--theme-text,#F8FAFC)]'}`} />
-                      </button>
+                        )}
+                      </a>
                     );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
+                  }
 
-          {/* 3. Category 3: ऋण, लक्ष्य व बजट (Loans, Goals & Budgets - 3 items) */}
-          {(menuFilter === 'all' || menuFilter === 'finance') && (
-            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/45 p-2.5 sm:p-3 space-y-2 shadow-sm">
-              <div
-                onClick={() => menuFilter === 'all' && toggleSection('finance')}
-                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Landmark className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                    {isHindi ? '3. ऋण, लक्ष्य व बजट' : '3. Loans, Goals & Budgets'}
-                  </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                    3 ITEMS
-                  </span>
-                </div>
-                {menuFilter === 'all' && (
-                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]">
-                    {collapsedSections['finance'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                  </button>
-                )}
-              </div>
-
-              {!collapsedSections['finance'] && (
-                <div className="space-y-1 pt-0.5">
-                  {/* Loans, EMIs & Udhar */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onOpenLoans) {
-                        handleMenuAction(onOpenLoans);
-                      } else if (onSelectTab) {
-                        handleMenuAction(() => onSelectTab('loans'));
-                      }
-                    }}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'loans'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Landmark className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {isHindi ? 'ऋण, किश्त व उधार खाता' : 'Loans, EMIs & Udhar'}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'उधार लेना/देना व बैंक किश्त' : 'Track money lent, borrowed & monthly EMIs'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Invoice & Bill Generator */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('invoice'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'invoice'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <FileText className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {isHindi ? 'इनवॉइस व बिल जनरेटर' : 'Invoice & Bill Generator'}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'दुकान व सर्विस हेतु GST बिल व UPI QR कोड' : 'Create professional GST bills, receipts & UPI QR'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Savings Goals */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('goals'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'goals'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Target className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {tr.menu.goals || (isHindi ? 'बचत लक्ष्य व टारगेट्स' : 'Savings Goals')}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'आपातकालीन फंड व जमा प्रगति' : 'Savings targets, progress & deposits'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Category Budgets & Limits */}
-                  {onOpenBudgetManager && (
+                  // Standard Action Button Row
+                  return (
                     <button
+                      key={item.id}
                       type="button"
-                      onClick={() => handleMenuAction(onOpenBudgetManager)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Sliders className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'मासिक बजट व खर्च सीमा' : 'Category Budgets & Limits'}
-                          </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'खर्च सीमा तय करें और ओवर-स्पेंडिंग रोकें' : 'Set category limits & prevent over-spending'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* 4. Category 4: कार्य व दैनिक आदतें (Productivity & Work - 4 items) */}
-          {(menuFilter === 'all' || menuFilter === 'work') && (
-            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/45 p-2.5 sm:p-3 space-y-2 shadow-sm">
-              <div
-                onClick={() => menuFilter === 'all' && toggleSection('work')}
-                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <CalendarCheck className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                    {isHindi ? '4. कार्य व दैनिक आदतें' : '4. Work & Daily Habits'}
-                  </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                    4 ITEMS
-                  </span>
-                </div>
-                {menuFilter === 'all' && (
-                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]">
-                    {collapsedSections['work'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                  </button>
-                )}
-              </div>
-
-              {!collapsedSections['work'] && (
-                <div className="space-y-1 pt-0.5">
-                  {/* Attendance Register */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('attendance'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'attendance'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <CalendarCheck className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {isHindi ? 'उपस्थिति रजिस्टर' : 'Attendance Register'}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'ड्यूटी घंटे, क्लॉक इन/आउट व वेतन गणना' : 'Duty hours, clock-in & salary calculation'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Work & Projects */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('tracker'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'tracker'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Briefcase className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {tr.menu.workAndLife || (isHindi ? 'कार्य व प्रोजेक्ट ट्रैकर' : 'Work & Projects')}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'क्लाइंट प्रोजेक्ट्स, डिलीवरेबल्स व आय' : 'Client deliverables & revenue'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Notes & Habits */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('notes'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'notes'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <BookOpen className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {tr.menu.personalNotes || (isHindi ? 'निजी नोट्स व आदतें' : 'Personal Notes & Routine')}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'दैनिक रूटीन, आदतें व सुरक्षित नोट्स' : 'Daily routines, habits & secure thoughts'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Scheduled Reminders */}
-                  {onOpenReminders && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(onOpenReminders)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Bell className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {isHindi ? 'बिल व भुगतान रिमाइंडर' : 'Scheduled Reminders'}
-                            </span>
-                            {remindersCount > 0 && (
-                              <span className="text-[9px] font-mono font-extrabold px-1.5 py-0.2 rounded-full bg-yellow-400 text-slate-900 animate-pulse">
-                                {remindersCount}
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'आवर्ती बिल, SIP व देय तारीख अलर्ट्स' : 'Recurring bills, loan & SIP due alerts'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* 5. Category 5: वित्तीय कैलकुलेटर सूट (Financial Calculators - 2 items) */}
-          {(menuFilter === 'all' || menuFilter === 'tools') && (
-            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/45 p-2.5 sm:p-3 space-y-2 shadow-sm">
-              <div
-                onClick={() => menuFilter === 'all' && toggleSection('tools')}
-                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <Calculator className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                    {isHindi ? '5. वित्तीय कैलकुलेटर' : '5. Financial Calculators'}
-                  </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                    2 TOOLS
-                  </span>
-                </div>
-                {menuFilter === 'all' && (
-                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]">
-                    {collapsedSections['tools'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                  </button>
-                )}
-              </div>
-
-              {!collapsedSections['tools'] && (
-                <div className="space-y-1 pt-0.5">
-                  {/* Financial Calculators */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('calculator'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'calculator'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Calculator className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                          {tr.menu.calculator || (isHindi ? 'वित्तीय कैलकुलेटर सूट' : 'Financial Calculators Suite')}
-                        </span>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'SIP, EMI, GST, FD, RD व मुद्रास्फीति' : 'SIP, EMI, GST, FD, RD & inflation calculators'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Split Bill */}
-                  {onOpenSplitBill && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(onOpenSplitBill)}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Split className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'बिल विभाजन / स्प्लिट' : 'Split Bill & Group Share'}
-                          </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'दोस्तों व परिवार के साथ बराबर खर्च बांटें' : 'Divide dinners, room & trip expenses'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* 6. Category 6: गाइड, अकादमी व सहायता केंद्र (Wealth Academy & Help Centre - 5 items) */}
-          {(menuFilter === 'all' || menuFilter === 'info') && (
-            <div className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/45 p-2.5 sm:p-3 space-y-2 shadow-sm">
-              <div
-                onClick={() => menuFilter === 'all' && toggleSection('info')}
-                className={`flex items-center justify-between gap-2 px-1 ${menuFilter === 'all' ? 'cursor-pointer select-none' : ''}`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <GraduationCap className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-primary,#38BDF8)]">
-                    {isHindi ? '6. गाइड, अकादमी व सहायता केंद्र' : '6. Wealth Academy & Help Centre'}
-                  </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                    5 ITEMS
-                  </span>
-                </div>
-                {menuFilter === 'all' && (
-                  <button type="button" className="text-[var(--theme-text-dim,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]">
-                    {collapsedSections['info'] ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                  </button>
-                )}
-              </div>
-
-              {!collapsedSections['info'] && (
-                <div className="space-y-1 pt-0.5">
-                  {/* Commercial News & Research Portal */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('news'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'news'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                    id="menu-news-portal-btn"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Newspaper className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'वाणिज्यिक समाचार व रिसर्च' : 'News & Research Portal'}
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'मार्केट, अर्थशास्त्र, फिनटेक, टैक्स व उद्योग रिपोर्ट' : 'Global markets, macro, fintech, policy & industry reports'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Sanity CMS Live Blog */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('blog'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'blog'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                    id="menu-sanity-blog-btn"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <Newspaper className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'लाइव ब्लॉग (Sanity)' : 'Live Blog (Sanity)'}
-                          </span>
-                          <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-400/20 text-indigo-400 border border-indigo-400/30">
-                            LIVE
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'सैनिटी से सीधे प्रकाशित नए लेख' : 'Live editorial dispatch from Sanity CMS'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Sanity Studio (Write & Manage Blog Posts) */}
-                  <button
-                    type="button"
-                    onClick={() => handleMenuAction(() => {
-                      window.open('/studio', '_blank') || (onSelectTab && onSelectTab('blog'));
-                    })}
-                    className="w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/50"
-                    id="menu-sanity-studio-btn"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
-                        <Sparkles className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'सैनिटी स्टूडियो (लेख लिखें)' : 'Sanity Studio (Write Post)'}
-                          </span>
-                          <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-400/20 text-emerald-400 border border-emerald-400/30">
-                            CMS
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? 'ब्लॉग पोस्ट लिखने व संपादित करने का स्टूडियो' : 'Write, edit & publish blog posts'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-emerald-400 transition-colors" />
-                  </button>
-
-                  {/* Wealth Academy */}
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab && handleMenuAction(() => onSelectTab('academy'))}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                      currentTab === 'academy' || currentTab === 'article'
-                        ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                        : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                    id="menu-academy-btn"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                        <GraduationCap className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'वेल्थ अकादमी' : 'Wealth Academy'}
-                          </span>
-                          <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-400 border border-amber-400/30">
-                            40+ GUIDES
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                          {isHindi ? '40+ वित्तीय लेख, 6-फंड नियम व धन प्रबंधन' : '40+ money management principles & wealth guides'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                  </button>
-
-                  {/* Help & Support Centre */}
-                  {(onOpenSupport || onSelectTab) && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onOpenSupport) handleMenuAction(() => onOpenSupport('help'));
-                        else if (onSelectTab) handleMenuAction(() => onSelectTab('support'));
-                      }}
-                      className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                        currentTab === 'support'
-                          ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                          : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-primary,#38BDF8)]/30 hover:border-[var(--theme-primary,#38BDF8)]/50'
+                      onClick={item.onClick}
+                      className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
+                        isRowActive
+                          ? 'bg-sky-500/15 border border-sky-500/30 text-sky-300'
+                          : 'hover:bg-slate-800/40 text-slate-100'
                       }`}
-                      id="menu-support-centre-btn"
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <HelpCircle className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                              {isHindi ? 'सहायता केंद्र व फीडबैक' : 'Help & Support Centre'}
-                            </span>
-                            <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary,#38BDF8)]/30">
-                              HELP DESK
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'समस्या रिपोर्ट, फीचर सुझाव, टिकट व 24x7 सहायता' : 'Report bugs, feature requests & contact support'}
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        <ItemIcon className={`w-5 h-5 shrink-0 transition-colors ${
+                          isRowActive
+                            ? 'text-sky-400'
+                            : 'text-sky-400 group-hover:text-sky-300'
+                        }`} />
+                        <span className={`text-[14px] sm:text-[14.5px] font-medium transition-colors truncate ${
+                          isRowActive
+                            ? 'text-sky-200 font-semibold'
+                            : 'text-slate-100 group-hover:text-white'
+                        }`}>
+                          {item.label}
+                        </span>
                       </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
 
-                  {/* User Guide & Manual */}
-                  {(onOpenManual || onSelectTab) && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onOpenManual) handleMenuAction(onOpenManual);
-                        else if (onSelectTab) handleMenuAction(() => onSelectTab('guide'));
-                      }}
-                      className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer text-left group"
-                      id="menu-guide-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <FileText className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {tr.menu.userManualGuide || (isHindi ? 'यूजर मैनुअल व मार्गदर्शिका' : 'User Manual & Guides')}
-                          </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? 'सभी फीचर्स की गाइड, शॉर्टकट व निर्देश' : 'Step-by-step feature walkthroughs & shortcuts'}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
+                      {item.badge && (
+                        <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                          item.badgeColor === 'emerald'
+                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                            : item.badgeColor === 'amber'
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                            : item.badgeColor === 'rose'
+                            ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                            : item.badgeColor === 'blue'
+                            ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                            : 'bg-slate-800 text-slate-400 border border-slate-700'
+                        }`}>
+                          {item.badge}
+                        </span>
+                      )}
                     </button>
-                  )}
+                  );
+                })}
+              </div>
 
-                  {/* About Daily Khata Pro */}
-                  {(onOpenAbout || onSelectTab) && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onOpenAbout) handleMenuAction(onOpenAbout);
-                        else if (onSelectTab) handleMenuAction(() => onSelectTab('about'));
-                      }}
-                      className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                        currentTab === 'about'
-                          ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                          : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                      }`}
-                      id="menu-about-page-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <Sparkles className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'ऐप के बारे में (About App)' : 'About Daily Khata Pro'}
-                          </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            {isHindi ? `मिशन, 6-फंड फॉर्मूला व v${APP_VERSION}` : `Mission, architecture & v${APP_VERSION}`}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-
-                  {/* Developer Profile */}
-                  {onSelectTab && (
-                    <button
-                      type="button"
-                      onClick={() => handleMenuAction(() => onSelectTab('developer'))}
-                      className={`w-full flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer text-left group ${
-                        currentTab === 'developer'
-                          ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] shadow-xs'
-                          : 'bg-[var(--theme-surface,#0E1A29)]/80 hover:bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)]/50'
-                      }`}
-                      id="menu-developer-page-btn"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 border border-[var(--theme-primary,#38BDF8)]/30 flex items-center justify-center text-[var(--theme-primary,#38BDF8)] shrink-0 group-hover:scale-105 transition-transform">
-                          <User className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-[var(--theme-text,#F8FAFC)] block truncate">
-                            {isHindi ? 'डेवलपर प्रोफाइल' : 'Developer Profile'}
-                          </span>
-                          <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate block">
-                            MD Zafeer Hasan (YAZDAAN)
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-text-dim,#64748B)] shrink-0 group-hover:text-[var(--theme-primary,#38BDF8)] transition-colors" />
-                    </button>
-                  )}
-
-                  {/* Compact 4 Legal Policies */}
-                  <div className="pt-1 grid grid-cols-2 gap-1.5">
-                    {[
-                      { id: 'privacy', label: isHindi ? 'गोपनीयता नीति' : 'Privacy Policy', icon: ShieldCheck, color: 'text-[var(--theme-primary,#38BDF8)]' },
-                      { id: 'terms', label: isHindi ? 'नियम व शर्तें' : 'Terms of Service', icon: FileText, color: 'text-[var(--theme-primary,#38BDF8)]' },
-                      { id: 'disclaimer', label: isHindi ? 'अस्वीकरण' : 'Disclaimer', icon: AlertCircle, color: 'text-[var(--theme-primary,#38BDF8)]' },
-                      { id: 'cookies', label: isHindi ? 'कुकीज़ नीति' : 'Cookie Policy', icon: Cookie, color: 'text-[var(--theme-primary,#38BDF8)]' }
-                    ].map((policy) => {
-                      const PolicyIcon = policy.icon;
-                      const isActive = currentTab === policy.id;
-                      return (
-                        <button
-                          key={policy.id}
-                          type="button"
-                          onClick={() => {
-                            if (onSelectTab) {
-                              handleMenuAction(() => onSelectTab(policy.id as NavTab));
-                            }
-                          }}
-                          className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-[10.5px] font-bold border transition-all cursor-pointer truncate ${
-                            isActive
-                              ? 'bg-[var(--theme-primary,#38BDF8)]/15 border-[var(--theme-primary,#38BDF8)] text-[var(--theme-primary,#38BDF8)]'
-                              : 'bg-[var(--theme-surface,#0E1A29)]/60 hover:bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)]/50 text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)]'
-                          }`}
-                        >
-                          <PolicyIcon className={`w-3 h-3 shrink-0 ${policy.color}`} />
-                          <span className="truncate">{policy.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
+              {/* Divider between sections */}
+              {idx < filteredSections.length - 1 && (
+                <div className="pt-2">
+                  <div className="h-px bg-slate-800/60" />
                 </div>
               )}
             </div>
-          )}
+          ))}
 
-          {/* App Distribution & Share Utilities */}
-          {(onOpenInstall || onOpenShare) && (
-            <div className="pt-1 flex items-center gap-2">
-              {onOpenInstall && (
-                <button
-                  type="button"
-                  onClick={() => handleMenuAction(onOpenInstall)}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-primary,#38BDF8)] text-[11.5px] font-bold transition-all cursor-pointer shadow-xs active:scale-95"
-                  id="menu-install-pwa-btn"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
-                </button>
-              )}
-              {onOpenShare && (
-                <button
-                  type="button"
-                  onClick={() => handleMenuAction(onOpenShare)}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-border,#213E61)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] text-[11.5px] font-bold transition-all cursor-pointer shadow-xs active:scale-95"
-                  id="menu-share-app-btn"
-                >
-                  <Share2 className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  <span>{isHindi ? 'शेयर करें' : 'Share App'}</span>
-                </button>
-              )}
+          {filteredSections.length === 0 && (
+            <div className="py-12 text-center text-xs text-slate-400">
+              {isHindi ? 'कोई परिणाम नहीं मिला' : 'No menu items match your search'}
             </div>
           )}
         </div>
 
-        {/* Drawer Footer */}
-        <div className="px-4 py-3 border-t border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)]/95 backdrop-blur-md flex flex-col gap-2 text-[11px] text-[var(--theme-text-dim,#94A3B8)] shrink-0">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="font-bold text-[12px] text-[var(--theme-text,#F8FAFC)] tracking-tight">
-                Daily Khata <span className="text-[var(--theme-primary,#38BDF8)]">Pro</span>
-              </span>
-              <span className="font-mono text-[10.5px] px-1.5 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#CBD5E1)] font-semibold shrink-0">
-                {APP_VERSION_TAG}
-              </span>
-            </div>
+        {/* Quick Utility Strip: Day/Night, Language, Privacy Mask */}
+        <div className="px-4 sm:px-5 py-2.5 bg-slate-900/60 border-t border-slate-800/70 flex items-center justify-between gap-1.5 shrink-0">
+          {/* Day/Night Theme Toggle */}
+          {onThemeChange && (
             <button
               type="button"
-              onClick={handleDirectUpdateApp}
-              disabled={isUpdatingApp}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.25))] text-[var(--theme-primary,#38BDF8)] border border-[var(--theme-primary-border,rgba(56,189,248,0.3))] text-[11px] font-bold transition-all cursor-pointer disabled:opacity-50 active:scale-95 shrink-0"
-              id="drawer-footer-update-btn"
-              title={isHindi ? 'एक क्लिक में अपडेट करें' : '1-Click Direct Update'}
+              onClick={() => {
+                triggerHapticSound('click');
+                onThemeChange(isLightMode ? 'blue' : 'white');
+              }}
+              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-slate-700/60 text-slate-300 hover:text-white text-[11px] font-medium transition-all cursor-pointer active:scale-95"
+              title={isLightMode ? 'Night Mode' : 'Day Mode'}
             >
-              <RefreshCw className={`w-3 h-3 ${isUpdatingApp ? 'animate-spin' : ''}`} />
-              <span>{isUpdatingApp ? '...' : (isHindi ? 'अपडेट' : 'Update')}</span>
+              {isLightMode ? <Moon className="w-3.5 h-3.5 text-slate-300" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
+              <span>{isLightMode ? (isHindi ? 'डार्क' : 'Dark') : (isHindi ? 'लाइट' : 'Light')}</span>
             </button>
+          )}
+
+          {/* Language Switch */}
+          {onLanguageChange && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onLanguageChange(isHindi ? 'en' : 'hi');
+              }}
+              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-slate-700/60 text-slate-300 hover:text-white text-[11px] font-medium transition-all cursor-pointer active:scale-95"
+              title="Toggle Language"
+            >
+              <Languages className="w-3.5 h-3.5 text-sky-400" />
+              <span>{isHindi ? 'English' : 'हिन्दी'}</span>
+            </button>
+          )}
+
+          {/* Google Translate Switch */}
+          {onOpenGoogleTranslate && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onClose();
+                onOpenGoogleTranslate();
+              }}
+              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/40 text-sky-300 hover:text-white text-[11px] font-medium transition-all cursor-pointer active:scale-95"
+              title="Google Translator (100+ Languages)"
+              id="drawer-utility-google-translate-btn"
+            >
+              <Globe className="w-3.5 h-3.5 text-sky-400" />
+              <span>{isHindi ? 'अनुवाद' : 'Translate'}</span>
+            </button>
+          )}
+
+          {/* Privacy Amount Mask */}
+          {onTogglePrivacyMask && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onTogglePrivacyMask();
+              }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
+                privacyMask
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                  : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white'
+              }`}
+              title="Mask Amounts"
+            >
+              {privacyMask ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              <span>{privacyMask ? (isHindi ? 'छिपा' : 'Masked') : (isHindi ? 'प्राइवेसी' : 'Privacy')}</span>
+            </button>
+          )}
+        </div>
+
+        {/* Drawer Footer (Matching Screenshot Style) */}
+        <div className="px-4 sm:px-5 py-3 border-t border-slate-800/80 bg-[#060D17] flex items-center justify-between text-xs text-slate-400 shrink-0">
+          <div className="flex flex-col min-w-0">
+            <span className="text-[12px] font-semibold text-slate-300 tracking-tight">
+              Daily Khata Pro v{APP_VERSION}
+            </span>
+            <span className="text-[10.5px] text-slate-500 truncate">
+              MD Zafeer Hasan (YAZDAAN) • Rozfiber
+            </span>
           </div>
-          <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--theme-border,#213E61)]/40 text-[10.5px]">
-            <div className="flex items-center gap-1.5 text-emerald-400 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse shrink-0" />
-              <span>100% Offline • Zero Telemetry</span>
-            </div>
-            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-mono">100% Private</span>
+
+          <div className="shrink-0 flex items-center gap-2">
+            {handleDirectUpdateApp && (
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticSound('save');
+                  onClose();
+                  handleDirectUpdateApp();
+                }}
+                disabled={isUpdatingApp}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-[11px] font-bold text-emerald-400 active:scale-95 transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                title={isHindi ? '1-क्लिक ऐप अपडेट' : '1-Click Direct Update'}
+                id="drawer-footer-direct-update-btn"
+              >
+                <RefreshCw className={`w-3 h-3 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                <span>{isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}</span>
+              </button>
+            )}
+            <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700/60 text-[10.5px] font-mono text-slate-300 shadow-xs">
+              PWA • Local-First
+            </span>
           </div>
         </div>
       </div>

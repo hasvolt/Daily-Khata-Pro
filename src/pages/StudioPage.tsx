@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Studio } from 'sanity';
-import sanityConfig from '../sanity/sanity.config';
 import { ExternalLink, Sparkles, RefreshCw, AlertTriangle, ShieldCheck, ArrowLeft, Maximize, Minimize } from 'lucide-react';
 
 class StudioErrorBoundary extends React.Component<
@@ -208,9 +206,12 @@ export function StudioPage() {
         key={studioKey}
         className="w-full flex-1 min-h-0 h-full relative overflow-hidden bg-[#070E18]"
       >
-        <StudioErrorBoundary currentStudioUrl={currentStudioUrl} onReload={() => setStudioKey((k) => k + 1)}>
-          <Studio config={sanityConfig} />
-        </StudioErrorBoundary>
+        <iframe
+          src="https://3zccyf67.sanity.studio"
+          title="Sanity Studio - Daily Khata Pro"
+          className="w-full h-full border-0"
+          allow="fullscreen; clipboard-read; clipboard-write"
+        />
       </div>
     </div>
   );

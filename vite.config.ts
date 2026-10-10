@@ -45,28 +45,12 @@ export default defineConfig(({ command }) => {
       ],
     },
     build: {
-      chunkSizeWarningLimit: 2500,
+      chunkSizeWarningLimit: 3500,
       sourcemap: false,
       target: 'es2022',
       rollupOptions: {
         external: ['express', 'path', 'fs'],
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules/sanity') || id.includes('node_modules/@sanity')) {
-              return 'sanity-vendor';
-            }
-            if (id.includes('node_modules/recharts')) {
-              return 'recharts-vendor';
-            }
-            if (id.includes('node_modules/lucide-react')) {
-              return 'lucide-vendor';
-            }
-            if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router-dom/')) {
-              return 'react-vendor';
-            }
-          },
-        },
-      }
+      },
     },
     server: {
       host: '0.0.0.0',

@@ -141,6 +141,21 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
       );
       loadDriveBackups();
     } catch (err: any) {
+      const isPopupClosed =
+        err?.code === 'auth/popup-closed-by-user' ||
+        err?.code === 'auth/cancelled-popup-request' ||
+        err?.code === 'auth/popup-blocked' ||
+        err?.message?.includes('popup-closed') ||
+        err?.message?.includes('cancelled');
+
+      if (isPopupClosed) {
+        showToast(
+          'info',
+          t('लॉगिन विंडो बंद कर दी गई।', 'Sign in popup was closed.')
+        );
+        return;
+      }
+
       triggerHapticSound('error');
       const isUnauthorized = err?.code === 'auth/unauthorized-domain' || err?.message?.includes('unauthorized-domain');
       if (isUnauthorized) {
@@ -156,9 +171,7 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
       } else {
         showToast(
           'error',
-          err.message?.includes('popup-closed')
-            ? t('लॉगिन विंडो बंद कर दी गई।', 'Sign in popup closed.')
-            : t(`लॉगिन विफल: ${err.message || 'Error'}`, `Login failed: ${err.message || 'Error'}`)
+          t(`लॉगिन विफल: ${err.message || 'Error'}`, `Login failed: ${err.message || 'Error'}`)
         );
       }
     } finally {

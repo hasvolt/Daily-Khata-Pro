@@ -5,7 +5,7 @@ import { TRANSLATIONS } from '../utils/translations';
 import { triggerHaptic } from '../utils/haptics';
 import { playClickSound } from '../utils/audioService';
 
-export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'about' | 'developer' | 'privacy' | 'disclaimer' | 'terms' | 'support' | 'safety' | 'guide' | 'calculator' | 'attendance' | 'loans' | 'invoice' | 'cookies' | 'academy' | 'article' | 'news' | 'blog' | 'support-project' | 'ads-policy';
+export type NavTab = 'home' | 'add' | 'tracker' | 'goals' | 'history' | 'report' | 'notes' | 'about' | 'developer' | 'privacy' | 'disclaimer' | 'terms' | 'support' | 'safety' | 'guide' | 'calculator' | 'attendance' | 'loans' | 'invoice' | 'cookies' | 'academy' | 'article' | 'news' | 'blog' | 'support-project' | 'ads-policy' | 'apps';
 
 interface BottomNavProps {
   currentTab: string;

@@ -198,7 +198,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('preferences');
   const [confirmAction, setConfirmAction] = useState<'reset' | 'sample' | 'reset_settings' | null>(null);
-  const [modalFeedback, setModalFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [modalFeedback, setModalFeedback] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
 
   // Dynamic Funds & Allocation Rules State
   const [currentFunds, setCurrentFunds] = useState<FundConfig[]>(() => {
@@ -258,7 +258,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const currentWorkCategories = data.workCategories || DEFAULT_WORK_CATEGORIES;
   const currentLifeTags = data.lifeTags || DEFAULT_LIFE_TAGS;
 
-  const showFeedback = (type: 'success' | 'error', text: string) => {
+  const showFeedback = (type: 'success' | 'error' | 'info', text: string) => {
     setModalFeedback({ type, text });
     setTimeout(() => {
       setModalFeedback(null);
@@ -315,6 +315,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         )
       );
     } catch (err: any) {
+      const isPopupClosed =
+        err?.code === 'auth/popup-closed-by-user' ||
+        err?.code === 'auth/cancelled-popup-request' ||
+        err?.code === 'auth/popup-blocked' ||
+        err?.message?.includes('popup-closed') ||
+        err?.message?.includes('cancelled');
+
+      if (isPopupClosed) {
+        showFeedback(
+          'info',
+          tStr(
+            'लॉगिन विंडो बंद कर दी गई।',
+            'Login popup band kar di gayi.',
+            'Sign in popup was closed.'
+          )
+        );
+        return;
+      }
+
       const isUnauthorized = err?.code === 'auth/unauthorized-domain' || err?.message?.includes('unauthorized-domain');
       if (isUnauthorized) {
         const host = typeof window !== 'undefined' ? window.location.hostname : '';
@@ -328,7 +347,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           )
         );
       } else {
-        console.error('Drive backup failed:', err);
+        console.warn('[Drive Backup] Backup failed:', err);
         showFeedback(
           'error',
           err?.message ||
@@ -579,10 +598,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const themeList: { id: AppTheme; label: string; dot: string; isLight?: boolean }[] = [
+    { id: 'blue', label: tStr('इलेक्ट्रिक ब्लू (Electric Blue - डिफ़ॉल्ट)', 'Electric Blue (Default Dark)', 'Electric Blue (Default)'), dot: '#2563EB' },
     { id: 'dark', label: tStr('साइबर एमराल्ड ब्लैक (Emerald)', 'Cyber Emerald Black (Emerald)', 'Emerald Black'), dot: '#10B981' },
     { id: 'black', label: tStr('डीप ओब्सीडियन (Obsidian)', 'Deep Obsidian (Obsidian)', 'Deep Obsidian'), dot: '#38BDF8' },
     { id: 'monochrome', label: tStr('प्रीमियम ब्लैक & वाइट (Monochrome)', 'Premium Black & White (Monochrome)', 'Premium Black & White (Monochrome)'), dot: '#F8FAFC' },
-    { id: 'blue', label: 'Electric Blue', dot: '#2563EB' },
     { id: 'yellow', label: 'Premium Gold', dot: '#F59E0B' },
     { id: 'orange', label: 'Sunset Orange', dot: '#F97316' },
     { id: 'emerald', label: 'Emerald Green', dot: '#22C55E' },
@@ -624,12 +643,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <div
             className={`px-4 py-2.5 text-[12.5px] font-bold flex items-center gap-2 border-b animate-in fade-in ${
               modalFeedback.type === 'success'
+                ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                : modalFeedback.type === 'info'
                 ? 'bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)] border-[var(--theme-primary,#38BDF8)]/30'
                 : 'bg-[#EF4444]/15 text-[#EF4444] border-[#EF4444]/30'
             }`}
           >
             {modalFeedback.type === 'success' ? (
               <CheckCircle2 className="w-4 h-4 shrink-0" />
+            ) : modalFeedback.type === 'info' ? (
+              <Info className="w-4 h-4 shrink-0" />
             ) : (
               <AlertCircle className="w-4 h-4 shrink-0" />
             )}

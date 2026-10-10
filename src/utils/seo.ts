@@ -109,6 +109,11 @@ export const ROUTE_SEO_MAP: Record<string, PageSEOMeta> = {
     description: 'Track money given (Udhar/Receivable) and money borrowed (Payable) with automatic net balance, due dates, and settlement logs. 100% private.',
     canonicalPath: '/loans'
   },
+  '/apps': {
+    title: 'Rozfiber Official Apps & Ecosystem — Staff Manager, Docs & Digital Tools',
+    description: 'Explore official Rozfiber applications: Staff Manager (universal attendance, wages & contractor system), Rozfiber Docs knowledge base, and Daily Khata Pro financial ledger.',
+    canonicalPath: '/apps'
+  },
   '/invoice': {
     title: 'Free Professional Invoice & GST Bill Generator — Daily Khata Pro',
     description: 'Create, print and download professional GST invoices, bills, and receipts with UPI QR code, itemized taxes, bank details, and 100% offline privacy.',

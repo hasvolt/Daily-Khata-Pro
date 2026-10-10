@@ -100,6 +100,7 @@ interface HeaderProps {
   isDriveConnected?: boolean;
   isAutoSyncing?: boolean;
   autoSyncEnabled?: boolean;
+  onOpenRozfiberApps?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -124,7 +125,7 @@ export const Header: React.FC<HeaderProps> = ({
   onLockNow,
   searchQuery = '',
   onSearchChange,
-  theme = 'white',
+  theme = 'blue',
   onThemeChange,
   language = 'en',
   onLanguageChange,
@@ -138,7 +139,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenGoogleDrive,
   isDriveConnected = false,
   isAutoSyncing = false,
-  autoSyncEnabled = false
+  autoSyncEnabled = false,
+  onOpenRozfiberApps
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
@@ -375,7 +377,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={() => {
                 if (isLightMode) {
-                  onThemeChange('dark');
+                  onThemeChange('blue');
                 } else {
                   onThemeChange('white');
                 }
@@ -476,6 +478,43 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* Quick Google Translate Button (Header) */}
+          {onOpenGoogleTranslate && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onOpenGoogleTranslate();
+              }}
+              className="relative h-8 sm:h-9 px-1.5 sm:px-2.5 rounded-lg sm:rounded-xl border border-sky-500/35 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 hover:text-sky-300 transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
+              title={isHindi ? 'गूगल ट्रांसलेटर (100+ भाषाएँ)' : 'Google Translator (100+ Languages)'}
+              id="header-google-translate-btn"
+              aria-label="Google Translate"
+            >
+              <Globe className="w-4 h-4 shrink-0 text-sky-400" />
+              <span className="hidden sm:inline text-[11px] font-bold">
+                {isHindi ? 'अनुवाद' : 'Translate'}
+              </span>
+            </button>
+          )}
+
+          {/* Quick Rozfiber Apps Hub Button (Header) */}
+          {onOpenRozfiberApps && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onOpenRozfiberApps();
+              }}
+              className="relative h-8 w-8 sm:h-9 sm:w-9 min-w-[32px] sm:min-w-[36px] rounded-lg sm:rounded-xl border border-emerald-500/35 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 hover:text-emerald-300 transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center shrink-0 p-0"
+              title={isHindi ? 'Rozfiber ऐप्स (Staff Manager, Docs)' : 'Rozfiber Apps (Staff Manager, Docs)'}
+              id="header-rozfiber-apps-btn"
+              aria-label="Rozfiber Apps"
+            >
+              <Layers className="w-4 h-4 shrink-0 text-emerald-400" />
+            </button>
+          )}
+
           {/* Main Menu 3-Dot Button */}
           <button
             type="button"
@@ -537,6 +576,7 @@ export const Header: React.FC<HeaderProps> = ({
         onOpenGoogleDrive={onOpenGoogleDrive}
         isDriveConnected={isDriveConnected}
         autoSyncEnabled={autoSyncEnabled}
+        onOpenRozfiberApps={onOpenRozfiberApps}
       />
 
       {/* 1-Click Update Loading Overlay */}

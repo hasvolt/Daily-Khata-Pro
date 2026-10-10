@@ -5,19 +5,19 @@
 
 @layer base {
   :root {
-    /* Default Base Tokens: Emerald Black */
-    --bg: #04100C;
-    --surface: #072118;
+    /* Default Base Tokens: Electric Blue */
+    --bg: #050B1F;
+    --surface: #0C1A3D;
     --surface-2: rgba(0, 0, 0, 0.28);
-    --border: #1A4D3B;
-    --border-subtle: #12382B;
+    --border: #1E3A8A;
+    --border-subtle: #172554;
     --text: #F1F5F9;
-    --text-muted: #9DB8AE;
-    --text-dim: #6B9385;
-    --accent: #10B981;
-    --accent-contrast: #02160A;
-    --card-gradient-from: #0E6B4B;
-    --card-gradient-to: #062E22;
+    --text-muted: #93C5FD;
+    --text-dim: #60A5FA;
+    --accent: #3B82F6;
+    --accent-contrast: #FFFFFF;
+    --card-gradient-from: #1D4ED8;
+    --card-gradient-to: #0B1E4A;
     --income: #4ADE80;
     --expense: #F87171;
     --btn-income: #16A34A;
@@ -26,22 +26,22 @@
     /* Semantic Theme Aliases */
     --theme-bg: var(--bg);
     --theme-surface: var(--surface);
-    --theme-card: #0A3D2B;
-    --theme-card-hover: #0E4F38;
+    --theme-card: #11285A;
+    --theme-card-hover: #17377C;
     --theme-border: var(--border);
     --theme-border-subtle: var(--border-subtle);
     --theme-text: var(--text);
     --theme-text-muted: var(--text-muted);
     --theme-text-dim: var(--text-dim);
     --theme-primary: var(--accent);
-    --theme-primary-hover: #059669;
-    --theme-primary-dim: rgba(16, 185, 129, 0.16);
+    --theme-primary-hover: #2563EB;
+    --theme-primary-dim: rgba(59, 130, 246, 0.16);
     --theme-primary-border: var(--border);
     --theme-glow: transparent;
     --theme-badge-text: var(--accent);
-    --theme-btn-bg: var(--accent);
-    --theme-btn-hover: #059669;
-    --theme-btn-text: var(--accent-contrast);
+    --theme-btn-bg: #2563EB;
+    --theme-btn-hover: #1D4ED8;
+    --theme-btn-text: #FFFFFF;
     --theme-income: var(--income);
     --theme-expense: var(--expense);
     --theme-warning: #F59E0B;
