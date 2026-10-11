@@ -152,7 +152,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const isHindi = language === 'hi';
-  const isLightMode = theme === 'light' || theme === 'white';
+  const isLightMode = theme === 'light' || theme === 'white' || (typeof document !== 'undefined' && (document.documentElement.getAttribute('data-theme') === 'light' || document.documentElement.getAttribute('data-theme') === 'white' || document.documentElement.classList.contains('light')));
 
   const isGoogleTranslated = isGoogleTranslateActive();
   const activeLangCode = getActiveGoogleLanguage();
@@ -592,60 +592,32 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Drawer Header (Logo, Brand Title, Professional Tagline & Status) */}
+        {/* Drawer Header (Exact Match to Screenshot) */}
         <div className={`p-4 sm:p-5 flex items-center justify-between gap-3 shrink-0 ${
-          isLightMode ? 'border-b border-slate-100' : 'border-b border-slate-800/50'
+          isLightMode ? 'border-b border-slate-200 bg-white' : 'border-b border-slate-800/80 bg-[#08111E]'
         }`}>
           <div className="flex items-center gap-3 min-w-0">
-            {/* App Logo with Modern Gradient Container */}
-            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-md shrink-0 ${
-              isLightMode
-                ? 'bg-gradient-to-br from-blue-600 to-sky-600 text-white border border-blue-400/30 shadow-blue-500/10'
-                : 'bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/20'
-            }`}>
-              <AppLogo size={26} />
-            </div>
+            {/* Authentic Daily Khata Pro AppLogo */}
+            <AppLogo size={42} className="shrink-0" />
 
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <h2 className={`text-[16px] sm:text-[17px] font-extrabold tracking-tight truncate ${
-                  isLightMode ? 'text-slate-900' : 'text-white'
-                }`}>
-                  Daily Khata
-                </h2>
-                <span className="text-[15px] sm:text-[16px] font-black tracking-tight text-sky-500">
-                  Pro
-                </span>
-              </div>
-              <p className={`text-[11px] font-medium truncate mt-0.5 ${
-                isLightMode ? 'text-slate-500' : 'text-slate-400'
+            <div className="min-w-0 flex flex-col justify-center">
+              <h2 className={`text-[17.5px] sm:text-[18.5px] font-extrabold tracking-tight truncate leading-tight flex items-center gap-1.5 ${
+                isLightMode ? 'text-slate-900' : 'text-white'
               }`}>
-                {isHindi ? 'स्मार्ट आय-व्यय ट्रैकर • Rozfiber' : 'Smart Expense Tracker • Rozfiber'}
-              </p>
-              <div className="mt-1 flex items-center gap-1.5">
-                {isDriveConnected ? (
-                  <span className={`inline-flex items-center gap-1 text-[9.5px] font-bold px-1.5 py-0.5 rounded-md ${
-                    isLightMode
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-300'
-                      : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                  }`}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    {isHindi ? 'क्लाउड सिंक' : 'Cloud Connected'}
-                  </span>
-                ) : (
-                  <span className={`inline-flex items-center gap-1 text-[9.5px] font-bold px-1.5 py-0.5 rounded-md ${
-                    isLightMode
-                      ? 'bg-slate-100 text-slate-600 border border-slate-300'
-                      : 'bg-slate-800 text-slate-400 border border-slate-700'
-                  }`}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                    {isHindi ? '100% ऑफ़लाइन' : '100% Offline'}
-                  </span>
-                )}
-                <span className={`text-[9.5px] font-mono font-medium ${
+                <span>Daily Khata</span>
+                <span className="text-blue-600 dark:text-sky-400 font-black">Pro</span>
+              </h2>
+              <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                <span className={`text-[11.5px] font-bold tracking-wide truncate ${
+                  isLightMode ? 'text-blue-700' : 'text-sky-400'
+                }`}>
+                  By Rozfiber
+                </span>
+                <span className={`text-[11px] truncate hidden sm:inline ${
                   isLightMode ? 'text-slate-400' : 'text-slate-500'
                 }`}>
-                  v{APP_VERSION}
+                  • rozfiber.com
                 </span>
               </div>
             </div>
@@ -655,14 +627,14 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className={`p-1.5 rounded-xl transition-colors cursor-pointer shrink-0 ${
+            className={`p-2 rounded-xl transition-all cursor-pointer shrink-0 border ${
               isLightMode
-                ? 'text-slate-400 hover:text-slate-800 hover:bg-slate-100'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200 active:scale-95'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/80 border-slate-700/60 active:scale-95'
             }`}
             title="Close Menu"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 
@@ -972,147 +944,121 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           )}
         </div>
 
-        {/* Quick Utility Strip: Day/Night, Language, Privacy Mask */}
-        <div className={`px-4 sm:px-5 py-2.5 border-t flex items-center justify-between gap-1.5 shrink-0 ${
+        {/* Drawer Footer (Exact Match to Screenshot) */}
+        <div className={`px-4 sm:px-5 pt-3 pb-3.5 border-t shrink-0 space-y-3 ${
           isLightMode
-            ? 'bg-slate-100/90 border-slate-200'
-            : 'bg-slate-900/60 border-slate-800/70'
+            ? 'border-slate-200 bg-white'
+            : 'border-slate-800/80 bg-[#070E1A]'
         }`}>
-          {/* Day/Night Theme Toggle */}
-          {onThemeChange && (
-            <button
-              type="button"
-              onClick={() => {
-                triggerHapticSound('click');
-                onThemeChange(isLightMode ? 'blue' : 'white');
-              }}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
-                isLightMode
-                  ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-700 hover:text-slate-900 shadow-2xs'
-                  : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white'
-              }`}
-              title={isLightMode ? 'Night Mode' : 'Day Mode'}
-            >
-              {isLightMode ? <Moon className="w-3.5 h-3.5 text-slate-700" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
-              <span>{isLightMode ? (isHindi ? 'डार्क' : 'Dark') : (isHindi ? 'लाइट' : 'Light')}</span>
-            </button>
-          )}
-
-          {/* Language Switch */}
-          {onLanguageChange && (
-            <button
-              type="button"
-              onClick={() => {
-                triggerHapticSound('click');
-                onLanguageChange(isHindi ? 'en' : 'hi');
-              }}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
-                isLightMode
-                  ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-700 hover:text-slate-900 shadow-2xs'
-                  : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white'
-              }`}
-              title="Toggle Language"
-            >
-              <Languages className={`w-3.5 h-3.5 ${isLightMode ? 'text-sky-600' : 'text-sky-400'}`} />
-              <span>{isHindi ? 'English' : 'हिन्दी'}</span>
-            </button>
-          )}
-
-          {/* Google Translate Switch */}
-          {onOpenGoogleTranslate && (
+          {/* Row 1: Install App & Share App Buttons */}
+          <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
               onClick={() => {
                 triggerHapticSound('click');
                 onClose();
-                onOpenGoogleTranslate();
+                if (onOpenInstall) onOpenInstall();
               }}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
+              className={`w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-[12.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
                 isLightMode
-                  ? 'bg-sky-50 hover:bg-sky-100 border-sky-300 text-sky-800 shadow-2xs'
-                  : 'bg-sky-500/15 hover:bg-sky-500/25 border-sky-500/40 text-sky-300 hover:text-white'
+                  ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800'
+                  : 'border-slate-700/80 bg-slate-800/80 hover:bg-slate-700/70 text-slate-100'
               }`}
-              title="Google Translator (100+ Languages)"
-              id="drawer-utility-google-translate-btn"
             >
-              <Globe className={`w-3.5 h-3.5 ${isLightMode ? 'text-sky-700' : 'text-sky-400'}`} />
-              <span>{isHindi ? 'अनुवाद' : 'Translate'}</span>
+              <Download className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
+              <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
             </button>
-          )}
 
-          {/* Privacy Amount Mask */}
-          {onTogglePrivacyMask && (
             <button
               type="button"
               onClick={() => {
                 triggerHapticSound('click');
-                onTogglePrivacyMask();
+                onClose();
+                if (onOpenShare) onOpenShare();
               }}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-[11px] font-medium transition-all cursor-pointer active:scale-95 ${
-                privacyMask
-                  ? (isLightMode
-                      ? 'bg-amber-100 border-amber-300 text-amber-800'
-                      : 'bg-amber-500/20 border-amber-500/50 text-amber-300')
-                  : (isLightMode
-                      ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-700 hover:text-slate-900 shadow-2xs'
-                      : 'bg-slate-800/70 hover:bg-slate-700/70 border-slate-700/60 text-slate-300 hover:text-white')
+              className={`w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-[12.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
+                isLightMode
+                  ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800'
+                  : 'border-slate-700/80 bg-slate-800/80 hover:bg-slate-700/70 text-slate-100'
               }`}
-              title="Mask Amounts"
             >
-              {privacyMask ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-              <span>{privacyMask ? (isHindi ? 'छिपा' : 'Masked') : (isHindi ? 'प्राइवेसी' : 'Privacy')}</span>
+              <Share2 className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
+              <span>{isHindi ? 'ऐप शेयर करें' : 'Share App'}</span>
             </button>
-          )}
-        </div>
-
-        {/* Drawer Footer */}
-        <div className={`px-4 sm:px-5 py-3 border-t flex items-center justify-between text-xs shrink-0 ${
-          isLightMode
-            ? 'bg-slate-100 border-slate-200 text-slate-600'
-            : 'bg-[#060D17] border-slate-800/80 text-slate-400'
-        }`}>
-          <div className="flex flex-col min-w-0">
-            <span className={`text-[12px] font-semibold tracking-tight ${
-              isLightMode ? 'text-slate-800' : 'text-slate-300'
-            }`}>
-              Daily Khata Pro v{APP_VERSION}
-            </span>
-            <span className={`text-[10.5px] truncate ${
-              isLightMode ? 'text-slate-500' : 'text-slate-500'
-            }`}>
-              MD Zafeer Hasan (YAZDAAN) • Rozfiber
-            </span>
           </div>
 
-          <div className="shrink-0 flex items-center gap-2">
+          {/* Row 2: Daily Khata Pro, Version Badge & Update Button */}
+          <div className="flex items-center justify-between gap-2 pt-0.5">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className={`text-[14px] sm:text-[14.5px] font-bold tracking-tight ${
+                isLightMode ? 'text-slate-900' : 'text-white'
+              }`}>
+                Daily Khata <span className="text-blue-600 dark:text-sky-400">Pro</span>
+              </span>
+              <span className={`px-2 py-0.5 rounded-lg border text-[11px] font-mono font-medium ${
+                isLightMode
+                  ? 'border-slate-200 bg-slate-100 text-slate-700'
+                  : 'border-slate-700/80 bg-slate-800/60 text-slate-300'
+              }`}>
+                v{APP_VERSION}
+              </span>
+            </div>
+
             {handleDirectUpdateApp && (
               <button
                 type="button"
+                disabled={isUpdatingApp}
                 onClick={() => {
                   triggerHapticSound('save');
                   onClose();
                   handleDirectUpdateApp();
                 }}
-                disabled={isUpdatingApp}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-bold active:scale-95 transition-all cursor-pointer shadow-xs disabled:opacity-50 ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-2xs active:scale-95 disabled:opacity-50 ${
                   isLightMode
-                    ? 'bg-emerald-100 hover:bg-emerald-200 border-emerald-300 text-emerald-800'
-                    : 'bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/35 text-emerald-400'
+                    ? 'border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700'
+                    : 'border-blue-500/40 bg-blue-500/15 hover:bg-blue-500/25 text-blue-400'
                 }`}
                 title={isHindi ? '1-क्लिक ऐप अपडेट' : '1-Click Direct Update'}
                 id="drawer-footer-direct-update-btn"
               >
-                <RefreshCw className={`w-3 h-3 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${isUpdatingApp ? 'animate-spin' : ''}`} />
                 <span>{isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}</span>
               </button>
             )}
-            <span className={`inline-flex items-center px-2.5 py-1 rounded-lg border text-[10.5px] font-mono shadow-xs ${
-              isLightMode
-                ? 'bg-white border-slate-300 text-slate-700'
-                : 'bg-slate-800/90 border-slate-700/60 text-slate-300'
+          </div>
+
+          {/* Subtle Horizontal Divider */}
+          <div className={`h-px ${isLightMode ? 'bg-slate-200' : 'bg-slate-800/80'}`} />
+
+          {/* Row 3: 100% Offline • Zero Telemetry & 100% Private */}
+          <div className="flex items-center justify-between text-[11.5px] pt-0.5">
+            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <span>{isHindi ? '100% ऑफ़लाइन • ज़ीरो टेलीमेट्री' : '100% Offline • Zero Telemetry'}</span>
+            </div>
+            <div className={`font-mono text-[11px] ${
+              isLightMode ? 'text-slate-600 font-medium' : 'text-slate-400'
             }`}>
-              PWA • Local-First
-            </span>
+              100% Private
+            </div>
+          </div>
+
+          {/* Brand Attribution - By Rozfiber */}
+          <div className={`text-[11px] text-center font-semibold tracking-tight pt-0.5 ${
+            isLightMode ? 'text-slate-600' : 'text-slate-400'
+          }`}>
+            <span>Daily Khata Pro</span>
+            <span className="mx-1.5 text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-blue-600 dark:text-sky-400 font-bold">By Rozfiber</span>
+            <span className="mx-1.5 text-slate-300 dark:text-slate-600">•</span>
+            <a
+              href="https://www.rozfiber.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline text-slate-500 dark:text-slate-400 font-normal font-mono"
+            >
+              rozfiber.com
+            </a>
           </div>
         </div>
       </div>
