@@ -1,6 +1,7 @@
 import React from 'react';
 import { Entry, FundConfig } from '../types';
 import { calculateFundTotals, formatCurrency } from '../utils/khataCalculations';
+import { getDaysAgoDateString } from '../utils/dateUtils';
 import { Flame, ShieldCheck, AlertTriangle, Sparkles, TrendingUp, HelpCircle } from 'lucide-react';
 
 interface CashRunwayWidgetProps {
@@ -25,10 +26,7 @@ export const CashRunwayWidget: React.FC<CashRunwayWidgetProps> = ({
   );
 
   // Compute 30-day expense average
-  const now = new Date();
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(now.getDate() - 30);
-  const thirtyDaysStr = thirtyDaysAgo.toISOString().split('T')[0];
+  const thirtyDaysStr = getDaysAgoDateString(30);
 
   const recentExpenses = entries
     .filter((e) => e.type === 'expense' && e.date >= thirtyDaysStr)

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { AttendanceLog, PaymentMode, FundType, AppLanguage } from '../../types';
 import { formatCurrency, triggerHapticSound } from '../../utils/khataCalculations';
+import { getLocalDateString } from '../../utils/dateUtils';
 import { getCurrencyConfig, getCurrentLanguage } from '../../utils/currencyConfig';
 import { 
   X, 
@@ -48,7 +49,7 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
   isHindi = false,
   privacyMask = false
 }) => {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = getLocalDateString();
   const [selectedEmployer, setSelectedEmployer] = useState<string>(initialEmployer);
 
   // Eligible pending logs for selected employer

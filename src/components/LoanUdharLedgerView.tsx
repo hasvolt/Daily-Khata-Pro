@@ -10,6 +10,7 @@ import {
   FundConfig
 } from '../types';
 import { formatCurrency, triggerHapticSound, triggerCelebration } from '../utils/khataCalculations';
+import { getLocalDateString } from '../utils/dateUtils';
 import { getCurrencyConfig } from '../utils/currencyConfig';
 import { AdsterraBanner } from './AdUnits';
 import {
@@ -1266,7 +1267,7 @@ const AddEditLoanModal: React.FC<AddEditLoanModalProps> = ({
     editingItem ? String(editingItem.principalAmount) : ''
   );
   const [startDate, setStartDate] = useState(
-    editingItem?.startDate || new Date().toISOString().split('T')[0]
+    editingItem?.startDate || getLocalDateString()
   );
   const [dueDate, setDueDate] = useState(editingItem?.dueDate || '');
   const [category, setCategory] = useState(editingItem?.category || 'Personal');
@@ -1708,7 +1709,7 @@ const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
     : debtItem.remainingAmount;
 
   const [amountStr, setAmountStr] = useState<string>(String(defaultAmt > 0 ? defaultAmt : ''));
-  const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState<string>(getLocalDateString());
   const [mode, setMode] = useState<PaymentMode>('upi');
   const [note, setNote] = useState<string>(
     debtItem.isEmi ? `EMI payment for ${debtItem.title}` : `Repayment from ${debtItem.title}`

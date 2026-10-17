@@ -2,6 +2,7 @@ import { Entry, FundType } from '../types';
 import { FUND_ORDER } from '../data/defaults';
 import confetti from 'canvas-confetti';
 import { formatCurrencyByLang } from './currencyConfig';
+import { getLocalDateString } from './dateUtils';
 
 export const formatCurrency = (n: number, mask: boolean = false, compact: boolean = false): string => {
   return formatCurrencyByLang(n, undefined, mask, compact);
@@ -12,7 +13,7 @@ export const formatPercent = (n: number): string => {
 };
 
 export const getTodayISO = (): string => {
-  return new Date().toISOString().slice(0, 10);
+  return getLocalDateString();
 };
 
 export const splitIncome = (

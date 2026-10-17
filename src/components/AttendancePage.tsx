@@ -38,6 +38,8 @@ import { BulkPaymentSettlementModal } from './attendance/BulkPaymentSettlementMo
 import { EmployerAccountsView } from './attendance/EmployerAccountsView';
 import { AttendancePrintModal } from './attendance/AttendancePrintModal';
 import { AdsterraResponsiveLeaderboard } from './AdUnits';
+import { escapeHtml } from '../utils/security';
+import { getLocalDateString } from '../utils/dateUtils';
 
 export interface AttendancePageProps {
   attendanceLogs: AttendanceLog[];
@@ -76,7 +78,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
   const [activeTab, setActiveTab] = useState<'register' | 'employers' | 'summary'>('register');
 
   // Month navigation: format 'YYYY-MM'
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = getLocalDateString();
   const currentMonthStr = todayStr.slice(0, 7);
   const [selectedMonth, setSelectedMonth] = useState<string>(currentMonthStr);
 
@@ -487,7 +489,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
         <div class="header">
           <div class="brand">DAILY KHATA PRO</div>
           <div class="subbrand">Official Work & Attendance Register</div>
-          <div class="title">${formatMonthTitle(selectedMonth)}</div>
+          <div class="title">${escapeHtml(formatMonthTitle(selectedMonth))}</div>
         </div>
 
         <div class="stats-box">
@@ -515,12 +517,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           <tbody>
             ${monthLogs.map((l) => `
               <tr>
-                <td><strong>${l.date}</strong></td>
-                <td>${l.status.toUpperCase()}</td>
-                <td>${l.startTime && l.endTime ? `${l.startTime}-${l.endTime}` : '-'}</td>
+                <td><strong>${escapeHtml(l.date)}</strong></td>
+                <td>${escapeHtml(l.status.toUpperCase())}</td>
+                <td>${l.startTime && l.endTime ? `${escapeHtml(l.startTime)}-${escapeHtml(l.endTime)}` : '-'}</td>
                 <td>${l.overtimeHours ? `${l.overtimeHours}h` : '-'}</td>
-                <td>${l.employerName || '-'}</td>
-                <td>${l.workCategory || l.workType || '-'}</td>
+                <td>${escapeHtml(l.employerName || '-')}</td>
+                <td>${escapeHtml(l.workCategory || l.workType || '-')}</td>
                 <td>${l.salaryOrRate ? formatCurrency(l.salaryOrRate) : '-'}</td>
                 <td>${l.paymentReceived ? formatCurrency(l.paymentReceived) : '-'}</td>
                 <td>${l.pendingPayment ? formatCurrency(l.pendingPayment) : 'PAID'}</td>

@@ -6,6 +6,7 @@
 
 import { AppReminder } from '../types';
 import { triggerHapticSound } from './khataCalculations';
+import { getLocalDateString } from './dateUtils';
 
 export interface DueCheckResult {
   updatedReminders: AppReminder[];
@@ -195,7 +196,7 @@ export const isReminderDue = (
   }
 
   // Fallback to date strings if timestamp failed
-  const curDate = currentDateStr || new Date().toISOString().slice(0, 10);
+  const curDate = currentDateStr || getLocalDateString();
   if (reminder.dueDate < curDate) return true;
   if (reminder.dueDate === curDate) {
     if (!reminder.dueTime) return true;

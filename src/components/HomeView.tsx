@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Entry, FundType, FundConfig, AppLanguage, CategoryBudget, DebtItem, Goal } from '../types';
 import { DEFAULT_FUNDS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats } from '../utils/khataCalculations';
+import { getLocalDateString, getDaysAgoDateString, getLocalMonthString } from '../utils/dateUtils';
 import { getCurrencyConfig } from '../utils/currencyConfig';
 import { getFundIcon, getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
@@ -187,12 +188,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
     const sorted = entries.slice().sort((a, b) => b.createdAt - a.createdAt);
     if (recentFilter === 'all') return sorted.slice(0, 4);
 
-    const now = new Date();
-    const todayStr = now.toISOString().slice(0, 10);
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const sevenDaysStr = sevenDaysAgo.toISOString().slice(0, 10);
-    const curMonthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const todayStr = getLocalDateString();
+    const sevenDaysStr = getDaysAgoDateString(7);
+    const curMonthPrefix = getLocalMonthString();
 
     if (recentFilter === 'today') {
       return sorted.filter((e) => e.date === todayStr).slice(0, 4);

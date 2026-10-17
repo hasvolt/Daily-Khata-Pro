@@ -34,23 +34,7 @@
         } catch (e) {}
       })();
     </script>
-
-    <!-- Google Translate Script Setup -->
-    <script type="text/javascript">
-      function googleTranslateElementInit() {
-        try {
-          if (window.google && window.google.translate) {
-            new window.google.translate.TranslateElement({
-              pageLanguage: 'en',
-              autoDisplay: false
-            }, 'google_translate_element');
-          }
-        } catch (e) {
-          console.warn('Google Translate Init Warning:', e);
-        }
-      }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+    <!-- Google Translate is initialized on-demand via src/utils/googleTranslate.ts only when chosen by user -->
 
     <style>
       /* Permanent Google Translate Banner & Tooltip Suppressor */

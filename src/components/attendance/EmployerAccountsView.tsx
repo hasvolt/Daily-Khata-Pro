@@ -16,6 +16,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { EmployerSummary, getWorkCategoryMeta, WORK_CATEGORIES_CATALOG } from './attendanceTypes';
+import { escapeHtml } from '../../utils/security';
 
 interface EmployerAccountsViewProps {
   employerSummaries: EmployerSummary[];
@@ -93,7 +94,7 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
         <div class="header">
           <div class="brand">DAILY KHATA PRO</div>
           <div class="subbrand">Attendance, Duty & Wage Tracking System</div>
-          <div class="title">Work Statement / कार्य विवरण: ${employerName}</div>
+          <div class="title">Work Statement / कार्य विवरण: ${escapeHtml(employerName)}</div>
         </div>
 
         <div class="summary">
@@ -134,10 +135,10 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
               const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
               return `
                 <tr>
-                  <td><strong>${l.date}</strong></td>
-                  <td>${l.status.toUpperCase()}</td>
-                  <td>${l.startTime && l.endTime ? `${l.startTime}-${l.endTime}` : '-'}</td>
-                  <td>${l.jobDescription || l.workType || '-'}</td>
+                  <td><strong>${escapeHtml(l.date)}</strong></td>
+                  <td>${escapeHtml(l.status.toUpperCase())}</td>
+                  <td>${l.startTime && l.endTime ? `${escapeHtml(l.startTime)}-${escapeHtml(l.endTime)}` : '-'}</td>
+                  <td>${escapeHtml(l.jobDescription || l.workType || '-')}</td>
                   <td>${rate ? formatCurrency(rate) : '-'}</td>
                   <td>${rec ? formatCurrency(rec) : '-'}</td>
                   <td><strong style="color: ${pend > 0 ? '#0284C7' : '#15803D'}">${pend ? formatCurrency(pend) : 'PAID'}</strong></td>

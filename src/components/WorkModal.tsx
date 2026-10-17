@@ -4,6 +4,7 @@ import { WorkLog, WorkStatus, AppLanguage } from '../types';
 import { DEFAULT_WORK_CATEGORIES } from '../data/defaults';
 import { getWorkCategoryIcon } from '../utils/iconMap';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import { getLocalDateString } from '../utils/dateUtils';
 import {
   X,
   Briefcase,
@@ -44,7 +45,7 @@ export const WorkModal: React.FC<WorkModalProps> = ({
   const [clientOrCompany, setClientOrCompany] = useState('');
   const [category, setCategory] = useState(workCategories[0] || 'Client Project');
   const [status, setStatus] = useState<WorkStatus>('completed');
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(getLocalDateString());
   const [hoursSpent, setHoursSpent] = useState<string>('');
   const [earningsOrCost, setEarningsOrCost] = useState<string>('');
   const [location, setLocation] = useState('');
@@ -63,7 +64,7 @@ export const WorkModal: React.FC<WorkModalProps> = ({
       setClientOrCompany(initialLog.clientOrCompany || '');
       setCategory(initialLog.category || workCategories[0]);
       setStatus(initialLog.status || 'completed');
-      setDate(initialLog.date || new Date().toISOString().slice(0, 10));
+      setDate(initialLog.date || getLocalDateString());
       setHoursSpent(initialLog.hoursSpent ? String(initialLog.hoursSpent) : '');
       setEarningsOrCost(initialLog.earningsOrCost ? String(initialLog.earningsOrCost) : '');
       setLocation(initialLog.location || '');
@@ -74,7 +75,7 @@ export const WorkModal: React.FC<WorkModalProps> = ({
       setClientOrCompany('');
       setCategory(workCategories[0] || 'Client Project');
       setStatus('completed');
-      setDate(new Date().toISOString().slice(0, 10));
+      setDate(getLocalDateString());
       setHoursSpent('');
       setEarningsOrCost('');
       setLocation('');

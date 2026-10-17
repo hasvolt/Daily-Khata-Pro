@@ -24,6 +24,7 @@ import { getSanityPostBySlug, urlFor, SanityBlogPost } from '../utils/sanityClie
 import { COMMERCIAL_ARTICLES, CommercialArticle } from '../data/newsPortalData';
 import { GoogleTranslateModal } from './GoogleTranslateModal';
 import { AdsterraBanner300x250, AdsterraNativeBanner, AdsterraResponsiveLeaderboard } from './AdUnits';
+import { sanitizeHtml } from '../utils/security';
 
 interface SanityArticlePageProps {
   slugOrId: string;
@@ -489,7 +490,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
           <div
             style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
             className="my-4 text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: value.html }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(value.html) }}
           />
         );
       },
@@ -960,7 +961,7 @@ export const SanityArticlePage: React.FC<SanityArticlePageProps> = ({
             <div
               style={{ fontSize: `${fontSizePx}px`, lineHeight: lineHeightVal }}
               className="article-body-html space-y-4 text-[var(--theme-text,#F8FAFC)]/90 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: post.bodyText }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.bodyText) }}
             />
           ) : post?.bodyText ? (
             <div className="space-y-4">

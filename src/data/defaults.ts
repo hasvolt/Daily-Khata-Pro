@@ -1,4 +1,5 @@
 import { FundConfig, FundType, Entry, SecurityLockConfig } from '../types';
+import { getLocalDateString } from '../utils/dateUtils';
 
 export const DEFAULT_FUNDS: FundConfig[] = [
   {
@@ -233,7 +234,7 @@ export const INITIAL_SAMPLE_ENTRIES: Entry[] = [
     id: 'demo_1',
     type: 'income',
     amount: 25000,
-    date: new Date().toISOString().slice(0, 10),
+    date: getLocalDateString(),
     source: 'Salary & Wages',
     note: 'Professional monthly revenue credit',
     paymentMode: 'bank',
@@ -252,7 +253,7 @@ export const INITIAL_SAMPLE_ENTRIES: Entry[] = [
     id: 'demo_2',
     type: 'expense',
     amount: 1450,
-    date: new Date().toISOString().slice(0, 10),
+    date: getLocalDateString(),
     category: 'Food & Groceries',
     fund: 'family',
     paymentMode: 'upi',
@@ -263,7 +264,7 @@ export const INITIAL_SAMPLE_ENTRIES: Entry[] = [
     id: 'demo_3',
     type: 'expense',
     amount: 600,
-    date: new Date().toISOString().slice(0, 10),
+    date: getLocalDateString(),
     category: 'Transport & Fuel',
     fund: 'personal',
     paymentMode: 'upi',

@@ -6,6 +6,7 @@ import {
   InvoiceTaxType,
   InvoicePaymentTerms
 } from '../types';
+import { getLocalDateString } from './dateUtils';
 
 export const INVOICE_STORAGE_KEY = 'dailykhata_invoices_v1';
 export const INVOICE_PROFILE_STORAGE_KEY = 'dailykhata_invoice_profile_v1';
@@ -452,5 +453,5 @@ export function calculateDueDateFromTerms(dateStr: string, terms: InvoicePayment
 
   const daysToAdd = PAYMENT_TERMS_LABELS[terms]?.days || 0;
   d.setDate(d.getDate() + daysToAdd);
-  return d.toISOString().split('T')[0];
+  return getLocalDateString(d);
 }

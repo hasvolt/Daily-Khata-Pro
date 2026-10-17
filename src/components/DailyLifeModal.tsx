@@ -3,6 +3,7 @@ import { DailyLifeLog, MoodType, AppLanguage } from '../types';
 import { DEFAULT_LIFE_TAGS } from '../data/defaults';
 import { getMoodVisual } from '../utils/iconMap';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import { getLocalDateString } from '../utils/dateUtils';
 import { NativeTimePicker } from './NativeTimePicker';
 import {
   X,
@@ -41,7 +42,7 @@ export const DailyLifeModal: React.FC<DailyLifeModalProps> = ({
 }) => {
   const isHindi = language === 'hi';
 
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(getLocalDateString());
   const [title, setTitle] = useState('');
   const [highlights, setHighlights] = useState('');
   const [mood, setMood] = useState<MoodType>('productive');
@@ -58,7 +59,7 @@ export const DailyLifeModal: React.FC<DailyLifeModalProps> = ({
 
   useEffect(() => {
     if (initialLog) {
-      setDate(initialLog.date || new Date().toISOString().slice(0, 10));
+      setDate(initialLog.date || getLocalDateString());
       setTitle(initialLog.title || '');
       setHighlights(initialLog.highlights || '');
       setMood(initialLog.mood || 'productive');
@@ -71,7 +72,7 @@ export const DailyLifeModal: React.FC<DailyLifeModalProps> = ({
       setGratitude(initialLog.gratitude || '');
       setSelectedTags(initialLog.tags || []);
     } else {
-      setDate(new Date().toISOString().slice(0, 10));
+      setDate(getLocalDateString());
       setTitle('');
       setHighlights('');
       setMood('productive');

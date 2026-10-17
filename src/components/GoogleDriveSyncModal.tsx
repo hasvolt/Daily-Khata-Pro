@@ -38,6 +38,7 @@ import {
 } from '../services/googleDriveService';
 import { User } from 'firebase/auth';
 import { triggerHapticSound } from '../utils/khataCalculations';
+import { validateAndSanitizeKhataBackup } from '../utils/security';
 
 export interface GoogleDriveSyncModalProps {
   isOpen: boolean;
@@ -227,7 +228,11 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
     try {
       const restored = await downloadBackupFromDrive(fileToRestore.id);
       if (restored && (Array.isArray(restored.entries) || restored.data?.entries)) {
-        const payload = restored.entries ? restored : restored.data;
+        const rawPayload = restored.entries ? restored : restored.data;
+        const payload = validateAndSanitizeKhataBackup(rawPayload);
+        if (!payload) {
+          throw new Error('Corrupted or invalid backup file');
+        }
         onRestoreData(payload);
         triggerHapticSound('save');
         showToast(

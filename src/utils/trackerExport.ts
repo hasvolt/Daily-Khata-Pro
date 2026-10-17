@@ -1,5 +1,6 @@
 import { getCurrencyConfig, getCurrentLanguage } from "./currencyConfig";
 import { WorkLog, DailyLifeLog } from '../types';
+import { getLocalDateString } from './dateUtils';
 
 export const downloadTrackerCSV = (workLogs: WorkLog[], dailyLifeLogs: DailyLifeLog[]) => {
   let csvContent = "data:text/csv;charset=utf-8,";
@@ -53,7 +54,7 @@ export const downloadTrackerCSV = (workLogs: WorkLog[], dailyLifeLogs: DailyLife
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `work-life-tracker-backup-${new Date().toISOString().slice(0, 10)}.csv`);
+  link.setAttribute("download", `work-life-tracker-backup-${getLocalDateString()}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

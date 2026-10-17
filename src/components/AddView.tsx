@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Entry, FundType, FundConfig, PaymentMode, AppLanguage, CategoryBudget } from '../types';
 import { DEFAULT_FUNDS, FUND_ORDER, FUND_LABELS, FUND_CONFIGS, DEFAULT_INCOME_SOURCES, DEFAULT_CATEGORIES } from '../data/defaults';
 import { formatCurrency, calculateFundSplits, triggerHapticSound } from '../utils/khataCalculations';
+import { getLocalDateString, getLocalMonthString } from '../utils/dateUtils';
 import { playIncomeSound, playExpenseSound, playClickSound } from '../utils/audioService';
 import { getCategoryIcon, getSourceIcon } from '../utils/iconMap';
 import { TRANSLATIONS } from '../utils/translations';
@@ -80,7 +81,7 @@ export const AddView: React.FC<AddViewProps> = ({
   const [paymentMode, setPaymentMode] = useState<PaymentMode>(editingEntry?.paymentMode || 'upi');
   const [clientName, setClientName] = useState<string>(editingEntry?.clientName || '');
   const [note, setNote] = useState<string>(editingEntry?.note || '');
-  const [date, setDate] = useState<string>(editingEntry?.date || new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState<string>(editingEntry?.date || getLocalDateString());
   const [error, setError] = useState<string>('');
   
   // Smart Auto-Categorization state
@@ -227,7 +228,7 @@ export const AddView: React.FC<AddViewProps> = ({
       const entry: Omit<Entry, 'id' | 'createdAt'> = {
         type: expressPreview.type,
         amount: expressPreview.amount,
-        date: new Date().toISOString().split('T')[0],
+        date: getLocalDateString(),
         paymentMode: expressPreview.mode,
         note: expressPreview.note,
         ...(expressPreview.type === 'income'
@@ -354,7 +355,7 @@ export const AddView: React.FC<AddViewProps> = ({
     if (type === 'expense') {
       const targetBudget = (budgets || []).find((b) => b.category === category);
       if (targetBudget && targetBudget.monthlyLimit > 0) {
-        const entryMonth = (date || new Date().toISOString()).slice(0, 7);
+        const entryMonth = (date || getLocalDateString()).slice(0, 7);
         const currentCatSpent = (entries || [])
           .filter(
             (e) =>

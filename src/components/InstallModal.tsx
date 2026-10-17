@@ -23,6 +23,7 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 import { AppLogo } from './AppLogo';
+import { getLocalDateString } from '../utils/dateUtils';
 import { AppLanguage } from '../types';
 import { APP_VERSION_TAG } from '../utils/version';
 import { getCurrencyConfig } from '../utils/currencyConfig';
@@ -178,7 +179,12 @@ export const InstallModal: React.FC<InstallModalProps> = ({
         const key = localStorage.key(i);
         if (key && (key.startsWith('daily_khata') || key.startsWith('khata_') || key.includes('khata'))) {
           try {
-            allData[key] = JSON.parse(localStorage.getItem(key) || '{}');
+            const parsedVal = JSON.parse(localStorage.getItem(key) || '{}');
+            if (key === 'khata_security_config' && typeof parsedVal === 'object') {
+              allData[key] = { ...parsedVal, pin: '', securityAnswer: '' };
+            } else {
+              allData[key] = parsedVal;
+            }
           } catch {
             allData[key] = localStorage.getItem(key);
           }
@@ -189,7 +195,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Daily-Khata-Pro-Backup-${new Date().toISOString().slice(0, 10)}.json`;
+      link.download = `Daily-Khata-Pro-Backup-${getLocalDateString()}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -342,6 +348,10 @@ export const InstallModal: React.FC<InstallModalProps> = ({
   </div>
 
   <script>
+    function escapeHtml(s) {
+      if (!s) return '';
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
     let transactions = JSON.parse(localStorage.getItem('offline_khata_txs') || '[]');
     const CURR = '\${currSym}';
     function render() {
@@ -355,7 +365,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
           if (t.type === 'income') inc += t.amount; else exp += t.amount;
           const row = document.createElement('div');
           row.className = 'tx-item';
-          row.innerHTML = '<div><div class="tx-desc">' + (t.title || 'Untitled') + '</div><div class="tx-meta">' + t.category + ' • ' + t.date + '</div></div><div class="tx-amount ' + (t.type === 'income' ? 'stat-income' : 'stat-expense') + '">' + (t.type === 'income' ? '+' : '-') + CURR + t.amount.toLocaleString() + '</div>';
+          row.innerHTML = '<div><div class="tx-desc">' + escapeHtml(t.title || 'Untitled') + '</div><div class="tx-meta">' + escapeHtml(t.category) + ' • ' + escapeHtml(t.date) + '</div></div><div class="tx-amount ' + (t.type === 'income' ? 'stat-income' : 'stat-expense') + '">' + (t.type === 'income' ? '+' : '-') + CURR + Number(t.amount || 0).toLocaleString() + '</div>';
           list.appendChild(row);
         });
       }
@@ -396,7 +406,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Daily-Khata-Pro-Offline-App-${new Date().toISOString().slice(0, 10)}.html`;
+      link.download = `Daily-Khata-Pro-Offline-App-${getLocalDateString()}.html`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

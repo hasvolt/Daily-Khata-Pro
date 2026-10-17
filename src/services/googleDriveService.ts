@@ -382,7 +382,19 @@ export const uploadBackupToDrive = async (
   const now = new Date();
   const description = `${isAutoSync ? 'Auto-Sync' : '1-Click Backup'} — ${totalEntries} transactions | Updated: ${now.toLocaleString()}`;
 
-  const jsonContent = JSON.stringify(backupData, null, 2);
+  const sanitizedBackup = { ...backupData };
+  if (sanitizedBackup.settings?.securityLock) {
+    sanitizedBackup.settings = {
+      ...sanitizedBackup.settings,
+      securityLock: {
+        ...sanitizedBackup.settings.securityLock,
+        pin: '', // Never upload raw PIN to cloud storage
+        securityAnswer: '' // Never upload raw answer to cloud storage
+      }
+    };
+  }
+
+  const jsonContent = JSON.stringify(sanitizedBackup, null, 2);
 
   if (targetFile?.id) {
     // Update existing file content

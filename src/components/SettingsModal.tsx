@@ -103,6 +103,8 @@ import { getAppTranslation } from '../utils/appTranslations';
 import { APP_VERSION_FULL, APP_VERSION_FOOTER } from '../utils/version';
 import { applyGoogleTranslateLanguage, resetGoogleTranslate } from '../utils/googleTranslate';
 import { getPreferredCurrency, setPreferredCurrency, getCurrencyConfig } from '../utils/currencyConfig';
+import { validateAndSanitizeKhataBackup } from '../utils/security';
+import { getLocalDateString } from '../utils/dateUtils';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -364,10 +366,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const handleExportJSON = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2));
+    const exportData = {
+      ...data,
+      settings: {
+        ...data.settings,
+        securityLock: data.settings?.securityLock
+          ? {
+              ...data.settings.securityLock,
+              pin: '', // Never expose raw PIN in downloadable backup file
+              securityAnswer: '' // Never expose raw security answer in downloadable backup file
+            }
+          : undefined
+      }
+    };
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportData, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `daily-khata-pro-backup-${new Date().toISOString().slice(0, 10)}.json`);
+    downloadAnchor.setAttribute('download', `daily-khata-pro-backup-${getLocalDateString()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -384,23 +399,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       try {
         const content = event.target?.result as string;
         const parsed = JSON.parse(content);
-        if (parsed.entries && Array.isArray(parsed.entries)) {
-          onRestoreData({
-            entries: parsed.entries,
-            categories: parsed.categories || DEFAULT_CATEGORIES,
-            incomeSources: parsed.incomeSources || DEFAULT_INCOME_SOURCES,
-            workCategories: parsed.workCategories || DEFAULT_WORK_CATEGORIES,
-            lifeTags: parsed.lifeTags || DEFAULT_LIFE_TAGS,
-            goals: parsed.goals || [],
-            workLogs: parsed.workLogs || [],
-            dailyLifeLogs: parsed.dailyLifeLogs || [],
-            settings: parsed.settings || {
-              percentages: DEFAULT_PERCENTAGES,
-              theme: theme,
-              language: language,
-              privacyMask: privacyMask
-            }
-          });
+        const validated = validateAndSanitizeKhataBackup(parsed);
+        if (validated && validated.entries) {
+          onRestoreData(validated);
           showFeedback('success', tStr('खाता डेटा सफलतापूर्वक रिस्टोर हो गया!', 'Record data restore ho gaya!', 'Record data restored successfully!'));
           setTimeout(() => onClose(), 1200);
         } else {

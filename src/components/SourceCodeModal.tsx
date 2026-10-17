@@ -1,4 +1,5 @@
 import { getCurrencyConfig, getCurrentLanguage } from '../utils/currencyConfig';
+import { getLocalDateString } from '../utils/dateUtils';
 import React, { useState } from 'react';
 import {
   X,
@@ -305,7 +306,7 @@ export interface KhataData {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `DailyKhata-Pro-SourceCode-${new Date().toISOString().slice(0, 10)}.ts`);
+    link.setAttribute('download', `DailyKhata-Pro-SourceCode-${getLocalDateString()}.ts`);
     document.body.appendChild(link);
     link.click();
     link.remove();

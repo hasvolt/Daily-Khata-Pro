@@ -15,6 +15,7 @@ import {
   DEFAULT_SECURITY_LOCK
 } from './data/defaults';
 import { calculateFundTotals, formatCurrency, triggerCelebration, triggerHapticSound } from './utils/khataCalculations';
+import { getLocalDateString } from './utils/dateUtils';
 import { playDeleteSound, playIncomeSound, playExpenseSound } from './utils/audioService';
 import { setCurrentLanguage } from './utils/currencyConfig';
 import { Header } from './components/Header';
@@ -1009,7 +1010,7 @@ function AppContent() {
       amount,
       category: category || 'Food & Groceries',
       fund: funds[0]?.id || 'personal',
-      date: new Date().toISOString().split('T')[0],
+      date: getLocalDateString(),
       paymentMode: 'upi',
       note
     };
@@ -1356,7 +1357,7 @@ function AppContent() {
         createdAt: Date.now(),
         type: 'expense',
         amount: amount,
-        date: new Date().toISOString().slice(0, 10),
+        date: getLocalDateString(),
         fund: deductFromFund,
         category: categories[0] || 'General',
         note: note || `Goal Saving: ${targetGoalTitle}`,
@@ -1492,7 +1493,7 @@ function AppContent() {
       createdAt: Date.now(),
       type: 'income',
       amount: work.earningsOrCost,
-      date: work.date || new Date().toISOString().slice(0, 10),
+      date: work.date || getLocalDateString(),
       source: work.category || incomeSources[0] || 'Client Project',
       clientName: work.clientOrCompany || '',
       note: `Work Income: ${work.title}${work.clientOrCompany ? ` (${work.clientOrCompany})` : ''}`,
@@ -1724,7 +1725,7 @@ function AppContent() {
     if (!data.amount || data.amount <= 0) return;
     const newEntry: Entry = {
       id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-      date: data.date || new Date().toISOString().slice(0, 10),
+      date: data.date || getLocalDateString(),
       amount: data.amount,
       type: 'income',
       fund: data.fund || 'personal',
@@ -1744,7 +1745,7 @@ function AppContent() {
     if (!log.paymentReceived || log.paymentReceived <= 0) return;
     const newEntry: Entry = {
       id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-      date: log.date || new Date().toISOString().slice(0, 10),
+      date: log.date || getLocalDateString(),
       amount: log.paymentReceived,
       type: 'income',
       fund: 'personal',
@@ -1966,7 +1967,7 @@ function AppContent() {
         paidEmis: 0,
         emiFrequency: debtData.emiFrequency || 'monthly',
         interestRate: debtData.interestRate,
-        startDate: debtData.startDate || new Date().toISOString().split('T')[0],
+        startDate: debtData.startDate || getLocalDateString(),
         dueDate: debtData.dueDate,
         status: 'active',
         note: debtData.note,
@@ -2134,7 +2135,7 @@ function AppContent() {
   };
 
   // Daily Checks for Smart Reminders
-  const todayDateStr = new Date().toISOString().slice(0, 10);
+  const todayDateStr = getLocalDateString();
   const hasTransactionsToday = entries.some((e) => e.date === todayDateStr);
   const hasAttendanceToday = attendanceLogs.some((l) => l.date === todayDateStr);
   const pendingRemindersCount = reminders.filter((r) => !r.isCompleted).length + (!hasTransactionsToday ? 1 : 0) + (!hasAttendanceToday ? 1 : 0);
@@ -2224,7 +2225,7 @@ function AppContent() {
     const sampleWork: WorkLog[] = [
       {
         id: 'sample_work_1',
-        date: new Date().toISOString().slice(0, 10),
+        date: getLocalDateString(),
         title: 'Full-Stack Architecture & Cloud Deployment',
         clientOrCompany: 'Nexus Enterprise',
         category: 'Development',
@@ -2238,7 +2239,7 @@ function AppContent() {
       },
       {
         id: 'sample_work_2',
-        date: new Date().toISOString().slice(0, 10),
+        date: getLocalDateString(),
         title: 'Q3 Financial Audit & Strategy Review',
         clientOrCompany: 'Apex Retail',
         category: 'Consulting',
@@ -2255,7 +2256,7 @@ function AppContent() {
     const sampleLife: DailyLifeLog[] = [
       {
         id: 'sample_life_1',
-        date: new Date().toISOString().slice(0, 10),
+        date: getLocalDateString(),
         title: 'High Focus & Healthy Discipline',
         highlights: 'Woke at 6:00 AM. Completed major deliverables on schedule. Evening exercise and family conversation.',
         morningRoutine: 'Morning run 5km, meditation, balanced breakfast.',

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { AppReminder, ReminderType, AppLanguage } from '../types';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
+import { getLocalDateString } from '../utils/dateUtils';
 import {
   X,
   Bell,
@@ -73,7 +74,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   // Form states
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = getLocalDateString();
   const [formTitle, setFormTitle] = useState('');
   const [formDescription, setFormDescription] = useState('');
   const [formType, setFormType] = useState<ReminderType>('payment');

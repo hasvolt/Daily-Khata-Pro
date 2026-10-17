@@ -1,7 +1,5 @@
-/**
- * Daily Khata Pro - Calculator Print & PDF Generator
- * Generates official, clean calculation slips with company watermark and website branding
- */
+import { getLocalDateString } from './dateUtils';
+import { escapeHtml } from './security';
 
 export interface CalcPrintParams {
   title: string;
@@ -344,7 +342,7 @@ export function downloadCalculatorSlipHTML(params: CalcPrintParams): void {
     const a = document.createElement('a');
     a.href = url;
     const sanitizedTitle = params.title.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    a.download = `daily-khata-calc-${sanitizedTitle}-${new Date().toISOString().slice(0, 10)}.html`;
+    a.download = `daily-khata-calc-${sanitizedTitle}-${getLocalDateString()}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

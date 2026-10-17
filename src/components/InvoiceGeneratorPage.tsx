@@ -27,6 +27,7 @@ import {
   Check
 } from 'lucide-react';
 import { triggerHapticSound, triggerCelebration } from '../utils/khataCalculations';
+import { getLocalDateString } from '../utils/dateUtils';
 import {
   loadInvoicesFromStorage,
   saveInvoicesToStorage,
@@ -67,7 +68,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
 
   // Active working invoice
   const [currentInvoice, setCurrentInvoice] = useState<Invoice>(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     const initialDue = calculateDueDateFromTerms(today, 'net15');
     const existing = loadInvoicesFromStorage();
     const nextNum = getNextInvoiceNumber(existing);
@@ -233,7 +234,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
 
   // Create new blank invoice
   const handleCreateNew = () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     const initialDue = calculateDueDateFromTerms(today, 'net15');
     const nextNum = getNextInvoiceNumber(invoices);
 
@@ -375,7 +376,7 @@ export const InvoiceGeneratorPage: React.FC<InvoiceGeneratorPageProps> = ({
       type: 'income',
       amount: inv.grandTotal,
       source: `Invoice ${inv.invoiceNumber} - ${inv.client.clientName || 'Client'}`,
-      date: inv.invoiceDate || new Date().toISOString().split('T')[0],
+      date: inv.invoiceDate || getLocalDateString(),
       paymentMode: 'upi',
       fund: defaultFundId,
       note: `Payment for Invoice #${inv.invoiceNumber}. Total items: ${inv.items.length}. Tax: ${inv.taxTotal.toFixed(2)}.`
