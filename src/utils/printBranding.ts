@@ -6,8 +6,8 @@
 
 export const BRAND_WATERMARK_CONFIG = {
   appName: 'Daily Khata Pro',
-  tagline: 'Simple Income & Expense Tracker',
-  companyName: 'Daily Khata Pro',
+  tagline: 'Income Expense Tracker',
+  companyName: 'Daily Khata Pro (By Rozfiber)',
   license: 'Open Source MIT License',
   website: 'https://rozfiber.com',
   supportPortal: 'https://github.com/hasvolt/Daily-Khata-Pro',

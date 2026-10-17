@@ -74,7 +74,7 @@ export const AppLogo: React.FC<AppLogoProps> = ({
             <span className="text-[#38BDF8] ml-1">Pro</span>
           </span>
           <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-medium">
-            Income &amp; Expense Tracker
+            Income Expense Tracker
           </span>
         </div>
       )}

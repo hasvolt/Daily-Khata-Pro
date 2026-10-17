@@ -609,15 +609,13 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
               </h2>
               <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                <span className={`text-[11.5px] font-bold tracking-wide truncate ${
-                  isLightMode ? 'text-blue-700' : 'text-sky-400'
+                <span className={`text-[11.5px] font-semibold tracking-wide truncate ${
+                  isLightMode ? 'text-slate-600' : 'text-slate-300'
                 }`}>
-                  By Rozfiber
+                  Income Expense Tracker
                 </span>
-                <span className={`text-[11px] truncate hidden sm:inline ${
-                  isLightMode ? 'text-slate-400' : 'text-slate-500'
-                }`}>
-                  • rozfiber.com
+                <span className={`text-[11px] font-bold text-sky-600 dark:text-sky-400 truncate hidden sm:inline`}>
+                  • By Rozfiber
                 </span>
               </div>
             </div>

@@ -315,10 +315,9 @@ export const Header: React.FC<HeaderProps> = ({
                 Pro
               </span>
             </div>
-            <div className="mt-0.5 flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-              <span className="text-[9.5px] sm:text-[11px] font-bold tracking-wide transition-colors text-[var(--theme-primary,#38BDF8)] leading-tight whitespace-nowrap">
-                By Rozfiber
+            <div className="mt-0.5 flex items-center gap-1.5 whitespace-nowrap min-w-0">
+              <span className="text-[9.5px] sm:text-[11px] font-semibold tracking-wide transition-colors text-[var(--theme-text-muted,#8BA4D0)] leading-tight whitespace-nowrap">
+                {isHindi ? 'आय-व्यय ट्रैकर (Income Expense Tracker)' : 'Income Expense Tracker'}
               </span>
             </div>
           </div>
@@ -402,7 +401,7 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Quick App Lock (Header: Desktop/Tablet only to avoid mobile header overload) */}
+          {/* Quick App Lock (Visible on Mobile and Desktop) */}
           {(onLockNow || onOpenSecurity) && (
             <button
               type="button"
@@ -414,7 +413,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onOpenSecurity();
                 }
               }}
-              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold hidden sm:flex items-center justify-center gap-1.5 shrink-0 ${
+              className={`h-8 sm:h-9 w-8 sm:w-auto sm:min-w-[36px] px-0 sm:px-2.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 text-[11px] font-bold flex items-center justify-center gap-1.5 shrink-0 ${
                 isLockEnabled
                   ? 'bg-rose-500/15 border-rose-500/35 text-rose-500 dark:text-rose-400 hover:bg-rose-500/25'
                   : 'bg-[var(--theme-card,#132438)] border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-text,#F8FAFC)] hover:border-[var(--theme-primary,#34D399)]'

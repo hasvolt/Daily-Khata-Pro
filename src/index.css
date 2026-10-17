@@ -210,20 +210,20 @@
     --accent-color: var(--accent);
   }
 
-  /* 4. Electric Blue */
+  /* 4. Electric Blue (Ultra-Dark Luxury Obsidian Pitch Black & Sapphire Dark Mode) */
   [data-theme="blue"] {
-    --bg: #050B1F;
-    --surface: #0C1A3D;
-    --surface-2: rgba(0, 0, 0, 0.28);
-    --border: #1E3A8A;
-    --border-subtle: #172554;
-    --text: #F1F5F9;
-    --text-muted: #93C5FD;
-    --text-dim: #60A5FA;
-    --accent: #3B82F6;
+    --bg: #020611;
+    --surface: #060D1D;
+    --surface-2: rgba(255, 255, 255, 0.035);
+    --border: #111E36;
+    --border-subtle: #091122;
+    --text: #F8FAFC;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+    --accent: #38BDF8;
     --accent-contrast: #FFFFFF;
-    --card-gradient-from: #1D4ED8;
-    --card-gradient-to: #0B1E4A;
+    --card-gradient-from: #0F2754;
+    --card-gradient-to: #050E22;
     --income: #4ADE80;
     --expense: #F87171;
     --btn-income: #16A34A;
@@ -231,21 +231,21 @@
 
     --theme-bg: var(--bg);
     --theme-surface: var(--surface);
-    --theme-card: #11285A;
-    --theme-card-hover: #17377C;
+    --theme-card: #081122;
+    --theme-card-hover: #0E1A34;
     --theme-border: var(--border);
     --theme-border-subtle: var(--border-subtle);
     --theme-text: var(--text);
     --theme-text-muted: var(--text-muted);
     --theme-text-dim: var(--text-dim);
     --theme-primary: var(--accent);
-    --theme-primary-hover: #2563EB;
-    --theme-primary-dim: rgba(59, 130, 246, 0.16);
-    --theme-primary-border: var(--border);
-    --theme-glow: transparent;
+    --theme-primary-hover: #0EA5E9;
+    --theme-primary-dim: rgba(56, 189, 248, 0.14);
+    --theme-primary-border: #142746;
+    --theme-glow: rgba(56, 189, 248, 0.30);
     --theme-badge-text: var(--accent);
-    --theme-btn-bg: #2563EB;
-    --theme-btn-hover: #1D4ED8;
+    --theme-btn-bg: #0284C7;
+    --theme-btn-hover: #0369A1;
     --theme-btn-text: #FFFFFF;
     --theme-income: var(--income);
     --theme-expense: var(--expense);
@@ -1069,38 +1069,44 @@
   background-color: #F8FAFC;
 }
 
-/* Banking Card 3D - Luxury Titanium Dark Substrate with Theme Foil Accent */
+/* Banking Card 3D - Ultra-Rich Dark Obsidian Titanium Substrate */
 .banking-card-3d {
-  background: radial-gradient(circle at 85% 15%, var(--theme-primary-dim, rgba(56, 189, 248, 0.12)) 0%, var(--theme-card, #162030) 65%) !important;
-  border-color: var(--theme-primary-border, rgba(56, 189, 248, 0.30)) !important;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  background: linear-gradient(135deg, rgba(8, 15, 30, 0.98) 0%, rgba(5, 10, 22, 0.99) 50%, rgba(2, 5, 12, 1) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.30) !important;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(56, 189, 248, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
 }
 
 [data-theme="emerald"] .banking-card-3d {
-  background: radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.14) 0%, var(--theme-card, #162030) 65%) !important;
+  background: linear-gradient(135deg, rgba(6, 24, 18, 0.98) 0%, rgba(4, 16, 12, 0.99) 50%, rgba(2, 8, 6, 1) 100%) !important;
   border-color: rgba(16, 185, 129, 0.35) !important;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(16, 185, 129, 0.20), inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
 }
 
 [data-theme="monochrome"] .banking-card-3d {
-  background: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.12) 0%, var(--theme-card, #171720) 65%) !important;
+  background: linear-gradient(135deg, rgba(18, 18, 22, 0.98) 0%, rgba(10, 10, 12, 0.99) 50%, rgba(4, 4, 6, 1) 100%) !important;
   border-color: rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.90), 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.18) !important;
+}
+
+[data-theme="black"] .banking-card-3d {
+  background: linear-gradient(135deg, rgba(8, 12, 24, 0.98) 0%, rgba(5, 8, 18, 0.99) 50%, rgba(2, 4, 10, 1) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.30) !important;
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(56, 189, 248, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.10) !important;
 }
 
 .summary-card-3d {
-  background: radial-gradient(circle at 85% 15%, var(--theme-primary-dim, rgba(56, 189, 248, 0.10)) 0%, var(--theme-card, #162030) 65%) !important;
-  border-color: var(--theme-primary-border, rgba(56, 189, 248, 0.30)) !important;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  background: linear-gradient(135deg, rgba(8, 15, 30, 0.92) 0%, rgba(5, 10, 22, 0.96) 60%, rgba(2, 5, 12, 0.98) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.20) !important;
+  box-shadow: 0 10px 32px -6px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
 }
 
 .summary-card-3d:hover {
-  border-color: var(--theme-primary-border) !important;
-  box-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(56, 189, 248, 0.40) !important;
+  box-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
 }
 
 [data-theme="light"] .homepage-canvas-glow,
