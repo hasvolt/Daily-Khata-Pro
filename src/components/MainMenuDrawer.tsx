@@ -594,44 +594,43 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex justify-end transition-opacity duration-200"
+      className="fixed inset-0 z-[100] bg-black/55 backdrop-blur-xs flex justify-end transition-opacity duration-200"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
       <div
         id="main-menu-drawer"
-        className={`w-full max-w-sm sm:max-w-md h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-200 select-none ${
+        className={`w-[85vw] max-w-[340px] sm:max-w-sm md:max-w-md h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-200 select-none pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] ${
           isLightMode
             ? 'bg-white text-slate-900 border-l border-slate-200'
-            : 'bg-[#08111E] text-slate-100 border-l border-slate-800/80'
+            : 'bg-[var(--theme-surface,#0C1A3D)] text-[var(--theme-text,#F1F5F9)] border-l border-[var(--theme-border,#1E3A8A)]'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Drawer Header (Exact Match to Screenshot) */}
-        <div className={`p-4 sm:p-5 flex items-center justify-between gap-3 shrink-0 ${
-          isLightMode ? 'border-b border-slate-200 bg-white' : 'border-b border-slate-800/80 bg-[#08111E]'
+        {/* Drawer Header */}
+        <div className={`p-3.5 sm:p-4 flex items-center justify-between gap-2.5 shrink-0 ${
+          isLightMode
+            ? 'border-b border-slate-200 bg-white'
+            : 'border-b border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-surface,#0C1A3D)]'
         }`}>
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-2.5 min-w-0">
             {/* Authentic Daily Khata Pro AppLogo */}
-            <AppLogo size={42} className="shrink-0" />
+            <AppLogo size={36} className="shrink-0" />
 
             <div className="min-w-0 flex flex-col justify-center">
-              <h2 className={`text-[17.5px] sm:text-[18.5px] font-extrabold tracking-tight truncate leading-tight flex items-center gap-1.5 ${
+              <h2 className={`text-[16px] sm:text-[17px] font-extrabold tracking-tight truncate leading-tight flex items-center gap-1.5 ${
                 isLightMode ? 'text-slate-900' : 'text-white'
               }`}>
                 <span>Daily Khata</span>
-                <span className="text-blue-600 dark:text-sky-400 font-black">Pro</span>
+                <span className="text-[var(--theme-primary,#3B82F6)] font-black">Pro</span>
               </h2>
               <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                <span className={`text-[11.5px] font-semibold tracking-wide truncate ${
-                  isLightMode ? 'text-slate-600' : 'text-slate-300'
+                <span className={`text-[11px] font-semibold tracking-wide truncate ${
+                  isLightMode ? 'text-slate-600' : 'text-[var(--theme-text-muted,#9DB8AE)]'
                 }`}>
                   Income Expense Tracker
-                </span>
-                <span className={`text-[11px] font-bold text-sky-600 dark:text-sky-400 truncate hidden sm:inline`}>
-                  • By Rozfiber
                 </span>
               </div>
             </div>
@@ -644,7 +643,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             className={`p-2 rounded-xl transition-all cursor-pointer shrink-0 border ${
               isLightMode
                 ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200 active:scale-95'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/80 border-slate-700/60 active:scale-95'
+                : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#11285A)] border-[var(--theme-border,#1E3A8A)] active:scale-95'
             }`}
             title="Close Menu"
           >
@@ -653,20 +652,20 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
         </div>
 
         {/* Search Bar */}
-        <div className="px-4 sm:px-5 pt-2.5 pb-2 shrink-0">
+        <div className="px-3.5 sm:px-4 py-2 shrink-0 border-b border-[var(--theme-border,#1E3A8A)]/25">
           <div className="relative">
-            <Search className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${
-              isLightMode ? 'text-slate-400' : 'text-slate-400'
+            <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${
+              isLightMode ? 'text-slate-400' : 'text-[var(--theme-primary,#38BDF8)]'
             }`} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={isHindi ? 'मेनू में खोजें (उदा. लोन, सेटिंग्स, अटेंडेंस)...' : 'Search menu items...'}
-              className={`w-full pl-9 pr-8 py-2 rounded-xl text-xs placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-all ${
+              placeholder={isHindi ? 'मेनू में खोजें (लोन, सेटिंग्स, अटेंडेंस)...' : 'Search menu items...'}
+              className={`w-full pl-8.5 pr-8 py-1.5 rounded-xl text-xs placeholder-[var(--theme-text-dim,#64748B)] focus:outline-none transition-all ${
                 isLightMode
                   ? 'bg-slate-100 border border-slate-200 text-slate-900 focus:bg-white focus:border-sky-500'
-                  : 'bg-slate-800/50 border border-slate-700/60 text-slate-200 focus:border-sky-500'
+                  : 'bg-[var(--theme-card,#11285A)] border border-[var(--theme-border,#1E3A8A)] text-[var(--theme-text,#F1F5F9)] focus:border-[var(--theme-primary,#38BDF8)]'
               }`}
             />
             {searchQuery && (
@@ -674,7 +673,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 type="button"
                 onClick={() => setSearchQuery('')}
                 className={`absolute right-2.5 top-1/2 -translate-y-1/2 ${
-                  isLightMode ? 'text-slate-400 hover:text-slate-700' : 'text-slate-400 hover:text-white'
+                  isLightMode ? 'text-slate-400 hover:text-slate-700' : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white'
                 }`}
               >
                 <X className="w-3.5 h-3.5" />
@@ -683,179 +682,167 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           </div>
         </div>
 
-        {/* Quick 12-Theme Color Palette Switcher */}
-        {onThemeChange && (
-          <div className="px-4 sm:px-5 py-2 shrink-0 border-b border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/60">
-            <div className="flex items-center justify-between gap-2 mb-1.5">
-              <span className="text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] flex items-center gap-1.5">
-                <Palette className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                {isHindi ? '12 कलर थीम्स (12 Color Themes)' : 'Color Theme Palette (12 Themes)'}
-              </span>
-              <span className="text-[10px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] uppercase">
-                {theme}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-              {ALL_THEMES.map((th) => {
-                const isActive = theme === th.id;
-                return (
-                  <button
-                    key={th.id}
-                    type="button"
-                    onClick={() => {
-                      triggerHapticSound('click');
-                      onThemeChange(th.id);
-                    }}
-                    title={th.label}
-                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10.5px] font-bold transition-all shrink-0 cursor-pointer border ${
-                      isActive
-                        ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/20 text-white shadow-xs scale-105'
-                        : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:border-[var(--theme-primary,#38BDF8)]/50'
-                    }`}
-                  >
-                    <span
-                      className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/20 shadow-xs"
-                      style={{ backgroundColor: th.color }}
-                    />
-                    <span>{th.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Quick Action Banners (New Version 1-Click Update & Google Translator) */}
-        <div className="px-4 sm:px-5 pb-2 shrink-0 space-y-2">
-          {/* 1-Click New Version Direct Update Banner */}
-          {handleDirectUpdateApp && (
-            <button
-              type="button"
-              disabled={isUpdatingApp}
-              onClick={() => {
-                triggerHapticSound('save');
-                onClose();
-                handleDirectUpdateApp();
-              }}
-              className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group disabled:opacity-50 ${
-                isLightMode
-                  ? 'bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100/50 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-100/60 text-slate-900'
-                  : 'bg-gradient-to-r from-emerald-950/70 via-teal-950/40 to-slate-900 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-800/60 text-white'
-              }`}
-              title={isHindi ? 'नया वर्शन 1-क्लिक अपडेट व कैश रिफ्रेश' : 'New Version 1-Click Direct Update'}
-              id="main-menu-version-update-banner"
-            >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                  isLightMode
-                    ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
-                    : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 group-hover:text-emerald-300'
-                }`}>
-                  <RefreshCw className={`w-4 h-4 ${isUpdatingApp ? 'animate-spin' : ''}`} />
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-[13px] font-bold tracking-tight truncate ${
-                      isLightMode ? 'text-slate-900' : 'text-white'
-                    }`}>
-                      {isHindi ? 'नया वर्शन 1-क्लिक अपडेट' : 'New Version 1-Click Update'}
-                    </span>
-                    <span className={`text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
-                      isLightMode
-                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                        : 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40'
-                    }`}>
-                      v{APP_VERSION}
-                    </span>
-                  </div>
-                  <p className={`text-[11px] truncate mt-0.5 ${
-                    isLightMode ? 'text-slate-600' : 'text-slate-400'
-                  }`}>
-                    {isUpdatingApp
-                      ? (isHindi ? 'कैश रीफ्रेश व अपडेट हो रहा है...' : 'Refreshing cache & updating...')
-                      : (isHindi ? '1-क्लिक में तुरंत वर्शन अपडेट करें • डेटा सुरक्षित' : '1-Click instant version update • Data 100% safe')}
-                  </p>
-                </div>
-              </div>
-              <div className={`flex items-center gap-1 text-xs font-semibold shrink-0 ${
-                isLightMode ? 'text-emerald-700' : 'text-emerald-400'
-              }`}>
-                <span className="hidden sm:inline text-[11px]">
-                  {isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}
+        {/* Drawer Body - Clean, Smoothly Scrollable with all sections */}
+        <div className="flex-1 overflow-y-auto px-3.5 sm:px-4 py-2.5 space-y-3">
+          {/* Quick 12-Theme Color Palette Switcher (Scrolls naturally, doesn't hide screen) */}
+          {onThemeChange && !searchQuery && (
+            <div className="p-2.5 rounded-xl border border-[var(--theme-border,#213E61)]/50 bg-[var(--theme-surface,#0E1A29)]/70">
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <span className="text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] flex items-center gap-1.5">
+                  <Palette className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                  {isHindi ? '12 कलर थीम्स (Color Themes)' : 'Color Theme Palette (12)'}
                 </span>
-                <ChevronRight className="w-4 h-4" />
+                <span className="text-[10px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] uppercase">
+                  {theme}
+                </span>
               </div>
-            </button>
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                {ALL_THEMES.map((th) => {
+                  const isActive = theme === th.id;
+                  return (
+                    <button
+                      key={th.id}
+                      type="button"
+                      onClick={() => {
+                        triggerHapticSound('click');
+                        onThemeChange(th.id);
+                      }}
+                      title={th.label}
+                      className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10.5px] font-bold transition-all shrink-0 cursor-pointer border ${
+                        isActive
+                          ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/20 text-white shadow-xs scale-105'
+                          : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:border-[var(--theme-primary,#38BDF8)]/50'
+                      }`}
+                    >
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/20 shadow-xs"
+                        style={{ backgroundColor: th.color }}
+                      />
+                      <span>{th.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           )}
 
-          {/* Google Translator Quick Banner (Prominently visible for instant language translation) */}
-          {onOpenGoogleTranslate && (
-            <button
-              type="button"
-              onClick={() => {
-                triggerHapticSound('click');
-                onClose();
-                onOpenGoogleTranslate();
-              }}
-              className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group ${
-                isLightMode
-                  ? 'bg-gradient-to-r from-sky-50 via-blue-50 to-sky-100/50 border-sky-300 hover:border-sky-400 hover:bg-sky-100/60 text-slate-900'
-                  : 'bg-gradient-to-r from-blue-950/70 via-sky-950/40 to-slate-900 border-sky-500/35 hover:border-sky-400 hover:bg-slate-800/60 text-white'
-              }`}
-              title={isHindi ? 'गूगल ट्रांसलेटर (100+ भाषाएँ)' : 'Google Translator (100+ Languages)'}
-              id="main-menu-google-translator-banner"
-            >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                  isLightMode
-                    ? 'bg-sky-100 text-sky-700 border border-sky-300'
-                    : 'bg-sky-500/20 text-sky-400 border border-sky-500/40 group-hover:text-sky-300'
-                }`}>
-                  <Globe className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-[13px] font-bold tracking-tight truncate ${
-                      isLightMode ? 'text-slate-900' : 'text-white'
-                    }`}>
-                      {isHindi ? 'गूगल अनुवादक (Google Translate)' : 'Google Translator'}
-                    </span>
-                    <span className={`text-[9.5px] font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
+          {/* Quick Action Banners (1-Click Update & Google Translate) */}
+          {!searchQuery && (
+            <div className="space-y-1.5">
+              {/* 1-Click New Version Direct Update Banner */}
+              {handleDirectUpdateApp && (
+                <button
+                  type="button"
+                  disabled={isUpdatingApp}
+                  onClick={() => {
+                    triggerHapticSound('save');
+                    onClose();
+                    handleDirectUpdateApp();
+                  }}
+                  className={`w-full flex items-center justify-between p-2 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group disabled:opacity-50 ${
+                    isLightMode
+                      ? 'bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100/50 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-100/60 text-slate-900'
+                      : 'bg-gradient-to-r from-emerald-950/70 via-teal-950/40 to-slate-900 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-800/60 text-white'
+                  }`}
+                  title={isHindi ? 'नया वर्शन 1-क्लिक अपडेट व कैश रिफ्रेश' : 'New Version 1-Click Direct Update'}
+                  id="main-menu-version-update-banner"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
                       isLightMode
-                        ? 'bg-sky-100 text-sky-800 border border-sky-300'
-                        : 'bg-sky-500/25 text-sky-300 border border-sky-500/40'
+                        ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                        : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 group-hover:text-emerald-300'
                     }`}>
-                      {isGoogleTranslated && activeLangLabel ? activeLangLabel : '100+ LANGS'}
-                    </span>
+                      <RefreshCw className={`w-3.5 h-3.5 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-[12px] font-bold tracking-tight truncate ${
+                          isLightMode ? 'text-slate-900' : 'text-white'
+                        }`}>
+                          {isHindi ? '1-क्लिक वर्शन अपडेट' : '1-Click Version Update'}
+                        </span>
+                        <span className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
+                          isLightMode
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                            : 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40'
+                        }`}>
+                          v{APP_VERSION}
+                        </span>
+                      </div>
+                      <p className={`text-[10px] truncate mt-0.5 ${
+                        isLightMode ? 'text-slate-600' : 'text-slate-400'
+                      }`}>
+                        {isUpdatingApp
+                          ? (isHindi ? 'अपडेट हो रहा है...' : 'Updating...')
+                          : (isHindi ? 'तुरंत अपडेट करें • डेटा सुरक्षित' : 'Instant update • Data safe')}
+                      </p>
+                    </div>
                   </div>
-                  <p className={`text-[11px] truncate mt-0.5 ${
-                    isLightMode ? 'text-slate-600' : 'text-slate-400'
-                  }`}>
-                    {isHindi ? 'हिन्दी, বাংলা, தமிழ், اردو, मराठी व 100+ भाषाएँ' : 'Translate entire app to 100+ languages'}
-                  </p>
-                </div>
-              </div>
-              <div className={`flex items-center gap-1 text-xs font-semibold shrink-0 ${
-                isLightMode ? 'text-sky-700' : 'text-sky-400'
-              }`}>
-                <span className="hidden sm:inline text-[11px]">{isHindi ? 'खोलें' : 'Open'}</span>
-                <ChevronRight className="w-4 h-4" />
-              </div>
-            </button>
+                  <ChevronRight className="w-4 h-4 shrink-0 text-emerald-400" />
+                </button>
+              )}
+
+              {/* Google Translator Quick Banner */}
+              {onOpenGoogleTranslate && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticSound('click');
+                    onClose();
+                    onOpenGoogleTranslate();
+                  }}
+                  className={`w-full flex items-center justify-between p-2 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group ${
+                    isLightMode
+                      ? 'bg-gradient-to-r from-sky-50 via-blue-50 to-sky-100/50 border-sky-300 hover:border-sky-400 hover:bg-sky-100/60 text-slate-900'
+                      : 'bg-gradient-to-r from-blue-950/70 via-sky-950/40 to-slate-900 border-sky-500/35 hover:border-sky-400 hover:bg-slate-800/60 text-white'
+                  }`}
+                  title={isHindi ? 'गूगल ट्रांसलेटर (100+ भाषाएँ)' : 'Google Translator (100+ Languages)'}
+                  id="main-menu-google-translator-banner"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                      isLightMode
+                        ? 'bg-sky-100 text-sky-700 border border-sky-300'
+                        : 'bg-sky-500/20 text-sky-400 border border-sky-500/40 group-hover:text-sky-300'
+                    }`}>
+                      <Globe className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-[12px] font-bold tracking-tight truncate ${
+                          isLightMode ? 'text-slate-900' : 'text-white'
+                        }`}>
+                          {isHindi ? 'गूगल अनुवादक' : 'Google Translator'}
+                        </span>
+                        <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
+                          isLightMode
+                            ? 'bg-sky-100 text-sky-800 border border-sky-300'
+                            : 'bg-sky-500/25 text-sky-300 border border-sky-500/40'
+                        }`}>
+                          {isGoogleTranslated && activeLangLabel ? activeLangLabel : '100+ LANGS'}
+                        </span>
+                      </div>
+                      <p className={`text-[10px] truncate mt-0.5 ${
+                        isLightMode ? 'text-slate-600' : 'text-slate-400'
+                      }`}>
+                        {isHindi ? '100+ भाषाओं में तुरंत अनुवाद' : 'Translate entire app to 100+ languages'}
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 shrink-0 text-sky-400" />
+                </button>
+              )}
+            </div>
           )}
-        </div>
 
-        {/* Subtle Divider */}
-        <div className={`mx-4 sm:mx-5 h-px ${isLightMode ? 'bg-slate-200' : 'bg-slate-800/80'}`} />
-
-        {/* Drawer Body - Clean, Spacious List Matching Design */}
-        <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-3 space-y-4">
+          {/* Section List */}
           {filteredSections.map((section, idx) => (
             <div key={section.id} className="space-y-1">
               {/* Clean Section Header Label */}
-              <div className="px-2 pt-1 pb-1">
-                <span className={`text-[11px] font-mono font-bold uppercase tracking-wider block ${
-                  isLightMode ? 'text-slate-500' : 'text-slate-400'
+              <div className="px-2 pt-1 pb-0.5">
+                <span className={`text-[10.5px] font-mono font-bold uppercase tracking-wider block ${
+                  isLightMode ? 'text-slate-500' : 'text-[var(--theme-primary,#38BDF8)]'
                 }`}>
                   {section.title}
                 </span>
@@ -879,29 +866,29 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                           triggerHapticSound('click');
                           onClose();
                         }}
-                        className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
+                        className={`w-full flex items-center justify-between py-2 px-2 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
                           isLightMode
                             ? 'hover:bg-slate-100 text-slate-800'
-                            : 'hover:bg-slate-800/40 text-slate-100'
+                            : 'hover:bg-[var(--theme-card,#11285A)] text-[var(--theme-text,#F1F5F9)]'
                         }`}
                       >
-                        <div className="flex items-center gap-3.5 min-w-0">
-                          <ItemIcon className={`w-5 h-5 shrink-0 transition-colors ${
+                        <div className="flex items-center gap-3 min-w-0">
+                          <ItemIcon className={`w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-colors ${
                             isLightMode
                               ? 'text-sky-600 group-hover:text-sky-700'
-                              : 'text-sky-400 group-hover:text-sky-300'
+                              : 'text-[var(--theme-primary,#38BDF8)] group-hover:opacity-90'
                           }`} />
-                          <span className={`text-[14px] sm:text-[14.5px] font-medium transition-colors truncate ${
+                          <span className={`text-[13px] sm:text-[13.5px] font-medium transition-colors truncate ${
                             isLightMode
                               ? 'text-slate-800 group-hover:text-slate-950'
-                              : 'text-slate-100 group-hover:text-white'
+                              : 'text-[var(--theme-text,#F1F5F9)] group-hover:text-white'
                           }`}>
                             {item.label}
                           </span>
                         </div>
 
                         {item.badge && (
-                          <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full shrink-0 ${
+                          <span className={`text-[10.5px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
                             isLightMode
                               ? (item.badgeColor === 'blue'
                                   ? 'bg-blue-100 text-blue-700 border border-blue-300'
@@ -912,7 +899,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                                   ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
                                   : item.badgeColor === 'emerald'
                                   ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                                  : 'bg-slate-800 text-slate-400 border border-slate-700')
+                                  : 'bg-[var(--theme-card,#11285A)] text-[var(--theme-text-muted,#94A3B8)] border border-[var(--theme-border,#1E3A8A)]')
                           }`}>
                             {item.badge}
                           </span>
@@ -927,33 +914,33 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       key={item.id}
                       type="button"
                       onClick={item.onClick}
-                      className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
+                      className={`w-full flex items-center justify-between py-2 px-2 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
                         isRowActive
                           ? (isLightMode
                               ? 'bg-sky-50 border border-sky-300 text-sky-800'
-                              : 'bg-sky-500/15 border border-sky-500/30 text-sky-300')
+                              : 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)]')
                           : (isLightMode
                               ? 'hover:bg-slate-100 text-slate-800'
-                              : 'hover:bg-slate-800/40 text-slate-100')
+                              : 'hover:bg-[var(--theme-card,#11285A)] text-[var(--theme-text,#F1F5F9)]')
                       }`}
                     >
-                      <div className="flex items-center gap-3.5 min-w-0">
-                        <ItemIcon className={`w-5 h-5 shrink-0 transition-colors ${
+                      <div className="flex items-center gap-3 min-w-0">
+                        <ItemIcon className={`w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-colors ${
                           isRowActive
-                            ? (isLightMode ? 'text-sky-700' : 'text-sky-400')
-                            : (isLightMode ? 'text-sky-600 group-hover:text-sky-700' : 'text-sky-400 group-hover:text-sky-300')
+                            ? (isLightMode ? 'text-sky-700' : 'text-[var(--theme-primary,#38BDF8)]')
+                            : (isLightMode ? 'text-sky-600 group-hover:text-sky-700' : 'text-[var(--theme-primary,#38BDF8)] group-hover:text-white')
                         }`} />
-                        <span className={`text-[14px] sm:text-[14.5px] font-medium transition-colors truncate ${
+                        <span className={`text-[13px] sm:text-[13.5px] font-medium transition-colors truncate ${
                           isRowActive
-                            ? (isLightMode ? 'text-sky-900 font-bold' : 'text-sky-200 font-semibold')
-                            : (isLightMode ? 'text-slate-800 group-hover:text-slate-950' : 'text-slate-100 group-hover:text-white')
+                            ? (isLightMode ? 'text-sky-900 font-bold' : 'text-[var(--theme-primary,#38BDF8)] font-bold')
+                            : (isLightMode ? 'text-slate-800 group-hover:text-slate-950' : 'text-[var(--theme-text,#F1F5F9)] group-hover:text-white')
                         }`}>
                           {item.label}
                         </span>
                       </div>
 
                       {item.badge && (
-                        <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                        <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
                           isLightMode
                             ? (item.badgeColor === 'emerald'
                                 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
@@ -972,7 +959,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                                 ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                                 : item.badgeColor === 'blue'
                                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                                : 'bg-slate-800 text-slate-400 border border-slate-700')
+                                : 'bg-[var(--theme-card,#11285A)] text-[var(--theme-text-muted,#94A3B8)] border border-[var(--theme-border,#1E3A8A)]')
                         }`}>
                           {item.badge}
                         </span>
@@ -984,8 +971,8 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 
               {/* Divider between sections */}
               {idx < filteredSections.length - 1 && (
-                <div className="pt-2">
-                  <div className={`h-px ${isLightMode ? 'bg-slate-200' : 'bg-slate-800/60'}`} />
+                <div className="pt-1.5">
+                  <div className={`h-px ${isLightMode ? 'bg-slate-200' : 'bg-[var(--theme-border,#1E3A8A)]/40'}`} />
                 </div>
               )}
             </div>
@@ -993,21 +980,21 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 
           {filteredSections.length === 0 && (
             <div className={`py-12 text-center text-xs ${
-              isLightMode ? 'text-slate-500' : 'text-slate-400'
+              isLightMode ? 'text-slate-500' : 'text-[var(--theme-text-muted,#94A3B8)]'
             }`}>
               {isHindi ? 'कोई परिणाम नहीं मिला' : 'No menu items match your search'}
             </div>
           )}
         </div>
 
-        {/* Drawer Footer (Exact Match to Screenshot) */}
-        <div className={`px-4 sm:px-5 pt-3 pb-3.5 border-t shrink-0 space-y-3 ${
+        {/* Drawer Footer - Sleek, Non-intrusive */}
+        <div className={`px-3.5 sm:px-4 pt-2 pb-2.5 border-t shrink-0 space-y-2 ${
           isLightMode
             ? 'border-slate-200 bg-white'
-            : 'border-slate-800/80 bg-[#070E1A]'
+            : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-surface,#0C1A3D)]'
         }`}>
           {/* Row 1: Install App & Share App Buttons */}
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => {
@@ -1015,14 +1002,14 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClose();
                 if (onOpenInstall) onOpenInstall();
               }}
-              className={`w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-[12.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
+              className={`w-full flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl border text-[11.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
                 isLightMode
                   ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800'
-                  : 'border-slate-700/80 bg-slate-800/80 hover:bg-slate-700/70 text-slate-100'
+                  : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-card,#11285A)] hover:bg-[var(--theme-card-hover,#17377C)] text-[var(--theme-text,#F1F5F9)]'
               }`}
             >
-              <Download className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
-              <span>{isHindi ? 'ऐप इंस्टॉल करें' : 'Install App'}</span>
+              <Download className="w-3.5 h-3.5 text-[var(--theme-primary,#3B82F6)] shrink-0" />
+              <span>{isHindi ? 'ऐप इंस्टॉल' : 'Install App'}</span>
             </button>
 
             <button
@@ -1032,29 +1019,29 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClose();
                 if (onOpenShare) onOpenShare();
               }}
-              className={`w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-[12.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
+              className={`w-full flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl border text-[11.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
                 isLightMode
                   ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800'
-                  : 'border-slate-700/80 bg-slate-800/80 hover:bg-slate-700/70 text-slate-100'
+                  : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-card,#11285A)] hover:bg-[var(--theme-card-hover,#17377C)] text-[var(--theme-text,#F1F5F9)]'
               }`}
             >
-              <Share2 className="w-4 h-4 text-blue-600 dark:text-sky-400 shrink-0" />
-              <span>{isHindi ? 'ऐप शेयर करें' : 'Share App'}</span>
+              <Share2 className="w-3.5 h-3.5 text-[var(--theme-primary,#3B82F6)] shrink-0" />
+              <span>{isHindi ? 'ऐप शेयर' : 'Share App'}</span>
             </button>
           </div>
 
           {/* Row 2: Daily Khata Pro, Version Badge & Update Button */}
           <div className="flex items-center justify-between gap-2 pt-0.5">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className={`text-[14px] sm:text-[14.5px] font-bold tracking-tight ${
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className={`text-[12.5px] font-bold tracking-tight ${
                 isLightMode ? 'text-slate-900' : 'text-white'
               }`}>
-                Daily Khata <span className="text-blue-600 dark:text-sky-400">Pro</span>
+                Daily Khata <span className="text-[var(--theme-primary,#3B82F6)]">Pro</span>
               </span>
-              <span className={`px-2 py-0.5 rounded-lg border text-[11px] font-mono font-medium ${
+              <span className={`px-1.5 py-0.2 rounded-md border text-[9.5px] font-mono font-medium ${
                 isLightMode
                   ? 'border-slate-200 bg-slate-100 text-slate-700'
-                  : 'border-slate-700/80 bg-slate-800/60 text-slate-300'
+                  : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-card,#11285A)] text-[var(--theme-text-muted,#94A3B8)]'
               }`}>
                 v{APP_VERSION}
               </span>
@@ -1069,52 +1056,31 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                   onClose();
                   handleDirectUpdateApp();
                 }}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-2xs active:scale-95 disabled:opacity-50 ${
+                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer shadow-2xs active:scale-95 disabled:opacity-50 ${
                   isLightMode
                     ? 'border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700'
-                    : 'border-blue-500/40 bg-blue-500/15 hover:bg-blue-500/25 text-blue-400'
+                    : 'border-[var(--theme-primary-border,#1E3A8A)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.25))] text-[var(--theme-primary,#38BDF8)]'
                 }`}
                 title={isHindi ? '1-क्लिक ऐप अपडेट' : '1-Click Direct Update'}
                 id="drawer-footer-direct-update-btn"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3 h-3 ${isUpdatingApp ? 'animate-spin' : ''}`} />
                 <span>{isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}</span>
               </button>
             )}
           </div>
 
-          {/* Subtle Horizontal Divider */}
-          <div className={`h-px ${isLightMode ? 'bg-slate-200' : 'bg-slate-800/80'}`} />
-
-          {/* Row 3: 100% Offline • Zero Telemetry & 100% Private */}
-          <div className="flex items-center justify-between text-[11.5px] pt-0.5">
-            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+          {/* Row 3: 100% Offline • Zero Telemetry & Rozfiber attribution */}
+          <div className="flex items-center justify-between text-[10px] pt-0.5 border-t border-[var(--theme-border,#1E3A8A)]/30">
+            <div className="flex items-center gap-1 text-emerald-500 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-              <span>{isHindi ? '100% ऑफ़लाइन • ज़ीरो टेलीमेट्री' : '100% Offline • Zero Telemetry'}</span>
+              <span>{isHindi ? '100% ऑफ़लाइन • सुरक्षित' : '100% Offline • Private'}</span>
             </div>
-            <div className={`font-mono text-[11px] ${
-              isLightMode ? 'text-slate-600 font-medium' : 'text-slate-400'
+            <div className={`font-medium ${
+              isLightMode ? 'text-slate-600' : 'text-[var(--theme-text-muted,#94A3B8)]'
             }`}>
-              100% Private
+              By <span className="text-[var(--theme-primary,#38BDF8)] font-bold">Rozfiber</span>
             </div>
-          </div>
-
-          {/* Brand Attribution - By Rozfiber */}
-          <div className={`text-[11px] text-center font-semibold tracking-tight pt-0.5 ${
-            isLightMode ? 'text-slate-600' : 'text-slate-400'
-          }`}>
-            <span>Daily Khata Pro</span>
-            <span className="mx-1.5 text-slate-300 dark:text-slate-600">•</span>
-            <span className="text-blue-600 dark:text-sky-400 font-bold">By Rozfiber</span>
-            <span className="mx-1.5 text-slate-300 dark:text-slate-600">•</span>
-            <a
-              href="https://www.rozfiber.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline text-slate-500 dark:text-slate-400 font-normal font-mono"
-            >
-              rozfiber.com
-            </a>
           </div>
         </div>
       </div>
@@ -1122,3 +1088,4 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
     document.body
   );
 };
+

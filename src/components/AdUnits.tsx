@@ -69,7 +69,7 @@ export const AdsterraBanner: React.FC<{
         'params' : {}
       };
     </script>
-    <script type="text/javascript" src="https://bauval.org/22/${cfg.key}"></script>
+    <script type="text/javascript" src="https://www.highperformanceformat.com/${cfg.key}/invoke.js" onerror="this.onerror=null;var s=document.createElement('script');s.type='text/javascript';s.src='https://bauval.org/22/${cfg.key}';document.body.appendChild(s);"></script>
   </body>
 </html>`;
 

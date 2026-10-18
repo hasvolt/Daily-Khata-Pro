@@ -129,26 +129,24 @@ export function BankingCard3D({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY }}
-        className="banking-card-3d relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] backdrop-blur-xl p-2.5 xs:p-3 sm:p-4 md:p-[18px] transition-all"
+        className="banking-card-3d relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-border,#1E3A8A)] backdrop-blur-xl p-2.5 xs:p-3 sm:p-4 md:p-[18px] transition-all"
       >
-        {/* Luxury Multi-Layer Ambient Glow Nebulae (Dynamically matches active theme) */}
+        {/* Multi-Layer Ambient Glow Nebulae (Dynamically matches active theme without muddy blur) */}
         <div className="banking-card-ambient-glow absolute inset-0 pointer-events-none overflow-hidden select-none">
           {/* Top-Right Luminous Accent Nebula */}
-          <div className="absolute -right-6 -top-10 h-48 w-56 rounded-full bg-[radial-gradient(circle,var(--theme-primary,#38BDF8)_0%,transparent_70%)] opacity-25 blur-2xl" />
+          <div className="absolute -right-6 -top-10 h-44 w-52 rounded-full bg-[radial-gradient(circle,var(--theme-primary,#38BDF8)_0%,transparent_70%)] opacity-20 blur-xl" />
           {/* Bottom-Left Deep Atmospheric Glow */}
-          <div className="absolute -left-10 -bottom-10 h-48 w-56 rounded-full bg-[radial-gradient(circle,var(--card-gradient-from,#1D4ED8)_0%,transparent_70%)] opacity-20 blur-2xl" />
-          {/* Subtle Mid-Center Bloom */}
-          <div className="absolute left-1/3 top-1/4 h-32 w-36 rounded-full bg-[radial-gradient(circle,var(--theme-primary,#38BDF8)_0%,transparent_70%)] opacity-15 blur-xl" />
+          <div className="absolute -left-10 -bottom-10 h-44 w-52 rounded-full bg-[radial-gradient(circle,var(--card-gradient-from,#1D4ED8)_0%,transparent_70%)] opacity-15 blur-xl" />
         </div>
 
         {/* High-Precision Guilloché Security Watermark & Luxury Texture */}
         <div className="banking-card-waves absolute inset-0 pointer-events-none overflow-hidden select-none">
-          {/* Luxury Brushed Carbon Cross-Weave Micro-Texture (No dots) */}
+          {/* Micro-Texture Grid */}
           <div
-            className="absolute inset-0 opacity-[0.07]"
+            className="absolute inset-0 opacity-[0.05]"
             style={{
-              backgroundImage: `repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0px, rgba(255, 255, 255, 0.22) 1px, transparent 1px, transparent 8px),
-                               repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.12) 0px, rgba(255, 255, 255, 0.12) 1px, transparent 1px, transparent 8px)`,
+              backgroundImage: `repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0px, rgba(255, 255, 255, 0.18) 1px, transparent 1px, transparent 8px),
+                               repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.10) 0px, rgba(255, 255, 255, 0.10) 1px, transparent 1px, transparent 8px)`,
               backgroundSize: '16px 16px',
             }}
           />
@@ -162,9 +160,9 @@ export function BankingCard3D({
           >
             <defs>
               <linearGradient id="guillocheGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.5" />
-                <stop offset="50%" stopColor="#818CF8" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.2" />
+                <stop offset="0%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.4" />
+                <stop offset="50%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.25" />
+                <stop offset="100%" stopColor="var(--theme-primary, #38BDF8)" stopOpacity="0.1" />
               </linearGradient>
             </defs>
 
@@ -178,28 +176,28 @@ export function BankingCard3D({
             <path
               d="M10 260 C80 180, 160 210, 260 110 C310 60, 335 30, 360 -10"
               stroke="url(#guillocheGrad)"
-              strokeWidth="2"
-              strokeOpacity="0.45"
+              strokeWidth="1.8"
+              strokeOpacity="0.4"
             />
             <path
               d="M40 270 C110 195, 190 225, 280 130 C325 80, 345 45, 365 5"
               stroke="url(#guillocheGrad)"
-              strokeWidth="1.5"
-              strokeOpacity="0.35"
+              strokeWidth="1.4"
+              strokeOpacity="0.3"
             />
             <path
               d="M80 280 C140 210, 220 240, 300 150 C340 100, 355 60, 370 20"
               stroke="url(#guillocheGrad)"
-              strokeWidth="1.2"
+              strokeWidth="1.1"
               strokeDasharray="4 4"
-              strokeOpacity="0.25"
+              strokeOpacity="0.2"
             />
           </svg>
         </div>
 
-        {/* Specular Diagonal Glass Glaze and Top Rim Laser Bevel */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-transparent select-none" />
-        <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)]/70 via-white/80 to-transparent pointer-events-none" />
+        {/* Specular Diagonal Glass Glaze and Crisp Subtle Top Highlight */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.03] to-transparent select-none" />
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--theme-primary,#38BDF8)]/50 via-white/40 to-transparent pointer-events-none" />
 
         {/* Foreground Content */}
         <div className="relative z-10">
@@ -312,8 +310,8 @@ export function BankingCard3D({
             )}
           </div>
 
-          {/* Divider Line above buttons - Crisp Specular Horizon Line */}
-          <div className="hero-buttons-divider border-t-2 border-[var(--theme-primary,#38BDF8)] shadow-[0_1px_12px_var(--theme-glow,rgba(56,189,248,0.45))] pt-2 sm:pt-2.5 mt-2 sm:mt-2.5 opacity-95">
+          {/* Clean 1px Theme-Aware Divider Line above buttons */}
+          <div className="hero-buttons-divider border-t border-[var(--theme-border-subtle,rgba(255,255,255,0.12))] pt-2 sm:pt-2.5 mt-2 sm:mt-2.5">
             <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
               <motion.button
                 type="button"

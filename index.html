@@ -9,11 +9,12 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#070E18" />
+    <meta name="theme-color" content="#020611" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Daily Khata Pro - Smart Expense Tracker & Finance Platform</title>
     <meta name="description" content="Daily Khata Pro - Smart Expense Tracker & Finance Platform by Rozfiber. Track daily income, expenses, loans, EMIs, and read research-based finance articles." />
     <meta property="og:title" content="Daily Khata Pro - Smart Expense Tracker & Finance Platform" />
@@ -22,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- Synchronous Pre-render Theme Initialization (Prevents Icon & Color Flickering) -->
+    <!-- Synchronous Pre-render Theme & Mobile Status Bar Initialization -->
     <script>
       (function() {
         try {
@@ -35,6 +36,30 @@
             }
           }
           document.documentElement.setAttribute('data-theme', theme);
+
+          var themeColors = {
+            blue: '#020611',
+            dark: '#04100C',
+            black: '#050810',
+            monochrome: '#000000',
+            yellow: '#0F0A02',
+            orange: '#110804',
+            emerald: '#04120A',
+            purple: '#0A0614',
+            cyan: '#04141A',
+            pink: '#12060C',
+            white: '#F8FAFC',
+            light: '#F0F9FF'
+          };
+          var color = themeColors[theme] || '#020611';
+          var isLight = theme === 'white' || theme === 'light';
+          var metaTheme = document.querySelector('meta[name="theme-color"]');
+          if (metaTheme) metaTheme.setAttribute('content', color);
+          var appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+          if (appleMeta) appleMeta.setAttribute('content', isLight ? 'default' : 'black-translucent');
+          document.documentElement.style.colorScheme = isLight ? 'light' : 'dark';
+          document.documentElement.style.backgroundColor = color;
+          document.body.style.backgroundColor = color;
         } catch (e) {}
       })();
     </script>
@@ -57,27 +82,78 @@
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
 
     <style>
-      /* Permanent Google Translate Banner & Tooltip Suppressor */
-      .skiptranslate > iframe,
-      iframe.skiptranslate,
-      .goog-te-banner-frame,
-      #goog-gt-tt,
-      .goog-te-balloon-frame {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-      body {
+      /* Permanent Google Translate Banner, Bar & Shift Suppressor */
+      html, body {
         top: 0px !important;
         position: static !important;
+        margin-top: 0px !important;
+        padding-top: 0px !important;
+      }
+      .skiptranslate,
+      body > .skiptranslate,
+      body > div[class*="skiptranslate"],
+      .goog-te-banner-frame,
+      .goog-te-banner-frame.skiptranslate,
+      iframe[class*="skiptranslate"],
+      iframe.goog-te-banner-frame,
+      #goog-gt-tt,
+      .goog-te-balloon-frame,
+      div[class*="VIpgJd"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0px !important;
+        max-height: 0px !important;
+        width: 0px !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
       }
       .goog-text-highlight {
         background: transparent !important;
         box-shadow: none !important;
       }
     </style>
+    <script type="text/javascript">
+      /* Active guard against Google Translate's inline top shift on body and html */
+      (function() {
+        function resetTopShift() {
+          if (document.documentElement && document.documentElement.style.top && document.documentElement.style.top !== '0px') {
+            document.documentElement.style.setProperty('top', '0px', 'important');
+          }
+          if (document.body) {
+            if (document.body.style.top && document.body.style.top !== '0px') {
+              document.body.style.setProperty('top', '0px', 'important');
+            }
+            if (document.body.style.position && document.body.style.position !== 'static') {
+              document.body.style.setProperty('position', 'static', 'important');
+            }
+            if (document.body.style.marginTop && document.body.style.marginTop !== '0px') {
+              document.body.style.setProperty('margin-top', '0px', 'important');
+            }
+          }
+        }
+        resetTopShift();
+        if (window.MutationObserver) {
+          var mo = new MutationObserver(resetTopShift);
+          if (document.documentElement) {
+            mo.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] });
+          }
+          window.addEventListener('DOMContentLoaded', function() {
+            resetTopShift();
+            if (document.body) {
+              mo.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
+            }
+          });
+        }
+        window.addEventListener('load', resetTopShift);
+        setInterval(resetTopShift, 300);
+      })();
+    </script>
   </head>
   <body class="antialiased selection:bg-emerald-500 selection:text-white min-h-screen" style="background-color: var(--theme-bg); color: var(--theme-text);">
     <!-- Google Translate Anchor Container -->

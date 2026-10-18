@@ -16,6 +16,7 @@ import {
 } from './data/defaults';
 import { calculateFundTotals, formatCurrency, triggerCelebration, triggerHapticSound } from './utils/khataCalculations';
 import { getLocalDateString } from './utils/dateUtils';
+import { syncThemeWithStatusBar } from './utils/statusBarSync';
 import { playDeleteSound, playIncomeSound, playExpenseSound } from './utils/audioService';
 import { setCurrentLanguage } from './utils/currencyConfig';
 import { Header } from './components/Header';
@@ -494,9 +495,10 @@ function AppContent() {
     handleUrlSync();
   }, []);
 
-  // Sync theme, viewMode and appLayout to document element
+  // Sync theme, mobile status bar, viewMode and appLayout to document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    syncThemeWithStatusBar(theme);
   }, [theme]);
 
   useEffect(() => {
