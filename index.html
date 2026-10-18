@@ -34,7 +34,23 @@
         } catch (e) {}
       })();
     </script>
-    <!-- Google Translate is initialized on-demand via src/utils/googleTranslate.ts only when chosen by user -->
+
+    <!-- Google Translate Engine Setup -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        try {
+          if (window.google && window.google.translate) {
+            new window.google.translate.TranslateElement({
+              pageLanguage: 'en',
+              autoDisplay: false
+            }, 'google_translate_element');
+          }
+        } catch (e) {
+          console.warn('Google Translate Init Warning:', e);
+        }
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
 
     <style>
       /* Permanent Google Translate Banner & Tooltip Suppressor */
@@ -59,7 +75,9 @@
       }
     </style>
   </head>
-  <body class="bg-[#05111f] text-slate-100 antialiased selection:bg-emerald-500 selection:text-white min-h-screen">
+  <body class="antialiased selection:bg-emerald-500 selection:text-white min-h-screen" style="background-color: var(--theme-bg); color: var(--theme-text);">
+    <!-- Google Translate Anchor Container -->
+    <div id="google_translate_element" style="display:none;position:absolute;left:-9999px;top:-9999px;"></div>
     <!-- App Splash Screen / Preloader (App Logo, Name & Tagline on App Launch) -->
     <div id="app-preloader" style="position: fixed; inset: 0; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #070E18; color: #FFFFFF; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; transition: opacity 0.35s ease-out;">
       <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 24px; max-width: 360px;">

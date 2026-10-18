@@ -929,6 +929,11 @@ function AppContent() {
 
   const handleThemeChange = (newTheme: AppTheme) => {
     setTheme(newTheme);
+    if (newTheme !== 'white' && newTheme !== 'light') {
+      try {
+        localStorage.setItem('dailykhata_last_dark_theme', newTheme);
+      } catch (e) {}
+    }
     saveToLocalStorage(entries, goals, categories, incomeSources, workCategories, lifeTags, percentages, newTheme, language, privacyMask, workLogs, dailyLifeLogs);
     showToast(`Theme updated: ${newTheme.toUpperCase()}`);
   };

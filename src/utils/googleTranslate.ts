@@ -22,9 +22,12 @@ export const INDIAN_LANGUAGES: GoogleLanguage[] = [
   { code: 'ne', name: 'Nepali', nativeName: 'नेपाली', flag: '🇳🇵', category: 'indian' },
   { code: 'bho', name: 'Bhojpuri', nativeName: 'भोजपुरी', flag: '🇮🇳', category: 'indian' },
   { code: 'sa', name: 'Sanskrit', nativeName: 'संस्कृतम्', flag: '🇮🇳', category: 'indian' },
-  { code: 'sd', name: 'Sindhi', nativeName: 'سنڌي', flag: '🇮🇳', category: 'indian' },
   { code: 'mai', name: 'Maithili', nativeName: 'मैथिली', flag: '🇮🇳', category: 'indian' },
-  { code: 'gom', name: 'Konkani', nativeName: 'कोंकणी', flag: '🇮🇳', category: 'indian' }
+  { code: 'sd', name: 'Sindhi', nativeName: 'سنڌي', flag: '🇮🇳', category: 'indian' },
+  { code: 'gom', name: 'Konkani', nativeName: 'कोंकणी', flag: '🇮🇳', category: 'indian' },
+  { code: 'doi', name: 'Dogri', nativeName: 'डोगरी', flag: '🇮🇳', category: 'indian' },
+  { code: 'mni-Mtei', name: 'Manipuri (Meitei)', nativeName: 'মৈতৈলোন্', flag: '🇮🇳', category: 'indian' },
+  { code: 'lus', name: 'Mizo (Lushai)', nativeName: 'Mizo ṭawng', flag: '🇮🇳', category: 'indian' }
 ];
 
 export const GLOBAL_LANGUAGES: GoogleLanguage[] = [
@@ -46,7 +49,7 @@ export const GLOBAL_LANGUAGES: GoogleLanguage[] = [
   { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', category: 'global' },
   { code: 'th', name: 'Thai', nativeName: 'ไทย', flag: '🇹🇭', category: 'global' },
   { code: 'ms', name: 'Malay', nativeName: 'Bahasa Melayu', flag: '🇲🇾', category: 'global' },
-  { code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱' , category: 'global' },
+  { code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱', category: 'global' },
   { code: 'pl', name: 'Polish', nativeName: 'Polski', flag: '🇵🇱', category: 'global' },
   { code: 'sv', name: 'Swedish', nativeName: 'Svenska', flag: '🇸🇪', category: 'global' },
   { code: 'tl', name: 'Filipino / Tagalog', nativeName: 'Tagalog', flag: '🇵🇭', category: 'global' },
@@ -59,7 +62,69 @@ export const GLOBAL_LANGUAGES: GoogleLanguage[] = [
   { code: 'ro', name: 'Romanian', nativeName: 'Română', flag: '🇷🇴', category: 'global' },
   { code: 'da', name: 'Danish', nativeName: 'Dansk', flag: '🇩🇰', category: 'global' },
   { code: 'fi', name: 'Finnish', nativeName: 'Suomi', flag: '🇫🇮', category: 'global' },
-  { code: 'no', name: 'Norwegian', nativeName: 'Norsk', flag: '🇳🇴', category: 'global' }
+  { code: 'no', name: 'Norwegian', nativeName: 'Norsk', flag: '🇳🇴', category: 'global' },
+  { code: 'af', name: 'Afrikaans', nativeName: 'Afrikaans', flag: '🇿🇦', category: 'global' },
+  { code: 'sq', name: 'Albanian', nativeName: 'Shqip', flag: '🇦🇱', category: 'global' },
+  { code: 'am', name: 'Amharic', nativeName: 'አማርኛ', flag: '🇪🇹', category: 'global' },
+  { code: 'hy', name: 'Armenian', nativeName: 'Հայերեն', flag: '🇦🇲', category: 'global' },
+  { code: 'az', name: 'Azerbaijani', nativeName: 'Azərbaycan', flag: '🇦🇿', category: 'global' },
+  { code: 'eu', name: 'Basque', nativeName: 'Euskara', flag: '🇪🇸', category: 'global' },
+  { code: 'be', name: 'Belarusian', nativeName: 'Беларуская', flag: '🇧🇾', category: 'global' },
+  { code: 'bs', name: 'Bosnian', nativeName: 'Bosanski', flag: '🇧🇦', category: 'global' },
+  { code: 'bg', name: 'Bulgarian', nativeName: 'Български', flag: '🇧🇬', category: 'global' },
+  { code: 'ca', name: 'Catalan', nativeName: 'Català', flag: '🇪🇸', category: 'global' },
+  { code: 'ceb', name: 'Cebuano', nativeName: 'Bisaya', flag: '🇵🇭', category: 'global' },
+  { code: 'co', name: 'Corsican', nativeName: 'Corsu', flag: '🇫🇷', category: 'global' },
+  { code: 'hr', name: 'Croatian', nativeName: 'Hrvatski', flag: '🇭🇷', category: 'global' },
+  { code: 'eo', name: 'Esperanto', nativeName: 'Esperanto', flag: '🌐', category: 'global' },
+  { code: 'et', name: 'Estonian', nativeName: 'Eesti', flag: '🇪🇪', category: 'global' },
+  { code: 'gl', name: 'Galician', nativeName: 'Galego', flag: '🇪🇸', category: 'global' },
+  { code: 'ka', name: 'Georgian', nativeName: 'ქართული', flag: '🇬🇪', category: 'global' },
+  { code: 'ht', name: 'Haitian Creole', nativeName: 'Kreyòl Ayisyen', flag: '🇭🇹', category: 'global' },
+  { code: 'ha', name: 'Hausa', nativeName: 'Hausa', flag: '🇳🇬', category: 'global' },
+  { code: 'haw', name: 'Hawaiian', nativeName: 'ʻŌlelo Hawaiʻi', flag: '🇺🇸', category: 'global' },
+  { code: 'hmn', name: 'Hmong', nativeName: 'Hmoob', flag: '🇱🇦', category: 'global' },
+  { code: 'is', name: 'Icelandic', nativeName: 'Íslenska', flag: '🇮🇸', category: 'global' },
+  { code: 'ig', name: 'Igbo', nativeName: 'Asụsụ Igbo', flag: '🇳🇬', category: 'global' },
+  { code: 'ga', name: 'Irish', nativeName: 'Gaeilge', flag: '🇮🇪', category: 'global' },
+  { code: 'jv', name: 'Javanese', nativeName: 'Basa Jawa', flag: '🇮🇩', category: 'global' },
+  { code: 'kk', name: 'Kazakh', nativeName: 'Қазақ тілі', flag: '🇰🇿', category: 'global' },
+  { code: 'km', name: 'Khmer', nativeName: 'ភាសាខ្មែរ', flag: '🇰🇭', category: 'global' },
+  { code: 'rw', name: 'Kinyarwanda', nativeName: 'Ikinyarwanda', flag: '🇷🇼', category: 'global' },
+  { code: 'ku', name: 'Kurdish', nativeName: 'Kurdî', flag: '🇮🇶', category: 'global' },
+  { code: 'ky', name: 'Kyrgyz', nativeName: 'Кыргызча', flag: '🇰🇬', category: 'global' },
+  { code: 'lo', name: 'Lao', nativeName: 'ພາສາລາວ', flag: '🇱🇦', category: 'global' },
+  { code: 'la', name: 'Latin', nativeName: 'Latīna', flag: '🇻🇦', category: 'global' },
+  { code: 'lv', name: 'Latvian', nativeName: 'Latviešu', flag: '🇱🇻', category: 'global' },
+  { code: 'lt', name: 'Lithuanian', nativeName: 'Lietuvių', flag: '🇱🇹', category: 'global' },
+  { code: 'lb', name: 'Luxembourgish', nativeName: 'Lëtzebuergesch', flag: '🇱🇺', category: 'global' },
+  { code: 'mk', name: 'Macedonian', nativeName: 'Македонски', flag: '🇲🇰', category: 'global' },
+  { code: 'mg', name: 'Malagasy', nativeName: 'Fiteny Malagasy', flag: '🇲🇬', category: 'global' },
+  { code: 'mt', name: 'Maltese', nativeName: 'Malti', flag: '🇲🇹', category: 'global' },
+  { code: 'mi', name: 'Maori', nativeName: 'Te Reo Māori', flag: '🇳🇿', category: 'global' },
+  { code: 'mn', name: 'Mongolian', nativeName: 'Монгол хэл', flag: '🇲🇳', category: 'global' },
+  { code: 'my', name: 'Myanmar (Burmese)', nativeName: 'မြန်မာစာ', flag: '🇲🇲', category: 'global' },
+  { code: 'ps', name: 'Pashto', nativeName: 'پښتو', flag: '🇦🇫', category: 'global' },
+  { code: 'sm', name: 'Samoan', nativeName: 'Gagana Sāmoa', flag: '🇼🇸', category: 'global' },
+  { code: 'gd', name: 'Scots Gaelic', nativeName: 'Gàidhlig', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', category: 'global' },
+  { code: 'sr', name: 'Serbian', nativeName: 'Српски', flag: '🇷🇸', category: 'global' },
+  { code: 'st', name: 'Sesotho', nativeName: 'Sesotho', flag: '🇱🇸', category: 'global' },
+  { code: 'sn', name: 'Shona', nativeName: 'chiShona', flag: '🇿🇼', category: 'global' },
+  { code: 'si', name: 'Sinhala', nativeName: 'සිංහල', flag: '🇱🇰', category: 'global' },
+  { code: 'sk', name: 'Slovak', nativeName: 'Slovenčina', flag: '🇸🇰', category: 'global' },
+  { code: 'sl', name: 'Slovenian', nativeName: 'Slovenščina', flag: '🇸🇮', category: 'global' },
+  { code: 'so', name: 'Somali', nativeName: 'Soomaaliga', flag: '🇸🇴', category: 'global' },
+  { code: 'su', name: 'Sundanese', nativeName: 'Basa Sunda', flag: '🇮🇩', category: 'global' },
+  { code: 'tg', name: 'Tajik', nativeName: 'Тоҷикӣ', flag: '🇹🇯', category: 'global' },
+  { code: 'tt', name: 'Tatar', nativeName: 'Татар теле', flag: '🇷🇺', category: 'global' },
+  { code: 'tk', name: 'Turkmen', nativeName: 'Türkmen dili', flag: '🇹🇲', category: 'global' },
+  { code: 'ug', name: 'Uyghur', nativeName: 'ئۇيغۇرچە', flag: '🇨🇳', category: 'global' },
+  { code: 'uz', name: 'Uzbek', nativeName: 'Oʻzbekcha', flag: '🇺🇿', category: 'global' },
+  { code: 'cy', name: 'Welsh', nativeName: 'Cymraeg', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', category: 'global' },
+  { code: 'xh', name: 'Xhosa', nativeName: 'isiXhosa', flag: '🇿🇦', category: 'global' },
+  { code: 'yi', name: 'Yiddish', nativeName: 'ייִדיש', flag: '🇮🇱', category: 'global' },
+  { code: 'yo', name: 'Yoruba', nativeName: 'Èdè Yorùbá', flag: '🇳🇬', category: 'global' },
+  { code: 'zu', name: 'Zulu', nativeName: 'isiZulu', flag: '🇿🇦', category: 'global' }
 ];
 
 export const ALL_GOOGLE_LANGUAGES: GoogleLanguage[] = [
@@ -96,8 +161,27 @@ export function ensureGoogleTranslateInitialized(): void {
     document.body.appendChild(el);
   }
 
-  // 2. Ensure script is loaded if online
-  if (typeof window !== 'undefined' && !window.google?.translate && isNetworkOnline()) {
+  // 2. Define callback function if not set
+  if (typeof (window as any).googleTranslateElementInit !== 'function') {
+    (window as any).googleTranslateElementInit = function () {
+      try {
+        if ((window as any).google && (window as any).google.translate) {
+          new (window as any).google.translate.TranslateElement(
+            {
+              pageLanguage: 'en',
+              autoDisplay: false
+            },
+            'google_translate_element'
+          );
+        }
+      } catch (e) {
+        console.warn('Google Translate element init error:', e);
+      }
+    };
+  }
+
+  // 3. Ensure script tag is loaded if online
+  if (typeof window !== 'undefined' && !(window as any).google?.translate && isNetworkOnline()) {
     if (!document.getElementById('google-translate-script')) {
       const script = document.createElement('script');
       script.id = 'google-translate-script';
@@ -111,7 +195,7 @@ export function ensureGoogleTranslateInitialized(): void {
 }
 
 /**
- * Get the currently active Google Translate language from cookie
+ * Get the currently active Google Translate language from cookie or localStorage
  */
 export function getActiveGoogleLanguage(): string | null {
   try {
@@ -127,6 +211,8 @@ export function getActiveGoogleLanguage(): string | null {
         }
       }
     }
+    const stored = localStorage.getItem('dailykhata_active_google_lang');
+    if (stored && stored !== 'en') return stored;
   } catch (e) {
     console.error('Failed to read googtrans cookie', e);
   }
@@ -178,7 +264,7 @@ export function applyGoogleTranslateLanguage(langCode: string): TranslateResult 
       `googtrans=/en/${langCode}; path=/; domain=${hostname};`
     ];
 
-    if (cleanHost && cleanHost !== hostname) {
+    if (cleanHost && cleanHost !== hostname && cleanHost !== 'localhost') {
       cookiesToSet.push(`googtrans=/auto/${langCode}; path=/; domain=.${cleanHost};`);
       cookiesToSet.push(`googtrans=/en/${langCode}; path=/; domain=.${cleanHost};`);
     }
@@ -189,15 +275,19 @@ export function applyGoogleTranslateLanguage(langCode: string): TranslateResult 
       } catch (e) {}
     });
 
+    try {
+      localStorage.setItem('dailykhata_active_google_lang', langCode);
+    } catch (e) {}
+
     // Try finding Google Translate dropdown combo
-    const combo = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+    const combo = (document.querySelector('.goog-te-combo') || document.querySelector('select.goog-te-combo')) as HTMLSelectElement | null;
     if (combo) {
       combo.value = langCode;
       combo.dispatchEvent(new Event('change', { bubbles: true }));
       combo.dispatchEvent(new Event('input', { bubbles: true }));
       return { success: true, reason: 'success' };
     } else {
-      // If combo not rendered in DOM yet, reload so the cookie triggers Google Translate init
+      // Reload so the cookie triggers Google Translate init across the entire DOM
       setTimeout(() => {
         window.location.reload();
       }, 150);
@@ -219,9 +309,9 @@ export function resetGoogleTranslate(): void {
 
     const clearCookies = [
       'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;',
-      `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname};`
+      'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + hostname + ';'
     ];
-    if (cleanHost && cleanHost !== hostname) {
+    if (cleanHost && cleanHost !== hostname && cleanHost !== 'localhost') {
       clearCookies.push(`googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${cleanHost};`);
     }
 
@@ -231,7 +321,11 @@ export function resetGoogleTranslate(): void {
       } catch (e) {}
     });
 
-    const combo = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+    try {
+      localStorage.removeItem('dailykhata_active_google_lang');
+    } catch (e) {}
+
+    const combo = (document.querySelector('.goog-te-combo') || document.querySelector('select.goog-te-combo')) as HTMLSelectElement | null;
     if (combo) {
       combo.value = '';
       combo.dispatchEvent(new Event('change', { bubbles: true }));

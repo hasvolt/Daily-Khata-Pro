@@ -131,14 +131,14 @@ export function BankingCard3D({
         style={{ rotateX, rotateY }}
         className="banking-card-3d relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] backdrop-blur-xl p-2.5 xs:p-3 sm:p-4 md:p-[18px] transition-all"
       >
-        {/* Luxury Multi-Layer Ambient Glow Nebulae (Dark Mode Deep Atmosphere) */}
+        {/* Luxury Multi-Layer Ambient Glow Nebulae (Dynamically matches active theme) */}
         <div className="banking-card-ambient-glow absolute inset-0 pointer-events-none overflow-hidden select-none">
-          {/* Top-Right Luminous Sky/Cyan Nebula */}
-          <div className="absolute -right-6 -top-10 h-48 w-56 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.28)_0%,transparent_70%)] blur-2xl" />
-          {/* Bottom-Left Deep Violet/Indigo Atmospheric Glow */}
-          <div className="absolute -left-10 -bottom-10 h-48 w-56 rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.20)_0%,transparent_70%)] blur-2xl" />
-          {/* Subtle Mid-Center Electric Sapphire Bloom */}
-          <div className="absolute left-1/3 top-1/4 h-32 w-36 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.14)_0%,transparent_70%)] blur-xl" />
+          {/* Top-Right Luminous Accent Nebula */}
+          <div className="absolute -right-6 -top-10 h-48 w-56 rounded-full bg-[radial-gradient(circle,var(--theme-primary,#38BDF8)_0%,transparent_70%)] opacity-25 blur-2xl" />
+          {/* Bottom-Left Deep Atmospheric Glow */}
+          <div className="absolute -left-10 -bottom-10 h-48 w-56 rounded-full bg-[radial-gradient(circle,var(--card-gradient-from,#1D4ED8)_0%,transparent_70%)] opacity-20 blur-2xl" />
+          {/* Subtle Mid-Center Bloom */}
+          <div className="absolute left-1/3 top-1/4 h-32 w-36 rounded-full bg-[radial-gradient(circle,var(--theme-primary,#38BDF8)_0%,transparent_70%)] opacity-15 blur-xl" />
         </div>
 
         {/* High-Precision Guilloché Security Watermark & Luxury Texture */}

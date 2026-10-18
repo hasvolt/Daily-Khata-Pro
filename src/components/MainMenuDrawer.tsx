@@ -46,7 +46,8 @@ import {
   Share2,
   Bell,
   Sparkles,
-  Users
+  Users,
+  Palette
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -54,6 +55,21 @@ import { AppTheme, AppLanguage } from '../types';
 import { triggerHapticSound } from '../utils/khataCalculations';
 import { APP_VERSION } from '../utils/version';
 import { isGoogleTranslateActive, getActiveGoogleLanguage, ALL_GOOGLE_LANGUAGES } from '../utils/googleTranslate';
+
+const ALL_THEMES: { id: AppTheme; label: string; color: string }[] = [
+  { id: 'blue', label: 'Electric Blue', color: '#3B82F6' },
+  { id: 'dark', label: 'Emerald Black', color: '#10B981' },
+  { id: 'black', label: 'Deep Obsidian', color: '#38BDF8' },
+  { id: 'monochrome', label: 'Monochrome', color: '#F8FAFC' },
+  { id: 'yellow', label: 'Premium Gold', color: '#F59E0B' },
+  { id: 'orange', label: 'Sunset Orange', color: '#F97316' },
+  { id: 'emerald', label: 'Emerald Green', color: '#22C55E' },
+  { id: 'purple', label: 'Royal Violet', color: '#A855F7' },
+  { id: 'cyan', label: 'Ocean Teal', color: '#06B6D4' },
+  { id: 'pink', label: 'Crimson Pink', color: '#EC4899' },
+  { id: 'white', label: 'Day / White', color: '#FFFFFF' },
+  { id: 'light', label: 'Daylight Light', color: '#38BDF8' }
+];
 
 export interface MainMenuDrawerProps {
   isOpen: boolean;
@@ -666,6 +682,48 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             )}
           </div>
         </div>
+
+        {/* Quick 12-Theme Color Palette Switcher */}
+        {onThemeChange && (
+          <div className="px-4 sm:px-5 py-2 shrink-0 border-b border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-surface,#0E1A29)]/60">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <span className="text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] flex items-center gap-1.5">
+                <Palette className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
+                {isHindi ? '12 कलर थीम्स (12 Color Themes)' : 'Color Theme Palette (12 Themes)'}
+              </span>
+              <span className="text-[10px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] uppercase">
+                {theme}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+              {ALL_THEMES.map((th) => {
+                const isActive = theme === th.id;
+                return (
+                  <button
+                    key={th.id}
+                    type="button"
+                    onClick={() => {
+                      triggerHapticSound('click');
+                      onThemeChange(th.id);
+                    }}
+                    title={th.label}
+                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10.5px] font-bold transition-all shrink-0 cursor-pointer border ${
+                      isActive
+                        ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/20 text-white shadow-xs scale-105'
+                        : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:border-[var(--theme-primary,#38BDF8)]/50'
+                    }`}
+                  >
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/20 shadow-xs"
+                      style={{ backgroundColor: th.color }}
+                    />
+                    <span>{th.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Quick Action Banners (New Version 1-Click Update & Google Translator) */}
         <div className="px-4 sm:px-5 pb-2 shrink-0 space-y-2">

@@ -377,7 +377,14 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={() => {
                 if (isLightMode) {
-                  onThemeChange('blue');
+                  let lastDark: AppTheme = 'blue';
+                  try {
+                    const saved = localStorage.getItem('dailykhata_last_dark_theme') as AppTheme;
+                    if (saved && saved !== 'white' && saved !== 'light') {
+                      lastDark = saved;
+                    }
+                  } catch (e) {}
+                  onThemeChange(lastDark);
                 } else {
                   onThemeChange('white');
                 }
