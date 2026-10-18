@@ -3508,7 +3508,7 @@ function AppContent() {
             return;
           }
           if (tab === 'toggle-theme') {
-            handleThemeChange(theme === 'light' || theme === 'white' ? 'yellow' : 'light');
+            handleThemeChange(theme === 'white' || theme === 'light' ? 'blue' : 'white');
             return;
           }
           if (tab === 'toggle-privacy') {

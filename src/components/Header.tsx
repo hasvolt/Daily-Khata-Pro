@@ -371,21 +371,16 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          {/* Quick Day/Night Toggle */}
+          {/* Quick Day/Night Toggle - White paired with Electric Blue ('blue') */}
           {onThemeChange && (
             <button
               type="button"
               onClick={() => {
                 if (isLightMode) {
-                  let lastDark: AppTheme = 'blue';
-                  try {
-                    const saved = localStorage.getItem('dailykhata_last_dark_theme') as AppTheme;
-                    if (saved && saved !== 'white' && saved !== 'light') {
-                      lastDark = saved;
-                    }
-                  } catch (e) {}
-                  onThemeChange(lastDark);
+                  // White colour theme ke sath dark mode ke liye Electric Blue ('blue')
+                  onThemeChange('blue');
                 } else {
+                  // Dark mode se day mode ke liye Day/White ('white')
                   onThemeChange('white');
                 }
               }}
