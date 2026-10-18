@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExternalLink, Sparkles, RefreshCw, AlertTriangle, ShieldCheck, ArrowLeft, Maximize, Minimize } from 'lucide-react';
+import { Studio } from 'sanity';
+import sanityConfig from '../sanity/sanity.config';
 
 class StudioErrorBoundary extends React.Component<
   { children: React.ReactNode; currentStudioUrl: string; onReload: () => void },
@@ -158,17 +160,6 @@ export function StudioPage() {
           </a>
 
           <a
-            href="https://3zccyf67.sanity.studio"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-2 py-1 rounded-lg bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] hover:border-emerald-500/50 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
-            title="Open Hosted Sanity Cloud Studio Directly"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="hidden sm:inline">Cloud Studio</span>
-          </a>
-
-          <a
             href="https://www.sanity.io/manage/project/3zccyf67/api#cors-origins"
             target="_blank"
             rel="noopener noreferrer"
@@ -206,14 +197,12 @@ export function StudioPage() {
         key={studioKey}
         className="w-full flex-1 min-h-0 h-full relative overflow-hidden bg-[#070E18]"
       >
-        <iframe
-          src="https://3zccyf67.sanity.studio"
-          title="Sanity Studio - Daily Khata Pro"
-          className="w-full h-full border-0"
-          allow="fullscreen; clipboard-read; clipboard-write"
-        />
+        <StudioErrorBoundary currentStudioUrl={currentStudioUrl} onReload={() => setStudioKey((k) => k + 1)}>
+          <Studio config={sanityConfig} />
+        </StudioErrorBoundary>
       </div>
     </div>
   );
 }
 export default StudioPage;
+

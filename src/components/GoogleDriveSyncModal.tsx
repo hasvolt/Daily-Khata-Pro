@@ -427,6 +427,31 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
                   </span>
                 </button>
 
+                {/* Preview Iframe Helper (Detects iframe and offers opening in new tab) */}
+                {typeof window !== 'undefined' && window.self !== window.top && (
+                  <div className="p-3 rounded-xl bg-sky-500/10 border border-sky-500/30 text-[11.5px] space-y-1.5">
+                    <div className="flex items-center gap-1.5 text-sky-400 font-bold">
+                      <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                      <span>{t('प्रीव्यू विंडो सहायता (Preview Iframe)', 'Preview Iframe Helper')}</span>
+                    </div>
+                    <p className="text-[var(--theme-text-muted,#CBD5E1)] leading-relaxed">
+                      {t(
+                        'यदि प्रीव्यू विंडो में गूगल लॉगिन विंडो ब्लॉक होती है, तो ऐप को नए टैब में खोलकर कनेक्ट करें।',
+                        'If Google sign-in popup is blocked by browser iframe policies, open the app in a new tab to connect.'
+                      )}
+                    </p>
+                    <a
+                      href={typeof window !== 'undefined' ? window.location.href : '/'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-[11px] cursor-pointer transition-colors shadow-xs"
+                    >
+                      <span>{t('नये टैब में खोलें (Open in New Tab)', 'Open in New Tab')}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+
                 {unauthorizedDomain && (
                   <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11.5px] space-y-2">
                     <div className="flex items-start gap-2 text-amber-400 font-bold">

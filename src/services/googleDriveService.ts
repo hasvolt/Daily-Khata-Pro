@@ -194,7 +194,129 @@ export const initAuth = (
 };
 
 /**
- * Google Sign In with Popup
+ * Ensure Google Identity Services (GIS) client library is loaded
+ */
+export const loadGsiScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined') return resolve(false);
+    if ((window as any).google?.accounts?.oauth2) return resolve(true);
+
+    const existing = document.querySelector('script[src*="accounts.google.com/gsi/client"]');
+    if (existing) {
+      existing.addEventListener('load', () => resolve(true), { once: true });
+      existing.addEventListener('error', () => resolve(false), { once: true });
+      // If already loaded before listener
+      if ((window as any).google?.accounts?.oauth2) return resolve(true);
+      setTimeout(() => resolve(Boolean((window as any).google?.accounts?.oauth2)), 1500);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.head.appendChild(script);
+  });
+};
+
+/**
+ * Sign in directly via Google Identity Services (Token Client)
+ * Bypasses Firebase Authorized Domains restrictions by using standard Google OAuth 2.0.
+ */
+export const signInWithGIS = (
+  emailHint?: string
+): Promise<{ user: StoredUserProfile; accessToken: string }> => {
+  return new Promise(async (resolve, reject) => {
+    if (typeof window === 'undefined') {
+      return reject(new Error('Browser window environment required for Google Sign In.'));
+    }
+
+    await loadGsiScript();
+
+    const gAccounts = (window as any).google?.accounts?.oauth2;
+    if (!gAccounts) {
+      return reject(new Error('Google Identity Services SDK could not be initialized.'));
+    }
+
+    const clientId = firebaseConfig.oAuthClientId;
+    if (!clientId) {
+      return reject(new Error('Google OAuth Client ID is missing in configuration.'));
+    }
+
+    try {
+      const client = gAccounts.initTokenClient({
+        client_id: clientId,
+        scope: `${DRIVE_SCOPES.join(' ')} https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email`,
+        hint: emailHint,
+        callback: async (tokenResponse: any) => {
+          if (tokenResponse.error) {
+            const errCode = tokenResponse.error;
+            const errDesc = tokenResponse.error_description || tokenResponse.error;
+            if (errCode === 'popup_closed_by_user' || errCode === 'access_denied') {
+              const cancelErr = new Error('Sign in was closed or denied by user.');
+              (cancelErr as any).code = 'auth/popup-closed-by-user';
+              return reject(cancelErr);
+            }
+            return reject(new Error(errDesc));
+          }
+
+          const accessToken = tokenResponse.access_token;
+          if (!accessToken) {
+            return reject(new Error('Google OAuth access token not received.'));
+          }
+
+          cachedAccessToken = accessToken;
+          const expiresIn = parseInt(tokenResponse.expires_in, 10) || 3600;
+          setStoredToken(accessToken, expiresIn);
+
+          // Fetch user info from Google's UserInfo API
+          try {
+            const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+              headers: { Authorization: `Bearer ${accessToken}` }
+            });
+            if (userRes.ok) {
+              const uData = await userRes.json();
+              const profile: StoredUserProfile = {
+                uid: uData.sub || 'google-' + Date.now(),
+                email: uData.email || null,
+                displayName: uData.name || null,
+                photoURL: uData.picture || null
+              };
+              setStoredUserProfile(profile);
+              return resolve({ user: profile, accessToken });
+            }
+          } catch (e) {
+            console.warn('[Google Drive] User info fetch error:', e);
+          }
+
+          // Fallback profile if userinfo is restricted
+          const fallbackProfile: StoredUserProfile = {
+            uid: 'google-user-' + Date.now(),
+            email: emailHint || 'Google Drive Connected',
+            displayName: 'Google Account',
+            photoURL: null
+          };
+          setStoredUserProfile(fallbackProfile);
+          resolve({ user: fallbackProfile, accessToken });
+        },
+        error_callback: (err: any) => {
+          console.warn('[GIS OAuth Error Callback]:', err);
+          reject(new Error(err?.message || 'Google OAuth error'));
+        }
+      });
+
+      client.requestAccessToken({ prompt: emailHint ? '' : 'select_account' });
+    } catch (err: any) {
+      reject(err);
+    }
+  });
+};
+
+/**
+ * Google Sign In — tries Google Identity Services (GIS) first for maximum domain compatibility,
+ * and seamlessly falls back to Firebase Auth.
  */
 export const googleSignIn = async (
   isReauth: boolean = false
@@ -202,8 +324,25 @@ export const googleSignIn = async (
   try {
     isSigningIn = true;
     const emailHint = auth.currentUser?.email || getStoredUserProfile()?.email || undefined;
-    const provider = createGoogleProvider(isReauth ? emailHint : undefined);
 
+    // 1. Try Google Identity Services (GIS) first — works across all domains & previews
+    try {
+      const gisResult = await signInWithGIS(isReauth ? emailHint : undefined);
+      return gisResult;
+    } catch (gisError: any) {
+      // If user closed popup intentionally, don't cascade to another popup
+      if (
+        gisError?.code === 'auth/popup-closed-by-user' ||
+        gisError?.message?.includes('closed') ||
+        gisError?.message?.includes('denied')
+      ) {
+        throw gisError;
+      }
+      console.warn('[Google Auth] GIS sign in notice (falling back to Firebase Auth):', gisError);
+    }
+
+    // 2. Fallback to Firebase Auth signInWithPopup
+    const provider = createGoogleProvider(isReauth ? emailHint : undefined);
     const result = await signInWithPopup(auth, provider);
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (!credential?.accessToken) {
