@@ -275,6 +275,49 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
     }
   };
 
+  // Instant Offline JSON Backup (Infallible Fallback)
+  const handleDownloadLocalJsonBackup = () => {
+    try {
+      const jsonStr = JSON.stringify(currentData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().split('T')[0];
+      a.href = url;
+      a.download = `daily-khata-pro-backup-${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      triggerHapticSound('save');
+      showToast('success', t('ऑफ़लाइन JSON बैकअप फ़ाइल डाउनलोड हो गई!', 'Offline JSON backup file downloaded successfully!'));
+    } catch (e: any) {
+      showToast('error', e.message || 'Export failed');
+    }
+  };
+
+  const handleRestoreLocalJsonFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const parsed = JSON.parse(event.target?.result as string);
+        const payload = validateAndSanitizeKhataBackup(parsed);
+        if (!payload) {
+          throw new Error('Invalid or corrupted backup file');
+        }
+        onRestoreData(payload);
+        triggerHapticSound('save');
+        showToast('success', t('लोकल बैकअप फ़ाइल से डेटा सफलतापूर्वक रिस्टोर हो गया!', 'Data restored from backup file successfully!'));
+      } catch (err: any) {
+        showToast('error', t(`फ़ाइल अमान्य है: ${err.message}`, `Invalid backup file: ${err.message}`));
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#030712]/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-2xl w-full max-w-xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-left">
@@ -718,6 +761,44 @@ export const GoogleDriveSyncModal: React.FC<GoogleDriveSyncModalProps> = ({
                 )}
               </div>
             )}
+          </div>
+
+          {/* 4. OFFLINE DIRECT JSON FILE BACKUP & RESTORE (100% Guaranteed Fallback) */}
+          <div className="p-4 rounded-xl bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] space-y-3">
+            <div className="flex items-center gap-2 text-[var(--theme-primary,#38BDF8)]">
+              <ArrowDownToLine className="w-4 h-4" />
+              <span className="font-bold text-[13px] text-[var(--theme-text,#F8FAFC)]">
+                {t('100% ऑफ़लाइन लोकल बैकअप फ़ाइल (.json)', '100% Offline Local File Backup (.json)')}
+              </span>
+            </div>
+            <p className="text-[11.5px] text-[var(--theme-text-dim,#94A3B8)] leading-relaxed">
+              {t(
+                'यदि गूगल ड्राइव कनेक्ट करने में कोई समस्या हो, तो बिना इंटरनेट तुरंत अपने डिवाइस पर पूरा बैकअप डाउनलोड करें या फ़ाइल से डेटा रिस्टोर करें।',
+                'If you ever face network or domain issues with Google Drive, download an offline backup directly to your device or restore from a JSON file.'
+              )}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={handleDownloadLocalJsonBackup}
+                className="flex-1 py-2 px-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/35 font-bold text-[12px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98"
+              >
+                <ArrowDownToLine className="w-4 h-4" />
+                <span>{t('लोकल फ़ाइल डाउनलोड करें (.json)', 'Download Backup (.json)')}</span>
+              </button>
+
+              <label className="flex-1 py-2 px-3 rounded-xl bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#17377C)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text,#F8FAFC)] font-bold text-[12px] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98 text-center">
+                <CloudDownload className="w-4 h-4 text-sky-400" />
+                <span>{t('फ़ाइल से रिस्टोर करें', 'Restore from File')}</span>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleRestoreLocalJsonFile}
+                  className="hidden"
+                />
+              </label>
+            </div>
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   User,
   Cloud,
@@ -166,6 +167,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   isUpdatingApp = false,
   onOpenRozfiberApps
 }) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const isHindi = language === 'hi';
   const isLightMode = theme === 'light' || theme === 'white' || (typeof document !== 'undefined' && (document.documentElement.getAttribute('data-theme') === 'light' || document.documentElement.getAttribute('data-theme') === 'white' || document.documentElement.classList.contains('light')));
@@ -383,6 +385,18 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           label: isHindi ? 'बिल विभाजन कैलकुलेटर' : 'Bill Splitting Calculator',
           icon: Split,
           onClick: onOpenSplitBill ? () => handleAction(onOpenSplitBill) : undefined
+        },
+        {
+          id: 'sanity-studio-blog',
+          label: isHindi ? 'सैनिटी स्टूडियो (ब्लॉग लिखें)' : 'Sanity Studio (Write Blog)',
+          icon: Sparkles,
+          badge: 'STUDIO ↗',
+          badgeColor: 'emerald',
+          onClick: () => {
+            triggerHapticSound('click');
+            onClose();
+            navigate('/studio');
+          }
         }
       ]
     },
@@ -441,6 +455,18 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           badge: 'HUB',
           badgeColor: 'emerald',
           onClick: onOpenRozfiberApps ? () => handleAction(onOpenRozfiberApps) : () => handleNavigate('apps')
+        },
+        {
+          id: 'sanity-studio-manage',
+          label: isHindi ? 'सैनिटी ब्लॉग स्टूडियो (कंटेंट लिखें)' : 'Sanity Studio (Author & Publish)',
+          icon: Sparkles,
+          badge: 'CMS ↗',
+          badgeColor: 'emerald',
+          onClick: () => {
+            triggerHapticSound('click');
+            onClose();
+            navigate('/studio');
+          }
         }
       ]
     },

@@ -1084,6 +1084,101 @@
   box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.90), 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.18) !important;
 }
 
+/* Day / White Mode: Total Balance Card High Contrast & Crisp Hierarchy */
+[data-theme="white"] .banking-card-3d,
+[data-theme="light"] .banking-card-3d {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F0F7FF 55%, #E0EFFE 100%) !important;
+  border: 1.5px solid #93C5FD !important;
+  box-shadow: 0 12px 36px -4px rgba(37, 99, 235, 0.14), inset 0 1px 2px #FFFFFF !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-title,
+[data-theme="light"] .banking-card-3d .banking-card-title {
+  color: #0F172A !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-amount,
+[data-theme="light"] .banking-card-3d .banking-card-amount {
+  color: #0F172A !important;
+  text-shadow: none !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-avail-label,
+[data-theme="light"] .banking-card-3d .banking-card-avail-label {
+  color: #1E40AF !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-subtitle,
+[data-theme="light"] .banking-card-3d .banking-card-subtitle,
+[data-theme="white"] .banking-card-3d .banking-card-words,
+[data-theme="light"] .banking-card-3d .banking-card-words {
+  color: #475569 !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-badge,
+[data-theme="light"] .banking-card-3d .banking-card-badge {
+  background-color: #FFFFFF !important;
+  border-color: #BFDBFE !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-badge-text,
+[data-theme="light"] .banking-card-3d .banking-card-badge-text {
+  color: #1E3A8A !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-icon-box,
+[data-theme="light"] .banking-card-3d .banking-card-icon-box {
+  background: rgba(37, 99, 235, 0.12) !important;
+  border-color: #93C5FD !important;
+}
+
+[data-theme="white"] .banking-card-3d .banking-card-icon-box svg,
+[data-theme="light"] .banking-card-3d .banking-card-icon-box svg {
+  color: #2563EB !important;
+}
+
+[data-theme="white"] .banking-card-3d .hero-buttons-divider,
+[data-theme="light"] .banking-card-3d .hero-buttons-divider {
+  border-top-color: #BFDBFE !important;
+}
+
+/* Electric Blue Mode: Total Balance Card Signature Obsidian & Sapphire Luminescence */
+[data-theme="blue"] .banking-card-3d {
+  background: linear-gradient(135deg, #0C2147 0%, #06132D 55%, #020716 100%) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 16px 48px -8px rgba(2, 6, 23, 0.90), 0 0 0 1px rgba(56, 189, 248, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="blue"] .banking-card-3d .banking-card-title {
+  color: #F8FAFC !important;
+}
+
+[data-theme="blue"] .banking-card-3d .banking-card-amount {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 14px rgba(56, 189, 248, 0.35) !important;
+}
+
+[data-theme="blue"] .banking-card-3d .banking-card-avail-label {
+  color: #7DD3FC !important;
+}
+
+[data-theme="blue"] .banking-card-3d .banking-card-subtitle {
+  color: #94A3B8 !important;
+}
+
+[data-theme="blue"] .banking-card-3d .banking-card-words {
+  color: #BAE6FD !important;
+}
+
+[data-theme="blue"] .banking-card-3d .banking-card-badge {
+  background-color: rgba(6, 13, 29, 0.92) !important;
+  border-color: rgba(56, 189, 248, 0.40) !important;
+}
+
+[data-theme="blue"] .banking-card-3d .banking-card-badge-text {
+  color: #FFFFFF !important;
+}
+
 .summary-card-3d {
   background: linear-gradient(135deg, var(--theme-card) 0%, var(--theme-surface) 100%) !important;
   border-color: var(--theme-border) !important;

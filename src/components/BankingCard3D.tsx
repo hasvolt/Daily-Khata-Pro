@@ -210,7 +210,7 @@ export function BankingCard3D({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1 sm:gap-1.5">
-                  <h2 className="banking-card-title text-[11.5px] xs:text-[12.5px] sm:text-[14px] font-bold text-white tracking-wide uppercase leading-tight whitespace-nowrap">
+                  <h2 className="banking-card-title text-[11.5px] xs:text-[12.5px] sm:text-[14px] font-bold text-[var(--theme-card-text,#FFFFFF)] tracking-wide uppercase leading-tight whitespace-nowrap">
                     {isHindi ? 'कुल शुद्ध बैलेंस' : 'TOTAL NET BALANCE'}
                   </h2>
                   <button
@@ -220,17 +220,17 @@ export function BankingCard3D({
                       if (onTogglePrivacyMask) onTogglePrivacyMask();
                     }}
                     title={privacyMask ? (isHindi ? 'बैलेंस दिखाएं' : 'Show Balance') : (isHindi ? 'बैलेंस छिपाएं' : 'Hide Balance')}
-                    className="text-[var(--theme-primary,#38BDF8)] hover:text-white p-0.5 rounded-full hover:bg-[var(--theme-primary,#38BDF8)]/20 active:scale-90 transition-all cursor-pointer shrink-0"
+                    className="text-[var(--theme-primary,#38BDF8)] hover:opacity-80 p-0.5 rounded-full hover:bg-[var(--theme-primary,#38BDF8)]/20 active:scale-90 transition-all cursor-pointer shrink-0"
                     aria-label={privacyMask ? 'Show Balance' : 'Hide Balance'}
                   >
                     {privacyMask ? (
                       <EyeOff className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" strokeWidth={2.4} />
                     ) : (
-                      <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)] hover:text-white" strokeWidth={2.4} />
+                      <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--theme-primary,#38BDF8)]" strokeWidth={2.4} />
                     )}
                   </button>
                 </div>
-                <p className="text-[9.5px] sm:text-[10.5px] font-medium text-[var(--theme-text-muted,#CBD5E1)] leading-tight mt-0.5 truncate">
+                <p className="banking-card-subtitle text-[9.5px] sm:text-[10.5px] font-medium text-[var(--theme-text-muted,#CBD5E1)] leading-tight mt-0.5 truncate">
                   {isHindi ? 'आपका संपूर्ण वित्तीय सारांश' : 'Your overall financial summary'}
                 </p>
               </div>
@@ -253,16 +253,16 @@ export function BankingCard3D({
               {/* Stacked Badges (SECURED & Date) */}
               <div className="flex flex-col items-end gap-1 shrink-0">
                 {/* SECURED badge with professional ShieldCheck icon */}
-                <div className="flex items-center gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-surface,#060D1A)]/90 shadow-2xs">
+                <div className="banking-card-badge flex items-center gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-surface,#060D1A)]/90 shadow-2xs">
                   <ShieldCheck className="w-3 h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" strokeWidth={2.4} />
-                  <span className="text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-bold text-white tracking-wider uppercase">
+                  <span className="banking-card-badge-text text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-bold text-[var(--theme-card-text,#FFFFFF)] tracking-wider uppercase">
                     SECURED
                   </span>
                 </div>
                 {/* Date badge */}
-                <div className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-surface,#060D1A)]/90 shadow-2xs">
+                <div className="banking-card-badge flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-surface,#060D1A)]/90 shadow-2xs">
                   <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" strokeWidth={2.4} />
-                  <span className="text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-bold text-white tracking-wide uppercase whitespace-nowrap">
+                  <span className="banking-card-badge-text text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-bold text-[var(--theme-card-text,#FFFFFF)] tracking-wide uppercase whitespace-nowrap">
                     {activeDate}
                   </span>
                 </div>
@@ -274,7 +274,7 @@ export function BankingCard3D({
           <div className="mt-1.5 sm:mt-2.5">
             <div className="mb-0.5 flex items-center gap-1.5">
               <TrendingUp className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] shrink-0" strokeWidth={2.4} />
-              <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-[var(--theme-text-muted,#CBD5E1)] uppercase">
+              <span className="banking-card-avail-label text-[10px] sm:text-[11px] font-bold tracking-wider text-[var(--theme-text-muted,#CBD5E1)] uppercase">
                 {isHindi ? 'उपलब्ध बैलेंस' : 'AVAILABLE BALANCE'}
               </span>
             </div>
@@ -282,20 +282,20 @@ export function BankingCard3D({
             {privacyMask ? (
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xl sm:text-2xl font-extrabold text-white font-mono leading-none">
+                  <span className="banking-card-amount text-xl sm:text-2xl font-extrabold text-[var(--theme-card-text,#FFFFFF)] font-mono leading-none">
                     ₹
                   </span>
-                  <span className="text-lg sm:text-xl text-white tracking-[0.25em] font-mono leading-none select-none">
+                  <span className="banking-card-amount text-lg sm:text-xl text-[var(--theme-card-text,#FFFFFF)] tracking-[0.25em] font-mono leading-none select-none">
                     • • • • •
                   </span>
                 </div>
-                <p className="text-[9px] sm:text-[10px] font-semibold text-[var(--theme-text-muted,#CBD5E1)] mt-0.5 tracking-widest select-none">
+                <p className="banking-card-words text-[9px] sm:text-[10px] font-semibold text-[var(--theme-text-muted,#CBD5E1)] mt-0.5 tracking-widest select-none">
                   ••••••••••••••
                 </p>
               </div>
             ) : (
               <div className="min-w-0">
-                <div className="text-[22px] xs:text-[26px] sm:text-[32px] md:text-[36px] font-black text-white tracking-tight leading-tight break-words drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]">
+                <div className="banking-card-amount text-[22px] xs:text-[26px] sm:text-[32px] md:text-[36px] font-black text-[var(--theme-card-text,#FFFFFF)] tracking-tight leading-tight break-words drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]">
                   {formatCurrency(totalWealth, false)}
                 </div>
                 <div className="mt-0.5 max-w-full">
