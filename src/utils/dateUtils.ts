@@ -46,3 +46,31 @@ export function normalizeDateToLocal(val: string | Date | undefined | null): str
   if (isNaN(parsed.getTime())) return getLocalDateString();
   return getLocalDateString(parsed);
 }
+
+/**
+ * Formats a time string (e.g. "09:00", "18:30", "13:00") into 12-hour format with AM/PM (e.g. "09:00 AM", "06:30 PM", "01:00 PM").
+ * Handles already formatted strings gracefully.
+ */
+export function formatTime12h(timeStr?: string | null): string {
+  if (!timeStr) return '';
+  const trimmed = timeStr.trim();
+  if (!trimmed) return '';
+  
+  if (/[ap]m/i.test(trimmed)) {
+    return trimmed.toUpperCase();
+  }
+  
+  const parts = trimmed.split(':');
+  if (parts.length < 2) return trimmed;
+  
+  const hoursNum = parseInt(parts[0], 10);
+  const minutes = parts[1].slice(0, 2);
+  if (isNaN(hoursNum)) return trimmed;
+  
+  const ampm = hoursNum >= 12 ? 'PM' : 'AM';
+  let h12 = hoursNum % 12;
+  if (h12 === 0) h12 = 12;
+  
+  return `${String(h12).padStart(2, '0')}:${minutes} ${ampm}`;
+}
+

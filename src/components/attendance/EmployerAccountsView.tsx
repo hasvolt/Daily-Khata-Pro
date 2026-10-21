@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { EmployerSummary, getWorkCategoryMeta, WORK_CATEGORIES_CATALOG } from './attendanceTypes';
 import { escapeHtml } from '../../utils/security';
+import { formatTime12h } from '../../utils/dateUtils';
 
 interface EmployerAccountsViewProps {
   employerSummaries: EmployerSummary[];
@@ -129,7 +130,8 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
             <tr>
               <th>Date</th>
               <th>Status</th>
-              <th>Timings</th>
+              <th>Duty Hours (12H)</th>
+              <th>Location / Site</th>
               <th>Work Detail</th>
               <th>Rate/Wage</th>
               <th>Received</th>
@@ -147,7 +149,8 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
                 <tr>
                   <td><strong>${escapeHtml(l.date)}</strong></td>
                   <td>${escapeHtml(l.status.toUpperCase())}</td>
-                  <td>${l.startTime && l.endTime ? `${escapeHtml(l.startTime)}-${escapeHtml(l.endTime)}` : '-'}</td>
+                  <td>${l.startTime && l.endTime ? `${escapeHtml(formatTime12h(l.startTime))} - ${escapeHtml(formatTime12h(l.endTime))}` : '-'}</td>
+                  <td>${escapeHtml(l.workAddress || '-')}</td>
                   <td>${escapeHtml(l.jobDescription || l.workType || '-')}</td>
                   <td>${rate ? formatCurrency(rate) : '-'}</td>
                   <td>${rec ? formatCurrency(rec) : '-'}</td>

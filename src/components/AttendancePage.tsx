@@ -25,7 +25,8 @@ import {
   Coins,
   Check,
   X,
-  PieChart
+  PieChart,
+  MapPin
 } from 'lucide-react';
 import { NativeTimePicker } from './NativeTimePicker';
 import { ConfirmModal } from './ConfirmModal';
@@ -39,7 +40,7 @@ import { EmployerAccountsView } from './attendance/EmployerAccountsView';
 import { AttendancePrintModal } from './attendance/AttendancePrintModal';
 import { AdsterraResponsiveLeaderboard } from './AdUnits';
 import { escapeHtml } from '../utils/security';
-import { getLocalDateString } from '../utils/dateUtils';
+import { getLocalDateString, formatTime12h } from '../utils/dateUtils';
 
 export interface AttendancePageProps {
   attendanceLogs: AttendanceLog[];
@@ -130,6 +131,17 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     attendanceLogs.forEach((l) => {
       if (l.employerName && l.employerName.trim()) {
         set.add(l.employerName.trim());
+      }
+    });
+    return Array.from(set).sort();
+  }, [attendanceLogs]);
+
+  // Extract all distinct location/area names
+  const existingLocations = useMemo(() => {
+    const set = new Set<string>();
+    attendanceLogs.forEach((l) => {
+      if (l.workAddress && l.workAddress.trim()) {
+        set.add(l.workAddress.trim());
       }
     });
     return Array.from(set).sort();
@@ -577,6 +589,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           <div class="stat-item"><div class="stat-label">Full Days</div><div class="stat-val">${stats.presentDays}</div></div>
           <div class="stat-item"><div class="stat-label">Half Days</div><div class="stat-val">${stats.halfDays}</div></div>
           <div class="stat-item"><div class="stat-label">Total Hours</div><div class="stat-val">${stats.totalWorkingHours}h</div></div>
+          <div class="stat-item"><div class="stat-label">Advance (पेशगी)</div><div class="stat-val" style="color: #D97706;">${formatCurrency(stats.totalAdvance)}</div></div>
           <div class="stat-item"><div class="stat-label">Total Earned</div><div class="stat-val">${formatCurrency(stats.totalEarnings)}</div></div>
           <div class="stat-item"><div class="stat-label">Pending Dues</div><div class="stat-val" style="color: #0284C7;">${formatCurrency(stats.totalPending)}</div></div>
         </div>
@@ -586,11 +599,13 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             <tr>
               <th>Date</th>
               <th>Status</th>
-              <th>Timings</th>
+              <th>Duty Hours (12H)</th>
+              <th>Location / Area</th>
               <th>OT</th>
               <th>Employer / Client</th>
               <th>Category</th>
               <th>Rate</th>
+              <th>Advance</th>
               <th>Received</th>
               <th>Pending</th>
             </tr>
@@ -600,13 +615,15 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
               <tr>
                 <td><strong>${escapeHtml(l.date)}</strong></td>
                 <td>${escapeHtml(l.status.toUpperCase())}</td>
-                <td>${l.startTime && l.endTime ? `${escapeHtml(l.startTime)}-${escapeHtml(l.endTime)}` : '-'}</td>
+                <td>${l.startTime && l.endTime ? `${escapeHtml(formatTime12h(l.startTime))} - ${escapeHtml(formatTime12h(l.endTime))}` : '-'}</td>
+                <td>${escapeHtml(l.workAddress || '-')}</td>
                 <td>${l.overtimeHours ? `${l.overtimeHours}h` : '-'}</td>
                 <td>${escapeHtml(l.employerName || '-')}</td>
                 <td>${escapeHtml(l.workCategory || l.workType || '-')}</td>
                 <td>${l.salaryOrRate ? formatCurrency(l.salaryOrRate) : '-'}</td>
+                <td style="color: ${(l.advanceReceived || 0) > 0 ? '#D97706' : '#64748B'};">${l.advanceReceived ? formatCurrency(l.advanceReceived) : '-'}</td>
                 <td>${l.paymentReceived ? formatCurrency(l.paymentReceived) : '-'}</td>
-                <td>${l.pendingPayment ? formatCurrency(l.pendingPayment) : 'PAID'}</td>
+                <td style="color: ${(l.pendingPayment || 0) > 0 ? '#0284C7' : '#15803D'}; font-weight: bold;">${l.pendingPayment ? formatCurrency(l.pendingPayment) : 'PAID'}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -1122,12 +1139,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                         ) : null}
                       </div>
 
-                      {/* Timings and Employer Details */}
+                      {/* Timings, Employer and Location Details */}
                       <div className="flex items-center gap-3 text-[12px] text-[var(--theme-text-muted,#94A3B8)] flex-wrap min-w-0">
                         {log.startTime && log.endTime ? (
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1 font-mono text-[11.5px] text-[var(--theme-text,#F8FAFC)] bg-[var(--theme-surface,#0E1A29)]/80 px-2 py-0.5 rounded-md border border-[var(--theme-border,#213E61)]/40">
                             <Clock className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                            <span>{log.startTime} - {log.endTime} ({log.workingHours || 0}h)</span>
+                            <span>{formatTime12h(log.startTime)} - {formatTime12h(log.endTime)} ({log.workingHours || 0}h)</span>
                           </div>
                         ) : null}
 
@@ -1135,6 +1152,13 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                           <div className="flex items-center gap-1 text-[var(--theme-text,#F8FAFC)] font-semibold">
                             <Building className="w-3.5 h-3.5 text-[#F59E0B]" />
                             <span className="min-w-0 break-words">{log.employerName}</span>
+                          </div>
+                        ) : null}
+
+                        {log.workAddress ? (
+                          <div className="flex items-center gap-1 text-rose-300 font-medium bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20">
+                            <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                            <span className="min-w-0 break-words">{log.workAddress}</span>
                           </div>
                         ) : null}
                       </div>
@@ -1429,6 +1453,65 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* Location / Area / Site Selection & Entry */}
+              <div>
+                <label className="block text-[12px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-rose-400" />
+                    <span>{isHindi ? 'कार्य स्थल / लोकेशन / साइट / एरिया' : 'Work Location / Area / Site'}</span>
+                  </span>
+                  <span className="text-[10.5px] font-normal text-[var(--theme-text-dim,#94A3B8)]">
+                    {isHindi ? '(वैकल्पिक / Optional)' : '(Optional)'}
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  value={formWorkAddress}
+                  onChange={(e) => setFormWorkAddress(e.target.value)}
+                  placeholder={isHindi ? 'उदा. साइट नं. 4, मेन मार्केट दुकान, वर्कशॉप शेड, फील्ड...' : 'e.g. Site #4, Main Market Shop, Workshop, Field...'}
+                  className="w-full bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[13px] px-3 py-2.5 rounded-xl border border-[var(--theme-border,#213E61)] focus:outline-hidden focus:border-[var(--theme-primary,#38BDF8)]"
+                />
+                {/* Quick Location Preset Chips */}
+                <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                  <span className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">{isHindi ? 'क्विक चयन:' : 'Quick:'}</span>
+                  {[
+                    { label: isHindi ? 'साइट' : 'Site', val: isHindi ? 'कार्य साइट (Site)' : 'Site' },
+                    { label: isHindi ? 'दुकान' : 'Shop', val: isHindi ? 'दुकान (Shop)' : 'Shop' },
+                    { label: isHindi ? 'फैक्ट्री' : 'Factory', val: isHindi ? 'कारखाना (Factory)' : 'Factory' },
+                    { label: isHindi ? 'ऑफिस' : 'Office', val: isHindi ? 'कार्यालय (Office)' : 'Office' },
+                    { label: isHindi ? 'फील्ड' : 'Field', val: isHindi ? 'फील्ड वर्क (Field)' : 'Field' },
+                    { label: isHindi ? 'घर' : 'Home', val: isHindi ? 'घर / घरेलू (Home)' : 'Home' },
+                    { label: isHindi ? 'गोदाम' : 'Godown', val: isHindi ? 'गोदाम / वेयरहाउस' : 'Godown' },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => {
+                        setFormWorkAddress(preset.val);
+                        triggerHapticSound('click');
+                      }}
+                      className="text-[10.5px] px-2 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] text-rose-300 border border-rose-500/30 hover:bg-rose-500/20 cursor-pointer"
+                    >
+                      +{preset.label}
+                    </button>
+                  ))}
+                  {/* Recent used locations */}
+                  {existingLocations.slice(0, 3).map((loc) => (
+                    <button
+                      key={loc}
+                      type="button"
+                      onClick={() => {
+                        setFormWorkAddress(loc);
+                        triggerHapticSound('click');
+                      }}
+                      className="text-[10.5px] px-2 py-0.5 rounded-md bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] border border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-card,#132438)] cursor-pointer"
+                    >
+                      {loc}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Duty Timings & Overtime */}
