@@ -67,6 +67,7 @@ export interface EmployerSummary {
   workingHours: number;
   totalEarned: number;
   totalReceived: number;
+  totalAdvance: number;
   totalPending: number;
   pendingLogsCount: number;
   latestDate: string;

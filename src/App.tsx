@@ -1,8 +1,9 @@
-import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang } from "./utils/currencyConfig";
+import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang, setPreferredCurrency } from "./utils/currencyConfig";
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
-import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode, CategoryBudget, BillSplitExpense, DebtItem, DebtPayment } from './types';
+import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode, CategoryBudget, BillSplitExpense, DebtItem, DebtPayment, UserPurpose } from './types';
+import { OnboardingModal } from './components/OnboardingModal';
 import {
   DEFAULT_FUNDS,
   DEFAULT_PERCENTAGES,
@@ -184,6 +185,22 @@ function AppContent() {
     return 'blue';
   });
   const [language, setLanguage] = useState<AppLanguage>('en');
+  const [userPurpose, setUserPurpose] = useState<UserPurpose>(() => {
+    try {
+      const saved = localStorage.getItem('daily_khata_user_purpose');
+      if (saved && ['shop', 'construction', 'factory', 'farm', 'household', 'personal'].includes(saved)) {
+        return saved as UserPurpose;
+      }
+    } catch {}
+    return 'personal';
+  });
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('daily_khata_onboarding_completed') !== 'true';
+    } catch {
+      return false;
+    }
+  });
   const [privacyMask, setPrivacyMask] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<AppViewMode>('auto');
   const [appLayout, setAppLayout] = useState<AppLayout>('dashboard');
@@ -273,6 +290,14 @@ function AppContent() {
     return () => {
       window.removeEventListener('focus', checkGoogle);
       clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleOpenWizard = () => setIsOnboardingOpen(true);
+    window.addEventListener('open-onboarding-wizard', handleOpenWizard);
+    return () => {
+      window.removeEventListener('open-onboarding-wizard', handleOpenWizard);
     };
   }, []);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
@@ -508,6 +533,25 @@ function AppContent() {
   useEffect(() => {
     document.documentElement.setAttribute('data-app-layout', appLayout);
   }, [appLayout]);
+
+  // Sync RTL layout for Arabic & Urdu, and LTR for other languages
+  useEffect(() => {
+    if (language === 'ur' || language === 'ar') {
+      document.documentElement.setAttribute('dir', 'rtl');
+    } else {
+      document.documentElement.setAttribute('dir', 'ltr');
+    }
+  }, [language]);
+
+  // Listen for purpose changes
+  useEffect(() => {
+    const handlePurposeEvent = (e: Event) => {
+      const detail = (e as CustomEvent<UserPurpose>).detail;
+      if (detail) setUserPurpose(detail);
+    };
+    window.addEventListener('dailykhata-purpose-change', handlePurposeEvent);
+    return () => window.removeEventListener('dailykhata-purpose-change', handlePurposeEvent);
+  }, []);
 
   // Load from localStorage on startup
   useEffect(() => {
@@ -2547,6 +2591,8 @@ function AppContent() {
               onOpenSplitBill={() => setIsSplitBillOpen(true)}
               language={language}
               privacyMask={privacyMask}
+              userPurpose={userPurpose}
+              onOpenChangePurpose={() => setIsOnboardingOpen(true)}
             />
           } />
 
@@ -3609,6 +3655,43 @@ function AppContent() {
         onToggleAutoSync={handleToggleAutoSync}
         lastSyncTime={lastDriveSyncTime}
         isAutoSyncing={isAutoSyncing}
+      />
+
+      {/* First-Visit / Customization Onboarding Wizard */}
+      <OnboardingModal
+        isOpen={isOnboardingOpen}
+        currentLanguage={language}
+        currentPurpose={userPurpose}
+        onComplete={(res) => {
+          setLanguage(res.language);
+          setCurrentLanguage(res.language);
+          setUserPurpose(res.purpose);
+          if (res.currency) {
+            setPreferredCurrency(res.currency);
+          }
+          localStorage.setItem('daily_khata_onboarding_completed', 'true');
+          localStorage.setItem('daily-khata-onboarded-v1', 'true');
+          localStorage.setItem('daily_khata_user_purpose', res.purpose);
+          localStorage.setItem('daily-khata-user-purpose', res.purpose);
+          setIsOnboardingOpen(false);
+          setToastMessage(res.language === 'hi' ? 'स्वागत है! आपका व्यापार खाता सेटअप पूरा हुआ।' : 'Welcome! Setup completed successfully.');
+        }}
+        onLanguageChange={(lang) => {
+          setLanguage(lang);
+          setCurrentLanguage(lang);
+        }}
+        onOpenPrivacy={() => {
+          setIsOnboardingOpen(false);
+          navigate('/privacy');
+        }}
+        onOpenTerms={() => {
+          setIsOnboardingOpen(false);
+          navigate('/terms');
+        }}
+        onOpenCookies={() => {
+          setIsOnboardingOpen(false);
+          navigate('/cookies');
+        }}
       />
 
       {/* 100% PWA Offline Mode Status Indicator */}

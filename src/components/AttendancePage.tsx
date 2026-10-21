@@ -118,6 +118,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
   const [formPaymentDate, setFormPaymentDate] = useState('');
   const [formNotes, setFormNotes] = useState('');
 
+  // Quick Advance Modal State
+  const [quickAdvanceLog, setQuickAdvanceLog] = useState<AttendanceLog | null>(null);
+  const [quickAdvanceAmount, setQuickAdvanceAmount] = useState<string>('');
+  const [quickAdvanceNote, setQuickAdvanceNote] = useState<string>('');
+  const [quickAdvanceMode, setQuickAdvanceMode] = useState<PaymentMode>('cash');
+
   // Extract all distinct employer names
   const existingEmployers = useMemo(() => {
     const set = new Set<string>();
@@ -139,6 +145,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
       workingHours: number;
       totalEarned: number;
       totalReceived: number;
+      totalAdvance: number;
       totalPending: number;
       pendingLogsCount: number;
       latestDate: string;
@@ -157,6 +164,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
         workingHours: 0,
         totalEarned: 0,
         totalReceived: 0,
+        totalAdvance: 0,
         totalPending: 0,
         pendingLogsCount: 0,
         latestDate: l.date,
@@ -171,10 +179,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
 
       const rate = l.salaryOrRate || 0;
       const rec = l.paymentReceived || 0;
-      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+      const adv = l.advanceReceived || 0;
+      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
 
       current.totalEarned += rate;
       current.totalReceived += rec;
+      current.totalAdvance += adv;
       current.totalPending += pend;
       if (pend > 0 && l.paymentStatus !== 'paid') {
         current.pendingLogsCount += 1;
@@ -210,6 +220,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
         workingHours: data.workingHours,
         totalEarned: data.totalEarned,
         totalReceived: data.totalReceived,
+        totalAdvance: data.totalAdvance,
         totalPending: data.totalPending,
         pendingLogsCount: data.pendingLogsCount,
         latestDate: data.latestDate
@@ -290,7 +301,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
       totalEarnings += l.salaryOrRate || 0;
       totalReceived += l.paymentReceived || 0;
       totalAdvance += l.advanceReceived || 0;
-      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, (l.salaryOrRate || 0) - (l.paymentReceived || 0));
+      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, (l.salaryOrRate || 0) - (l.paymentReceived || 0) - (l.advanceReceived || 0));
       totalPending += pend;
     });
 
@@ -428,8 +439,25 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     const rate = parseFloat(formSalaryOrRate) || 0;
     const received = parseFloat(formPaymentReceived) || 0;
     const advance = parseFloat(formAdvanceReceived) || 0;
+    
+    // Auto calculate pending based on rate, received and advance
+    const autoPending = Math.max(0, rate - received - advance);
     const customPending = parseFloat(formPendingPayment);
-    const calculatedPending = !isNaN(customPending) ? customPending : Math.max(0, rate - received - advance);
+    const calculatedPending = !isNaN(customPending) && formPendingPayment.trim() !== '' 
+      ? customPending 
+      : autoPending;
+
+    // Auto determine paymentStatus if rate is set
+    let determinedStatus: PaymentStatusType = formPaymentStatus;
+    if (rate > 0) {
+      if (calculatedPending <= 0 && (received > 0 || advance > 0)) {
+        determinedStatus = 'paid';
+      } else if (received > 0 || advance > 0) {
+        determinedStatus = 'partial';
+      } else {
+        determinedStatus = 'pending';
+      }
+    }
 
     onSaveAttendanceLog(
       {
@@ -446,9 +474,9 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
         jobDescription: formJobDescription.trim() || undefined,
         salaryOrRate: rate > 0 ? rate : undefined,
         paymentReceived: received > 0 ? received : undefined,
-        advanceReceived: advance > 0 ? advance : undefined,
-        pendingPayment: calculatedPending > 0 ? calculatedPending : undefined,
-        paymentStatus: formPaymentStatus,
+        advanceReceived: advance > 0 ? advance : 0,
+        pendingPayment: calculatedPending > 0 ? calculatedPending : 0,
+        paymentStatus: determinedStatus,
         paymentDate: formPaymentDate || undefined,
         notes: formNotes.trim() || undefined
       },
@@ -456,6 +484,59 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     );
 
     setIsLogModalOpen(false);
+  };
+
+  // Quick Advance handlers
+  const handleOpenQuickAdvance = (log: AttendanceLog) => {
+    setQuickAdvanceLog(log);
+    setQuickAdvanceAmount(log.advanceReceived ? String(log.advanceReceived) : '');
+    setQuickAdvanceNote('');
+    setQuickAdvanceMode('cash');
+    triggerHapticSound('click');
+  };
+
+  const handleSaveQuickAdvance = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickAdvanceLog) return;
+    triggerHapticSound('save');
+
+    const newAdvance = Math.max(0, parseFloat(quickAdvanceAmount) || 0);
+    const rate = quickAdvanceLog.salaryOrRate || 0;
+    const received = quickAdvanceLog.paymentReceived || 0;
+    const newPending = Math.max(0, rate - received - newAdvance);
+
+    let newStatus: PaymentStatusType = quickAdvanceLog.paymentStatus;
+    if (rate > 0) {
+      if (newPending <= 0 && (received > 0 || newAdvance > 0)) {
+        newStatus = 'paid';
+      } else if (received > 0 || newAdvance > 0) {
+        newStatus = 'partial';
+      } else {
+        newStatus = 'pending';
+      }
+    }
+
+    const modeLabel = quickAdvanceMode === 'upi' ? 'UPI' : quickAdvanceMode === 'bank' ? (isHindi ? 'बैंक' : 'Bank') : (isHindi ? 'नकद' : 'Cash');
+    const noteAddition = quickAdvanceNote.trim()
+      ? `${isHindi ? 'एडवांस' : 'Advance'}: ₹${newAdvance} (${modeLabel}) - ${quickAdvanceNote.trim()}`
+      : (newAdvance > 0 ? `${isHindi ? 'एडवांस' : 'Advance'}: ₹${newAdvance} (${modeLabel})` : '');
+
+    const updatedNotes = quickAdvanceLog.notes
+      ? (noteAddition ? `${quickAdvanceLog.notes} • ${noteAddition}` : quickAdvanceLog.notes)
+      : (noteAddition || undefined);
+
+    onSaveAttendanceLog(
+      {
+        ...quickAdvanceLog,
+        advanceReceived: newAdvance,
+        pendingPayment: newPending,
+        paymentStatus: newStatus,
+        notes: updatedNotes
+      },
+      quickAdvanceLog.id
+    );
+
+    setQuickAdvanceLog(null);
   };
 
   // Print Monthly Register Slip
@@ -816,64 +897,74 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
               </div>
             </div>
 
-            {/* 6 KPI Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
-                <div className="text-[11px] font-bold text-[#10B981] flex items-center justify-center gap-1">
+            {/* 7 KPI Cards (including Advance) */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 sm:gap-3">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
+                <div className="text-[10.5px] sm:text-[11px] font-bold text-[#10B981] flex items-center justify-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>{isHindi ? 'पूर्ण दिन' : 'Full Days'}</span>
                 </div>
-                <div className="text-[18px] sm:text-[20px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-1">
+                <div className="text-[17px] sm:text-[19px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-1">
                   {stats.presentDays}
                 </div>
               </div>
 
-              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
-                <div className="text-[11px] font-bold text-[#F59E0B] flex items-center justify-center gap-1">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
+                <div className="text-[10.5px] sm:text-[11px] font-bold text-[#F59E0B] flex items-center justify-center gap-1">
                   <Clock3 className="w-3.5 h-3.5" />
                   <span>{isHindi ? 'हाफ डे' : 'Half Days'}</span>
                 </div>
-                <div className="text-[18px] sm:text-[20px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-1">
+                <div className="text-[17px] sm:text-[19px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-1">
                   {stats.halfDays}
                 </div>
               </div>
 
-              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
-                <div className="text-[11px] font-bold text-[#A855F7] flex items-center justify-center gap-1">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
+                <div className="text-[10.5px] sm:text-[11px] font-bold text-[#A855F7] flex items-center justify-center gap-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>{isHindi ? 'ओवरटाइम' : 'OT Hours'}</span>
                 </div>
-                <div className="text-[18px] sm:text-[20px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-1">
+                <div className="text-[17px] sm:text-[19px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-1">
                   {stats.totalOvertimeHours}h
                 </div>
               </div>
 
-              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
-                <div className="text-[11px] font-bold text-[var(--theme-primary,#38BDF8)] flex items-center justify-center gap-1">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
+                <div className="text-[10.5px] sm:text-[11px] font-bold text-[var(--theme-primary,#38BDF8)] flex items-center justify-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
-                  <span>{isHindi ? 'कुल कमाई' : 'Total Earnings'}</span>
+                  <span>{isHindi ? 'कुल कमाई' : 'Total Earned'}</span>
                 </div>
-                <div className="text-[16px] sm:text-[18px] font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] mt-1 truncate">
+                <div className="text-[14.5px] sm:text-[16px] font-mono font-extrabold text-[var(--theme-primary,#38BDF8)] mt-1 truncate">
                   {formatCurrency(stats.totalEarnings, privacyMask)}
                 </div>
               </div>
 
-              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
-                <div className="text-[11px] font-bold text-[#10B981] flex items-center justify-center gap-1">
-                  <Check className="w-3.5 h-3.5" />
-                  <span>{isHindi ? 'प्राप्त भुगतान' : 'Payment Received'}</span>
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-amber-500/30 bg-amber-500/5 shadow-xs text-center">
+                <div className="text-[10.5px] sm:text-[11px] font-bold text-amber-500 flex items-center justify-center gap-1">
+                  <Coins className="w-3.5 h-3.5" />
+                  <span>{isHindi ? 'कुल एडवांस' : 'Total Advance'}</span>
                 </div>
-                <div className="text-[16px] sm:text-[18px] font-mono font-extrabold text-[#10B981] mt-1 truncate">
+                <div className="text-[14.5px] sm:text-[16px] font-mono font-extrabold text-amber-500 mt-1 truncate">
+                  {formatCurrency(stats.totalAdvance, privacyMask)}
+                </div>
+              </div>
+
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
+                <div className="text-[10.5px] sm:text-[11px] font-bold text-[#10B981] flex items-center justify-center gap-1">
+                  <Check className="w-3.5 h-3.5" />
+                  <span>{isHindi ? 'प्राप्त' : 'Received'}</span>
+                </div>
+                <div className="text-[14.5px] sm:text-[16px] font-mono font-extrabold text-[#10B981] mt-1 truncate">
                   {formatCurrency(stats.totalReceived, privacyMask)}
                 </div>
               </div>
 
-              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] shadow-xs text-center">
-                <div className="text-[11px] font-bold text-[#F59E0B] flex items-center justify-center gap-1">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--theme-card,#132438)] border border-amber-500/40 shadow-xs text-center col-span-2 sm:col-span-1">
+                <div className="text-[10.5px] sm:text-[11px] font-bold text-amber-400 flex items-center justify-center gap-1">
                   <AlertTriangle className="w-3.5 h-3.5" />
-                  <span>{isHindi ? 'बाकी राशि' : 'Pending Balance'}</span>
+                  <span>{isHindi ? 'बाकी राशि' : 'Pending'}</span>
                 </div>
-                <div className="text-[16px] sm:text-[18px] font-mono font-extrabold text-amber-400 mt-1 truncate">
+                <div className="text-[14.5px] sm:text-[16px] font-mono font-extrabold text-amber-400 mt-1 truncate">
                   {formatCurrency(stats.totalPending, privacyMask)}
                 </div>
               </div>
@@ -985,7 +1076,8 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
 
                 const rate = log.salaryOrRate || 0;
                 const rec = log.paymentReceived || 0;
-                const pend = log.pendingPayment !== undefined ? log.pendingPayment : Math.max(0, rate - rec);
+                const adv = log.advanceReceived || 0;
+                const pend = log.pendingPayment !== undefined ? log.pendingPayment : Math.max(0, rate - rec - adv);
 
                 return (
                   <div
@@ -1015,6 +1107,13 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                             +{log.overtimeHours}h OT
                           </span>
                         ) : null}
+
+                        {adv > 0 && (
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                            <Coins className="w-3 h-3" />
+                            <span>{isHindi ? 'एडवांस' : 'Adv'}: {formatCurrency(adv, privacyMask)}</span>
+                          </span>
+                        )}
 
                         {rate > 0 ? (
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${payBadge.color}`}>
@@ -1057,28 +1156,43 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                           <div className="text-[15px] sm:text-[16px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)]">
                             {formatCurrency(rate, privacyMask)}
                           </div>
+                          {adv > 0 && (
+                            <div className="text-[10.5px] font-mono text-amber-500 font-bold">
+                              {isHindi ? 'एडवांस:' : 'Adv:'} {formatCurrency(adv, privacyMask)}
+                            </div>
+                          )}
                           {pend > 0 ? (
                             <div className="text-[10.5px] font-mono text-amber-400 font-bold">
                               {isHindi ? 'बाकी:' : 'Due:'} {formatCurrency(pend, privacyMask)}
                             </div>
                           ) : (
                             <div className="text-[10.5px] font-mono text-[#10B981]">
-                              ✓ {isHindi ? 'प्राप्त' : 'Received'}
+                              ✓ {isHindi ? 'पूर्ण चुकता' : 'Paid'}
                             </div>
                           )}
                         </div>
                       ) : null}
 
                       <div className="flex items-center gap-1">
+                        {/* Quick Update Advance Payment */}
+                        <button
+                          type="button"
+                          onClick={() => handleOpenQuickAdvance(log)}
+                          className="p-2 rounded-xl bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/30 transition-colors cursor-pointer"
+                          title={isHindi ? 'एडवांस / पेशगी अपडेट करें' : 'Update Advance Payment'}
+                        >
+                          <Coins className="w-4 h-4" />
+                        </button>
+
                         {/* Quick Settle for this single log if pending */}
                         {pend > 0 && (
                           <button
                             type="button"
                             onClick={() => handleOpenBulkSettlement(log.employerName || 'all')}
-                            className="p-2 rounded-xl bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/30 transition-colors cursor-pointer"
+                            className="p-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-amber-400 hover:bg-amber-500/15 border border-[var(--theme-border,#213E61)] transition-colors cursor-pointer"
                             title={isHindi ? 'बल्क भुगतान में शामिल करें' : 'Settle in Bulk Payment'}
                           >
-                            <Coins className="w-4 h-4" />
+                            <CalendarCheck className="w-4 h-4" />
                           </button>
                         )}
 
@@ -1366,31 +1480,117 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                   {isHindi ? 'वेतन व भुगतान हिसाब (Wage & Payment)' : 'Wage & Payment Details'}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   <div>
                     <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
-                      {isHindi ? 'दैनिक दर / वेतन' : 'Daily Wage / Salary Rate'}
+                      {isHindi ? 'दैनिक दर / वेतन (Rate)' : 'Daily Wage / Rate'}
                     </label>
-                    <input
-                      type="number"
-                      value={formSalaryOrRate}
-                      onChange={(e) => setFormSalaryOrRate(e.target.value)}
-                      placeholder="0.00"
-                      className="w-full bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] font-mono text-[13px] px-3 py-2 rounded-lg border border-[var(--theme-border,#213E61)]"
-                    />
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] font-mono text-[var(--theme-text-dim,#94A3B8)]">₹</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={formSalaryOrRate}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setFormSalaryOrRate(val);
+                          const r = parseFloat(val) || 0;
+                          const rec = parseFloat(formPaymentReceived) || 0;
+                          const a = parseFloat(formAdvanceReceived) || 0;
+                          setFormPendingPayment(String(Math.max(0, r - rec - a)));
+                        }}
+                        placeholder="0.00"
+                        className="w-full bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] font-mono text-[13px] pl-7 pr-3 py-2 rounded-lg border border-[var(--theme-border,#213E61)] focus:border-[var(--theme-primary,#38BDF8)] focus:outline-hidden"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-amber-400 mb-1 flex items-center justify-between">
+                      <span>{isHindi ? 'एडवांस / पेशगी रकम' : 'Advance Payment'}</span>
+                      <span className="text-[10px] text-amber-400/80">({isHindi ? 'कटौती' : 'Deducted'})</span>
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] font-mono text-amber-400">₹</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={formAdvanceReceived}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setFormAdvanceReceived(val);
+                          const r = parseFloat(formSalaryOrRate) || 0;
+                          const rec = parseFloat(formPaymentReceived) || 0;
+                          const a = parseFloat(val) || 0;
+                          setFormPendingPayment(String(Math.max(0, r - rec - a)));
+                        }}
+                        placeholder="0.00"
+                        className="w-full bg-[var(--theme-card,#132438)] text-amber-300 font-mono text-[13px] pl-7 pr-3 py-2 rounded-lg border border-amber-500/40 focus:border-amber-400 focus:outline-hidden"
+                      />
+                    </div>
+                    {/* Quick advance buttons */}
+                    <div className="flex items-center gap-1 mt-1.5 flex-wrap">
+                      {[100, 200, 500, 1000].map((amt) => (
+                        <button
+                          key={amt}
+                          type="button"
+                          onClick={() => {
+                            const cur = parseFloat(formAdvanceReceived) || 0;
+                            const next = cur + amt;
+                            setFormAdvanceReceived(String(next));
+                            const r = parseFloat(formSalaryOrRate) || 0;
+                            const rec = parseFloat(formPaymentReceived) || 0;
+                            setFormPendingPayment(String(Math.max(0, r - rec - next)));
+                            triggerHapticSound('click');
+                          }}
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 cursor-pointer"
+                        >
+                          +{amt}
+                        </button>
+                      ))}
+                      {parseFloat(formAdvanceReceived) > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormAdvanceReceived('');
+                            const r = parseFloat(formSalaryOrRate) || 0;
+                            const rec = parseFloat(formPaymentReceived) || 0;
+                            setFormPendingPayment(String(Math.max(0, r - rec)));
+                            triggerHapticSound('click');
+                          }}
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 cursor-pointer"
+                        >
+                          {isHindi ? 'साफ' : 'Reset'}
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div>
                     <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
-                      {isHindi ? 'आज प्राप्त भुगतान' : 'Payment Received Today'}
+                      {isHindi ? 'आज प्राप्त भुगतान' : 'Payment Received'}
                     </label>
-                    <input
-                      type="number"
-                      value={formPaymentReceived}
-                      onChange={(e) => setFormPaymentReceived(e.target.value)}
-                      placeholder="0.00"
-                      className="w-full bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] font-mono text-[13px] px-3 py-2 rounded-lg border border-[var(--theme-border,#213E61)]"
-                    />
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] font-mono text-[#10B981]">₹</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={formPaymentReceived}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setFormPaymentReceived(val);
+                          const r = parseFloat(formSalaryOrRate) || 0;
+                          const rec = parseFloat(val) || 0;
+                          const a = parseFloat(formAdvanceReceived) || 0;
+                          setFormPendingPayment(String(Math.max(0, r - rec - a)));
+                        }}
+                        placeholder="0.00"
+                        className="w-full bg-[var(--theme-card,#132438)] text-[#10B981] font-mono text-[13px] pl-7 pr-3 py-2 rounded-lg border border-[var(--theme-border,#213E61)] focus:border-[#10B981] focus:outline-hidden"
+                      />
+                    </div>
                   </div>
 
                   <div>
@@ -1403,11 +1603,36 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                       className="w-full bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] text-[12.5px] px-3 py-2 rounded-lg border border-[var(--theme-border,#213E61)] font-semibold"
                     >
                       <option value="pending">{isHindi ? 'बाकी (Pending)' : 'Pending'}</option>
-                      <option value="paid">{isHindi ? 'पूर्ण प्राप्त (Paid)' : 'Paid'}</option>
+                      <option value="paid">{isHindi ? 'पूर्ण चुकता (Paid)' : 'Paid'}</option>
                       <option value="partial">{isHindi ? 'आंशिक (Partial)' : 'Partial'}</option>
                     </select>
                   </div>
                 </div>
+
+                {/* Live Real-time Calculation Breakdown Bar */}
+                {parseFloat(formSalaryOrRate) > 0 && (
+                  <div className="p-2.5 rounded-lg bg-[var(--theme-card,#132438)]/80 border border-[var(--theme-border,#213E61)] flex items-center justify-between gap-2 flex-wrap text-[11.5px] font-mono">
+                    <div className="flex items-center gap-2 flex-wrap text-[var(--theme-text-muted,#94A3B8)]">
+                      <span>{isHindi ? 'दर' : 'Rate'}: <strong className="text-[var(--theme-text,#F8FAFC)]">₹{parseFloat(formSalaryOrRate) || 0}</strong></span>
+                      {parseFloat(formAdvanceReceived) > 0 && (
+                        <span>- {isHindi ? 'एडवांस' : 'Adv'}: <strong className="text-amber-400">₹{parseFloat(formAdvanceReceived)}</strong></span>
+                      )}
+                      {parseFloat(formPaymentReceived) > 0 && (
+                        <span>- {isHindi ? 'प्राप्त' : 'Rec'}: <strong className="text-[#10B981]">₹{parseFloat(formPaymentReceived)}</strong></span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1.5 font-bold">
+                      <span className="text-[var(--theme-text-muted,#94A3B8)]">{isHindi ? '= शेष बाकी:' : '= Net Due:'}</span>
+                      <span className={`px-2 py-0.5 rounded ${
+                        Math.max(0, (parseFloat(formSalaryOrRate) || 0) - (parseFloat(formPaymentReceived) || 0) - (parseFloat(formAdvanceReceived) || 0)) > 0
+                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                          : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                      }`}>
+                        ₹{Math.max(0, (parseFloat(formSalaryOrRate) || 0) - (parseFloat(formPaymentReceived) || 0) - (parseFloat(formAdvanceReceived) || 0))}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Notes */}
@@ -1486,6 +1711,198 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           onCancel={() => setDeleteConfirmId(null)}
           isDanger={true}
         />
+      )}
+
+      {/* Dedicated Quick Advance Modal */}
+      {quickAdvanceLog && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md bg-[var(--theme-card,#132438)] border border-[var(--theme-border,#213E61)] rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-150">
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-[var(--theme-border,#213E61)] flex items-center justify-between bg-[var(--theme-surface,#0E1A29)]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <Coins className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-[15px] font-bold text-[var(--theme-text,#F8FAFC)]">
+                    {isHindi ? 'एडवांस / पेशगी भुगतान' : 'Advance Payment Update'}
+                  </h3>
+                  <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-mono">
+                    {quickAdvanceLog.date} {quickAdvanceLog.employerName ? `• ${quickAdvanceLog.employerName}` : ''}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setQuickAdvanceLog(null)}
+                className="p-1.5 rounded-xl text-[var(--theme-text-dim,#94A3B8)] hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Content Form */}
+            <form onSubmit={handleSaveQuickAdvance} className="p-5 space-y-4">
+              {/* Context Summary */}
+              <div className="p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)]/60 border border-[var(--theme-border,#213E61)]/50 grid grid-cols-2 gap-2 text-center text-[12px] font-mono">
+                <div>
+                  <span className="text-[10.5px] text-[var(--theme-text-muted,#94A3B8)] block">
+                    {isHindi ? 'दैनिक दर / वेतन' : 'Daily Wage'}
+                  </span>
+                  <span className="font-bold text-[var(--theme-text,#F8FAFC)]">
+                    {formatCurrency(quickAdvanceLog.salaryOrRate || 0, privacyMask)}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10.5px] text-[var(--theme-text-muted,#94A3B8)] block">
+                    {isHindi ? 'पहले से एडवांस' : 'Current Advance'}
+                  </span>
+                  <span className="font-bold text-amber-400">
+                    {formatCurrency(quickAdvanceLog.advanceReceived || 0, privacyMask)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Amount Input */}
+              <div>
+                <label className="block text-[12px] font-bold text-amber-400 mb-1">
+                  {isHindi ? 'नया कुल एडवांस रकम दर्ज करें' : 'New Total Advance Amount'} *
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] font-mono text-amber-400 font-bold">₹</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    required
+                    autoFocus
+                    value={quickAdvanceAmount}
+                    onChange={(e) => setQuickAdvanceAmount(e.target.value)}
+                    placeholder="0.00"
+                    className="w-full bg-[var(--theme-surface,#0E1A29)] text-amber-300 font-mono text-[16px] font-bold pl-8 pr-3 py-2.5 rounded-xl border border-amber-500/40 focus:border-amber-400 focus:outline-hidden"
+                  />
+                </div>
+
+                {/* Quick Add Chips */}
+                <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                  {[100, 200, 500, 1000, 2000].map((amt) => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => {
+                        const cur = parseFloat(quickAdvanceAmount) || 0;
+                        setQuickAdvanceAmount(String(cur + amt));
+                        triggerHapticSound('click');
+                      }}
+                      className="text-[11px] px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 font-mono font-bold cursor-pointer active:scale-95"
+                    >
+                      +{amt}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuickAdvanceAmount('0');
+                      triggerHapticSound('click');
+                    }}
+                    className="text-[11px] px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 font-bold cursor-pointer active:scale-95"
+                  >
+                    {isHindi ? 'शून्य (0)' : 'Reset 0'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Payment Mode Selection */}
+              <div>
+                <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
+                  {isHindi ? 'भुगतान माध्यम (Mode)' : 'Payment Mode'}
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'cash' as PaymentMode, label: isHindi ? 'नकद (Cash)' : 'Cash' },
+                    { id: 'upi' as PaymentMode, label: 'UPI / Online' },
+                    { id: 'bank' as PaymentMode, label: isHindi ? 'बैंक' : 'Bank' }
+                  ].map((m) => (
+                    <button
+                      key={m.id}
+                      type="button"
+                      onClick={() => {
+                        setQuickAdvanceMode(m.id);
+                        triggerHapticSound('click');
+                      }}
+                      className={`py-1.5 px-2 rounded-xl text-[11px] font-bold border text-center transition-all cursor-pointer ${
+                        quickAdvanceMode === m.id
+                          ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-xs'
+                          : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
+                      }`}
+                    >
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Note / Remarks */}
+              <div>
+                <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
+                  {isHindi ? 'टिप्पणी / कारण (उदा. राशन, पेट्रोल, दवाई)' : 'Note / Reason (e.g. Petrol, Groceries)'}
+                </label>
+                <input
+                  type="text"
+                  value={quickAdvanceNote}
+                  onChange={(e) => setQuickAdvanceNote(e.target.value)}
+                  placeholder={isHindi ? 'उदा. पेट्रोल खर्चा, घर का राशन...' : 'e.g. Petrol, emergency, groceries...'}
+                  className="w-full bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12.5px] px-3 py-2 rounded-xl border border-[var(--theme-border,#213E61)] focus:outline-hidden focus:border-[var(--theme-primary,#38BDF8)]"
+                />
+              </div>
+
+              {/* Live Preview Box */}
+              {quickAdvanceLog.salaryOrRate && (
+                <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 space-y-1 text-[11.5px] font-mono">
+                  <div className="flex justify-between text-[var(--theme-text-muted,#94A3B8)]">
+                    <span>{isHindi ? 'दैनिक वेतन:' : 'Daily Wage:'}</span>
+                    <span className="text-[var(--theme-text,#F8FAFC)]">₹{quickAdvanceLog.salaryOrRate || 0}</span>
+                  </div>
+                  {(quickAdvanceLog.paymentReceived || 0) > 0 && (
+                    <div className="flex justify-between text-[var(--theme-text-muted,#94A3B8)]">
+                      <span>{isHindi ? 'प्राप्त वेतन:' : 'Received:'}</span>
+                      <span className="text-[#10B981]">₹{quickAdvanceLog.paymentReceived}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-amber-400 font-bold">
+                    <span>{isHindi ? 'नया एडवांस:' : 'New Advance:'}</span>
+                    <span>₹{parseFloat(quickAdvanceAmount) || 0}</span>
+                  </div>
+                  <div className="pt-1 border-t border-amber-500/20 flex justify-between font-bold text-[12px]">
+                    <span className="text-[var(--theme-text,#F8FAFC)]">{isHindi ? 'शेष बाकी मजदूरी:' : 'Net Pending Due:'}</span>
+                    <span className="text-amber-400">
+                      ₹{Math.max(0, (quickAdvanceLog.salaryOrRate || 0) - (quickAdvanceLog.paymentReceived || 0) - (parseFloat(quickAdvanceAmount) || 0))}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Footer Buttons */}
+              <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[var(--theme-border,#213E61)]">
+                <button
+                  type="button"
+                  onClick={() => setQuickAdvanceLog(null)}
+                  className="px-4 py-2 rounded-xl bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] hover:text-white border border-[var(--theme-border,#213E61)] text-[12.5px] font-bold cursor-pointer"
+                >
+                  {isHindi ? 'रद्द करें' : 'Cancel'}
+                </button>
+
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[13px] flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 transition-all"
+                >
+                  <Check className="w-4 h-4" />
+                  <span>{isHindi ? 'एडवांस सुरक्षित करें' : 'Save Advance'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

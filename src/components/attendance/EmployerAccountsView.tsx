@@ -56,6 +56,10 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
     return employerSummaries.reduce((sum, e) => sum + e.totalEarned, 0);
   }, [employerSummaries]);
 
+  const totalAdvanceAll = useMemo(() => {
+    return employerSummaries.reduce((sum, e) => sum + (e.totalAdvance || 0), 0);
+  }, [employerSummaries]);
+
   // Employer Printable Invoice / Statement Slip
   const handlePrintEmployerSlip = (employerName: string) => {
     triggerHapticSound('click');
@@ -111,6 +115,10 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
             <div class="summary-val">${formatCurrency(emp?.totalReceived || 0)}</div>
           </div>
           <div class="summary-item">
+            <div class="summary-label">Advance (पेशगी)</div>
+            <div class="summary-val" style="color: #D97706;">${formatCurrency(emp?.totalAdvance || 0)}</div>
+          </div>
+          <div class="summary-item">
             <div class="summary-label">Pending Dues</div>
             <div class="summary-val pending">${formatCurrency(emp?.totalPending || 0)}</div>
           </div>
@@ -125,6 +133,7 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
               <th>Work Detail</th>
               <th>Rate/Wage</th>
               <th>Received</th>
+              <th>Advance</th>
               <th>Pending</th>
             </tr>
           </thead>
@@ -132,7 +141,8 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
             ${logs.map((l) => {
               const rate = l.salaryOrRate || 0;
               const rec = l.paymentReceived || 0;
-              const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+              const adv = l.advanceReceived || 0;
+              const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
               return `
                 <tr>
                   <td><strong>${escapeHtml(l.date)}</strong></td>
@@ -141,6 +151,7 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
                   <td>${escapeHtml(l.jobDescription || l.workType || '-')}</td>
                   <td>${rate ? formatCurrency(rate) : '-'}</td>
                   <td>${rec ? formatCurrency(rec) : '-'}</td>
+                  <td style="color: ${adv > 0 ? '#D97706' : '#64748B'}; font-weight: ${adv > 0 ? 'bold' : 'normal'}">${adv ? formatCurrency(adv) : '-'}</td>
                   <td><strong style="color: ${pend > 0 ? '#0284C7' : '#15803D'}">${pend ? formatCurrency(pend) : 'PAID'}</strong></td>
                 </tr>
               `;
@@ -307,12 +318,12 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
                   </div>
 
                   {/* Stats Grid */}
-                  <div className="grid grid-cols-3 gap-2 mt-4 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)]/60 border border-[var(--theme-border,#213E61)]/50 text-center">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4 p-3 rounded-xl bg-[var(--theme-surface,#0E1A29)]/60 border border-[var(--theme-border,#213E61)]/50 text-center">
                     <div>
                       <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-bold">
                         {isHindi ? 'कुल कमाई' : 'Total Earned'}
                       </div>
-                      <div className="text-[13.5px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-0.5">
+                      <div className="text-[13px] font-mono font-extrabold text-[var(--theme-text,#F8FAFC)] mt-0.5 truncate">
                         {formatCurrency(emp.totalEarned, privacyMask)}
                       </div>
                     </div>
@@ -321,8 +332,17 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
                       <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-bold">
                         {isHindi ? 'प्राप्त' : 'Received'}
                       </div>
-                      <div className="text-[13.5px] font-mono font-extrabold text-[#10B981] mt-0.5">
+                      <div className="text-[13px] font-mono font-extrabold text-[#10B981] mt-0.5 truncate">
                         {formatCurrency(emp.totalReceived, privacyMask)}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-bold">
+                        {isHindi ? 'एडवांस' : 'Advance'}
+                      </div>
+                      <div className="text-[13px] font-mono font-extrabold text-amber-500 mt-0.5 truncate">
+                        {formatCurrency(emp.totalAdvance || 0, privacyMask)}
                       </div>
                     </div>
 
@@ -330,7 +350,7 @@ export const EmployerAccountsView: React.FC<EmployerAccountsViewProps> = ({
                       <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-bold">
                         {isHindi ? 'बाकी राशि' : 'Pending'}
                       </div>
-                      <div className="text-[13.5px] font-mono font-extrabold text-amber-400 mt-0.5">
+                      <div className="text-[13px] font-mono font-extrabold text-amber-400 mt-0.5 truncate">
                         {formatCurrency(emp.totalPending, privacyMask)}
                       </div>
                     </div>

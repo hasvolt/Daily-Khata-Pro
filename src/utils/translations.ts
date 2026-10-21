@@ -194,7 +194,7 @@ export interface Translations {
   } & { [K in FundType]?: { name: string; desc: string } };
 }
 
-export const TRANSLATIONS: Record<AppLanguage, Translations> = {
+export const TRANSLATIONS: Record<string, any> & Partial<Record<AppLanguage, Translations>> = {
   en: {
     appName: 'Daily Khata Pro',
     appSubtitle: 'Universal Daily Financial Record & Smart Fund Capital Engine',
@@ -3185,8 +3185,15 @@ function createFallbackProxy<T extends object>(target: T, fallback: T): T {
   });
 }
 
-(Object.keys(TRANSLATIONS) as AppLanguage[]).forEach((l) => {
-  if (l !== 'en' && TRANSLATIONS[l]) {
+const allSupportedLangs: AppLanguage[] = [
+  'en', 'hi', 'hinglish', 'mr', 'gu', 'pa', 'ta', 'te', 'kn', 'ml', 'or', 'as', 'ne',
+  'ur', 'bn', 'ar', 'es', 'fr', 'de', 'ru', 'pt', 'id', 'ja', 'zh'
+];
+
+allSupportedLangs.forEach((l) => {
+  if (!TRANSLATIONS[l]) {
+    TRANSLATIONS[l] = createFallbackProxy({} as Translations, TRANSLATIONS.en);
+  } else if (l !== 'en') {
     TRANSLATIONS[l] = createFallbackProxy(TRANSLATIONS[l], TRANSLATIONS.en);
   }
 });

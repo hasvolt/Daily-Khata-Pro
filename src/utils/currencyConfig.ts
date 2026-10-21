@@ -121,7 +121,17 @@ export const LANGUAGE_CURRENCY_MAP: Record<AppLanguage, CurrencyConfig> = {
     locale: 'zh-CN',
     symbolPosition: 'prefix',
     spaceAfterSymbol: false
-  }
+  },
+  mr: { symbol: '₹', code: 'INR', name: 'भारतीय रुपया (INR)', locale: 'mr-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  gu: { symbol: '₹', code: 'INR', name: 'ભારતીય રૂપિયો (INR)', locale: 'gu-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  pa: { symbol: '₹', code: 'INR', name: 'ਭਾਰਤੀ ਰੁਪਿਆ (INR)', locale: 'pa-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  ta: { symbol: '₹', code: 'INR', name: 'இந்திய ரூபாய் (INR)', locale: 'ta-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  te: { symbol: '₹', code: 'INR', name: 'భారతీయ రూపాయి (INR)', locale: 'te-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  kn: { symbol: '₹', code: 'INR', name: 'ಭಾರತೀಯ ರೂಪಾಯಿ (INR)', locale: 'kn-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  ml: { symbol: '₹', code: 'INR', name: 'ഇന്ത്യൻ രൂപ (INR)', locale: 'ml-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  or: { symbol: '₹', code: 'INR', name: 'ଭାରତୀୟ ଟଙ୍କା (INR)', locale: 'or-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  as: { symbol: '₹', code: 'INR', name: 'ভাৰতীয় টকা (INR)', locale: 'as-IN', symbolPosition: 'prefix', spaceAfterSymbol: false },
+  ne: { symbol: '₨', code: 'NPR', name: 'नेपाली रुपैयाँ (NPR)', locale: 'ne-NP', symbolPosition: 'prefix', spaceAfterSymbol: false }
 };
 
 export const UNIVERSAL_CURRENCY_MAP: Record<string, CurrencyConfig> = {

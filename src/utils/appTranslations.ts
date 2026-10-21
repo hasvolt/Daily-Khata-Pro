@@ -235,7 +235,7 @@ export interface AppTranslationBundle {
   };
 }
 
-export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
+export const APP_TRANSLATIONS: Record<string, any> & Partial<Record<AppLanguage, AppTranslationBundle>> = {
   en: {
     menu: {
       mainMenu: 'Main Menu',
@@ -980,12 +980,207 @@ export const APP_TRANSLATIONS: Record<AppLanguage, AppTranslationBundle> = {
 };
 
 // Polyfill languages with tailored translations
-const supportedLangs: AppLanguage[] = ['es', 'ar', 'fr', 'de', 'ru', 'pt', 'bn', 'ur', 'id', 'ja', 'zh'];
+const supportedLangs: AppLanguage[] = [
+  'mr', 'gu', 'pa', 'ta', 'te', 'kn', 'ml', 'or', 'as', 'ne',
+  'es', 'ar', 'fr', 'de', 'ru', 'pt', 'bn', 'ur', 'id', 'ja', 'zh'
+];
 
 supportedLangs.forEach((lang) => {
   if (!APP_TRANSLATIONS[lang] || Object.keys(APP_TRANSLATIONS[lang]).length === 0) {
     // Clone English as reliable base then localize core titles
     const base = JSON.parse(JSON.stringify(APP_TRANSLATIONS.en));
+    
+    if (lang === 'mr') {
+      base.menu.mainMenu = 'मुख्य मेनू';
+      base.menu.menuAndTools = 'मुख्य मेनू आणि टूल्स';
+      base.menu.appSettings = 'ॲप सेटिंग्ज';
+      base.menu.calculator = 'कॅल्क्युलेटर';
+      base.menu.personalNotes = 'वैयक्तिक नोट्स';
+      base.menu.securityPinLock = 'सुरक्षा पिन लॉक';
+      base.menu.userManualGuide = 'वापरकर्ता मार्गदर्शक';
+      base.menu.safetySourceCode = 'सुरक्षा आणि सोर्स कोड';
+      base.menu.khata = 'खाते';
+      base.menu.record = 'नोंदवही';
+      base.menu.goals = 'ध्येये';
+      base.menu.workAndLife = 'काम आणि जीवन';
+      base.menu.notes = 'नोट्स';
+      base.menu.analytics = 'अहवाल';
+      base.brand.appName = 'डेली खाता: प्रो';
+      base.developer.title = 'विकासक परिचय';
+      base.developer.role = 'स्वतंत्र विकासक आणि संस्थापक';
+      base.calc.title = 'बहुउद्देशीय आर्थिक कॅल्क्युलेटर';
+    } else if (lang === 'gu') {
+      base.menu.mainMenu = 'મુખ્ય મેનુ';
+      base.menu.menuAndTools = 'મુખ્ય મેનુ અને ટૂલ્સ';
+      base.menu.appSettings = 'એપ સેટિંગ્સ';
+      base.menu.calculator = 'કેલ્ક્યુલેટર';
+      base.menu.personalNotes = 'વ્યક્તિગત નોંધો';
+      base.menu.securityPinLock = 'સુરક્ષા પિન લૉક';
+      base.menu.userManualGuide = 'વપરાશકર્તા માર્ગદર્શિકા';
+      base.menu.safetySourceCode = 'સુરક્ષા અને સોર્સ કોડ';
+      base.menu.khata = 'ખાતાવહી';
+      base.menu.record = 'નોંધણી';
+      base.menu.goals = 'ધ્યેયો';
+      base.menu.workAndLife = 'કામ અને જીવન';
+      base.menu.notes = 'નોંધો';
+      base.menu.analytics = 'અહેવાલો';
+      base.brand.appName = 'ડેઇલી ખાતા: પ્રો';
+      base.developer.title = 'ડેવલપર પરિચય';
+      base.developer.role = 'સ્વતંત્ર ડેવલપર અને સ્થાપક';
+      base.calc.title = 'બહુહેતુક નાણાકીય કેલ્ક્યુલેટર';
+    } else if (lang === 'pa') {
+      base.menu.mainMenu = 'ਮੁੱਖ ਮੀਨੂ';
+      base.menu.menuAndTools = 'ਮੁੱਖ ਮੀਨੂ ਅਤੇ ਟੂਲ';
+      base.menu.appSettings = 'ਐਪ ਸੈਟਿੰਗਾਂ';
+      base.menu.calculator = 'ਕੈਲਕੁਲੇਟਰ';
+      base.menu.personalNotes = 'ਨਿੱਜੀ ਨੋਟਸ';
+      base.menu.securityPinLock = 'ਸੁਰੱਖਿਆ ਪਿੰਨ ਲਾਕ';
+      base.menu.userManualGuide = 'ਵਰਤੋਂਕਾਰ ਗਾਈਡ';
+      base.menu.safetySourceCode = 'ਸੁਰੱਖਿਆ ਅਤੇ ਸਰੋਤ ਕੋਡ';
+      base.menu.khata = 'ਖਾਤਾ';
+      base.menu.record = 'ਲੇਖਾ';
+      base.menu.goals = 'ਟੀਚੇ';
+      base.menu.workAndLife = 'ਕੰਮ ਅਤੇ ਜੀਵਨ';
+      base.menu.notes = 'ਨੋਟਸ';
+      base.menu.analytics = 'ਰਿਪੋਰਟਾਂ';
+      base.brand.appName = 'ਡੇਲੀ ਖਾਤਾ: ਪ੍ਰੋ';
+      base.developer.title = 'ਡਿਵੈਲਪਰ ਜਾਣਕਾਰੀ';
+      base.developer.role = 'ਸੁਤੰਤਰ ਡਿਵੈਲਪਰ ਅਤੇ ਸੰਸਥਾਪਕ';
+      base.calc.title = 'ਬਹੁ-ਮੰਤਵੀ ਵਿੱਤੀ ਕੈਲਕੁਲੇਟਰ';
+    } else if (lang === 'ta') {
+      base.menu.mainMenu = 'முதன்மை மெனு';
+      base.menu.menuAndTools = 'முதன்மை மெனு & கருவிகள்';
+      base.menu.appSettings = 'பயன்பாட்டு அமைப்புகள்';
+      base.menu.calculator = 'கணக்கீட்டு கருவி';
+      base.menu.personalNotes = 'தனிப்பட்ட குறிப்புகள்';
+      base.menu.securityPinLock = 'பாதுகாப்பு பின் லாக்';
+      base.menu.userManualGuide = 'பயனர் கையேடு';
+      base.menu.safetySourceCode = 'பாதுகாப்பு & மூலக் குறியீடு';
+      base.menu.khata = 'கணக்கு';
+      base.menu.record = 'பதிவு';
+      base.menu.goals = 'இலக்குகள்';
+      base.menu.workAndLife = 'வேலை மற்றும் வாழ்க்கை';
+      base.menu.notes = 'குறிப்புகள்';
+      base.menu.analytics = 'அறிக்கைகள்';
+      base.brand.appName = 'டெய்லி காதா: ப்ரோ';
+      base.developer.title = 'உருவாக்குநர் சுயவிவரம்';
+      base.developer.role = 'சுயாதீன உருவாக்குநர் & நிறுவனர்';
+      base.calc.title = 'பன்முக நிதி கணக்கீட்டு கருவி';
+    } else if (lang === 'te') {
+      base.menu.mainMenu = 'ప్రధాన మెనూ';
+      base.menu.menuAndTools = 'ప్రధాన మెనూ & సాధనాలు';
+      base.menu.appSettings = 'యాప్ సెట్టింగ్‌లు';
+      base.menu.calculator = 'కాలిక్యులేటర్';
+      base.menu.personalNotes = 'వ్యక్తిగత గమనికలు';
+      base.menu.securityPinLock = 'సెక్యూరిటీ పిన్ లాక్';
+      base.menu.userManualGuide = 'యూజర్ గైడ్';
+      base.menu.safetySourceCode = 'భద్రత & సోర్స్ కోడ్';
+      base.menu.khata = 'ఖాతా';
+      base.menu.record = 'నమోదు';
+      base.menu.goals = 'లక్ష్యాలు';
+      base.menu.workAndLife = 'పని మరియు జీవితం';
+      base.menu.notes = 'గమనికలు';
+      base.menu.analytics = 'నివేదికలు';
+      base.brand.appName = 'డైలీ ఖాతా: ప్రో';
+      base.developer.title = 'డెవలపర్ ప్రొఫైల్';
+      base.developer.role = 'స్వతంత్ర డెవలపర్ & వ్యవస్థాపకుడు';
+      base.calc.title = 'బహుళ ప్రయోజన ఆర్థిక కాలిక్యులేటర్';
+    } else if (lang === 'kn') {
+      base.menu.mainMenu = 'ಮುಖ್ಯ ಮೆನು';
+      base.menu.menuAndTools = 'ಮುಖ್ಯ ಮೆನು & ಪರಿಕರಗಳು';
+      base.menu.appSettings = 'ಆ್ಯಪ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು';
+      base.menu.calculator = 'ಕ್ಯಾಲ್ಕುಲೇಟರ್';
+      base.menu.personalNotes = 'ವೈಯಕ್ತಿಕ ಟಿಪ್ಪಣಿಗಳು';
+      base.menu.securityPinLock = 'ಭದ್ರತಾ ಪಿನ್ ಲಾಕ್';
+      base.menu.userManualGuide = 'ಬಳಕೆದಾರರ ಮಾರ್ಗದರ್ಶಿ';
+      base.menu.safetySourceCode = 'ಭದ್ರತೆ ಮತ್ತು ಮೂಲ ಕೋಡ್';
+      base.menu.khata = 'ಖಾತೆ';
+      base.menu.record = 'ದಾಖಲೆ';
+      base.menu.goals = 'ಗುರಿಗಳು';
+      base.menu.workAndLife = 'ಕೆಲಸ ಮತ್ತು ಜೀವನ';
+      base.menu.notes = 'ಟಿಪ್ಪಣಿಗಳು';
+      base.menu.analytics = 'ವರದಿಗಳು';
+      base.brand.appName = 'ಡೈಲಿ ಖಾತಾ: ಪ್ರೋ';
+      base.developer.title = 'ಡೆವಲಪರ್ ಪರಿಚಯ';
+      base.developer.role = 'ಸ್ವತಂತ್ರ ಡೆವಲಪರ್ & ಸಂಸ್ಥಾಪಕ';
+      base.calc.title = 'ಬಹುಪಯೋಗಿ ಹಣಕಾಸು ಕ್ಯಾಲ್ಕುಲೇಟರ್';
+    } else if (lang === 'ml') {
+      base.menu.mainMenu = 'പ്രധാന മെനു';
+      base.menu.menuAndTools = 'പ്രധാന മെനു & ടൂളുകൾ';
+      base.menu.appSettings = 'ആപ്പ് ക്രമീകരണങ്ങൾ';
+      base.menu.calculator = 'കാൽക്കുലേറ്റർ';
+      base.menu.personalNotes = 'വ്യക്തിഗത കുറിപ്പുകൾ';
+      base.menu.securityPinLock = 'സുരക്ഷാ പിൻ ലോക്ക്';
+      base.menu.userManualGuide = 'ഉപയോക്തൃ ഗൈഡ്';
+      base.menu.safetySourceCode = 'സുരക്ഷ & സോഴ്സ് കോഡ്';
+      base.menu.khata = 'ഖാത്ത';
+      base.menu.record = 'രേഖ';
+      base.menu.goals = 'ലക്ഷ്യങ്ങൾ';
+      base.menu.workAndLife = 'ജോലിയും ജീവിതവും';
+      base.menu.notes = 'കുറിപ്പുകൾ';
+      base.menu.analytics = 'റിപ്പോർട്ടുകൾ';
+      base.brand.appName = 'ഡെയ്‌ലി ഖാത: പ്രോ';
+      base.developer.title = 'ഡെവലപ്പർ പ്രൊഫൈൽ';
+      base.developer.role = 'സ്വതന്ത്ര ഡെവലപ്പർ & സ്ഥാപകൻ';
+      base.calc.title = 'ധനകാര്യ കാൽക്കുലേറ്റർ';
+    } else if (lang === 'or') {
+      base.menu.mainMenu = 'ମୁଖ୍ୟ ମେନୁ';
+      base.menu.menuAndTools = 'ମୁଖ୍ୟ ମେନୁ ଏବଂ ଉପକରଣ';
+      base.menu.appSettings = 'ଆପ୍ ସେଟିଂସମୂହ';
+      base.menu.calculator = 'କାଲକୁଲେଟର';
+      base.menu.personalNotes = 'ବ୍ୟକ୍ତିଗତ ନୋଟ୍ସ';
+      base.menu.securityPinLock = 'ସୁରକ୍ଷା ପିନ୍ ଲକ୍';
+      base.menu.userManualGuide = 'ବ୍ୟବହାରକାରୀ ମାର୍ଗଦର୍ଶିକା';
+      base.menu.safetySourceCode = 'ସୁରକ୍ଷା ଏବଂ ସୋର୍ସ କୋଡ୍';
+      base.menu.khata = 'ଖାତା';
+      base.menu.record = 'ରେକର୍ଡ';
+      base.menu.goals = 'ଲକ୍ଷ୍ୟ';
+      base.menu.workAndLife = 'କାର୍ଯ୍ୟ ଏବଂ ଜୀବନ';
+      base.menu.notes = 'ନୋଟ୍ସ';
+      base.menu.analytics = 'ରିପୋର୍ଟ';
+      base.brand.appName = 'ଡେଲି ଖାତା: ପ୍ରୋ';
+      base.developer.title = 'ଡେଭଲପର ପରିଚୟ';
+      base.developer.role = 'ସ୍ୱାଧୀନ ଡେଭଲପର ଏବଂ ପ୍ରତିଷ୍ଠାତା';
+      base.calc.title = 'ଆର୍ଥିକ କାଲକୁଲେଟର';
+    } else if (lang === 'as') {
+      base.menu.mainMenu = 'মুখ্য মেনু';
+      base.menu.menuAndTools = 'মুখ্য মেনু আৰু সঁজুলি';
+      base.menu.appSettings = 'এপৰ ছেটিংছ';
+      base.menu.calculator = 'কেলকুলেটৰ';
+      base.menu.personalNotes = 'ব্যক্তিগত টোকা';
+      base.menu.securityPinLock = 'সুৰক্ষা পিন লক';
+      base.menu.userManualGuide = 'ব্যৱহাৰকাৰীৰ নিৰ্দেশিকা';
+      base.menu.safetySourceCode = 'সুৰক্ষা আৰু উৎস ক’ড';
+      base.menu.khata = 'খাতা';
+      base.menu.record = 'হিচাপ';
+      base.menu.goals = 'লক্ষ্য';
+      base.menu.workAndLife = 'কৰ্ম আৰু জীৱন';
+      base.menu.notes = 'টোকা';
+      base.menu.analytics = 'প্ৰতিবেদন';
+      base.brand.appName = 'ডেইলী খাতা: প্ৰ’';
+      base.developer.title = 'ডেভেলপাৰ পৰিচয়';
+      base.developer.role = 'স্বাধীন ডেভেলপাৰ আৰু প্ৰতিষ্ঠাপক';
+      base.calc.title = 'বিত্তীয় কেলকুলেটৰ';
+    } else if (lang === 'ne') {
+      base.menu.mainMenu = 'मुख्य मेनु';
+      base.menu.menuAndTools = 'मुख्य मेनु र उपकरणहरू';
+      base.menu.appSettings = 'एप सेटिङहरू';
+      base.menu.calculator = 'क्यालकुलेटर';
+      base.menu.personalNotes = 'व्यक्तिगत नोटहरू';
+      base.menu.securityPinLock = 'सुरक्षा पिन लक';
+      base.menu.userManualGuide = 'प्रयोगकर्ता गाइड';
+      base.menu.safetySourceCode = 'सुरक्षा र स्रोत कोड';
+      base.menu.khata = 'खाता';
+      base.menu.record = 'रेकर्ड';
+      base.menu.goals = 'लक्ष्यहरू';
+      base.menu.workAndLife = 'काम र जीवन';
+      base.menu.notes = 'नोटहरू';
+      base.menu.analytics = 'रिपोर्टहरू';
+      base.brand.appName = 'डेली खाता: प्रो';
+      base.developer.title = 'विकासकर्ता परिचय';
+      base.developer.role = 'स्वतन्त्र विकासकर्ता र संस्थापक';
+      base.calc.title = 'वित्तीय क्यालकुलेटर';
+    }
     
     if (lang === 'ur') {
       base.menu.mainMenu = 'مین مینو';

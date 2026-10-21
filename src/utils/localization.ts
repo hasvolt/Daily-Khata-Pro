@@ -1,10 +1,12 @@
 import { AppLanguage, FundType, PaymentMode, WorkStatus, MoodType } from '../types';
 
+export type LangMap = Partial<Record<AppLanguage, string>> & Record<string, string>;
+
 // ==========================================
 // 1. CATEGORY & SOURCE LOCALIZATION MAPS
 // ==========================================
 
-export const CATEGORY_TRANSLATIONS: Record<string, Record<AppLanguage, string>> = {
+export const CATEGORY_TRANSLATIONS: Record<string, LangMap> = {
   'Food & Dining': {
     en: 'Food & Dining',
     hi: 'भोजन एवं रेस्टोरेंट',
@@ -503,7 +505,7 @@ export const CATEGORY_TRANSLATIONS: Record<string, Record<AppLanguage, string>> 
   }
 };
 
-export const SOURCE_TRANSLATIONS: Record<string, Record<AppLanguage, string>> = {
+export const SOURCE_TRANSLATIONS: Record<string, LangMap> = {
   'Salary & Wages': {
     en: 'Salary & Wages',
     hi: 'मासिक वेतन एवं नौकरी आय',
@@ -762,7 +764,7 @@ export const SOURCE_TRANSLATIONS: Record<string, Record<AppLanguage, string>> = 
   }
 };
 
-export const PAYMENT_MODE_TRANSLATIONS: Record<PaymentMode, Record<AppLanguage, string>> = {
+export const PAYMENT_MODE_TRANSLATIONS: Record<PaymentMode, LangMap> = {
   cash: {
     en: 'Cash in Hand',
     hi: 'नकद (Cash)',
@@ -877,7 +879,7 @@ export const PAYMENT_MODE_TRANSLATIONS: Record<PaymentMode, Record<AppLanguage, 
   }
 };
 
-export const WORK_STATUS_TRANSLATIONS: Record<WorkStatus, Record<AppLanguage, string>> = {
+export const WORK_STATUS_TRANSLATIONS: Record<WorkStatus, LangMap> = {
   completed: {
     en: 'Completed',
     hi: 'पूर्ण (सम्पन्न)',
@@ -944,7 +946,7 @@ export const WORK_STATUS_TRANSLATIONS: Record<WorkStatus, Record<AppLanguage, st
   }
 };
 
-export const MOOD_TRANSLATIONS: Record<MoodType, Record<AppLanguage, string>> = {
+export const MOOD_TRANSLATIONS: Record<MoodType, LangMap> = {
   happy: {
     en: 'Happy & Joyful',
     hi: 'प्रसन्न एवं खुशहाल',
@@ -1083,7 +1085,7 @@ export function localizeMood(mood: MoodType, lang: AppLanguage | string = 'en'):
 // 3. COMPREHENSIVE UI TEXT DICTIONARIES
 // ==========================================
 
-export const TRACKER_TRANSLATIONS: Record<string, Record<AppLanguage, string>> = {
+export const TRACKER_TRANSLATIONS: Record<string, LangMap> = {
   headerTitle: {
     en: 'Work Deliverables & Daily Life Tracker',
     hi: 'काम व दैनिक जीवन ट्रैकर',
@@ -1246,7 +1248,7 @@ export const TRACKER_TRANSLATIONS: Record<string, Record<AppLanguage, string>> =
   }
 };
 
-export const NOTES_TRANSLATIONS: Record<string, Record<AppLanguage, string>> = {
+export const NOTES_TRANSLATIONS: Record<string, LangMap> = {
   vaultBadge: {
     en: 'Private Personal Vault',
     hi: '100% प्राइवेट व सेपरेट वॉल्ट',
@@ -1894,8 +1896,37 @@ export const COMMON_UI_TRANSLATIONS: Record<string, Partial<Record<AppLanguage, 
     id: 'Kehadiran',
     ja: '出勤',
     zh: '考勤'
+  },
+  'Income Expense Tracker': {
+    hi: 'आय-व्यय ट्रैकर',
+    hinglish: 'Income Expense Tracker',
+    mr: 'जमा-खर्च ट्रॅकर',
+    gu: 'આવક-ખર્ચ ટ્રેકર',
+    pa: 'ਆਮਦਨ-ਖਰਚ ਟਰੈਕਰ',
+    ta: 'வருமானம் செலவு டிராக்கர்',
+    te: 'ఆదాయ-వ్యయ ట్రాకర్',
+    kn: 'ಆದಾಯ-ವೆಚ್ಚ ಟ್ರ್ಯಾಕರ್',
+    ml: 'വരുമാന-ചെലവ് ട്രാക്കർ',
+    or: 'ଆୟ-ବ୍ୟୟ ଟ୍ରାକର୍',
+    as: 'আয়-ব্যয় ট্ৰেকাৰ',
+    ne: 'आम्दानी-खर्च ट्र्याकर',
+    ur: 'آمدن و خرچ ٹریکر',
+    bn: 'আয়-ব্যয় ট্র্যাকার',
+    ar: 'متتبع الدخل والمصروفات',
+    es: 'Control de Ingresos y Gastos',
+    fr: 'Suivi Revenus et Dépenses',
+    de: 'Einnahmen- & Ausgaben-Tracker',
+    ru: 'Учёт Доходов и Расходов',
+    pt: 'Rastreador de Rendas e Despesas',
+    id: 'Pelacak Pemasukan & Pengeluaran',
+    ja: '収支トラッカー',
+    zh: '收支记账器'
   }
 };
+
+export function isRtlLanguage(lang: string): boolean {
+  return lang === 'ur' || lang === 'ar';
+}
 
 export function getUIText(englishText: string, lang: AppLanguage | string = 'en'): string {
   if (!englishText || lang === 'en') return englishText;

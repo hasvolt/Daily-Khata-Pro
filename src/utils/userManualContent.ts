@@ -1556,7 +1556,7 @@ const MANUAL_ZH: UserManualTranslation = {
   quickAction: '打开相关功能'
 };
 
-const USER_MANUAL_TRANSLATIONS: Record<AppLanguage, UserManualTranslation> = {
+const USER_MANUAL_TRANSLATIONS: Record<string, UserManualTranslation> = {
   en: MANUAL_EN,
   hi: MANUAL_HI,
   hinglish: MANUAL_HINGLISH,

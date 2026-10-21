@@ -162,7 +162,7 @@ export interface PageTranslations {
   };
 }
 
-export const PAGE_TRANSLATIONS: Record<AppLanguage, PageTranslations> = {
+export const PAGE_TRANSLATIONS: Record<string, PageTranslations> & { en: PageTranslations } = {
   en: {
     about: {
       backToHome: 'Back to Home',

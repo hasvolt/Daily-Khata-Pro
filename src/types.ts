@@ -17,17 +17,35 @@ export type AppLanguage =
   | 'en' // English (Global)
   | 'hi' // हिन्दी (Hindi)
   | 'hinglish' // Hinglish (India)
-  | 'es' // Español (Spanish)
+  | 'mr' // मराठी (Marathi)
+  | 'gu' // ગુજરાતી (Gujarati)
+  | 'pa' // ਪੰਜਾਬੀ (Punjabi)
+  | 'ta' // தமிழ் (Tamil)
+  | 'te' // తెలుగు (Telugu)
+  | 'kn' // ಕನ್ನಡ (Kannada)
+  | 'ml' // മലയാളം (Malayalam)
+  | 'or' // ଓଡ଼ିଆ (Odia)
+  | 'as' // অসমীয়া (Assamese)
+  | 'ne' // नेपाली (Nepali)
+  | 'ur' // اردو (Urdu)
+  | 'bn' // বাংলা (Bengali)
   | 'ar' // العربية (Arabic)
+  | 'es' // Español (Spanish)
   | 'fr' // Français (French)
   | 'de' // Deutsch (German)
   | 'ru' // Русский (Russian)
   | 'pt' // Português (Portuguese)
-  | 'bn' // বাংলা (Bengali)
-  | 'ur' // اردو (Urdu)
   | 'id' // Bahasa Indonesia
   | 'ja' // 日本語 (Japanese)
   | 'zh'; // 中文 (Simplified Chinese)
+
+export type UserPurpose = 
+  | 'shop' // Dukaan & Retail (दुकान, स्टोर, गल्ला)
+  | 'construction' // Thekedari & Site (ठेकेदारी, लेबर, साइट)
+  | 'factory' // Factory & Workshop (कारखाना, वर्कशॉप, कारीगर)
+  | 'farm' // Khet & Krishi (खेत, किसानी, मजदूर)
+  | 'household' // Ghar & Parivar (घर खर्च, घरेलू स्टाफ)
+  | 'personal'; // Personal & Freelance (पर्सनल, बचत, लोन)
 
 export type AppViewMode = 'auto' | 'mobile' | 'desktop';
 export type AppLayout = 'dashboard' | 'bento' | 'passbook' | 'cardstack' | 'compact' | 'minimal';

@@ -288,8 +288,8 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-2 flex items-center justify-between gap-1 sm:gap-3">
-        {/* Brand Icon & Name (Un-truncated, clear across all devices: Laptop, Desktop & Mobile) */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0 select-none">
+        {/* Brand Icon & Name */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink min-w-0 select-none">
           <div
             onClick={() => onSelectTab && onSelectTab('home')}
             className="cursor-pointer active:scale-95 transition-transform shrink-0"
@@ -303,10 +303,10 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col text-left justify-center shrink-0 min-w-0">
+          <div className="flex flex-col text-left justify-center shrink min-w-0">
             <div
               onClick={() => onSelectTab && onSelectTab('home')}
-              className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group whitespace-nowrap"
+              className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group"
             >
               <span className="font-extrabold text-[15px] sm:text-[18px] tracking-tight text-[var(--theme-text,#F8FAFC)] group-hover:opacity-95 transition-opacity whitespace-nowrap">
                 Daily Khata
@@ -315,9 +315,9 @@ export const Header: React.FC<HeaderProps> = ({
                 Pro
               </span>
             </div>
-            <div className="mt-0.5 flex items-center gap-1.5 whitespace-nowrap min-w-0">
-              <span className="text-[9.5px] sm:text-[11px] font-semibold tracking-wide transition-colors text-[var(--theme-text-muted,#8BA4D0)] leading-tight whitespace-nowrap">
-                {isHindi ? 'आय-व्यय ट्रैकर (Income Expense Tracker)' : 'Income Expense Tracker'}
+            <div className="mt-0.5 flex items-center gap-1.5 min-w-0">
+              <span className="text-[9.5px] sm:text-[11px] font-semibold tracking-wide transition-colors text-[var(--theme-text-muted,#8BA4D0)] leading-tight truncate max-w-[125px] sm:max-w-[200px] md:max-w-none">
+                {getUIText('Income Expense Tracker', language)}
               </span>
             </div>
           </div>

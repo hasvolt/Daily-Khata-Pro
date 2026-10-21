@@ -59,7 +59,8 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
         if (selectedEmployer !== 'all' && l.employerName !== selectedEmployer) return false;
         const rate = l.salaryOrRate || 0;
         const rec = l.paymentReceived || 0;
-        const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+        const adv = l.advanceReceived || 0;
+        const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
         return pend > 0 && l.paymentStatus !== 'paid';
       })
       .sort((a, b) => a.date.localeCompare(b.date)); // Oldest first
@@ -69,7 +70,8 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
     return pendingLogs.reduce((sum, l) => {
       const rate = l.salaryOrRate || 0;
       const rec = l.paymentReceived || 0;
-      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+      const adv = l.advanceReceived || 0;
+      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
       return sum + pend;
     }, 0);
   }, [pendingLogs]);
@@ -89,13 +91,15 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
       if (emp !== 'all' && l.employerName !== emp) return false;
       const rate = l.salaryOrRate || 0;
       const rec = l.paymentReceived || 0;
-      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+      const adv = l.advanceReceived || 0;
+      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
       return pend > 0 && l.paymentStatus !== 'paid';
     });
     const total = logs.reduce((sum, l) => {
       const rate = l.salaryOrRate || 0;
       const rec = l.paymentReceived || 0;
-      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+      const adv = l.advanceReceived || 0;
+      const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
       return sum + pend;
     }, 0);
     setAmount(total > 0 ? String(total) : '');
@@ -118,7 +122,8 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
       if (remaining <= 0) return;
       const rate = target.salaryOrRate || 0;
       const currentRec = target.paymentReceived || 0;
-      const currentPend = target.pendingPayment !== undefined ? target.pendingPayment : Math.max(0, rate - currentRec);
+      const currentAdv = target.advanceReceived || 0;
+      const currentPend = target.pendingPayment !== undefined ? target.pendingPayment : Math.max(0, rate - currentRec - currentAdv);
 
       if (currentPend <= 0) return;
 
@@ -388,7 +393,8 @@ export const BulkPaymentSettlementModal: React.FC<BulkPaymentSettlementModalProp
                 {pendingLogs.slice(0, 10).map((l) => {
                   const rate = l.salaryOrRate || 0;
                   const rec = l.paymentReceived || 0;
-                  const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+                  const adv = l.advanceReceived || 0;
+                  const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
                   return (
                     <div key={l.id} className="flex items-center justify-between py-1 px-2 rounded-lg bg-[var(--theme-card,#132438)]/60 text-[var(--theme-text,#F8FAFC)]">
                       <div className="flex items-center gap-2 min-w-0">

@@ -82,10 +82,12 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
     overtimeHours: filteredLogs.reduce((sum, l) => sum + (l.overtimeHours || 0), 0),
     totalEarnings: filteredLogs.reduce((sum, l) => sum + (l.salaryOrRate || 0), 0),
     totalReceived: filteredLogs.reduce((sum, l) => sum + (l.paymentReceived || 0), 0),
+    totalAdvance: filteredLogs.reduce((sum, l) => sum + (l.advanceReceived || 0), 0),
     totalPending: filteredLogs.reduce((sum, l) => {
       const rate = l.salaryOrRate || 0;
       const rec = l.paymentReceived || 0;
-      return sum + (l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec));
+      const adv = l.advanceReceived || 0;
+      return sum + (l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv));
     }, 0)
   };
 
@@ -283,6 +285,10 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
             <div class="stat-val" style="color: #16a34a;">${formatCurrency(stats.totalReceived, privacyMask)}</div>
           </div>
           <div class="stat-box">
+            <div class="stat-label">Advance (पेशगी)</div>
+            <div class="stat-val" style="color: #d97706;">${formatCurrency(stats.totalAdvance, privacyMask)}</div>
+          </div>
+          <div class="stat-box">
             <div class="stat-label">Pending Dues</div>
             <div class="stat-val" style="color: #ea580c;">${formatCurrency(stats.totalPending, privacyMask)}</div>
           </div>
@@ -291,12 +297,13 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
         <table>
           <thead>
             <tr>
-              <th style="width: 14%;">Date</th>
-              <th style="width: 14%;">Status</th>
-              <th style="width: 16%;">Timings / OT</th>
-              <th style="width: 20%;">Person / Employer</th>
-              <th style="width: 16%;">Work Type</th>
-              <th style="width: 10%; text-align: right;">Rate</th>
+              <th style="width: 13%;">Date</th>
+              <th style="width: 12%;">Status</th>
+              <th style="width: 14%;">Timings / OT</th>
+              <th style="width: 18%;">Person / Employer</th>
+              <th style="width: 15%;">Work Type</th>
+              <th style="width: 9%; text-align: right;">Rate</th>
+              <th style="width: 9%; text-align: right;">Advance</th>
               <th style="width: 10%; text-align: right;">Pending</th>
             </tr>
           </thead>
@@ -305,7 +312,8 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
               const statusClass = l.status === 'present' ? 'badge-present' : l.status === 'half_day' ? 'badge-half' : l.status === 'overtime' ? 'badge-ot' : 'badge-absent';
               const rate = l.salaryOrRate || 0;
               const rec = l.paymentReceived || 0;
-              const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec);
+              const adv = l.advanceReceived || 0;
+              const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
               return `
                 <tr>
                   <td><strong>${l.date}</strong></td>
@@ -314,6 +322,7 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
                   <td><strong>${l.employerName || '-'}</strong></td>
                   <td>${l.workCategory || l.workType || '-'}</td>
                   <td style="text-align: right;" class="font-mono">${rate > 0 ? formatCurrency(rate, privacyMask) : '-'}</td>
+                  <td style="text-align: right; color: ${adv > 0 ? '#d97706' : '#64748b'};" class="font-mono">${adv > 0 ? formatCurrency(adv, privacyMask) : '-'}</td>
                   <td style="text-align: right; color: ${pend > 0 ? '#ea580c' : '#16a34a'};" class="font-mono font-bold">${pend > 0 ? formatCurrency(pend, privacyMask) : 'PAID'}</td>
                 </tr>
               `;

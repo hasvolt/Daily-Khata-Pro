@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Entry, FundType, FundConfig, AppLanguage, CategoryBudget, DebtItem, Goal } from '../types';
+import { Entry, FundType, FundConfig, AppLanguage, CategoryBudget, DebtItem, Goal, UserPurpose } from '../types';
 import { DEFAULT_FUNDS } from '../data/defaults';
 import { formatCurrency, calculateFundTotals, calculatePeriodStats } from '../utils/khataCalculations';
 import { getLocalDateString, getDaysAgoDateString, getLocalMonthString } from '../utils/dateUtils';
@@ -38,6 +38,15 @@ import {
   Receipt,
   CalendarCheck,
   Menu,
+  Store,
+  HardHat,
+  Factory,
+  Tractor,
+  Home as HomeIcon,
+  UserCheck,
+  Sparkles,
+  RefreshCw,
+  Users
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -68,6 +77,10 @@ interface HomeViewProps {
   onOpenTrash?: () => void;
   onNavigateAttendance?: () => void;
   onOpenSplitBill?: () => void;
+  userPurpose?: UserPurpose;
+  onOpenChangePurpose?: () => void;
+  hasDemoData?: boolean;
+  onRemoveDemoData?: () => void;
   [key: string]: any;
 }
 
@@ -107,6 +120,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onOpenTrash,
   onNavigateAttendance,
   onOpenSplitBill,
+  userPurpose = 'shop',
+  onOpenChangePurpose,
+  hasDemoData = false,
+  onRemoveDemoData,
 }) => {
   const isHindi = language === 'hi' || language === 'hinglish';
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
@@ -298,7 +315,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   return (
     <div className="relative w-full max-w-6xl mx-auto pb-10 sm:pb-14 space-y-3.5 sm:space-y-4 animate-in fade-in duration-200">
-      {/* 1. HERO BALANCE CARD */}
+      {/* 1. HERO BALANCE CARD (Always at the very top) */}
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
         <BankingCard3D
           totalWealth={totalWealth}
@@ -312,7 +329,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         />
       </motion.div>
 
-      {/* 2. TODAY + THIS MONTH SUMMARY CARDS (Full Width Stack matching screenshot) */}
+      {/* 2. TODAY + THIS MONTH SUMMARY CARDS (Full Width Stack) */}
       <motion.section
         className="space-y-2 sm:space-y-2.5"
         initial={{ opacity: 0, y: 8 }}
@@ -352,6 +369,535 @@ export const HomeView: React.FC<HomeViewProps> = ({
           onClick={onViewHistory}
         />
       </motion.section>
+
+      {/* 3. PURPOSE-TAILORED QUICK BANNER & SHORTCUTS (Directly below Total Balance & Month Cards) */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+        className="rounded-2xl border border-[var(--theme-border,#213E61)] bg-gradient-to-r from-[var(--theme-card,#132438)] via-[var(--theme-card,#132438)] to-[var(--theme-bg,#070E1A)] p-3 sm:p-3.5 shadow-sm"
+      >
+        <div className="flex items-center justify-between gap-2 flex-wrap mb-2.5 pb-2 border-b border-[var(--theme-border,#213E61)]/50">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-[var(--theme-primary,#38BDF8)]/15 text-[var(--theme-primary,#38BDF8)]">
+              {userPurpose === 'shop' && <Store className="w-4 h-4" />}
+              {userPurpose === 'construction' && <HardHat className="w-4 h-4" />}
+              {userPurpose === 'factory' && <Factory className="w-4 h-4" />}
+              {userPurpose === 'farm' && <Tractor className="w-4 h-4" />}
+              {userPurpose === 'household' && <HomeIcon className="w-4 h-4" />}
+              {userPurpose === 'personal' && <UserCheck className="w-4 h-4" />}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[12.5px] sm:text-[13.5px] font-black text-[var(--theme-text,#F8FAFC)] tracking-tight">
+                  {userPurpose === 'shop' && (isHindi ? 'दुकान व रिटेल बहीखाता' : 'Shop & Retail Ledger')}
+                  {userPurpose === 'construction' && (isHindi ? 'ठेकेदारी व निर्माण लेजर' : 'Contractor & Site Ledger')}
+                  {userPurpose === 'factory' && (isHindi ? 'कारखाना व वर्कशॉप खाता' : 'Factory & Workshop Ledger')}
+                  {userPurpose === 'farm' && (isHindi ? 'खेत व किसानी बहीखाता' : 'Farm & Krishi Ledger')}
+                  {userPurpose === 'household' && (isHindi ? 'घरेलू व परिवार बजट' : 'Home & Family Budget')}
+                  {userPurpose === 'personal' && (isHindi ? 'पर्सनल वेल्थ खाता' : 'Personal Finance Engine')}
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  {isHindi ? 'सक्रिय मोड' : 'Active Mode'}
+                </span>
+              </div>
+              <p className="text-[10.5px] text-[var(--theme-text-muted,#8BA4D0)] line-clamp-1">
+                {userPurpose === 'shop' && (isHindi ? 'गल्ला, बिक्री, सप्लायर भुगतान व ग्राहक उधारी' : 'Counter cash, retail sales, supplier & udhar')}
+                {userPurpose === 'construction' && (isHindi ? 'साइट खर्च, मजदूर हाजिरी व क्लाइंट बिलिंग' : 'Site materials, labour attendance & client bills')}
+                {userPurpose === 'factory' && (isHindi ? 'कारीगर मजदूरी, कच्चा माल खर्च व प्रोडक्शन' : 'Worker wages, raw materials & production orders')}
+                {userPurpose === 'farm' && (isHindi ? 'फसल बिक्री, खाद-बीज, खेत मजदूर व ट्रैक्टर डीजल' : 'Crop sales, seeds & fertilizer, farm labour')}
+                {userPurpose === 'household' && (isHindi ? 'मासिक राशन, घरेलू स्टाफ वेतन व पारिवारिक बचत' : 'Groceries, domestic staff wages & family savings')}
+                {userPurpose === 'personal' && (isHindi ? 'मासिक वेतन, व्यक्तिगत खर्च, ईएमआई व 6-फंड बचत' : 'Salary, personal expenses, EMI & wealth goals')}
+              </p>
+            </div>
+          </div>
+
+          {onOpenChangePurpose && (
+            <button
+              type="button"
+              onClick={onOpenChangePurpose}
+              className="px-2.5 py-1 rounded-xl border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-bg,#070E1A)] text-[10.5px] font-bold text-[var(--theme-text-muted,#8BA4D0)] hover:text-[var(--theme-text,#F8FAFC)] flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
+              title={isHindi ? 'व्यापार या उपयोग का प्रकार बदलें' : 'Change Business / Usage Mode'}
+            >
+              <RefreshCw className="w-3 h-3 text-[var(--theme-primary,#38BDF8)]" />
+              <span>{isHindi ? 'मोड बदलें' : 'Switch Mode'}</span>
+            </button>
+          )}
+        </div>
+
+        {/* Tailored Quick Action Buttons */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
+          {userPurpose === 'shop' && (
+            <>
+              <button
+                type="button"
+                onClick={() => onAddClick('income')}
+                className="p-2 sm:p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  +
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-emerald-300 truncate">
+                    {isHindi ? 'दुकान बिक्री आय' : 'Counter Sale'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'गल्ला / कैश इन' : '+ Cash Income'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('expense')}
+                className="p-2 sm:p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  -
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-rose-300 truncate">
+                    {isHindi ? 'सप्लायर / स्टॉक' : 'Supplier Pay'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'माल खरीद खर्च' : '- Purchase Expense'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateLoans}
+                className="p-2 sm:p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <Landmark className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-amber-300 truncate">
+                    {isHindi ? 'ग्राहक उधारी' : 'Customer Udhar'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'बाकी खाता' : 'Ledger & Dues'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateInvoice}
+                className="p-2 sm:p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <Receipt className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-sky-300 truncate">
+                    {isHindi ? 'बिल व चालान' : 'Bill / Invoice'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'रसीद बनाएं' : 'Instant Receipt'}
+                  </div>
+                </div>
+              </button>
+            </>
+          )}
+
+          {userPurpose === 'construction' && (
+            <>
+              <button
+                type="button"
+                onClick={onNavigateAttendance}
+                className="p-2 sm:p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <CalendarCheck className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-sky-300 truncate">
+                    {isHindi ? 'मजदूर हाजिरी' : 'Labour Attendance'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'दैनिक उपस्थिति' : 'Daily Roll Call'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('expense')}
+                className="p-2 sm:p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  -
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-rose-300 truncate">
+                    {isHindi ? 'साइट मटेरियल' : 'Site Material'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'सीमेंट, रेत, लोहा' : '- Site Expenses'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('income')}
+                className="p-2 sm:p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  +
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-emerald-300 truncate">
+                    {isHindi ? 'क्लाइंट भुगतान' : 'Client Payment'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'साइट से आय' : '+ Contract Income'}
+                  </div>
+                </div>
+              </button>
+              <a
+                href="https://staff.rozfiber.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 sm:p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <Users className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-indigo-300 truncate">
+                    Staff Manager ↗
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'फुल स्टाफ सैलरी' : 'Payroll & Slips'}
+                  </div>
+                </div>
+              </a>
+            </>
+          )}
+
+          {userPurpose === 'factory' && (
+            <>
+              <button
+                type="button"
+                onClick={() => onAddClick('expense')}
+                className="p-2 sm:p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  -
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-rose-300 truncate">
+                    {isHindi ? 'कच्चा माल खर्च' : 'Raw Materials'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'फैक्टरी इनपुट' : '- Factory Material'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('income')}
+                className="p-2 sm:p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  +
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-emerald-300 truncate">
+                    {isHindi ? 'उत्पाद बिक्री आय' : 'Product Sales'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'ऑर्डर इनकम' : '+ Order Income'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateAttendance}
+                className="p-2 sm:p-2.5 rounded-xl border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <CalendarCheck className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-teal-300 truncate">
+                    {isHindi ? 'कारीगर हाजिरी' : 'Worker Roll'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'दैनिक मजदूरी' : 'Attendance & Wage'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateReports}
+                className="p-2 sm:p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <BarChart3 className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-indigo-300 truncate">
+                    {isHindi ? 'लागत रिपोर्ट' : 'Cost Report'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'लाभ व हानि' : 'Factory Analytics'}
+                  </div>
+                </div>
+              </button>
+            </>
+          )}
+
+          {userPurpose === 'farm' && (
+            <>
+              <button
+                type="button"
+                onClick={() => onAddClick('income')}
+                className="p-2 sm:p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  🌾
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-emerald-300 truncate">
+                    {isHindi ? 'फसल बिक्री आय' : 'Harvest Income'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'मंडी बिक्री' : '+ Crop Sales'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('expense')}
+                className="p-2 sm:p-2.5 rounded-xl border border-lime-500/30 bg-lime-500/10 hover:bg-lime-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-lime-500/20 text-lime-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  🧪
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-lime-300 truncate">
+                    {isHindi ? 'खाद, बीज व डीजल' : 'Seeds & Diesel'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'खेती खर्च' : '- Farm Expenses'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateAttendance}
+                className="p-2 sm:p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <CalendarCheck className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-amber-300 truncate">
+                    {isHindi ? 'खेत मजदूर हाजिरी' : 'Farm Labour'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'मजदूरी हिसाब' : 'Daily Mazdoor'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateLoans}
+                className="p-2 sm:p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <Landmark className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-sky-300 truncate">
+                    {isHindi ? 'उधारी व ऋण खाता' : 'Loans & Credit'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'दुकानदार / किसान' : 'Udhar & Dues'}
+                  </div>
+                </div>
+              </button>
+            </>
+          )}
+
+          {userPurpose === 'household' && (
+            <>
+              <button
+                type="button"
+                onClick={() => onAddClick('expense')}
+                className="p-2 sm:p-2.5 rounded-xl border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  🛒
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-purple-300 truncate">
+                    {isHindi ? 'राशन व बिजली बिल' : 'Groceries & Bills'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'घर खर्च' : '- House Expense'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('income')}
+                className="p-2 sm:p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  +
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-emerald-300 truncate">
+                    {isHindi ? 'पारिवारिक आय' : 'Family Income'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'वेतन / जमा' : '+ Salary Deposit'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateGoals}
+                className="p-2 sm:p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <Target className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-indigo-300 truncate">
+                    {isHindi ? 'पारिवारिक बचत' : 'Family Savings'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'बच्चों की शिक्षा' : 'Goals & Wealth'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onOpenBudgetManager}
+                className="p-2 sm:p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <PieChart className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-sky-300 truncate">
+                    {isHindi ? 'मासिक बजट' : 'Monthly Budget'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'खर्च सीमाएं' : 'Budget Planner'}
+                  </div>
+                </div>
+              </button>
+            </>
+          )}
+
+          {userPurpose === 'personal' && (
+            <>
+              <button
+                type="button"
+                onClick={() => onAddClick('income')}
+                className="p-2 sm:p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  +
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-emerald-300 truncate">
+                    {isHindi ? 'मासिक सैलरी / आय' : 'Salary / Income'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'वेतन व फ्रीलांस' : '+ Earnings'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAddClick('expense')}
+                className="p-2 sm:p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  -
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-rose-300 truncate">
+                    {isHindi ? 'दैनिक खर्च' : 'Daily Expense'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'पर्सनल खर्च' : '- Spends'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateGoals}
+                className="p-2 sm:p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <Target className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-sky-300 truncate">
+                    {isHindi ? 'बचत लक्ष्य' : 'Savings Goals'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? '6-फंड वेल्थ' : 'Wealth Engine'}
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateCalculator}
+                className="p-2 sm:p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+              >
+                <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
+                  <Calculator className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-extrabold text-amber-300 truncate">
+                    {isHindi ? 'कैलकुलेटर' : 'Calculator'}
+                  </div>
+                  <div className="text-[9.5px] text-[var(--theme-text-muted,#8BA4D0)] truncate">
+                    {isHindi ? 'ईएमआई व ब्याज' : 'Financial Tool'}
+                  </div>
+                </div>
+              </button>
+            </>
+          )}
+        </div>
+      </motion.div>
+
+      {/* 4. DEMO / SAMPLE DATA REMOVAL (1-Click Clean) */}
+      {hasDemoData && onRemoveDemoData && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-xs"
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-[12px] sm:text-[13px] font-bold text-amber-200">
+                {isHindi ? 'डेमो / सैंपल रिकॉर्ड्स सक्रिय हैं' : 'Sample / Demo Records Active'}
+              </div>
+              <div className="text-[10px] text-amber-300/80 truncate">
+                {isHindi ? 'आप 1-क्लिक में सभी डेमो रिकॉर्ड्स हटाकर अपना असली खाता शुरू कर सकते हैं' : 'You can remove all sample records in 1 click and start fresh'}
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onRemoveDemoData}
+            className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[11px] sm:text-[12px] shrink-0 transition-all active:scale-95 cursor-pointer shadow-sm flex items-center gap-1.5"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>{isHindi ? 'डेमो हटाएं' : 'Remove Demo'}</span>
+          </button>
+        </motion.div>
+      )}
 
       {/* 3. QUICK ACCESS */}
       <motion.section

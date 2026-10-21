@@ -221,6 +221,21 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           onClick: onOpenSettings ? () => handleAction(onOpenSettings) : undefined
         },
         {
+          id: 'business-purpose-mode',
+          label: isHindi ? 'बिज़नेस मोड व कार्यक्षेत्र (दुकान, साइट, फार्म)' : 'Business Mode & Usage (Shop, Site, Farm)',
+          icon: Briefcase,
+          badge: (localStorage.getItem('daily_khata_user_purpose') || 'personal').toUpperCase(),
+          badgeColor: 'blue',
+          onClick: () => {
+            triggerHapticSound('click');
+            onClose();
+            try {
+              localStorage.removeItem('daily_khata_onboarding_completed');
+              window.location.reload();
+            } catch {}
+          }
+        },
+        {
           id: 'direct-update-app',
           label: isHindi
             ? `1-क्लिक ऐप अपडेट (v${APP_VERSION} New Version)`
@@ -242,6 +257,18 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           badge: isGoogleTranslated ? (activeLangLabel ? activeLangLabel : 'ACTIVE') : '100+ LANGS',
           badgeColor: isGoogleTranslated ? 'emerald' : 'blue',
           onClick: onOpenGoogleTranslate ? () => handleAction(onOpenGoogleTranslate) : undefined
+        },
+        {
+          id: 'onboarding-wizard',
+          label: isHindi ? 'भाषा व व्यापार सेटअप (Setup Wizard)' : 'Language & Business Setup Wizard',
+          icon: Sparkles,
+          badge: 'WIZARD',
+          badgeColor: 'blue',
+          onClick: () => {
+            triggerHapticSound('click');
+            onClose();
+            window.dispatchEvent(new CustomEvent('open-onboarding-wizard'));
+          }
         },
         {
           id: 'master-edit',
