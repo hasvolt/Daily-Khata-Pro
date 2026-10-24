@@ -339,6 +339,15 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
               const adv = l.advanceReceived || 0;
               const pend = l.pendingPayment !== undefined ? l.pendingPayment : Math.max(0, rate - rec - adv);
               const timingsStr = l.startTime && l.endTime ? `${formatTime12h(l.startTime)} - ${formatTime12h(l.endTime)}` : '-';
+
+              const advList = l.advances && l.advances.length > 0
+                ? l.advances
+                : (adv > 0 ? [{ id: '1', amount: adv, reason: l.advanceReason }] : []);
+
+              const advHtml = advList.length > 0
+                ? advList.map(a => `<div>${formatCurrency(a.amount, privacyMask)}${a.reason ? `<br><span style="font-size:7.5pt;font-weight:normal;color:#b45309;">${a.reason}</span>` : ''}</div>`).join('')
+                : '-';
+
               return `
                 <tr>
                   <td><strong>${l.date}</strong></td>
@@ -351,7 +360,7 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
                     ${l.jobDescription || l.notes ? `<br><small style="color:#64748b;">${l.jobDescription || l.notes}</small>` : ''}
                   </td>
                   <td style="text-align: right;" class="font-mono">${rate > 0 ? formatCurrency(rate, privacyMask) : '-'}</td>
-                  <td style="text-align: right; color: ${adv > 0 ? '#d97706' : '#64748b'};" class="font-mono font-bold">${adv > 0 ? formatCurrency(adv, privacyMask) : '-'}</td>
+                  <td style="text-align: right; color: ${adv > 0 ? '#d97706' : '#64748b'};" class="font-mono font-bold">${advHtml}</td>
                   <td style="text-align: right; color: ${pend > 0 ? '#ea580c' : '#16a34a'};" class="font-mono font-bold">${pend > 0 ? formatCurrency(pend, privacyMask) : 'PAID'}</td>
                 </tr>
               `;
@@ -441,7 +450,9 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
         l.employerName || '-',
         l.workCategory || l.workType || '-',
         rate > 0 ? `Rs. ${rate}` : '-',
-        adv > 0 ? `Rs. ${adv}` : '-',
+        l.advances && l.advances.length > 0
+          ? l.advances.map(a => `Rs. ${a.amount}${a.reason ? ` (${a.reason})` : ''}`).join('\n')
+          : (adv > 0 ? (l.advanceReason ? `Rs. ${adv} (${l.advanceReason})` : `Rs. ${adv}`) : '-'),
         rec > 0 ? `Rs. ${rec}` : '-',
         pend > 0 ? `Rs. ${pend}` : 'PAID'
       ];

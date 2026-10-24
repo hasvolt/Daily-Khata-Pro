@@ -151,6 +151,16 @@ export type PersonalNoteColor = 'default' | 'blue' | 'emerald' | 'amber' | 'purp
 export type AttendanceStatus = 'present' | 'absent' | 'half_day' | 'leave' | 'overtime';
 export type PaymentStatusType = 'paid' | 'pending' | 'partial';
 
+export interface AdvanceItem {
+  id: string;
+  amount: number;
+  reason?: string;
+  paymentMode?: PaymentMode | string;
+  time?: string; // e.g. "10:30 AM" or "14:30"
+  date?: string; // YYYY-MM-DD
+  notes?: string;
+}
+
 export interface AttendanceLog {
   id: string;
   date: string; // YYYY-MM-DD
@@ -164,6 +174,8 @@ export interface AttendanceLog {
   salaryOrRate?: number;
   paymentReceived?: number;
   advanceReceived?: number;
+  advanceReason?: string; // Primary or summary reason for advance
+  advances?: AdvanceItem[]; // Multiple advances with reason, time, mode
   pendingPayment?: number;
   paymentDate?: string;
   paymentStatus: PaymentStatusType;

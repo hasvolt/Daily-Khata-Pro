@@ -72,3 +72,37 @@ export interface EmployerSummary {
   pendingLogsCount: number;
   latestDate: string;
 }
+
+export interface AdvanceReasonMeta {
+  id: string;
+  labelEn: string;
+  labelHi: string;
+  icon: string;
+  color?: string;
+}
+
+export const ADVANCE_REASONS_CATALOG: AdvanceReasonMeta[] = [
+  { id: 'chai_nashta', labelEn: 'Tea / Snacks', labelHi: 'चाय-नाश्ता', icon: '☕' },
+  { id: 'petrol_travel', labelEn: 'Petrol / Travel', labelHi: 'पेट्रोल / यात्रा किराया', icon: '⛽' },
+  { id: 'kirana_food', labelEn: 'Groceries / Food', labelHi: 'राशन / भोजन खर्च', icon: '🍚' },
+  { id: 'medical_emergency', labelEn: 'Medicine / Health', labelHi: 'दवा / इलाज खर्च', icon: '💊' },
+  { id: 'mobile_recharge', labelEn: 'Mobile Recharge', labelHi: 'मोबाइल रिचार्ज', icon: '📱' },
+  { id: 'urgent_personal', labelEn: 'Personal / Household', labelHi: 'घरेलू / जरूरी कार्य', icon: '🏠' },
+  { id: 'tools_material', labelEn: 'Tools / Materials', labelHi: 'सामान / औजार खरीदी', icon: '🔧' },
+  { id: 'room_rent', labelEn: 'Room Rent', labelHi: 'कमरा किराया / रूम भाड़ा', icon: '🔑' },
+  { id: 'kharcha_general', labelEn: 'Daily Expenses', labelHi: 'रोजमर्रा जेब खर्च', icon: '💵' },
+  { id: 'festival_gift', labelEn: 'Festival / Bonus Adv', labelHi: 'त्यौहार / पर्व खर्च', icon: '🎁' }
+];
+
+export const getAdvanceReasonLabel = (reason?: string, isHindi: boolean = true): string => {
+  if (!reason || !reason.trim()) return isHindi ? 'सामान्य पेशगी (Advance)' : 'General Advance';
+  const found = ADVANCE_REASONS_CATALOG.find(
+    (r) => r.id === reason.toLowerCase() || 
+           r.labelEn.toLowerCase() === reason.toLowerCase() || 
+           r.labelHi === reason
+  );
+  if (found) {
+    return isHindi ? `${found.icon} ${found.labelHi}` : `${found.icon} ${found.labelEn}`;
+  }
+  return reason;
+};

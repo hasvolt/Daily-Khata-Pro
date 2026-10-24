@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { AttendanceLog, AttendanceStatus, PaymentStatusType, AppLanguage, PaymentMode, FundType } from '../types';
+import { AttendanceLog, AttendanceStatus, PaymentStatusType, AppLanguage, PaymentMode, FundType, AdvanceItem } from '../types';
 import { formatCurrency, triggerHapticSound } from '../utils/khataCalculations';
 import {
   Calendar,
@@ -26,18 +26,22 @@ import {
   Check,
   X,
   PieChart,
-  MapPin
+  MapPin,
+  ListPlus
 } from 'lucide-react';
 import { NativeTimePicker } from './NativeTimePicker';
 import { ConfirmModal } from './ConfirmModal';
 import { 
   WORK_CATEGORIES_CATALOG, 
   getWorkCategoryMeta, 
-  EmployerSummary 
+  EmployerSummary,
+  ADVANCE_REASONS_CATALOG,
+  getAdvanceReasonLabel
 } from './attendance/attendanceTypes';
 import { BulkPaymentSettlementModal } from './attendance/BulkPaymentSettlementModal';
 import { EmployerAccountsView } from './attendance/EmployerAccountsView';
 import { AttendancePrintModal } from './attendance/AttendancePrintModal';
+import { DailyAttendanceDetailsModal } from './attendance/DailyAttendanceDetailsModal';
 import { AdsterraResponsiveLeaderboard } from './AdUnits';
 import { escapeHtml } from '../utils/security';
 import { getLocalDateString, formatTime12h } from '../utils/dateUtils';
@@ -96,6 +100,10 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [isPrintFilterModalOpen, setIsPrintFilterModalOpen] = useState(false);
 
+  // Daily Detailed Inspector Modal
+  const [isDailyDetailsModalOpen, setIsDailyDetailsModalOpen] = useState(false);
+  const [dailyDetailsDate, setDailyDetailsDate] = useState<string>(todayStr);
+
   // Bulk Settlement Modal
   const [isBulkPayModalOpen, setIsBulkPayModalOpen] = useState(false);
   const [bulkPayInitialEmployer, setBulkPayInitialEmployer] = useState<string>('all');
@@ -119,11 +127,22 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
   const [formPaymentDate, setFormPaymentDate] = useState('');
   const [formNotes, setFormNotes] = useState('');
 
-  // Quick Advance Modal State
+  // Multiple Advances in Add / Edit Modal
+  const [formAdvances, setFormAdvances] = useState<AdvanceItem[]>([]);
+  const [inlineAdvAmount, setInlineAdvAmount] = useState<string>('');
+  const [inlineAdvReason, setInlineAdvReason] = useState<string>('chai_nashta');
+  const [inlineAdvCustomReason, setInlineAdvCustomReason] = useState<string>('');
+  const [inlineAdvMode, setInlineAdvMode] = useState<PaymentMode>('cash');
+  const [isAddingAdvanceInline, setIsAddingAdvanceInline] = useState<boolean>(false);
+
+  // Quick Advance Modal State with reason
   const [quickAdvanceLog, setQuickAdvanceLog] = useState<AttendanceLog | null>(null);
   const [quickAdvanceAmount, setQuickAdvanceAmount] = useState<string>('');
+  const [quickAdvanceReason, setQuickAdvanceReason] = useState<string>('chai_nashta');
+  const [quickAdvanceCustomReason, setQuickAdvanceCustomReason] = useState<string>('');
   const [quickAdvanceNote, setQuickAdvanceNote] = useState<string>('');
   const [quickAdvanceMode, setQuickAdvanceMode] = useState<PaymentMode>('cash');
+  const [quickAdvanceActionType, setQuickAdvanceActionType] = useState<'add' | 'replace'>('add');
 
   // Extract all distinct employer names
   const existingEmployers = useMemo(() => {
@@ -377,10 +396,58 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     );
   };
 
+  // Add inline advance to formAdvances list
+  const handleAddAdvanceInline = () => {
+    const amt = parseFloat(inlineAdvAmount) || 0;
+    if (amt <= 0) return;
+    triggerHapticSound('click');
+
+    const chosenReason = inlineAdvCustomReason.trim() || inlineAdvReason;
+    const finalReason = getAdvanceReasonLabel(chosenReason, isHindi);
+    const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const newItem: AdvanceItem = {
+      id: `adv-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      amount: amt,
+      reason: finalReason,
+      paymentMode: inlineAdvMode,
+      time: nowTime,
+      date: formDate
+    };
+
+    const nextAdvances = [...formAdvances, newItem];
+    setFormAdvances(nextAdvances);
+
+    // Sync total advance and recompute pending
+    const totalAdv = nextAdvances.reduce((sum, a) => sum + a.amount, 0);
+    setFormAdvanceReceived(String(totalAdv));
+    const r = parseFloat(formSalaryOrRate) || 0;
+    const rec = parseFloat(formPaymentReceived) || 0;
+    setFormPendingPayment(String(Math.max(0, r - rec - totalAdv)));
+
+    // Reset inline input fields
+    setInlineAdvAmount('');
+    setInlineAdvCustomReason('');
+    setIsAddingAdvanceInline(false);
+  };
+
+  // Remove advance item from formAdvances list
+  const handleRemoveAdvanceInline = (id: string) => {
+    triggerHapticSound('click');
+    const nextAdvances = formAdvances.filter((a) => a.id !== id);
+    setFormAdvances(nextAdvances);
+
+    const totalAdv = nextAdvances.reduce((sum, a) => sum + a.amount, 0);
+    setFormAdvanceReceived(totalAdv > 0 ? String(totalAdv) : '');
+    const r = parseFloat(formSalaryOrRate) || 0;
+    const rec = parseFloat(formPaymentReceived) || 0;
+    setFormPendingPayment(String(Math.max(0, r - rec - totalAdv)));
+  };
+
   // Open modal for new log
-  const handleOpenNewModal = (defaultEmployer?: string) => {
+  const handleOpenNewModal = (defaultEmployer?: string, defaultDate?: string) => {
     setEditingLog(null);
-    setFormDate(todayStr);
+    setFormDate(defaultDate || todayStr);
     setFormStatus('present');
     setFormStartTime('09:00');
     setFormEndTime('18:00');
@@ -393,6 +460,11 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     setFormSalaryOrRate('');
     setFormPaymentReceived('');
     setFormAdvanceReceived('');
+    setFormAdvances([]);
+    setInlineAdvAmount('');
+    setInlineAdvReason('chai_nashta');
+    setInlineAdvCustomReason('');
+    setIsAddingAdvanceInline(false);
     setFormPendingPayment('');
     setFormPaymentStatus('pending');
     setFormPaymentDate('');
@@ -416,7 +488,28 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     setFormJobDescription(log.jobDescription || '');
     setFormSalaryOrRate(log.salaryOrRate ? String(log.salaryOrRate) : '');
     setFormPaymentReceived(log.paymentReceived ? String(log.paymentReceived) : '');
-    setFormAdvanceReceived(log.advanceReceived ? String(log.advanceReceived) : '');
+    
+    // Normalize existing advances
+    let advs: AdvanceItem[] = [];
+    if (log.advances && log.advances.length > 0) {
+      advs = [...log.advances];
+    } else if (log.advanceReceived && log.advanceReceived > 0) {
+      advs = [{
+        id: 'adv-legacy-1',
+        amount: log.advanceReceived,
+        reason: log.advanceReason || (isHindi ? 'सामान्य पेशगी' : 'General Advance'),
+        paymentMode: 'cash',
+        date: log.date
+      }];
+    }
+    setFormAdvances(advs);
+    const sumAdv = advs.reduce((s, a) => s + (a.amount || 0), 0);
+    setFormAdvanceReceived(sumAdv > 0 ? String(sumAdv) : (log.advanceReceived ? String(log.advanceReceived) : ''));
+    
+    setInlineAdvAmount('');
+    setInlineAdvCustomReason('');
+    setIsAddingAdvanceInline(false);
+
     setFormPendingPayment(log.pendingPayment !== undefined ? String(log.pendingPayment) : '');
     setFormPaymentStatus(log.paymentStatus || 'pending');
     setFormPaymentDate(log.paymentDate || '');
@@ -450,10 +543,19 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     const calculatedHours = calculateWorkingHours(formStartTime, formEndTime);
     const rate = parseFloat(formSalaryOrRate) || 0;
     const received = parseFloat(formPaymentReceived) || 0;
-    const advance = parseFloat(formAdvanceReceived) || 0;
     
+    // Calculate total advance from advances list or direct input
+    const advancesSum = formAdvances.reduce((sum, a) => sum + (a.amount || 0), 0);
+    const directAdv = parseFloat(formAdvanceReceived) || 0;
+    const finalAdvance = advancesSum > 0 ? advancesSum : directAdv;
+
+    // Advance reasons summary
+    const advanceReasonSummary = formAdvances.length > 0
+      ? formAdvances.map(a => `${a.amount ? `₹${a.amount} ` : ''}${a.reason || 'Adv'}`).join(', ')
+      : (finalAdvance > 0 ? (isHindi ? 'सामान्य पेशगी' : 'General Advance') : undefined);
+
     // Auto calculate pending based on rate, received and advance
-    const autoPending = Math.max(0, rate - received - advance);
+    const autoPending = Math.max(0, rate - received - finalAdvance);
     const customPending = parseFloat(formPendingPayment);
     const calculatedPending = !isNaN(customPending) && formPendingPayment.trim() !== '' 
       ? customPending 
@@ -462,9 +564,9 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     // Auto determine paymentStatus if rate is set
     let determinedStatus: PaymentStatusType = formPaymentStatus;
     if (rate > 0) {
-      if (calculatedPending <= 0 && (received > 0 || advance > 0)) {
+      if (calculatedPending <= 0 && (received > 0 || finalAdvance > 0)) {
         determinedStatus = 'paid';
-      } else if (received > 0 || advance > 0) {
+      } else if (received > 0 || finalAdvance > 0) {
         determinedStatus = 'partial';
       } else {
         determinedStatus = 'pending';
@@ -486,7 +588,15 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
         jobDescription: formJobDescription.trim() || undefined,
         salaryOrRate: rate > 0 ? rate : undefined,
         paymentReceived: received > 0 ? received : undefined,
-        advanceReceived: advance > 0 ? advance : 0,
+        advanceReceived: finalAdvance > 0 ? finalAdvance : 0,
+        advanceReason: advanceReasonSummary,
+        advances: formAdvances.length > 0 ? formAdvances : (finalAdvance > 0 ? [{
+          id: 'adv-single-1',
+          amount: finalAdvance,
+          reason: isHindi ? 'सामान्य पेशगी' : 'General Advance',
+          paymentMode: 'cash',
+          date: formDate
+        }] : undefined),
         pendingPayment: calculatedPending > 0 ? calculatedPending : 0,
         paymentStatus: determinedStatus,
         paymentDate: formPaymentDate || undefined,
@@ -501,9 +611,12 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
   // Quick Advance handlers
   const handleOpenQuickAdvance = (log: AttendanceLog) => {
     setQuickAdvanceLog(log);
-    setQuickAdvanceAmount(log.advanceReceived ? String(log.advanceReceived) : '');
+    setQuickAdvanceAmount('');
+    setQuickAdvanceReason('chai_nashta');
+    setQuickAdvanceCustomReason('');
     setQuickAdvanceNote('');
     setQuickAdvanceMode('cash');
+    setQuickAdvanceActionType('add');
     triggerHapticSound('click');
   };
 
@@ -512,16 +625,57 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     if (!quickAdvanceLog) return;
     triggerHapticSound('save');
 
-    const newAdvance = Math.max(0, parseFloat(quickAdvanceAmount) || 0);
+    const enteredAmount = Math.max(0, parseFloat(quickAdvanceAmount) || 0);
+    if (enteredAmount <= 0) {
+      setQuickAdvanceLog(null);
+      return;
+    }
+
+    const chosenReason = quickAdvanceCustomReason.trim() || quickAdvanceReason;
+    const finalReasonLabel = getAdvanceReasonLabel(chosenReason, isHindi);
+    const nowTimeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // Existing advances list
+    const existingAdvances: AdvanceItem[] = quickAdvanceLog.advances && quickAdvanceLog.advances.length > 0
+      ? [...quickAdvanceLog.advances]
+      : (quickAdvanceLog.advanceReceived && quickAdvanceLog.advanceReceived > 0
+          ? [{
+              id: 'adv-exist-1',
+              amount: quickAdvanceLog.advanceReceived,
+              reason: quickAdvanceLog.advanceReason || (isHindi ? 'पिछला एडवांस' : 'Previous Advance'),
+              paymentMode: 'cash',
+              date: quickAdvanceLog.date
+            }]
+          : []);
+
+    // Create new advance record
+    const newAdvItem: AdvanceItem = {
+      id: `adv-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      amount: enteredAmount,
+      reason: finalReasonLabel,
+      paymentMode: quickAdvanceMode,
+      time: nowTimeStr,
+      date: quickAdvanceLog.date,
+      notes: quickAdvanceNote.trim() || undefined
+    };
+
+    let updatedAdvances: AdvanceItem[];
+    if (quickAdvanceActionType === 'replace') {
+      updatedAdvances = [newAdvItem];
+    } else {
+      updatedAdvances = [...existingAdvances, newAdvItem];
+    }
+
+    const newTotalAdvance = updatedAdvances.reduce((sum, a) => sum + (a.amount || 0), 0);
     const rate = quickAdvanceLog.salaryOrRate || 0;
     const received = quickAdvanceLog.paymentReceived || 0;
-    const newPending = Math.max(0, rate - received - newAdvance);
+    const newPending = Math.max(0, rate - received - newTotalAdvance);
 
     let newStatus: PaymentStatusType = quickAdvanceLog.paymentStatus;
     if (rate > 0) {
-      if (newPending <= 0 && (received > 0 || newAdvance > 0)) {
+      if (newPending <= 0 && (received > 0 || newTotalAdvance > 0)) {
         newStatus = 'paid';
-      } else if (received > 0 || newAdvance > 0) {
+      } else if (received > 0 || newTotalAdvance > 0) {
         newStatus = 'partial';
       } else {
         newStatus = 'pending';
@@ -529,18 +683,19 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
     }
 
     const modeLabel = quickAdvanceMode === 'upi' ? 'UPI' : quickAdvanceMode === 'bank' ? (isHindi ? 'बैंक' : 'Bank') : (isHindi ? 'नकद' : 'Cash');
-    const noteAddition = quickAdvanceNote.trim()
-      ? `${isHindi ? 'एडवांस' : 'Advance'}: ₹${newAdvance} (${modeLabel}) - ${quickAdvanceNote.trim()}`
-      : (newAdvance > 0 ? `${isHindi ? 'एडवांस' : 'Advance'}: ₹${newAdvance} (${modeLabel})` : '');
-
+    const noteLine = `${isHindi ? 'एडवांस' : 'Adv'}: ₹${enteredAmount} [${finalReasonLabel}] (${modeLabel})${quickAdvanceNote.trim() ? ` - ${quickAdvanceNote.trim()}` : ''}`;
     const updatedNotes = quickAdvanceLog.notes
-      ? (noteAddition ? `${quickAdvanceLog.notes} • ${noteAddition}` : quickAdvanceLog.notes)
-      : (noteAddition || undefined);
+      ? `${quickAdvanceLog.notes} • ${noteLine}`
+      : noteLine;
+
+    const allReasonsSummary = updatedAdvances.map(a => a.reason || 'Adv').join(', ');
 
     onSaveAttendanceLog(
       {
         ...quickAdvanceLog,
-        advanceReceived: newAdvance,
+        advanceReceived: newTotalAdvance,
+        advanceReason: allReasonsSummary,
+        advances: updatedAdvances,
         pendingPayment: newPending,
         paymentStatus: newStatus,
         notes: updatedNotes
@@ -702,7 +857,22 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
+        <div className="grid grid-cols-2 sm:flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto flex-wrap">
+          {/* Daily Details Inspector Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setDailyDetailsDate(todayStr);
+              setIsDailyDetailsModalOpen(true);
+              triggerHapticSound('click');
+            }}
+            className="justify-center px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] xs:text-[12px] sm:text-[12.5px] flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-md active:scale-95 transition-all truncate"
+            title="Today's & Daily Detailed Attendance Inspector"
+          >
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-purple-200" />
+            <span className="truncate">{isHindi ? 'आज का विवरण' : 'Daily Details'}</span>
+          </button>
+
           {/* Quick Bulk Settlement Button */}
           <button
             type="button"
@@ -1104,9 +1274,19 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                     {/* Left: Date, Status, Employer & Category */}
                     <div className="space-y-2 flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-mono font-extrabold text-[14.5px] text-[var(--theme-text,#F8FAFC)]">
-                          {dayLabel}
-                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDailyDetailsDate(log.date);
+                            setIsDailyDetailsModalOpen(true);
+                            triggerHapticSound('click');
+                          }}
+                          className="font-mono font-extrabold text-[14.5px] text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] flex items-center gap-1 cursor-pointer transition-colors group"
+                          title={isHindi ? 'इस दिन का सम्पूर्ण विवरण देखें' : "Inspect this day's details"}
+                        >
+                          <Calendar className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)] opacity-70 group-hover:opacity-100" />
+                          <span className="underline decoration-dotted decoration-[var(--theme-border,#213E61)] group-hover:decoration-[var(--theme-primary,#38BDF8)]">{dayLabel}</span>
+                        </button>
 
                         <span className={`text-[10.5px] font-extrabold px-2.5 py-0.5 rounded-full border flex items-center gap-1 ${badge.color}`}>
                           <BadgeIcon className="w-3 h-3" />
@@ -1126,9 +1306,17 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                         ) : null}
 
                         {adv > 0 && (
-                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1 flex-wrap">
                             <Coins className="w-3 h-3" />
                             <span>{isHindi ? 'एडवांस' : 'Adv'}: {formatCurrency(adv, privacyMask)}</span>
+                            {log.advanceReason && (
+                              <span className="text-amber-300 font-normal max-w-[160px] truncate">({log.advanceReason})</span>
+                            )}
+                            {log.advances && log.advances.length > 1 && (
+                              <span className="px-1.5 py-0.2 rounded-full bg-amber-500/30 text-[9px] font-black">
+                                {log.advances.length} {isHindi ? 'किस्त' : 'items'}
+                              </span>
+                            )}
                           </span>
                         )}
 
@@ -1589,65 +1777,238 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-[11px] font-bold text-amber-400 mb-1 flex items-center justify-between">
-                      <span>{isHindi ? 'एडवांस / पेशगी रकम' : 'Advance Payment'}</span>
-                      <span className="text-[10px] text-amber-400/80">({isHindi ? 'कटौती' : 'Deducted'})</span>
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] font-mono text-amber-400">₹</span>
-                      <input
-                        type="number"
-                        min="0"
-                        step="any"
-                        value={formAdvanceReceived}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setFormAdvanceReceived(val);
-                          const r = parseFloat(formSalaryOrRate) || 0;
-                          const rec = parseFloat(formPaymentReceived) || 0;
-                          const a = parseFloat(val) || 0;
-                          setFormPendingPayment(String(Math.max(0, r - rec - a)));
+                  {/* Advance Payment Section with Multiple Advances & Reasons */}
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2.5 sm:col-span-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[11.5px] font-extrabold text-amber-400 flex items-center gap-1.5">
+                        <Coins className="w-3.5 h-3.5" />
+                        <span>{isHindi ? 'एडवांस / पेशगी (Multiple Advances & Reasons)' : 'Advance Payments & Reasons'}</span>
+                        <span className="text-[10px] text-amber-400/80 font-normal">({isHindi ? 'वेतन से कटौती' : 'Deducted'})</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAddingAdvanceInline(!isAddingAdvanceInline);
+                          triggerHapticSound('click');
                         }}
-                        placeholder="0.00"
-                        className="w-full bg-[var(--theme-card,#132438)] text-amber-300 font-mono text-[13px] pl-7 pr-3 py-2 rounded-lg border border-amber-500/40 focus:border-amber-400 focus:outline-hidden"
-                      />
+                        className="text-[11px] px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>{isHindi ? '+ नया एडवांस जोड़ें' : '+ Add Advance'}</span>
+                      </button>
                     </div>
-                    {/* Quick advance buttons */}
-                    <div className="flex items-center gap-1 mt-1.5 flex-wrap">
-                      {[100, 200, 500, 1000].map((amt) => (
+
+                    {/* List of existing advances */}
+                    {formAdvances.length > 0 && (
+                      <div className="space-y-1.5 pt-1">
+                        {formAdvances.map((adv, idx) => (
+                          <div
+                            key={adv.id || idx}
+                            className="flex items-center justify-between text-[11.5px] bg-[var(--theme-card,#132438)] px-2.5 py-1.5 rounded-lg border border-amber-500/30"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="font-mono font-extrabold text-amber-400">₹{adv.amount}</span>
+                              <span className="text-[var(--theme-text,#F8FAFC)] font-medium truncate">
+                                {adv.reason || (isHindi ? 'सामान्य पेशगी' : 'General Advance')}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0">
+                              {adv.paymentMode && (
+                                <span className="text-[9.5px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300">
+                                  {adv.paymentMode}
+                                </span>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveAdvanceInline(adv.id)}
+                                className="p-1 rounded text-rose-400 hover:text-rose-300 hover:bg-rose-500/20 cursor-pointer"
+                                title="Remove Advance"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Inline Advance Adder Form */}
+                    {isAddingAdvanceInline && (
+                      <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-amber-500/40 space-y-2 animate-in fade-in duration-150">
+                        <div className="text-[11px] font-extrabold text-amber-400 flex items-center justify-between">
+                          <span>{isHindi ? 'नया एडवांस दर्ज करें:' : 'Enter New Advance Item:'}</span>
+                          <button
+                            type="button"
+                            onClick={() => setIsAddingAdvanceInline(false)}
+                            className="text-[10px] text-[var(--theme-text-muted,#94A3B8)] hover:text-white cursor-pointer"
+                          >
+                            ✕ {isHindi ? 'रद्द' : 'Cancel'}
+                          </button>
+                        </div>
+
+                        {/* Amount & Mode */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] font-mono text-amber-400">₹</span>
+                            <input
+                              type="number"
+                              min="0"
+                              step="any"
+                              value={inlineAdvAmount}
+                              onChange={(e) => setInlineAdvAmount(e.target.value)}
+                              placeholder={isHindi ? 'एडवांस रकम...' : 'Advance Amount...'}
+                              className="w-full bg-[var(--theme-surface,#0E1A29)] text-amber-300 font-mono text-[13px] pl-7 pr-3 py-1.5 rounded-lg border border-amber-500/40 focus:outline-hidden"
+                            />
+                          </div>
+
+                          <div className="flex items-center gap-1">
+                            {(['cash', 'upi', 'bank'] as PaymentMode[]).map((mode) => (
+                              <button
+                                key={mode}
+                                type="button"
+                                onClick={() => setInlineAdvMode(mode)}
+                                className={`flex-1 py-1.5 rounded-lg text-[10.5px] font-bold border transition-all cursor-pointer ${
+                                  inlineAdvMode === mode
+                                    ? 'bg-amber-500 text-slate-950 border-amber-500'
+                                    : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] border-[var(--theme-border,#213E61)]'
+                                }`}
+                              >
+                                {mode === 'cash' ? (isHindi ? 'नकद' : 'Cash') : mode === 'upi' ? 'UPI' : (isHindi ? 'बैंक' : 'Bank')}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Quick Amount presets for inline advance */}
+                        <div className="flex items-center gap-1 flex-wrap">
+                          {[100, 200, 500, 1000, 2000].map((amt) => (
+                            <button
+                              key={amt}
+                              type="button"
+                              onClick={() => {
+                                const cur = parseFloat(inlineAdvAmount) || 0;
+                                setInlineAdvAmount(String(cur + amt));
+                                triggerHapticSound('click');
+                              }}
+                              className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 font-mono font-bold cursor-pointer"
+                            >
+                              +{amt}
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Reason Selection Chips */}
+                        <div className="space-y-1">
+                          <span className="text-[10.5px] font-bold text-[var(--theme-text-muted,#94A3B8)] block">
+                            {isHindi ? 'एडवांस का कारण / वजह (Reason):' : 'Advance Reason / Purpose:'}
+                          </span>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {ADVANCE_REASONS_CATALOG.slice(0, 8).map((r) => (
+                              <button
+                                key={r.id}
+                                type="button"
+                                onClick={() => {
+                                  setInlineAdvReason(r.id);
+                                  setInlineAdvCustomReason('');
+                                  triggerHapticSound('click');
+                                }}
+                                className={`text-[10px] px-2 py-0.5 rounded-md border cursor-pointer transition-all flex items-center gap-1 ${
+                                  inlineAdvReason === r.id && !inlineAdvCustomReason
+                                    ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
+                                    : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
+                                }`}
+                              >
+                                <span>{r.icon}</span>
+                                <span>{isHindi ? r.labelHi : r.labelEn}</span>
+                              </button>
+                            ))}
+                          </div>
+                          <input
+                            type="text"
+                            value={inlineAdvCustomReason}
+                            onChange={(e) => setInlineAdvCustomReason(e.target.value)}
+                            placeholder={isHindi ? 'या अन्य कारण लिखें (उदा. डॉक्टर, बस किराया, राशन...)' : 'Or type custom reason (e.g. medicine, fare...)'}
+                            className="w-full bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[11.5px] px-2.5 py-1.5 rounded-lg border border-[var(--theme-border,#213E61)] focus:outline-hidden"
+                          />
+                        </div>
+
                         <button
-                          key={amt}
                           type="button"
-                          onClick={() => {
-                            const cur = parseFloat(formAdvanceReceived) || 0;
-                            const next = cur + amt;
-                            setFormAdvanceReceived(String(next));
-                            const r = parseFloat(formSalaryOrRate) || 0;
-                            const rec = parseFloat(formPaymentReceived) || 0;
-                            setFormPendingPayment(String(Math.max(0, r - rec - next)));
-                            triggerHapticSound('click');
-                          }}
-                          className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 cursor-pointer"
+                          onClick={handleAddAdvanceInline}
+                          disabled={!inlineAdvAmount || parseFloat(inlineAdvAmount) <= 0}
+                          className="w-full py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-extrabold text-[12px] flex items-center justify-center gap-1 cursor-pointer transition-all"
                         >
-                          +{amt}
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>{isHindi ? 'यह एडवांस सूची में जोड़ें' : 'Add This Advance to List'}</span>
                         </button>
-                      ))}
-                      {parseFloat(formAdvanceReceived) > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormAdvanceReceived('');
-                            const r = parseFloat(formSalaryOrRate) || 0;
-                            const rec = parseFloat(formPaymentReceived) || 0;
-                            setFormPendingPayment(String(Math.max(0, r - rec)));
-                            triggerHapticSound('click');
-                          }}
-                          className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 cursor-pointer"
-                        >
-                          {isHindi ? 'साफ' : 'Reset'}
-                        </button>
-                      )}
+                      </div>
+                    )}
+
+                    {/* Total Advance Summary & Direct Input if not using multi-line */}
+                    <div className="pt-1 flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)]">
+                          {isHindi ? 'कुल एडवांस रकम:' : 'Total Advance:'}
+                        </span>
+                        <div className="relative w-28">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11.5px] font-mono text-amber-400">₹</span>
+                          <input
+                            type="number"
+                            min="0"
+                            step="any"
+                            value={formAdvanceReceived}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setFormAdvanceReceived(val);
+                              const r = parseFloat(formSalaryOrRate) || 0;
+                              const rec = parseFloat(formPaymentReceived) || 0;
+                              const a = parseFloat(val) || 0;
+                              setFormPendingPayment(String(Math.max(0, r - rec - a)));
+                            }}
+                            placeholder="0.00"
+                            className="w-full bg-[var(--theme-card,#132438)] text-amber-300 font-mono text-[12px] pl-6 pr-2 py-1 rounded-lg border border-amber-500/40 focus:border-amber-400 focus:outline-hidden"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Quick preset chips */}
+                      <div className="flex items-center gap-1 flex-wrap">
+                        {[100, 200, 500, 1000].map((amt) => (
+                          <button
+                            key={amt}
+                            type="button"
+                            onClick={() => {
+                              const cur = parseFloat(formAdvanceReceived) || 0;
+                              const next = cur + amt;
+                              setFormAdvanceReceived(String(next));
+                              const r = parseFloat(formSalaryOrRate) || 0;
+                              const rec = parseFloat(formPaymentReceived) || 0;
+                              setFormPendingPayment(String(Math.max(0, r - rec - next)));
+                              triggerHapticSound('click');
+                            }}
+                            className="text-[9.5px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 cursor-pointer"
+                          >
+                            +{amt}
+                          </button>
+                        ))}
+                        {parseFloat(formAdvanceReceived) > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormAdvanceReceived('');
+                              setFormAdvances([]);
+                              const r = parseFloat(formSalaryOrRate) || 0;
+                              const rec = parseFloat(formPaymentReceived) || 0;
+                              setFormPendingPayment(String(Math.max(0, r - rec)));
+                              triggerHapticSound('click');
+                            }}
+                            className="text-[9.5px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 cursor-pointer"
+                          >
+                            {isHindi ? 'साफ' : 'Reset'}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -1838,7 +2199,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                 </div>
                 <div>
                   <span className="text-[10.5px] text-[var(--theme-text-muted,#94A3B8)] block">
-                    {isHindi ? 'पहले से एडवांस' : 'Current Advance'}
+                    {isHindi ? 'वर्तमान कुल एडवांस' : 'Current Advance'}
                   </span>
                   <span className="font-bold text-amber-400">
                     {formatCurrency(quickAdvanceLog.advanceReceived || 0, privacyMask)}
@@ -1846,10 +2207,68 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                 </div>
               </div>
 
+              {/* Existing advances if any */}
+              {quickAdvanceLog.advances && quickAdvanceLog.advances.length > 0 && (
+                <div className="p-2.5 rounded-xl bg-[var(--theme-card,#132438)] border border-amber-500/25 space-y-1">
+                  <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wide block">
+                    {isHindi ? 'पहले लिए गए एडवांस:' : 'Previously Taken Advances:'}
+                  </span>
+                  <div className="space-y-1">
+                    {quickAdvanceLog.advances.map((a, i) => (
+                      <div key={a.id || i} className="flex items-center justify-between text-[11px] text-[var(--theme-text-muted,#94A3B8)] bg-[var(--theme-surface,#0E1A29)] px-2 py-0.5 rounded">
+                        <span className="font-mono font-bold text-amber-300">₹{a.amount}</span>
+                        <span className="truncate max-w-[140px]">{a.reason || 'Adv'}</span>
+                        <span className="text-[9.5px] uppercase opacity-75">{a.paymentMode || 'cash'}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Type Toggle */}
+              <div>
+                <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
+                  {isHindi ? 'एडवांस जोड़ने का तरीका' : 'Action Type'}
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuickAdvanceActionType('add');
+                      triggerHapticSound('click');
+                    }}
+                    className={`py-1.5 px-2 rounded-xl text-[11px] font-bold border transition-all cursor-pointer ${
+                      quickAdvanceActionType === 'add'
+                        ? 'bg-amber-500 text-slate-950 border-amber-500 font-extrabold shadow-xs'
+                        : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] border-[var(--theme-border,#213E61)]'
+                    }`}
+                  >
+                    {isHindi ? '+ नया जोड़ें (Add to Existing)' : '+ Add to Existing'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuickAdvanceActionType('replace');
+                      triggerHapticSound('click');
+                    }}
+                    className={`py-1.5 px-2 rounded-xl text-[11px] font-bold border transition-all cursor-pointer ${
+                      quickAdvanceActionType === 'replace'
+                        ? 'bg-amber-500 text-slate-950 border-amber-500 font-extrabold shadow-xs'
+                        : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] border-[var(--theme-border,#213E61)]'
+                    }`}
+                  >
+                    {isHindi ? 'कुल बदलें (Set Total)' : 'Set Total'}
+                  </button>
+                </div>
+              </div>
+
               {/* Amount Input */}
               <div>
                 <label className="block text-[12px] font-bold text-amber-400 mb-1">
-                  {isHindi ? 'नया कुल एडवांस रकम दर्ज करें' : 'New Total Advance Amount'} *
+                  {quickAdvanceActionType === 'add' 
+                    ? (isHindi ? 'नया एडवांस रकम दर्ज करें' : 'New Advance Amount to Add')
+                    : (isHindi ? 'कुल एडवांस रकम दर्ज करें' : 'Set Total Advance Amount')} *
                 </label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] font-mono text-amber-400 font-bold">₹</span>
@@ -1895,6 +2314,41 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                 </div>
               </div>
 
+              {/* Reason Selection Chips */}
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)]">
+                  {isHindi ? 'एडवांस का कारण / वजह (Reason)' : 'Advance Reason / Purpose'}
+                </label>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {ADVANCE_REASONS_CATALOG.slice(0, 8).map((r) => (
+                    <button
+                      key={r.id}
+                      type="button"
+                      onClick={() => {
+                        setQuickAdvanceReason(r.id);
+                        setQuickAdvanceCustomReason('');
+                        triggerHapticSound('click');
+                      }}
+                      className={`text-[10.5px] px-2.5 py-1 rounded-lg border cursor-pointer transition-all flex items-center gap-1 ${
+                        quickAdvanceReason === r.id && !quickAdvanceCustomReason
+                          ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
+                          : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
+                      }`}
+                    >
+                      <span>{r.icon}</span>
+                      <span>{isHindi ? r.labelHi : r.labelEn}</span>
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  value={quickAdvanceCustomReason}
+                  onChange={(e) => setQuickAdvanceCustomReason(e.target.value)}
+                  placeholder={isHindi ? 'या अन्य कारण लिखें (उदा. डॉक्टर खर्च, बस टिकट, राशन...)' : 'Or custom reason (e.g. medicine, grocery, fare...)'}
+                  className="w-full bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12px] px-3 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] focus:outline-hidden"
+                />
+              </div>
+
               {/* Payment Mode Selection */}
               <div>
                 <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
@@ -1915,7 +2369,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                       }}
                       className={`py-1.5 px-2 rounded-xl text-[11px] font-bold border text-center transition-all cursor-pointer ${
                         quickAdvanceMode === m.id
-                          ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-xs'
+                          ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-xs font-bold'
                           : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#94A3B8)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
                       }`}
                     >
@@ -1928,13 +2382,13 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
               {/* Note / Remarks */}
               <div>
                 <label className="block text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] mb-1">
-                  {isHindi ? 'टिप्पणी / कारण (उदा. राशन, पेट्रोल, दवाई)' : 'Note / Reason (e.g. Petrol, Groceries)'}
+                  {isHindi ? 'अतिरिक्त टिप्पणी (वैकल्पिक)' : 'Optional Note'}
                 </label>
                 <input
                   type="text"
                   value={quickAdvanceNote}
                   onChange={(e) => setQuickAdvanceNote(e.target.value)}
-                  placeholder={isHindi ? 'उदा. पेट्रोल खर्चा, घर का राशन...' : 'e.g. Petrol, emergency, groceries...'}
+                  placeholder={isHindi ? 'कोई अतिरिक्त विवरण...' : 'Any extra details...'}
                   className="w-full bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text,#F8FAFC)] text-[12.5px] px-3 py-2 rounded-xl border border-[var(--theme-border,#213E61)] focus:outline-hidden focus:border-[var(--theme-primary,#38BDF8)]"
                 />
               </div>
@@ -1959,7 +2413,11 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                   <div className="pt-1 border-t border-amber-500/20 flex justify-between font-bold text-[12px]">
                     <span className="text-[var(--theme-text,#F8FAFC)]">{isHindi ? 'शेष बाकी मजदूरी:' : 'Net Pending Due:'}</span>
                     <span className="text-amber-400">
-                      ₹{Math.max(0, (quickAdvanceLog.salaryOrRate || 0) - (quickAdvanceLog.paymentReceived || 0) - (parseFloat(quickAdvanceAmount) || 0))}
+                      ₹{Math.max(0, (quickAdvanceLog.salaryOrRate || 0) - (quickAdvanceLog.paymentReceived || 0) - (
+                        quickAdvanceActionType === 'add'
+                          ? ((quickAdvanceLog.advanceReceived || 0) + (parseFloat(quickAdvanceAmount) || 0))
+                          : (parseFloat(quickAdvanceAmount) || 0)
+                      ))}
                     </span>
                   </div>
                 </div>
@@ -1987,6 +2445,32 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           </div>
         </div>
       )}
+
+      {/* Daily Detailed Attendance & Multi-Advance Inspector Modal */}
+      <DailyAttendanceDetailsModal
+        isOpen={isDailyDetailsModalOpen}
+        onClose={() => setIsDailyDetailsModalOpen(false)}
+        initialDate={dailyDetailsDate}
+        attendanceLogs={attendanceLogs}
+        onOpenEditModal={(log) => {
+          setIsDailyDetailsModalOpen(false);
+          handleOpenEditModal(log);
+        }}
+        onOpenQuickAdvance={(log) => {
+          setIsDailyDetailsModalOpen(false);
+          handleOpenQuickAdvance(log);
+        }}
+        onOpenNewModalForDate={(date) => {
+          setIsDailyDetailsModalOpen(false);
+          handleOpenNewModal(undefined, date);
+        }}
+        onDeleteAttendanceLog={(id) => {
+          setDeleteConfirmId(id);
+        }}
+        formatCurrency={formatCurrency}
+        language={language}
+        privacyMask={privacyMask}
+      />
     </div>
   );
 };
