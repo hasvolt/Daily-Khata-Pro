@@ -67,8 +67,6 @@ export const DailyAttendanceDetailsModal: React.FC<DailyAttendanceDetailsModalPr
     }
   }, [initialDate]);
 
-  if (!isOpen) return null;
-
   // Date Navigation handlers
   const handlePrevDay = () => {
     triggerHaptic('light');
@@ -323,6 +321,8 @@ export const DailyAttendanceDetailsModal: React.FC<DailyAttendanceDetailsModalPr
 
     printHTMLContent(printableHtml);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
