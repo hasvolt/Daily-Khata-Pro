@@ -29,7 +29,8 @@ import {
   MapPin,
   ListPlus,
   Download,
-  HardDrive
+  HardDrive,
+  Eye
 } from 'lucide-react';
 import { NativeTimePicker } from './NativeTimePicker';
 import { ConfirmModal } from './ConfirmModal';
@@ -868,7 +869,10 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
           <button
             type="button"
             onClick={() => {
-              setDailyDetailsDate(todayStr);
+              const latestRecordedDate = attendanceLogs.length > 0 
+                ? [...attendanceLogs].sort((a, b) => b.date.localeCompare(a.date))[0]?.date 
+                : todayStr;
+              setDailyDetailsDate(todayLog ? todayStr : (latestRecordedDate || todayStr));
               setIsDailyDetailsModalOpen(true);
               triggerHapticSound('click');
             }}
@@ -876,7 +880,7 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             title="Today's & Daily Detailed Attendance Inspector"
           >
             <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-purple-200" />
-            <span className="truncate">{isHindi ? 'आज का विवरण' : 'Daily Details'}</span>
+            <span className="truncate">{isHindi ? 'दैनिक विवरण देखें' : 'View Details'}</span>
           </button>
 
           {/* Quick Bulk Settlement Button */}
@@ -1418,6 +1422,20 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                       ) : null}
 
                       <div className="flex items-center gap-1">
+                        {/* View Full Daily Details for this date */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDailyDetailsDate(log.date);
+                            setIsDailyDetailsModalOpen(true);
+                            triggerHapticSound('click');
+                          }}
+                          className="p-2 rounded-xl bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 border border-purple-500/30 transition-colors cursor-pointer"
+                          title={isHindi ? 'इस दिन का विवरण व एडवांस देखें' : 'View Daily Details & Advances'}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+
                         {/* Quick Update Advance Payment */}
                         <button
                           type="button"

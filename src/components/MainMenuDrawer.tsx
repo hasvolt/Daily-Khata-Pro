@@ -154,6 +154,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   theme = 'blue',
   onThemeChange,
   language = 'en',
+  onLanguageChange,
   onOpenGoogleTranslate,
   privacyMask = false,
   onTogglePrivacyMask,
@@ -388,6 +389,19 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
       title: isHindi ? 'सेटिंग्स व सपोर्ट' : 'Settings & Support',
       items: [
         {
+          id: 'language-selection',
+          label: isHindi ? 'भाषा चयन (Language)' : 'Language Selection',
+          sublabel: isHindi ? '16+ भारतीय व विदेशी भाषाएं' : '16+ Regional & Global Languages',
+          icon: Languages,
+          badge: language ? language.toUpperCase() : 'EN',
+          badgeColor: 'sky',
+          onClick: onOpenGoogleTranslate
+            ? () => handleAction(onOpenGoogleTranslate)
+            : onOpenSettings
+            ? () => handleAction(onOpenSettings)
+            : undefined
+        },
+        {
           id: 'settings',
           label: isHindi ? 'ऐप सेटिंग्स व फंड्स' : 'App Settings & Funds',
           icon: Settings,
@@ -615,6 +629,72 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Language Switcher Strip */}
+          {onLanguageChange && !searchQuery && (
+            <div className="p-2.5 rounded-xl border border-[var(--theme-border,#1E293B)] bg-[var(--theme-card,#1E293B)]/40">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1.5">
+                  <Languages className="w-3.5 h-3.5 text-sky-400" />
+                  <span>{isHindi ? 'भाषा चयन' : 'Language'}</span>
+                </span>
+                <span className="text-[10px] font-mono text-sky-400 uppercase font-bold">{language}</span>
+              </div>
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                {[
+                  { id: 'en', label: 'English' },
+                  { id: 'hi', label: 'हिन्दी' },
+                  { id: 'hinglish', label: 'Hinglish' },
+                  { id: 'ur', label: 'اردو' },
+                  { id: 'ar', label: 'العربية' },
+                  { id: 'bn', label: 'বাংলা' },
+                  { id: 'mr', label: 'मराठी' },
+                  { id: 'gu', label: 'ગુજરાતી' },
+                  { id: 'pa', label: 'ਪੰਜਾਬੀ' },
+                  { id: 'ta', label: 'தமிழ்' },
+                  { id: 'te', label: 'తెలుగు' },
+                  { id: 'kn', label: 'ಕನ್ನಡ' },
+                  { id: 'ml', label: 'മലയാളം' },
+                  { id: 'or', label: 'ଓଡ଼ିଆ' },
+                  { id: 'as', label: 'অসমীয়া' },
+                  { id: 'ne', label: 'नेपाली' },
+                  { id: 'es', label: 'Español' },
+                ].map((langItem) => {
+                  const isActive = language === langItem.id;
+                  return (
+                    <button
+                      key={langItem.id}
+                      type="button"
+                      onClick={() => {
+                        triggerHapticSound('click');
+                        onLanguageChange(langItem.id as AppLanguage);
+                      }}
+                      className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10.5px] font-semibold transition-all shrink-0 cursor-pointer border ${
+                        isActive
+                          ? 'border-sky-400 bg-sky-500/20 text-white font-bold shadow-xs'
+                          : 'border-[var(--theme-border,#334155)] bg-[var(--theme-surface,#0F172A)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
+                      }`}
+                    >
+                      <span>{langItem.label}</span>
+                    </button>
+                  );
+                })}
+                {onOpenGoogleTranslate && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHapticSound('click');
+                      onOpenGoogleTranslate();
+                    }}
+                    className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:text-white shrink-0 cursor-pointer"
+                  >
+                    <Globe className="w-3 h-3 text-sky-400" />
+                    <span>More (50+)</span>
+                  </button>
+                )}
               </div>
             </div>
           )}

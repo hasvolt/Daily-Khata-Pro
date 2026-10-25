@@ -1,108 +1,86 @@
-# Daily Khata Pro - Professional Redesign & Advanced Export System
+# Implementation Plan - Mobile Layout, Attendance Details, Print Formatting & Header Refinements
 
-A comprehensive upgrade to deliver a Minimalist Executive financial interface, eliminate visual clutter and raw emojis, streamline navigation, and introduce a selective Export & Backup modal with module checkboxes and date range filters.
-
-### User Review & Critical Decisions
-
-> [!IMPORTANT]
-> The following decisions were confirmed with the user in Phase 1:
-> - **Module & Date Range Selection**: Unified modal with individual checkboxes for data modules (Financial Entries, Attendance & Advances, Loans & Udhar, Personal Notes, Goals & Budgets) plus date-range presets (All Time, This Month, Last Month, Last 3 Months, Custom).
-> - **Homepage Cleanliness**: The redundant floating quick backup pill and extra homepage tiles are removed. Backup and PDF export reside exclusively in the top Header action and the Main Menu drawer.
-> - **Visual Language**: Minimalist Executive aesthetic—clean Lucide icons replacing all raw emojis, refined typography, subtle 1px hairline borders, muted metadata without pill badge sandwiches, and uncluttered layout density.
-
----
-
-### 1. Overview & Core Concept
-
-- **What It Does**: 
-  1. Replaces the monolithic 1-click export with a **Smart Export & Backup Control Center**: users can select exactly which modules to include (or pick "Select All / Everything at Once") and choose their desired date range before generating PDFs, JSON backups, or CSV spreadsheets.
-  2. Cleans the **Homepage Dashboard** by removing floating overlay widgets and redundant export buttons, establishing a focused balance and net-worth card hierarchy.
-  3. Redesigns the **Main Menu Drawer** into an executive navigation panel with crisp categorization, clean typography, and zero emoji clutter.
-  4. Systematically replaces all raw emojis across the app with consistent, precision Lucide SVG icons.
-- **Target Audience**: Business owners, shopkeepers, contractors, households, and professionals managing money and staff records who require an audit-grade, distraction-free tool.
-- **Key Value**: Professional credibility, flexible control over reports and backup files, and an interface that feels calm, fast, and authoritative.
+## Problem Overview & Scope
+Based on the user's report and clarifying answers, 7 critical items will be resolved:
+1. **MultiBackupModal Mobile Layout**: The modal is crowded on narrow mobile viewports. Tabs, module checkboxes, and date filters need touch-friendly padding, responsive wrapping, and sticky action buttons.
+2. **Attendance Print & PDF Format**: When printing or exporting attendance, information must follow a professional, complete register layout with Worker Name, Date, 12-Hour Duty Hours, Site/Location, Rate/Wage, Advances (with itemized reasons), and Net Due balances.
+3. **Language Icon & Option in Main Menu**: User chose to have the Language option in **both** the top quick bar (next to theme switcher) and within the **Settings & Support** section.
+4. **Header Download Icon Theme Color**: The download icon in `Header.tsx` currently has hardcoded `border-emerald-500/40 bg-emerald-500/15 text-emerald-400` which conflicts with non-emerald themes (Electric Blue, Deep Obsidian, Day/White). It must dynamically bind to theme variables (`var(--theme-primary)` / `var(--theme-card)` / `var(--theme-border)`).
+5. **Attendance "View Details" Bug**: In `AttendancePage.tsx` and `DailyAttendanceDetailsModal.tsx`, pre-existing attendance entries were not rendering under View Details due to rigid string equality (`l.date === selectedDate`) without timestamp/whitespace normalization, and lack of an explicit "View Details" button on each card.
+6. **Header Translated Text Overlap**: In translated languages (Hindi, Urdu, Bengali, Tamil, etc.), expanded text length in the brand section causes text to wrap and collide with adjacent buttons. We will enforce flex isolation, `min-w-0`, and single-line `truncate` styling.
+7. **Residual Polish**: Full TypeScript verification (`tsc --noEmit`), build check, and zero console errors.
 
 ---
 
-### 2. User Experience & Visual Design
+## Proposed Changes
 
-- **Key User Flows**:
-  1. *Selective Export & Backup Flow*:
-     - User clicks the Export/Backup icon in the Header or Main Menu drawer.
-     - A clean modal opens with two primary sections:
-       - **What to Include (कवर किए जाने वाले मॉड्यूल्स)**: Checkboxes for Financial Entries, Attendance & Advances Register, Loans & Udhar, Personal Notes, and Goals/Budgets, with a "Select All (एक बार में सब)" switch.
-       - **Time Period (समयावधि / कितना लेना है)**: Segmented selector with "All Time (सम्पूर्ण)", "This Month (इस माह)", "Last Month (पिछला माह)", "Last 3 Months", or "Custom Range (कस्टम तारीख)".
-     - User chooses their output action with clear action buttons: `[Download PDF Report]`, `[Export JSON Backup]`, `[Export Excel/CSV]`, `[Save Local Snapshot]`, or `[Cloud Sync]`.
-  2. *Clean Homepage Flow*:
-     - No intrusive floating pill widget blocking content.
-     - Top bar provides an uncluttered header with wordmark, search, theme/language, export icon, and menu toggle.
-     - Hero card presents total net wealth, followed by daily/monthly summaries and purposeful shortcuts.
-  3. *Executive Main Menu Flow*:
-     - Side drawer slides in with a refined translucent backdrop.
-     - Grouped into 4 clean sections: Ledger & Accounts, Analytics & Reports, Safety & Cloud, and Support & About.
-     - Each item features a subtle Lucide icon, crisp single-line title, and quiet secondary indicator (no competing rainbow badges).
+### 1. `src/components/MultiBackupModal.tsx`
+- **Mobile Viewport Optimization**:
+  - Convert modal dialog to a responsive sheet on mobile: `p-3 sm:p-4 max-h-[92dvh]`.
+  - Header: Compact icon and title padding (`px-4 py-3 sm:px-5 sm:py-4`), preventing title wrap.
+  - Tab Bar: Horizontally scrollable tab strip with `no-scrollbar` so that "डाउनलोड व PDF विकल्प", "लोकल चेकपॉइंट्स", and "बैकअप रिस्टोर" fit without crushing.
+  - Module Checkboxes (Section 1): Change grid to `grid-cols-1 sm:grid-cols-2 gap-2`. Stack "Select All / एक बार में सब" smoothly on small screens.
+  - Date Range Pills (Section 2): Compact pills (`text-[11px] px-2.5 py-1`) with clean active borders.
+  - Export Format Cards (Section 3): Responsive layout (`grid-cols-1 sm:grid-cols-3 gap-2.5`) with concise sublabels so all 3 formats (PDF, JSON, CSV) fit on mobile screens without excessive scrolling.
+  - Sticky Footer: Keep "Close" and quick status bar anchored so mobile users don't need to scroll all the way down.
 
-- **Visual Identity & Theme**:
-  - *Aesthetic Direction*: Minimalist Executive — disciplined 60-30-10 color hierarchy, zero raw emojis, and clean tabular figures.
-  - *Color Palette & Tokens*: Dark slate surfaces (`--theme-surface: #0E1A29`), deep neutral background (`--theme-bg: #070E18`), refined 1px hairline borders (`--theme-border: #213E61`), and electric/emerald accents concentrated only at interactive focus points.
-  - *Typography*: High-contrast sans pairings with `tabular-nums` for all currency amounts and dates; text metadata unboxed with `·` separators.
-  - *Emoji Replacement*: All emojis (`📥`, `💾`, `📌`, `📅`, `🕒`, `⚡`, `🌾`, `🧪`, `🛒`, `🧾`, `💰`, `👥`, `★`) replaced with semantic Lucide icons (`Download`, `HardDrive`, `Pin`, `Calendar`, `Clock`, `Zap`, `Sprout`, `FlaskConical`, `ShoppingCart`, `Receipt`, `Coins`, `Users`, `Star`).
+### 2. `src/components/attendance/AttendancePrintModal.tsx` & `DailyAttendanceDetailsModal.tsx`
+- **Full Register Layout**:
+  - Upgrade the print HTML and PDF export format to include:
+    - **Worker / Staff / Employer Name**
+    - **Date & Day Name**
+    - **Duty Status** (Present, Half Day, Overtime, Absent, Leave) with clean high-contrast badges (black on white for printing).
+    - **Duty Hours (12-Hour AM/PM)** + Overtime (+2h OT).
+    - **Location / Site** (e.g., Shop, Site-B, Factory).
+    - **Daily Wage / Rate** (formatted cleanly).
+    - **Advance (पेशगी)** itemized with reason (e.g. ₹500 Medicine, ₹200 Fare).
+    - **Net Pending Due**.
+  - Remove raw emojis (replace `📍` with clean text or print-safe bullet).
+  - Ensure A4 Landscape formatting with page-break protection on rows (`page-break-inside: avoid`).
+
+### 3. `src/components/MainMenuDrawer.tsx`
+- **Top Quick Bar**:
+  - Add a dedicated Language strip right next to the Theme Palette strip featuring a `Languages` / `Globe` icon and quick language chips (EN, हिन्दी, Hinglish, etc.).
+- **Settings & Support Section**:
+  - Add an explicit menu item:
+    - Label: `भाषा चयन (Language Selection)`
+    - Sublabel: `16 भारतीय एवं वैश्विक भाषाएँ (16 Regional & Global Languages)`
+    - Icon: `Languages`
+    - Badge: Current language code (`HI`, `EN`, etc.).
+    - Action: Triggers `onOpenGoogleTranslate` or language selection modal.
+
+### 4. `src/components/Header.tsx`
+- **Download Icon Color Fix**:
+  - Replace hardcoded `border-emerald-500/40 bg-emerald-500/15 text-emerald-400` with:
+    `border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] text-[var(--theme-primary,#38BDF8)] hover:bg-[var(--theme-card-hover,#19304A)]`
+  - In Day/White mode and Daylight Light mode, it will cleanly inherit the primary blue/cyan tone with readable contrast.
+- **Header Text Overlap Fix**:
+  - Wrap brand text in `min-w-0 flex flex-col justify-center`.
+  - Fix subtitle container with `block truncate max-w-[130px] sm:max-w-[220px] md:max-w-xs text-ellipsis whitespace-nowrap overflow-hidden`.
+  - Add `shrink min-w-0` to the brand flex container so it never overlaps with the action buttons on the right.
+
+### 5. `src/components/AttendancePage.tsx` & `src/components/attendance/DailyAttendanceDetailsModal.tsx`
+- **View Details Button & Date Normalization**:
+  - On every attendance record card in `AttendancePage.tsx`, add an explicit "View Details (विवरण)" button with `<Eye className="w-3.5 h-3.5" />`.
+  - In `DailyAttendanceDetailsModal.tsx`, normalize dates:
+    `const normalizeDate = (d?: string) => d ? d.split('T')[0].split(' ')[0].trim() : '';`
+    Match `normalizeDate(l.date) === normalizeDate(selectedDate)`.
+  - Synchronize `selectedDate` whenever `isOpen` or `initialDate` changes:
+    `React.useEffect(() => { if (isOpen && initialDate) setSelectedDate(normalizeDate(initialDate)); }, [isOpen, initialDate]);`
+  - Add a quick dropdown of all available recorded dates from `attendanceLogs` inside the modal so the user can easily switch to any date with existing entries.
 
 ---
 
-### 3. Key Product Decisions & Trade-Offs
-
-- **Decision 1: Selective vs. Monolithic Export**:
-  - *Chosen Approach*: Unified interactive configuration modal that defaults to "All Modules + Current Month" with a 1-click "Select Everything" toggle.
-  - *Why*: Accommodates both quick full backups and specific period statements (e.g. exporting only October attendance or only active loans) without creating separate fragmented modals.
-- **Decision 2: Removal of Floating QuickBackupBar**:
-  - *Chosen Approach*: Completely unmount and delete the persistent floating pill from `src/App.tsx`.
-  - *Why*: Floating widgets clutter viewport height on mobile, obscure bottom navigation tabs, and violate the 15% mobile sticky cap rule.
-- **Decision 3: Main Menu Categorization**:
-  - *Chosen Approach*: Streamlined 4-category drawer with quiet text hierarchy and subtle hover states, demoting low-priority options into secondary sub-menus.
-  - *Why*: The previous menu was 1,100+ lines with 40+ items sporting disparate candy badges that looked overwhelming.
-
----
-
-### 4. Technical Architecture & Data Strategy
-
-```
-┌────────────────────────────────────────────────────────┐
-│                        App.tsx                         │
-│  ├── Header (Clean wordmark, Theme, Lang, Backup, Menu)│
-│  ├── Routes (HomeView, Attendance, Loans, Notes, etc.) │
-│  └── MainMenuDrawer (Refined 4-section executive menu) │
-└───────────────────────┬────────────────────────────────┘
-                        │ Opens
-                        ▼
-┌────────────────────────────────────────────────────────┐
-│               SmartExportBackupModal.tsx               │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │ 1. Module Checkbox Selector                      │  │
-│  │    [✓] Financial Entries    [✓] Attendance Logs  │  │
-│  │    [✓] Loans & Udhar        [✓] Personal Notes   │  │
-│  │    [✓] Goals & Budgets      [ Toggle: Select All]│  │
-│  ├──────────────────────────────────────────────────┤  │
-│  │ 2. Date Range Filter                             │  │
-│  │    ( ) All Time  (•) This Month  ( ) Custom Date │  │
-│  ├──────────────────────────────────────────────────┤  │
-│  │ 3. Output Generators                             │  │
-│  │    [PDF Statement] [JSON Backup] [Excel CSV]     │  │
-│  │    [Local Snapshot] [Google Drive Cloud Sync]    │  │
-│  └──────────────────────────────────────────────────┘  │
-└───────────────────────┬────────────────────────────────┘
-                        │ Calls
-                        ▼
-┌────────────────────────────────────────────────────────┐
-│                   backupService.ts                     │
-│  ├── filterKhataDataByRangeAndModules(...)             │
-│  ├── exportSelectivePDF(data, options)                 │
-│  ├── exportSelectiveCSV(data, options)                 │
-│  └── exportSelectiveJSON(data, options)                │
-└────────────────────────────────────────────────────────┘
-```
-
-- **Data Flow & Filtering**:
-  - User chooses `modules: { entries, attendance, loans, notes, goals }` and `dateRange: { type, startDate, endDate }`.
-  - `backupService.ts` executes pure filtering logic without mutating state, extracting only the matching date subsets for the chosen modules.
-  - PDF, CSV, and JSON generators execute with the filtered subset, respecting user privacy masks and locale formats.
+## Verification Plan
+1. **Type & Syntax Check**:
+   - Run `npm run lint` (`tsc --noEmit`).
+2. **Mobile Layout Verification**:
+   - Inspect `MultiBackupModal.tsx` on narrow viewports (360px - 414px) to ensure no horizontal overflow, readable text, and reachable buttons.
+3. **Attendance Print & Details Testing**:
+   - Open Attendance page, click "View Details" on an existing attendance entry, verify that pre-existing entries appear immediately.
+   - Click "Print Slip" / "प्रिंट रिपोर्ट", verify that the printable table has all columns: Worker Name, Date, Status, 12h Duty Hours, Rate, Advance, Net Due.
+4. **Header & Theme Verification**:
+   - Toggle through Day/White mode, Electric Blue, Emerald Black, and Daylight Light. Verify the download icon matches the active theme.
+   - Switch language to Hindi and verify Header text does not overlap or clip.
+5. **Main Menu Language Verification**:
+   - Open Main Menu drawer, verify Language option in both top quick bar and Settings list.

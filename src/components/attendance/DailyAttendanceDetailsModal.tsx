@@ -20,7 +20,8 @@ import {
   Search,
   Check,
   Building,
-  DollarSign
+  DollarSign,
+  CalendarCheck
 } from 'lucide-react';
 import { getWorkCategoryMeta, getAdvanceReasonLabel } from './attendanceTypes';
 import { formatTime12h, getLocalDateString } from '../../utils/dateUtils';
@@ -56,16 +57,55 @@ export const DailyAttendanceDetailsModal: React.FC<DailyAttendanceDetailsModalPr
 }) => {
   const isHindi = language === 'hi' || language === 'hinglish';
   const todayStr = useMemo(() => getLocalDateString(), []);
-  const [selectedDate, setSelectedDate] = useState<string>(initialDate || todayStr);
+
+  // Normalize date string (strip timestamp or whitespace)
+  const normalizeDate = (d?: string) => {
+    if (!d) return '';
+    return d.trim().split('T')[0].split(' ')[0];
+  };
+
+  // Available unique dates with recorded attendance
+  const availableDates = useMemo(() => {
+    const dates = Array.from(new Set(attendanceLogs.map((l) => normalizeDate(l.date)).filter(Boolean)));
+    return dates.sort().reverse();
+  }, [attendanceLogs]);
+
+  // Determine initial selected date: prefer initialDate, then latest available date, or today
+  const initialResolvedDate = useMemo(() => {
+    const normInit = normalizeDate(initialDate);
+    if (normInit && attendanceLogs.some(l => normalizeDate(l.date) === normInit)) {
+      return normInit;
+    }
+    if (attendanceLogs.some(l => normalizeDate(l.date) === todayStr)) {
+      return todayStr;
+    }
+    if (availableDates.length > 0) {
+      return availableDates[0];
+    }
+    return normInit || todayStr;
+  }, [initialDate, todayStr, attendanceLogs, availableDates]);
+
+  const [selectedDate, setSelectedDate] = useState<string>(initialResolvedDate);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | AttendanceStatus | 'has_advance' | 'has_pending'>('all');
 
-  // Keep date synced if initialDate changes
+  // Keep date synced whenever modal opens or initialDate changes
   React.useEffect(() => {
-    if (initialDate) {
-      setSelectedDate(initialDate);
+    if (isOpen) {
+      const normInit = normalizeDate(initialDate);
+      if (normInit && attendanceLogs.some(l => normalizeDate(l.date) === normInit)) {
+        setSelectedDate(normInit);
+      } else if (normInit) {
+        setSelectedDate(normInit);
+      } else if (attendanceLogs.some(l => normalizeDate(l.date) === todayStr)) {
+        setSelectedDate(todayStr);
+      } else if (availableDates.length > 0) {
+        setSelectedDate(availableDates[0]);
+      } else {
+        setSelectedDate(todayStr);
+      }
     }
-  }, [initialDate]);
+  }, [isOpen, initialDate, attendanceLogs, availableDates, todayStr]);
 
   // Date Navigation handlers
   const handlePrevDay = () => {
@@ -107,10 +147,11 @@ export const DailyAttendanceDetailsModal: React.FC<DailyAttendanceDetailsModalPr
     }
   }, [selectedDate, isHindi]);
 
-  // Logs for this specific day
+  // Logs for this specific day with normalized date match
   const dayLogs = useMemo(() => {
+    const normTarget = normalizeDate(selectedDate);
     return attendanceLogs
-      .filter((l) => l.date === selectedDate)
+      .filter((l) => normalizeDate(l.date) === normTarget)
       .sort((a, b) => (a.employerName || '').localeCompare(b.employerName || ''));
   }, [attendanceLogs, selectedDate]);
 
@@ -402,6 +443,30 @@ export const DailyAttendanceDetailsModal: React.FC<DailyAttendanceDetailsModalPr
               <ChevronRight className="w-4 h-4" />
             </button>
 
+            {availableDates.length > 0 && (
+              <select
+                value={availableDates.includes(selectedDate) ? selectedDate : ''}
+                onChange={(e) => {
+                  if (e.target.value) {
+                    setSelectedDate(e.target.value);
+                    triggerHaptic('light');
+                  }
+                }}
+                className="bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] text-[11.5px] font-semibold px-2 py-1 rounded-lg border border-[var(--theme-border,#213E61)] cursor-pointer max-w-[140px] xs:max-w-[180px] truncate"
+                title={isHindi ? 'उपलब्ध तारीखें' : 'Select recorded date'}
+              >
+                <option value="" disabled>{isHindi ? 'दर्ज तारीखें...' : 'Jump to Date...'}</option>
+                {availableDates.map((dStr) => {
+                  const count = attendanceLogs.filter(l => normalizeDate(l.date) === dStr).length;
+                  return (
+                    <option key={dStr} value={dStr}>
+                      {dStr} ({count} {isHindi ? 'रिकॉर्ड' : 'entries'})
+                    </option>
+                  );
+                })}
+              </select>
+            )}
+
             {selectedDate !== todayStr && (
               <button
                 type="button"
@@ -539,11 +604,41 @@ export const DailyAttendanceDetailsModal: React.FC<DailyAttendanceDetailsModalPr
               <button
                 type="button"
                 onClick={() => onOpenNewModalForDate(selectedDate)}
-                className="px-4 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-slate-950 font-extrabold text-[12.5px] inline-flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[var(--theme-primary,#38BDF8)] text-slate-950 font-extrabold text-[12.5px] inline-flex items-center gap-1.5 cursor-pointer shadow-md hover:opacity-95"
               >
                 <Plus className="w-4 h-4" />
                 <span>{isHindi ? 'इस दिन की हाजिरी दर्ज करें' : 'Log Attendance for this day'}</span>
               </button>
+
+              {availableDates.length > 0 && (
+                <div className="pt-4 border-t border-[var(--theme-border,#213E61)]/50 mt-4 text-left">
+                  <div className="text-[12px] font-bold text-[var(--theme-text,#F8FAFC)] mb-2 flex items-center gap-2">
+                    <CalendarCheck className="w-4 h-4 text-[var(--theme-primary,#38BDF8)]" />
+                    <span>{isHindi ? 'पहले से उपलब्ध अटेंडेंस तारीखें (क्लिक करें):' : 'Previously Recorded Dates (Click to view):'}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {availableDates.slice(0, 10).map((dStr) => {
+                      const count = attendanceLogs.filter(l => normalizeDate(l.date) === dStr).length;
+                      return (
+                        <button
+                          key={dStr}
+                          type="button"
+                          onClick={() => {
+                            setSelectedDate(dStr);
+                            triggerHaptic('light');
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-[var(--theme-card,#132438)] text-[var(--theme-text,#F8FAFC)] border border-[var(--theme-border,#213E61)] hover:border-[var(--theme-primary,#38BDF8)] text-[12px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
+                        >
+                          <span className="font-mono">{dStr}</span>
+                          <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[var(--theme-primary,#38BDF8)]/20 text-[var(--theme-primary,#38BDF8)] font-bold">
+                            {count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

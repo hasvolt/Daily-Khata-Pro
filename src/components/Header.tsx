@@ -307,10 +307,10 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col text-left justify-center shrink min-w-0">
+          <div className="flex flex-col text-left justify-center shrink min-w-0 overflow-hidden">
             <div
               onClick={() => onSelectTab && onSelectTab('home')}
-              className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group"
+              className="flex items-center gap-1 sm:gap-1.5 cursor-pointer select-none group leading-none"
             >
               <span className="font-extrabold text-[15px] sm:text-[18px] tracking-tight text-[var(--theme-text,#F8FAFC)] group-hover:opacity-95 transition-opacity whitespace-nowrap">
                 Daily Khata
@@ -319,8 +319,11 @@ export const Header: React.FC<HeaderProps> = ({
                 Pro
               </span>
             </div>
-            <div className="mt-0.5 flex items-center gap-1.5 min-w-0">
-              <span className="text-[9.5px] sm:text-[11px] font-semibold tracking-wide transition-colors text-[var(--theme-text-muted,#8BA4D0)] leading-tight truncate max-w-[125px] sm:max-w-[200px] md:max-w-none">
+            <div className="mt-1 flex items-center min-w-0 overflow-hidden">
+              <span
+                className="text-[9px] xs:text-[10px] sm:text-[11px] font-medium tracking-wide transition-colors text-[var(--theme-text-muted,#8BA4D0)] leading-none truncate block max-w-[110px] xs:max-w-[150px] sm:max-w-[200px] md:max-w-none"
+                title={getUIText('Income Expense Tracker', language)}
+              >
                 {getUIText('Income Expense Tracker', language)}
               </span>
             </div>
@@ -529,13 +532,13 @@ export const Header: React.FC<HeaderProps> = ({
                 triggerHapticSound('click');
                 onOpenMultiBackup();
               }}
-              className="relative h-8 sm:h-9 px-2 sm:px-2.5 rounded-lg sm:rounded-xl border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
+              className="relative h-8 sm:h-9 px-2 sm:px-2.5 rounded-lg sm:rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] hover:bg-[var(--theme-card-hover,#19304A)] text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
               title={isHindi ? 'मल्टीपल बैकअप व 1-क्लिक PDF रिपोर्ट' : 'Multi-Backup & 1-Click PDF Report'}
               id="header-multi-backup-btn"
               aria-label={isHindi ? 'बैकअप व PDF' : 'Backup & PDF'}
             >
-              <Download className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
-              <span className="hidden md:inline text-[11px] font-bold">
+              <Download className="w-3.5 h-3.5 shrink-0 text-[var(--theme-primary,#38BDF8)]" />
+              <span className="hidden md:inline text-[11px] font-bold text-[var(--theme-text,#F8FAFC)]">
                 {isHindi ? 'बैकअप / PDF' : 'Backup / PDF'}
               </span>
             </button>

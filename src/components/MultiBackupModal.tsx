@@ -23,7 +23,8 @@ import {
   Filter,
   Printer,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  SlidersHorizontal
 } from 'lucide-react';
 import { KhataData, AppLanguage } from '../types';
 import {
@@ -292,23 +293,23 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#1E293B)] shadow-2xl text-[var(--theme-text,#F8FAFC)] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 xs:p-3 sm:p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl max-h-[94vh] sm:max-h-[90vh] flex flex-col rounded-2xl bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#1E293B)] shadow-2xl text-[var(--theme-text,#F8FAFC)] overflow-hidden">
         
-        {/* Header Bar */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--theme-border,#1E293B)] bg-[var(--theme-surface,#0F172A)]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-              <Download className="w-5 h-5" />
+        {/* Header Bar - Compact for mobile */}
+        <div className="flex items-center justify-between px-3.5 sm:px-5 py-3 sm:py-3.5 border-b border-[var(--theme-border,#1E293B)] bg-[var(--theme-surface,#0F172A)] shrink-0">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+              <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </div>
-            <div>
-              <h3 className="font-bold text-[16px] text-white flex items-center gap-2">
-                <span>{isHindi ? 'डाउनलोड, PDF रिपोर्ट व बैकअप' : 'Export, PDF Statement & Backup'}</span>
+            <div className="min-w-0">
+              <h3 className="font-bold text-[14.5px] sm:text-[16px] text-white truncate">
+                {isHindi ? 'डाउनलोड, PDF व बैकअप' : 'Export, PDF & Backup'}
               </h3>
-              <p className="text-[12px] text-[var(--theme-text-dim,#94A3B8)]">
+              <p className="text-[11px] sm:text-[11.5px] text-[var(--theme-text-dim,#94A3B8)] truncate">
                 {isHindi
-                  ? 'चयन करें कि क्या और किस समयावधि का बैकअप या PDF बनाना है'
-                  : 'Select exact modules and date range to export or save'}
+                  ? 'चुनें कि क्या और किस अवधि का बैकअप या PDF बनाना है'
+                  : 'Choose modules & date range to export'}
               </p>
             </div>
           </div>
@@ -316,7 +317,7 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] flex items-center justify-center text-[var(--theme-text-dim,#94A3B8)] hover:text-white cursor-pointer transition-colors"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] flex items-center justify-center text-[var(--theme-text-dim,#94A3B8)] hover:text-white cursor-pointer transition-colors shrink-0 ml-2"
           >
             <X className="w-4 h-4" />
           </button>
@@ -325,7 +326,7 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
         {/* Feedback Alert Toast inside Modal */}
         {feedback && (
           <div
-            className={`px-4 py-2.5 text-[12px] font-semibold flex items-center gap-2 transition-all ${
+            className={`px-3.5 py-2 text-[11.5px] font-semibold flex items-center gap-2 transition-all shrink-0 ${
               feedback.type === 'success'
                 ? 'bg-emerald-500/15 text-emerald-300 border-b border-emerald-500/30'
                 : feedback.type === 'error'
@@ -338,38 +339,38 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
             ) : (
               <AlertCircle className="w-4 h-4 shrink-0" />
             )}
-            <span>{feedback.text}</span>
+            <span className="truncate">{feedback.text}</span>
           </div>
         )}
 
-        {/* Top Navigation Tabs */}
-        <div className="flex border-b border-[var(--theme-border,#1E293B)] px-5 pt-2 bg-[var(--theme-surface,#0F172A)] gap-2">
+        {/* Top Navigation Tabs - Horizontal Scroll on small screens */}
+        <div className="flex border-b border-[var(--theme-border,#1E293B)] px-3.5 sm:px-5 pt-1.5 bg-[var(--theme-surface,#0F172A)] overflow-x-auto no-scrollbar gap-1 sm:gap-2 shrink-0">
           <button
             type="button"
             onClick={() => setActiveTab('export')}
-            className={`px-4 py-2.5 font-semibold text-[13px] border-b-2 cursor-pointer transition-all flex items-center gap-2 ${
+            className={`px-3 sm:px-4 py-2 font-semibold text-[12px] sm:text-[13px] border-b-2 cursor-pointer transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
               activeTab === 'export'
                 ? 'border-emerald-400 text-emerald-400'
                 : 'border-transparent text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
             }`}
           >
-            <Download className="w-4 h-4" />
-            <span>{isHindi ? 'डाउनलोड व PDF विकल्प' : 'Export & PDF Statement'}</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>{isHindi ? 'डाउनलोड व PDF' : 'Export & PDF'}</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('snapshots')}
-            className={`px-4 py-2.5 font-semibold text-[13px] border-b-2 cursor-pointer transition-all flex items-center gap-2 ${
+            className={`px-3 sm:px-4 py-2 font-semibold text-[12px] sm:text-[13px] border-b-2 cursor-pointer transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
               activeTab === 'snapshots'
                 ? 'border-sky-400 text-sky-400'
                 : 'border-transparent text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
             }`}
           >
-            <Camera className="w-4 h-4" />
-            <span>{isHindi ? 'लोकल चेकपॉइंट्स' : 'Local Snapshots'}</span>
+            <Camera className="w-3.5 h-3.5" />
+            <span>{isHindi ? 'चेकपॉइंट्स' : 'Snapshots'}</span>
             {snapshots.length > 0 && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] bg-sky-500/20 text-sky-400 font-mono">
+              <span className="px-1.5 py-0.2 rounded text-[10px] bg-sky-500/20 text-sky-400 font-mono">
                 {snapshots.length}
               </span>
             )}
@@ -378,29 +379,29 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('import')}
-            className={`px-4 py-2.5 font-semibold text-[13px] border-b-2 cursor-pointer transition-all flex items-center gap-2 ${
+            className={`px-3 sm:px-4 py-2 font-semibold text-[12px] sm:text-[13px] border-b-2 cursor-pointer transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
               activeTab === 'import'
                 ? 'border-amber-400 text-amber-400'
                 : 'border-transparent text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
             }`}
           >
-            <Upload className="w-4 h-4" />
-            <span>{isHindi ? 'बैकअप रिस्टोर' : 'Restore Data'}</span>
+            <Upload className="w-3.5 h-3.5" />
+            <span>{isHindi ? 'रिस्टोर डेटा' : 'Restore'}</span>
           </button>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+        <div className="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
           {activeTab === 'export' && (
-            <div className="space-y-5">
+            <div className="space-y-3.5 sm:space-y-4">
               
               {/* SECTION 1: MODULE SELECTION CHECKBOXES */}
-              <div className="p-4 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] space-y-3">
-                <div className="flex items-center justify-between">
+              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] space-y-2.5">
+                <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Filter className="w-4 h-4 text-emerald-400" />
-                    <span className="text-[13px] font-bold text-white">
-                      {isHindi ? '1. क्या शामिल करना है? (Select Modules)' : '1. What to include? (Select Modules)'}
+                    <Filter className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-[12.5px] sm:text-[13px] font-bold text-white">
+                      {isHindi ? '1. क्या शामिल करना है?' : '1. Select Modules'}
                     </span>
                   </div>
 
@@ -408,200 +409,200 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
                   <button
                     type="button"
                     onClick={toggleSelectAllModules}
-                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] hover:border-emerald-500/50 text-[12px] font-semibold text-white cursor-pointer transition-colors"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] hover:border-emerald-500/50 text-[11.5px] font-semibold text-white cursor-pointer transition-colors self-start xs:self-auto"
                   >
                     {allModulesSelected ? (
                       <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
                     ) : (
                       <Square className="w-3.5 h-3.5 text-slate-400" />
                     )}
-                    <span>{isHindi ? 'एक बार में सब (Select All)' : 'Select All'}</span>
+                    <span>{isHindi ? 'एक बार में सब' : 'Select All'}</span>
                   </button>
                 </div>
 
                 {/* 6 Module Checkbox Pills */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
                   {/* Financial Entries */}
-                  <label
+                  <div
                     onClick={() => toggleModule('entries')}
-                    className={`flex items-center justify-between p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
+                    className={`flex items-center justify-between p-2 sm:p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
                       modules.entries
                         ? 'bg-emerald-500/10 border-emerald-500/40 text-white'
                         : 'bg-[var(--theme-surface,#0F172A)]/60 border-[var(--theme-border,#334155)] text-slate-400 hover:text-white'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 min-w-0">
                       {modules.entries ? (
                         <CheckSquare className="w-4 h-4 text-emerald-400 shrink-0" />
                       ) : (
                         <Square className="w-4 h-4 text-slate-500 shrink-0" />
                       )}
-                      <div>
-                        <div className="text-[12.5px] font-semibold">
+                      <div className="min-w-0">
+                        <div className="text-[12px] sm:text-[12.5px] font-semibold truncate">
                           {isHindi ? 'लेन-देन प्रविष्टियां' : 'Financial Entries'}
                         </div>
-                        <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                        <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">
                           {filteredPreview.entries?.length || 0} {isHindi ? 'रिकॉर्ड्स' : 'records'}
                         </div>
                       </div>
                     </div>
-                    <Coins className="w-4 h-4 text-emerald-400/60" />
-                  </label>
+                    <Coins className="w-4 h-4 text-emerald-400/60 shrink-0" />
+                  </div>
 
                   {/* Attendance & Advances */}
-                  <label
+                  <div
                     onClick={() => toggleModule('attendance')}
-                    className={`flex items-center justify-between p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
+                    className={`flex items-center justify-between p-2 sm:p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
                       modules.attendance
                         ? 'bg-sky-500/10 border-sky-500/40 text-white'
                         : 'bg-[var(--theme-surface,#0F172A)]/60 border-[var(--theme-border,#334155)] text-slate-400 hover:text-white'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 min-w-0">
                       {modules.attendance ? (
                         <CheckSquare className="w-4 h-4 text-sky-400 shrink-0" />
                       ) : (
                         <Square className="w-4 h-4 text-slate-500 shrink-0" />
                       )}
-                      <div>
-                        <div className="text-[12.5px] font-semibold">
+                      <div className="min-w-0">
+                        <div className="text-[12px] sm:text-[12.5px] font-semibold truncate">
                           {isHindi ? 'उपस्थिति व एडवांस' : 'Attendance & Advances'}
                         </div>
-                        <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                        <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">
                           {filteredPreview.attendanceLogs?.length || 0} {isHindi ? 'दिन' : 'logs'}
                         </div>
                       </div>
                     </div>
-                    <CalendarCheck className="w-4 h-4 text-sky-400/60" />
-                  </label>
+                    <CalendarCheck className="w-4 h-4 text-sky-400/60 shrink-0" />
+                  </div>
 
                   {/* Loans & Udhar */}
-                  <label
+                  <div
                     onClick={() => toggleModule('loans')}
-                    className={`flex items-center justify-between p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
+                    className={`flex items-center justify-between p-2 sm:p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
                       modules.loans
                         ? 'bg-amber-500/10 border-amber-500/40 text-white'
                         : 'bg-[var(--theme-surface,#0F172A)]/60 border-[var(--theme-border,#334155)] text-slate-400 hover:text-white'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 min-w-0">
                       {modules.loans ? (
                         <CheckSquare className="w-4 h-4 text-amber-400 shrink-0" />
                       ) : (
                         <Square className="w-4 h-4 text-slate-500 shrink-0" />
                       )}
-                      <div>
-                        <div className="text-[12.5px] font-semibold">
+                      <div className="min-w-0">
+                        <div className="text-[12px] sm:text-[12.5px] font-semibold truncate">
                           {isHindi ? 'ऋण व उधार खाता' : 'Loans & Udhar Book'}
                         </div>
-                        <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
-                          {filteredPreview.debtItems?.length || 0} {isHindi ? 'खातेदार' : 'items'}
+                        <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">
+                          {filteredPreview.debtItems?.length || 0} {isHindi ? 'खाते' : 'items'}
                         </div>
                       </div>
                     </div>
-                    <Landmark className="w-4 h-4 text-amber-400/60" />
-                  </label>
+                    <Landmark className="w-4 h-4 text-amber-400/60 shrink-0" />
+                  </div>
 
                   {/* Personal Notes */}
-                  <label
+                  <div
                     onClick={() => toggleModule('notes')}
-                    className={`flex items-center justify-between p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
+                    className={`flex items-center justify-between p-2 sm:p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
                       modules.notes
                         ? 'bg-purple-500/10 border-purple-500/40 text-white'
                         : 'bg-[var(--theme-surface,#0F172A)]/60 border-[var(--theme-border,#334155)] text-slate-400 hover:text-white'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 min-w-0">
                       {modules.notes ? (
                         <CheckSquare className="w-4 h-4 text-purple-400 shrink-0" />
                       ) : (
                         <Square className="w-4 h-4 text-slate-500 shrink-0" />
                       )}
-                      <div>
-                        <div className="text-[12.5px] font-semibold">
+                      <div className="min-w-0">
+                        <div className="text-[12px] sm:text-[12.5px] font-semibold truncate">
                           {isHindi ? 'पर्सनल नोट्स व डायरी' : 'Personal Notes & Tasks'}
                         </div>
-                        <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                        <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">
                           {filteredPreview.personalNotes?.length || 0} {isHindi ? 'नोट्स' : 'notes'}
                         </div>
                       </div>
                     </div>
-                    <FileText className="w-4 h-4 text-purple-400/60" />
-                  </label>
+                    <FileText className="w-4 h-4 text-purple-400/60 shrink-0" />
+                  </div>
 
                   {/* Goals & Budgets */}
-                  <label
+                  <div
                     onClick={() => toggleModule('goals')}
-                    className={`flex items-center justify-between p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
+                    className={`flex items-center justify-between p-2 sm:p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
                       modules.goals
                         ? 'bg-teal-500/10 border-teal-500/40 text-white'
                         : 'bg-[var(--theme-surface,#0F172A)]/60 border-[var(--theme-border,#334155)] text-slate-400 hover:text-white'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 min-w-0">
                       {modules.goals ? (
                         <CheckSquare className="w-4 h-4 text-teal-400 shrink-0" />
                       ) : (
                         <Square className="w-4 h-4 text-slate-500 shrink-0" />
                       )}
-                      <div>
-                        <div className="text-[12.5px] font-semibold">
+                      <div className="min-w-0">
+                        <div className="text-[12px] sm:text-[12.5px] font-semibold truncate">
                           {isHindi ? 'लक्ष्य व बजट' : 'Goals & Budgets'}
                         </div>
-                        <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                        <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">
                           {filteredPreview.goals?.length || 0} {isHindi ? 'लक्ष्य' : 'goals'}
                         </div>
                       </div>
                     </div>
-                    <ShieldCheck className="w-4 h-4 text-teal-400/60" />
-                  </label>
+                    <ShieldCheck className="w-4 h-4 text-teal-400/60 shrink-0" />
+                  </div>
 
                   {/* App Settings */}
-                  <label
+                  <div
                     onClick={() => toggleModule('settings')}
-                    className={`flex items-center justify-between p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
+                    className={`flex items-center justify-between p-2 sm:p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
                       modules.settings
                         ? 'bg-blue-500/10 border-blue-500/40 text-white'
                         : 'bg-[var(--theme-surface,#0F172A)]/60 border-[var(--theme-border,#334155)] text-slate-400 hover:text-white'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 min-w-0">
                       {modules.settings ? (
                         <CheckSquare className="w-4 h-4 text-blue-400 shrink-0" />
                       ) : (
                         <Square className="w-4 h-4 text-slate-500 shrink-0" />
                       )}
-                      <div>
-                        <div className="text-[12.5px] font-semibold">
+                      <div className="min-w-0">
+                        <div className="text-[12px] sm:text-[12.5px] font-semibold truncate">
                           {isHindi ? 'सेटिंग्स व श्रेणियां' : 'Settings & Categories'}
                         </div>
-                        <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
-                          {isHindi ? 'थीम, फॉन्ट, श्रेणियां' : 'Theme, Funds, Categories'}
+                        <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">
+                          {isHindi ? 'थीम, फंड्स व श्रेणियां' : 'Theme, funds & categories'}
                         </div>
                       </div>
                     </div>
-                    <SlidersHorizontalIcon className="w-4 h-4 text-blue-400/60" />
-                  </label>
+                    <SlidersHorizontal className="w-4 h-4 text-blue-400/60 shrink-0" />
+                  </div>
                 </div>
               </div>
 
               {/* SECTION 2: DATE RANGE SELECTOR */}
-              <div className="p-4 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] space-y-3">
+              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] space-y-2.5">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-sky-400" />
-                  <span className="text-[13px] font-bold text-white">
-                    {isHindi ? '2. कितनी अवधि का डेटा? (Date Range)' : '2. Date Range'}
+                  <Calendar className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="text-[12.5px] sm:text-[13px] font-bold text-white">
+                    {isHindi ? '2. कितनी अवधि का डेटा?' : '2. Date Range'}
                   </span>
                 </div>
 
-                {/* Range Pills */}
-                <div className="flex flex-wrap gap-2">
+                {/* Range Pills - Touch friendly */}
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {[
-                    { id: 'all', label: isHindi ? 'सब (All Time)' : 'All Time' },
-                    { id: 'this_month', label: isHindi ? 'इस महीने (This Month)' : 'This Month' },
-                    { id: 'last_month', label: isHindi ? 'पिछले महीने (Last Month)' : 'Last Month' },
-                    { id: 'last_3_months', label: isHindi ? 'पिछले 3 महीने' : 'Last 3 Months' },
-                    { id: 'custom', label: isHindi ? 'कस्टम अवधि (Custom)' : 'Custom' }
+                    { id: 'all', label: isHindi ? 'सम्पूर्ण (All Time)' : 'All Time' },
+                    { id: 'this_month', label: isHindi ? 'इस महीने' : 'This Month' },
+                    { id: 'last_month', label: isHindi ? 'पिछले महीने' : 'Last Month' },
+                    { id: 'last_3_months', label: isHindi ? '3 महीने' : '3 Months' },
+                    { id: 'custom', label: isHindi ? 'कस्टम' : 'Custom' }
                   ].map((range) => {
                     const active = dateRangeType === range.id;
                     return (
@@ -609,7 +610,7 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
                         key={range.id}
                         type="button"
                         onClick={() => setDateRangeType(range.id as any)}
-                        className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold border cursor-pointer transition-all ${
+                        className={`px-2.5 py-1 rounded-lg text-[11px] sm:text-[11.5px] font-semibold border cursor-pointer transition-all ${
                           active
                             ? 'bg-sky-500/20 border-sky-400 text-sky-300'
                             : 'bg-[var(--theme-surface,#0F172A)] border-[var(--theme-border,#334155)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
@@ -621,29 +622,29 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
                   })}
                 </div>
 
-                {/* Custom Date Pickers if selected */}
+                {/* Custom Date Pickers */}
                 {dateRangeType === 'custom' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                        {isHindi ? 'प्रारंभिक तिथि (From Date)' : 'From Date'}
+                      <label className="block text-[10.5px] font-semibold text-slate-400 mb-1">
+                        {isHindi ? 'प्रारंभिक तिथि (From)' : 'From Date'}
                       </label>
                       <input
                         type="date"
                         value={customStartDate}
                         onChange={(e) => setCustomStartDate(e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] text-[12px] text-white focus:outline-none focus:border-sky-400"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] text-[12px] text-white focus:outline-none focus:border-sky-400"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                        {isHindi ? 'अंतिम तिथि (To Date)' : 'To Date'}
+                      <label className="block text-[10.5px] font-semibold text-slate-400 mb-1">
+                        {isHindi ? 'अंतिम तिथि (To)' : 'To Date'}
                       </label>
                       <input
                         type="date"
                         value={customEndDate}
                         onChange={(e) => setCustomEndDate(e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] text-[12px] text-white focus:outline-none focus:border-sky-400"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] text-[12px] text-white focus:outline-none focus:border-sky-400"
                       />
                     </div>
                   </div>
@@ -651,38 +652,38 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
               </div>
 
               {/* SECTION 3: EXPORT ACTION BUTTONS */}
-              <div className="space-y-3">
-                <div className="text-[13px] font-bold text-white flex items-center justify-between">
-                  <span>{isHindi ? '3. डाउनलोड माध्यम चुनें:' : '3. Choose Export Format:'}</span>
-                  <span className="text-[11.5px] font-semibold text-emerald-400">
-                    {isHindi ? 'चयनित कुल' : 'Selected Total'}: {filteredPreview.entries?.length || 0} entries
+              <div className="space-y-2.5">
+                <div className="text-[12.5px] sm:text-[13px] font-bold text-white flex items-center justify-between">
+                  <span>{isHindi ? '3. माध्यम चुनें:' : '3. Choose Format:'}</span>
+                  <span className="text-[11px] font-semibold text-emerald-400">
+                    {filteredPreview.entries?.length || 0} {isHindi ? 'प्रविष्टियां' : 'entries'}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
                   {/* Option 1: PDF Download */}
                   <button
                     type="button"
                     onClick={handleExportPdf}
                     disabled={isGeneratingPdf}
-                    className="p-3.5 rounded-xl bg-gradient-to-b from-emerald-500/15 to-emerald-500/5 border border-emerald-500/40 hover:border-emerald-400 text-left flex flex-col justify-between cursor-pointer transition-all active:scale-98 group"
+                    className="p-3 rounded-xl bg-gradient-to-b from-emerald-500/15 to-emerald-500/5 border border-emerald-500/40 hover:border-emerald-400 text-left flex items-center sm:flex-col sm:items-start justify-between cursor-pointer transition-all active:scale-98 group gap-2"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <div className="flex items-center gap-2.5 sm:w-full sm:justify-between sm:mb-1.5">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                         <FileText className="w-4 h-4" />
                       </div>
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                      <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300">
                         PDF
                       </span>
                     </div>
-                    <div>
-                      <div className="font-bold text-[13px] text-white group-hover:text-emerald-300">
+                    <div className="min-w-0 text-right sm:text-left">
+                      <div className="font-bold text-[12.5px] text-white group-hover:text-emerald-300 truncate">
                         {isGeneratingPdf
                           ? isHindi ? 'PDF बन रही है...' : 'Generating...'
                           : isHindi ? 'PDF स्टेटमेंट डाउनलोड' : 'Download PDF'}
                       </div>
-                      <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] mt-0.5">
-                        {isHindi ? 'प्रिंट व शेयर फ्रेंडली' : 'Clean printable PDF'}
+                      <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
+                        {isHindi ? 'प्रिंट व शेयर फ्रेंडली' : 'Printable statement'}
                       </div>
                     </div>
                   </button>
@@ -691,22 +692,22 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
                   <button
                     type="button"
                     onClick={handleExportJson}
-                    className="p-3.5 rounded-xl bg-gradient-to-b from-sky-500/15 to-sky-500/5 border border-sky-500/40 hover:border-sky-400 text-left flex flex-col justify-between cursor-pointer transition-all active:scale-98 group"
+                    className="p-3 rounded-xl bg-gradient-to-b from-sky-500/15 to-sky-500/5 border border-sky-500/40 hover:border-sky-400 text-left flex items-center sm:flex-col sm:items-start justify-between cursor-pointer transition-all active:scale-98 group gap-2"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center">
+                    <div className="flex items-center gap-2.5 sm:w-full sm:justify-between sm:mb-1.5">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0">
                         <Download className="w-4 h-4" />
                       </div>
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">
+                      <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-mono">
                         JSON
                       </span>
                     </div>
-                    <div>
-                      <div className="font-bold text-[13px] text-white group-hover:text-sky-300">
+                    <div className="min-w-0 text-right sm:text-left">
+                      <div className="font-bold text-[12.5px] text-white group-hover:text-sky-300 truncate">
                         {isHindi ? 'पूर्ण JSON बैकअप' : 'Complete JSON'}
                       </div>
-                      <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] mt-0.5">
-                        {isHindi ? '100% लॉसलेस डेटा फ़ाइल' : 'Full backup for restore'}
+                      <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
+                        {isHindi ? '100% डेटा बैकअप फ़ाइल' : 'Full backup for restore'}
                       </div>
                     </div>
                   </button>
@@ -715,21 +716,21 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
                   <button
                     type="button"
                     onClick={handleExportCsv}
-                    className="p-3.5 rounded-xl bg-gradient-to-b from-purple-500/15 to-purple-500/5 border border-purple-500/40 hover:border-purple-400 text-left flex flex-col justify-between cursor-pointer transition-all active:scale-98 group"
+                    className="p-3 rounded-xl bg-gradient-to-b from-purple-500/15 to-purple-500/5 border border-purple-500/40 hover:border-purple-400 text-left flex items-center sm:flex-col sm:items-start justify-between cursor-pointer transition-all active:scale-98 group gap-2"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+                    <div className="flex items-center gap-2.5 sm:w-full sm:justify-between sm:mb-1.5">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0">
                         <FileSpreadsheet className="w-4 h-4" />
                       </div>
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">
+                      <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">
                         CSV
                       </span>
                     </div>
-                    <div>
-                      <div className="font-bold text-[13px] text-white group-hover:text-purple-300">
+                    <div className="min-w-0 text-right sm:text-left">
+                      <div className="font-bold text-[12.5px] text-white group-hover:text-purple-300 truncate">
                         {isHindi ? 'एक्सेल (Excel / CSV)' : 'Excel / CSV Sheet'}
                       </div>
-                      <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] mt-0.5">
+                      <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)]">
                         {isHindi ? 'स्प्रेडशीट व अकाउंटिंग' : 'Open in Excel/Sheets'}
                       </div>
                     </div>
@@ -739,22 +740,22 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
 
               {/* Cloud Backup Link if available */}
               {onOpenGoogleDrive && (
-                <div className="p-3.5 rounded-xl bg-[var(--theme-card,#1E293B)]/40 border border-[var(--theme-border,#1E293B)] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center">
+                <div className="p-3 rounded-xl bg-[var(--theme-card,#1E293B)]/40 border border-[var(--theme-border,#1E293B)] flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
                       <Cloud className="w-4 h-4" />
                     </div>
-                    <div>
-                      <div className="text-[12.5px] font-bold text-white flex items-center gap-1.5">
-                        <span>{isHindi ? 'गूगल ड्राइव क्लाउड सिंक' : 'Google Drive Cloud Sync'}</span>
+                    <div className="min-w-0">
+                      <div className="text-[12px] font-bold text-white flex items-center gap-1.5 truncate">
+                        <span>{isHindi ? 'गूगल ड्राइव सिंक' : 'Google Drive Sync'}</span>
                         {isDriveConnected && (
-                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                         )}
                       </div>
-                      <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)]">
+                      <div className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] truncate">
                         {isDriveConnected
-                          ? isHindi ? 'कनेक्टेड: सुरक्षित ऑटो व 1-क्लिक बैकअप' : 'Connected: Safe 1-Click Sync'
-                          : isHindi ? 'अपने Google Drive में क्लाउड बैकअप लें' : 'Backup directly to your Google Drive'}
+                          ? isHindi ? 'कनेक्टेड: सुरक्षित ऑटो सिंक' : 'Connected: 1-Click Sync'
+                          : isHindi ? 'क्लाउड में बैकअप सहेजें' : 'Save to Google Drive'}
                       </div>
                     </div>
                   </div>
@@ -765,9 +766,9 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
                       onClose();
                       onOpenGoogleDrive();
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-400 text-slate-950 text-[11.5px] font-bold cursor-pointer transition-colors"
+                    className="px-2.5 py-1 rounded-lg bg-blue-500 hover:bg-blue-400 text-slate-950 text-[11px] font-bold cursor-pointer transition-colors shrink-0"
                   >
-                    {isHindi ? 'क्लाउड खोलें' : 'Open Cloud'}
+                    {isHindi ? 'खोलें' : 'Open'}
                   </button>
                 </div>
               )}
@@ -777,13 +778,13 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
 
           {/* TAB 2: LOCAL SNAPSHOTS */}
           {activeTab === 'snapshots' && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Snapshot Creation */}
-              <div className="p-4 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] space-y-2.5">
+              <div className="p-3 sm:p-4 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] space-y-2">
                 <div className="flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-sky-400" />
-                  <span className="text-[13px] font-bold text-white">
-                    {isHindi ? 'त्वरित चेकपॉइंट बनाएं (Instant Safe Checkpoint)' : 'Create Safe Checkpoint'}
+                  <Camera className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="text-[12.5px] font-bold text-white">
+                    {isHindi ? 'त्वरित चेकपॉइंट बनाएं' : 'Create Safe Checkpoint'}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -793,15 +794,15 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
                     onChange={(e) => setSnapshotName(e.target.value)}
                     placeholder={
                       isHindi
-                        ? 'चेकपॉइंट का नाम (उदा: माह अंत, वेतन से पूर्व)'
-                        : 'Checkpoint Name (e.g. Month End, Before Salary)'
+                        ? 'चेकपॉइंट नाम (उदा: माह अंत, वेतन पूर्व)'
+                        : 'Name (e.g. Month End, Before Salary)'
                     }
-                    className="flex-1 px-3 py-2 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] text-[12px] text-white focus:outline-none focus:border-sky-400 placeholder:text-slate-500"
+                    className="flex-1 px-2.5 py-1.5 rounded-lg bg-[var(--theme-surface,#0F172A)] border border-[var(--theme-border,#334155)] text-[12px] text-white focus:outline-none focus:border-sky-400 placeholder:text-slate-500 min-w-0"
                   />
                   <button
                     type="button"
                     onClick={handleCreateSnapshot}
-                    className="px-4 py-2 rounded-lg bg-sky-500 hover:bg-sky-400 active:scale-95 text-slate-950 font-bold text-[12px] flex items-center gap-1.5 cursor-pointer transition-all shrink-0"
+                    className="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 active:scale-95 text-slate-950 font-bold text-[11.5px] flex items-center gap-1 cursor-pointer transition-all shrink-0"
                   >
                     <Camera className="w-3.5 h-3.5" />
                     <span>{isHindi ? 'सहेजें' : 'Save'}</span>
@@ -811,57 +812,53 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
 
               {/* Snapshots List */}
               <div className="space-y-2">
-                <div className="text-[12px] font-bold text-[var(--theme-text-dim,#94A3B8)]">
-                  {isHindi
-                    ? 'ब्राउज़र में सहेजे गए लोकल चेकपॉइंट्स (अधिकतम 6):'
-                    : 'Recent recovery snapshots in local storage:'}
+                <div className="text-[11.5px] font-bold text-[var(--theme-text-dim,#94A3B8)]">
+                  {isHindi ? 'लोकल चेकपॉइंट्स (अधिकतम 6):' : 'Recent checkpoints in storage:'}
                 </div>
 
                 {snapshots.length === 0 ? (
-                  <div className="py-8 text-center border border-dashed border-[var(--theme-border,#334155)] rounded-xl space-y-2">
-                    <Camera className="w-8 h-8 mx-auto text-slate-500 opacity-60" />
-                    <p className="text-[12.5px] text-[var(--theme-text-dim,#94A3B8)] font-semibold">
-                      {isHindi ? 'कोई लोकल स्नैपशॉट नहीं है' : 'No local snapshots created yet'}
+                  <div className="py-6 text-center border border-dashed border-[var(--theme-border,#334155)] rounded-xl space-y-1.5">
+                    <Camera className="w-6 h-6 mx-auto text-slate-500 opacity-60" />
+                    <p className="text-[12px] text-[var(--theme-text-dim,#94A3B8)] font-semibold">
+                      {isHindi ? 'कोई लोकल स्नैपशॉट नहीं है' : 'No snapshots created yet'}
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {snapshots.map((snap) => (
                       <div
                         key={snap.id}
-                        className="p-3 rounded-xl bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] flex items-center justify-between gap-3"
+                        className="p-2.5 rounded-xl bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] flex items-center justify-between gap-2"
                       >
-                        <div>
-                          <div className="font-bold text-[13px] text-white flex items-center gap-2">
-                            <span>{snap.name}</span>
-                            <span className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] font-normal">
+                        <div className="min-w-0">
+                          <div className="font-bold text-[12px] sm:text-[12.5px] text-white flex items-center gap-1.5 truncate">
+                            <span className="truncate">{snap.name}</span>
+                            <span className="text-[10px] text-[var(--theme-text-dim,#94A3B8)] font-normal shrink-0">
                               ({snap.createdAt})
                             </span>
                           </div>
-                          <div className="text-[11px] text-[var(--theme-text-dim,#94A3B8)] flex gap-2 mt-0.5">
+                          <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] flex gap-1.5 mt-0.5 truncate">
                             <span>{snap.stats.entriesCount} entries</span>
                             <span>•</span>
-                            <span>{snap.stats.attendanceCount} attendance</span>
-                            <span>•</span>
-                            <span>{snap.stats.notesCount} notes</span>
+                            <span>{snap.stats.attendanceCount} logs</span>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-1.5 shrink-0">
                           <button
                             type="button"
                             onClick={() => handleRestoreSnapshot(snap)}
-                            className="px-3 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all"
+                            className="px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-[10.5px] font-bold flex items-center gap-1 cursor-pointer transition-all"
                           >
                             <RotateCcw className="w-3 h-3" />
-                            <span>{isHindi ? 'लोड करें' : 'Restore'}</span>
+                            <span>{isHindi ? 'लोड' : 'Restore'}</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDeleteSnapshot(snap.id)}
-                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 cursor-pointer transition-all"
+                            className="p-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 cursor-pointer transition-all"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-3 h-3" />
                           </button>
                         </div>
                       </div>
@@ -874,25 +871,25 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
 
           {/* TAB 3: IMPORT & RESTORE */}
           {activeTab === 'import' && (
-            <div className="space-y-4">
-              <div className="p-5 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] text-center space-y-3">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 mx-auto">
-                  <Upload className="w-6 h-6" />
+            <div className="space-y-3">
+              <div className="p-4 sm:p-5 rounded-xl bg-[var(--theme-card,#1E293B)]/60 border border-[var(--theme-border,#1E293B)] text-center space-y-2.5">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 mx-auto">
+                  <Upload className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[14px] text-white">
-                    {isHindi ? 'JSON बैकअप फ़ाइल से डेटा पुनर्स्थापित करें' : 'Restore data from JSON backup file'}
+                  <h4 className="font-bold text-[13.5px] text-white">
+                    {isHindi ? 'JSON बैकअप फ़ाइल से रिस्टोर करें' : 'Restore from JSON file'}
                   </h4>
-                  <p className="text-[12px] text-[var(--theme-text-dim,#94A3B8)] mt-1 max-w-md mx-auto">
+                  <p className="text-[11.5px] text-[var(--theme-text-dim,#94A3B8)] mt-1 max-w-md mx-auto">
                     {isHindi
-                      ? 'अपनी पहले डाउनलोड की गई .json बैकअप फ़ाइल चुनें। वित्तीय प्रविष्टियां, अटेंडेंस, नोट्स और ऋण स्वचालित रूप से लोड हो जाएंगे।'
-                      : 'Select a previously saved .json backup. Entries, attendance, loans, and personal notes will be restored safely.'}
+                      ? 'अपनी पहले डाउनलोड की गई .json बैकअप फ़ाइल चुनें। वित्तीय प्रविष्टियां, अटेंडेंस व नोट्स स्वतः लोड हो जाएंगे।'
+                      : 'Choose your saved .json backup file to restore entries, attendance, notes & loans.'}
                   </p>
                 </div>
 
-                <label className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-[13px] cursor-pointer transition-all shadow-md">
-                  <Upload className="w-4 h-4" />
-                  <span>{isHindi ? 'फ़ाइल चुनें (.json)' : 'Choose Backup File (.json)'}</span>
+                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-[12px] cursor-pointer transition-all shadow-md">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{isHindi ? 'फ़ाइल चुनें (.json)' : 'Choose File (.json)'}</span>
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -906,21 +903,19 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
           )}
         </div>
 
-        {/* Footer Note */}
-        <div className="px-5 py-3 bg-[var(--theme-surface,#0F172A)] border-t border-[var(--theme-border,#1E293B)] flex items-center justify-between text-[11.5px] text-[var(--theme-text-dim,#94A3B8)]">
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>
-              {isHindi
-                ? '100% प्राइवेट व ऑफ़लाइन सुरक्षित'
-                : '100% Client-Side Safe & Offline Capable'}
+        {/* Footer Note - Sticky at bottom */}
+        <div className="px-3.5 sm:px-5 py-2.5 sm:py-3 bg-[var(--theme-surface,#0F172A)] border-t border-[var(--theme-border,#1E293B)] flex items-center justify-between text-[11px] text-[var(--theme-text-dim,#94A3B8)] shrink-0">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <span className="truncate">
+              {isHindi ? '100% ऑफ़लाइन सुरक्षित' : '100% Client-Side Safe'}
             </span>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] hover:bg-[var(--theme-card-hover,#334155)] text-white font-semibold text-[12px] cursor-pointer transition-colors"
+            className="px-3.5 py-1 rounded-lg bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] hover:bg-[var(--theme-card-hover,#334155)] text-white font-semibold text-[11.5px] cursor-pointer transition-colors shrink-0 ml-2"
           >
             {isHindi ? 'बंद करें' : 'Close'}
           </button>
@@ -931,31 +926,3 @@ export const MultiBackupModal: React.FC<MultiBackupModalProps> = ({
     document.body
   );
 };
-
-// Helper Icon
-function SlidersHorizontalIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <line x1="21" x2="14" y1="4" y2="4" />
-      <line x1="10" x2="3" y1="4" y2="4" />
-      <line x1="21" x2="12" y1="12" y2="12" />
-      <line x1="8" x2="3" y1="12" y2="12" />
-      <line x1="21" x2="16" y1="20" y2="20" />
-      <line x1="12" x2="3" y1="20" y2="20" />
-      <line x1="14" x2="14" y1="2" y2="6" />
-      <line x1="8" x2="8" y1="10" y2="14" />
-      <line x1="16" x2="16" y1="18" y2="22" />
-    </svg>
-  );
-}
