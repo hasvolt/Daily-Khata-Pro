@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { 
   Building, 
   Laptop, 
@@ -8,7 +9,16 @@ import {
   GraduationCap, 
   Sprout, 
   Briefcase, 
-  Layers 
+  Layers,
+  Coffee,
+  Fuel,
+  ShoppingBag,
+  Stethoscope,
+  Smartphone,
+  Home,
+  Key,
+  Banknote,
+  Gift
 } from 'lucide-react';
 import { AttendanceLog, AttendanceStatus, PaymentStatusType, PaymentMode, FundType } from '../../types';
 
@@ -77,32 +87,86 @@ export interface AdvanceReasonMeta {
   id: string;
   labelEn: string;
   labelHi: string;
-  icon: string;
+  icon: LucideIcon;
   color?: string;
 }
 
 export const ADVANCE_REASONS_CATALOG: AdvanceReasonMeta[] = [
-  { id: 'chai_nashta', labelEn: 'Tea / Snacks', labelHi: 'चाय-नाश्ता', icon: '☕' },
-  { id: 'petrol_travel', labelEn: 'Petrol / Travel', labelHi: 'पेट्रोल / यात्रा किराया', icon: '⛽' },
-  { id: 'kirana_food', labelEn: 'Groceries / Food', labelHi: 'राशन / भोजन खर्च', icon: '🍚' },
-  { id: 'medical_emergency', labelEn: 'Medicine / Health', labelHi: 'दवा / इलाज खर्च', icon: '💊' },
-  { id: 'mobile_recharge', labelEn: 'Mobile Recharge', labelHi: 'मोबाइल रिचार्ज', icon: '📱' },
-  { id: 'urgent_personal', labelEn: 'Personal / Household', labelHi: 'घरेलू / जरूरी कार्य', icon: '🏠' },
-  { id: 'tools_material', labelEn: 'Tools / Materials', labelHi: 'सामान / औजार खरीदी', icon: '🔧' },
-  { id: 'room_rent', labelEn: 'Room Rent', labelHi: 'कमरा किराया / रूम भाड़ा', icon: '🔑' },
-  { id: 'kharcha_general', labelEn: 'Daily Expenses', labelHi: 'रोजमर्रा जेब खर्च', icon: '💵' },
-  { id: 'festival_gift', labelEn: 'Festival / Bonus Adv', labelHi: 'त्यौहार / पर्व खर्च', icon: '🎁' }
+  { id: 'chai_nashta', labelEn: 'Tea / Snacks', labelHi: 'चाय-नाश्ता', icon: Coffee, color: 'text-amber-400' },
+  { id: 'petrol_travel', labelEn: 'Petrol / Travel', labelHi: 'पेट्रोल / यात्रा किराया', icon: Fuel, color: 'text-sky-400' },
+  { id: 'kirana_food', labelEn: 'Groceries / Food', labelHi: 'राशन / भोजन खर्च', icon: ShoppingBag, color: 'text-emerald-400' },
+  { id: 'medical_emergency', labelEn: 'Medicine / Health', labelHi: 'दवा / इलाज खर्च', icon: Stethoscope, color: 'text-rose-400' },
+  { id: 'mobile_recharge', labelEn: 'Mobile Recharge', labelHi: 'मोबाइल रिचार्ज', icon: Smartphone, color: 'text-indigo-400' },
+  { id: 'urgent_personal', labelEn: 'Personal / Household', labelHi: 'घरेलू / जरूरी कार्य', icon: Home, color: 'text-purple-400' },
+  { id: 'tools_material', labelEn: 'Tools / Materials', labelHi: 'सामान / औजार खरीदी', icon: Wrench, color: 'text-cyan-400' },
+  { id: 'room_rent', labelEn: 'Room Rent', labelHi: 'कमरा किराया / रूम भाड़ा', icon: Key, color: 'text-yellow-400' },
+  { id: 'kharcha_general', labelEn: 'Daily Expenses', labelHi: 'रोजमर्रा जेब खर्च', icon: Banknote, color: 'text-green-400' },
+  { id: 'festival_gift', labelEn: 'Festival / Bonus Adv', labelHi: 'त्यौहार / पर्व खर्च', icon: Gift, color: 'text-pink-400' }
 ];
 
 export const getAdvanceReasonLabel = (reason?: string, isHindi: boolean = true): string => {
-  if (!reason || !reason.trim()) return isHindi ? 'सामान्य पेशगी (Advance)' : 'General Advance';
+  if (!reason || !reason.trim()) return isHindi ? 'सामान्य पेशगी' : 'General Advance';
+  // Strip legacy emojis if present
+  const cleanReason = reason.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
   const found = ADVANCE_REASONS_CATALOG.find(
-    (r) => r.id === reason.toLowerCase() || 
-           r.labelEn.toLowerCase() === reason.toLowerCase() || 
-           r.labelHi === reason
+    (r) => r.id === cleanReason.toLowerCase() || 
+           r.labelEn.toLowerCase() === cleanReason.toLowerCase() || 
+           r.labelHi === cleanReason
   );
   if (found) {
-    return isHindi ? `${found.icon} ${found.labelHi}` : `${found.icon} ${found.labelEn}`;
+    return isHindi ? found.labelHi : found.labelEn;
   }
-  return reason;
+  return cleanReason;
 };
+
+export const getAdvanceReasonMeta = (reason?: string): AdvanceReasonMeta => {
+  if (!reason) return ADVANCE_REASONS_CATALOG[8];
+  const cleanReason = reason.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+  const found = ADVANCE_REASONS_CATALOG.find(
+    (r) => r.id === cleanReason.toLowerCase() || 
+           r.labelEn.toLowerCase() === cleanReason.toLowerCase() || 
+           r.labelHi === cleanReason
+  );
+  return found || {
+    id: 'custom',
+    labelEn: cleanReason,
+    labelHi: cleanReason,
+    icon: Banknote,
+    color: 'text-amber-400'
+  };
+};
+
+/**
+ * Standardized advance calculation helper
+ */
+export const calculateLogAdvanceTotal = (log: AttendanceLog): number => {
+  if (log.advances && log.advances.length > 0) {
+    return log.advances.reduce((sum, item) => sum + (item.amount || 0), 0);
+  }
+  return log.advanceReceived || 0;
+};
+
+/**
+ * Standardized Net Due calculation helper
+ */
+export const calculateLogPendingDue = (log: AttendanceLog): number => {
+  if (log.pendingPayment !== undefined && log.pendingPayment !== null) {
+    return Math.max(0, log.pendingPayment);
+  }
+  const wage = log.salaryOrRate || 0;
+  const received = log.paymentReceived || 0;
+  const advance = calculateLogAdvanceTotal(log);
+  return Math.max(0, wage - received - advance);
+};
+
+/**
+ * Derive payment status from wage figures
+ */
+export const derivePaymentStatus = (salaryOrRate: number, received: number, advance: number): PaymentStatusType => {
+  const netDue = Math.max(0, salaryOrRate - received - advance);
+  if (salaryOrRate <= 0) return 'paid';
+  if (netDue <= 0) return 'paid';
+  if (received > 0 || advance > 0) return 'partial';
+  return 'pending';
+};
+

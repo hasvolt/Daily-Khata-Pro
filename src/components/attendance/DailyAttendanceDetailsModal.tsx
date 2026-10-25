@@ -23,7 +23,13 @@ import {
   DollarSign,
   CalendarCheck
 } from 'lucide-react';
-import { getWorkCategoryMeta, getAdvanceReasonLabel } from './attendanceTypes';
+import { 
+  getWorkCategoryMeta, 
+  getAdvanceReasonLabel,
+  getAdvanceReasonMeta,
+  calculateLogAdvanceTotal,
+  calculateLogPendingDue
+} from './attendanceTypes';
 import { formatTime12h, getLocalDateString } from '../../utils/dateUtils';
 import { printHTMLContent } from '../../utils/printHelpers';
 import { triggerHaptic } from '../../utils/haptics';
@@ -731,27 +737,32 @@ export const DailyAttendanceDetailsModal: React.FC<DailyAttendanceDetailsModalPr
 
                       {advancesList.length > 0 ? (
                         <div className="space-y-1 pt-1">
-                          {advancesList.map((adv, aIdx) => (
-                            <div 
-                              key={adv.id || aIdx}
-                              className="flex items-center justify-between text-[11px] bg-[var(--theme-card,#132438)]/90 px-2 py-1 rounded border border-amber-500/20"
-                            >
-                              <div className="flex items-center gap-1.5 min-w-0">
-                                <span className="font-bold text-amber-300 font-mono">₹{adv.amount}</span>
-                                <span className="text-[var(--theme-text-muted,#CBD5E1)] truncate">
-                                  {getAdvanceReasonLabel(adv.reason, isHindi)}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1.5 text-[10px] text-[var(--theme-text-dim,#94A3B8)] shrink-0">
-                                {adv.paymentMode && (
-                                  <span className="uppercase px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-bold">
-                                    {adv.paymentMode}
+                          {advancesList.map((adv, aIdx) => {
+                            const reasonMeta = getAdvanceReasonMeta(adv.reason);
+                            const AdvIcon = reasonMeta.icon;
+                            return (
+                              <div 
+                                key={adv.id || aIdx}
+                                className="flex items-center justify-between text-[11px] bg-[var(--theme-card,#132438)]/90 px-2 py-1 rounded border border-amber-500/20"
+                              >
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  <AdvIcon className={`w-3 h-3 shrink-0 ${reasonMeta.color || 'text-amber-400'}`} />
+                                  <span className="font-bold text-amber-300 font-mono">₹{adv.amount}</span>
+                                  <span className="text-[var(--theme-text-muted,#CBD5E1)] truncate">
+                                    {getAdvanceReasonLabel(adv.reason, isHindi)}
                                   </span>
-                                )}
-                                {adv.time && <span>{adv.time}</span>}
+                                </div>
+                                <div className="flex items-center gap-1.5 text-[10px] text-[var(--theme-text-dim,#94A3B8)] shrink-0">
+                                  {adv.paymentMode && (
+                                    <span className="uppercase px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-bold">
+                                      {adv.paymentMode}
+                                    </span>
+                                  )}
+                                  {adv.time && <span>{adv.time}</span>}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       ) : (
                         <p className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] italic">

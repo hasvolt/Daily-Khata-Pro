@@ -87,8 +87,19 @@ export function validateAndSanitizeKhataBackup(parsed: any): KhataData | null {
     return null;
   }
 
-  // Verify at least one essential root structure exists
-  if (!Array.isArray(parsed.entries) && !parsed.settings) {
+  // Verify at least one essential root data module exists
+  const hasValidModule = 
+    Array.isArray(parsed.entries) ||
+    Array.isArray(parsed.attendanceLogs) ||
+    Array.isArray(parsed.personalNotes) ||
+    Array.isArray(parsed.goals) ||
+    Array.isArray(parsed.workLogs) ||
+    Array.isArray(parsed.dailyLifeLogs) ||
+    Array.isArray(parsed.debtItems) ||
+    parsed.settings ||
+    parsed.percentages;
+
+  if (!hasValidModule) {
     return null;
   }
 

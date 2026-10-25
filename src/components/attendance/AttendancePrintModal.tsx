@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { AttendanceLog, AppLanguage } from '../../types';
 import { printHTMLContent } from '../../utils/printHelpers';
-import { WORK_CATEGORIES_CATALOG } from './attendanceTypes';
+import { WORK_CATEGORIES_CATALOG, getAdvanceReasonLabel } from './attendanceTypes';
 import { Printer, Calendar, User, Briefcase, X, FileText, CheckCircle2, Download, MapPin } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -345,7 +345,7 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
                 : (adv > 0 ? [{ id: '1', amount: adv, reason: l.advanceReason }] : []);
 
               const advHtml = advList.length > 0
-                ? advList.map(a => `<div>${formatCurrency(a.amount, privacyMask)}${a.reason ? `<br><span style="font-size:7.5pt;font-weight:normal;color:#b45309;">${a.reason}</span>` : ''}</div>`).join('')
+                ? advList.map(a => `<div>${formatCurrency(a.amount, privacyMask)}${a.reason ? `<br><span style="font-size:7.5pt;font-weight:normal;color:#b45309;">${getAdvanceReasonLabel(a.reason, isHindi)}</span>` : ''}</div>`).join('')
                 : '-';
 
               return `
@@ -451,8 +451,8 @@ export const AttendancePrintModal: React.FC<AttendancePrintModalProps> = ({
         l.workCategory || l.workType || '-',
         rate > 0 ? `Rs. ${rate}` : '-',
         l.advances && l.advances.length > 0
-          ? l.advances.map(a => `Rs. ${a.amount}${a.reason ? ` (${a.reason})` : ''}`).join('\n')
-          : (adv > 0 ? (l.advanceReason ? `Rs. ${adv} (${l.advanceReason})` : `Rs. ${adv}`) : '-'),
+          ? l.advances.map(a => `Rs. ${a.amount}${a.reason ? ` (${getAdvanceReasonLabel(a.reason, isHindi)})` : ''}`).join('\n')
+          : (adv > 0 ? (l.advanceReason ? `Rs. ${adv} (${getAdvanceReasonLabel(l.advanceReason, isHindi)})` : `Rs. ${adv}`) : '-'),
         rec > 0 ? `Rs. ${rec}` : '-',
         pend > 0 ? `Rs. ${pend}` : 'PAID'
       ];

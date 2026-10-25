@@ -2282,17 +2282,28 @@ function AppContent() {
   const hasAttendanceToday = attendanceLogs.some((l) => l.date === todayDateStr);
   const pendingRemindersCount = reminders.filter((r) => !r.isCompleted).length + (!hasTransactionsToday ? 1 : 0) + (!hasAttendanceToday ? 1 : 0);
 
-  // Restore backup
+  // Restore backup with selective merge safety
   const handleRestoreData = (restored: KhataData) => {
-    setEntries(restored.entries || []);
-    setGoals(restored.goals || []);
-    setWorkLogs(restored.workLogs || []);
-    setDailyLifeLogs(restored.dailyLifeLogs || []);
-    setPersonalNotes(restored.personalNotes || []);
-    setCategories(restored.categories || DEFAULT_CATEGORIES);
-    setIncomeSources(restored.incomeSources || DEFAULT_INCOME_SOURCES);
-    setWorkCategories(restored.workCategories || DEFAULT_WORK_CATEGORIES);
-    setLifeTags(restored.lifeTags || DEFAULT_LIFE_TAGS);
+    // Merge gracefully: if a selective backup was imported, retain existing records for unselected modules
+    const nextEntries = Array.isArray(restored.entries) ? restored.entries : entries;
+    const nextGoals = Array.isArray(restored.goals) ? restored.goals : goals;
+    const nextWorkLogs = Array.isArray(restored.workLogs) ? restored.workLogs : workLogs;
+    const nextDailyLifeLogs = Array.isArray(restored.dailyLifeLogs) ? restored.dailyLifeLogs : dailyLifeLogs;
+    const nextPersonalNotes = Array.isArray(restored.personalNotes) ? restored.personalNotes : personalNotes;
+    const nextCategories = Array.isArray(restored.categories) && restored.categories.length > 0 ? restored.categories : categories;
+    const nextIncomeSources = Array.isArray(restored.incomeSources) && restored.incomeSources.length > 0 ? restored.incomeSources : incomeSources;
+    const nextWorkCategories = Array.isArray(restored.workCategories) && restored.workCategories.length > 0 ? restored.workCategories : workCategories;
+    const nextLifeTags = Array.isArray(restored.lifeTags) && restored.lifeTags.length > 0 ? restored.lifeTags : lifeTags;
+
+    setEntries(nextEntries);
+    setGoals(nextGoals);
+    setWorkLogs(nextWorkLogs);
+    setDailyLifeLogs(nextDailyLifeLogs);
+    setPersonalNotes(nextPersonalNotes);
+    setCategories(nextCategories);
+    setIncomeSources(nextIncomeSources);
+    setWorkCategories(nextWorkCategories);
+    setLifeTags(nextLifeTags);
 
     if (restored.attendanceLogs && Array.isArray(restored.attendanceLogs)) {
       setAttendanceLogs(restored.attendanceLogs);
@@ -2341,15 +2352,17 @@ function AppContent() {
     
     const restoredFunds = (restored.funds && Array.isArray(restored.funds) && restored.funds.length > 0)
       ? restored.funds
-      : ((restored.settings?.funds && Array.isArray(restored.settings.funds) && restored.settings.funds.length > 0) ? restored.settings.funds : DEFAULT_FUNDS);
+      : ((restored.settings?.funds && Array.isArray(restored.settings.funds) && restored.settings.funds.length > 0) ? restored.settings.funds : funds);
     setFunds(restoredFunds);
 
     const restoredHomepage = (restored.homepageFundIds && Array.isArray(restored.homepageFundIds) && restored.homepageFundIds.length > 0)
       ? restored.homepageFundIds
-      : ((restored.settings?.homepageFundIds && Array.isArray(restored.settings.homepageFundIds) && restored.settings.homepageFundIds.length > 0) ? restored.settings.homepageFundIds : restoredFunds.slice(0, 6).map((f) => f.id));
+      : ((restored.settings?.homepageFundIds && Array.isArray(restored.settings.homepageFundIds) && restored.settings.homepageFundIds.length > 0) ? restored.settings.homepageFundIds : homepageFundIds);
     setHomepageFundIds(restoredHomepage);
 
-    setPercentages(restored.settings?.percentages || DEFAULT_PERCENTAGES);
+    if (restored.settings?.percentages) {
+      setPercentages(restored.settings.percentages);
+    }
     if (restored.settings?.theme) {
       setTheme(restored.settings.theme);
     }
@@ -2357,24 +2370,24 @@ function AppContent() {
       setLanguage(restored.settings.language);
     }
     saveToLocalStorage({
-      entries: restored.entries || [],
-      goals: restored.goals || [],
-      categories: restored.categories || DEFAULT_CATEGORIES,
-      incomeSources: restored.incomeSources || DEFAULT_INCOME_SOURCES,
-      workCategories: restored.workCategories || DEFAULT_WORK_CATEGORIES,
-      lifeTags: restored.lifeTags || DEFAULT_LIFE_TAGS,
+      entries: nextEntries,
+      goals: nextGoals,
+      categories: nextCategories,
+      incomeSources: nextIncomeSources,
+      workCategories: nextWorkCategories,
+      lifeTags: nextLifeTags,
       funds: restoredFunds,
       homepageFundIds: restoredHomepage,
-      percentages: restored.settings?.percentages || DEFAULT_PERCENTAGES,
+      percentages: restored.settings?.percentages || percentages,
       theme: restored.settings?.theme || theme,
       language: restored.settings?.language || language,
       privacyMask: typeof restored.settings?.privacyMask === 'boolean' ? restored.settings.privacyMask : privacyMask,
-      workLogs: restored.workLogs || [],
-      dailyLifeLogs: restored.dailyLifeLogs || [],
+      workLogs: nextWorkLogs,
+      dailyLifeLogs: nextDailyLifeLogs,
       securityLock: restored.settings?.securityLock || securityLock,
-      personalNotes: restored.personalNotes || []
+      personalNotes: nextPersonalNotes
     });
-    showToast(language === 'hi' ? 'सम्पूर्ण बैकअप (उपस्थिति, नोट्स व खाता) सफलतापूर्वक लोड हुआ!' : 'Complete backup restored successfully!');
+    showToast(language === 'hi' ? 'बैकअप डेटा सुरक्षित रूप से रीस्टोर हुआ!' : 'Backup data restored safely!');
   };
 
   // Reset all

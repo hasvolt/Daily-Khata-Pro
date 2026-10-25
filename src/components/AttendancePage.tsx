@@ -39,7 +39,10 @@ import {
   getWorkCategoryMeta, 
   EmployerSummary,
   ADVANCE_REASONS_CATALOG,
-  getAdvanceReasonLabel
+  getAdvanceReasonLabel,
+  calculateLogAdvanceTotal,
+  calculateLogPendingDue,
+  derivePaymentStatus
 } from './attendance/attendanceTypes';
 import { BulkPaymentSettlementModal } from './attendance/BulkPaymentSettlementModal';
 import { EmployerAccountsView } from './attendance/EmployerAccountsView';
@@ -1954,25 +1957,28 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                             {isHindi ? 'एडवांस का कारण / वजह (Reason):' : 'Advance Reason / Purpose:'}
                           </span>
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            {ADVANCE_REASONS_CATALOG.slice(0, 8).map((r) => (
-                              <button
-                                key={r.id}
-                                type="button"
-                                onClick={() => {
-                                  setInlineAdvReason(r.id);
-                                  setInlineAdvCustomReason('');
-                                  triggerHapticSound('click');
-                                }}
-                                className={`text-[10px] px-2 py-0.5 rounded-md border cursor-pointer transition-all flex items-center gap-1 ${
-                                  inlineAdvReason === r.id && !inlineAdvCustomReason
-                                    ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
-                                    : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
-                                }`}
-                              >
-                                <span>{r.icon}</span>
-                                <span>{isHindi ? r.labelHi : r.labelEn}</span>
-                              </button>
-                            ))}
+                            {ADVANCE_REASONS_CATALOG.slice(0, 8).map((r) => {
+                              const ReasonIcon = r.icon;
+                              return (
+                                <button
+                                  key={r.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setInlineAdvReason(r.id);
+                                    setInlineAdvCustomReason('');
+                                    triggerHapticSound('click');
+                                  }}
+                                  className={`text-[10px] px-2 py-0.5 rounded-md border cursor-pointer transition-all flex items-center gap-1.5 ${
+                                    inlineAdvReason === r.id && !inlineAdvCustomReason
+                                      ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
+                                      : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
+                                  }`}
+                                >
+                                  <ReasonIcon className="w-3 h-3 shrink-0" />
+                                  <span>{isHindi ? r.labelHi : r.labelEn}</span>
+                                </button>
+                              );
+                            })}
                           </div>
                           <input
                             type="text"
@@ -2370,25 +2376,28 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
                   {isHindi ? 'एडवांस का कारण / वजह (Reason)' : 'Advance Reason / Purpose'}
                 </label>
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  {ADVANCE_REASONS_CATALOG.slice(0, 8).map((r) => (
-                    <button
-                      key={r.id}
-                      type="button"
-                      onClick={() => {
-                        setQuickAdvanceReason(r.id);
-                        setQuickAdvanceCustomReason('');
-                        triggerHapticSound('click');
-                      }}
-                      className={`text-[10.5px] px-2.5 py-1 rounded-lg border cursor-pointer transition-all flex items-center gap-1 ${
-                        quickAdvanceReason === r.id && !quickAdvanceCustomReason
-                          ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
-                          : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
-                      }`}
-                    >
-                      <span>{r.icon}</span>
-                      <span>{isHindi ? r.labelHi : r.labelEn}</span>
-                    </button>
-                  ))}
+                  {ADVANCE_REASONS_CATALOG.slice(0, 8).map((r) => {
+                    const ReasonIcon = r.icon;
+                    return (
+                      <button
+                        key={r.id}
+                        type="button"
+                        onClick={() => {
+                          setQuickAdvanceReason(r.id);
+                          setQuickAdvanceCustomReason('');
+                          triggerHapticSound('click');
+                        }}
+                        className={`text-[10.5px] px-2.5 py-1 rounded-lg border cursor-pointer transition-all flex items-center gap-1.5 ${
+                          quickAdvanceReason === r.id && !quickAdvanceCustomReason
+                            ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
+                            : 'bg-[var(--theme-surface,#0E1A29)] text-[var(--theme-text-muted,#CBD5E1)] border-[var(--theme-border,#213E61)] hover:bg-[var(--theme-surface,#0E1A29)]/80'
+                        }`}
+                      >
+                        <ReasonIcon className="w-3.5 h-3.5 shrink-0" />
+                        <span>{isHindi ? r.labelHi : r.labelEn}</span>
+                      </button>
+                    );
+                  })}
                 </div>
                 <input
                   type="text"
