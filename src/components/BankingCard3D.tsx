@@ -2,6 +2,7 @@ import React, { useRef, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Wallet, Calendar, ShieldCheck, Eye, EyeOff, TrendingUp, Sparkles, BadgeCheck } from 'lucide-react';
 import { getCurrencyConfig } from '../utils/currencyConfig';
+import { AppLanguage } from '../types';
 
 interface BankingCard3DProps {
   totalWealth: number;
@@ -10,8 +11,31 @@ interface BankingCard3DProps {
   dateFormatted: string;
   t: any;
   pageT: any;
+  language?: AppLanguage;
+  isHindi?: boolean;
   onAddClick: (type: 'income' | 'expense') => void;
   onTogglePrivacyMask?: () => void;
+}
+
+const HINDI_ONES = [
+  '', 'एक', 'दो', 'तीन', 'चार', 'पाँच', 'छह', 'सात', 'आठ', 'नौ',
+  'दस', 'ग्यारह', 'बारह', 'तेरह', 'चौदह', 'पंद्रह', 'सोलह', 'सत्रह', 'अठारह', 'उन्नीस'
+];
+const HINDI_TENS = ['', 'दस', 'बीस', 'तीस', 'चालीस', 'पचास', 'साठ', 'सत्तर', 'अस्सी', 'नब्बे'];
+
+function convertTwoDigitsHindi(n: number): string {
+  if (n === 0) return '';
+  if (n < 20) return HINDI_ONES[n];
+  const tens = Math.floor(n / 10);
+  const unit = n % 10;
+  return `${HINDI_TENS[tens]}${unit > 0 ? ' ' + HINDI_ONES[unit] : ''}`;
+}
+
+function convertNumberHindi(n: number): string {
+  if (n < 100) return convertTwoDigitsHindi(n);
+  const h = Math.floor(n / 100);
+  const r = n % 100;
+  return `${HINDI_ONES[h]} सौ${r > 0 ? ' ' + convertTwoDigitsHindi(r) : ''}`;
 }
 
 function numberToWords(amount: number, isHindi: boolean = false, currencyCode: string = 'INR'): string {
@@ -23,6 +47,31 @@ function numberToWords(amount: number, isHindi: boolean = false, currencyCode: s
 
   if (whole === 0 && paise === 0) {
     return isHindi ? 'शून्य रुपये मात्र' : 'Zero Rupees Only';
+  }
+
+  const crore = Math.floor(whole / 10000000);
+  const lakh = Math.floor((whole % 10000000) / 100000);
+  const thousand = Math.floor((whole % 100000) / 1000);
+  const hundred = Math.floor((whole % 1000) / 100);
+  const rest = whole % 100;
+
+  if (isHindi) {
+    const parts: string[] = [];
+    if (crore > 0) parts.push(`${convertNumberHindi(crore)} करोड़`);
+    if (lakh > 0) parts.push(`${convertNumberHindi(lakh)} लाख`);
+    if (thousand > 0) parts.push(`${convertNumberHindi(thousand)} हज़ार`);
+    if (hundred > 0) parts.push(`${HINDI_ONES[hundred]} सौ`);
+    if (rest > 0) parts.push(convertTwoDigitsHindi(rest));
+
+    let words = parts.join(' ').trim();
+    if (!words) words = 'शून्य';
+
+    let result = `${isNegative ? 'माइनस ' : ''}${words} रुपये`;
+    if (paise > 0) {
+      result += ` और ${convertTwoDigitsHindi(paise)} पैसे`;
+    }
+    result += ' मात्र';
+    return result;
   }
 
   const ones = [
@@ -45,12 +94,6 @@ function numberToWords(amount: number, isHindi: boolean = false, currencyCode: s
     return `${ones[h]} Hundred${r > 0 ? ' ' + convertTwoDigits(r) : ''}`;
   };
 
-  const crore = Math.floor(whole / 10000000);
-  const lakh = Math.floor((whole % 10000000) / 100000);
-  const thousand = Math.floor((whole % 100000) / 1000);
-  const hundred = Math.floor((whole % 1000) / 100);
-  const rest = whole % 100;
-
   const parts: string[] = [];
   if (crore > 0) parts.push(`${convertNumber(crore)} Crore`);
   if (lakh > 0) parts.push(`${convertNumber(lakh)} Lakh`);
@@ -61,11 +104,7 @@ function numberToWords(amount: number, isHindi: boolean = false, currencyCode: s
   let words = parts.join(' ').trim();
   if (!words) words = 'Zero';
 
-  const currencyName = currencyCode === 'INR' ? (isHindi ? 'रुपये' : 'Rupees') : (isHindi ? 'रुपये' : 'Rupees');
-
-  if (isHindi) {
-    return `${isNegative ? 'माइनस ' : ''}${words} ${currencyName} मात्र`;
-  }
+  const currencyName = currencyCode === 'INR' ? 'Rupees' : 'Rupees';
 
   let result = `${isNegative ? 'Minus ' : ''}${words} ${currencyName}`;
   if (paise > 0) {
@@ -82,6 +121,8 @@ export function BankingCard3D({
   dateFormatted,
   t,
   pageT: _pageT,
+  language = 'en',
+  isHindi: isHindiProp,
   onAddClick,
   onTogglePrivacyMask,
 }: BankingCard3DProps) {
@@ -106,12 +147,24 @@ export function BankingCard3D({
     y.set(0);
   };
 
-  const isHindi = t?.language === 'hi' || /मंग|बुध|गुरु|शुक्र|शनि|रवि|सोम/.test(dateFormatted);
-  const currencyCode = getCurrencyConfig().code || 'INR';
+  const isHindi = isHindiProp ?? (
+    language === 'hi' ||
+    language === 'hinglish' ||
+    t?.language === 'hi' ||
+    /मंग|बुध|गुरु|शुक्र|शनि|रवि|सोम/.test(dateFormatted)
+  );
+  const currencyCode = getCurrencyConfig(language).code || 'INR';
 
   const activeDate = useMemo(() => {
     try {
       const d = new Date();
+      if (isHindi) {
+        const dayName = d.toLocaleDateString('hi-IN', { weekday: 'short' });
+        const day = d.getDate();
+        const month = d.toLocaleDateString('hi-IN', { month: 'short' });
+        const year = d.getFullYear();
+        return `${dayName}, ${day} ${month} ${year}`;
+      }
       const dayName = d.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
       const day = d.getDate();
       const month = d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
@@ -120,7 +173,7 @@ export function BankingCard3D({
     } catch {
       return (dateFormatted || '').toUpperCase();
     }
-  }, [dateFormatted]);
+  }, [dateFormatted, isHindi]);
 
   return (
     <div style={{ perspective: 1200 }} className="w-full relative z-10">
@@ -256,7 +309,7 @@ export function BankingCard3D({
                 <div className="banking-card-badge flex items-center gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] bg-[var(--theme-surface,#060D1A)]/90 shadow-2xs">
                   <ShieldCheck className="w-3 h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" strokeWidth={2.4} />
                   <span className="banking-card-badge-text text-[7.5px] xs:text-[8px] sm:text-[9.5px] font-bold text-[var(--theme-card-text,#FFFFFF)] tracking-wider uppercase">
-                    SECURED
+                    {isHindi ? 'सुरक्षित' : 'SECURED'}
                   </span>
                 </div>
                 {/* Date badge */}

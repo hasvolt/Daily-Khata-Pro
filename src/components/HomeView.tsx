@@ -330,6 +330,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
           dateFormatted={dateFormatted}
           t={t}
           pageT={pageT}
+          language={language}
+          isHindi={isHindi}
           onAddClick={onAddClick}
           onTogglePrivacyMask={onTogglePrivacyMask}
         />

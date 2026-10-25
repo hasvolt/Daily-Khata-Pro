@@ -3195,32 +3195,66 @@ function AppContent() {
         </div>
       </main>
 
-      {/* Clean Global Footer */}
+      {/* Streamlined, Modern Global Footer */}
       <footer className="no-print print:hidden mt-auto w-full border-t border-[var(--theme-border,#213E61)]/40 bg-[var(--theme-bg,#070E18)]/95 backdrop-blur-xs select-none">
-        <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col items-center gap-3 sm:gap-3.5 text-center">
-          {/* Logo & Brand */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-7 flex flex-col items-center gap-3.5 text-center">
+          {/* Brand Header */}
           <div className="flex items-center gap-2">
             <AppLogo size={24} />
-            <span className="font-bold text-[14px] sm:text-[15px] tracking-wide text-[var(--theme-text,#F8FAFC)]">Daily Khata Pro</span>
+            <span className="font-bold text-[15px] tracking-wide text-[var(--theme-text,#F8FAFC)]">Daily Khata Pro</span>
           </div>
 
-          {/* Clean Mission & Trust Badge */}
-          <p className="text-[11px] sm:text-[12px] font-medium text-[var(--theme-text-muted,#94A3B8)] max-w-md px-2 leading-snug">
+          {/* Clean Tagline */}
+          <p className="text-[11.5px] sm:text-[12px] font-medium text-[var(--theme-text-muted,#94A3B8)] max-w-md leading-relaxed">
             {language === 'hi' 
-              ? 'गोपनीयता-प्रथम वित्तीय खाता • निःशुल्क मानक संस्करण • पारदर्शी नियम' 
-              : 'Privacy-First Financial Ledger • Free Standard Edition • 100% Transparent'}
+              ? 'गोपनीयता-प्रथम वित्तीय बहीखाता • 100% ऑफ़लाइन सुरक्षित • निःशुल्क मानक संस्करण' 
+              : 'Privacy-First Financial Ledger • 100% Offline Safe • Free Standard Edition'}
           </p>
 
-          {/* Unified Action Chips & Social in Single Harmonious Flow */}
-          <div className="flex flex-wrap items-center justify-center gap-2 max-w-lg">
+          {/* Essential Quick Links */}
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[12px] sm:text-[13px] font-medium text-[var(--theme-text,#F8FAFC)]/90">
+            <button onClick={() => setCurrentTab('guide')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">
+              {language === 'hi' ? 'मैन्युअल' : 'User Manual'}
+            </button>
+            <span className="opacity-25">•</span>
+            <button onClick={() => setCurrentTab('about')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">
+              {language === 'hi' ? 'परिचय' : 'About Us'}
+            </button>
+            <span className="opacity-25">•</span>
+            <button onClick={() => setCurrentTab('privacy')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">
+              {language === 'hi' ? 'गोपनीयता नीति' : 'Privacy'}
+            </button>
+            <span className="opacity-25">•</span>
+            <button onClick={() => setCurrentTab('terms')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">
+              {language === 'hi' ? 'नियम व शर्तें' : 'Terms'}
+            </button>
+            <span className="opacity-25">•</span>
+            <button onClick={() => setCurrentTab('support-project')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors inline-flex items-center gap-1">
+              <Heart className="w-3 h-3 text-rose-400 shrink-0" />
+              <span>{language === 'hi' ? 'सपोर्ट' : 'Support'}</span>
+            </button>
+            <span className="opacity-25">•</span>
+            <a 
+              href="https://staff.rozfiber.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-emerald-400 hover:text-emerald-300 hover:underline cursor-pointer transition-colors inline-flex items-center gap-1 font-semibold"
+            >
+              <span>Staff Manager</span>
+              <span className="text-[8.5px] font-mono px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">NEW</span>
+            </a>
+          </div>
+
+          {/* Minimal Social & Ecosystem Icons */}
+          <div className="flex items-center justify-center gap-2 pt-0.5">
             <a
               href="https://www.rozfiber.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] text-[11px] font-medium text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 shadow-xs transition-colors cursor-pointer"
-              title="Visit Rozfiber Official Website"
+              className="px-2.5 py-1 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[11px] font-medium text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 inline-flex items-center gap-1.5 transition-colors"
+              title="Official Website"
             >
-              <Globe className="w-3 h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" />
+              <Globe className="w-3 h-3 text-[var(--theme-primary,#38BDF8)]" />
               <span>rozfiber.com</span>
             </a>
 
@@ -3228,104 +3262,47 @@ function AppContent() {
               href="https://github.com/hasvolt/Daily-Khata-Pro" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] text-[11px] font-medium text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 shadow-xs transition-colors cursor-pointer"
-              title="GitHub Repository"
+              className="w-7 h-7 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 flex items-center justify-center transition-colors"
+              title="GitHub"
+              aria-label="GitHub"
             >
-              <Github className="w-3 h-3 text-[var(--theme-primary,#38BDF8)] shrink-0" />
-              <span>GitHub</span>
+              <Github className="w-3.5 h-3.5" />
             </a>
 
-            <button 
-              onClick={() => setCurrentTab('support-project')}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] text-[11px] font-medium text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 shadow-xs transition-colors cursor-pointer"
+            <a 
+              href="https://x.com/Dailykhatapro" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-7 h-7 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 flex items-center justify-center transition-colors"
+              title="X (Twitter)"
+              aria-label="X (Twitter)"
             >
-              <Heart className="w-3 h-3 text-rose-400 shrink-0" />
-              <span>{language === 'hi' ? 'सपोर्ट' : 'Support'}</span>
-            </button>
-
-            <button 
-              onClick={() => setIsRozfiberAppsModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-emerald-500/40 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 hover:border-emerald-400 shadow-xs transition-colors cursor-pointer"
-              title={language === 'hi' ? 'Rozfiber आधिकारिक ऐप्स देखें' : 'View all official Rozfiber apps'}
-            >
-              <Layers className="w-3 h-3 text-emerald-400 shrink-0" />
-              <span>{language === 'hi' ? 'अन्य ऐप्स' : 'Rozfiber Apps'}</span>
-            </button>
-
-            <div className="flex items-center gap-1.5">
-              <a 
-                href="https://x.com/Dailykhatapro" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-7 h-7 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 flex items-center justify-center transition-colors shadow-xs"
-                aria-label="X (Twitter)"
-              >
-                <Twitter className="w-3 h-3" />
-              </a>
-              <a 
-                href="https://www.instagram.com/dailykhatapro" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-7 h-7 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 flex items-center justify-center transition-colors shadow-xs"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-3 h-3" />
-              </a>
-              <a 
-                href="mailto:daily-Khata-Pro@gmail.com" 
-                className="w-7 h-7 rounded-full bg-[var(--theme-surface,#0E1A29)]/90 border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 flex items-center justify-center transition-colors shadow-xs"
-                aria-label="Email Contact"
-              >
-                <Mail className="w-3 h-3" />
-              </a>
-            </div>
-          </div>
-
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-[var(--theme-border,#213E61)]/50 to-transparent my-0.5"></div>
-
-          {/* Tier 1: Editorial & Knowledge Navigation */}
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11.5px] sm:text-[12.5px] font-semibold text-[var(--theme-text,#F8FAFC)]/90 max-w-2xl px-2">
-            <button onClick={() => setCurrentTab('blog')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'ब्लॉग' : 'Blog'}</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('invoice')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'इनवॉइस जनरेटर' : 'Invoice Generator'}</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('news')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'समाचार व रिसर्च' : 'News & Research'}</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('academy')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'अकादमी' : 'Wealth Academy'}</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('guide')} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'यूज़र मैन्युअल' : 'User Manual'}</button>
-            <span className="opacity-30">•</span>
-            <a href="https://staff.rozfiber.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 hover:underline cursor-pointer transition-colors inline-flex items-center gap-1 font-semibold text-emerald-400">
-              <span>Staff Manager</span>
-              <span className="text-[8.5px] font-mono font-bold px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">NEW</span>
+              <Twitter className="w-3.5 h-3.5" />
             </a>
-            <span className="opacity-30">•</span>
-            <a href="https://docs.rozfiber.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">Docs</a>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setIsRozfiberAppsModalOpen(true)} className="hover:text-[var(--theme-primary,#38BDF8)] hover:underline cursor-pointer transition-colors">
-              {language === 'hi' ? 'अन्य ऐप्स (Ecosystem)' : 'More Apps'}
-            </button>
-          </div>
 
-          {/* Tier 2: Legal, Policy & Organization Links */}
-          <div className="flex flex-wrap items-center justify-center gap-x-2.5 sm:gap-x-3 gap-y-1 text-[10.5px] sm:text-[11.5px] font-normal text-[var(--theme-text-dim,#64748B)] max-w-2xl px-2">
-            <button onClick={() => setCurrentTab('about')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">About Us</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('developer')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Developer Profile</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('privacy')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Privacy Policy</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('terms')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Terms of Service</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('disclaimer')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Disclaimer</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('safety')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">Security & Safety</button>
-            <span className="opacity-30">•</span>
-            <button onClick={() => setCurrentTab('ads-policy')} className="hover:text-[var(--theme-text,#F8FAFC)] hover:underline cursor-pointer transition-colors">{language === 'hi' ? 'विज्ञापन नीति' : 'Ads Policy'}</button>
+            <a 
+              href="https://www.instagram.com/dailykhatapro" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-7 h-7 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 flex items-center justify-center transition-colors"
+              title="Instagram"
+              aria-label="Instagram"
+            >
+              <Instagram className="w-3.5 h-3.5" />
+            </a>
+
+            <a 
+              href="mailto:daily-Khata-Pro@gmail.com" 
+              className="w-7 h-7 rounded-full bg-[var(--theme-surface,#0E1A29)] border border-[var(--theme-border,#213E61)] text-[var(--theme-text-muted,#94A3B8)] hover:text-[var(--theme-primary,#38BDF8)] hover:border-[var(--theme-primary,#38BDF8)]/50 flex items-center justify-center transition-colors"
+              title="Email Contact"
+              aria-label="Email Contact"
+            >
+              <Mail className="w-3.5 h-3.5" />
+            </a>
           </div>
 
           {/* Copyright */}
-          <p className="text-[11px] sm:text-[12px] text-[var(--theme-text-dim,#64748B)] flex items-center justify-center gap-1 pb-16 sm:pb-20">
+          <p className="text-[11px] sm:text-[11.5px] text-[var(--theme-text-dim,#64748B)] pb-20 sm:pb-8">
             © {new Date().getFullYear()} Daily Khata Pro · Rozfiber. All rights reserved.
           </p>
         </div>

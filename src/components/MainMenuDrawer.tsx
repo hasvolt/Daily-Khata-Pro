@@ -71,6 +71,24 @@ const ALL_THEMES: { id: AppTheme; label: string; color: string }[] = [
   { id: 'light', label: 'Daylight Light', color: '#38BDF8' }
 ];
 
+const UpgradedThemeIcon: React.FC<{ activeColor: string }> = ({ activeColor }) => (
+  <span className="relative inline-flex items-center justify-center w-4 h-4 shrink-0">
+    <span
+      className="w-4 h-4 rounded-full p-[1.5px] shrink-0 flex items-center justify-center shadow-xs"
+      style={{
+        background: 'conic-gradient(from 0deg, #F59E0B, #EC4899, #8B5CF6, #3B82F6, #10B981, #F59E0B)',
+      }}
+    >
+      <span className="w-full h-full rounded-full bg-[var(--theme-surface,#0F172A)] flex items-center justify-center">
+        <span
+          className="w-1.5 h-1.5 rounded-full shadow-[0_0_6px_currentColor] transition-colors"
+          style={{ backgroundColor: activeColor, color: activeColor }}
+        />
+      </span>
+    </span>
+  </span>
+);
+
 export interface MainMenuDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -117,7 +135,7 @@ interface MenuItem {
   id: string;
   label: string;
   sublabel?: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   onClick?: () => void;
   href?: string;
   badge?: string;
@@ -186,6 +204,11 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   const activeLangObj = activeLangCode ? ALL_GOOGLE_LANGUAGES.find((l) => l.code === activeLangCode) : null;
   const activeLangLabel = activeLangObj ? activeLangObj.nativeName : activeLangCode ? activeLangCode.toUpperCase() : null;
 
+  const currentThemeObj = useMemo(() => {
+    return ALL_THEMES.find((t) => t.id === theme) || ALL_THEMES[0];
+  }, [theme]);
+  const activeThemeColor = currentThemeObj.color;
+
   // ESC key to close
   useEffect(() => {
     if (!isOpen) return;
@@ -221,6 +244,15 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           icon: Home,
           isActive: currentTab === 'home',
           onClick: () => handleNavigate('home')
+        },
+        {
+          id: 'settings-top',
+          label: isHindi ? 'ऐप सेटिंग्स व फंड्स' : 'App Settings & Funds',
+          sublabel: isHindi ? 'फंड्स, श्रेणियां व प्राथमिकताएं' : 'Preferences, funds & setup',
+          icon: Settings,
+          badge: 'SETUP',
+          badgeColor: 'sky',
+          onClick: onOpenSettings ? () => handleAction(onOpenSettings) : undefined
         },
         {
           id: 'add',
@@ -536,27 +568,44 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 <span>Daily Khata</span>
                 <span className="text-[var(--theme-primary,#38BDF8)] font-black">Pro</span>
               </h2>
-              <div className="flex items-center gap-1.5 mt-0.5 min-w-0 text-[11px] font-medium text-[var(--theme-text-dim,#94A3B8)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span className="truncate">
-                  {isHindi ? 'ऑफ़लाइन बहीखाता व वित्तीय सूट' : 'Offline Financial Suite'}
-                </span>
-              </div>
+              <p className="mt-0.5 min-w-0 text-[11px] font-medium text-[var(--theme-text-dim,#94A3B8)] truncate">
+                {isHindi ? 'गोपनीयता-प्रथम वित्तीय बहीखाता' : 'Privacy-First Financial Ledger'}
+              </p>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className={`p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 border ${
-              isLightMode
-                ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
-                : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#1E293B)] border-[var(--theme-border,#334155)]'
-            }`}
-            title="Close"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {onOpenSettings && (
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticSound('click');
+                  onClose();
+                  onOpenSettings();
+                }}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 border ${
+                  isLightMode
+                    ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
+                    : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#1E293B)] border-[var(--theme-border,#334155)]'
+                }`}
+                title={isHindi ? 'सेटिंग्स' : 'Settings'}
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 border ${
+                isLightMode
+                  ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
+                  : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#1E293B)] border-[var(--theme-border,#334155)]'
+              }`}
+              title="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -574,8 +623,8 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
               placeholder={isHindi ? 'मेनू में खोजें (लोन, अटेंडेंस, नोट्स)...' : 'Search menu...'}
               className={`w-full pl-8.5 pr-8 py-1.5 rounded-lg text-[12px] placeholder:text-slate-500 focus:outline-none transition-all ${
                 isLightMode
-                  ? 'bg-slate-100 border border-slate-200 text-slate-900 focus:border-sky-500'
-                  : 'bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] text-white focus:border-sky-400'
+                  ? 'bg-slate-100 border border-slate-200 text-slate-900 focus:border-[var(--theme-primary,#38BDF8)]'
+                  : 'bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] text-white focus:border-[var(--theme-primary,#38BDF8)]'
               }`}
             />
             {searchQuery && (
@@ -598,10 +647,12 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             <div className="p-2.5 rounded-xl border border-[var(--theme-border,#1E293B)] bg-[var(--theme-card,#1E293B)]/40">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1.5">
-                  <Palette className="w-3.5 h-3.5 text-sky-400" />
+                  <UpgradedThemeIcon activeColor={activeThemeColor} />
                   <span>{isHindi ? 'थीम चयन' : 'Themes'}</span>
                 </span>
-                <span className="text-[10px] font-mono text-sky-400 uppercase">{theme}</span>
+                <span className="text-[10px] font-mono uppercase font-bold" style={{ color: activeThemeColor }}>
+                  {theme}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                 {ALL_THEMES.map((th) => {
@@ -615,15 +666,28 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                         onThemeChange(th.id);
                       }}
                       title={th.label}
+                      style={
+                        isActive
+                          ? {
+                              borderColor: th.color,
+                              backgroundColor: `${th.color}25`,
+                              color: '#FFFFFF',
+                            }
+                          : undefined
+                      }
                       className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10.5px] font-semibold transition-all shrink-0 cursor-pointer border ${
                         isActive
-                          ? 'border-sky-400 bg-sky-500/20 text-white'
+                          ? 'shadow-xs font-bold'
                           : 'border-[var(--theme-border,#334155)] bg-[var(--theme-surface,#0F172A)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
                       }`}
                     >
                       <span
-                        className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/20"
-                        style={{ backgroundColor: th.color }}
+                        className="w-3 h-3 rounded-full shrink-0 transition-transform"
+                        style={{
+                          backgroundColor: th.color,
+                          boxShadow: isActive ? `0 0 8px ${th.color}` : 'inset 0 1px 1px rgba(255,255,255,0.4)',
+                          border: '1.5px solid rgba(255, 255, 255, 0.45)',
+                        }}
                       />
                       <span>{th.label}</span>
                     </button>
@@ -638,10 +702,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             <div className="p-2.5 rounded-xl border border-[var(--theme-border,#1E293B)] bg-[var(--theme-card,#1E293B)]/40">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1.5">
-                  <Languages className="w-3.5 h-3.5 text-sky-400" />
+                  <Languages className="w-3.5 h-3.5" style={{ color: activeThemeColor }} />
                   <span>{isHindi ? 'भाषा चयन' : 'Language'}</span>
                 </span>
-                <span className="text-[10px] font-mono text-sky-400 uppercase font-bold">{language}</span>
+                <span className="text-[10px] font-mono uppercase font-bold" style={{ color: activeThemeColor }}>{language}</span>
               </div>
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                 {[
@@ -659,7 +723,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                   { id: 'kn', label: 'ಕನ್ನಡ' },
                   { id: 'ml', label: 'മലയാളം' },
                   { id: 'or', label: 'ଓଡ଼ିଆ' },
-                  { id: 'as', label: 'অসমীয়া' },
+                  { id: 'as', label: 'অसमীয়া' },
                   { id: 'ne', label: 'नेपाली' },
                   { id: 'es', label: 'Español' },
                 ].map((langItem) => {
@@ -672,9 +736,18 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                         triggerHapticSound('click');
                         onLanguageChange(langItem.id as AppLanguage);
                       }}
+                      style={
+                        isActive
+                          ? {
+                              borderColor: activeThemeColor,
+                              backgroundColor: `${activeThemeColor}25`,
+                              color: '#FFFFFF',
+                            }
+                          : undefined
+                      }
                       className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10.5px] font-semibold transition-all shrink-0 cursor-pointer border ${
                         isActive
-                          ? 'border-sky-400 bg-sky-500/20 text-white font-bold shadow-xs'
+                          ? 'font-bold shadow-xs'
                           : 'border-[var(--theme-border,#334155)] bg-[var(--theme-surface,#0F172A)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
                       }`}
                     >
@@ -689,9 +762,14 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       triggerHapticSound('click');
                       onOpenGoogleTranslate();
                     }}
-                    className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:text-white shrink-0 cursor-pointer"
+                    style={{
+                      borderColor: `${activeThemeColor}40`,
+                      backgroundColor: `${activeThemeColor}15`,
+                      color: activeThemeColor,
+                    }}
+                    className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium border shrink-0 cursor-pointer"
                   >
-                    <Globe className="w-3 h-3 text-sky-400" />
+                    <Globe className="w-3 h-3" style={{ color: activeThemeColor }} />
                     <span>More (50+)</span>
                   </button>
                 )}
@@ -765,7 +843,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                         }`}
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          <ItemIcon className="w-4 h-4 text-sky-400 shrink-0" />
+                          <ItemIcon className="w-4 h-4 shrink-0" style={{ color: activeThemeColor }} />
                           <div className="min-w-0">
                             <div className="text-[13px] font-medium truncate">{item.label}</div>
                             {item.sublabel && (
@@ -777,7 +855,13 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                         </div>
 
                         {item.badge && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 font-mono shrink-0">
+                          <span
+                            style={{
+                              backgroundColor: `${activeThemeColor}20`,
+                              color: activeThemeColor,
+                            }}
+                            className="text-[10px] font-bold px-1.5 py-0.5 rounded font-mono shrink-0"
+                          >
                             {item.badge}
                           </span>
                         )}
@@ -790,9 +874,18 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                       key={item.id}
                       type="button"
                       onClick={item.onClick}
-                      className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors cursor-pointer ${
+                      style={
                         isRowActive
-                          ? 'bg-sky-500/15 border border-sky-500/30 text-sky-300 font-semibold'
+                          ? {
+                              backgroundColor: `${activeThemeColor}18`,
+                              borderColor: `${activeThemeColor}45`,
+                              color: activeThemeColor,
+                            }
+                          : undefined
+                      }
+                      className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors cursor-pointer border border-transparent ${
+                        isRowActive
+                          ? 'font-bold'
                           : isLightMode
                           ? 'hover:bg-slate-100 text-slate-800'
                           : 'hover:bg-[var(--theme-card,#1E293B)] text-[var(--theme-text,#F8FAFC)]'
@@ -800,9 +893,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <ItemIcon
-                          className={`w-4 h-4 shrink-0 ${
-                            isRowActive ? 'text-sky-400' : 'text-slate-400 group-hover:text-white'
-                          }`}
+                          className="w-4 h-4 shrink-0 transition-colors"
+                          style={{
+                            color: isRowActive ? activeThemeColor : undefined,
+                          }}
                         />
                         <div className="min-w-0">
                           <div className="text-[13px] font-medium truncate">{item.label}</div>
@@ -816,15 +910,20 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 
                       {item.badge && (
                         <span
+                          style={
+                            item.badgeColor === 'sky'
+                              ? { backgroundColor: `${activeThemeColor}20`, color: activeThemeColor }
+                              : undefined
+                          }
                           className={`text-[10px] font-bold px-1.5 py-0.5 rounded font-mono shrink-0 ${
                             item.badgeColor === 'emerald'
                               ? 'bg-emerald-500/20 text-emerald-300'
-                              : item.badgeColor === 'sky'
-                              ? 'bg-sky-500/20 text-sky-300'
                               : item.badgeColor === 'rose'
                               ? 'bg-rose-500/20 text-rose-300'
                               : item.badgeColor === 'amber'
                               ? 'bg-amber-500/20 text-amber-300'
+                              : item.badgeColor === 'sky'
+                              ? ''
                               : 'bg-slate-700/40 text-slate-300'
                           }`}
                         >
@@ -869,7 +968,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
               }}
               className="flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg border border-[var(--theme-border,#334155)] bg-[var(--theme-card,#1E293B)] hover:bg-[var(--theme-card-hover,#334155)] text-[11.5px] font-semibold text-white transition-colors cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+              <Download className="w-3.5 h-3.5 shrink-0" style={{ color: activeThemeColor }} />
               <span>{isHindi ? 'ऐप इंस्टॉल' : 'Install PWA'}</span>
             </button>
 
@@ -882,7 +981,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
               }}
               className="flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg border border-[var(--theme-border,#334155)] bg-[var(--theme-card,#1E293B)] hover:bg-[var(--theme-card-hover,#334155)] text-[11.5px] font-semibold text-white transition-colors cursor-pointer"
             >
-              <Share2 className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+              <Share2 className="w-3.5 h-3.5 shrink-0" style={{ color: activeThemeColor }} />
               <span>{isHindi ? 'ऐप शेयर' : 'Share App'}</span>
             </button>
           </div>
