@@ -27,7 +27,9 @@ import {
   X,
   PieChart,
   MapPin,
-  ListPlus
+  ListPlus,
+  Download,
+  HardDrive
 } from 'lucide-react';
 import { NativeTimePicker } from './NativeTimePicker';
 import { ConfirmModal } from './ConfirmModal';
@@ -64,6 +66,8 @@ export interface AttendancePageProps {
   onBack: () => void;
   language?: AppLanguage;
   privacyMask?: boolean;
+  onOpenMultiBackup?: () => void;
+  onOneClickPdf?: () => void;
 }
 
 export const AttendancePage: React.FC<AttendancePageProps> = ({
@@ -75,7 +79,9 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
   onRecordBulkAttendancePaymentToKhata,
   onBack,
   language = 'en',
-  privacyMask = false
+  privacyMask = false,
+  onOpenMultiBackup,
+  onOneClickPdf
 }) => {
   const isHindi = language === 'hi' || language === 'hinglish';
 
@@ -883,6 +889,32 @@ export const AttendancePage: React.FC<AttendancePageProps> = ({
             <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span className="truncate">{isHindi ? 'बल्क निपटान' : 'Settle Dues'}</span>
           </button>
+
+          {/* 1-Click PDF Button */}
+          {onOneClickPdf && (
+            <button
+              type="button"
+              onClick={onOneClickPdf}
+              className="justify-center px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-[11px] xs:text-[12px] font-bold flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all truncate"
+              title={isHindi ? '1-क्लिक सम्पूर्ण PDF रिपोर्ट' : '1-Click Comprehensive PDF'}
+            >
+              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+              <span className="truncate">{isHindi ? '1-क्लिक PDF' : '1-Click PDF'}</span>
+            </button>
+          )}
+
+          {/* Multi-Backup Button */}
+          {onOpenMultiBackup && (
+            <button
+              type="button"
+              onClick={onOpenMultiBackup}
+              className="justify-center px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 text-[11px] xs:text-[12px] font-bold flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all truncate"
+              title={isHindi ? 'मल्टीपल बैकअप (JSON, Snapshots, CSV)' : 'Multi-Backup Options'}
+            >
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-400 shrink-0" />
+              <span className="truncate">{isHindi ? 'बैकअप' : 'Backup'}</span>
+            </button>
+          )}
 
           <button
             type="button"

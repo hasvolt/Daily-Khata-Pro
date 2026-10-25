@@ -40,6 +40,8 @@ interface PersonalNotesViewProps {
   onOpenSecurityModal?: () => void;
   language?: AppLanguage;
   privacyMask?: boolean;
+  onOpenMultiBackup?: () => void;
+  onOneClickPdf?: () => void;
 }
 
 export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
@@ -54,7 +56,9 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
   onToggleLock,
   onOpenSecurityModal,
   language = 'en',
-  privacyMask = false
+  privacyMask = false,
+  onOpenMultiBackup,
+  onOneClickPdf
 }) => {
   const handleOpenCreate = onOpenCreateModal || onAddNote || (() => {});
   const handleQuickAdd = onQuickAdd || onQuickAddNote;
@@ -198,13 +202,39 @@ export const PersonalNotesView: React.FC<PersonalNotesViewProps> = ({
             </p>
           </div>
 
-          <button
-            onClick={handleOpenCreate}
-            className="self-start sm:self-center min-h-[46px] py-2.5 px-5 sm:px-6 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[14px] flex items-center gap-2 shadow-lg active:scale-95 transition-all cursor-pointer shrink-0"
-          >
-            <Plus className="w-4.5 h-4.5 stroke-[3]" />
-            <span>{getNotesText('createNoteBtn', language)}</span>
-          </button>
+          <div className="flex items-center gap-2 flex-wrap self-start sm:self-center">
+            {onOneClickPdf && (
+              <button
+                type="button"
+                onClick={onOneClickPdf}
+                className="min-h-[46px] py-2.5 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-bold text-[13px] flex items-center gap-2 shadow-sm active:scale-95 transition-all cursor-pointer shrink-0"
+                title={language === 'hi' ? '1-क्लिक सम्पूर्ण PDF रिपोर्ट' : '1-Click Comprehensive PDF'}
+              >
+                <Download className="w-4 h-4 text-emerald-400" />
+                <span>{language === 'hi' ? '1-क्लिक PDF' : '1-Click PDF'}</span>
+              </button>
+            )}
+
+            {onOpenMultiBackup && (
+              <button
+                type="button"
+                onClick={onOpenMultiBackup}
+                className="min-h-[46px] py-2.5 px-4 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 font-bold text-[13px] flex items-center gap-2 shadow-sm active:scale-95 transition-all cursor-pointer shrink-0"
+                title={language === 'hi' ? 'मल्टीपल बैकअप (JSON, Snapshots, CSV)' : 'Multi-Backup Options'}
+              >
+                <Sparkles className="w-4 h-4 text-sky-400" />
+                <span>{language === 'hi' ? 'बैकअप' : 'Backup'}</span>
+              </button>
+            )}
+
+            <button
+              onClick={handleOpenCreate}
+              className="min-h-[46px] py-2.5 px-5 sm:px-6 rounded-xl bg-[var(--theme-primary,#38BDF8)] hover:brightness-110 text-[#070E18] font-extrabold text-[14px] flex items-center gap-2 shadow-lg active:scale-95 transition-all cursor-pointer shrink-0"
+            >
+              <Plus className="w-4.5 h-4.5 stroke-[3]" />
+              <span>{getNotesText('createNoteBtn', language)}</span>
+            </button>
+          </div>
         </div>
 
         {/* Quick Stats Strip */}

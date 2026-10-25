@@ -46,7 +46,8 @@ import {
   UserCheck,
   Sparkles,
   RefreshCw,
-  Users
+  Users,
+  Download
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -124,6 +125,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onOpenChangePurpose,
   hasDemoData = false,
   onRemoveDemoData,
+  onOpenMultiBackup,
+  onOneClickPdf
 }) => {
   const isHindi = language === 'hi' || language === 'hinglish';
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
@@ -253,6 +256,20 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const totalWealth = Object.values(fundTotals).reduce((sum, v) => sum + v, 0);
 
   const quickAccess = [
+    {
+      label: isHindi ? '1-क्लिक PDF' : '1-Click PDF',
+      icon: Download,
+      action: onOneClickPdf || (() => window.dispatchEvent(new CustomEvent('trigger-1click-pdf'))),
+      iconBg: 'bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+      hoverBorder: 'hover:border-emerald-500/50',
+    },
+    {
+      label: isHindi ? 'मल्टी बैकअप' : 'Multi-Backup',
+      icon: Sparkles,
+      action: onOpenMultiBackup || (() => window.dispatchEvent(new CustomEvent('open-multi-backup-modal'))),
+      iconBg: 'bg-sky-500/15 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/30',
+      hoverBorder: 'hover:border-sky-500/50',
+    },
     {
       label: getUIText('Invoice Generator', language),
       icon: FileText,

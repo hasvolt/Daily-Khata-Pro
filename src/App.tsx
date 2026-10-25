@@ -1,5 +1,5 @@
 import { getCurrencyConfig, getCurrentLanguage, formatCurrencyByLang, setPreferredCurrency } from "./utils/currencyConfig";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
 import { Entry, FundType, FundConfig, Goal, WorkLog, DailyLifeLog, PersonalNote, KhataData, AppTheme, AppLanguage, AppViewMode, SecurityLockConfig, AppLayout, TrashItem, AttendanceLog, AppReminder, PaymentMode, CategoryBudget, BillSplitExpense, DebtItem, DebtPayment, UserPurpose } from './types';
@@ -88,6 +88,9 @@ import {
 } from './utils/reminderService';
 import { PageSearchModal } from './components/PageSearchModal';
 import { GoogleDriveSyncModal } from './components/GoogleDriveSyncModal';
+import { MultiBackupModal } from './components/MultiBackupModal';
+import { QuickBackupBar } from './components/QuickBackupBar';
+import { buildCompleteBackupData, exportOneClickComprehensivePDF } from './utils/backupService';
 import { RozfiberAppsModal } from './components/RozfiberAppsModal';
 import { RozfiberAppsPage } from './components/RozfiberAppsPage';
 import { OfflineIndicator } from './components/OfflineIndicator';
@@ -263,6 +266,8 @@ function AppContent() {
   const [isRozfiberAppsModalOpen, setIsRozfiberAppsModalOpen] = useState<boolean>(false);
   const [isGoogleTranslated, setIsGoogleTranslated] = useState<boolean>(false);
   const [activeGoogleCode, setActiveGoogleCode] = useState<string | null>(null);
+  const [isMultiBackupOpen, setIsMultiBackupOpen] = useState<boolean>(false);
+  const [isGeneratingComprehensivePdf, setIsGeneratingComprehensivePdf] = useState<boolean>(false);
 
   // Dismiss App Splash Preloader smoothly when App mounts
   useEffect(() => {
@@ -396,6 +401,83 @@ function AppContent() {
       console.error('Failed to save debt items', e);
     }
   }, [debtItems]);
+
+  // Master Comprehensive KhataData payload covering all 6 core data entities
+  const fullKhataData: KhataData = useMemo(() => buildCompleteBackupData({
+    entries,
+    attendanceLogs,
+    personalNotes,
+    debtItems,
+    reminders,
+    goals,
+    workLogs,
+    dailyLifeLogs,
+    trashItems,
+    budgets,
+    categories,
+    incomeSources,
+    workCategories,
+    lifeTags,
+    funds,
+    homepageFundIds,
+    percentages,
+    theme,
+    language,
+    privacyMask,
+    viewMode,
+    appLayout,
+    securityLock
+  }), [
+    entries,
+    attendanceLogs,
+    personalNotes,
+    debtItems,
+    reminders,
+    goals,
+    workLogs,
+    dailyLifeLogs,
+    trashItems,
+    budgets,
+    categories,
+    incomeSources,
+    workCategories,
+    lifeTags,
+    funds,
+    homepageFundIds,
+    percentages,
+    theme,
+    language,
+    privacyMask,
+    viewMode,
+    appLayout,
+    securityLock
+  ]);
+
+  const handleOneClickPdfDownload = async () => {
+    try {
+      setIsGeneratingComprehensivePdf(true);
+      const symbol = getCurrencyConfig(getCurrentLanguage()).symbol || 'Rs.';
+      await exportOneClickComprehensivePDF(fullKhataData, symbol, language === 'hi' || language === 'hinglish');
+      showToast(language === 'hi' ? '1-क्लिक सम्पूर्ण PDF डाउनलोड हो गई!' : '1-Click Comprehensive PDF report downloaded!');
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      showToast('Failed to generate PDF');
+    } finally {
+      setIsGeneratingComprehensivePdf(false);
+    }
+  };
+
+  // Global event triggers for universal access
+  useEffect(() => {
+    const onOpenBackup = () => setIsMultiBackupOpen(true);
+    const onTriggerPdf = () => handleOneClickPdfDownload();
+    window.addEventListener('open-multi-backup-modal', onOpenBackup);
+    window.addEventListener('trigger-1click-pdf', onTriggerPdf);
+    return () => {
+      window.removeEventListener('open-multi-backup-modal', onOpenBackup);
+      window.removeEventListener('trigger-1click-pdf', onTriggerPdf);
+    };
+  }, [fullKhataData, language]);
 
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
 
@@ -790,6 +872,11 @@ function AppContent() {
           workLogs: updates.workLogs ?? workLogs,
           dailyLifeLogs: updates.dailyLifeLogs ?? dailyLifeLogs,
           personalNotes: updates.personalNotes ?? personalNotes,
+          attendanceLogs,
+          debtItems,
+          reminders,
+          trashItems,
+          budgets,
           settings: {
             percentages: updates.percentages ?? percentages,
             funds: currentFunds,
@@ -817,6 +904,11 @@ function AppContent() {
           workLogs: newWorkLogs ?? workLogs,
           dailyLifeLogs: newDailyLifeLogs ?? dailyLifeLogs,
           personalNotes: newPersonalNotes ?? personalNotes,
+          attendanceLogs,
+          debtItems,
+          reminders,
+          trashItems,
+          budgets,
           settings: {
             percentages: newPct ?? percentages,
             funds: currentFunds,
@@ -851,7 +943,7 @@ function AppContent() {
       try {
         if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
         setIsAutoSyncing(true);
-        await uploadBackupToDrive(dataToSync, AUTO_SYNC_FILE_NAME, true);
+        await uploadBackupToDrive(fullKhataData, AUTO_SYNC_FILE_NAME, true);
         const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         setLastDriveSyncTime(timeStr);
         localStorage.setItem('khata_last_gdrive_sync', timeStr);
@@ -874,35 +966,11 @@ function AppContent() {
       if (isGoogleLinked()) {
         try {
           setIsAutoSyncing(true);
-          const currentData: KhataData = {
-            entries,
-            funds,
-            homepageFundIds,
-            categories,
-            incomeSources,
-            workCategories,
-            lifeTags,
-            goals,
-            workLogs,
-            dailyLifeLogs,
-            personalNotes,
-            settings: {
-              percentages,
-              funds,
-              homepageFundIds,
-              theme,
-              language,
-              privacyMask,
-              viewMode,
-              appLayout,
-              securityLock
-            }
-          };
-          await uploadBackupToDrive(currentData, AUTO_SYNC_FILE_NAME, true);
+          await uploadBackupToDrive(fullKhataData, AUTO_SYNC_FILE_NAME, true);
           const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           setLastDriveSyncTime(timeStr);
           localStorage.setItem('khata_last_gdrive_sync', timeStr);
-          showToast(language === 'hi' ? 'गूगल ड्राइव ऑटो सिंक सक्रिय व बैकअप सहेजा गया' : 'Google Drive Auto-Sync enabled & initial backup saved');
+          showToast(language === 'hi' ? 'गूगल ड्राइव ऑटो सिंक सक्रिय व संपूर्ण बैकअप सहेजा गया' : 'Google Drive Auto-Sync enabled & full backup saved');
         } catch (err) {
           console.warn('Initial auto-sync failed:', err);
         } finally {
@@ -2202,6 +2270,51 @@ function AppContent() {
     setIncomeSources(restored.incomeSources || DEFAULT_INCOME_SOURCES);
     setWorkCategories(restored.workCategories || DEFAULT_WORK_CATEGORIES);
     setLifeTags(restored.lifeTags || DEFAULT_LIFE_TAGS);
+
+    if (restored.attendanceLogs && Array.isArray(restored.attendanceLogs)) {
+      setAttendanceLogs(restored.attendanceLogs);
+      try {
+        localStorage.setItem('dailykhata_attendance_v1', JSON.stringify(restored.attendanceLogs));
+      } catch (e) {
+        console.error('Failed to save restored attendance', e);
+      }
+    }
+
+    if (restored.debtItems && Array.isArray(restored.debtItems)) {
+      setDebtItems(restored.debtItems);
+      try {
+        localStorage.setItem('daily_khata_debt_items_v1', JSON.stringify(restored.debtItems));
+      } catch (e) {
+        console.error('Failed to save restored debts', e);
+      }
+    }
+
+    if (restored.reminders && Array.isArray(restored.reminders)) {
+      setReminders(restored.reminders);
+      try {
+        localStorage.setItem('dailykhata_reminders_v1', JSON.stringify(restored.reminders));
+      } catch (e) {
+        console.error('Failed to save restored reminders', e);
+      }
+    }
+
+    if (restored.trashItems && Array.isArray(restored.trashItems)) {
+      setTrashItems(restored.trashItems);
+      try {
+        localStorage.setItem('dailykhata_trash_v1', JSON.stringify(restored.trashItems));
+      } catch (e) {
+        console.error('Failed to save restored trash', e);
+      }
+    }
+
+    if (restored.budgets && Array.isArray(restored.budgets)) {
+      setBudgets(restored.budgets);
+      try {
+        localStorage.setItem('daily_khata_category_budgets', JSON.stringify(restored.budgets));
+      } catch (e) {
+        console.error('Failed to save restored budgets', e);
+      }
+    }
     
     const restoredFunds = (restored.funds && Array.isArray(restored.funds) && restored.funds.length > 0)
       ? restored.funds
@@ -2238,7 +2351,7 @@ function AppContent() {
       securityLock: restored.settings?.securityLock || securityLock,
       personalNotes: restored.personalNotes || []
     });
-    showToast('Backup restored successfully');
+    showToast(language === 'hi' ? 'सम्पूर्ण बैकअप (उपस्थिति, नोट्स व खाता) सफलतापूर्वक लोड हुआ!' : 'Complete backup restored successfully!');
   };
 
   // Reset all
@@ -2505,6 +2618,8 @@ function AppContent() {
           isAutoSyncing={isAutoSyncing}
           autoSyncEnabled={autoSyncEnabled}
           onOpenRozfiberApps={() => setIsRozfiberAppsModalOpen(true)}
+          onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+          onOneClickPdf={handleOneClickPdfDownload}
         />
       </div>
 
@@ -2593,6 +2708,8 @@ function AppContent() {
               privacyMask={privacyMask}
               userPurpose={userPurpose}
               onOpenChangePurpose={() => setIsOnboardingOpen(true)}
+              onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+              onOneClickPdf={handleOneClickPdfDownload}
             />
           } />
 
@@ -2613,6 +2730,8 @@ function AppContent() {
               onQuickAdd={handleQuickAddPersonalNote}
               language={language}
               onOpenSecurityModal={() => setIsSecurityModalOpen(true)}
+              onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+              onOneClickPdf={handleOneClickPdfDownload}
             />
           } />
 
@@ -2652,6 +2771,8 @@ function AppContent() {
               onBack={() => setCurrentTab('home')}
               language={language}
               privacyMask={privacyMask}
+              onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+              onOneClickPdf={handleOneClickPdfDownload}
             />
           } />
 
@@ -2782,6 +2903,8 @@ function AppContent() {
               onTriggerPrint={handleTriggerPrint}
               language={language}
               privacyMask={privacyMask}
+              onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+              onOneClickPdf={handleOneClickPdfDownload}
             />
           } />
 
@@ -2927,6 +3050,8 @@ function AppContent() {
               onBack={() => setCurrentTab('home')}
               language={language}
               privacyMask={privacyMask}
+              onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+              onOneClickPdf={handleOneClickPdfDownload}
             />
           } />
 
@@ -2999,6 +3124,8 @@ function AppContent() {
               onOpenSplitBill={() => setIsSplitBillOpen(true)}
               language={language}
               privacyMask={privacyMask}
+              onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+              onOneClickPdf={handleOneClickPdfDownload}
             />} />
             <Route path="/studio" element={
               <React.Suspense fallback={
@@ -3203,20 +3330,7 @@ function AppContent() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        data={{
-          entries,
-          goals,
-          workLogs,
-          dailyLifeLogs,
-          personalNotes,
-          categories,
-          incomeSources,
-          workCategories,
-          lifeTags,
-          funds,
-          homepageFundIds,
-          settings: { percentages, funds, homepageFundIds, theme, language, privacyMask, viewMode, appLayout, securityLock }
-        }}
+        data={fullKhataData}
         funds={funds}
         onUpdateFunds={handleUpdateFunds}
         homepageFundIds={homepageFundIds}
@@ -3625,30 +3739,7 @@ function AppContent() {
       <GoogleDriveSyncModal
         isOpen={isGoogleDriveModalOpen}
         onClose={() => setIsGoogleDriveModalOpen(false)}
-        currentData={{
-          entries,
-          funds,
-          homepageFundIds,
-          categories,
-          incomeSources,
-          workCategories,
-          lifeTags,
-          goals,
-          workLogs,
-          dailyLifeLogs,
-          personalNotes,
-          settings: {
-            percentages,
-            funds,
-            homepageFundIds,
-            theme,
-            language,
-            privacyMask,
-            viewMode,
-            appLayout,
-            securityLock
-          }
-        }}
+        currentData={fullKhataData}
         onRestoreData={handleRestoreData}
         language={language}
         autoSyncEnabled={autoSyncEnabled}
@@ -3692,6 +3783,26 @@ function AppContent() {
           setIsOnboardingOpen(false);
           navigate('/cookies');
         }}
+      />
+
+      {/* Universal Multi-Backup System Modal */}
+      <MultiBackupModal
+        isOpen={isMultiBackupOpen}
+        onClose={() => setIsMultiBackupOpen(false)}
+        fullKhataData={fullKhataData}
+        onRestoreData={handleRestoreData}
+        onOpenGoogleDrive={() => setIsGoogleDriveModalOpen(true)}
+        isDriveConnected={isDriveConnected}
+        isAutoSyncing={isAutoSyncing}
+        language={language}
+      />
+
+      {/* Persistent Quick Action Backup & 1-Click PDF floating pill */}
+      <QuickBackupBar
+        onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
+        onOneClickPdf={handleOneClickPdfDownload}
+        isGeneratingPdf={isGeneratingComprehensivePdf}
+        language={language}
       />
 
       {/* 100% PWA Offline Mode Status Indicator */}

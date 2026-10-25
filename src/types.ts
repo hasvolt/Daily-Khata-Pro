@@ -272,6 +272,13 @@ export interface KhataData {
   personalNotes?: PersonalNote[];
   attendanceLogs?: AttendanceLog[];
   reminders?: AppReminder[];
+  debtItems?: DebtItem[];
+  trashItems?: TrashItem[];
+  budgets?: CategoryBudget[];
+  khataBooks?: KhataBook[];
+  invoices?: Invoice[];
+  exportVersion?: number;
+  exportedAt?: string;
   settings: {
     percentages: Record<FundType, number>;
     funds?: FundConfig[];

@@ -21,6 +21,8 @@ interface ReportViewProps {
   onTriggerPrint: (targetMonth: Date) => void;
   language?: AppLanguage;
   privacyMask?: boolean;
+  onOpenMultiBackup?: () => void;
+  onOneClickPdf?: () => void;
 }
 
 export const ReportView: React.FC<ReportViewProps> = ({
@@ -33,7 +35,9 @@ export const ReportView: React.FC<ReportViewProps> = ({
   onRemoveCategory,
   onTriggerPrint,
   language = 'en',
-  privacyMask = false
+  privacyMask = false,
+  onOpenMultiBackup,
+  onOneClickPdf
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isHindi = language === 'hi';
@@ -156,7 +160,29 @@ export const ReportView: React.FC<ReportViewProps> = ({
         </div>
 
         {/* Export & Print Buttons */}
-        <div className="flex items-center gap-1.5 justify-end shrink-0">
+        <div className="flex items-center gap-1.5 justify-end shrink-0 flex-wrap">
+          {onOneClickPdf && (
+            <button
+              onClick={onOneClickPdf}
+              className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[11px] sm:text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap active:scale-95 transition-all"
+              title={isHindi ? '1-क्लिक सम्पूर्ण PDF रिपोर्ट' : '1-Click Comprehensive PDF'}
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{isHindi ? '1-क्लिक PDF' : '1-Click PDF'}</span>
+            </button>
+          )}
+
+          {onOpenMultiBackup && (
+            <button
+              onClick={onOpenMultiBackup}
+              className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-sky-500/40 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 text-[11px] sm:text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap active:scale-95 transition-all"
+              title={isHindi ? 'मल्टीपल बैकअप (JSON, Snapshots, CSV)' : 'Multi-Backup Options'}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+              <span>{isHindi ? 'बैकअप' : 'Backup'}</span>
+            </button>
+          )}
+
           <button
             onClick={() => downloadCSVReport(entries, selectedDate)}
             className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-[var(--theme-border,#213E61)] bg-[var(--theme-surface,#0E1A29)] hover:bg-[var(--theme-card-hover,#19304A)] text-[var(--theme-text,#F8FAFC)] hover:text-[var(--theme-primary,#38BDF8)] text-[11px] sm:text-[11.5px] font-bold flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"

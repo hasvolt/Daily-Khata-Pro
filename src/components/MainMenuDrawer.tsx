@@ -110,6 +110,8 @@ export interface MainMenuDrawerProps {
   isDriveConnected?: boolean;
   autoSyncEnabled?: boolean;
   onOpenRozfiberApps?: () => void;
+  onOpenMultiBackup?: () => void;
+  onOneClickPdf?: () => void;
 }
 
 interface MenuItem {
@@ -165,7 +167,9 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   isDriveConnected = false,
   handleDirectUpdateApp,
   isUpdatingApp = false,
-  onOpenRozfiberApps
+  onOpenRozfiberApps,
+  onOpenMultiBackup,
+  onOneClickPdf
 }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
@@ -283,6 +287,22 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           badge: isDriveConnected ? 'SYNC ON' : undefined,
           badgeColor: 'emerald',
           onClick: onOpenGoogleDrive ? () => handleAction(onOpenGoogleDrive) : undefined
+        },
+        {
+          id: 'multi-backup-all',
+          label: isHindi ? 'मल्टीपल बैकअप सिस्टम (JSON, Snapshots, CSV)' : 'Multi-Backup System (JSON, Snapshots, CSV)',
+          icon: Download,
+          badge: 'ALL DATA',
+          badgeColor: 'emerald',
+          onClick: onOpenMultiBackup ? () => handleAction(onOpenMultiBackup) : undefined
+        },
+        {
+          id: 'one-click-pdf-report',
+          label: isHindi ? '1-क्लिक सम्पूर्ण PDF रिपोर्ट डाउनलोड' : '1-Click Comprehensive PDF Report',
+          icon: FileText,
+          badge: 'PDF',
+          badgeColor: 'blue',
+          onClick: onOneClickPdf ? () => handleAction(onOneClickPdf) : (onOpenMultiBackup ? () => handleAction(onOpenMultiBackup) : undefined)
         },
         {
           id: 'security',

@@ -38,7 +38,9 @@ import {
   CreditCard,
   FileSpreadsheet,
   Check,
-  Copy
+  Copy,
+  Download,
+  Sparkles
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -59,6 +61,8 @@ interface LoanUdharLedgerViewProps {
   language?: AppLanguage;
   privacyMask?: boolean;
   funds?: FundConfig[];
+  onOpenMultiBackup?: () => void;
+  onOneClickPdf?: () => void;
 }
 
 export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
@@ -71,7 +75,9 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
   onBack,
   language: _language = 'en',
   privacyMask = false,
-  funds = []
+  funds = [],
+  onOpenMultiBackup,
+  onOneClickPdf
 }) => {
   // Filters & Search
   const [selectedType, setSelectedType] = useState<'all' | DebtType>('all');
@@ -454,7 +460,33 @@ export const LoanUdharLedgerView: React.FC<LoanUdharLedgerViewProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+          {/* 1-Click PDF Button */}
+          {onOneClickPdf && (
+            <button
+              type="button"
+              onClick={onOneClickPdf}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-semibold cursor-pointer transition-all active:scale-95 no-print"
+              title={_language === 'hi' ? '1-क्लिक सम्पूर्ण PDF रिपोर्ट' : '1-Click Comprehensive PDF'}
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{_language === 'hi' ? '1-क्लिक PDF' : '1-Click PDF'}</span>
+            </button>
+          )}
+
+          {/* Multi-Backup Button */}
+          {onOpenMultiBackup && (
+            <button
+              type="button"
+              onClick={onOpenMultiBackup}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 text-xs font-semibold cursor-pointer transition-all active:scale-95 no-print"
+              title={_language === 'hi' ? 'मल्टीपल बैकअप (JSON, Snapshots, CSV)' : 'Multi-Backup Options'}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+              <span>{_language === 'hi' ? 'बैकअप' : 'Backup'}</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={handlePrintStatement}

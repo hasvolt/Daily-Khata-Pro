@@ -101,6 +101,8 @@ interface HeaderProps {
   isAutoSyncing?: boolean;
   autoSyncEnabled?: boolean;
   onOpenRozfiberApps?: () => void;
+  onOpenMultiBackup?: () => void;
+  onOneClickPdf?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -140,7 +142,9 @@ export const Header: React.FC<HeaderProps> = ({
   isDriveConnected = false,
   isAutoSyncing = false,
   autoSyncEnabled = false,
-  onOpenRozfiberApps
+  onOpenRozfiberApps,
+  onOpenMultiBackup,
+  onOneClickPdf
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUpdatingApp, setIsUpdatingApp] = useState(false);
@@ -517,6 +521,26 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* Universal Quick Backup & 1-Click PDF Button in Header */}
+          {onOpenMultiBackup && (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticSound('click');
+                onOpenMultiBackup();
+              }}
+              className="relative h-8 sm:h-9 px-2 sm:px-2.5 rounded-lg sm:rounded-xl border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 transition-all cursor-pointer shadow-xs active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
+              title={isHindi ? 'मल्टीपल बैकअप व 1-क्लिक PDF रिपोर्ट' : 'Multi-Backup & 1-Click PDF Report'}
+              id="header-multi-backup-btn"
+              aria-label={isHindi ? 'बैकअप व PDF' : 'Backup & PDF'}
+            >
+              <Download className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+              <span className="hidden md:inline text-[11px] font-bold">
+                {isHindi ? 'बैकअप / PDF' : 'Backup / PDF'}
+              </span>
+            </button>
+          )}
+
           {/* Main Menu 3-Dot Button */}
           <button
             type="button"
@@ -579,6 +603,8 @@ export const Header: React.FC<HeaderProps> = ({
         isDriveConnected={isDriveConnected}
         autoSyncEnabled={autoSyncEnabled}
         onOpenRozfiberApps={onOpenRozfiberApps}
+        onOpenMultiBackup={onOpenMultiBackup}
+        onOneClickPdf={onOneClickPdf}
       />
 
       {/* 1-Click Update Loading Overlay */}
