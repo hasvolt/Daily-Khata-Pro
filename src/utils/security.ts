@@ -203,6 +203,17 @@ export function validateAndSanitizeKhataBackup(parsed: any): KhataData | null {
           isPinned: Boolean(n.isPinned),
           isLocked: Boolean(n.isLocked),
           tags: Array.isArray(n.tags) ? n.tags.map((t: any) => escapeHtml(String(t)).slice(0, 40)) : undefined,
+          date: n.date ? String(n.date).slice(0, 20) : undefined,
+          time: n.time ? String(n.time).slice(0, 15) : undefined,
+          priority: ['normal', 'high', 'urgent'].includes(n.priority) ? n.priority : 'normal',
+          reminderDateTime: n.reminderDateTime ? String(n.reminderDateTime).slice(0, 30) : undefined,
+          checklist: Array.isArray(n.checklist)
+            ? n.checklist.map((item: any) => ({
+                id: String(item.id || ('chk_' + Math.random().toString(36).slice(2, 6))),
+                text: escapeHtml(String(item.text || '')).slice(0, 300),
+                isDone: Boolean(item.isDone)
+              }))
+            : undefined,
           createdAt: Number(n.createdAt) || Date.now(),
           updatedAt: Number(n.updatedAt) || Date.now()
         }))

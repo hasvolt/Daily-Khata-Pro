@@ -16,7 +16,7 @@ import {
   DEFAULT_SECURITY_LOCK
 } from './data/defaults';
 import { calculateFundTotals, formatCurrency, triggerCelebration, triggerHapticSound } from './utils/khataCalculations';
-import { getLocalDateString } from './utils/dateUtils';
+import { getLocalDateString, getCurrentTimeString } from './utils/dateUtils';
 import { syncThemeWithStatusBar } from './utils/statusBarSync';
 import { playDeleteSound, playIncomeSound, playExpenseSound } from './utils/audioService';
 import { setCurrentLanguage } from './utils/currencyConfig';
@@ -89,7 +89,6 @@ import {
 import { PageSearchModal } from './components/PageSearchModal';
 import { GoogleDriveSyncModal } from './components/GoogleDriveSyncModal';
 import { MultiBackupModal } from './components/MultiBackupModal';
-import { QuickBackupBar } from './components/QuickBackupBar';
 import { buildCompleteBackupData, exportOneClickComprehensivePDF } from './utils/backupService';
 import { RozfiberAppsModal } from './components/RozfiberAppsModal';
 import { RozfiberAppsPage } from './components/RozfiberAppsPage';
@@ -1749,12 +1748,36 @@ function AppContent() {
     showToast(language === 'hi' ? 'नोट की सुरक्षा बदली गई' : 'Note lock status updated');
   };
 
+  const handleSaveInlinePersonalNote = (updatedNote: PersonalNote) => {
+    const updated = personalNotes.map((n) => (n.id === updatedNote.id ? { ...updatedNote, updatedAt: Date.now() } : n));
+    setPersonalNotes(updated);
+    saveToLocalStorage(
+      entries,
+      goals,
+      categories,
+      incomeSources,
+      workCategories,
+      lifeTags,
+      percentages,
+      theme,
+      language,
+      privacyMask,
+      workLogs,
+      dailyLifeLogs,
+      securityLock,
+      updated
+    );
+  };
+
   const handleQuickAddPersonalNote = (title: string, content: string) => {
     const newNote: PersonalNote = {
       id: 'note_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
       title,
       content,
-      category: 'Personal',
+      category: 'personal',
+      date: getLocalDateString(),
+      time: getCurrentTimeString(),
+      priority: 'normal',
       createdAt: Date.now(),
       updatedAt: Date.now()
     };
@@ -2728,6 +2751,7 @@ function AppContent() {
               onTogglePin={handleTogglePinPersonalNote}
               onToggleLock={handleToggleLockPersonalNote}
               onQuickAdd={handleQuickAddPersonalNote}
+              onSaveNoteInline={handleSaveInlinePersonalNote}
               language={language}
               onOpenSecurityModal={() => setIsSecurityModalOpen(true)}
               onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
@@ -3794,14 +3818,6 @@ function AppContent() {
         onOpenGoogleDrive={() => setIsGoogleDriveModalOpen(true)}
         isDriveConnected={isDriveConnected}
         isAutoSyncing={isAutoSyncing}
-        language={language}
-      />
-
-      {/* Persistent Quick Action Backup & 1-Click PDF floating pill */}
-      <QuickBackupBar
-        onOpenMultiBackup={() => setIsMultiBackupOpen(true)}
-        onOneClickPdf={handleOneClickPdfDownload}
-        isGeneratingPdf={isGeneratingComprehensivePdf}
         language={language}
       />
 

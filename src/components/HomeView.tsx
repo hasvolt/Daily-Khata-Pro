@@ -47,7 +47,10 @@ import {
   Sparkles,
   RefreshCw,
   Users,
-  Download
+  Download,
+  Sprout,
+  FlaskConical,
+  ShoppingCart
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -256,20 +259,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const totalWealth = Object.values(fundTotals).reduce((sum, v) => sum + v, 0);
 
   const quickAccess = [
-    {
-      label: isHindi ? '1-क्लिक PDF' : '1-Click PDF',
-      icon: Download,
-      action: onOneClickPdf || (() => window.dispatchEvent(new CustomEvent('trigger-1click-pdf'))),
-      iconBg: 'bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
-      hoverBorder: 'hover:border-emerald-500/50',
-    },
-    {
-      label: isHindi ? 'मल्टी बैकअप' : 'Multi-Backup',
-      icon: Sparkles,
-      action: onOpenMultiBackup || (() => window.dispatchEvent(new CustomEvent('open-multi-backup-modal'))),
-      iconBg: 'bg-sky-500/15 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/30',
-      hoverBorder: 'hover:border-sky-500/50',
-    },
     {
       label: getUIText('Invoice Generator', language),
       icon: FileText,
@@ -672,7 +661,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 className="p-2 sm:p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
               >
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
-                  🌾
+                  <Sprout className="w-3.5 h-3.5" />
                 </div>
                 <div className="min-w-0">
                   <div className="text-[11.5px] font-extrabold text-emerald-300 truncate">
@@ -689,7 +678,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 className="p-2 sm:p-2.5 rounded-xl border border-lime-500/30 bg-lime-500/10 hover:bg-lime-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
               >
                 <div className="w-7 h-7 rounded-lg bg-lime-500/20 text-lime-400 flex items-center justify-center font-bold text-xs shrink-0">
-                  🧪
+                  <FlaskConical className="w-3.5 h-3.5" />
                 </div>
                 <div className="min-w-0">
                   <div className="text-[11.5px] font-extrabold text-lime-300 truncate">
@@ -745,7 +734,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 className="p-2 sm:p-2.5 rounded-xl border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-2"
               >
                 <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs shrink-0">
-                  🛒
+                  <ShoppingCart className="w-3.5 h-3.5" />
                 </div>
                 <div className="min-w-0">
                   <div className="text-[11.5px] font-extrabold text-purple-300 truncate">

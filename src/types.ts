@@ -225,6 +225,14 @@ export interface TrashItem {
   data: any; // Original payload for complete lossless restoration
 }
 
+export type NotePriority = 'normal' | 'high' | 'urgent';
+
+export interface NoteChecklistItem {
+  id: string;
+  text: string;
+  isDone: boolean;
+}
+
 export interface PersonalNote {
   id: string;
   title: string;
@@ -234,6 +242,11 @@ export interface PersonalNote {
   isPinned?: boolean;
   isLocked?: boolean; // Can be masked with private lock view
   tags?: string[];
+  date?: string; // YYYY-MM-DD
+  time?: string; // HH:mm
+  priority?: NotePriority;
+  reminderDateTime?: string; // Optional reminder / target date-time
+  checklist?: NoteChecklistItem[];
   createdAt: number;
   updatedAt: number;
 }

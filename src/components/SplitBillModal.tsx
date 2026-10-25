@@ -44,11 +44,11 @@ export const SplitBillModal: React.FC<SplitBillModalProps> = ({
   };
 
   // Generate WhatsApp ready text
-  const shareText = `🧾 *Bill Split: ${billTitle}*\n` +
-    `💰 Total Amount: ${formatCurrency(totalNum)}\n` +
-    `👥 People (${count}): ${participants.join(', ')}\n` +
-    `👉 *Share per person: ${formatCurrency(perPersonShare)}*\n\n` +
-    `Calculated via Daily Khata Pro ⚡`;
+  const shareText = `*Bill Split: ${billTitle}*\n` +
+    `Total Amount: ${formatCurrency(totalNum)}\n` +
+    `Participants (${count}): ${participants.join(', ')}\n` +
+    `*Share per person: ${formatCurrency(perPersonShare)}*\n\n` +
+    `Calculated via Daily Khata Pro`;
 
   const handleCopy = () => {
     if (navigator.clipboard) {

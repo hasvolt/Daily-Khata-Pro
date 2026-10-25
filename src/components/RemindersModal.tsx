@@ -139,8 +139,8 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
           setIsTestingLockScreen(false);
           setTestResultMsg(
             isHindi
-              ? '✅ 10 सेकंड पूरे हुए! यदि स्क्रीन लॉक थी तो अलर्ट आ चुका होगा।'
-              : '✅ 10s elapsed! If your screen was locked, the alert should have appeared.'
+              ? '10 सेकंड पूरे हुए! यदि स्क्रीन लॉक थी तो अलर्ट आ चुका होगा।'
+              : '10s elapsed! If your screen was locked, the alert should have appeared.'
           );
           setTimeout(() => setTestResultMsg(null), 8000);
         } else {
@@ -322,7 +322,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
                     title={isHindi ? 'तुरंत साउंड और नोटिफिकेशन चेक करें' : 'Verify sound and notification alert right now'}
                   >
                     <Volume2 className="w-3.5 h-3.5" />
-                    <span>{isTestingNotification ? (isHindi ? 'जांच जारी...' : 'Testing...') : (isHindi ? '🔔 तुरंत टेस्ट' : '🔔 Instant Test')}</span>
+                    <span>{isTestingNotification ? (isHindi ? 'जांच जारी...' : 'Testing...') : (isHindi ? 'तुरंत टेस्ट' : 'Instant Test')}</span>
                   </button>
 
                   <button
@@ -333,7 +333,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
                     title={isHindi ? '10 सेकंड बाद लॉक स्क्रीन पर नोटिफिकेशन चेक करें' : 'Test notification delivery with screen locked in 10s'}
                   >
                     <Smartphone className="w-3.5 h-3.5" />
-                    <span>{isTestingLockScreen ? (isHindi ? `लॉकिंग (${lockCountdown}s)...` : `Testing (${lockCountdown}s)...`) : (isHindi ? '📲 10s लॉक स्क्रीन टेस्ट' : '📲 Lock Screen Test')}</span>
+                    <span>{isTestingLockScreen ? (isHindi ? `लॉकिंग (${lockCountdown}s)...` : `Testing (${lockCountdown}s)...`) : (isHindi ? '10s लॉक स्क्रीन टेस्ट' : 'Lock Screen Test')}</span>
                   </button>
                 </div>
               </div>
@@ -385,7 +385,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
               <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold">{isHindi ? 'ब्राउज़र में नोटिफिकेशन ब्लॉक हैं:' : 'Notifications blocked in browser:'} </span>
-                <span>{isHindi ? 'साइट सेटिंग्स (URL बार के पास लॉक 🔒 आइकन) में जाकर Notifications को "Allow" करें।' : 'Tap the site settings or lock icon in URL bar and set Notifications to "Allow".'}</span>
+                <span>{isHindi ? 'साइट सेटिंग्स (URL बार के पास लॉक आइकन) में जाकर Notifications को "Allow" करें।' : 'Tap the site settings or lock icon in URL bar and set Notifications to "Allow".'}</span>
               </div>
             </div>
           ) : (
@@ -410,7 +410,7 @@ export const RemindersModal: React.FC<RemindersModalProps> = ({
               <div className="flex items-center justify-between font-black text-amber-300">
                 <div className="flex items-center gap-2">
                   <Smartphone className="w-4 h-4 text-amber-400" />
-                  <span>{isHindi ? '📲 अभी फोन का पावर बटन दबाकर स्क्रीन लॉक करें!' : '📲 Lock Your Phone Screen Now!'}</span>
+                  <span>{isHindi ? 'अभी फोन का पावर बटन दबाकर स्क्रीन लॉक करें!' : 'Lock Your Phone Screen Now!'}</span>
                 </div>
                 <span className="text-sm px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black font-mono">
                   {lockCountdown}s

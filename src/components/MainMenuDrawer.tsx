@@ -25,7 +25,6 @@ import {
   Globe,
   ChevronRight,
   RefreshCw,
-  ArrowUpCircle,
   X,
   Home,
   PlusCircle,
@@ -36,7 +35,6 @@ import {
   Sliders,
   CalendarCheck,
   Briefcase,
-  FileText as NotesIcon,
   Split,
   GraduationCap,
   Newspaper,
@@ -48,7 +46,8 @@ import {
   Bell,
   Sparkles,
   Users,
-  Palette
+  Palette,
+  Receipt
 } from 'lucide-react';
 import { NavTab } from './BottomNav';
 import { AppLogo } from './AppLogo';
@@ -117,11 +116,12 @@ export interface MainMenuDrawerProps {
 interface MenuItem {
   id: string;
   label: string;
+  sublabel?: string;
   icon: React.ComponentType<{ className?: string }>;
   onClick?: () => void;
   href?: string;
   badge?: string;
-  badgeColor?: 'blue' | 'emerald' | 'amber' | 'rose' | 'slate';
+  badgeColor?: 'emerald' | 'sky' | 'amber' | 'rose' | 'slate';
   isExternal?: boolean;
   isActive?: boolean;
 }
@@ -154,11 +154,9 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
   theme = 'blue',
   onThemeChange,
   language = 'en',
-  onLanguageChange,
   onOpenGoogleTranslate,
   privacyMask = false,
   onTogglePrivacyMask,
-  onOpenPageSearch,
   onOpenAbout,
   onOpenSplitBill,
   onOpenBudgetManager,
@@ -173,152 +171,201 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const isHindi = language === 'hi';
-  const isLightMode = theme === 'light' || theme === 'white' || (typeof document !== 'undefined' && (document.documentElement.getAttribute('data-theme') === 'light' || document.documentElement.getAttribute('data-theme') === 'white' || document.documentElement.classList.contains('light')));
+  const isHindi = language === 'hi' || language === 'hinglish';
+  const isLightMode =
+    theme === 'light' ||
+    theme === 'white' ||
+    (typeof document !== 'undefined' &&
+      (document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.documentElement.getAttribute('data-theme') === 'white' ||
+        document.documentElement.classList.contains('light')));
 
   const isGoogleTranslated = isGoogleTranslateActive();
   const activeLangCode = getActiveGoogleLanguage();
   const activeLangObj = activeLangCode ? ALL_GOOGLE_LANGUAGES.find((l) => l.code === activeLangCode) : null;
-  const activeLangLabel = activeLangObj ? activeLangObj.nativeName : (activeLangCode ? activeLangCode.toUpperCase() : null);
+  const activeLangLabel = activeLangObj ? activeLangObj.nativeName : activeLangCode ? activeLangCode.toUpperCase() : null;
 
-  // Keyboard shortcut listener (ESC to close menu)
+  // ESC key to close
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
+      if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   const handleAction = (action?: () => void) => {
     triggerHapticSound('click');
     onClose();
-    if (action) {
-      action();
-    }
+    if (action) action();
   };
 
   const handleNavigate = (tab: NavTab) => {
     triggerHapticSound('click');
     onClose();
-    if (onSelectTab) {
-      onSelectTab(tab);
-    }
+    if (onSelectTab) onSelectTab(tab);
   };
 
-  // Master List of all original Daily Khata Pro features grouped cleanly
+  // 4 Executive Sections
   const sections: MenuSection[] = useMemo(() => [
-    // 1. Settings & Cloud Backup (सेटिंग्स व बैकअप)
+    // 1. Core Accounts & Ledger
     {
-      id: 'settings-cloud',
-      title: isHindi ? 'सेटिंग्स व क्लाउड बैकअप' : 'Settings & Cloud Sync',
+      id: 'core-ledger',
+      title: isHindi ? 'खाता व दैनिक रिकॉर्ड्स' : 'Ledger & Accounts',
       items: [
         {
-          id: 'settings',
-          label: isHindi ? 'ऐप सेटिंग्स व मुद्रा' : 'App Settings & Currency',
-          icon: Settings,
-          onClick: onOpenSettings ? () => handleAction(onOpenSettings) : undefined
+          id: 'home',
+          label: isHindi ? 'बहीखाता होम' : 'Dashboard Home',
+          icon: Home,
+          isActive: currentTab === 'home',
+          onClick: () => handleNavigate('home')
         },
         {
-          id: 'business-purpose-mode',
-          label: isHindi ? 'बिज़नेस मोड व कार्यक्षेत्र (दुकान, साइट, फार्म)' : 'Business Mode & Usage (Shop, Site, Farm)',
-          icon: Briefcase,
-          badge: (localStorage.getItem('daily_khata_user_purpose') || 'personal').toUpperCase(),
-          badgeColor: 'blue',
-          onClick: () => {
-            triggerHapticSound('click');
-            onClose();
-            try {
-              localStorage.removeItem('daily_khata_onboarding_completed');
-              window.location.reload();
-            } catch {}
-          }
+          id: 'add',
+          label: isHindi ? 'नया लेन-देन दर्ज करें' : 'Add Transaction',
+          sublabel: isHindi ? 'आय / व्यय प्रविष्टि' : 'Income & Expense',
+          icon: PlusCircle,
+          isActive: currentTab === 'add',
+          onClick: () => handleNavigate('add')
         },
         {
-          id: 'direct-update-app',
-          label: isHindi
-            ? `1-क्लिक ऐप अपडेट (v${APP_VERSION} New Version)`
-            : `1-Click App Update (v${APP_VERSION} New Version)`,
-          icon: RefreshCw,
-          badge: isUpdatingApp ? (isHindi ? 'अपडेट जारी...' : 'UPDATING...') : '1-CLICK',
+          id: 'history',
+          label: isHindi ? 'लेन-देन पासबुक' : 'Passbook & History',
+          sublabel: isHindi ? 'सम्पूर्ण प्रविष्टियों की सूची' : 'Complete statement',
+          icon: History,
+          isActive: currentTab === 'history',
+          onClick: () => handleNavigate('history')
+        },
+        {
+          id: 'report',
+          label: isHindi ? 'वित्तीय रिपोर्ट्स व विश्लेषण' : 'Reports & Analytics',
+          icon: BarChart3,
+          isActive: currentTab === 'report',
+          onClick: () => handleNavigate('report')
+        },
+        {
+          id: 'loans',
+          label: isHindi ? 'ऋण व उधार लेजर' : 'Loans & Udhar Book',
+          sublabel: isHindi ? 'उधारी, किश्तें व लेनदारियां' : 'Credit & EMI tracking',
+          icon: Landmark,
+          isActive: currentTab === 'loans',
+          onClick: onOpenLoans ? () => handleAction(onOpenLoans) : () => handleNavigate('loans')
+        },
+        {
+          id: 'attendance',
+          label: isHindi ? 'स्टाफ उपस्थिति व मजदूरी' : 'Staff Attendance',
+          sublabel: isHindi ? 'दैनिक हाजिरी व अग्रिम (Advance)' : 'Daily roll call & advance',
+          icon: CalendarCheck,
+          isActive: currentTab === 'attendance',
+          onClick: () => handleNavigate('attendance')
+        },
+        {
+          id: 'notes',
+          label: isHindi ? 'पर्सनल नोट्स व डायरी' : 'Personal Notes & Tasks',
+          sublabel: isHindi ? 'तारीख, समय व चेकलिस्ट' : 'With date, time & checklist',
+          icon: FileText,
+          isActive: currentTab === 'notes',
+          onClick: () => handleNavigate('notes')
+        }
+      ]
+    },
+
+    // 2. Financial Tools & Calculators
+    {
+      id: 'tools-calculators',
+      title: isHindi ? 'वित्तीय टूल्स व कैलकुलेटर' : 'Calculators & Invoicing',
+      items: [
+        {
+          id: 'calculator',
+          label: isHindi ? 'वित्तीय कैलकुलेटर सूट' : 'Financial Calculators',
+          sublabel: 'SIP, EMI, GST, CAGR, Interest',
+          icon: Calculator,
+          isActive: currentTab === 'calculator',
+          onClick: () => handleNavigate('calculator')
+        },
+        {
+          id: 'invoice',
+          label: isHindi ? 'GST इनवॉइस व रसीद जनरेटर' : 'Invoice & Bill Generator',
+          icon: Receipt,
+          badge: 'FREE',
           badgeColor: 'emerald',
-          onClick: handleDirectUpdateApp ? () => {
-            onClose();
-            handleDirectUpdateApp();
-          } : undefined
+          isActive: currentTab === 'invoice',
+          onClick: () => handleNavigate('invoice')
         },
         {
-          id: 'google-translate',
-          label: isHindi
-            ? 'गूगल ट्रांसलेटर (100+ भाषाएँ - Google Translate)'
-            : 'Google Translator (100+ Languages)',
-          icon: Globe,
-          badge: isGoogleTranslated ? (activeLangLabel ? activeLangLabel : 'ACTIVE') : '100+ LANGS',
-          badgeColor: isGoogleTranslated ? 'emerald' : 'blue',
-          onClick: onOpenGoogleTranslate ? () => handleAction(onOpenGoogleTranslate) : undefined
+          id: 'budgets',
+          label: isHindi ? 'मासिक बजट व खर्च सीमा' : 'Category Budgets',
+          icon: Sliders,
+          onClick: onOpenBudgetManager ? () => handleAction(onOpenBudgetManager) : undefined
         },
         {
-          id: 'onboarding-wizard',
-          label: isHindi ? 'भाषा व व्यापार सेटअप (Setup Wizard)' : 'Language & Business Setup Wizard',
-          icon: Sparkles,
-          badge: 'WIZARD',
-          badgeColor: 'blue',
-          onClick: () => {
-            triggerHapticSound('click');
-            onClose();
-            window.dispatchEvent(new CustomEvent('open-onboarding-wizard'));
-          }
+          id: 'goals',
+          label: isHindi ? 'वित्तीय लक्ष्य व बचत' : 'Financial Goals',
+          icon: Target,
+          isActive: currentTab === 'goals',
+          onClick: () => handleNavigate('goals')
         },
         {
-          id: 'master-edit',
-          label: isHindi ? 'मास्टर लेजर व श्रेणियां' : 'Master Categories & Ledger',
-          icon: User,
-          onClick: onOpenMasterEdit ? () => handleAction(onOpenMasterEdit) : undefined
-        },
+          id: 'split-bill',
+          label: isHindi ? 'बिल विभाजन कैलकुलेटर' : 'Split Bill Tool',
+          icon: Split,
+          onClick: onOpenSplitBill ? () => handleAction(onOpenSplitBill) : undefined
+        }
+      ]
+    },
+
+    // 3. Backup, PDF & Security
+    {
+      id: 'backup-security',
+      title: isHindi ? 'बैकअप, PDF व सुरक्षा' : 'Backup, Export & Security',
+      items: [
         {
-          id: 'cloud-drive',
-          label: isHindi ? 'गूगल ड्राइव सिंक व बैकअप' : 'Google Drive Cloud Sync',
-          icon: Cloud,
-          badge: isDriveConnected ? 'SYNC ON' : undefined,
-          badgeColor: 'emerald',
-          onClick: onOpenGoogleDrive ? () => handleAction(onOpenGoogleDrive) : undefined
-        },
-        {
-          id: 'multi-backup-all',
-          label: isHindi ? 'मल्टीपल बैकअप सिस्टम (JSON, Snapshots, CSV)' : 'Multi-Backup System (JSON, Snapshots, CSV)',
+          id: 'multi-backup',
+          label: isHindi ? 'डाउनलोड, PDF व बैकअप' : 'Export & Selective Backup',
+          sublabel: isHindi ? 'माड्यूल व तिथि चयन के साथ' : 'With module & date picker',
           icon: Download,
-          badge: 'ALL DATA',
+          badge: 'SELECTIVE',
           badgeColor: 'emerald',
           onClick: onOpenMultiBackup ? () => handleAction(onOpenMultiBackup) : undefined
         },
         {
-          id: 'one-click-pdf-report',
-          label: isHindi ? '1-क्लिक सम्पूर्ण PDF रिपोर्ट डाउनलोड' : '1-Click Comprehensive PDF Report',
+          id: 'one-click-pdf',
+          label: isHindi ? '1-क्लिक सम्पूर्ण PDF रिपोर्ट' : '1-Click Full PDF Report',
+          sublabel: isHindi ? 'प्रिंट व शेयर फ्रेंडली' : 'Direct printable statement',
           icon: FileText,
           badge: 'PDF',
-          badgeColor: 'blue',
-          onClick: onOneClickPdf ? () => handleAction(onOneClickPdf) : (onOpenMultiBackup ? () => handleAction(onOpenMultiBackup) : undefined)
-        },
-        {
-          id: 'security',
-          label: isHindi ? 'ऐप सुरक्षा व पिन लॉक' : 'App Security & PIN Lock',
-          icon: Lock,
-          badge: isLockEnabled ? (isHindi ? 'सक्रिय' : 'LOCKED') : undefined,
-          badgeColor: isLockEnabled ? 'rose' : undefined,
-          onClick: isLockEnabled && onLockNow
-            ? () => handleAction(onLockNow)
-            : onOpenSecurity
-            ? () => handleAction(onOpenSecurity)
+          badgeColor: 'sky',
+          onClick: onOneClickPdf
+            ? () => handleAction(onOneClickPdf)
+            : onOpenMultiBackup
+            ? () => handleAction(onOpenMultiBackup)
             : undefined
         },
         {
+          id: 'cloud-drive',
+          label: isHindi ? 'गूगल ड्राइव क्लाउड बैकअप' : 'Google Drive Cloud Sync',
+          icon: Cloud,
+          badge: isDriveConnected ? 'CONNECTED' : undefined,
+          badgeColor: 'emerald',
+          onClick: onOpenGoogleDrive ? () => handleAction(onOpenGoogleDrive) : undefined
+        },
+        {
+          id: 'security-lock',
+          label: isHindi ? 'ऐप सुरक्षा व पिन लॉक' : 'Security & PIN Lock',
+          icon: Lock,
+          badge: isLockEnabled ? 'PROTECTED' : undefined,
+          badgeColor: isLockEnabled ? 'rose' : undefined,
+          onClick:
+            isLockEnabled && onLockNow
+              ? () => handleAction(onLockNow)
+              : onOpenSecurity
+              ? () => handleAction(onOpenSecurity)
+              : undefined
+        },
+        {
           id: 'reminders',
-          label: isHindi ? 'बिल व भुगतान रिमाइंडर' : 'Reminders & Bill Alerts',
+          label: isHindi ? 'बिल व भुगतान अलर्ट' : 'Reminders & Alerts',
           icon: Bell,
           badge: remindersCount > 0 ? String(remindersCount) : undefined,
           badgeColor: 'amber',
@@ -326,7 +373,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
         },
         {
           id: 'trash',
-          label: isHindi ? 'रीसायकल बिन (ट्रैश)' : 'Trash (Recycle Bin)',
+          label: isHindi ? 'रीसायकल बिन (Trash)' : 'Recycle Bin',
           icon: Trash2,
           badge: trashCount > 0 ? String(trashCount) : undefined,
           badgeColor: 'rose',
@@ -335,223 +382,58 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
       ]
     },
 
-    // 2. Core Ledger & Records (मुख्य लेजर व रिकॉर्ड्स)
+    // 4. Settings & Ecosystem
     {
-      id: 'core-ledger',
-      title: isHindi ? 'मुख्य लेजर व खाते' : 'Core Ledger & Accounts',
+      id: 'settings-eco',
+      title: isHindi ? 'सेटिंग्स व सपोर्ट' : 'Settings & Support',
       items: [
         {
-          id: 'home',
-          label: isHindi ? 'होम / बहीखाता सारांश' : 'Home Ledger Dashboard',
-          icon: Home,
-          isActive: currentTab === 'home',
-          onClick: () => handleNavigate('home')
+          id: 'settings',
+          label: isHindi ? 'ऐप सेटिंग्स व फंड्स' : 'App Settings & Funds',
+          icon: Settings,
+          onClick: onOpenSettings ? () => handleAction(onOpenSettings) : undefined
         },
         {
-          id: 'add',
-          label: isHindi ? 'नया लेन-देन जोड़ें' : 'Add Transaction (Income / Expense)',
-          icon: PlusCircle,
-          isActive: currentTab === 'add',
-          onClick: () => handleNavigate('add')
+          id: 'master-categories',
+          label: isHindi ? 'मास्टर श्रेणियां व लेजर' : 'Master Categories',
+          icon: User,
+          onClick: onOpenMasterEdit ? () => handleAction(onOpenMasterEdit) : undefined
         },
-        {
-          id: 'history',
-          label: isHindi ? 'लेन-देन इतिहास व पासबुक' : 'Passbook & Transaction History',
-          icon: History,
-          isActive: currentTab === 'history',
-          onClick: () => handleNavigate('history')
-        },
-        {
-          id: 'report',
-          label: isHindi ? 'वित्तीय रिपोर्ट्स व चार्ट्स' : 'Financial Reports & Analytics',
-          icon: BarChart3,
-          isActive: currentTab === 'report',
-          onClick: () => handleNavigate('report')
-        }
-      ]
-    },
-
-    // 3. Loans, Goals & Budgets (ऋण, लक्ष्य व बजट)
-    {
-      id: 'loans-goals',
-      title: isHindi ? 'ऋण, लक्ष्य व बजट' : 'Loans, Goals & Budgets',
-      items: [
-        {
-          id: 'loans',
-          label: isHindi ? 'ऋण, किश्त व उधार लेजर' : 'Loans, EMIs & Udhar Ledger',
-          icon: Landmark,
-          badge: 'PRO',
-          badgeColor: 'amber',
-          isActive: currentTab === 'loans',
-          onClick: onOpenLoans ? () => handleAction(onOpenLoans) : () => handleNavigate('loans')
-        },
-        {
-          id: 'goals',
-          label: isHindi ? 'वित्तीय लक्ष्य व बचत' : 'Financial Goals & Milestones',
-          icon: Target,
-          isActive: currentTab === 'goals',
-          onClick: () => handleNavigate('goals')
-        },
-        {
-          id: 'budgets',
-          label: isHindi ? 'मासिक बजट व खर्च सीमा' : 'Category Budgets & Limits',
-          icon: Sliders,
-          onClick: onOpenBudgetManager ? () => handleAction(onOpenBudgetManager) : undefined
-        }
-      ]
-    },
-
-    // 4. Productivity & Work (कार्य व दैनिक आदतें)
-    {
-      id: 'productivity',
-      title: isHindi ? 'कार्य व दैनिक आदतें' : 'Productivity & Habits',
-      items: [
-        {
-          id: 'attendance',
-          label: isHindi ? 'दैनिक उपस्थिति / हाजिरी' : 'Daily Attendance Tracker',
-          icon: CalendarCheck,
-          isActive: currentTab === 'attendance',
-          onClick: () => handleNavigate('attendance')
-        },
-        {
-          id: 'tracker',
-          label: isHindi ? 'कार्य व क्लाइंट डिलीवरी' : 'Work Deliverables Tracker',
-          icon: Briefcase,
-          isActive: currentTab === 'tracker',
-          onClick: () => handleNavigate('tracker')
-        },
-        {
-          id: 'notes',
-          label: isHindi ? 'दैनिक डायरी व नोट्स' : 'Daily Journal & Personal Notes',
-          icon: NotesIcon,
-          isActive: currentTab === 'notes',
-          onClick: () => handleNavigate('notes')
-        },
-        {
-          id: 'split-bill',
-          label: isHindi ? 'बिल विभाजन कैलकुलेटर' : 'Bill Splitting Calculator',
-          icon: Split,
-          onClick: onOpenSplitBill ? () => handleAction(onOpenSplitBill) : undefined
-        },
-        {
-          id: 'sanity-studio-blog',
-          label: isHindi ? 'सैनिटी स्टूडियो (ब्लॉग लिखें)' : 'Sanity Studio (Write Blog)',
-          icon: Sparkles,
-          badge: 'STUDIO ↗',
-          badgeColor: 'emerald',
-          onClick: () => {
-            triggerHapticSound('click');
-            onClose();
-            navigate('/studio');
-          }
-        }
-      ]
-    },
-
-    // 5. Calculators Suite (वित्तीय कैलकुलेटर व इनवॉइस)
-    {
-      id: 'calculators-suite',
-      title: isHindi ? 'कैलकुलेटर व इनवॉइस सूट' : 'Calculators & Invoicing',
-      items: [
-        {
-          id: 'calculator',
-          label: isHindi ? 'वित्तीय कैलकुलेटर सूट' : 'Financial Calculators (SIP, CAGR, EMI, GST)',
-          icon: Calculator,
-          isActive: currentTab === 'calculator',
-          onClick: () => handleNavigate('calculator')
-        },
-        {
-          id: 'invoice',
-          label: isHindi ? 'फ्री GST इनवॉइस जनरेटर' : 'Free Invoice & Bill Generator',
-          icon: FileText,
-          badge: 'FREE',
-          badgeColor: 'emerald',
-          isActive: currentTab === 'invoice',
-          onClick: () => handleNavigate('invoice')
-        }
-      ]
-    },
-
-    // 6. Rozfiber Apps Ecosystem (इकोसिस्टम ऐप्स)
-    {
-      id: 'rozfiber-ecosystem',
-      title: isHindi ? 'Rozfiber ऐप्स इकोसिस्टम' : 'Rozfiber Apps Ecosystem',
-      items: [
         {
           id: 'staff-manager',
-          label: 'Staff Manager',
+          label: 'Staff Manager ↗',
+          sublabel: isHindi ? 'सिस्टर ऐप • पूर्ण पेरोल व स्लिप्स' : 'Sister App • Full Payroll & Slips',
           icon: Users,
-          badge: 'Sister App',
-          badgeColor: 'blue',
           isExternal: true,
           href: 'https://staff.rozfiber.com'
         },
         {
           id: 'rozfiber-docs',
-          label: isHindi ? 'रोज़फाइबर डॉक्स (Docs)' : 'Rozfiber Docs',
+          label: isHindi ? 'रोज़फाइबर डॉक्स (Docs ↗)' : 'Rozfiber Docs ↗',
           icon: BookOpen,
-          badge: 'Docs ↗',
-          badgeColor: 'slate',
           isExternal: true,
           href: 'https://docs.rozfiber.com'
         },
         {
-          id: 'all-apps',
-          label: isHindi ? 'सभी Rozfiber ऐप्स देखें' : 'Explore All Rozfiber Apps',
-          icon: Layers,
-          badge: 'HUB',
-          badgeColor: 'emerald',
-          onClick: onOpenRozfiberApps ? () => handleAction(onOpenRozfiberApps) : () => handleNavigate('apps')
-        },
-        {
-          id: 'sanity-studio-manage',
-          label: isHindi ? 'सैनिटी ब्लॉग स्टूडियो (कंटेंट लिखें)' : 'Sanity Studio (Author & Publish)',
-          icon: Sparkles,
-          badge: 'CMS ↗',
-          badgeColor: 'emerald',
-          onClick: () => {
-            triggerHapticSound('click');
-            onClose();
-            navigate('/studio');
-          }
-        }
-      ]
-    },
-
-    // 7. Knowledge, Help & Policies (गाइड, अकादमी व नीतियां)
-    {
-      id: 'knowledge-legal',
-      title: isHindi ? 'गाइड, अकादमी व नीतियां' : 'Knowledge, Help & Policies',
-      items: [
-        {
-          id: 'guide',
-          label: isHindi ? 'उपयोगकर्ता गाइड व मैन्युअल' : 'User Manual & 6-Fund Guide',
-          icon: BookOpen,
+          id: 'manual',
+          label: isHindi ? 'उपयोगकर्ता मैन्युअल' : 'User Guide & Manual',
+          icon: HelpCircle,
           isActive: currentTab === 'guide',
           onClick: onOpenManual ? () => handleAction(onOpenManual) : () => handleNavigate('guide')
         },
         {
-          id: 'academy',
-          label: isHindi ? 'वेल्थ अकादमी (वित्तीय ज्ञान)' : 'Wealth Academy (Financial Mastery)',
-          icon: GraduationCap,
-          isActive: currentTab === 'academy',
-          onClick: () => handleNavigate('academy')
-        },
-        {
-          id: 'news',
-          label: isHindi ? 'समाचार व रिसर्च पोर्टल' : 'Commercial News & Research',
-          icon: Newspaper,
-          badge: 'PORTAL',
-          badgeColor: 'blue',
-          isActive: currentTab === 'news',
-          onClick: () => handleNavigate('news')
-        },
-        {
           id: 'support',
-          label: isHindi ? 'सहायता केंद्र व फीडबैक' : 'Help & Support Centre',
-          icon: HelpCircle,
+          label: isHindi ? 'सहायता केंद्र व सुझाव' : 'Help & Support',
+          icon: Mail,
           isActive: currentTab === 'support',
           onClick: onOpenSupport ? () => handleAction(onOpenSupport) : () => handleNavigate('support')
+        },
+        {
+          id: 'privacy-policy',
+          label: isHindi ? 'गोपनीयता नीति' : 'Privacy Policy',
+          icon: ShieldCheck,
+          isActive: currentTab === 'privacy',
+          onClick: () => handleNavigate('privacy')
         },
         {
           id: 'about',
@@ -559,95 +441,33 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           icon: Info,
           isActive: currentTab === 'about',
           onClick: onOpenAbout ? () => handleAction(onOpenAbout) : () => handleNavigate('about')
-        },
-        {
-          id: 'developer',
-          label: isHindi ? 'डेवलपर प्रोफाइल (MD Zafeer Hasan)' : 'Developer Profile (MD Zafeer Hasan)',
-          icon: User,
-          isActive: currentTab === 'developer',
-          onClick: () => handleNavigate('developer')
-        },
-        {
-          id: 'privacy',
-          label: isHindi ? 'गोपनीयता नीति' : 'Privacy Policy (100% Offline)',
-          icon: ShieldCheck,
-          isActive: currentTab === 'privacy',
-          onClick: () => handleNavigate('privacy')
-        },
-        {
-          id: 'terms',
-          label: isHindi ? 'नियम व शर्तें' : 'Terms of Service',
-          icon: FileText,
-          isActive: currentTab === 'terms',
-          onClick: () => handleNavigate('terms')
-        },
-        {
-          id: 'disclaimer',
-          label: isHindi ? 'अस्वीकरण' : 'Disclaimer',
-          icon: AlertCircle,
-          isActive: currentTab === 'disclaimer',
-          onClick: () => handleNavigate('disclaimer')
-        },
-        {
-          id: 'cookies',
-          label: isHindi ? 'कुकीज़ नीति' : 'Cookie Policy',
-          icon: Cookie,
-          isActive: currentTab === 'cookies',
-          onClick: () => handleNavigate('cookies')
-        },
-        {
-          id: 'safety',
-          label: isHindi ? 'सोर्स कोड एवं सुरक्षा ऑडिट' : 'Source Safety & Audit Guarantee',
-          icon: Shield,
-          isActive: currentTab === 'safety',
-          onClick: onOpenSourceCode ? () => handleAction(onOpenSourceCode) : () => handleNavigate('safety')
-        },
-        {
-          id: 'install',
-          label: isHindi ? 'ऐप इंस्टॉल करें' : 'Install PWA App',
-          icon: Download,
-          onClick: onOpenInstall ? () => handleAction(onOpenInstall) : undefined
-        },
-        {
-          id: 'share',
-          label: isHindi ? 'ऐप शेयर करें' : 'Share App',
-          icon: Share2,
-          onClick: onOpenShare ? () => handleAction(onOpenShare) : undefined
         }
       ]
     }
   ], [
     isHindi,
+    currentTab,
     isDriveConnected,
     isLockEnabled,
     remindersCount,
     trashCount,
-    currentTab,
-    onOpenSettings,
-    onOpenMasterEdit,
+    onOpenLoans,
+    onOpenBudgetManager,
+    onOpenSplitBill,
+    onOpenMultiBackup,
+    onOneClickPdf,
     onOpenGoogleDrive,
     onLockNow,
     onOpenSecurity,
     onOpenReminders,
     onOpenTrash,
-    onOpenLoans,
-    onOpenBudgetManager,
-    onOpenSplitBill,
-    onOpenRozfiberApps,
+    onOpenSettings,
+    onOpenMasterEdit,
     onOpenManual,
     onOpenSupport,
-    onOpenAbout,
-    onOpenSourceCode,
-    onOpenInstall,
-    onOpenShare,
-    onOpenGoogleTranslate,
-    isGoogleTranslated,
-    activeLangLabel,
-    handleDirectUpdateApp,
-    isUpdatingApp
+    onOpenAbout
   ]);
 
-  // Filter items if user is searching
   const filteredSections = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return sections;
@@ -655,9 +475,11 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
     return sections
       .map((section) => ({
         ...section,
-        items: section.items.filter((item) =>
-          item.label.toLowerCase().includes(q) ||
-          item.id.toLowerCase().includes(q)
+        items: section.items.filter(
+          (item) =>
+            item.label.toLowerCase().includes(q) ||
+            item.id.toLowerCase().includes(q) ||
+            (item.sublabel && item.sublabel.toLowerCase().includes(q))
         )
       }))
       .filter((section) => section.items.length > 0);
@@ -667,7 +489,7 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] bg-black/55 backdrop-blur-xs flex justify-end transition-opacity duration-200"
+      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-xs flex justify-end transition-opacity duration-200"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -677,77 +499,76 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
         className={`w-[85vw] max-w-[340px] sm:max-w-sm md:max-w-md h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-200 select-none pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] ${
           isLightMode
             ? 'bg-white text-slate-900 border-l border-slate-200'
-            : 'bg-[var(--theme-surface,#0C1A3D)] text-[var(--theme-text,#F1F5F9)] border-l border-[var(--theme-border,#1E3A8A)]'
+            : 'bg-[var(--theme-surface,#0F172A)] text-[var(--theme-text,#F8FAFC)] border-l border-[var(--theme-border,#1E293B)]'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Header */}
-        <div className={`p-3.5 sm:p-4 flex items-center justify-between gap-2.5 shrink-0 ${
-          isLightMode
-            ? 'border-b border-slate-200 bg-white'
-            : 'border-b border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-surface,#0C1A3D)]'
-        }`}>
-          <div className="flex items-center gap-2.5 min-w-0">
-            {/* Authentic Daily Khata Pro AppLogo */}
+        <div
+          className={`p-4 flex items-center justify-between gap-3 shrink-0 ${
+            isLightMode
+              ? 'border-b border-slate-200 bg-white'
+              : 'border-b border-[var(--theme-border,#1E293B)] bg-[var(--theme-surface,#0F172A)]'
+          }`}
+        >
+          <div className="flex items-center gap-3 min-w-0">
             <AppLogo size={36} className="shrink-0" />
-
             <div className="min-w-0 flex flex-col justify-center">
-              <h2 className={`text-[16px] sm:text-[17px] font-extrabold tracking-tight truncate leading-tight flex items-center gap-1.5 ${
-                isLightMode ? 'text-slate-900' : 'text-white'
-              }`}>
+              <h2
+                className={`text-[16px] font-bold tracking-tight truncate leading-tight flex items-center gap-1.5 ${
+                  isLightMode ? 'text-slate-900' : 'text-white'
+                }`}
+              >
                 <span>Daily Khata</span>
-                <span className="text-[var(--theme-primary,#3B82F6)] font-black">Pro</span>
+                <span className="text-[var(--theme-primary,#38BDF8)] font-black">Pro</span>
               </h2>
-              <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                <span className={`text-[11px] font-semibold tracking-wide truncate ${
-                  isLightMode ? 'text-slate-600' : 'text-[var(--theme-text-muted,#9DB8AE)]'
-                }`}>
-                  Income Expense Tracker
+              <div className="flex items-center gap-1.5 mt-0.5 min-w-0 text-[11px] font-medium text-[var(--theme-text-dim,#94A3B8)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span className="truncate">
+                  {isHindi ? 'ऑफ़लाइन बहीखाता व वित्तीय सूट' : 'Offline Financial Suite'}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Close Button */}
           <button
             type="button"
             onClick={onClose}
-            className={`p-2 rounded-xl transition-all cursor-pointer shrink-0 border ${
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 border ${
               isLightMode
-                ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200 active:scale-95'
-                : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#11285A)] border-[var(--theme-border,#1E3A8A)] active:scale-95'
+                ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
+                : 'text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:bg-[var(--theme-card,#1E293B)] border-[var(--theme-border,#334155)]'
             }`}
-            title="Close Menu"
+            title="Close"
           >
-            <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Search Bar */}
-        <div className="px-3.5 sm:px-4 py-2 shrink-0 border-b border-[var(--theme-border,#1E3A8A)]/25">
+        <div className="px-4 py-2.5 shrink-0 border-b border-[var(--theme-border,#1E293B)]/40">
           <div className="relative">
-            <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${
-              isLightMode ? 'text-slate-400' : 'text-[var(--theme-primary,#38BDF8)]'
-            }`} />
+            <Search
+              className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${
+                isLightMode ? 'text-slate-400' : 'text-slate-500'
+              }`}
+            />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={isHindi ? 'मेनू में खोजें (लोन, सेटिंग्स, अटेंडेंस)...' : 'Search menu items...'}
-              className={`w-full pl-8.5 pr-8 py-1.5 rounded-xl text-xs placeholder-[var(--theme-text-dim,#64748B)] focus:outline-none transition-all ${
+              placeholder={isHindi ? 'मेनू में खोजें (लोन, अटेंडेंस, नोट्स)...' : 'Search menu...'}
+              className={`w-full pl-8.5 pr-8 py-1.5 rounded-lg text-[12px] placeholder:text-slate-500 focus:outline-none transition-all ${
                 isLightMode
-                  ? 'bg-slate-100 border border-slate-200 text-slate-900 focus:bg-white focus:border-sky-500'
-                  : 'bg-[var(--theme-card,#11285A)] border border-[var(--theme-border,#1E3A8A)] text-[var(--theme-text,#F1F5F9)] focus:border-[var(--theme-primary,#38BDF8)]'
+                  ? 'bg-slate-100 border border-slate-200 text-slate-900 focus:border-sky-500'
+                  : 'bg-[var(--theme-card,#1E293B)] border border-[var(--theme-border,#334155)] text-white focus:border-sky-400'
               }`}
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className={`absolute right-2.5 top-1/2 -translate-y-1/2 ${
-                  isLightMode ? 'text-slate-400 hover:text-slate-700' : 'text-[var(--theme-text-muted,#94A3B8)] hover:text-white'
-                }`}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -755,19 +576,18 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
           </div>
         </div>
 
-        {/* Drawer Body - Clean, Smoothly Scrollable with all sections */}
-        <div className="flex-1 overflow-y-auto px-3.5 sm:px-4 py-2.5 space-y-3">
-          {/* Quick 12-Theme Color Palette Switcher (Scrolls naturally, doesn't hide screen) */}
+        {/* Drawer Body */}
+        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+          
+          {/* Quick Theme Switcher Strip */}
           {onThemeChange && !searchQuery && (
-            <div className="p-2.5 rounded-xl border border-[var(--theme-border,#213E61)]/50 bg-[var(--theme-surface,#0E1A29)]/70">
-              <div className="flex items-center justify-between gap-2 mb-1.5">
-                <span className="text-[11px] font-bold text-[var(--theme-text-muted,#94A3B8)] flex items-center gap-1.5">
-                  <Palette className="w-3.5 h-3.5 text-[var(--theme-primary,#38BDF8)]" />
-                  {isHindi ? '12 कलर थीम्स (Color Themes)' : 'Color Theme Palette (12)'}
+            <div className="p-2.5 rounded-xl border border-[var(--theme-border,#1E293B)] bg-[var(--theme-card,#1E293B)]/40">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-[var(--theme-text-dim,#94A3B8)] flex items-center gap-1.5">
+                  <Palette className="w-3.5 h-3.5 text-sky-400" />
+                  <span>{isHindi ? 'थीम चयन' : 'Themes'}</span>
                 </span>
-                <span className="text-[10px] font-mono font-bold text-[var(--theme-primary,#38BDF8)] uppercase">
-                  {theme}
-                </span>
+                <span className="text-[10px] font-mono text-sky-400 uppercase">{theme}</span>
               </div>
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                 {ALL_THEMES.map((th) => {
@@ -781,14 +601,14 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                         onThemeChange(th.id);
                       }}
                       title={th.label}
-                      className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10.5px] font-bold transition-all shrink-0 cursor-pointer border ${
+                      className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10.5px] font-semibold transition-all shrink-0 cursor-pointer border ${
                         isActive
-                          ? 'border-[var(--theme-primary,#38BDF8)] bg-[var(--theme-primary,#38BDF8)]/20 text-white shadow-xs scale-105'
-                          : 'border-[var(--theme-border,#213E61)] bg-[var(--theme-card,#132438)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white hover:border-[var(--theme-primary,#38BDF8)]/50'
+                          ? 'border-sky-400 bg-sky-500/20 text-white'
+                          : 'border-[var(--theme-border,#334155)] bg-[var(--theme-surface,#0F172A)] text-[var(--theme-text-dim,#94A3B8)] hover:text-white'
                       }`}
                     >
                       <span
-                        className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/20 shadow-xs"
+                        className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/20"
                         style={{ backgroundColor: th.color }}
                       />
                       <span>{th.label}</span>
@@ -799,135 +619,54 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
             </div>
           )}
 
-          {/* Quick Action Banners (1-Click Update & Google Translate) */}
-          {!searchQuery && (
-            <div className="space-y-1.5">
-              {/* 1-Click New Version Direct Update Banner */}
-              {handleDirectUpdateApp && (
-                <button
-                  type="button"
-                  disabled={isUpdatingApp}
-                  onClick={() => {
-                    triggerHapticSound('save');
-                    onClose();
-                    handleDirectUpdateApp();
-                  }}
-                  className={`w-full flex items-center justify-between p-2 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group disabled:opacity-50 ${
-                    isLightMode
-                      ? 'bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100/50 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-100/60 text-slate-900'
-                      : 'bg-gradient-to-r from-emerald-950/70 via-teal-950/40 to-slate-900 border-emerald-500/40 hover:border-emerald-400 hover:bg-slate-800/60 text-white'
-                  }`}
-                  title={isHindi ? 'नया वर्शन 1-क्लिक अपडेट व कैश रिफ्रेश' : 'New Version 1-Click Direct Update'}
-                  id="main-menu-version-update-banner"
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      isLightMode
-                        ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
-                        : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 group-hover:text-emerald-300'
-                    }`}>
-                      <RefreshCw className={`w-3.5 h-3.5 ${isUpdatingApp ? 'animate-spin' : ''}`} />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className={`text-[12px] font-bold tracking-tight truncate ${
-                          isLightMode ? 'text-slate-900' : 'text-white'
-                        }`}>
-                          {isHindi ? '1-क्लिक वर्शन अपडेट' : '1-Click Version Update'}
-                        </span>
-                        <span className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
-                          isLightMode
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                            : 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40'
-                        }`}>
-                          v{APP_VERSION}
-                        </span>
-                      </div>
-                      <p className={`text-[10px] truncate mt-0.5 ${
-                        isLightMode ? 'text-slate-600' : 'text-slate-400'
-                      }`}>
-                        {isUpdatingApp
-                          ? (isHindi ? 'अपडेट हो रहा है...' : 'Updating...')
-                          : (isHindi ? 'तुरंत अपडेट करें • डेटा सुरक्षित' : 'Instant update • Data safe')}
-                      </p>
-                    </div>
+          {/* Quick Version Update Banner if available */}
+          {!searchQuery && handleDirectUpdateApp && (
+            <button
+              type="button"
+              disabled={isUpdatingApp}
+              onClick={() => {
+                triggerHapticSound('save');
+                onClose();
+                handleDirectUpdateApp();
+              }}
+              className="w-full flex items-center justify-between p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/15 text-left transition-colors cursor-pointer group"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                  <RefreshCw className={`w-3.5 h-3.5 ${isUpdatingApp ? 'animate-spin' : ''}`} />
+                </div>
+                <div>
+                  <div className="text-[12px] font-bold text-white flex items-center gap-1.5">
+                    <span>{isHindi ? 'वर्शन अपडेट' : 'App Update'}</span>
+                    <span className="text-[9.5px] font-mono px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300">
+                      v{APP_VERSION}
+                    </span>
                   </div>
-                  <ChevronRight className="w-4 h-4 shrink-0 text-emerald-400" />
-                </button>
-              )}
-
-              {/* Google Translator Quick Banner */}
-              {onOpenGoogleTranslate && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    triggerHapticSound('click');
-                    onClose();
-                    onOpenGoogleTranslate();
-                  }}
-                  className={`w-full flex items-center justify-between p-2 rounded-xl border text-left transition-all active:scale-[0.99] cursor-pointer shadow-xs group ${
-                    isLightMode
-                      ? 'bg-gradient-to-r from-sky-50 via-blue-50 to-sky-100/50 border-sky-300 hover:border-sky-400 hover:bg-sky-100/60 text-slate-900'
-                      : 'bg-gradient-to-r from-blue-950/70 via-sky-950/40 to-slate-900 border-sky-500/35 hover:border-sky-400 hover:bg-slate-800/60 text-white'
-                  }`}
-                  title={isHindi ? 'गूगल ट्रांसलेटर (100+ भाषाएँ)' : 'Google Translator (100+ Languages)'}
-                  id="main-menu-google-translator-banner"
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      isLightMode
-                        ? 'bg-sky-100 text-sky-700 border border-sky-300'
-                        : 'bg-sky-500/20 text-sky-400 border border-sky-500/40 group-hover:text-sky-300'
-                    }`}>
-                      <Globe className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className={`text-[12px] font-bold tracking-tight truncate ${
-                          isLightMode ? 'text-slate-900' : 'text-white'
-                        }`}>
-                          {isHindi ? 'गूगल अनुवादक' : 'Google Translator'}
-                        </span>
-                        <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-md shrink-0 ${
-                          isLightMode
-                            ? 'bg-sky-100 text-sky-800 border border-sky-300'
-                            : 'bg-sky-500/25 text-sky-300 border border-sky-500/40'
-                        }`}>
-                          {isGoogleTranslated && activeLangLabel ? activeLangLabel : '100+ LANGS'}
-                        </span>
-                      </div>
-                      <p className={`text-[10px] truncate mt-0.5 ${
-                        isLightMode ? 'text-slate-600' : 'text-slate-400'
-                      }`}>
-                        {isHindi ? '100+ भाषाओं में तुरंत अनुवाद' : 'Translate entire app to 100+ languages'}
-                      </p>
-                    </div>
+                  <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)]">
+                    {isUpdatingApp
+                      ? isHindi ? 'अपडेट हो रहा है...' : 'Updating...'
+                      : isHindi ? 'नवीनतम संस्करण लोड करें' : 'Click to refresh cache'}
                   </div>
-                  <ChevronRight className="w-4 h-4 shrink-0 text-sky-400" />
-                </button>
-              )}
-            </div>
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-emerald-400 shrink-0" />
+            </button>
           )}
 
-          {/* Section List */}
+          {/* 4 Clean Sections */}
           {filteredSections.map((section, idx) => (
             <div key={section.id} className="space-y-1">
-              {/* Clean Section Header Label */}
               <div className="px-2 pt-1 pb-0.5">
-                <span className={`text-[10.5px] font-mono font-bold uppercase tracking-wider block ${
-                  isLightMode ? 'text-slate-500' : 'text-[var(--theme-primary,#38BDF8)]'
-                }`}>
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[var(--theme-text-dim,#94A3B8)]">
                   {section.title}
                 </span>
               </div>
 
-              {/* Section Rows */}
               <div className="space-y-0.5">
                 {section.items.map((item) => {
                   const ItemIcon = item.icon;
                   const isRowActive = item.isActive;
 
-                  // External Link Row
                   if (item.isExternal && item.href) {
                     return (
                       <a
@@ -939,41 +678,26 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                           triggerHapticSound('click');
                           onClose();
                         }}
-                        className={`w-full flex items-center justify-between py-2 px-2 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
+                        className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors cursor-pointer ${
                           isLightMode
                             ? 'hover:bg-slate-100 text-slate-800'
-                            : 'hover:bg-[var(--theme-card,#11285A)] text-[var(--theme-text,#F1F5F9)]'
+                            : 'hover:bg-[var(--theme-card,#1E293B)] text-[var(--theme-text,#F8FAFC)]'
                         }`}
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          <ItemIcon className={`w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-colors ${
-                            isLightMode
-                              ? 'text-sky-600 group-hover:text-sky-700'
-                              : 'text-[var(--theme-primary,#38BDF8)] group-hover:opacity-90'
-                          }`} />
-                          <span className={`text-[13px] sm:text-[13.5px] font-medium transition-colors truncate ${
-                            isLightMode
-                              ? 'text-slate-800 group-hover:text-slate-950'
-                              : 'text-[var(--theme-text,#F1F5F9)] group-hover:text-white'
-                          }`}>
-                            {item.label}
-                          </span>
+                          <ItemIcon className="w-4 h-4 text-sky-400 shrink-0" />
+                          <div className="min-w-0">
+                            <div className="text-[13px] font-medium truncate">{item.label}</div>
+                            {item.sublabel && (
+                              <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                                {item.sublabel}
+                              </div>
+                            )}
+                          </div>
                         </div>
 
                         {item.badge && (
-                          <span className={`text-[10.5px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
-                            isLightMode
-                              ? (item.badgeColor === 'blue'
-                                  ? 'bg-blue-100 text-blue-700 border border-blue-300'
-                                  : item.badgeColor === 'emerald'
-                                  ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
-                                  : 'bg-slate-100 text-slate-700 border border-slate-300')
-                              : (item.badgeColor === 'blue'
-                                  ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
-                                  : item.badgeColor === 'emerald'
-                                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                                  : 'bg-[var(--theme-card,#11285A)] text-[var(--theme-text-muted,#94A3B8)] border border-[var(--theme-border,#1E3A8A)]')
-                          }`}>
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 font-mono shrink-0">
                             {item.badge}
                           </span>
                         )}
@@ -981,59 +705,49 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                     );
                   }
 
-                  // Standard Action Button Row
                   return (
                     <button
                       key={item.id}
                       type="button"
                       onClick={item.onClick}
-                      className={`w-full flex items-center justify-between py-2 px-2 rounded-xl text-left transition-colors active:scale-[0.99] group cursor-pointer ${
+                      className={`w-full flex items-center justify-between py-2 px-2.5 rounded-xl text-left transition-colors cursor-pointer ${
                         isRowActive
-                          ? (isLightMode
-                              ? 'bg-sky-50 border border-sky-300 text-sky-800'
-                              : 'bg-[var(--theme-primary-dim,rgba(56,189,248,0.18))] border border-[var(--theme-primary-border,rgba(56,189,248,0.35))] text-[var(--theme-primary,#38BDF8)]')
-                          : (isLightMode
-                              ? 'hover:bg-slate-100 text-slate-800'
-                              : 'hover:bg-[var(--theme-card,#11285A)] text-[var(--theme-text,#F1F5F9)]')
+                          ? 'bg-sky-500/15 border border-sky-500/30 text-sky-300 font-semibold'
+                          : isLightMode
+                          ? 'hover:bg-slate-100 text-slate-800'
+                          : 'hover:bg-[var(--theme-card,#1E293B)] text-[var(--theme-text,#F8FAFC)]'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <ItemIcon className={`w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-colors ${
-                          isRowActive
-                            ? (isLightMode ? 'text-sky-700' : 'text-[var(--theme-primary,#38BDF8)]')
-                            : (isLightMode ? 'text-sky-600 group-hover:text-sky-700' : 'text-[var(--theme-primary,#38BDF8)] group-hover:text-white')
-                        }`} />
-                        <span className={`text-[13px] sm:text-[13.5px] font-medium transition-colors truncate ${
-                          isRowActive
-                            ? (isLightMode ? 'text-sky-900 font-bold' : 'text-[var(--theme-primary,#38BDF8)] font-bold')
-                            : (isLightMode ? 'text-slate-800 group-hover:text-slate-950' : 'text-[var(--theme-text,#F1F5F9)] group-hover:text-white')
-                        }`}>
-                          {item.label}
-                        </span>
+                        <ItemIcon
+                          className={`w-4 h-4 shrink-0 ${
+                            isRowActive ? 'text-sky-400' : 'text-slate-400 group-hover:text-white'
+                          }`}
+                        />
+                        <div className="min-w-0">
+                          <div className="text-[13px] font-medium truncate">{item.label}</div>
+                          {item.sublabel && (
+                            <div className="text-[10.5px] text-[var(--theme-text-dim,#94A3B8)] truncate">
+                              {item.sublabel}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       {item.badge && (
-                        <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
-                          isLightMode
-                            ? (item.badgeColor === 'emerald'
-                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                                : item.badgeColor === 'amber'
-                                ? 'bg-amber-100 text-amber-800 border border-amber-300'
-                                : item.badgeColor === 'rose'
-                                ? 'bg-rose-100 text-rose-800 border border-rose-300'
-                                : item.badgeColor === 'blue'
-                                ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                                : 'bg-slate-100 text-slate-700 border border-slate-300')
-                            : (item.badgeColor === 'emerald'
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                                : item.badgeColor === 'amber'
-                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                : item.badgeColor === 'rose'
-                                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                                : item.badgeColor === 'blue'
-                                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                                : 'bg-[var(--theme-card,#11285A)] text-[var(--theme-text-muted,#94A3B8)] border border-[var(--theme-border,#1E3A8A)]')
-                        }`}>
+                        <span
+                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded font-mono shrink-0 ${
+                            item.badgeColor === 'emerald'
+                              ? 'bg-emerald-500/20 text-emerald-300'
+                              : item.badgeColor === 'sky'
+                              ? 'bg-sky-500/20 text-sky-300'
+                              : item.badgeColor === 'rose'
+                              ? 'bg-rose-500/20 text-rose-300'
+                              : item.badgeColor === 'amber'
+                              ? 'bg-amber-500/20 text-amber-300'
+                              : 'bg-slate-700/40 text-slate-300'
+                          }`}
+                        >
                           {item.badge}
                         </span>
                       )}
@@ -1042,31 +756,29 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 })}
               </div>
 
-              {/* Divider between sections */}
               {idx < filteredSections.length - 1 && (
-                <div className="pt-1.5">
-                  <div className={`h-px ${isLightMode ? 'bg-slate-200' : 'bg-[var(--theme-border,#1E3A8A)]/40'}`} />
+                <div className="pt-2">
+                  <div className="h-px bg-[var(--theme-border,#1E293B)]/60" />
                 </div>
               )}
             </div>
           ))}
 
           {filteredSections.length === 0 && (
-            <div className={`py-12 text-center text-xs ${
-              isLightMode ? 'text-slate-500' : 'text-[var(--theme-text-muted,#94A3B8)]'
-            }`}>
+            <div className="py-12 text-center text-xs text-[var(--theme-text-dim,#94A3B8)]">
               {isHindi ? 'कोई परिणाम नहीं मिला' : 'No menu items match your search'}
             </div>
           )}
         </div>
 
-        {/* Drawer Footer - Sleek, Non-intrusive */}
-        <div className={`px-3.5 sm:px-4 pt-2 pb-2.5 border-t shrink-0 space-y-2 ${
-          isLightMode
-            ? 'border-slate-200 bg-white'
-            : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-surface,#0C1A3D)]'
-        }`}>
-          {/* Row 1: Install App & Share App Buttons */}
+        {/* Drawer Footer */}
+        <div
+          className={`px-4 py-3 border-t shrink-0 space-y-2.5 ${
+            isLightMode
+              ? 'border-slate-200 bg-white'
+              : 'border-[var(--theme-border,#1E293B)] bg-[var(--theme-surface,#0F172A)]'
+          }`}
+        >
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
@@ -1075,14 +787,10 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClose();
                 if (onOpenInstall) onOpenInstall();
               }}
-              className={`w-full flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl border text-[11.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
-                isLightMode
-                  ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800'
-                  : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-card,#11285A)] hover:bg-[var(--theme-card-hover,#17377C)] text-[var(--theme-text,#F1F5F9)]'
-              }`}
+              className="flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg border border-[var(--theme-border,#334155)] bg-[var(--theme-card,#1E293B)] hover:bg-[var(--theme-card-hover,#334155)] text-[11.5px] font-semibold text-white transition-colors cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-[var(--theme-primary,#3B82F6)] shrink-0" />
-              <span>{isHindi ? 'ऐप इंस्टॉल' : 'Install App'}</span>
+              <Download className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+              <span>{isHindi ? 'ऐप इंस्टॉल' : 'Install PWA'}</span>
             </button>
 
             <button
@@ -1092,73 +800,27 @@ export const MainMenuDrawer: React.FC<MainMenuDrawerProps> = ({
                 onClose();
                 if (onOpenShare) onOpenShare();
               }}
-              className={`w-full flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl border text-[11.5px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95 ${
-                isLightMode
-                  ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800'
-                  : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-card,#11285A)] hover:bg-[var(--theme-card-hover,#17377C)] text-[var(--theme-text,#F1F5F9)]'
-              }`}
+              className="flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg border border-[var(--theme-border,#334155)] bg-[var(--theme-card,#1E293B)] hover:bg-[var(--theme-card-hover,#334155)] text-[11.5px] font-semibold text-white transition-colors cursor-pointer"
             >
-              <Share2 className="w-3.5 h-3.5 text-[var(--theme-primary,#3B82F6)] shrink-0" />
+              <Share2 className="w-3.5 h-3.5 text-sky-400 shrink-0" />
               <span>{isHindi ? 'ऐप शेयर' : 'Share App'}</span>
             </button>
           </div>
 
-          {/* Row 2: Daily Khata Pro, Version Badge & Update Button */}
-          <div className="flex items-center justify-between gap-2 pt-0.5">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className={`text-[12.5px] font-bold tracking-tight ${
-                isLightMode ? 'text-slate-900' : 'text-white'
-              }`}>
-                Daily Khata <span className="text-[var(--theme-primary,#3B82F6)]">Pro</span>
-              </span>
-              <span className={`px-1.5 py-0.2 rounded-md border text-[9.5px] font-mono font-medium ${
-                isLightMode
-                  ? 'border-slate-200 bg-slate-100 text-slate-700'
-                  : 'border-[var(--theme-border,#1E3A8A)] bg-[var(--theme-card,#11285A)] text-[var(--theme-text-muted,#94A3B8)]'
-              }`}>
-                v{APP_VERSION}
-              </span>
+          <div className="flex items-center justify-between text-[11px] text-[var(--theme-text-dim,#94A3B8)] pt-1">
+            <div className="flex items-center gap-1 text-emerald-400 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+              <span>{isHindi ? '100% ऑफ़लाइन सुरक्षित' : '100% Offline Safe'}</span>
             </div>
-
-            {handleDirectUpdateApp && (
-              <button
-                type="button"
-                disabled={isUpdatingApp}
-                onClick={() => {
-                  triggerHapticSound('save');
-                  onClose();
-                  handleDirectUpdateApp();
-                }}
-                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer shadow-2xs active:scale-95 disabled:opacity-50 ${
-                  isLightMode
-                    ? 'border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700'
-                    : 'border-[var(--theme-primary-border,#1E3A8A)] bg-[var(--theme-primary-dim,rgba(56,189,248,0.15))] hover:bg-[var(--theme-primary-dim,rgba(56,189,248,0.25))] text-[var(--theme-primary,#38BDF8)]'
-                }`}
-                title={isHindi ? '1-क्लिक ऐप अपडेट' : '1-Click Direct Update'}
-                id="drawer-footer-direct-update-btn"
-              >
-                <RefreshCw className={`w-3 h-3 ${isUpdatingApp ? 'animate-spin' : ''}`} />
-                <span>{isUpdatingApp ? (isHindi ? 'जारी...' : 'Updating') : (isHindi ? 'अपडेट' : 'Update')}</span>
-              </button>
-            )}
-          </div>
-
-          {/* Row 3: 100% Offline • Zero Telemetry & Rozfiber attribution */}
-          <div className="flex items-center justify-between text-[10px] pt-0.5 border-t border-[var(--theme-border,#1E3A8A)]/30">
-            <div className="flex items-center gap-1 text-emerald-500 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-              <span>{isHindi ? '100% ऑफ़लाइन • सुरक्षित' : '100% Offline • Private'}</span>
-            </div>
-            <div className={`font-medium ${
-              isLightMode ? 'text-slate-600' : 'text-[var(--theme-text-muted,#94A3B8)]'
-            }`}>
-              By <span className="text-[var(--theme-primary,#38BDF8)] font-bold">Rozfiber</span>
+            <div>
+              <span>Daily Khata Pro </span>
+              <span className="font-mono text-[10px]">v{APP_VERSION}</span>
             </div>
           </div>
         </div>
+
       </div>
     </div>,
     document.body
   );
 };
-

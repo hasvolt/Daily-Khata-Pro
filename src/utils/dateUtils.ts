@@ -70,7 +70,105 @@ export function formatTime12h(timeStr?: string | null): string {
   const ampm = hoursNum >= 12 ? 'PM' : 'AM';
   let h12 = hoursNum % 12;
   if (h12 === 0) h12 = 12;
-  
+
   return `${String(h12).padStart(2, '0')}:${minutes} ${ampm}`;
 }
+
+export function getCurrentTimeString(d: Date = new Date()): string {
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
+export interface NoteDisplayDateTime {
+  effectiveDate: string; // YYYY-MM-DD
+  effectiveTime: string; // HH:mm or formatted
+  formattedDate: string; // e.g. 24 Oct 2026
+  formattedTime: string; // e.g. 10:30 PM
+  relativeBadge: string; // e.g. "आज, 10:30 PM" or "Yesterday, 04:15 PM"
+  isToday: boolean;
+  isYesterday: boolean;
+  isEdited: boolean;
+  editedTimeStr?: string;
+}
+
+export function getNoteDisplayDateTime(
+  note: { date?: string; time?: string; createdAt?: number; updatedAt?: number },
+  isHindi: boolean = false
+): NoteDisplayDateTime {
+  const todayStr = getLocalDateString();
+  const yesterdayStr = getDaysAgoDateString(1);
+
+  // Fallback to createdAt if date or time is missing
+  const createdDate = note.createdAt ? new Date(note.createdAt) : new Date();
+  const effectiveDate = note.date || getLocalDateString(createdDate);
+
+  let rawTime = note.time;
+  if (!rawTime && note.createdAt) {
+    const ch = String(createdDate.getHours()).padStart(2, '0');
+    const cm = String(createdDate.getMinutes()).padStart(2, '0');
+    rawTime = `${ch}:${cm}`;
+  }
+  const effectiveTime = rawTime || getCurrentTimeString();
+  const formattedTime = formatTime12h(effectiveTime);
+
+  // Formatted date string
+  let formattedDate = effectiveDate;
+  try {
+    const parts = effectiveDate.split('-');
+    if (parts.length === 3) {
+      const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      formattedDate = d.toLocaleDateString(isHindi ? 'hi-IN' : 'en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+  } catch {
+    formattedDate = effectiveDate;
+  }
+
+  const isToday = effectiveDate === todayStr;
+  const isYesterday = effectiveDate === yesterdayStr;
+
+  let relativeBadge = '';
+  if (isToday) {
+    relativeBadge = isHindi ? `आज, ${formattedTime}` : `Today, ${formattedTime}`;
+  } else if (isYesterday) {
+    relativeBadge = isHindi ? `कल, ${formattedTime}` : `Yesterday, ${formattedTime}`;
+  } else {
+    relativeBadge = `${formattedDate} • ${formattedTime}`;
+  }
+
+  const isEdited = Boolean(
+    note.updatedAt && note.createdAt && note.updatedAt - note.createdAt > 45000
+  );
+
+  let editedTimeStr: string | undefined = undefined;
+  if (isEdited && note.updatedAt) {
+    const editD = new Date(note.updatedAt);
+    const editDateStr = getLocalDateString(editD);
+    const editTimeFormatted = formatTime12h(
+      `${String(editD.getHours()).padStart(2, '0')}:${String(editD.getMinutes()).padStart(2, '0')}`
+    );
+    if (editDateStr === todayStr) {
+      editedTimeStr = isHindi ? `संशोधित: आज ${editTimeFormatted}` : `Edited: Today ${editTimeFormatted}`;
+    } else {
+      editedTimeStr = isHindi ? `संशोधित: ${editD.toLocaleDateString('hi-IN', { day: 'numeric', month: 'short' })}` : `Edited: ${editD.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}`;
+    }
+  }
+
+  return {
+    effectiveDate,
+    effectiveTime,
+    formattedDate,
+    formattedTime,
+    relativeBadge,
+    isToday,
+    isYesterday,
+    isEdited,
+    editedTimeStr
+  };
+}
+
 
